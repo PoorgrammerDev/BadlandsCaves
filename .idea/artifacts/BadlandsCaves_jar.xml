@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BadlandsCaves:jar">
+    <output-path>$PROJECT_DIR$/../../Minecraft Stuff/Plugin Testing Server/plugins</output-path>
+    <root id="archive" name="BadlandsCaves.jar">
+      <element id="module-output" name="BadlandsCaves" />
+    </root>
+  </artifact>
+</component>
