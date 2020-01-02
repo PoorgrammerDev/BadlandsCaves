@@ -48,7 +48,7 @@ public class NewPlayer implements Listener {
         player.getInventory().addItem(starter_sapling);
         player.getInventory().addItem(starter_bone_meal);
 
-        //default value
+        //default values
         player.setMetadata("Deaths", new FixedMetadataValue(plugin, 0.0));
         player.setMetadata("Thirst", new FixedMetadataValue(plugin, 100.0));
         player.setMetadata("Toxicity", new FixedMetadataValue(plugin, 0.0));
@@ -56,6 +56,28 @@ public class NewPlayer implements Listener {
         player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0.0));
         player.setMetadata("tox_nat_decr_var", new FixedMetadataValue(plugin, 0.0));
         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
+
+        //stacking debuffs
+        player.setMetadata("plyr_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("plyr_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("plyr_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("plyr_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+
+        player.setMetadata("deaths_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("deaths_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("deaths_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("deaths_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+
+        player.setMetadata("tox_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("tox_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("tox_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("tox_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+
+        player.setMetadata("thirst_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("thirst_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("thirst_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("thirst_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+
 
     }
 

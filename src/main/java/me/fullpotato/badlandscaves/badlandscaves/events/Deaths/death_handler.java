@@ -7,17 +7,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class change_data implements Listener {
+public class death_handler implements Listener {
 
     private BadlandsCaves plugin;
-    public change_data (BadlandsCaves bcav) {
+    public death_handler (BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @EventHandler
-    public void change_data(PlayerDeathEvent event) {
+    public void death_handler(PlayerDeathEvent event) {
         Player player = event.getEntity();
         int death_count = player.getMetadata("Deaths").get(0).asInt();
+        double toxicity = player.getMetadata("Toxicity").get(0).asDouble();
+        double thirst = player.getMetadata("Thirst").get(0).asDouble();
+
+        if (toxicity >= 100 && thirst <= 0) {
+            event.setDeathMessage(player.getDisplayName()+ " died of multiple causes.");
+        }
+        else if (toxicity >= 100) {
+            event.setDeathMessage(player.getDisplayName() + " died of toxicity.");
+        }
+        else if (thirst <= 0) {
+            event.setDeathMessage(player.getDisplayName() + " died of dehydration.");
+        }
 
         //resetting thirst/tox values on death
         player.setMetadata("Thirst", new FixedMetadataValue(plugin, 100.0));

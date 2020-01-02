@@ -1,11 +1,17 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
-import me.fullpotato.badlandscaves.badlandscaves.Commands.CommandClass;
-import me.fullpotato.badlandscaves.badlandscaves.events.Deaths.change_data;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.DeathCommand;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.ThirstCommand;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.ToxicityCommand;
+import me.fullpotato.badlandscaves.badlandscaves.events.Deaths.death_effects_runnable;
+import me.fullpotato.badlandscaves.badlandscaves.events.Deaths.death_handler;
 import me.fullpotato.badlandscaves.badlandscaves.events.Deaths.gapple_eat;
 import me.fullpotato.badlandscaves.badlandscaves.events.NewPlayer;
 import me.fullpotato.badlandscaves.badlandscaves.events.Thirst.decrease_thirst;
+import me.fullpotato.badlandscaves.badlandscaves.events.Thirst.thirst_effects_runnable;
 import me.fullpotato.badlandscaves.badlandscaves.events.Toxicity.incr_tox_in_water;
+import me.fullpotato.badlandscaves.badlandscaves.actionbar_runnable;
+import me.fullpotato.badlandscaves.badlandscaves.events.Toxicity.tox_effects_runnable;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -13,6 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 public final class BadlandsCaves extends JavaPlugin {
 
@@ -26,39 +33,24 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new NewPlayer(this), this);
         this.getServer().getPluginManager().registerEvents(new decrease_thirst(this), this);
         this.getServer().getPluginManager().registerEvents(new incr_tox_in_water(this), this);
-        this.getServer().getPluginManager().registerEvents(new change_data(this), this);
+        this.getServer().getPluginManager().registerEvents(new death_handler(this), this);
         this.getServer().getPluginManager().registerEvents(new gapple_eat(this), this);
 
         //command reg
-        this.getCommand("thirst").setExecutor(new CommandClass());
+        this.getCommand("thirst").setExecutor(new ThirstCommand());
+        this.getCommand("toxicity").setExecutor(new ToxicityCommand());
+        this.getCommand("deaths").setExecutor(new DeathCommand());
+
 
         //runnable
-        actionbar_runnable();
+        BukkitTask act_bar = new actionbar_runnable().runTaskTimerAsynchronously(this, 0 ,0);
+        BukkitTask tox_eff = new tox_effects_runnable(this).runTaskTimer(this, 0, 5);
+        BukkitTask thrst_eff = new thirst_effects_runnable(this).runTaskTimer(this, 0, 5);
+        BukkitTask dth_eff = new death_effects_runnable(this).runTaskTimer(this, 0 ,5);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-    }
-
-    public void actionbar_runnable() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    int death_count = player.getMetadata("Deaths").get(0).asInt();
-                    int thirst_count = player.getMetadata("Thirst").get(0).asInt();
-                    int tox_count = player.getMetadata("Toxicity").get(0).asInt();
-
-                    String separator = ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + " | ";
-                    String actionbarmsg = (
-                            ChatColor.GOLD + ChatColor.BOLD.toString() + "Deaths: " + ChatColor.RED + ChatColor.BOLD.toString() + death_count + separator
-                            + ChatColor.BLUE + ChatColor.BOLD.toString() + "Thirst: " + ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + thirst_count + ChatColor.BOLD.toString() + "%" + separator
-                            + ChatColor.DARK_GREEN + ChatColor.BOLD.toString() +"Toxicity: " + ChatColor.GREEN + ChatColor.BOLD.toString() + tox_count + ChatColor.BOLD.toString() + "%");
-
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionbarmsg));
-                }
-            }
-        }.runTaskTimerAsynchronously(this, 0, 5);
     }
 }

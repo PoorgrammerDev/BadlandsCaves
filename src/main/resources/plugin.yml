@@ -4,5 +4,13 @@ main: me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves
 api-version: 1.13
 commands:
   thirst:
-    usage: /<command>
-    description: thirst
+    usage: /thirst <get|set> <username> <value>
+    description: Work with Thirst
+  toxicity:
+    usage: /toxicity <get|set> <username> <value>
+    description: Work with Toxicity
+    aliases: tox
+  deaths:
+    usage: /deaths <get|set> <username> <value>
+    description: Work with Death count
+    aliases: death

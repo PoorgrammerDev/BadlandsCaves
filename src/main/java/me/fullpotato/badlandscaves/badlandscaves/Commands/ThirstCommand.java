@@ -6,11 +6,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
-public class CommandClass implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ThirstCommand implements CommandExecutor {
 
     private Plugin plugin = BadlandsCaves.getPlugin(BadlandsCaves.class);
 
