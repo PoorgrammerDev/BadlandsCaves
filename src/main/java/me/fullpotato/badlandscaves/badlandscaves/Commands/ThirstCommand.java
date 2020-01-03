@@ -54,10 +54,11 @@ public class ThirstCommand implements CommandExecutor {
                             }
                         }
                     }
-                } else {
-                    player.sendMessage(ChatColor.RED + "You must be an operator to access this command.");
-                    return true;
                 }
+            }
+            else {
+                player.sendMessage(ChatColor.RED + "You must be an operator to access this command.");
+                return true;
             }
         }
         return false;

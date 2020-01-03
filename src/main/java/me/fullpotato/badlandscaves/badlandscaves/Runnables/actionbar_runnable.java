@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves;
+package me.fullpotato.badlandscaves.badlandscaves.Runnables;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;

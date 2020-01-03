@@ -58,11 +58,6 @@ public class NewPlayer implements Listener {
         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
 
         //stacking debuffs
-        player.setMetadata("plyr_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("plyr_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("plyr_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("plyr_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
-
         player.setMetadata("deaths_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
         player.setMetadata("deaths_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
         player.setMetadata("deaths_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
