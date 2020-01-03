@@ -22,58 +22,59 @@ public class NewPlayer implements Listener {
     }
 
     @EventHandler
-    public void newPlayer (PlayerJoinEvent event) {
+    public void newPlayer (PlayerLoginEvent event) {
         //give items
         Player player = event.getPlayer();
-        ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING, 1);
-        ItemMeta sapling_meta = starter_sapling.getItemMeta();
 
-        sapling_meta.setDisplayName(ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "Starter Sapling" + ChatColor.DARK_GRAY + "]");
-        sapling_meta.addEnchant(Enchantment.DURABILITY, 1, false);
-        sapling_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        if (!player.hasPlayedBefore()) {
+            ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING, 1);
+            ItemMeta sapling_meta = starter_sapling.getItemMeta();
 
-        starter_sapling.setItemMeta(sapling_meta);
+            sapling_meta.setDisplayName(ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "Starter Sapling" + ChatColor.DARK_GRAY + "]");
+            sapling_meta.addEnchant(Enchantment.DURABILITY, 1, false);
+            sapling_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-
-        ItemStack starter_bone_meal = new ItemStack(Material.BONE_MEAL, 3);
-        ItemMeta bone_meta = starter_bone_meal.getItemMeta();
-
-        bone_meta.setDisplayName(ChatColor.DARK_GRAY + "[" + ChatColor.WHITE + "Starter Bone Meal" + ChatColor.DARK_GRAY + "]");
-        bone_meta.addEnchant(Enchantment.DURABILITY, 1, false);
-        bone_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        starter_bone_meal.setItemMeta(bone_meta);
+            starter_sapling.setItemMeta(sapling_meta);
 
 
-        player.getInventory().addItem(starter_sapling);
-        player.getInventory().addItem(starter_bone_meal);
+            ItemStack starter_bone_meal = new ItemStack(Material.BONE_MEAL, 3);
+            ItemMeta bone_meta = starter_bone_meal.getItemMeta();
 
-        //default values
-        player.setMetadata("Deaths", new FixedMetadataValue(plugin, 0.0));
-        player.setMetadata("Thirst", new FixedMetadataValue(plugin, 100.0));
-        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, 0.0));
+            bone_meta.setDisplayName(ChatColor.DARK_GRAY + "[" + ChatColor.WHITE + "Starter Bone Meal" + ChatColor.DARK_GRAY + "]");
+            bone_meta.addEnchant(Enchantment.DURABILITY, 1, false);
+            bone_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0.0));
-        player.setMetadata("tox_nat_decr_var", new FixedMetadataValue(plugin, 0.0));
-        player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
-
-        //stacking debuffs
-        player.setMetadata("deaths_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("deaths_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("deaths_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("deaths_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
-
-        player.setMetadata("tox_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("tox_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("tox_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("tox_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
-
-        player.setMetadata("thirst_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("thirst_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("thirst_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("thirst_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+            starter_bone_meal.setItemMeta(bone_meta);
 
 
+            player.getInventory().addItem(starter_sapling);
+            player.getInventory().addItem(starter_bone_meal);
+
+            //default values
+            player.setMetadata("Deaths", new FixedMetadataValue(plugin, 0.0));
+            player.setMetadata("Thirst", new FixedMetadataValue(plugin, 100.0));
+            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, 0.0));
+
+            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0.0));
+            player.setMetadata("tox_nat_decr_var", new FixedMetadataValue(plugin, 0.0));
+            player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
+
+            //stacking debuffs
+            player.setMetadata("deaths_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("deaths_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("deaths_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("deaths_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+
+            player.setMetadata("tox_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("tox_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("tox_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("tox_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+
+            player.setMetadata("thirst_debuff_slowmine_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("thirst_debuff_slow_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("thirst_debuff_hunger_lvl", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("thirst_debuff_poison_lvl", new FixedMetadataValue(plugin, 0));
+        }
     }
 
 }
