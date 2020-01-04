@@ -32,6 +32,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new purification(this), this);
         this.getServer().getPluginManager().registerEvents(new toxic_water_bottling(this), this);
         this.getServer().getPluginManager().registerEvents(new water_drinking(this), this);
+        this.getServer().getPluginManager().registerEvents(new toxic_water_bottling(this),this);
 
         //command reg
         this.getCommand("thirst").setExecutor(new ThirstCommand());

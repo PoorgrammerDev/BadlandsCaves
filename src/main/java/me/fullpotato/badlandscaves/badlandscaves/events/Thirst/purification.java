@@ -105,8 +105,9 @@ public class purification implements Listener {
                     boolean otherAction = (player.isSneaking() || holding.equals(Material.WATER_BUCKET) || holding.equals(Material.POTION) || holding.equals(Material.BUCKET) || holding.equals(Material.GLASS_BOTTLE));
                     if (block_under.getType().equals(Material.FIRE)) {
                         if (!otherAction) {
+                            event.setCancelled(true);
                             purification_menu(player, cauldron_block, cauldron_title);
-                            BukkitTask inv_refresh = new purification_runnable(plugin, cauldron_inv, loc_of_cauld).runTaskTimerAsynchronously(plugin, 0, 10);
+                            BukkitTask inv_refresh = new purification_runnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
                             refresh_id = inv_refresh.getTaskId();
                         }
                     }
