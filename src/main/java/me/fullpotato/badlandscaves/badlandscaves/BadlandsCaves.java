@@ -9,6 +9,8 @@ import me.fullpotato.badlandscaves.badlandscaves.events.Deaths.gapple_eat;
 import me.fullpotato.badlandscaves.badlandscaves.events.NewPlayer;
 import me.fullpotato.badlandscaves.badlandscaves.events.Thirst.decrease_thirst;
 import me.fullpotato.badlandscaves.badlandscaves.events.Thirst.purification;
+import me.fullpotato.badlandscaves.badlandscaves.events.Thirst.toxic_water_bottling;
+import me.fullpotato.badlandscaves.badlandscaves.events.Thirst.water_drinking;
 import me.fullpotato.badlandscaves.badlandscaves.events.Toxicity.incr_tox_in_water;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -28,6 +30,8 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new death_handler(this), this);
         this.getServer().getPluginManager().registerEvents(new gapple_eat(this), this);
         this.getServer().getPluginManager().registerEvents(new purification(this), this);
+        this.getServer().getPluginManager().registerEvents(new toxic_water_bottling(this), this);
+        this.getServer().getPluginManager().registerEvents(new water_drinking(this), this);
 
         //command reg
         this.getCommand("thirst").setExecutor(new ThirstCommand());
