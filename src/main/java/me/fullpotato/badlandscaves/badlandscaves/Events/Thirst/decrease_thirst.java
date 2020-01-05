@@ -1,8 +1,6 @@
-package me.fullpotato.badlandscaves.badlandscaves.events.Thirst;
+package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,14 +52,12 @@ public class decrease_thirst implements Listener {
             //player.sendMessage("thirstsys level: " + player.getMetadata("thirst_sys_var").get(0).asDouble());
         }
 
-        if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= 500) {
+        if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= 50) {
             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0));
 
             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-
-            double new_thirst = current_thirst - 1;
-            double thirst_rounded = Math.round(new_thirst * 100.0) / 100.0;
-            player.setMetadata("Thirst" , new FixedMetadataValue(plugin, thirst_rounded));
+            double new_thirst = current_thirst - 0.1;
+            player.setMetadata("Thirst" , new FixedMetadataValue(plugin, new_thirst));
         }
     }
 

@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.events.Deaths;
+package me.fullpotato.badlandscaves.badlandscaves.Events.Deaths;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;

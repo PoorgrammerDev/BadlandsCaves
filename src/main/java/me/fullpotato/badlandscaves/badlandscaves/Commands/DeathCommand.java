@@ -24,12 +24,12 @@ public class DeathCommand implements CommandExecutor {
                     return true;
                 } else if (args[0].equalsIgnoreCase("get")) {
                     if (args.length < 2) {
-                        player.sendMessage(ChatColor.GOLD + "Your Deaths count is " + ChatColor.RED + player.getMetadata("Deaths").get(0).asDouble() + ChatColor.GOLD + ".");
+                        player.sendMessage(ChatColor.GOLD + "Your Deaths count is " + ChatColor.RED + player.getMetadata("Deaths").get(0).asInt() + ChatColor.GOLD + ".");
                         return true;
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                player.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Deaths").get(0).asDouble() + ChatColor.GOLD + ".");
+                                player.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Deaths").get(0).asInt() + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }
@@ -44,9 +44,17 @@ public class DeathCommand implements CommandExecutor {
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                targets.setMetadata("Deaths", new FixedMetadataValue(plugin, args[2]));
-                                player.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + args[2] + ChatColor.GOLD + ".");
-                                return true;
+                                try {
+                                    int change = Integer.parseInt(args[2]);
+                                    targets.setMetadata("Deaths", new FixedMetadataValue(plugin, change));
+                                    plugin.saveConfig();
+                                    player.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                    return true;
+                                }
+                                catch (NumberFormatException e) {
+                                    player.sendMessage(ChatColor.RED + "You must set the Deaths count to an integer!");
+                                    return true;
+                                }
                             }
                         }
                     }

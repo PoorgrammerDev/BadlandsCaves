@@ -6,13 +6,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ThirstCommand implements CommandExecutor {
 
@@ -28,12 +24,12 @@ public class ThirstCommand implements CommandExecutor {
                     return true;
                 } else if (args[0].equalsIgnoreCase("get")) {
                     if (args.length < 2) {
-                        player.sendMessage(ChatColor.GOLD + "Your Thirst level is " + ChatColor.RED + player.getMetadata("Thirst").get(0).asDouble() + ChatColor.GOLD + ".");
+                        player.sendMessage(ChatColor.GOLD + "Your Thirst count is " + ChatColor.RED + player.getMetadata("Thirst").get(0).asDouble() + ChatColor.GOLD + ".");
                         return true;
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                player.sendMessage(ChatColor.GOLD + "The Thirst level of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Thirst").get(0).asDouble() + ChatColor.GOLD + ".");
+                                player.sendMessage(ChatColor.GOLD + "The Thirst count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Thirst").get(0).asDouble() + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }
@@ -48,9 +44,16 @@ public class ThirstCommand implements CommandExecutor {
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                targets.setMetadata("Thirst", new FixedMetadataValue(plugin, args[2]));
-                                player.sendMessage(ChatColor.GOLD + "The Thirst level of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + args[2] + ChatColor.GOLD + ".");
-                                return true;
+                                try {
+                                    double change = Double.parseDouble(args[2]);
+                                    targets.setMetadata("Thirst", new FixedMetadataValue(plugin, change));
+                                    player.sendMessage(ChatColor.GOLD + "The Thirst count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                    return true;
+                                }
+                                catch (NumberFormatException e) {
+                                    player.sendMessage(ChatColor.RED + "You must set the Thirst count to a double!");
+                                    return true;
+                                }
                             }
                         }
                     }

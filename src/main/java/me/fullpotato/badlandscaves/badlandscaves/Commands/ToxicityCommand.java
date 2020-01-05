@@ -11,6 +11,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
 public class ToxicityCommand implements CommandExecutor {
+
     private Plugin plugin = BadlandsCaves.getPlugin(BadlandsCaves.class);
 
     @Override
@@ -23,12 +24,12 @@ public class ToxicityCommand implements CommandExecutor {
                     return true;
                 } else if (args[0].equalsIgnoreCase("get")) {
                     if (args.length < 2) {
-                        player.sendMessage(ChatColor.GOLD + "Your Toxicity level is " + ChatColor.RED + player.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
+                        player.sendMessage(ChatColor.GOLD + "Your Toxicity count is " + ChatColor.RED + player.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
                         return true;
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                player.sendMessage(ChatColor.GOLD + "The Toxicity level of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
+                                player.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Deaths").get(0).asDouble() + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }
@@ -43,9 +44,16 @@ public class ToxicityCommand implements CommandExecutor {
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                targets.setMetadata("Toxicity", new FixedMetadataValue(plugin, args[2]));
-                                player.sendMessage(ChatColor.GOLD + "The Toxicity level of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + args[2] + ChatColor.GOLD + ".");
-                                return true;
+                                try {
+                                    double change = Double.parseDouble(args[2]);
+                                    targets.setMetadata("Toxicity", new FixedMetadataValue(plugin, change));
+                                    player.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                    return true;
+                                }
+                                catch (NumberFormatException e) {
+                                    player.sendMessage(ChatColor.RED + "You must set the Toxicity count to a double!");
+                                    return true;
+                                }
                             }
                         }
                     }

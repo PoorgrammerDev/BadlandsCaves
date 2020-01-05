@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.events.Toxicity;
+package me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.GameMode;
@@ -62,9 +62,9 @@ public class incr_tox_in_water implements Listener {
                     current_tox = player.getMetadata("Toxicity").get(0).asDouble();
                     current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
 
-                    if (current_tox_slow >= 1000) {
+                    if (current_tox_slow >= 100) {
                         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0));
-                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + 1));
+                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + 0.1));
                     }
                 }
             }
