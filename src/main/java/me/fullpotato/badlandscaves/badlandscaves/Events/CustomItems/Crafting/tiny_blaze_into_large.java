@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems;
+package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;

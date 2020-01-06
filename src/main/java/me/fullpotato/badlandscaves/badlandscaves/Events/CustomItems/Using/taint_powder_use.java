@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems;
+package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.tainted_powder_runnable;
