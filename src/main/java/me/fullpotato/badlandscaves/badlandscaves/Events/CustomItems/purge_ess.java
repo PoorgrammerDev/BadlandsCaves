@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting;
+package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;
@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class purge_ess implements Listener {
     private BadlandsCaves plugin;

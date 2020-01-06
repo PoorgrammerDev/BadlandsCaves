@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting;
+package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;
@@ -7,8 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
 
 public class tiny_blaze_into_large implements Listener {
     private BadlandsCaves plugin;

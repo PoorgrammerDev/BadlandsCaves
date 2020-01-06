@@ -3,14 +3,15 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.essence_of_purging;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.tiny_blaze_powder;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting.purge_ess;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting.stop_custom_items_rclick;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting.tiny_blaze_into_large;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.purge_ess;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stop_custom_items_rclick;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.taint_powder_use;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.tiny_blaze_into_large;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.death_handler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gapple_eat;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.decrease_thirst;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.purification;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldron;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.toxic_water_bottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.water_drinking;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.incr_tox_in_water;
@@ -35,7 +36,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new incr_tox_in_water(this), this);
         this.getServer().getPluginManager().registerEvents(new death_handler(this), this);
         this.getServer().getPluginManager().registerEvents(new gapple_eat(this), this);
-        this.getServer().getPluginManager().registerEvents(new purification(this), this);
+        this.getServer().getPluginManager().registerEvents(new cauldron(this), this);
         this.getServer().getPluginManager().registerEvents(new toxic_water_bottling(this), this);
         this.getServer().getPluginManager().registerEvents(new water_drinking(this), this);
         this.getServer().getPluginManager().registerEvents(new toxic_water_bottling(this),this);
@@ -43,6 +44,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new tiny_blaze_into_large(this), this);
         this.getServer().getPluginManager().registerEvents(new purge_ess(this), this);
         this.getServer().getPluginManager().registerEvents(new stop_custom_items_rclick(this), this);
+        this.getServer().getPluginManager().registerEvents(new taint_powder_use(this), this);
 
         //command reg
         this.getCommand("thirst").setExecutor(new ThirstCommand());

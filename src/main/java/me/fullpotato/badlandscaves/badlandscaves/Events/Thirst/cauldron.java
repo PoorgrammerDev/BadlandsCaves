@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.purification_runnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.cauldron_runnable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -25,9 +25,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-public class purification implements Listener {
+public class cauldron implements Listener {
     private BadlandsCaves plugin;
-    public purification (BadlandsCaves bcav) {
+    public cauldron(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -108,7 +108,7 @@ public class purification implements Listener {
                         if (!otherAction) {
                             event.setCancelled(true);
                             purification_menu(player, cauldron_block, cauldron_title);
-                            BukkitTask inv_refresh = new purification_runnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
+                            BukkitTask inv_refresh = new cauldron_runnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
                             refresh_id = inv_refresh.getTaskId();
                         }
                     }
@@ -161,7 +161,13 @@ public class purification implements Listener {
                 if (target_inv.getItem(11) == null || target_inv.getItem(15) == null) {
                     hasIng = false;
                 }
-                else if (in_slots.contains(Material.GLASS_BOTTLE) && ((in_slots.contains(Material.BLAZE_POWDER) || (in_slots.contains(Material.COMMAND_BLOCK))))) {
+                else if (in_slots.contains(Material.GLASS_BOTTLE) && ((in_slots.contains(Material.BLAZE_POWDER) ))) {
+                    hasIng = true;
+                }
+                else if (in_slots.contains(Material.GLASS_BOTTLE) && in_slots.contains(Material.COMMAND_BLOCK)) {
+                    hasIng = true;
+                }
+                else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
                     hasIng = true;
                 }
 
@@ -224,6 +230,24 @@ public class purification implements Listener {
                                 antidote.setItemMeta(ant_pot_meta);
 
                                 cauldron_inv.setItem(22, antidote);
+                            }
+                            else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
+                                ItemStack tainted_powder = new ItemStack(Material.COMMAND_BLOCK, 2);
+                                ItemMeta powder_meta = tainted_powder.getItemMeta();
+
+                                powder_meta.setDisplayName(ChatColor.DARK_GREEN + "Tainted Powder");
+                                ArrayList<String> powder_lore = new ArrayList<>();
+                                powder_lore.add(ChatColor.GREEN + "Right click to use.");
+                                powder_lore.add("");
+                                powder_lore.add(ChatColor.GRAY + "Formulated to cripple silverfish's nervous systems.");
+                                powder_lore.add(ChatColor.GRAY + "Works best when they are sleeping, in their blocks.");
+                                powder_lore.add(ChatColor.GRAY + "Also works on humans, but not as well.");
+                                powder_meta.setLore(powder_lore);
+
+                                tainted_powder.setItemMeta(powder_meta);
+
+                                cauldron_inv.setItem(22, tainted_powder);
+
                             }
                         }
                     }

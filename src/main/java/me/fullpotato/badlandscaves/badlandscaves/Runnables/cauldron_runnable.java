@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class purification_runnable extends BukkitRunnable {
+public class cauldron_runnable extends BukkitRunnable {
 
     private BadlandsCaves plugin;
     private Inventory inventory;
@@ -23,7 +23,7 @@ public class purification_runnable extends BukkitRunnable {
     private Location location_under;
     private Player player;
 
-    public purification_runnable (BadlandsCaves bcav, Inventory inv, Location loc, Location bl_under, Player ply) {
+    public cauldron_runnable(BadlandsCaves bcav, Inventory inv, Location loc, Location bl_under, Player ply) {
         plugin = bcav;
         inventory = inv;
         location = loc;
@@ -69,17 +69,17 @@ public class purification_runnable extends BukkitRunnable {
             else if (block_desc.equalsIgnoreCase("minecraft:cauldron[level=1]")) {
                 cauldron_level = 1;
                 ItemStack level_indicator_empty = new ItemStack(Material.GLASS_PANE, 1);
-                ItemStack level_indicator_water = new ItemStack(Material.BLUE_STAINED_GLASS_PANE, 1);
+                ItemStack level_indicator_water = new ItemStack(Material.GREEN_STAINED_GLASS_PANE, 1);
                 ItemMeta lvl_indic_em_meta = level_indicator_empty.getItemMeta();
                 ItemMeta lvl_indic_wa_meta = level_indicator_water.getItemMeta();
 
                 assert lvl_indic_em_meta != null;
-                lvl_indic_em_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.DARK_AQUA + "33% Full");
+                lvl_indic_em_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GREEN + "33% Full");
                 assert lvl_indic_wa_meta != null;
-                lvl_indic_wa_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.DARK_AQUA + "33% Full");
+                lvl_indic_wa_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GREEN + "33% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.DARK_AQUA + "Fill to use Cauldron.");
+                lvl_indic_lore.add(ChatColor.DARK_GREEN + "Fill to use Cauldron.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
                 lvl_indic_wa_meta.setLore(lvl_indic_lore);
 
@@ -96,17 +96,17 @@ public class purification_runnable extends BukkitRunnable {
             else if (block_desc.equalsIgnoreCase("minecraft:cauldron[level=2]")) {
                 cauldron_level = 2;
                 ItemStack level_indicator_empty = new ItemStack(Material.GLASS_PANE, 1);
-                ItemStack level_indicator_water = new ItemStack(Material.BLUE_STAINED_GLASS_PANE, 1);
+                ItemStack level_indicator_water = new ItemStack(Material.GREEN_STAINED_GLASS_PANE, 1);
                 ItemMeta lvl_indic_em_meta = level_indicator_empty.getItemMeta();
                 ItemMeta lvl_indic_wa_meta = level_indicator_water.getItemMeta();
 
                 assert lvl_indic_em_meta != null;
-                lvl_indic_em_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.DARK_AQUA + "67% Full");
+                lvl_indic_em_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GREEN + "67% Full");
                 assert lvl_indic_wa_meta != null;
-                lvl_indic_wa_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.DARK_AQUA + "67% Full");
+                lvl_indic_wa_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GREEN + "67% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.DARK_AQUA + "Fill to use Cauldron.");
+                lvl_indic_lore.add(ChatColor.DARK_GREEN + "Fill to use Cauldron.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
                 lvl_indic_wa_meta.setLore(lvl_indic_lore);
 
@@ -123,17 +123,17 @@ public class purification_runnable extends BukkitRunnable {
             else if (block_desc.equalsIgnoreCase("minecraft:cauldron[level=3]")) {
                 cauldron_level = 3;
                 ItemStack level_indicator_empty = new ItemStack(Material.GLASS_PANE, 1);
-                ItemStack level_indicator_water = new ItemStack(Material.BLUE_STAINED_GLASS_PANE, 1);
+                ItemStack level_indicator_water = new ItemStack(Material.GREEN_STAINED_GLASS_PANE, 1);
                 ItemMeta lvl_indic_em_meta = level_indicator_empty.getItemMeta();
                 ItemMeta lvl_indic_wa_meta = level_indicator_water.getItemMeta();
 
                 assert lvl_indic_em_meta != null;
-                lvl_indic_em_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.AQUA + "100% Full");
+                lvl_indic_em_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.GREEN + "100% Full");
                 assert lvl_indic_wa_meta != null;
-                lvl_indic_wa_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.AQUA + "100% Full");
+                lvl_indic_wa_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.GREEN + "100% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.AQUA + "There's enough water.");
+                lvl_indic_lore.add(ChatColor.GREEN + "There's enough water.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
                 lvl_indic_wa_meta.setLore(lvl_indic_lore);
 
@@ -208,6 +208,20 @@ public class purification_runnable extends BukkitRunnable {
                         }
                     }
                 }
+                else if (in_slots.contains(Material.SUGAR) && (in_slots.contains(Material.BONE_MEAL))) {
+                    ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
+                    ItemMeta green_meta = green.getItemMeta();
+                    assert green_meta != null;
+                    green_meta.setDisplayName(ChatColor.GREEN + "Tainting Ready");
+                    ArrayList<String> green_lore = new ArrayList<String>();
+                    green_lore.add(ChatColor.DARK_GREEN + "Click to taint the powder.");
+                    green_meta.setLore(green_lore);
+                    green.setItemMeta(green_meta);
+
+                    inventory.setItem(13, green);
+                }
+
+
             }
             else {
                 ItemStack red = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
@@ -223,12 +237,12 @@ public class purification_runnable extends BukkitRunnable {
                         red_lore.add(ChatColor.DARK_RED + "Input items in slots to use cauldron.");
                     }
 
-                    else if (!in_slots.contains(Material.GLASS_BOTTLE)) {
-                        red_lore.add(ChatColor.DARK_RED + "Requires an empty glass bottle.");
+                    else if (!in_slots.contains(Material.GLASS_BOTTLE) && !in_slots.contains(Material.SUGAR)) {
+                        red_lore.add(ChatColor.DARK_RED + "Requires correct primary ingredient.");
                     }
 
                     else if (!in_slots.contains(Material.BLAZE_POWDER) && !in_slots.contains(Material.COMMAND_BLOCK)) {
-                        red_lore.add(ChatColor.DARK_RED + "Requires secondary ingredient.");
+                        red_lore.add(ChatColor.DARK_RED + "Requires correct secondary ingredient.");
                     }
                 }
 
