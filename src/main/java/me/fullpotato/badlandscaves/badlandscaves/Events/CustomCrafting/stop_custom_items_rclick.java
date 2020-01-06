@@ -22,10 +22,12 @@ public class stop_custom_items_rclick implements Listener {
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack item = event.getItem();
-            if (item.getType().equals(Material.STRUCTURE_VOID) || item.getType().equals(Material.DEBUG_STICK)) {
-                Player player = event.getPlayer();
-                if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                    event.setCancelled(true);
+            if (item != null) {
+                if (item.getType().equals(Material.STRUCTURE_VOID) || item.getType().equals(Material.DEBUG_STICK)) {
+                    Player player = event.getPlayer();
+                    if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }

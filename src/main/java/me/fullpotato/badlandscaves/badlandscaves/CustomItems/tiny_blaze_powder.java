@@ -16,7 +16,7 @@ public class tiny_blaze_powder implements Listener {
     }
 
     public void tiny_blaze_powder_craft () {
-        ItemStack tiny_blz = new ItemStack(Material.STRUCTURE_VOID, 9);
+        ItemStack tiny_blz = new ItemStack(Material.STRUCTURE_BLOCK, 9);
         ItemMeta tiny_blz_meta = tiny_blz.getItemMeta();
         tiny_blz_meta.setDisplayName(ChatColor.RESET + "Tiny Pile of Blaze Powder");
         tiny_blz_meta.setCustomModelData(100);
@@ -30,7 +30,7 @@ public class tiny_blaze_powder implements Listener {
 
     public void back_to_large () {
         ShapelessRecipe tiny_blz_to_big = new ShapelessRecipe(new NamespacedKey(plugin, "large_blaze_powder"), new ItemStack(Material.BLAZE_POWDER, 1));
-        tiny_blz_to_big.addIngredient(9, Material.STRUCTURE_VOID);
+        tiny_blz_to_big.addIngredient(9, Material.STRUCTURE_BLOCK);
 
         plugin.getServer().addRecipe(tiny_blz_to_big);
     }

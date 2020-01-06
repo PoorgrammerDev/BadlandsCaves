@@ -33,7 +33,7 @@ public class purge_ess implements Listener {
         }
 
         Material result = event.getRecipe().getResult().getType();
-        if (result.equals(Material.DEBUG_STICK)) {
+        if (result.equals(Material.COMMAND_BLOCK)) {
             String result_name = event.getRecipe().getResult().getItemMeta().getDisplayName();
             String tiny_blz_name = ChatColor.RESET + "Tiny Pile of Blaze Powder";
             String prg_ess_name = ChatColor.AQUA + "Essence of Purging";

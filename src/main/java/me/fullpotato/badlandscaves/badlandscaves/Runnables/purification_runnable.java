@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class purification_runnable extends BukkitRunnable {
 
@@ -39,7 +40,7 @@ public class purification_runnable extends BukkitRunnable {
         }
         else if (!location_under.getBlock().getType().equals(Material.FIRE)) {
             player.closeInventory();
-            player.sendMessage(ChatColor.RED + "To purify water, light a fire underneath the cauldron.");
+            player.sendMessage(ChatColor.RED + "Light a fire underneath the Cauldron to use it.");
             return;
         }
         else {
@@ -53,7 +54,7 @@ public class purification_runnable extends BukkitRunnable {
                 lvl_indic_em_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GRAY + "0% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.DARK_GRAY + "Fill to purify water.");
+                lvl_indic_lore.add(ChatColor.DARK_GRAY + "Fill to use Cauldron.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
 
                 level_indicator_empty.setItemMeta(lvl_indic_em_meta);
@@ -78,7 +79,7 @@ public class purification_runnable extends BukkitRunnable {
                 lvl_indic_wa_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.DARK_AQUA + "33% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.DARK_AQUA + "Fill to purify water.");
+                lvl_indic_lore.add(ChatColor.DARK_AQUA + "Fill to use Cauldron.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
                 lvl_indic_wa_meta.setLore(lvl_indic_lore);
 
@@ -105,7 +106,7 @@ public class purification_runnable extends BukkitRunnable {
                 lvl_indic_wa_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.DARK_AQUA + "67% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.DARK_AQUA + "Fill to purify water.");
+                lvl_indic_lore.add(ChatColor.DARK_AQUA + "Fill to use Cauldron.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
                 lvl_indic_wa_meta.setLore(lvl_indic_lore);
 
@@ -132,7 +133,7 @@ public class purification_runnable extends BukkitRunnable {
                 lvl_indic_wa_meta.setDisplayName(ChatColor.BLUE + "Cauldron: " + ChatColor.AQUA + "100% Full");
 
                 ArrayList<String> lvl_indic_lore = new ArrayList<String>();
-                lvl_indic_lore.add(ChatColor.AQUA + "There's enough water to purify.");
+                lvl_indic_lore.add(ChatColor.AQUA + "There's enough water.");
                 lvl_indic_em_meta.setLore(lvl_indic_lore);
                 lvl_indic_wa_meta.setLore(lvl_indic_lore);
 
@@ -147,66 +148,87 @@ public class purification_runnable extends BukkitRunnable {
                 inventory.setItem(26, level_indicator_water); //lvl
             }
 
-            //PROCESS READY INDICATOR
-            if ((cauldron_level == 3) && (inventory.getItem(11) != null && inventory.getItem(15) != null) && (inventory.getItem(11).getType().equals(Material.GLASS_BOTTLE) && inventory.getItem(15).getType().equals(Material.BLAZE_POWDER) || (inventory.getItem(11).getType().equals(Material.BLAZE_POWDER) && inventory.getItem(15).getType().equals(Material.GLASS_BOTTLE)))) {
-                ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
-                ItemMeta green_meta = green.getItemMeta();
-                assert green_meta != null;
-                green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
-                ArrayList<String> green_lore = new ArrayList<String>();
-                green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
-                green_meta.setLore(green_lore);
-                green.setItemMeta(green_meta);
+            ArrayList<Material> in_slots = new ArrayList<>(2);
+            if (inventory.getItem(11) != null) {
+                in_slots.add(0, inventory.getItem(11).getType());
+            }
+            else {
+                in_slots.add(0, Material.AIR);
+            }
 
-                inventory.setItem(13, green);
+            if (inventory.getItem(15) != null) {
+                in_slots.add(1, inventory.getItem(15).getType());
+            }
+            else {
+                in_slots.add(1, Material.AIR);
+            }
+
+
+            //PROCESS READY INDICATOR
+            if ((cauldron_level == 3) && (inventory.getItem(11) != null && inventory.getItem(15) != null)) {
+                if (in_slots.contains(Material.GLASS_BOTTLE)) {
+                    if (in_slots.contains(Material.BLAZE_POWDER)) {
+                        ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
+                        ItemMeta green_meta = green.getItemMeta();
+                        assert green_meta != null;
+                        green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
+                        ArrayList<String> green_lore = new ArrayList<String>();
+                        green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
+                        green_meta.setLore(green_lore);
+                        green.setItemMeta(green_meta);
+
+                        inventory.setItem(13, green);
+                    }
+                    else if (in_slots.contains(Material.COMMAND_BLOCK)) {
+                        int slotPRG = in_slots.indexOf(Material.COMMAND_BLOCK);
+                        int slot;
+
+                        if (slotPRG == 0) {
+                            slot = 11;
+                        }
+                        else {
+                            slot = 15;
+                        }
+
+                        if (inventory.getItem(slot).hasItemMeta()) {
+                            if (inventory.getItem(slot).getItemMeta().hasDisplayName()) {
+                                if (inventory.getItem(slot).getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Essence of Purging")) {
+                                    ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
+                                    ItemMeta green_meta = green.getItemMeta();
+                                    assert green_meta != null;
+                                    green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");
+                                    ArrayList<String> green_lore = new ArrayList<String>();
+                                    green_lore.add(ChatColor.DARK_GREEN + "Click to create antidote.");
+                                    green_meta.setLore(green_lore);
+                                    green.setItemMeta(green_meta);
+
+                                    inventory.setItem(13, green);
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else {
                 ItemStack red = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
                 ItemMeta red_meta = red.getItemMeta();
                 assert red_meta != null;
-                red_meta.setDisplayName(ChatColor.RED + "Purification Process Not Ready");
+                red_meta.setDisplayName(ChatColor.RED + "Not Ready");
                 ArrayList<String> red_lore = new ArrayList<String>();
                 if (cauldron_level < 3) {
                     red_lore.add(ChatColor.DARK_RED + "Requires full tank of water.");
                 }
                 else {
                     if (inventory.getItem(11) == null && inventory.getItem(15) == null) {
-                        red_lore.add(ChatColor.DARK_RED + "Input items in slots to purify water.");
+                        red_lore.add(ChatColor.DARK_RED + "Input items in slots to use cauldron.");
                     }
 
-                    else if (inventory.getItem(11) == null) {
-                        if (inventory.getItem(15).getType().equals(Material.GLASS_BOTTLE)) {
-                            red_lore.add(ChatColor.DARK_RED + "Requires blaze powder.");
-                        }
-                        else if (inventory.getItem(15).getType().equals(Material.BLAZE_POWDER)) {
-                            red_lore.add(ChatColor.DARK_RED + "Requires empty bottle.");
-                        }
-                        else {
-                            red_lore.add(ChatColor.DARK_RED + "Requires blaze powder and empty bottle.");
-                        }
+                    else if (!in_slots.contains(Material.GLASS_BOTTLE)) {
+                        red_lore.add(ChatColor.DARK_RED + "Requires an empty glass bottle.");
                     }
 
-                    else if (inventory.getItem(15) == null) {
-                        if (inventory.getItem(11).getType().equals(Material.GLASS_BOTTLE)) {
-                            red_lore.add(ChatColor.DARK_RED + "Requires blaze powder.");
-                        }
-                        else if (inventory.getItem(11).getType().equals(Material.BLAZE_POWDER)) {
-                            red_lore.add(ChatColor.DARK_RED + "Requires empty bottle.");
-                        }
-                        else {
-                            red_lore.add(ChatColor.DARK_RED + "Requires blaze powder and empty bottle.");
-                        }
-                    }
-                    else {
-                        if (inventory.getItem(11).getType().equals(Material.GLASS_BOTTLE) || inventory.getItem(15).getType().equals(Material.GLASS_BOTTLE)) {
-                            red_lore.add(ChatColor.DARK_RED + "Requires blaze powder.");
-                        }
-                        else if (inventory.getItem(11).getType().equals(Material.BLAZE_POWDER) || inventory.getItem(15).getType().equals(Material.BLAZE_POWDER)) {
-                            red_lore.add(ChatColor.DARK_RED + "Requires empty bottle.");
-                        }
-                        else {
-                            red_lore.add(ChatColor.DARK_RED + "Requires blaze powder and empty bottle.");
-                        }
+                    else if (!in_slots.contains(Material.BLAZE_POWDER) && !in_slots.contains(Material.COMMAND_BLOCK)) {
+                        red_lore.add(ChatColor.DARK_RED + "Requires secondary ingredient.");
                     }
                 }
 

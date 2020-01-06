@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.purification_runnable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +31,7 @@ public class purification implements Listener {
         plugin = bcav;
     }
 
-    private String cauldron_title = ChatColor.BLUE + "Water Purification";
+    private String cauldron_title = ChatColor.DARK_GRAY + "Cauldron";
     private int cdr_lvl = 0;
     private boolean ready;
     private Inventory cauldron_inv;
@@ -112,7 +113,7 @@ public class purification implements Listener {
                         }
                     }
                     else if (!otherAction) {
-                        player.sendMessage(ChatColor.RED + "To purify water, light a fire underneath the cauldron.");
+                        player.sendMessage(ChatColor.RED + "Light a fire underneath the Cauldron to use it.");
                     }
                 }
             }
@@ -149,42 +150,22 @@ public class purification implements Listener {
                 boolean hasIng = false;
                 boolean isFull = cdr_lvl == 3;
 
+                ArrayList<Material> in_slots = new ArrayList<>();
+                if (cauldron_inv.getItem(11) != null) {
+                    in_slots.add(cauldron_inv.getItem(11).getType());
+                }
+                if (cauldron_inv.getItem(15) != null) {
+                    in_slots.add(cauldron_inv.getItem(15).getType());
+                }
+
                 if (target_inv.getItem(11) == null || target_inv.getItem(15) == null) {
                     hasIng = false;
                 }
-                else if (target_inv.getItem(11).getType().equals(Material.GLASS_BOTTLE) && target_inv.getItem(15).getType().equals(Material.BLAZE_POWDER) || (target_inv.getItem(11).getType().equals(Material.BLAZE_POWDER) && target_inv.getItem(15).getType().equals(Material.GLASS_BOTTLE))) {
+                else if (in_slots.contains(Material.GLASS_BOTTLE) && ((in_slots.contains(Material.BLAZE_POWDER) || (in_slots.contains(Material.COMMAND_BLOCK))))) {
                     hasIng = true;
                 }
 
                 ready = (hasIng && isFull);
-                /*
-                if (ready) {
-                    ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
-                    ItemMeta green_meta = green.getItemMeta();
-                    assert green_meta != null;
-                    green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
-                    ArrayList<String> green_lore = new ArrayList<String>();
-                    green_lore.add(ChatColor.GREEN + "Click" + ChatColor.DARK_GREEN + " to start purifying water.");
-                    green_meta.setLore(green_lore);
-                    green.setItemMeta(green_meta);
-
-                    cauldron_inv.setItem(13, green);
-                }
-                else {
-                    ItemStack red = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
-                    ItemMeta red_meta = red.getItemMeta();
-                    assert red_meta != null;
-                    red_meta.setDisplayName(ChatColor.RED + "Purification Process Not Ready");
-                    ArrayList<String> red_lore = new ArrayList<String>();
-                    red_lore.add(ChatColor.DARK_RED + "Requires full tank of water.");
-                    red_lore.add(ChatColor.DARK_RED + "Requires empty bottle.");
-                    red_lore.add(ChatColor.DARK_RED + "Requires blaze powder.");
-                    red_meta.setLore(red_lore);
-                    red.setItemMeta(red_meta);
-
-                    cauldron_inv.setItem(13, red);
-                }
-                 */
 
                 if (item != null) {
                     if (item.getType().equals(Material.BLUE_STAINED_GLASS_PANE) ||
@@ -205,22 +186,45 @@ public class purification implements Listener {
                             cauldron_inv.getItem(15).setAmount(item_2_amt - 1);
                             cauldron_block.setType(Material.CAULDRON);
 
-                            ItemStack purified_water = new ItemStack(Material.POTION, 1);
-                            ItemMeta pur_wat_item_meta = purified_water.getItemMeta();
-                            pur_wat_item_meta.setDisplayName(ChatColor.DARK_AQUA + "Purified Water Bottle");
+                            if (in_slots.contains(Material.BLAZE_POWDER)) {
+                                ItemStack purified_water = new ItemStack(Material.POTION, 1);
+                                ItemMeta pur_wat_item_meta = purified_water.getItemMeta();
+                                pur_wat_item_meta.setDisplayName(ChatColor.DARK_AQUA + "Purified Water Bottle");
 
-                            ArrayList<String> pur_wat_lore = new ArrayList<>();
-                            pur_wat_lore.add(ChatColor.GRAY + "Light and refreshing.");
-                            pur_wat_item_meta.setLore(pur_wat_lore);
-                            pur_wat_item_meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                                ArrayList<String> pur_wat_lore = new ArrayList<>();
+                                pur_wat_lore.add(ChatColor.GRAY + "Light and refreshing.");
+                                pur_wat_item_meta.setLore(pur_wat_lore);
+                                pur_wat_item_meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
-                            PotionMeta pur_wat_pot_meta = (PotionMeta) pur_wat_item_meta;
-                            pur_wat_pot_meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
-                            pur_wat_pot_meta.setColor(Color.fromRGB(76,162,255));
+                                PotionMeta pur_wat_pot_meta = (PotionMeta) pur_wat_item_meta;
+                                pur_wat_pot_meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
+                                pur_wat_pot_meta.setColor(Color.fromRGB(76,162,255));
 
-                            purified_water.setItemMeta(pur_wat_pot_meta);
+                                purified_water.setItemMeta(pur_wat_pot_meta);
 
-                            cauldron_inv.setItem(22, purified_water);
+                                cauldron_inv.setItem(22, purified_water);
+                            }
+                            else if (in_slots.contains(Material.COMMAND_BLOCK)) {
+                                ItemStack antidote = new ItemStack(Material.POTION, 1);
+                                ItemMeta ant_meta = antidote.getItemMeta();
+                                ant_meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Antidote Bottle");
+
+                                ArrayList<String> pur_wat_lore = new ArrayList<>();
+                                pur_wat_lore.add(ChatColor.GRAY + "Purges the toxins from your body.");
+                                ant_meta.setLore(pur_wat_lore);
+
+                                ant_meta.addEnchant(Enchantment.DURABILITY, 100, true);
+                                ant_meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                                ant_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+                                PotionMeta ant_pot_meta = (PotionMeta) ant_meta;
+                                ant_pot_meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
+                                ant_pot_meta.setColor(Color.fromRGB(224,74,188));
+
+                                antidote.setItemMeta(ant_pot_meta);
+
+                                cauldron_inv.setItem(22, antidote);
+                            }
                         }
                     }
                 }

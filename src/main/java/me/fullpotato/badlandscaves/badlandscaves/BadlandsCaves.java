@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.essence_of_purging;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.tiny_blaze_powder;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting.purge_ess;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting.stop_custom_items_rclick;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomCrafting.tiny_blaze_into_large;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.death_handler;
@@ -41,6 +42,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new player_leave(this), this);
         this.getServer().getPluginManager().registerEvents(new tiny_blaze_into_large(this), this);
         this.getServer().getPluginManager().registerEvents(new purge_ess(this), this);
+        this.getServer().getPluginManager().registerEvents(new stop_custom_items_rclick(this), this);
 
         //command reg
         this.getCommand("thirst").setExecutor(new ThirstCommand());

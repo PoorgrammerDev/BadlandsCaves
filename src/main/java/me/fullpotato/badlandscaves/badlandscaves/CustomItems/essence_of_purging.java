@@ -16,7 +16,7 @@ public class essence_of_purging implements Listener {
     }
 
     public void purge_essence_craft () {
-        ItemStack purge_essence = new ItemStack(Material.DEBUG_STICK, 1);
+        ItemStack purge_essence = new ItemStack(Material.COMMAND_BLOCK, 1);
         ItemMeta purge_ess_meta = purge_essence.getItemMeta();
         purge_ess_meta.setDisplayName(ChatColor.AQUA + "Essence of Purging");
         purge_ess_meta.setCustomModelData(101);
@@ -32,8 +32,8 @@ public class essence_of_purging implements Listener {
         * where # = gold nuggets, @ = tiny pile of blaze powder
         * */
         purge_ess_craft.shape("###","#@#","###");
-        purge_ess_craft.setIngredient('#', Material.GOLD_NUGGET);
-        purge_ess_craft.setIngredient('@', Material.STRUCTURE_VOID);
+        purge_ess_craft.setIngredient('#', Material.GOLD_INGOT);
+        purge_ess_craft.setIngredient('@', Material.STRUCTURE_BLOCK);
 
         plugin.getServer().addRecipe(purge_ess_craft);
     }

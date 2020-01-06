@@ -52,10 +52,18 @@ public class water_drinking implements Listener {
                         }
                     }
                 }
-
+                else if (potionMeta.getDisplayName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Antidote Bottle")){
+                    if (potionMeta.getLore().contains(ChatColor.GRAY + "Purges the toxins from your body.")) {
+                        if (potionMeta.getEnchantLevel(Enchantment.DURABILITY ) > 50) {
+                            double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                            double tox_decr = 50;
+                            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, decrTox(current_tox, tox_decr)));
+                        }
+                    }
                 }
             }
         }
+    }
 
     public double addThirst (double current_thirst, double thirst_add) {
         if (current_thirst + thirst_add <= 100) {
@@ -63,6 +71,15 @@ public class water_drinking implements Listener {
         }
         else {
             return 100;
+        }
+    }
+
+    public double decrTox (double current_tox, double tox_decr) {
+        if (current_tox - tox_decr >= 0) {
+            return current_tox - tox_decr;
+        }
+        else {
+            return 0;
         }
     }
 }
