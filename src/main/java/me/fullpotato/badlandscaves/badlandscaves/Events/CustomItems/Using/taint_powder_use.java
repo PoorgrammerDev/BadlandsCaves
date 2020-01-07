@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.tainted_powder_runnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.tpowd_run_check_vel;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +15,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -59,10 +63,17 @@ public class taint_powder_use implements Listener {
                     drop.setInvulnerable(true);
                     drop.setPickupDelay(Integer.MAX_VALUE);
                     drop.setVelocity(loc.getDirection().multiply(1.2));
+                    drop.setMetadata("time", new FixedMetadataValue(plugin, 0));
 
-
-                    new tainted_powder_runnable(plugin, drop).runTaskLater(plugin, 30);
-
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            double init_x_vel = drop.getVelocity().getX();
+                            double init_y_vel = drop.getVelocity().getY();
+                            double init_z_vel = drop.getVelocity().getZ();
+                            BukkitTask check_vel = new tpowd_run_check_vel(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel).runTaskTimerAsynchronously(plugin, 0, 2);
+                        }
+                    }.runTaskLater(plugin, 3);
                 }
             }
         }

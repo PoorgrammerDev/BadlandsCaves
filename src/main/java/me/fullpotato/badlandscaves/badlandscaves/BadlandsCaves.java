@@ -19,6 +19,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.player_join;
 import me.fullpotato.badlandscaves.badlandscaves.Events.player_leave;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 

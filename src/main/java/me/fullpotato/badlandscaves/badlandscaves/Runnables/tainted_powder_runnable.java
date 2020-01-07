@@ -18,9 +18,13 @@ public class tainted_powder_runnable extends BukkitRunnable {
 
     private BadlandsCaves plugin;
     private Item item;
-    public tainted_powder_runnable (BadlandsCaves bcav, Item itm) {
+    private Player thrower;
+    private int vel_check_ID;
+    public tainted_powder_runnable (BadlandsCaves bcav, Item itm, Player ply, int id) {
         plugin = bcav;
         item = itm;
+        thrower = ply;
+        vel_check_ID = id;
     }
 
     @Override
@@ -30,6 +34,7 @@ public class tainted_powder_runnable extends BukkitRunnable {
         int X = location.getBlockX();
         int Y = location.getBlockY();
         int Z = location.getBlockZ();
+
 
 
         for (int x = X - 3; x < X + 3; x++) {
@@ -67,7 +72,8 @@ public class tainted_powder_runnable extends BukkitRunnable {
                         affected_block.getState().update(true);
 
                         if (foundblock) {
-                            world.spawnParticle(Particle.CLOUD, affected_block_loc, 1);
+                            world.spawnParticle(Particle.SMOKE_NORMAL, affected_block_loc, 1);
+                            thrower.playSound(affected_block_loc,Sound.ENTITY_SILVERFISH_DEATH, (float) 0.1, (float) Math.random() * 2);
                         }
                     }
                 }
@@ -85,18 +91,21 @@ public class tainted_powder_runnable extends BukkitRunnable {
                 else if (entity_list[a].getType().equals(EntityType.PLAYER)) {
                     Player player = (Player) entity_list[a];
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100, 1));
-                        double tox = player.getMetadata("Toxicity").get(0).asDouble();
-
-                        if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
-                            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + 1));
-                            world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), 10,0.2, 0.5 ,0.2);
+                        if (!player.getUniqueId().equals(thrower.getUniqueId())) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100, 1));
+                            double tox = player.getMetadata("Toxicity").get(0).asDouble();
+                            int tox_incr, part_num;
+                            if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
+                                tox_incr = 1;
+                                part_num = 10;
+                            }
+                            else {
+                                tox_incr = 10;
+                                part_num = 20;
+                            }
+                            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
+                            world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
                         }
-                        else {
-                            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + 10));
-                            world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), 20,0.2, 0.5 ,0.2);
-                        }
-
                     }
                 }
                 else {
@@ -112,9 +121,15 @@ public class tainted_powder_runnable extends BukkitRunnable {
         }
 
         assert world != null;
-        world.playEffect(location, Effect.ANVIL_LAND, 1);
+        world.playSound(location, Sound.BLOCK_LAVA_EXTINGUISH, 1, (float) 1.2);
+        world.spawnParticle(Particle.REDSTONE, location, 50, 0.5 ,0.5 ,0.5, new Particle.DustOptions(Color.fromRGB(0,127,0),3));
+
 
         item.teleport(new Location(world, X, -1000, Z));
+
+        if (vel_check_ID != 0) {
+            Bukkit.getScheduler().cancelTask(vel_check_ID);
+        }
 
     }
 }
