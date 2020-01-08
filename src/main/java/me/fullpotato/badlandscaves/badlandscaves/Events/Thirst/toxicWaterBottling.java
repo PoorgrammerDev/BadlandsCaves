@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.tox_bottling_runnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.toxBottlingRunnable;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,9 +10,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitTask;
 
-public class toxic_water_bottling implements Listener {
+public class toxicWaterBottling implements Listener {
     private BadlandsCaves plugin;
-    public toxic_water_bottling (BadlandsCaves bcav) {
+    public toxicWaterBottling(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -23,7 +23,7 @@ public class toxic_water_bottling implements Listener {
                 if (event.getHand().equals(EquipmentSlot.HAND)) {
                     if (event.getItem() != null) {
                         if (event.getItem().getType().equals(Material.GLASS_BOTTLE)) {
-                            BukkitTask bottling = new tox_bottling_runnable(plugin, event.getPlayer()).runTaskLaterAsynchronously(plugin, 1);
+                            BukkitTask bottling = new toxBottlingRunnable(plugin, event.getPlayer()).runTaskLaterAsynchronously(plugin, 1);
                         }
                     }
                 }

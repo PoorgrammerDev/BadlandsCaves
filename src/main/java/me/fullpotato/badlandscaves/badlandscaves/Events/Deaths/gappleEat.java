@@ -9,9 +9,9 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class gapple_eat implements Listener {
+public class gappleEat implements Listener {
     private BadlandsCaves plugin;
-    public gapple_eat (BadlandsCaves bcav) {
+    public gappleEat(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -21,11 +21,20 @@ public class gapple_eat implements Listener {
         ItemStack item = event.getItem();
         int death_count = player.getMetadata("Deaths").get(0).asInt();
 
-        if (item.getType() == Material.GOLDEN_APPLE) {
-            player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, 1)));
-        }
-        else if (item.getType() == Material.ENCHANTED_GOLDEN_APPLE) {
-            player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, 10)));
+        boolean gapple = item.getType().equals(Material.GOLDEN_APPLE);
+        boolean ench_gapple = item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE);
+
+        if (gapple || ench_gapple) {
+            int decr_by;
+            if (gapple) {
+                //TODO expand this to hardmode when implemented
+                decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_gapple");
+            }
+            else {
+                //TODO expand this to hardmode when implemented
+                decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_ench_gapple");
+            }
+            player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
         }
     }
 

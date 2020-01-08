@@ -13,9 +13,9 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionType;
 
-public class water_drinking implements Listener {
+public class drinking implements Listener {
     private BadlandsCaves plugin;
-    public water_drinking (BadlandsCaves bcav) {
+    public drinking(BadlandsCaves bcav) {
         plugin = bcav;
     }
     @EventHandler
@@ -32,11 +32,13 @@ public class water_drinking implements Listener {
             //toxic water
             if (potionMeta.getBasePotionData().getType().equals(PotionType.WATER)) {
                 double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-                double thirst_add = 10;
+                //TODO expand this to hardmode when implemented
+                double thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_thirst_incr");
                 player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
 
                 double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
-                double tox_add = 5;
+                //TODO expand this to hardmode when implemented
+                double tox_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_tox_incr");
                 player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + tox_add));
             }
             //either purified or antidote
@@ -47,7 +49,8 @@ public class water_drinking implements Listener {
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Light and refreshing.")) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
                             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-                            double thirst_add = 60;
+                            //TODO expand this to hardmode when implemented
+                            double thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
                             player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
                         }
                     }
@@ -56,7 +59,8 @@ public class water_drinking implements Listener {
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Purges the toxins from your body.")) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY ) > 50) {
                             double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
-                            double tox_decr = 50;
+                            //TODO expand this to hardmode when implemented
+                            double tox_decr = plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
                             player.setMetadata("Toxicity", new FixedMetadataValue(plugin, decrTox(current_tox, tox_decr)));
                         }
                     }

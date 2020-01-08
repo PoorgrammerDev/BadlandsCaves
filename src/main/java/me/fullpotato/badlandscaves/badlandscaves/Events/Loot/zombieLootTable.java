@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-public class zombie_loottable implements LootTable {
+public class zombieLootTable implements LootTable {
 
     private Plugin plugin = BadlandsCaves.getPlugin(BadlandsCaves.class);
     private NamespacedKey key = new NamespacedKey(plugin, "zombie_loot");

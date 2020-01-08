@@ -5,11 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class tox_decr_slowly extends BukkitRunnable {
+public class toxSlowDecreaseRunnable extends BukkitRunnable {
 
     private BadlandsCaves plugin;
     private Player player;
-    public tox_decr_slowly (BadlandsCaves bcav, Player ply) {
+    public toxSlowDecreaseRunnable(BadlandsCaves bcav, Player ply) {
         plugin = bcav;
         player = ply;
     }

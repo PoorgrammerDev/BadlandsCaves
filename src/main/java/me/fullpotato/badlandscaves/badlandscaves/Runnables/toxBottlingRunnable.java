@@ -16,11 +16,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
-public class tox_bottling_runnable extends BukkitRunnable {
+public class toxBottlingRunnable extends BukkitRunnable {
     private BadlandsCaves plugin;
     private Player player;
 
-    public tox_bottling_runnable (BadlandsCaves bcav, Player ply){
+    public toxBottlingRunnable(BadlandsCaves bcav, Player ply){
         plugin = bcav;
         player = ply;
     }
@@ -34,21 +34,8 @@ public class tox_bottling_runnable extends BukkitRunnable {
                 if (item.getType().equals(Material.POTION)) {
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
                     if (potionMeta.getBasePotionData().getType().equals(PotionType.WATER)) {
-                        ItemStack toxic_water = new ItemStack(Material.POTION, 1);
-                        ItemMeta tox_water_meta = toxic_water.getItemMeta();
-                        tox_water_meta.setDisplayName(ChatColor.DARK_GREEN + "Toxic Water Bottle");
-                        tox_water_meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                        ArrayList<String> tox_wat_lore = new ArrayList<>();
-                        tox_wat_lore.add(ChatColor.DARK_GRAY + "Leaves a disgusting taste in your mouth");
-                        tox_water_meta.setLore(tox_wat_lore);
-                        PotionMeta tox_wat_pot_meta = (PotionMeta) tox_water_meta;
-                        tox_wat_pot_meta.setColor(Color.fromRGB(55, 117, 89));
-                        tox_wat_pot_meta.setBasePotionData(new PotionData(PotionType.WATER));
-
-                        toxic_water.setItemMeta(tox_wat_pot_meta);
-
+                        ItemStack toxic_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.toxic_water").getValues(true));
                         player.getInventory().setItem(a, toxic_water);
-
                     }
                 }
             }

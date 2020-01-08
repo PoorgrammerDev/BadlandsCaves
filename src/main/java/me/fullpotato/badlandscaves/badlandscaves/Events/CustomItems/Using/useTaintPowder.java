@@ -1,12 +1,8 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.tainted_powder_runnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.tpowd_run_check_vel;
-import org.bukkit.ChatColor;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.taintedPowderVelCheck;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,17 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-
-public class taint_powder_use implements Listener {
+public class useTaintPowder implements Listener {
     private BadlandsCaves plugin;
-    public taint_powder_use (BadlandsCaves bcav) {
+    public useTaintPowder(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -36,17 +28,7 @@ public class taint_powder_use implements Listener {
             ItemStack item = event.getItem();
             if (item != null) {
 
-                ItemStack tainted_powder = new ItemStack(Material.COMMAND_BLOCK, 2);
-                ItemMeta powder_meta = tainted_powder.getItemMeta();
-                powder_meta.setDisplayName(ChatColor.DARK_GREEN + "Tainted Powder");
-                ArrayList<String> powder_lore = new ArrayList<>();
-                powder_lore.add(ChatColor.GREEN + "Right click to use.");
-                powder_lore.add("");
-                powder_lore.add(ChatColor.GRAY + "Formulated to cripple silverfish's nervous systems.");
-                powder_lore.add(ChatColor.GRAY + "Works best when they are sleeping, in their blocks.");
-                powder_lore.add(ChatColor.GRAY + "Also works on other living organisms, but not as well.");
-                powder_meta.setLore(powder_lore);
-                tainted_powder.setItemMeta(powder_meta);
+                ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
 
                 if (item.isSimilar(tainted_powder)) {
                     event.setCancelled(true);
@@ -71,7 +53,7 @@ public class taint_powder_use implements Listener {
                             double init_x_vel = drop.getVelocity().getX();
                             double init_y_vel = drop.getVelocity().getY();
                             double init_z_vel = drop.getVelocity().getZ();
-                            BukkitTask check_vel = new tpowd_run_check_vel(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel).runTaskTimerAsynchronously(plugin, 0, 2);
+                            BukkitTask check_vel = new taintedPowderVelCheck(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel).runTaskTimerAsynchronously(plugin, 0, 2);
                         }
                     }.runTaskLater(plugin, 3);
                 }

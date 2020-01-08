@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class tainted_powder_runnable extends BukkitRunnable {
+public class taintedPowderRunnable extends BukkitRunnable {
 
     private BadlandsCaves plugin;
     private Item item;
     private Player thrower;
     private int vel_check_ID;
-    public tainted_powder_runnable (BadlandsCaves bcav, Item itm, Player ply, int id) {
+    public taintedPowderRunnable(BadlandsCaves bcav, Item itm, Player ply, int id) {
         plugin = bcav;
         item = itm;
         thrower = ply;
@@ -124,8 +124,7 @@ public class tainted_powder_runnable extends BukkitRunnable {
         world.playSound(location, Sound.BLOCK_LAVA_EXTINGUISH, 1, (float) 1.2);
         world.spawnParticle(Particle.REDSTONE, location, 50, 0.5 ,0.5 ,0.5, new Particle.DustOptions(Color.fromRGB(0,127,0),3));
 
-
-        item.teleport(new Location(world, X, -1000, Z));
+        item.remove();
 
         if (vel_check_ID != 0) {
             Bukkit.getScheduler().cancelTask(vel_check_ID);

@@ -1,10 +1,9 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.cauldron_runnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.cauldronRunnable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,19 +14,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-public class cauldron implements Listener {
+public class cauldronMenu implements Listener {
     private BadlandsCaves plugin;
-    public cauldron(BadlandsCaves bcav) {
+    public cauldronMenu(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -108,7 +103,7 @@ public class cauldron implements Listener {
                         if (!otherAction) {
                             event.setCancelled(true);
                             purification_menu(player, cauldron_block, cauldron_title);
-                            BukkitTask inv_refresh = new cauldron_runnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
+                            BukkitTask inv_refresh = new cauldronRunnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
                             refresh_id = inv_refresh.getTaskId();
                         }
                     }
@@ -192,62 +187,20 @@ public class cauldron implements Listener {
                             cauldron_inv.getItem(15).setAmount(item_2_amt - 1);
                             cauldron_block.setType(Material.CAULDRON);
 
+                            //PURIFIED WATER
                             if (in_slots.contains(Material.BLAZE_POWDER)) {
-                                ItemStack purified_water = new ItemStack(Material.POTION, 1);
-                                ItemMeta pur_wat_item_meta = purified_water.getItemMeta();
-                                pur_wat_item_meta.setDisplayName(ChatColor.DARK_AQUA + "Purified Water Bottle");
-
-                                ArrayList<String> pur_wat_lore = new ArrayList<>();
-                                pur_wat_lore.add(ChatColor.GRAY + "Light and refreshing.");
-                                pur_wat_item_meta.setLore(pur_wat_lore);
-                                pur_wat_item_meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-
-                                PotionMeta pur_wat_pot_meta = (PotionMeta) pur_wat_item_meta;
-                                pur_wat_pot_meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
-                                pur_wat_pot_meta.setColor(Color.fromRGB(76,162,255));
-
-                                purified_water.setItemMeta(pur_wat_pot_meta);
-
+                                ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
                                 cauldron_inv.setItem(22, purified_water);
                             }
+                            //ANTIDOTE
                             else if (in_slots.contains(Material.COMMAND_BLOCK)) {
-                                ItemStack antidote = new ItemStack(Material.POTION, 1);
-                                ItemMeta ant_meta = antidote.getItemMeta();
-                                ant_meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Antidote Bottle");
-
-                                ArrayList<String> pur_wat_lore = new ArrayList<>();
-                                pur_wat_lore.add(ChatColor.GRAY + "Purges the toxins from your body.");
-                                ant_meta.setLore(pur_wat_lore);
-
-                                ant_meta.addEnchant(Enchantment.DURABILITY, 100, true);
-                                ant_meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                                ant_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-                                PotionMeta ant_pot_meta = (PotionMeta) ant_meta;
-                                ant_pot_meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
-                                ant_pot_meta.setColor(Color.fromRGB(224,74,188));
-
-                                antidote.setItemMeta(ant_pot_meta);
-
+                                ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
                                 cauldron_inv.setItem(22, antidote);
                             }
+                            //TAINTED POWDER
                             else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
-                                ItemStack tainted_powder = new ItemStack(Material.COMMAND_BLOCK, 2);
-                                ItemMeta powder_meta = tainted_powder.getItemMeta();
-
-                                powder_meta.setDisplayName(ChatColor.DARK_GREEN + "Tainted Powder");
-                                ArrayList<String> powder_lore = new ArrayList<>();
-                                powder_lore.add(ChatColor.GREEN + "Right click to use.");
-                                powder_lore.add("");
-                                powder_lore.add(ChatColor.GRAY + "Formulated to cripple silverfish's nervous systems.");
-                                powder_lore.add(ChatColor.GRAY + "Works best when they are sleeping, in their blocks.");
-                                powder_lore.add(ChatColor.GRAY + "Also works on humans, but not as well.");
-                                powder_meta.setLore(powder_lore);
-
-                                tainted_powder.setItemMeta(powder_meta);
-
+                                ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
                                 cauldron_inv.setItem(22, tainted_powder);
-
                             }
                         }
                     }

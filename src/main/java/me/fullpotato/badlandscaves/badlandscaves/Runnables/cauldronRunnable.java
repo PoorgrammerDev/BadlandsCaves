@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class cauldron_runnable extends BukkitRunnable {
+public class cauldronRunnable extends BukkitRunnable {
 
     private BadlandsCaves plugin;
     private Inventory inventory;
@@ -23,7 +23,7 @@ public class cauldron_runnable extends BukkitRunnable {
     private Location location_under;
     private Player player;
 
-    public cauldron_runnable(BadlandsCaves bcav, Inventory inv, Location loc, Location bl_under, Player ply) {
+    public cauldronRunnable(BadlandsCaves bcav, Inventory inv, Location loc, Location bl_under, Player ply) {
         plugin = bcav;
         inventory = inv;
         location = loc;
@@ -190,21 +190,18 @@ public class cauldron_runnable extends BukkitRunnable {
                             slot = 15;
                         }
 
-                        if (inventory.getItem(slot).hasItemMeta()) {
-                            if (inventory.getItem(slot).getItemMeta().hasDisplayName()) {
-                                if (inventory.getItem(slot).getItemMeta().getDisplayName().equals(ChatColor.AQUA + "Essence of Purging")) {
-                                    ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
-                                    ItemMeta green_meta = green.getItemMeta();
-                                    assert green_meta != null;
-                                    green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");
-                                    ArrayList<String> green_lore = new ArrayList<String>();
-                                    green_lore.add(ChatColor.DARK_GREEN + "Click to create antidote.");
-                                    green_meta.setLore(green_lore);
-                                    green.setItemMeta(green_meta);
+                        ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("item.purge_essence").getValues(true));
+                        if (inventory.getItem(slot).isSimilar(purge_ess)) {
+                            ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
+                            ItemMeta green_meta = green.getItemMeta();
+                            assert green_meta != null;
+                            green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");
+                            ArrayList<String> green_lore = new ArrayList<String>();
+                            green_lore.add(ChatColor.DARK_GREEN + "Click to create antidote.");
+                            green_meta.setLore(green_lore);
+                            green.setItemMeta(green_meta);
 
-                                    inventory.setItem(13, green);
-                                }
-                            }
+                            inventory.setItem(13, green);
                         }
                     }
                 }

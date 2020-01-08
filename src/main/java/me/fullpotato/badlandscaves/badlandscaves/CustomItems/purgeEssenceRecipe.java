@@ -9,18 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class essence_of_purging implements Listener {
+public class purgeEssenceRecipe implements Listener {
     private BadlandsCaves plugin;
-    public essence_of_purging (BadlandsCaves bcav) {
+    public purgeEssenceRecipe(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     public void purge_essence_craft () {
-        ItemStack purge_essence = new ItemStack(Material.COMMAND_BLOCK, 1);
-        ItemMeta purge_ess_meta = purge_essence.getItemMeta();
-        purge_ess_meta.setDisplayName(ChatColor.AQUA + "Essence of Purging");
-        purge_ess_meta.setCustomModelData(101);
-        purge_essence.setItemMeta(purge_ess_meta);
+        ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("item.purge_essence").getValues(true));
 
         ShapedRecipe purge_ess_craft = new ShapedRecipe(new NamespacedKey(plugin, "purge_essence"), purge_essence);
 

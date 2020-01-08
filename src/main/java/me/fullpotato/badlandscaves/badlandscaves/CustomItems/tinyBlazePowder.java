@@ -9,18 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class tiny_blaze_powder implements Listener {
+public class tinyBlazePowder implements Listener {
     private BadlandsCaves plugin;
-    public tiny_blaze_powder (BadlandsCaves bcav) {
+    public tinyBlazePowder(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     public void tiny_blaze_powder_craft () {
-        ItemStack tiny_blz = new ItemStack(Material.STRUCTURE_BLOCK, 9);
-        ItemMeta tiny_blz_meta = tiny_blz.getItemMeta();
-        tiny_blz_meta.setDisplayName(ChatColor.RESET + "Tiny Pile of Blaze Powder");
-        tiny_blz_meta.setCustomModelData(100);
-        tiny_blz.setItemMeta(tiny_blz_meta);
+        ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
 
         ShapelessRecipe blz_pd_to_small = new ShapelessRecipe(new NamespacedKey(plugin, "tiny_blaze_powder"), tiny_blz);
         blz_pd_to_small.addIngredient(Material.BLAZE_POWDER);

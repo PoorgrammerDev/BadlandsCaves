@@ -12,9 +12,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 
-public class incr_tox_in_water implements Listener {
+public class increaseToxInWater implements Listener {
     private BadlandsCaves plugin;
-    public incr_tox_in_water (BadlandsCaves bcav) {
+    public increaseToxInWater(BadlandsCaves bcav) {
         plugin = bcav;
     }
 

@@ -5,12 +5,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class death_handler implements Listener {
+public class deathHandler implements Listener {
 
     private BadlandsCaves plugin;
-    public death_handler (BadlandsCaves bcav) {
+    public deathHandler(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -39,5 +42,21 @@ public class death_handler implements Listener {
         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
 
         player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
+    }
+
+    @EventHandler
+    public void give_starter_on_spawn (PlayerRespawnEvent event) {
+        boolean active = plugin.getConfig().getBoolean("game_values.give_new_starter_on_spawn");
+
+        if (!active) return;
+
+        Player player = event.getPlayer();
+        Inventory inventory = player.getInventory();
+
+        ItemStack starter_sapling = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_sapling").getValues(true));
+        ItemStack starter_bone_meal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_bone_meal").getValues(true));
+
+        inventory.addItem(starter_sapling);
+        inventory.addItem(starter_bone_meal);
     }
 }

@@ -1,14 +1,13 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class tpowd_run_check_vel extends BukkitRunnable {
+public class taintedPowderVelCheck extends BukkitRunnable {
 
     private BadlandsCaves plugin;
     private Player player;
@@ -17,7 +16,7 @@ public class tpowd_run_check_vel extends BukkitRunnable {
     private double initial_y_vel;
     private double initial_z_vel;
 
-    public tpowd_run_check_vel (BadlandsCaves bcav, Player ply, Item powd, double init_x, double init_y, double init_z) {
+    public taintedPowderVelCheck(BadlandsCaves bcav, Player ply, Item powd, double init_x, double init_y, double init_z) {
         plugin = bcav;
         player = ply;
         powder = powd;
@@ -52,7 +51,7 @@ public class tpowd_run_check_vel extends BukkitRunnable {
         }
 
         if (ready_to_run) {
-            BukkitTask run = new tainted_powder_runnable(plugin, powder, player, this.getTaskId()).runTask(plugin);
+            BukkitTask run = new taintedPowderRunnable(plugin, powder, player, this.getTaskId()).runTask(plugin);
         }
     }
 }

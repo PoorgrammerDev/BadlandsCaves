@@ -8,9 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class decrease_thirst implements Listener {
+public class naturalThirstDecrease implements Listener {
     private BadlandsCaves plugin;
-    public decrease_thirst (BadlandsCaves bcav) {
+    public naturalThirstDecrease(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -52,7 +52,9 @@ public class decrease_thirst implements Listener {
             //player.sendMessage("thirstsys level: " + player.getMetadata("thirst_sys_var").get(0).asDouble());
         }
 
-        if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= 50) {
+        //TODO expand this to hardmode when implemented
+        int threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
+        if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= threshold) {
             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0));
 
             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();

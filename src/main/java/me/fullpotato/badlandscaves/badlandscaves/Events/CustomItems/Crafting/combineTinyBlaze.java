@@ -8,14 +8,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class tiny_blaze_into_large implements Listener {
+public class combineTinyBlaze implements Listener {
     private BadlandsCaves plugin;
-    public tiny_blaze_into_large (BadlandsCaves bcav) {
+
+    public combineTinyBlaze(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @EventHandler
-    public void tiny_blaze_into_large (PrepareItemCraftEvent event) {
+    public void tiny_blaze_into_large(PrepareItemCraftEvent event) {
 
         if (event.getRecipe() == null) {
             return;
@@ -28,26 +29,16 @@ public class tiny_blaze_into_large implements Listener {
 
         Material result = event.getRecipe().getResult().getType();
         if (result.equals(Material.BLAZE_POWDER)) {
-            String tiny_blz_name = ChatColor.RESET + "Tiny Pile of Blaze Powder";
+            ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("item.tiny_blaze_powder").getValues(true));
             boolean found = true;
             for (ItemStack item : event.getInventory().getMatrix()) {
+                if (!item.isSimilar(tiny_blz)) {
+                    found = false;
+                }
 
-                if (item == null) {
-                    found = false;
+                if (!found) {
+                    event.getInventory().setResult(null);
                 }
-                else if (!item.hasItemMeta()) {
-                    found = false;
-                }
-                else if (!item.getItemMeta().hasDisplayName()) {
-                    found = false;
-                }
-                else if (!item.getItemMeta().getDisplayName().equals(tiny_blz_name)) {
-                    found = false;
-                }
-            }
-
-            if (!found) {
-                event.getInventory().setResult(null);
             }
         }
     }

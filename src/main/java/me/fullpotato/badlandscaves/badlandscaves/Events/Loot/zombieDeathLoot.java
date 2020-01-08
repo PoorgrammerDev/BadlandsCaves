@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-public class zombie_death_loot implements Listener {
+public class zombieDeathLoot implements Listener {
     private BadlandsCaves plugin;
-    public zombie_death_loot(BadlandsCaves bcav) {
+    public zombieDeathLoot(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -46,13 +46,13 @@ public class zombie_death_loot implements Listener {
         builder.killer(player);
         LootContext lootContext = builder.build();
 
-        zombie_loottable zombieLoot = new zombie_loottable();
+        zombieLootTable zombieLoot = new zombieLootTable();
         Collection<ItemStack> drops = zombieLoot.populateLoot(new Random(), lootContext);
         ArrayList<ItemStack> items = (ArrayList<ItemStack>) drops;
 
         event.getDrops().clear();
 
-        for (int a = 0; a < 2; a++) {
+        for (int a = 0; a < items.size(); a++) {
             if (items.get(a).getAmount() > 0) {
                 location.getWorld().dropItemNaturally(location, items.get(a));
             }

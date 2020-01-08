@@ -1,0 +1,138 @@
+game_values:
+  give_new_starter_on_spawn: FALSE
+  hardmode: FALSE
+  pre_hardmode_values:
+    #how many deaths a golden apple will reverse
+    death_reverse_gapple: 1
+
+    #how many deaths an enchanted golden apple will reverse
+    death_reverse_ench_gapple: 10
+
+    #how many points the thirst system variable must reach until it increases 0.1 thirst
+    #decreasing this value will cause thirst to rise faster
+    #increasing this value will cause thirst to rise slower
+    threshold_thirst_sys: 50
+
+    #how many points of thirst drinking a toxic water will increase
+    tox_drink_thirst_incr: 10
+
+    #how many tox points drinking a toxic water will increase
+    tox_drink_tox_incr: 5
+
+    #how many thirst points drinking a purified water will increase
+    purified_drink_thirst_incr: 60
+
+    #how many points of toxicity an antidote will decrease
+    antidote_drink_tox_decr: 30
+
+items:
+  starter_sapling:
+    v: 2227
+    type: OAK_SAPLING
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      display-name: §8[§aStarter Sapling§8]
+      enchants:
+        DURABILITY: 1
+      ItemFlags:
+        - HIDE_ENCHANTS
+  starter_bone_meal:
+    v: 2227
+    type: BONE_MEAL
+    amount: 3
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      display-name: §8[§fStarter Bone Meal§8]
+      enchants:
+        DURABILITY: 1
+      ItemFlags:
+        - HIDE_ENCHANTS
+toxic_water:
+  v: 2227
+  type: POTION
+  meta:
+    ==: ItemMeta
+    meta-type: POTION
+    display-name: §2Toxic Water Bottle
+    lore:
+      - §8Leaves a disgusting taste in your mouth
+    ItemFlags:
+      - HIDE_POTION_EFFECTS
+    potion-type: minecraft:water
+    custom-color:
+      ==: Color
+      RED: 55
+      BLUE: 89
+      GREEN: 117
+  purified_water:
+    v: 2227
+    type: POTION
+    meta:
+      ==: ItemMeta
+      meta-type: POTION
+      display-name: §3Purified Water Bottle
+      lore:
+        - §7Light and refreshing.
+      ItemFlags:
+        - HIDE_POTION_EFFECTS
+      custom-color:
+        ==: Color
+        RED: 76
+        BLUE: 255
+        GREEN: 162
+  antidote:
+    v: 2227
+    type: POTION
+    meta:
+      ==: ItemMeta
+      meta-type: POTION
+      display-name: §dAntidote Bottle
+      lore:
+        - §7Purges the toxins from your body.
+      enchants:
+        DURABILITY: 100
+      ItemFlags:
+        - HIDE_ENCHANTS
+        - HIDE_POTION_EFFECTS
+      custom-color:
+        ==: Color
+        RED: 224
+        BLUE: 188
+        GREEN: 74
+  tiny_blaze_powder:
+    v: 2227
+    type: STRUCTURE_BLOCK
+    amount: 9
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rTiny Pile of Blaze Powder
+      custom-model-data: 100
+      blockMaterial: STRUCTURE_BLOCK
+  purge_essence:
+    v: 2227
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §bEssence of Purging
+      custom-model-data: 101
+      blockMaterial: COMMAND_BLOCK
+  tainted_powder:
+    v: 2227
+    type: COMMAND_BLOCK
+    amount: 2
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §2Tainted Powder
+      lore:
+        - §aRight click to use.
+        - ''
+        - §7Formulated to cripple silverfish's nervous systems.
+        - §7Works best when they are sleeping, in their blocks.
+        - §7Also works on humans, but not as well.
+      custom-model-data: 102
+      blockMaterial: COMMAND_BLOCK
