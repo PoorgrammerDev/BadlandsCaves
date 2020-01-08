@@ -2,7 +2,9 @@ package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,8 +18,10 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class player_join implements Listener {
 
     private BadlandsCaves plugin;
-    public player_join(BadlandsCaves bcav) {
+    private World world;
+    public player_join(BadlandsCaves bcav, World wrld) {
         plugin = bcav;
+        world = wrld;
     }
 
     @EventHandler
@@ -94,5 +98,7 @@ public class player_join implements Listener {
         player.setMetadata("thirst_debuff_slow_lvl", new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + ".thirst_debuff_slow_lvl")));
         player.setMetadata("thirst_debuff_hunger_lvl", new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + ".thirst_debuff_hunger_lvl")));
         player.setMetadata("thirst_debuff_poison_lvl", new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + ".thirst_debuff_poison_lvl")));
+
+        player.teleport(world.getSpawnLocation());
     }
 }

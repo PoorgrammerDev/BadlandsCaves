@@ -44,7 +44,7 @@ public class taint_powder_use implements Listener {
                 powder_lore.add("");
                 powder_lore.add(ChatColor.GRAY + "Formulated to cripple silverfish's nervous systems.");
                 powder_lore.add(ChatColor.GRAY + "Works best when they are sleeping, in their blocks.");
-                powder_lore.add(ChatColor.GRAY + "Also works on humans, but not as well.");
+                powder_lore.add(ChatColor.GRAY + "Also works on other living organisms, but not as well.");
                 powder_meta.setLore(powder_lore);
                 tainted_powder.setItemMeta(powder_meta);
 

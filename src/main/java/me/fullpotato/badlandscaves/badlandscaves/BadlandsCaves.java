@@ -7,6 +7,8 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.pur
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stop_custom_items_rclick;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.taint_powder_use;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.tiny_blaze_into_large;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.fish_up_crate;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombie_death_loot;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.death_handler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gapple_eat;
@@ -18,21 +20,29 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.incr_tox_in_wat
 import me.fullpotato.badlandscaves.badlandscaves.Events.player_join;
 import me.fullpotato.badlandscaves.badlandscaves.Events.player_leave;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class BadlandsCaves extends JavaPlugin {
 
+    World world;
+    World default_world;
     @Override
     public void onEnable() {
+        default_world = Bukkit.getWorld("world");
+
+        world_gen();
+
         //config
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
 
         //event registering
-        this.getServer().getPluginManager().registerEvents(new player_join(this), this);
+        this.getServer().getPluginManager().registerEvents(new player_join(this, world), this);
         this.getServer().getPluginManager().registerEvents(new decrease_thirst(this), this);
         this.getServer().getPluginManager().registerEvents(new incr_tox_in_water(this), this);
         this.getServer().getPluginManager().registerEvents(new death_handler(this), this);
@@ -46,6 +56,8 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new purge_ess(this), this);
         this.getServer().getPluginManager().registerEvents(new stop_custom_items_rclick(this), this);
         this.getServer().getPluginManager().registerEvents(new taint_powder_use(this), this);
+        this.getServer().getPluginManager().registerEvents(new zombie_death_loot(this), this);
+        this.getServer().getPluginManager().registerEvents(new fish_up_crate(), this);
 
         //command reg
         this.getCommand("thirst").setExecutor(new ThirstCommand());
@@ -97,5 +109,40 @@ public final class BadlandsCaves extends JavaPlugin {
     public void loadConfig() {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
+    }
+
+    public void world_gen () {
+        WorldCreator worldCreator = new WorldCreator("world_buffet");
+        worldCreator.type(WorldType.BUFFET);
+        worldCreator.copy(default_world);
+
+        worldCreator.generator(default_world.getGenerator());
+
+        /*
+        worldCreator.generatorSettings("[\n" +
+                "  {\n" +
+                "    \"biome_source\": {\n" +
+                "        \"options\": {\n" +
+                "          \"biomes\": \"minecraft:badlands\"\n" +
+                "        }\n" +
+                "      },\n" +
+                "        \"type\": \"minecraft:fixed\"\n" +
+                "    },\n" +
+                "  {\n" +
+                "    \"chunk_generator\":{\n" +
+                "        \"options\": {\n" +
+                "          \"default_block\": \"minecraft:cobblestone\",\n" +
+                "          \"default_fluid\": \"minecraft:lava\"\n" +
+                "        },\n" +
+                "          \"type\":\"minecraft:caves\"\n" +
+                "        }\n" +
+                "  }\n" +
+                "]");
+         */
+
+
+
+
+        world = worldCreator.createWorld();
     }
 }
