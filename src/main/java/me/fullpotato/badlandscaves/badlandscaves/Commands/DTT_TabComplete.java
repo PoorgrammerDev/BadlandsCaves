@@ -19,8 +19,12 @@ public class DTT_TabComplete implements TabCompleter {
             List<String> list = new ArrayList<>();
 
             if (args.length == 1) {
-                list.add("get");
-                list.add("set");
+                if (args[0].startsWith("g")) list.add("get");
+                else if (args[0].startsWith("s")) list.add("set");
+                else {
+                    list.add("get");
+                    list.add("set");
+                }
             }
 
             else if (args.length == 2) {

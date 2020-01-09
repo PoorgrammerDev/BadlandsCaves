@@ -1,13 +1,11 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItems;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class purgeEssenceRecipe implements Listener {
     private BadlandsCaves plugin;
@@ -16,7 +14,7 @@ public class purgeEssenceRecipe implements Listener {
     }
 
     public void purge_essence_craft () {
-        ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("item.purge_essence").getValues(true));
+        ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
 
         ShapedRecipe purge_ess_craft = new ShapedRecipe(new NamespacedKey(plugin, "purge_essence"), purge_essence);
 

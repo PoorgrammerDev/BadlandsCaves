@@ -1,28 +1,31 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
-import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.DTT_TabComplete;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.DeathCommand;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.ThirstCommand;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.ToxicityCommand;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.purgeEssenceRecipe;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.tinyBlazePowder;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.purgeEssence;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stopCustomItemsRClick;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useTaintPowder;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.fish_up_crate;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.purgeEssence;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useFishingCrate;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useTaintPowder;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stopCustomItemsRClick;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.deathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gappleEat;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.naturalThirstDecrease;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.toxicWaterBottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.drinking;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.naturalThirstDecrease;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.toxicWaterBottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWater;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -62,22 +65,26 @@ public final class BadlandsCaves extends JavaPlugin {
         loadConfig();
 
         //event registering
-        this.getServer().getPluginManager().registerEvents(new playerJoin(this, world, player_values), this);
-        this.getServer().getPluginManager().registerEvents(new naturalThirstDecrease(this), this);
-        this.getServer().getPluginManager().registerEvents(new increaseToxInWater(this), this);
-        this.getServer().getPluginManager().registerEvents(new deathHandler(this), this);
-        this.getServer().getPluginManager().registerEvents(new gappleEat(this), this);
-        this.getServer().getPluginManager().registerEvents(new cauldronMenu(this), this);
-        this.getServer().getPluginManager().registerEvents(new toxicWaterBottling(this), this);
-        this.getServer().getPluginManager().registerEvents(new drinking(this), this);
-        this.getServer().getPluginManager().registerEvents(new toxicWaterBottling(this),this);
-        this.getServer().getPluginManager().registerEvents(new playerLeave(this, player_values), this);
-        this.getServer().getPluginManager().registerEvents(new combineTinyBlaze(this), this);
-        this.getServer().getPluginManager().registerEvents(new purgeEssence(this), this);
-        this.getServer().getPluginManager().registerEvents(new stopCustomItemsRClick(this), this);
-        this.getServer().getPluginManager().registerEvents(new useTaintPowder(this), this);
-        this.getServer().getPluginManager().registerEvents(new zombieDeathLoot(this), this);
-        this.getServer().getPluginManager().registerEvents(new fish_up_crate(), this);
+        {
+            this.getServer().getPluginManager().registerEvents(new playerJoin(this, world, player_values), this);
+            this.getServer().getPluginManager().registerEvents(new naturalThirstDecrease(this), this);
+            this.getServer().getPluginManager().registerEvents(new increaseToxInWater(this), this);
+            this.getServer().getPluginManager().registerEvents(new deathHandler(this), this);
+            this.getServer().getPluginManager().registerEvents(new gappleEat(this), this);
+            this.getServer().getPluginManager().registerEvents(new cauldronMenu(this), this);
+            this.getServer().getPluginManager().registerEvents(new toxicWaterBottling(this), this);
+            this.getServer().getPluginManager().registerEvents(new drinking(this), this);
+            this.getServer().getPluginManager().registerEvents(new toxicWaterBottling(this),this);
+            this.getServer().getPluginManager().registerEvents(new playerLeave(this, player_values), this);
+            this.getServer().getPluginManager().registerEvents(new combineTinyBlaze(this), this);
+            this.getServer().getPluginManager().registerEvents(new purgeEssence(this), this);
+            this.getServer().getPluginManager().registerEvents(new stopCustomItemsRClick(this), this);
+            this.getServer().getPluginManager().registerEvents(new useTaintPowder(this), this);
+            this.getServer().getPluginManager().registerEvents(new zombieDeathLoot(this), this);
+            this.getServer().getPluginManager().registerEvents(new getFishingCrate(this), this);
+            this.getServer().getPluginManager().registerEvents(new useFishingCrate(this), this);
+        }
+
 
         //command reg
         this.getCommand("thirst").setExecutor(new ThirstCommand());
@@ -100,12 +107,12 @@ public final class BadlandsCaves extends JavaPlugin {
         try {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 BukkitTask decr_tox = new toxSlowDecreaseRunnable(this, player).runTaskTimerAsynchronously(this, 0, 600);
-                BukkitTask save_config = new playerSaveToConfig(this, player, player_values).runTaskTimer(this, 5, 3600);
+
+                BukkitTask save_config = new playerSaveToConfig(this, player, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
             }
         }
         catch (NoClassDefFoundError ignored) {
         }
-
 
         //crafting recipes
         tinyBlazePowder tiny_blz = new tinyBlazePowder(this);
@@ -114,7 +121,6 @@ public final class BadlandsCaves extends JavaPlugin {
 
         purgeEssenceRecipe prg_ess = new purgeEssenceRecipe(this);
         prg_ess.purge_essence_craft();
-
     }
 
     @Override
@@ -122,7 +128,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         try {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                new playerSaveToConfig(this, player, player_values).run();
+                new playerSaveToConfig(this, player, player_values, false).runTaskAsynchronously(this);
             }
         }
         catch (NoClassDefFoundError ignored) {
@@ -137,36 +143,8 @@ public final class BadlandsCaves extends JavaPlugin {
     }
 
     public void world_gen () {
-        WorldCreator worldCreator = new WorldCreator("world_buffet");
-        worldCreator.type(WorldType.BUFFET);
-        worldCreator.copy(default_world);
-
-        worldCreator.generator(default_world.getGenerator());
-
-        /*
-        worldCreator.generatorSettings("[\n" +
-                "  {\n" +
-                "    \"biome_source\": {\n" +
-                "        \"options\": {\n" +
-                "          \"biomes\": \"minecraft:badlands\"\n" +
-                "        }\n" +
-                "      },\n" +
-                "        \"type\": \"minecraft:fixed\"\n" +
-                "    },\n" +
-                "  {\n" +
-                "    \"chunk_generator\":{\n" +
-                "        \"options\": {\n" +
-                "          \"default_block\": \"minecraft:cobblestone\",\n" +
-                "          \"default_fluid\": \"minecraft:lava\"\n" +
-                "        },\n" +
-                "          \"type\":\"minecraft:caves\"\n" +
-                "        }\n" +
-                "  }\n" +
-                "]");
-         */
-
-
-
+        WorldCreator worldCreator = new WorldCreator("world_badlandscaves");
+        worldCreator.generator(new chunkGenerator());
 
         world = worldCreator.createWorld();
     }

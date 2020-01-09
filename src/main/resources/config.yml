@@ -1,6 +1,25 @@
 game_values:
+
+  #to get a fishing crate, the chance is 1 in "x" when catching a tropical fish, "x" being this number
+  #decreasing this value will cause fishing crates to be more common
+  #increasing this value will cause fishing crates to be less common
+  fishing_crate_chance: 20
+
+  #when opening a fishing crate, the chance is 1 in "x" to get treasure instead of fish, "x" being this number
+  #decreasing this value will cause treasure to be more common
+  #increasing this value will cause treasure to be less common
+  fish_or_treasure_base: 20
+
+  #the max amount of fish you can get from a fishing crate at one time
+  fish_bound_base: 32
+
+  #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
+
+  #value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
   hardmode: FALSE
+
+  #these values change from prehardmode to hardmode
   pre_hardmode_values:
     #how many deaths a golden apple will reverse
     death_reverse_gapple: 1
@@ -49,23 +68,23 @@ items:
         DURABILITY: 1
       ItemFlags:
         - HIDE_ENCHANTS
-toxic_water:
-  v: 2227
-  type: POTION
-  meta:
-    ==: ItemMeta
-    meta-type: POTION
-    display-name: §2Toxic Water Bottle
-    lore:
-      - §8Leaves a disgusting taste in your mouth
-    ItemFlags:
-      - HIDE_POTION_EFFECTS
-    potion-type: minecraft:water
-    custom-color:
-      ==: Color
-      RED: 55
-      BLUE: 89
-      GREEN: 117
+  toxic_water:
+    v: 2227
+    type: POTION
+    meta:
+      ==: ItemMeta
+      meta-type: POTION
+      display-name: §2Toxic Water Bottle
+      lore:
+        - §8Leaves a disgusting taste in your mouth
+      ItemFlags:
+        - HIDE_POTION_EFFECTS
+      potion-type: minecraft:water
+      custom-color:
+        ==: Color
+        RED: 55
+        BLUE: 89
+        GREEN: 117
   purified_water:
     v: 2227
     type: POTION
@@ -136,3 +155,17 @@ toxic_water:
         - §7Also works on humans, but not as well.
       custom-model-data: 102
       blockMaterial: COMMAND_BLOCK
+  fishing_crate:
+    v: 2227
+    type: BARREL
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §6Fishing Crate
+      lore:
+        - §7Right click to open.
+      enchants:
+        DURABILITY: 1
+      ItemFlags:
+        - HIDE_ENCHANTS
+      blockMaterial: BARREL
