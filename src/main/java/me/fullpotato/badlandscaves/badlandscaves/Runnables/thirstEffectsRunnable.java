@@ -28,7 +28,7 @@ public class thirstEffectsRunnable extends BukkitRunnable {
                 player.setHealth(0);
             }
             else if (thirst <= 10) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
                 poison_lvl = 1;
                 hunger_lvl = 2;
                 slow_lvl = 3;

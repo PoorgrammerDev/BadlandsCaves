@@ -23,6 +23,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWa
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.chunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;

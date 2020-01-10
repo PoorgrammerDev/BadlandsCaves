@@ -28,7 +28,7 @@ public class toxEffectsRunnable extends BukkitRunnable{
                 player.setHealth(0);
             }
             else if (toxicity >= 90) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
             }
             else if (toxicity >= 70) {
                 poison_lvl = 1;
