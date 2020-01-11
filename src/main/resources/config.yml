@@ -28,8 +28,8 @@ game_values:
     death_reverse_ench_gapple: 10
 
     #how many points the thirst system variable must reach until it increases 0.1 thirst
-    #decreasing this value will cause thirst to rise faster
-    #increasing this value will cause thirst to rise slower
+    #decreasing this value will cause thirst to fall faster
+    #increasing this value will cause thirst to fall slower
     threshold_thirst_sys: 50
 
     #how many points of thirst drinking a toxic water will increase
@@ -42,6 +42,14 @@ game_values:
     purified_drink_thirst_incr: 60
 
     #how many points of toxicity an antidote will decrease
+    antidote_drink_tox_decr: 30
+  hardmode_values:
+    death_reverse_gapple: 0
+    death_reverse_ench_gapple: 1
+    threshold_thirst_sys: 30
+    tox_drink_thirst_incr: 5
+    tox_drink_tox_incr: 10
+    purified_drink_thirst_incr: 30
     antidote_drink_tox_decr: 30
 
 items:

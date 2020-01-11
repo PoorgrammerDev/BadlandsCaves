@@ -52,8 +52,16 @@ public class naturalThirstDecrease implements Listener {
             //player.sendMessage("thirstsys level: " + player.getMetadata("thirst_sys_var").get(0).asDouble());
         }
 
-        //TODO expand this to hardmode when implemented
-        int threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        int threshold;
+
+        if (isHardmode) {
+            threshold = plugin.getConfig().getInt("game_values.hardmode_values.threshold_thirst_sys");
+        }
+        else {
+            threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
+        }
+
         if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= threshold) {
             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0));
 

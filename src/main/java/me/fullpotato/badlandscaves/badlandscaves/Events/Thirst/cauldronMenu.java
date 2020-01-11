@@ -169,7 +169,7 @@ public class cauldronMenu implements Listener {
                 ready = (hasIng && isFull);
 
                 if (item != null) {
-                    if (item.getType().equals(Material.BLUE_STAINED_GLASS_PANE) ||
+                    if (item.getType().equals(Material.GREEN_STAINED_GLASS_PANE) ||
                             item.getType().equals(Material.BLACK_STAINED_GLASS_PANE) ||
                             item.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE) ||
                             item.getType().equals(Material.GRAY_STAINED_GLASS_PANE) ||

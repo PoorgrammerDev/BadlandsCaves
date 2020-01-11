@@ -25,6 +25,7 @@ public class drinking implements Listener {
             return;
         }
 
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         Player player = event.getPlayer();
         if (item.getItemMeta() != null && item.getItemMeta().getLore() != null) {
             PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -32,13 +33,27 @@ public class drinking implements Listener {
             //toxic water
             if (potionMeta.getBasePotionData().getType().equals(PotionType.WATER)) {
                 double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-                //TODO expand this to hardmode when implemented
-                double thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_thirst_incr");
+                double thirst_add;
+
+                if (isHardmode) {
+                    thirst_add = plugin.getConfig().getInt("game_values.hardmode_values.tox_drink_thirst_incr");
+                }
+                else {
+                    thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_thirst_incr");
+                }
+
                 player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
 
                 double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
-                //TODO expand this to hardmode when implemented
-                double tox_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_tox_incr");
+                double tox_add;
+
+                if (isHardmode) {
+                    tox_add = plugin.getConfig().getInt("game_values.hardmode_values.tox_drink_tox_incr");
+                }
+                else {
+                    tox_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_tox_incr");
+                }
+
                 player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + tox_add));
             }
             //either purified or antidote
@@ -49,8 +64,15 @@ public class drinking implements Listener {
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Light and refreshing.")) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
                             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-                            //TODO expand this to hardmode when implemented
-                            double thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
+
+                            double thirst_add;
+                            if (isHardmode) {
+                                thirst_add = plugin.getConfig().getInt("game_values.hardmode_values.purified_drink_thirst_incr");
+                            }
+                            else {
+                                thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
+                            }
+
                             player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
                         }
                     }
@@ -59,8 +81,15 @@ public class drinking implements Listener {
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Purges the toxins from your body.")) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY ) > 50) {
                             double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
-                            //TODO expand this to hardmode when implemented
-                            double tox_decr = plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
+
+                            double tox_decr;
+                            if (isHardmode) {
+                                tox_decr = plugin.getConfig().getInt("game_values.hardmode_values.antidote_drink_tox_decr");
+                            }
+                            else {
+                                tox_decr = plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
+                            }
+
                             player.setMetadata("Toxicity", new FixedMetadataValue(plugin, decrTox(current_tox, tox_decr)));
                         }
                     }

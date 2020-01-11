@@ -26,13 +26,22 @@ public class gappleEat implements Listener {
 
         if (gapple || ench_gapple) {
             int decr_by;
+            boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
             if (gapple) {
-                //TODO expand this to hardmode when implemented
-                decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_gapple");
+                if (isHardmode) {
+                    decr_by = plugin.getConfig().getInt("game_values.hardmode_values.death_reverse_gapple");
+                }
+                else {
+                    decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_gapple");
+                }
             }
             else {
-                //TODO expand this to hardmode when implemented
-                decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_ench_gapple");
+                if (isHardmode) {
+                    decr_by = plugin.getConfig().getInt("game_values.hardmode_values.death_reverse_ench_gapple");
+                }
+                else {
+                    decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_ench_gapple");
+                }
             }
             player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
         }

@@ -190,7 +190,7 @@ public class cauldronRunnable extends BukkitRunnable {
                             slot = 15;
                         }
 
-                        ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("item.purge_essence").getValues(true));
+                        ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
                         if (inventory.getItem(slot).isSimilar(purge_ess)) {
                             ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
                             ItemMeta green_meta = green.getItemMeta();

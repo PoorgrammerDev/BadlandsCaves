@@ -11,18 +11,30 @@ import java.util.Random;
 public class lakePopulator extends BlockPopulator {
     @Override
     public void populate(World world, Random random, Chunk chunk) {
-        if (random.nextInt(100) < 10) {
+        if (random.nextInt(100) < 50) {
+
+            System.out.print("yeet1");
+
             int chunk_x = chunk.getX();
             int chunk_z = chunk.getZ();
+
+            System.out.print("yeet2");
 
             int x = chunk_x * 16 + random.nextInt(15) - 8;
             int z = chunk_z * 16 + random.nextInt(15) - 8;
             int y;
 
-            for (y = world.getMaxHeight() - 100; chunk.getBlock(x, y, z).getType().equals(Material.AIR); y--) ;
-            y -= 7;
+            System.out.print("yeet3");
+
+            for (y = world.getMaxHeight() - 200; chunk.getBlock(x, y, z).getType().equals(Material.AIR) || y == 0; y--);
+
+            System.out.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETt4ASFHQ(&H@!R(*&H&@R(@&!UYR");
 
             Block block = world.getBlockAt(x + 8, y, z + 8);
+            System.out.print(block.getX());
+            System.out.print(block.getY());
+            System.out.print(block.getZ());
+            System.out.println();
 
             if (random.nextInt(100) < 70) block.setType(Material.WATER);
             else block.setType(Material.LAVA);
@@ -66,6 +78,7 @@ public class lakePopulator extends BlockPopulator {
                 }
             }
 
+/*
             for (j = 0; j < 16; ++j) {
                 for (k1 = 0; k1 < 16; ++k1) {
                     for (j1 = 4; j1 < 8; ++j1) {
@@ -80,6 +93,7 @@ public class lakePopulator extends BlockPopulator {
                     }
                 }
             }
+            */
         }
     }
 }

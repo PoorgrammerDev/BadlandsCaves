@@ -16,8 +16,8 @@ public class coalPopulator extends BlockPopulator {
             if (random.nextInt(100) < 60) {  // The chance of spawning
                 X = random.nextInt(15);
                 Z = random.nextInt(15);
-                Y = random.nextInt(40 + 40);  // Get randomized coordinates
-                if (chunk.getBlock(X, Y, Z).getType() == Material.STONE) {
+                Y = random.nextInt(40);  // Get randomized coordinates
+                if (chunk.getBlock(X, Y, Z).getType().equals(Material.STONE)) {
                     isStone = true;
                     while (isStone) {
                         chunk.getBlock(X, Y, Z).setType(Material.COAL_ORE);

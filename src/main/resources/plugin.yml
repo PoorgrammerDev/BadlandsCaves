@@ -14,3 +14,7 @@ commands:
     usage: /deaths <get|set> <username> <value>
     description: Work with Death count
     aliases: death
+  hardmode:
+    usage: /hardmode <get|set> <value>
+    description: Work with Hardmode value
+    aliases: hm

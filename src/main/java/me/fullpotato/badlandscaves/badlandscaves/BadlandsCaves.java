@@ -1,9 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
-import me.fullpotato.badlandscaves.badlandscaves.Commands.DTT_TabComplete;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.DeathCommand;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.ThirstCommand;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.ToxicityCommand;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.purgeEssenceRecipe;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItems.tinyBlazePowder;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
@@ -61,7 +58,7 @@ public final class BadlandsCaves extends JavaPlugin {
     public void onEnable() {
         default_world = Bukkit.getWorld("world");
 
-        world_gen();
+        //world_gen();
 
         loadConfig();
 
@@ -96,6 +93,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
         this.getCommand("deaths").setExecutor(new DeathCommand());
         this.getCommand("deaths").setTabCompleter(new DTT_TabComplete());
+
+        this.getCommand("hardmode").setExecutor(new HardmodeCommand(this));
+        this.getCommand("hardmode").setTabCompleter(new HM_TabComplete());
 
         //runnables
         BukkitTask act_bar = new actionbarRunnable().runTaskTimerAsynchronously(this, 0 ,0);
@@ -143,10 +143,12 @@ public final class BadlandsCaves extends JavaPlugin {
         this.saveConfig();
     }
 
+    /*
     public void world_gen () {
         WorldCreator worldCreator = new WorldCreator("world_badlandscaves");
         worldCreator.generator(new chunkGenerator());
 
         world = worldCreator.createWorld();
     }
+     */
 }
