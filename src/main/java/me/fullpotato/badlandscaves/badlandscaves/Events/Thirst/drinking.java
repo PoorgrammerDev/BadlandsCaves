@@ -64,16 +64,23 @@ public class drinking implements Listener {
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Light and refreshing.")) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
                             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-
+                            int thirst_threshold;
                             double thirst_add;
+                            int buffer;
+
                             if (isHardmode) {
                                 thirst_add = plugin.getConfig().getInt("game_values.hardmode_values.purified_drink_thirst_incr");
+                                thirst_threshold = plugin.getConfig().getInt("game_values.hardmode_values.threshold_thirst_sys");
+                                buffer = thirst_threshold * -10;
                             }
                             else {
                                 thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
+                                thirst_threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
+                                buffer = thirst_threshold * -100;
                             }
 
                             player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
+                            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, buffer));
                         }
                     }
                 }

@@ -42,14 +42,15 @@ game_values:
     purified_drink_thirst_incr: 60
 
     #how many points of toxicity an antidote will decrease
-    antidote_drink_tox_decr: 30
+    antidote_drink_tox_decr: 40
+
   hardmode_values:
     death_reverse_gapple: 0
     death_reverse_ench_gapple: 1
     threshold_thirst_sys: 30
     tox_drink_thirst_incr: 5
     tox_drink_tox_incr: 10
-    purified_drink_thirst_incr: 30
+    purified_drink_thirst_incr: 40
     antidote_drink_tox_decr: 30
 
 items:

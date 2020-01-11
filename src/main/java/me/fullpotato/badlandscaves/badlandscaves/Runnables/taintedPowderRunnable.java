@@ -5,14 +5,9 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class taintedPowderRunnable extends BukkitRunnable {
 
@@ -83,10 +78,24 @@ public class taintedPowderRunnable extends BukkitRunnable {
         Entity[] entity_list = location.getChunk().getEntities();
         for (int a = 0; a < entity_list.length; a++) {
             if (location.distance(entity_list[a].getLocation()) <= 3) {
+                boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
                 if (entity_list[a].getType().equals(EntityType.SILVERFISH)) {
+                    int duration, amplifier, count;
+                    if (isHardmode) {
+                        duration = 100;
+                        amplifier = 1;
+                        count = 5;
+                    }
+                    else {
+                        duration = 9999;
+                        amplifier = 4;
+                        count = 50;
+                    }
+
                     LivingEntity silverfish = (LivingEntity) entity_list[a];
-                    silverfish.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 9999, 4));
-                    world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), 50,0.2,0.5,0.2);
+                    silverfish.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, amplifier));
+                    world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), count,0.2,0.5,0.2);
+
                 }
                 else if (entity_list[a].getType().equals(EntityType.PLAYER)) {
                     Player player = (Player) entity_list[a];
