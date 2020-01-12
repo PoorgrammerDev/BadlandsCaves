@@ -24,7 +24,10 @@ public class playerSaveToConfig extends BukkitRunnable {
         for (String meta : values) {
             String filtered;
             String dot_meta;
-            if (meta.contains("#") || meta.contains("*")) {
+            if (meta.contains("!")) {
+                continue;
+            }
+            else if (meta.contains("#") || meta.contains("*")) {
                 filtered = meta.substring(1);
             }
             else {

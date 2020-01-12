@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -58,11 +57,12 @@ public class drinking implements Listener {
             }
             //either purified or antidote
             else if (potionMeta.getBasePotionData().getType().equals(PotionType.UNCRAFTABLE)) {
+                ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
+                ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
+
                 //testing if purified
 
-                if (potionMeta.getDisplayName().equalsIgnoreCase(ChatColor.DARK_AQUA + "Purified Water Bottle")) {
-                    if (potionMeta.getLore().contains(ChatColor.GRAY + "Light and refreshing.")) {
-                        //TODO change this to use config item deserialization
+                if (item.isSimilar(purified_water)) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
                             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
                             int thirst_threshold;
@@ -83,11 +83,8 @@ public class drinking implements Listener {
                             player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
                             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, buffer));
                         }
-                    }
                 }
-                else if (potionMeta.getDisplayName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Antidote Bottle")){
-                    if (potionMeta.getLore().contains(ChatColor.GRAY + "Purges the toxins from your body.")) {
-                        //TODO change this to use config item deserialization
+                else if (item.isSimilar(antidote)){
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY ) > 50) {
                             double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
 
@@ -101,7 +98,6 @@ public class drinking implements Listener {
 
                             player.setMetadata("Toxicity", new FixedMetadataValue(plugin, decrTox(current_tox, tox_decr)));
                         }
-                    }
                 }
             }
         }

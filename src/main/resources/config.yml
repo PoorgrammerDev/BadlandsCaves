@@ -183,3 +183,11 @@ items:
       ItemFlags:
         - HIDE_ENCHANTS
       blockMaterial: BARREL
+  displace:
+    ==: org.bukkit.inventory.ItemStack
+    v: 2227
+    type: KNOWLEDGE_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: KNOWLEDGE_BOOK
+      display-name: §dDisplace

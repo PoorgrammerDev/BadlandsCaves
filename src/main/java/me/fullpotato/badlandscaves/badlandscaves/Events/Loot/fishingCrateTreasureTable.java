@@ -51,7 +51,7 @@ public class fishingCrateTreasureTable implements LootTable {
         ItemStack diamond_boots = new ItemStack(Material.DIAMOND_BOOTS);
 
         ItemMeta diamond_armor_meta = diamond_chestplate.getItemMeta();
-        diamond_armor_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, false);
+        diamond_armor_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, item_count / 3, false);
 
         diamond_helmet .setItemMeta(diamond_armor_meta);
         diamond_chestplate.setItemMeta(diamond_armor_meta);
@@ -65,8 +65,8 @@ public class fishingCrateTreasureTable implements LootTable {
         ItemMeta diamond_sword_meta = diamond_sword.getItemMeta();
         ItemMeta diamond_tools_meta = diamond_pick.getItemMeta();
 
-        diamond_sword_meta.addEnchant(Enchantment.DAMAGE_ALL, 5, false);
-        diamond_tools_meta.addEnchant(Enchantment.DIG_SPEED, 5, false);
+        diamond_sword_meta.addEnchant(Enchantment.DAMAGE_ALL, item_count / 2, false);
+        diamond_tools_meta.addEnchant(Enchantment.DIG_SPEED, item_count / 2, false);
 
         diamond_sword.setItemMeta(diamond_sword_meta);
         diamond_axe.setItemMeta(diamond_tools_meta);
