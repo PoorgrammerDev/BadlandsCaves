@@ -1,10 +1,8 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +23,8 @@ public class HM_TabComplete implements TabCompleter {
             }
 
             else if (args.length == 2) {
-                if (args[0].startsWith("t")) list.add("true");
-                else if (args[0].startsWith("f")) list.add("false");
+                if (args[1].startsWith("t")) list.add("true");
+                else if (args[1].startsWith("f")) list.add("false");
                 else {
                     list.add("true");
                     list.add("false");

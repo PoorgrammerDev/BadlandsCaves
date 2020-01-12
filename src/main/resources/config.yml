@@ -8,7 +8,7 @@ game_values:
   #when opening a fishing crate, the chance is 1 in "x" to get treasure instead of fish, "x" being this number
   #decreasing this value will cause treasure to be more common
   #increasing this value will cause treasure to be less common
-  fish_or_treasure_base: 20
+  fish_or_treasure_base: 200
 
   #the max amount of fish you can get from a fishing crate at one time
   fish_bound_base: 32
@@ -45,13 +45,18 @@ game_values:
     antidote_drink_tox_decr: 40
 
   hardmode_values:
+    #all of these are carried over from pre-hardmode, but are set to different values
     death_reverse_gapple: 0
-    death_reverse_ench_gapple: 1
+    death_reverse_ench_gapple: 2
     threshold_thirst_sys: 30
     tox_drink_thirst_incr: 5
     tox_drink_tox_incr: 10
     purified_drink_thirst_incr: 40
     antidote_drink_tox_decr: 30
+
+    #in hardmode, creepers' explosions are larger. this value changes the size of the explosion.
+    #for scale, a normal creeper's radius value is 3
+    creeper_radius: 10
 
 items:
   starter_sapling:

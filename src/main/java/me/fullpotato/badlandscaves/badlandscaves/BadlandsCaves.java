@@ -1,8 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
-import me.fullpotato.badlandscaves.badlandscaves.CustomItems.purgeEssenceRecipe;
-import me.fullpotato.badlandscaves.badlandscaves.CustomItems.tinyBlazePowder;
+import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.purgeEssence;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useFishingCrate;
@@ -12,6 +11,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.deathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gappleEat;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
+import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.drinking;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.naturalThirstDecrease;
@@ -20,10 +20,8 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWa
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.chunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -51,7 +49,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_slowmine_lvl",
             "thirst_debuff_slow_lvl",
             "thirst_debuff_hunger_lvl",
-            "thirst_debuff_poison_lvl"
+            "thirst_debuff_poison_lvl",
+            "has_supernatural_powers",
+            "is_cursed_soul"
     };
 
     @Override
@@ -81,6 +81,13 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new zombieDeathLoot(this), this);
             this.getServer().getPluginManager().registerEvents(new getFishingCrate(this), this);
             this.getServer().getPluginManager().registerEvents(new useFishingCrate(this), this);
+            this.getServer().getPluginManager().registerEvents(new skeleBuff(this), this);
+            this.getServer().getPluginManager().registerEvents(new zombieBuff(this), this);
+            this.getServer().getPluginManager().registerEvents(new creeperBuff(this), this);
+            this.getServer().getPluginManager().registerEvents(new spiderBuff(this), this);
+            this.getServer().getPluginManager().registerEvents(new pigZombieAngerBuff(this), this);
+            this.getServer().getPluginManager().registerEvents(new silverfishBuff(this), this);
+            this.getServer().getPluginManager().registerEvents(new blazeBuff(this), this);
         }
 
 
@@ -122,6 +129,15 @@ public final class BadlandsCaves extends JavaPlugin {
 
         purgeEssenceRecipe prg_ess = new purgeEssenceRecipe(this);
         prg_ess.purge_essence_craft();
+
+        notchAppleCrafting e_gap = new notchAppleCrafting(this);
+        e_gap.crafting_notch_apple();
+
+        reedsCrafting reeds = new reedsCrafting(this);
+        reeds.craft_reeds();
+
+        sandCrafting sand = new sandCrafting(this);
+        sand.craft_sand();
     }
 
     @Override

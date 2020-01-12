@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.CustomItems;
+package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;

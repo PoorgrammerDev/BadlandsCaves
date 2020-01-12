@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class HardmodeCommand implements CommandExecutor {
 
@@ -30,10 +29,13 @@ public class HardmodeCommand implements CommandExecutor {
                     }
                     else if (args[1].equalsIgnoreCase("true")) {
                         plugin.getConfig().set("game_values.hardmode", true);
+                        sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + "true" + ChatColor.GOLD + ".");
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("false")) {
                         plugin.getConfig().set("game_values.hardmode", false);
+                        sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + "false" + ChatColor.GOLD + ".");
+
                         return true;
                     }
                     else {

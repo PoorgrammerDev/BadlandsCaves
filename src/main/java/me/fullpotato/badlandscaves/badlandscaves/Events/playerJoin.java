@@ -1,18 +1,12 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class playerJoin implements Listener {
@@ -84,6 +78,6 @@ public class playerJoin implements Listener {
             dot_meta = "." + filtered;
             player.setMetadata(filtered, new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + dot_meta)));
         }
-        player.teleport(world.getSpawnLocation());
+        //player.teleport(world.getSpawnLocation());
     }
 }

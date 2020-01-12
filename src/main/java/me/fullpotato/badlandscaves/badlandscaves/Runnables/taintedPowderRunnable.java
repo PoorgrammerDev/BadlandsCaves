@@ -82,8 +82,8 @@ public class taintedPowderRunnable extends BukkitRunnable {
                 if (entity_list[a].getType().equals(EntityType.SILVERFISH)) {
                     int duration, amplifier, count;
                     if (isHardmode) {
-                        duration = 100;
-                        amplifier = 1;
+                        duration = 50;
+                        amplifier = 0;
                         count = 5;
                     }
                     else {

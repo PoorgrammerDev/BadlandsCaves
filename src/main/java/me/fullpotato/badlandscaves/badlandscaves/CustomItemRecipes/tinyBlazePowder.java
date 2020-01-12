@@ -1,13 +1,11 @@
-package me.fullpotato.badlandscaves.badlandscaves.CustomItems;
+package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class tinyBlazePowder implements Listener {
     private BadlandsCaves plugin;

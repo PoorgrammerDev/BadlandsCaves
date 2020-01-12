@@ -62,6 +62,7 @@ public class drinking implements Listener {
 
                 if (potionMeta.getDisplayName().equalsIgnoreCase(ChatColor.DARK_AQUA + "Purified Water Bottle")) {
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Light and refreshing.")) {
+                        //TODO change this to use config item deserialization
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
                             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
                             int thirst_threshold;
@@ -86,6 +87,7 @@ public class drinking implements Listener {
                 }
                 else if (potionMeta.getDisplayName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "Antidote Bottle")){
                     if (potionMeta.getLore().contains(ChatColor.GRAY + "Purges the toxins from your body.")) {
+                        //TODO change this to use config item deserialization
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY ) > 50) {
                             double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
 
