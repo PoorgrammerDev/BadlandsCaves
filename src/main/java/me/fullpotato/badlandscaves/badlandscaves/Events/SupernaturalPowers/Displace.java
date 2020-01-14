@@ -2,7 +2,6 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -11,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.BlockIterator;
 
@@ -28,9 +28,9 @@ public class Displace implements Listener {
         if (has_powers < 1.0) return;
 
         World world = player.getWorld();
-        //ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
-        //if (player.getInventory().getItemInOffHand().isSimilar(displace)) {
-        if (player.getInventory().getItemInOffHand().getType().equals(Material.KNOWLEDGE_BOOK)) {
+        ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
+        if (player.getInventory().getItemInOffHand().isSimilar(displace)) {
+        //if (player.getInventory().getItemInOffHand().getType().equals(Material.KNOWLEDGE_BOOK)) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
                 EquipmentSlot e = event.getHand();
@@ -51,7 +51,7 @@ public class Displace implements Listener {
                             player.teleport(displace_marker);
                             player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
                         }
-                        else if (player.getLocation().distance(displace_marker) < 30) {
+                        else if (player.getLocation().distance(displace_marker) < 20) {
                         }
                         else {
                             player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));

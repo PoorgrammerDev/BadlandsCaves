@@ -13,6 +13,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Displace;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.noInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.swapPowers;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.drinking;
@@ -54,6 +55,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_poison_lvl",
             "has_supernatural_powers",
             "is_cursed_soul",
+            "swap_cooldown",
+            "displace_level",
+            "displace_particle_id",
             "has_displace_marker",
             "displace_x",
             "displace_y",
@@ -96,6 +100,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new blazeBuff(this), this);
             this.getServer().getPluginManager().registerEvents(new swapPowers(this), this);
             this.getServer().getPluginManager().registerEvents(new Displace(this), this);
+            this.getServer().getPluginManager().registerEvents(new noInteract(this), this);
         }
 
 
@@ -124,10 +129,6 @@ public final class BadlandsCaves extends JavaPlugin {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 BukkitTask decr_tox = new toxSlowDecreaseRunnable(this, player).runTaskTimerAsynchronously(this, 0, 600);
                 BukkitTask save_config = new playerSaveToConfig(this, player, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
-
-                if (player.getMetadata("has_supernatural_powers").get(0).asDouble() > 0.5) {
-                    BukkitTask displace = new displaceAmbientRunnable(this, player).runTaskTimerAsynchronously(this, 0, 0);
-                }
             }
         }
         catch (NoClassDefFoundError ignored) {

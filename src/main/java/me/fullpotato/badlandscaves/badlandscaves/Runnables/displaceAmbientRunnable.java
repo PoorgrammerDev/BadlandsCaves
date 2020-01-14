@@ -21,7 +21,6 @@ public class displaceAmbientRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        //TODO make it so the particle is only active when you're holding the Displace book
         int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
         if (has_displace_marker > 0.5) {
             World world = player.getWorld();
@@ -50,7 +49,7 @@ public class displaceAmbientRunnable extends BukkitRunnable {
             location.setY(location.getY() + 0.5);
             location.setZ(location.getZ() + 0.5);
 
-            player.spawnParticle(Particle.SPELL_WITCH, location, 1);
+            player.spawnParticle(Particle.SPELL_WITCH, location, 3);
         }
     }
 }
