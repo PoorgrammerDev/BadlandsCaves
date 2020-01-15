@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,11 +11,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class playerJoin implements Listener {
 
     private BadlandsCaves plugin;
-    private World world;
     private String[] values;
-    public playerJoin(BadlandsCaves bcav, World wrld, String[] ply_vals) {
+    public playerJoin(BadlandsCaves bcav, String[] ply_vals) {
         plugin = bcav;
-        world = wrld;
         values = ply_vals;
     }
 
@@ -84,6 +81,5 @@ public class playerJoin implements Listener {
             dot_meta = "." + filtered;
             player.setMetadata(filtered, new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + dot_meta)));
         }
-        //player.teleport(world.getSpawnLocation());
     }
 }

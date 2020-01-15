@@ -24,17 +24,15 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWa
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorldGen;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class BadlandsCaves extends JavaPlugin {
 
-    World world;
+    World world_empty;
     World default_world;
 
     private final String[] player_values = {
@@ -77,7 +75,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         //event registering
         {
-            this.getServer().getPluginManager().registerEvents(new playerJoin(this, world, player_values), this);
+            this.getServer().getPluginManager().registerEvents(new playerJoin(this, player_values), this);
             this.getServer().getPluginManager().registerEvents(new naturalThirstDecrease(this), this);
             this.getServer().getPluginManager().registerEvents(new increaseToxInWater(this), this);
             this.getServer().getPluginManager().registerEvents(new deathHandler(this), this);
@@ -186,11 +184,18 @@ public final class BadlandsCaves extends JavaPlugin {
          */
 
         WorldCreator emptyworld = new WorldCreator("world_empty");
-        emptyworld.environment(World.Environment.THE_END);
-        emptyworld.type(WorldType.FLAT);
+        emptyworld.environment(World.Environment.THE_END)
+                .type(WorldType.FLAT)
+                .generator(new emptyWorldGen())
+                .generateStructures(false);
         //emptyworld.generatorSettings("minecraft:air;minecraft:the_void;");
 
-        world = emptyworld.createWorld();
+        world_empty = emptyworld.createWorld();
+        world_empty.setGameRule(GameRule.DO_INSOMNIA, false);
+        world_empty.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        world_empty.setGameRule(GameRule.FALL_DAMAGE, false);
+        world_empty.setDifficulty(Difficulty.PEACEFUL);
+        //TODO somehow prevent the ender dragon from spawning
     }
 
 }

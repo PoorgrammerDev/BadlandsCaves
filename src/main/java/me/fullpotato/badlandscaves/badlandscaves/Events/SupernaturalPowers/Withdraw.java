@@ -37,20 +37,25 @@ public class Withdraw implements Listener {
                 EquipmentSlot e = event.getHand();
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
+                    //TODO prevent the player from falling off the edge
+                    //TODO prevent the player from activating Withdraw while being inside of the pocket dimension (this causes issues)
+                    //TODO set the player to adventure mode while in the pocket dimension
                     event.setCancelled(true);
                     Random random = new Random();
                     for (int x = 0; x < 16; x++) {
                         for (int y = 0; y < 256; y++) {
                             for (int z = 0; z < 16; z++) {
                                 Block block = player.getLocation().getChunk().getBlock(x, y, z);
+                                Location block_loc = block.getLocation();
+                                block_loc.setWorld(Bukkit.getWorld("world_empty"));
                                 if (block.getType().isSolid()) {
-                                    Location block_loc = block.getLocation();
-                                    block_loc.setWorld(Bukkit.getWorld("world_empty"));
-
                                     int rand = random.nextInt(2);
                                     if (rand == 0) block_loc.getBlock().setType(Material.COAL_BLOCK);
                                     else if (rand == 1) block_loc.getBlock().setType(Material.BLACK_CONCRETE);
                                     else block_loc.getBlock().setType(Material.BLACK_WOOL);
+                                }
+                                else {
+                                    block_loc.getBlock().setType(Material.AIR);
                                 }
                             }
                         }
