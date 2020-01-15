@@ -191,3 +191,11 @@ items:
       meta-type: KNOWLEDGE_BOOK
       display-name: §dDisplace
       custom-model-data: 103
+  withdraw:
+    v: 2227
+    type: KNOWLEDGE_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: KNOWLEDGE_BOOK
+      display-name: §8Withdraw
+      custom-model-data: 104

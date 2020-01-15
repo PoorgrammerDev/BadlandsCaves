@@ -48,6 +48,7 @@ public class Displace implements Listener {
                         Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
 
                         if (player.getLocation().distance(displace_marker) < 15) {
+                            player.setFallDistance(0);
                             player.teleport(displace_marker);
                             player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
                         }

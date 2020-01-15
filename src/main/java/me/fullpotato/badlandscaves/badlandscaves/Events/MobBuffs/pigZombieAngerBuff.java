@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,6 +44,10 @@ public class pigZombieAngerBuff implements Listener {
 
         pigZombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(random.nextInt(100));
         pigZombie.setAnger(999);
+
+        if (random.nextBoolean()) {
+            world.spawnEntity(location, EntityType.MAGMA_CUBE);
+        }
 
         ItemStack[] armor = {
                 new ItemStack(Material.GOLDEN_BOOTS),

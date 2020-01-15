@@ -13,6 +13,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Displace;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Withdraw;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.noInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.swapPowers;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
@@ -25,6 +26,8 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -68,7 +71,7 @@ public final class BadlandsCaves extends JavaPlugin {
     public void onEnable() {
         default_world = Bukkit.getWorld("world");
 
-        //world_gen();
+        world_gen();
 
         loadConfig();
 
@@ -101,6 +104,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new swapPowers(this), this);
             this.getServer().getPluginManager().registerEvents(new Displace(this), this);
             this.getServer().getPluginManager().registerEvents(new noInteract(this), this);
+            this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
         }
 
 
@@ -171,12 +175,22 @@ public final class BadlandsCaves extends JavaPlugin {
         this.saveConfig();
     }
 
-    /*
+
     public void world_gen () {
+        //badlandscaves world
+        /*
         WorldCreator worldCreator = new WorldCreator("world_badlandscaves");
         worldCreator.generator(new chunkGenerator());
 
         world = worldCreator.createWorld();
+         */
+
+        WorldCreator emptyworld = new WorldCreator("world_empty");
+        emptyworld.environment(World.Environment.THE_END);
+        emptyworld.type(WorldType.FLAT);
+        //emptyworld.generatorSettings("minecraft:air;minecraft:the_void;");
+
+        world = emptyworld.createWorld();
     }
-     */
+
 }
