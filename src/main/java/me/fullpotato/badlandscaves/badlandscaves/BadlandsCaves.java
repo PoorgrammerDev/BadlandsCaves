@@ -198,6 +198,7 @@ public final class BadlandsCaves extends JavaPlugin {
         world_empty.setGameRule(GameRule.DISABLE_RAIDS, true);
         world_empty.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         world_empty.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world_empty.setGameRule(GameRule.MOB_GRIEFING, false);
         world_empty.setDifficulty(Difficulty.PEACEFUL);
     }
 

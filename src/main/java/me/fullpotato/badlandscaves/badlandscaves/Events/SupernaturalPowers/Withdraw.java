@@ -144,9 +144,27 @@ public class Withdraw implements Listener {
     public void prevent_dragon (CreatureSpawnEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity instanceof EnderDragon || entity.getType().equals(EntityType.ENDER_DRAGON)) {
-            if (entity.getWorld().equals(Bukkit.getWorld("world_empty"))) {
-                event.setCancelled(true);
+            World voidworld = Bukkit.getWorld("world_empty");
+            if (entity.getWorld().equals(voidworld)) {
+                EnderDragon dragon = (EnderDragon) entity;
+                dragon.setPhase(EnderDragon.Phase.DYING);
+                Location location = new Location(voidworld, 0, -300, 0);
+                dragon.teleport(location);
             }
         }
     }
+
+    @EventHandler
+    public void remove_egg (PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        World voidworld = Bukkit.getWorld("world_empty");
+        if (!player.getWorld().equals(voidworld)) return;
+        if (event.getClickedBlock() == null) return;
+        if (!event.getClickedBlock().getType().equals(Material.DRAGON_EGG)) return;
+
+        event.setCancelled(true);
+        event.getClickedBlock().setType(Material.AIR);
+
+    }
+
 }
