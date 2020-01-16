@@ -30,7 +30,10 @@ public class noInteract implements Listener {
         if (item == null) return;
 
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
+        ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+
         if (item.isSimilar(displace)) event.setCancelled(true);
+        if (item.isSimilar(withdraw)) event.setCancelled(true);
     }
 
     @EventHandler

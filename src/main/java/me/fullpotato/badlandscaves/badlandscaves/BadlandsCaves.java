@@ -62,7 +62,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "has_displace_marker",
             "displace_x",
             "displace_y",
-            "displace_z"
+            "displace_z",
+            "withdraw_level",
+            "withdraw_timer"
     };
 
     @Override
@@ -189,13 +191,14 @@ public final class BadlandsCaves extends JavaPlugin {
                 .generator(new emptyWorldGen())
                 .generateStructures(false);
         //emptyworld.generatorSettings("minecraft:air;minecraft:the_void;");
-
         world_empty = emptyworld.createWorld();
         world_empty.setGameRule(GameRule.DO_INSOMNIA, false);
         world_empty.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world_empty.setGameRule(GameRule.FALL_DAMAGE, false);
+        world_empty.setGameRule(GameRule.DISABLE_RAIDS, true);
+        world_empty.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        world_empty.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world_empty.setDifficulty(Difficulty.PEACEFUL);
-        //TODO somehow prevent the ender dragon from spawning
     }
 
 }
