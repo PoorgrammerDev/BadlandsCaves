@@ -29,6 +29,7 @@ public class Withdraw implements Listener {
     }
 
     private Location voidloc;
+    private World void_world = Bukkit.getWorld("world_empty");
 
     @EventHandler
     public void use_withdraw(PlayerInteractEvent event) {
@@ -43,7 +44,7 @@ public class Withdraw implements Listener {
                 EquipmentSlot e = event.getHand();
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
-                    if (player.getLocation().getWorld().equals(Bukkit.getWorld("world_empty")))
+                    if (player.getLocation().getWorld().equals(void_world))
                         event.setCancelled(true);
                     else {
                         event.setCancelled(true);
@@ -53,7 +54,7 @@ public class Withdraw implements Listener {
                                 for (int z = 0; z < 16; z++) {
                                     Block block = player.getLocation().getChunk().getBlock(x, y, z);
                                     Location block_loc = block.getLocation();
-                                    block_loc.setWorld(Bukkit.getWorld("world_empty"));
+                                    block_loc.setWorld(void_world);
                                     if (block.getType().isSolid()) {
                                         int rand = random.nextInt(3);
                                         if (rand == 0) block_loc.getBlock().setType(Material.COAL_BLOCK);
@@ -70,7 +71,7 @@ public class Withdraw implements Listener {
                         plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
 
                         voidloc = player.getLocation();
-                        voidloc.setWorld(Bukkit.getWorld("world_empty"));
+                        voidloc.setWorld(void_world);
 
                         player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, random.nextInt(200) + 500));
 
@@ -98,7 +99,7 @@ public class Withdraw implements Listener {
                                                 for (int z = 0; z < 16; z++) {
                                                     Block block = player.getLocation().getChunk().getBlock(x, y, z);
                                                     Location block_loc = block.getLocation();
-                                                    block_loc.setWorld(Bukkit.getWorld("world_empty"));
+                                                    block_loc.setWorld(void_world);
                                                     block_loc.getBlock().setType(Material.AIR);
                                                 }
                                             }
@@ -128,7 +129,7 @@ public class Withdraw implements Listener {
         World world = location.getWorld();
 
         assert world != null;
-        if (!world.equals(Bukkit.getWorld("world_empty"))) return;
+        if (!world.equals(void_world)) return;
 
         Chunk chunk = location.getChunk();
         if (!player.getLocation().getChunk().equals(voidloc.getChunk())) {
@@ -140,15 +141,19 @@ public class Withdraw implements Listener {
         }
     }
 
+
+    //if you can, find a better way to prevent the dragon from existing
+    //best case scenario: the dragon, the portal, and the egg never spawn in the first place
+    //could be possible with protocollib? idk
+
     @EventHandler
     public void prevent_dragon (CreatureSpawnEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity instanceof EnderDragon || entity.getType().equals(EntityType.ENDER_DRAGON)) {
-            World voidworld = Bukkit.getWorld("world_empty");
-            if (entity.getWorld().equals(voidworld)) {
+            if (entity.getWorld().equals(void_world)) {
                 EnderDragon dragon = (EnderDragon) entity;
                 dragon.setPhase(EnderDragon.Phase.DYING);
-                Location location = new Location(voidworld, 0, -300, 0);
+                Location location = new Location(void_world, 0, -300, 0);
                 dragon.teleport(location);
             }
         }
@@ -157,8 +162,7 @@ public class Withdraw implements Listener {
     @EventHandler
     public void remove_egg (PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        World voidworld = Bukkit.getWorld("world_empty");
-        if (!player.getWorld().equals(voidworld)) return;
+        if (!player.getWorld().equals(void_world)) return;
         if (event.getClickedBlock() == null) return;
         if (!event.getClickedBlock().getType().equals(Material.DRAGON_EGG)) return;
 

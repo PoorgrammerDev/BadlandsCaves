@@ -1,5 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
@@ -31,10 +33,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class BadlandsCaves extends JavaPlugin {
-
-    World world_empty;
-    World default_world;
-
     private final String[] player_values = {
             "Deaths",
             "*Thirst",
@@ -69,11 +67,12 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        default_world = Bukkit.getWorld("world");
-
-        world_gen();
-
+        gen_void_world();
         loadConfig();
+
+        //protocol-lib
+        ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+        //manager.addPacketListener();
 
         //event registering
         {
@@ -107,53 +106,58 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
         }
 
-
         //command reg
-        this.getCommand("thirst").setExecutor(new ThirstCommand());
-        this.getCommand("thirst").setTabCompleter(new DTT_TabComplete());
+        {
+            this.getCommand("thirst").setExecutor(new ThirstCommand());
+            this.getCommand("thirst").setTabCompleter(new DTT_TabComplete());
 
-        this.getCommand("toxicity").setExecutor(new ToxicityCommand());
-        this.getCommand("toxicity").setTabCompleter(new DTT_TabComplete());
+            this.getCommand("toxicity").setExecutor(new ToxicityCommand());
+            this.getCommand("toxicity").setTabCompleter(new DTT_TabComplete());
 
-        this.getCommand("deaths").setExecutor(new DeathCommand());
-        this.getCommand("deaths").setTabCompleter(new DTT_TabComplete());
+            this.getCommand("deaths").setExecutor(new DeathCommand());
+            this.getCommand("deaths").setTabCompleter(new DTT_TabComplete());
 
-        this.getCommand("hardmode").setExecutor(new HardmodeCommand(this));
-        this.getCommand("hardmode").setTabCompleter(new HM_TabComplete());
+            this.getCommand("hardmode").setExecutor(new HardmodeCommand(this));
+            this.getCommand("hardmode").setTabCompleter(new HM_TabComplete());
+        }
 
         //runnables
-        BukkitTask act_bar = new actionbarRunnable().runTaskTimerAsynchronously(this, 0 ,0);
+        {
+            BukkitTask act_bar = new actionbarRunnable().runTaskTimerAsynchronously(this, 0 ,0);
+            BukkitTask tox_eff = new toxEffectsRunnable(this).runTaskTimer(this, 0, 0);
+            BukkitTask thrst_eff = new thirstEffectsRunnable(this).runTaskTimer(this, 0, 0);
+            BukkitTask dth_eff = new deathEffectsRunnable(this).runTaskTimer(this, 0 ,0);
+            BukkitTask tot_eff = new playerEffectsRunnable().runTaskTimer(this,0,0);
 
-        BukkitTask tox_eff = new toxEffectsRunnable(this).runTaskTimer(this, 0, 0);
-        BukkitTask thrst_eff = new thirstEffectsRunnable(this).runTaskTimer(this, 0, 0);
-        BukkitTask dth_eff = new deathEffectsRunnable(this).runTaskTimer(this, 0 ,0);
-        BukkitTask tot_eff = new playerEffectsRunnable().runTaskTimer(this,0,0);
-
-        try {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                BukkitTask decr_tox = new toxSlowDecreaseRunnable(this, player).runTaskTimerAsynchronously(this, 0, 600);
-                BukkitTask save_config = new playerSaveToConfig(this, player, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
+            try {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    BukkitTask decr_tox = new toxSlowDecreaseRunnable(this, player).runTaskTimerAsynchronously(this, 0, 600);
+                    BukkitTask save_config = new playerSaveToConfig(this, player, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
+                }
             }
-        }
-        catch (NoClassDefFoundError ignored) {
+            catch (NoClassDefFoundError ignored) {
+            }
         }
 
         //crafting recipes
-        tinyBlazePowder tiny_blz = new tinyBlazePowder(this);
-        tiny_blz.tiny_blaze_powder_craft();
-        tiny_blz.back_to_large();
+        {
+            tinyBlazePowder tiny_blz = new tinyBlazePowder(this);
+            tiny_blz.tiny_blaze_powder_craft();
+            tiny_blz.back_to_large();
 
-        purgeEssenceRecipe prg_ess = new purgeEssenceRecipe(this);
-        prg_ess.purge_essence_craft();
+            purgeEssenceRecipe prg_ess = new purgeEssenceRecipe(this);
+            prg_ess.purge_essence_craft();
 
-        notchAppleCrafting e_gap = new notchAppleCrafting(this);
-        e_gap.crafting_notch_apple();
+            notchAppleCrafting e_gap = new notchAppleCrafting(this);
+            e_gap.crafting_notch_apple();
 
-        reedsCrafting reeds = new reedsCrafting(this);
-        reeds.craft_reeds();
+            reedsCrafting reeds = new reedsCrafting(this);
+            reeds.craft_reeds();
 
-        sandCrafting sand = new sandCrafting(this);
-        sand.craft_sand();
+            sandCrafting sand = new sandCrafting(this);
+            sand.craft_sand();
+        }
+
     }
 
     @Override
@@ -176,7 +180,7 @@ public final class BadlandsCaves extends JavaPlugin {
     }
 
 
-    public void world_gen () {
+    public void gen_void_world() {
         //badlandscaves world
         /*
         WorldCreator worldCreator = new WorldCreator("world_badlandscaves");
@@ -191,7 +195,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 .generator(new emptyWorldGen())
                 .generateStructures(false);
         //emptyworld.generatorSettings("minecraft:air;minecraft:the_void;");
-        world_empty = emptyworld.createWorld();
+        World world_empty = emptyworld.createWorld();
         world_empty.setGameRule(GameRule.DO_INSOMNIA, false);
         world_empty.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world_empty.setGameRule(GameRule.FALL_DAMAGE, false);
