@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,25 +24,44 @@ public class HardmodeCommand implements CommandExecutor {
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("set")) {
+                    int value = -1;
                     if (args.length < 2) {
                         sender.sendMessage(ChatColor.RED + "You must specify a value to set it to. (TRUE/FALSE)");
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("true")) {
-                        plugin.getConfig().set("game_values.hardmode", true);
-                        sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + "true" + ChatColor.GOLD + ".");
-                        return true;
+                        value = 1;
                     }
                     else if (args[1].equalsIgnoreCase("false")) {
-                        plugin.getConfig().set("game_values.hardmode", false);
-                        sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + "false" + ChatColor.GOLD + ".");
-
-                        return true;
+                        value = 0;
                     }
                     else {
                         sender.sendMessage(ChatColor.RED + "Possible Parameters: TRUE or FALSE.");
                         return true;
                     }
+
+
+                    boolean set_to = false;
+                    if (value == 0) {
+                        set_to = false;
+                    }
+                    else if (value == 1) {
+                        set_to = true;
+                    }
+
+                    plugin.getConfig().set("game_values.hardmode", set_to);
+                    plugin.saveConfig();
+                    sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + set_to + ChatColor.GOLD + ".");
+
+                    if (args.length < 3 || args[2] == null || args[2].equalsIgnoreCase("reload")) {
+                        Bukkit.reload();
+                    }
+                    else if (args[2].equalsIgnoreCase("noreload")) {
+                    }
+                    else {
+                        Bukkit.reload();
+                    }
+                    return true;
                 }
             }
         }

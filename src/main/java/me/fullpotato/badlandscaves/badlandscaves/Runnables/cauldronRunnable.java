@@ -4,7 +4,6 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +11,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class cauldronRunnable extends BukkitRunnable {
 
@@ -166,18 +164,18 @@ public class cauldronRunnable extends BukkitRunnable {
 
             //PROCESS READY INDICATOR
             if ((cauldron_level == 3) && (inventory.getItem(11) != null && inventory.getItem(15) != null)) {
-                if (in_slots.contains(Material.GLASS_BOTTLE)) {
-                    if (in_slots.contains(Material.BLAZE_POWDER)) {
-                        ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
-                        ItemMeta green_meta = green.getItemMeta();
-                        assert green_meta != null;
-                        green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
-                        ArrayList<String> green_lore = new ArrayList<String>();
-                        green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
-                        green_meta.setLore(green_lore);
-                        green.setItemMeta(green_meta);
+                boolean is_ready = false;
+                ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
+                ItemMeta green_meta = green.getItemMeta();
+                assert green_meta != null;
+                ArrayList<String> green_lore = new ArrayList<String>();
 
-                        inventory.setItem(13, green);
+                if (in_slots.contains(Material.GLASS_BOTTLE)) {
+                    boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+                    if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
+                        green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
+                        green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
+                        is_ready = true;
                     }
                     else if (in_slots.contains(Material.COMMAND_BLOCK)) {
                         int slotPRG = in_slots.indexOf(Material.COMMAND_BLOCK);
@@ -191,34 +189,32 @@ public class cauldronRunnable extends BukkitRunnable {
                         }
 
                         ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
+                        ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
                         if (inventory.getItem(slot).isSimilar(purge_ess)) {
-                            ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
-                            ItemMeta green_meta = green.getItemMeta();
-                            assert green_meta != null;
                             green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");
-                            ArrayList<String> green_lore = new ArrayList<String>();
                             green_lore.add(ChatColor.DARK_GREEN + "Click to create antidote.");
-                            green_meta.setLore(green_lore);
-                            green.setItemMeta(green_meta);
-
-                            inventory.setItem(13, green);
+                            is_ready = true;
                         }
+
+                        else if (inventory.getItem(slot).isSimilar(hell_ess)) {
+                            green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
+                            green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
+                            is_ready = true;
+                        }
+
                     }
                 }
                 else if (in_slots.contains(Material.SUGAR) && (in_slots.contains(Material.BONE_MEAL))) {
-                    ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
-                    ItemMeta green_meta = green.getItemMeta();
-                    assert green_meta != null;
                     green_meta.setDisplayName(ChatColor.GREEN + "Tainting Ready");
-                    ArrayList<String> green_lore = new ArrayList<String>();
                     green_lore.add(ChatColor.DARK_GREEN + "Click to taint the powder.");
-                    green_meta.setLore(green_lore);
-                    green.setItemMeta(green_meta);
-
-                    inventory.setItem(13, green);
+                    is_ready = true;
                 }
 
-
+                if (is_ready) {
+                    green_meta.setLore(green_lore);
+                    green.setItemMeta(green_meta);
+                    inventory.setItem(13, green);
+                }
             }
             else {
                 ItemStack red = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);

@@ -1,15 +1,11 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -33,6 +29,9 @@ public class stopCustomItemsRClick implements Listener {
 
                 ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
                 cancelled_items.add(purge_essence);
+
+                ItemStack hell_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
+                cancelled_items.add(hell_essence);
 
                 //keep adding more custom items here...
 

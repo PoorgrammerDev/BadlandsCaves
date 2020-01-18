@@ -2,7 +2,10 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.cauldronRunnable;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -120,6 +123,7 @@ public class cauldronMenu implements Listener {
         Inventory clicked_inv = event.getClickedInventory();
         Inventory target_inv = event.getView().getTopInventory();
         boolean isCauldron = event.getView().getTitle().equalsIgnoreCase(cauldron_title);
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
 
         if (clicked_inv != null) {
             if (isCauldron && clicked_inv.equals(target_inv)) {
@@ -187,15 +191,33 @@ public class cauldronMenu implements Listener {
                             cauldron_inv.getItem(15).setAmount(item_2_amt - 1);
                             cauldron_block.setType(Material.CAULDRON);
 
+                            ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
                             //PURIFIED WATER
-                            if (in_slots.contains(Material.BLAZE_POWDER)) {
-                                ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
+                            if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
                                 cauldron_inv.setItem(22, purified_water);
                             }
                             //ANTIDOTE
                             else if (in_slots.contains(Material.COMMAND_BLOCK)) {
-                                ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
-                                cauldron_inv.setItem(22, antidote);
+                                int slotPRG = in_slots.indexOf(Material.COMMAND_BLOCK);
+                                int slot;
+
+                                if (slotPRG == 0) {
+                                    slot = 11;
+                                }
+                                else {
+                                    slot = 15;
+                                }
+                                ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
+                                ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
+
+                                if (cauldron_inv.getItem(slot).isSimilar(purge_ess)) {
+                                    ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
+                                    cauldron_inv.setItem(22, antidote);
+                                }
+                                else if (isHardmode && cauldron_inv.getItem(slot).isSimilar(hell_ess)) {
+                                    cauldron_inv.setItem(22, purified_water);
+                                }
+
                             }
                             //TAINTED POWDER
                             else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {

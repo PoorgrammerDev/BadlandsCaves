@@ -154,21 +154,34 @@ public final class BadlandsCaves extends JavaPlugin {
 
             sandCrafting sand = new sandCrafting(this);
             sand.craft_sand();
+
+            hellEssence hellEssence = new hellEssence(this);
+            hellEssence.craft_hell_essence();
         }
 
     }
 
     @Override
     public void onDisable() {
-
-        try {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                new playerSaveToConfig(this, player, player_values, false).runTaskAsynchronously(this);
+        //just a copy of the playersavetoconfig runnable (idk why, but if i just call the runnable, it spits out an error)
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (String meta : player_values) {
+                String filtered;
+                String dot_meta;
+                if (meta.contains("!")) {
+                    continue;
+                }
+                else if (meta.contains("#") || meta.contains("*")) {
+                    filtered = meta.substring(1);
+                }
+                else {
+                    filtered = meta;
+                }
+                dot_meta = "." + filtered;
+                this.getConfig().set("Scores.users." + player.getUniqueId() + dot_meta, player.getMetadata(filtered).get(0).asDouble());
+                this.saveConfig();
             }
         }
-        catch (NoClassDefFoundError ignored) {
-        }
-
         this.saveConfig();
     }
 

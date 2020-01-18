@@ -15,19 +15,25 @@ public class purgeEssenceRecipe implements Listener {
 
     public void purge_essence_craft () {
         ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
-
         ShapedRecipe purge_ess_craft = new ShapedRecipe(new NamespacedKey(plugin, "purge_essence"), purge_essence);
-
-        /*SHAPE:
-        *  ###
-        *  #@#
-        *  ###
-        *
-        * where # = gold nuggets, @ = tiny pile of blaze powder
-        * */
         purge_ess_craft.shape("###","#@#","###");
-        purge_ess_craft.setIngredient('#', Material.GOLD_INGOT);
-        purge_ess_craft.setIngredient('@', Material.STRUCTURE_BLOCK);
+
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        /*SHAPE:
+         *  ###
+         *  #@#
+         *  ###
+         */
+        if (!isHardmode) {
+            //where # = gold nuggets, @ = tiny pile of blaze powder
+            purge_ess_craft.setIngredient('#', Material.GOLD_INGOT);
+            purge_ess_craft.setIngredient('@', Material.STRUCTURE_BLOCK);
+        }
+        else {
+            //where # = tiny pile of blaze powder, @ = regular golden apple
+            purge_ess_craft.setIngredient('#', Material.STRUCTURE_BLOCK);
+            purge_ess_craft.setIngredient('@', Material.GOLDEN_APPLE);
+        }
 
         plugin.getServer().addRecipe(purge_ess_craft);
     }

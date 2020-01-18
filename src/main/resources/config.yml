@@ -207,3 +207,12 @@ items:
       meta-type: KNOWLEDGE_BOOK
       display-name: §9Enhanced Eyes
       custom-model-data: 104
+  hell_essence:
+    v: 2227
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §cEssence of Hell
+      custom-model-data: 105
+      blockMaterial: COMMAND_BLOCK

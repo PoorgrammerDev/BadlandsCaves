@@ -18,7 +18,7 @@ public class enhancedEyes implements Listener {
     }
 
     @EventHandler
-    public void use_ee (PlayerInteractEvent event) {
+    public void use_eyes (PlayerInteractEvent event) {
         Player player = event.getPlayer();
         int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
         if (has_powers < 1.0) return;
