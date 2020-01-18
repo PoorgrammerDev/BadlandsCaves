@@ -14,10 +14,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gappleEat;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Displace;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Withdraw;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.noInteract;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.swapPowers;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.drinking;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.naturalThirstDecrease;
@@ -104,6 +101,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new Displace(this), this);
             this.getServer().getPluginManager().registerEvents(new noInteract(this), this);
             this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
+            this.getServer().getPluginManager().registerEvents(new enhancedEyes(this), this);
         }
 
         //command reg

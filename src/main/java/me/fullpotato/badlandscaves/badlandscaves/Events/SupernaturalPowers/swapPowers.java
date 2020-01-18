@@ -34,6 +34,7 @@ public class swapPowers implements Listener {
         ItemStack offhand_item = player.getInventory().getItemInOffHand();
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+        ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
 
         //switching from item to displace
         if (!offhand_item.getType().equals(Material.KNOWLEDGE_BOOK)) {
@@ -49,10 +50,10 @@ public class swapPowers implements Listener {
             }
         }
         else {
-            //switching from displace to withdraw
+            //switching from displace to enhanced eyes
             if (offhand_item.isSimilar(displace)) {
                 event.setCancelled(true);
-                player.getInventory().setItemInOffHand(withdraw);
+                player.getInventory().setItemInOffHand(eyes);
 
                 int particle_task_id = player.getMetadata("displace_particle_id").get(0).asInt();
                 if (particle_task_id != 0 && particle_task_id != 0.0) {
@@ -61,7 +62,14 @@ public class swapPowers implements Listener {
                 }
             }
 
+            else if (offhand_item.isSimilar(eyes)) {
+                //switching from enhanced eyes to withdraw
+                event.setCancelled(true);
+                player.getInventory().setItemInOffHand(withdraw);
+            }
+
             else if (offhand_item.isSimilar(withdraw)) {
+                //switching from withdraw back to normal item
                 event.setCancelled(true);
                 ItemStack orig_item = plugin.getConfig().getItemStack("Scores.users." + player.getUniqueId() + ".saved_offhand_item");
                 player.getInventory().setItemInOffHand(orig_item);

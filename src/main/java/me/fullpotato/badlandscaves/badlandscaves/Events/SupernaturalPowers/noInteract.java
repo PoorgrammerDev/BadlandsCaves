@@ -31,9 +31,11 @@ public class noInteract implements Listener {
 
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+        ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
 
         if (item.isSimilar(displace)) event.setCancelled(true);
         if (item.isSimilar(withdraw)) event.setCancelled(true);
+        if (item.isSimilar(eyes)) event.setCancelled(true);
     }
 
     @EventHandler
@@ -48,12 +50,14 @@ public class noInteract implements Listener {
 
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+        ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
 
         if (item.isSimilar(displace)) event.setCancelled(true);
         if (item_2.isSimilar(displace)) event.setCancelled(true);
-
         if (item.isSimilar(withdraw)) event.setCancelled(true);
         if (item_2.isSimilar(withdraw)) event.setCancelled(true);
+        if (item.isSimilar(eyes)) event.setCancelled(true);
+        if (item_2.isSimilar(eyes)) event.setCancelled(true);
     }
 
     @EventHandler
@@ -66,9 +70,11 @@ public class noInteract implements Listener {
 
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+        ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
 
         if (item.isSimilar(displace)) event.setCancelled(true);
         if (item.isSimilar(withdraw)) event.setCancelled(true);
+        if (item.isSimilar(eyes)) event.setCancelled(true);
 
     }
 
@@ -80,10 +86,13 @@ public class noInteract implements Listener {
 
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+        ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
 
         List<ItemStack> items = event.getDrops();
         for (int a = 0; a < items.size(); a++) {
-            if (items.get(a).isSimilar(displace) || items.get(a).isSimilar(withdraw)) {
+            if (items.get(a).isSimilar(displace) ||
+                    items.get(a).isSimilar(withdraw) ||
+                    items.get(a).isSimilar(eyes)) {
                 event.getDrops().remove(a);
             }
         }

@@ -13,6 +13,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -169,6 +171,17 @@ public class Withdraw implements Listener {
         event.setCancelled(true);
         event.getClickedBlock().setType(Material.AIR);
 
+    }
+
+    @EventHandler
+    public void prevent_portals (PlayerPortalEvent event) {
+        Player player = event.getPlayer();
+        if (!player.getWorld().equals(void_world)) return;
+
+        PlayerTeleportEvent.TeleportCause cause = event.getCause();
+        if (cause.equals(PlayerTeleportEvent.TeleportCause.END_GATEWAY) || cause.equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)) {
+            event.setCancelled(true);
+        }
     }
 
 }
