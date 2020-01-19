@@ -24,11 +24,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Minecraft Stuff/Plugin Testing Server/server.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Minecraft Stuff/Plugin Testing Server/server.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/Minecraft Stuff/Plugin Testing Server/server.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Minecraft Stuff/Plugin Testing Server/server.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -41,5 +41,14 @@
     <orderEntry type="library" name="Maven: com.comphenix.protocol:ProtocolLib:4.5.0" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:3.2.5" level="project" />
     <orderEntry type="library" name="Maven: com.comphenix.executors:BukkitExecutors:1.1-SNAPSHOT" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../Minecraft Stuff/PacketWrapper.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
