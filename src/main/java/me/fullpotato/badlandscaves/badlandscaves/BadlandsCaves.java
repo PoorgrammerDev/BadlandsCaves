@@ -51,6 +51,8 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_poison_lvl",
             "has_supernatural_powers",
             "is_cursed_soul",
+            "#Mana",
+            "swap_slot",
             "swap_cooldown",
             "displace_level",
             "displace_particle_id",
@@ -59,7 +61,11 @@ public final class BadlandsCaves extends JavaPlugin {
             "displace_y",
             "displace_z",
             "withdraw_level",
-            "withdraw_timer"
+            "withdraw_timer",
+            "eyes_level",
+            "eyes_timer",
+            "vanish_level",
+            "vanish_timer"
     };
 
     @Override
@@ -102,6 +108,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new noInteract(this), this);
             this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
             this.getServer().getPluginManager().registerEvents(new enhancedEyes(this), this);
+            this.getServer().getPluginManager().registerEvents(new Vanish(this), this);
         }
 
         //command reg

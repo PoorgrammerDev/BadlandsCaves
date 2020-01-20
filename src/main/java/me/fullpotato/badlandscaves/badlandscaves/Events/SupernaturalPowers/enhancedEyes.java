@@ -60,17 +60,16 @@ public class enhancedEyes implements Listener {
 */
                     ProtocolManager manager = ProtocolLibrary.getProtocolManager();
                     PacketContainer slime_spawn = manager.createPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
-                    slime_spawn.getIntegers().write(0, slime_id).write(1, (int) EntityType.SLIME.getTypeId());
+                    slime_spawn.getIntegers().write(0, slime_id).write(1, (int) EntityType.SLIME.getTypeId()); //doesn't spawn a slime
                     slime_spawn.getUUIDs().write(0, UUID.randomUUID());
                     slime_spawn.getDoubles().write(0, x).write(1, y).write(2, z);
                     slime_id--;
 
                     PacketContainer slime_meta = manager.createPacket(PacketType.Play.Server.ENTITY_METADATA);
-                    //slime_meta.
-                    slime_meta.setMeta("Size", 1);
-
+                    //what to put here?
 
                     manager.sendServerPacket(event.getPlayer(), slime_spawn);
+                    manager.sendServerPacket(event.getPlayer(), slime_meta);
 
                 }
             }
