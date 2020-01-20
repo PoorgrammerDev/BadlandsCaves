@@ -9,27 +9,26 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public class Vanish implements Listener {
+public class Possession implements Listener {
     private BadlandsCaves plugin;
-    public Vanish (BadlandsCaves bcav) {
+    public Possession(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @EventHandler
-    public void use_vanish (PlayerInteractEvent event) {
+    public void use_possession (PlayerInteractEvent event) {
         Player player = event.getPlayer();
         int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
         if (has_powers < 1.0) return;
-
-        ItemStack vanish = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.vanish").getValues(true));
-        if (player.getInventory().getItemInOffHand().isSimilar(vanish)) {
+        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
+        if (player.getInventory().getItemInOffHand().isSimilar(possess)) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
                 EquipmentSlot e = event.getHand();
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
-                    //TODO probably switch this out with a new power, vanish is kinda lame
+                    //TODO make possession
                 }
             }
         }

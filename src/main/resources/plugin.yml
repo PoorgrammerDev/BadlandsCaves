@@ -20,3 +20,6 @@ commands:
     usage: /hardmode <get|set> <value>
     description: Work with Hardmode value
     aliases: hm
+  mana:
+    usage: /mana <get|set> <username> <value>
+    description: Work with Mana

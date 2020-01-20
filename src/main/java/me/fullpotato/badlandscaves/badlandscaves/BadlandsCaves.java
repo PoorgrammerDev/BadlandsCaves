@@ -1,7 +1,5 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
@@ -51,9 +49,12 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_poison_lvl",
             "has_supernatural_powers",
             "is_cursed_soul",
-            "#Mana",
+            "Mana",
+            "max_mana",
+            "mana_needed_timer",
             "swap_slot",
             "swap_cooldown",
+            "swap_name_timer",
             "displace_level",
             "displace_particle_id",
             "has_displace_marker",
@@ -64,8 +65,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "withdraw_timer",
             "eyes_level",
             "eyes_timer",
-            "vanish_level",
-            "vanish_timer"
+            "possess_level",
     };
 
     @Override
@@ -74,7 +74,7 @@ public final class BadlandsCaves extends JavaPlugin {
         loadConfig();
 
         //protocol-lib
-        ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+        //ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         //manager.addPacketListener();
 
         //event registering
@@ -108,22 +108,25 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new noInteract(this), this);
             this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
             this.getServer().getPluginManager().registerEvents(new enhancedEyes(this), this);
-            this.getServer().getPluginManager().registerEvents(new Vanish(this), this);
+            this.getServer().getPluginManager().registerEvents(new Possession(this), this);
         }
 
         //command reg
         {
             this.getCommand("thirst").setExecutor(new ThirstCommand());
-            this.getCommand("thirst").setTabCompleter(new DTT_TabComplete());
+            this.getCommand("thirst").setTabCompleter(new valueCommandsTabComplete());
 
             this.getCommand("toxicity").setExecutor(new ToxicityCommand());
-            this.getCommand("toxicity").setTabCompleter(new DTT_TabComplete());
+            this.getCommand("toxicity").setTabCompleter(new valueCommandsTabComplete());
 
             this.getCommand("deaths").setExecutor(new DeathCommand());
-            this.getCommand("deaths").setTabCompleter(new DTT_TabComplete());
+            this.getCommand("deaths").setTabCompleter(new valueCommandsTabComplete());
 
             this.getCommand("hardmode").setExecutor(new HardmodeCommand(this));
             this.getCommand("hardmode").setTabCompleter(new HM_TabComplete());
+
+            this.getCommand("mana").setExecutor(new ManaCommand());
+            this.getCommand("mana").setTabCompleter(new valueCommandsTabComplete());
         }
 
         //runnables
@@ -138,6 +141,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     BukkitTask decr_tox = new toxSlowDecreaseRunnable(this, player).runTaskTimerAsynchronously(this, 0, 600);
                     BukkitTask save_config = new playerSaveToConfig(this, player, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
+                    BukkitTask mana = new manaBarRunnable(this, player).runTaskTimerAsynchronously(this, 0, 5);
                 }
             }
             catch (NoClassDefFoundError ignored) {

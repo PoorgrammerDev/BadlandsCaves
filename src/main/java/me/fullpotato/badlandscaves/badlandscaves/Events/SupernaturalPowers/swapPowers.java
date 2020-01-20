@@ -39,14 +39,14 @@ public class swapPowers implements Listener {
                 player.getMetadata("displace_level").get(0).asInt(),
                 player.getMetadata("eyes_level").get(0).asInt(),
                 player.getMetadata("withdraw_level").get(0).asInt(),
-                player.getMetadata("vanish_level").get(0).asInt(),
+                player.getMetadata("possess_level").get(0).asInt(),
         };
 
         final ItemStack[] power_items = {
                 ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true)),
                 ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true)),
                 ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.vanish").getValues(true)),
+                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true)),
         };
 
         final BukkitTask[] power_runnables = {
@@ -99,14 +99,19 @@ public class swapPowers implements Listener {
                 }
             }
 
-        player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 10));
+        player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 5));
+        player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, 60));
         BukkitTask decrement = new BukkitRunnable() {
             @Override
             public void run() {
                 int swap_cd_num = player.getMetadata("swap_cooldown").get(0).asInt();
-                if (swap_cd_num > 0) {
-                    swap_cd_num--;
+                int swap_name_timer = player.getMetadata("swap_name_timer").get(0).asInt();
+                if (swap_cd_num > 0 || swap_name_timer > 0) {
+                    swap_cd_num = swap_cd_num > 0 ? swap_cd_num - 1 : swap_cd_num;
                     player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, swap_cd_num));
+
+                    swap_name_timer = swap_name_timer > 0 ? swap_name_timer - 1 : swap_name_timer;
+                    player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, swap_name_timer));
                 }
                 else {
                     Bukkit.getScheduler().cancelTask(this.getTaskId());

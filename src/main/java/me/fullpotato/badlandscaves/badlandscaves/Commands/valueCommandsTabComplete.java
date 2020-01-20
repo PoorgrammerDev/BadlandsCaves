@@ -9,13 +9,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTT_TabComplete implements TabCompleter {
+public class valueCommandsTabComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
         if (command.getName().equalsIgnoreCase("deaths") ||
                 command.getName().equalsIgnoreCase("thirst") ||
-                command.getName().equalsIgnoreCase("toxicity")) {
+                command.getName().equalsIgnoreCase("toxicity") ||
+                command.getName().equalsIgnoreCase("mana")) {
             List<String> list = new ArrayList<>();
 
             if (args.length == 1) {

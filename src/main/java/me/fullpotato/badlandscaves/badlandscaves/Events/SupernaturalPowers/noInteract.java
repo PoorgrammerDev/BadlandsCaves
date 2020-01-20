@@ -32,17 +32,17 @@ public class noInteract implements Listener {
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
         ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
-        ItemStack vanish = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.vanish").getValues(true));
+        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
 
 
         if (item.isSimilar(displace) ||
                 item.isSimilar(withdraw) ||
                 item.isSimilar(eyes) ||
-                item.isSimilar(vanish) ||
+                item.isSimilar(possess) ||
                 item_2.isSimilar(displace) ||
                 item_2.isSimilar(withdraw) ||
                 item_2.isSimilar(eyes) ||
-                item_2.isSimilar(vanish)){
+                item_2.isSimilar(possess)){
                     event.setCancelled(true);
             }
 
@@ -61,16 +61,16 @@ public class noInteract implements Listener {
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
         ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
-        ItemStack vanish = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.vanish").getValues(true));
+        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
 
         if (item.isSimilar(displace) ||
                 item.isSimilar(withdraw) ||
                 item.isSimilar(eyes) ||
-                item.isSimilar(vanish) ||
+                item.isSimilar(possess) ||
                 item_2.isSimilar(displace) ||
                 item_2.isSimilar(withdraw) ||
                 item_2.isSimilar(eyes) ||
-                item_2.isSimilar(vanish)){
+                item_2.isSimilar(possess)){
             event.setCancelled(true);
         }
     }
@@ -86,12 +86,12 @@ public class noInteract implements Listener {
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
         ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
-        ItemStack vanish = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.vanish").getValues(true));
+        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
 
         if (item.isSimilar(displace) ||
                 item.isSimilar(withdraw) ||
                 item.isSimilar(eyes) ||
-                item.isSimilar(vanish)){
+                item.isSimilar(possess)){
             event.setCancelled(true);
         }
     }
@@ -105,14 +105,14 @@ public class noInteract implements Listener {
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
         ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
-        ItemStack vanish = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.vanish").getValues(true));
+        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
 
         List<ItemStack> items = event.getDrops();
         for (int a = 0; a < items.size(); a++) {
             if (items.get(a).isSimilar(displace) ||
                     items.get(a).isSimilar(withdraw) ||
                     items.get(a).isSimilar(eyes) ||
-                    items.get(a).isSimilar(vanish)){
+                    items.get(a).isSimilar(possess)){
                 event.getDrops().remove(a);
             }
         }

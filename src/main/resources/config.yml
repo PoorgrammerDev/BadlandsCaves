@@ -1,4 +1,6 @@
 game_values:
+  #value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
+  hardmode: FALSE
 
   #to get a fishing crate, the chance is 1 in "x" when catching a tropical fish, "x" being this number
   #decreasing this value will cause fishing crates to be more common
@@ -16,8 +18,11 @@ game_values:
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
 
-  #value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
-  hardmode: FALSE
+  #these are the mana costs for spells. the ones with "constant" in them don't cost that much to use, but rather drain that much constantly
+  displace_mana_cost: 20
+  constant_eyes_mana_cost: 10
+  withdraw_mana_cost: 70
+  constant_possess_mana_cost: 5
 
   #these values change from prehardmode to hardmode
   pre_hardmode_values:
@@ -216,11 +221,11 @@ items:
       display-name: §cEssence of Hell
       custom-model-data: 105
       blockMaterial: COMMAND_BLOCK
-  vanish:
+  possess:
     v: 2227
     type: KNOWLEDGE_BOOK
     meta:
       ==: ItemMeta
       meta-type: KNOWLEDGE_BOOK
-      display-name: §3Vanish
+      display-name: §2Possession
       custom-model-data: 106

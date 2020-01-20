@@ -1,12 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +11,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.UUID;
 
 public class enhancedEyes implements Listener {
     private BadlandsCaves plugin;
@@ -58,7 +52,7 @@ public class enhancedEyes implements Listener {
 
                     wrapper.sendPacket(player);
 */
-                    ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+                    /*ProtocolManager manager = ProtocolLibrary.getProtocolManager();
                     PacketContainer slime_spawn = manager.createPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
                     slime_spawn.getIntegers().write(0, slime_id).write(1, (int) EntityType.SLIME.getTypeId()); //doesn't spawn a slime
                     slime_spawn.getUUIDs().write(0, UUID.randomUUID());
@@ -70,7 +64,7 @@ public class enhancedEyes implements Listener {
 
                     manager.sendServerPacket(event.getPlayer(), slime_spawn);
                     manager.sendServerPacket(event.getPlayer(), slime_meta);
-
+*/
                 }
             }
         }
