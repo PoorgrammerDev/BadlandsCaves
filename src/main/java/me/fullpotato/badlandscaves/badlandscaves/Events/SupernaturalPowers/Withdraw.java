@@ -122,11 +122,14 @@ public class Withdraw implements Listener {
 
                             int new_mana = mana - withdraw_mana_cost;
                             player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+
                         }
                         else {
                             player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
                         }
                     }
+                    player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                 }
             }
         }

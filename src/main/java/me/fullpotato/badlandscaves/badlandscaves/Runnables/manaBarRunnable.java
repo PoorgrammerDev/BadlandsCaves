@@ -64,6 +64,17 @@ public class manaBarRunnable extends BukkitRunnable {
                 else {
                     manaBar.setTitle(title);
                 }
+
+                int active_timer = player.getMetadata("mana_bar_active_timer").get(0).asInt();
+                if (active_timer > 0) {
+                    manaBar.setVisible(true);
+                    active_timer--;
+                    player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, active_timer));
+                }
+                else {
+                    manaBar.setVisible(false);
+                }
+
             }
         }
     }

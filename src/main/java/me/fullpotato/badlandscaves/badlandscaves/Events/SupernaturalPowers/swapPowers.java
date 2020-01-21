@@ -99,6 +99,7 @@ public class swapPowers implements Listener {
                 }
             }
 
+        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
         player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 5));
         player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, 60));
         BukkitTask decrement = new BukkitRunnable() {

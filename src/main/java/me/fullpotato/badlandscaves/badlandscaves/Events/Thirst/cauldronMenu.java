@@ -150,11 +150,14 @@ public class cauldronMenu implements Listener {
                 boolean isFull = cdr_lvl == 3;
 
                 ArrayList<Material> in_slots = new ArrayList<>();
+                ArrayList<ItemStack> itemstacks_slots = new ArrayList<>();
                 if (cauldron_inv.getItem(11) != null) {
                     in_slots.add(cauldron_inv.getItem(11).getType());
+                    itemstacks_slots.add(cauldron_inv.getItem(11));
                 }
                 if (cauldron_inv.getItem(15) != null) {
                     in_slots.add(cauldron_inv.getItem(15).getType());
+                    itemstacks_slots.add(cauldron_inv.getItem(15));
                 }
 
                 if (target_inv.getItem(11) == null || target_inv.getItem(15) == null) {
@@ -198,24 +201,20 @@ public class cauldronMenu implements Listener {
                             }
                             //ANTIDOTE
                             else if (in_slots.contains(Material.COMMAND_BLOCK)) {
-                                int slotPRG = in_slots.indexOf(Material.COMMAND_BLOCK);
-                                int slot;
+                                int slot = in_slots.indexOf(Material.COMMAND_BLOCK);
 
-                                if (slotPRG == 0) {
-                                    slot = 11;
-                                }
-                                else {
-                                    slot = 15;
-                                }
                                 ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
                                 ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
 
-                                if (cauldron_inv.getItem(slot).isSimilar(purge_ess)) {
+                                System.out.print(slot);
+                                System.out.print(itemstacks_slots.get(slot));
+                                System.out.print(purge_ess);
+                                if (itemstacks_slots.get(slot).isSimilar(purge_ess)) {
                                     ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
                                     cauldron_inv.setItem(22, antidote);
                                     System.out.print("asdf");
                                 }
-                                else if (isHardmode && cauldron_inv.getItem(slot).isSimilar(hell_ess)) {
+                                else if (isHardmode && itemstacks_slots.get(slot).isSimilar(hell_ess)) {
                                     cauldron_inv.setItem(22, purified_water);
                                 }
 

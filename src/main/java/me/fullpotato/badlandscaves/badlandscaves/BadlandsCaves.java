@@ -50,9 +50,11 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_poison_lvl",
             "has_supernatural_powers",
             "is_cursed_soul",
-            "Mana",
+            "*Mana",
             "*max_mana",
             "mana_needed_timer",
+            "mana_regen_delay_timer",
+            "mana_bar_active_timer",
             "swap_slot",
             "swap_cooldown",
             "swap_name_timer",
@@ -139,8 +141,9 @@ public final class BadlandsCaves extends JavaPlugin {
             BukkitTask dth_eff = new deathEffectsRunnable(this).runTaskTimer(this, 0 ,0);
             BukkitTask tot_eff = new playerEffectsRunnable().runTaskTimer(this,0,0);
             BukkitTask decr_tox = new toxSlowDecreaseRunnable(this).runTaskTimerAsynchronously(this, 0, 600);
-            BukkitTask save_config = new playerSaveToConfig(this, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
-            BukkitTask mana = new manaBarRunnable(this).runTaskTimer(this, 0, 5);
+            BukkitTask save_config = new playerSaveToConfig(this, null, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
+            BukkitTask mana = new manaBarRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
+            BukkitTask mana_regen = new manaRegen(this).runTaskTimerAsynchronously(this, 0, 10);
         }
 
         //crafting recipes

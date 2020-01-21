@@ -58,6 +58,7 @@ public class Displace implements Listener {
 
                                 int new_mana = mana - displace_mana_cost;
                                 player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
                             }
                             else {
                                 player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
@@ -95,6 +96,7 @@ public class Displace implements Listener {
                         player.setMetadata("displace_y", new FixedMetadataValue(plugin, location.getY()));
                         player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));
                     }
+                    player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                 }
             }
         }
