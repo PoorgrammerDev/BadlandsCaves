@@ -85,7 +85,6 @@ public class playerJoin implements Listener {
             player.setMetadata(filtered, new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + dot_meta)));
         }
 
-
         //REGARDING SUPERNATURAL POWERS----------------------------------
 
         //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in

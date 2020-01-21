@@ -213,6 +213,7 @@ public class cauldronMenu implements Listener {
                                 if (cauldron_inv.getItem(slot).isSimilar(purge_ess)) {
                                     ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
                                     cauldron_inv.setItem(22, antidote);
+                                    System.out.print("asdf");
                                 }
                                 else if (isHardmode && cauldron_inv.getItem(slot).isSimilar(hell_ess)) {
                                     cauldron_inv.setItem(22, purified_water);

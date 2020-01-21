@@ -42,6 +42,13 @@ public class deathHandler implements Listener {
         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
 
         player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
+
+        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+        if (has_powers >= 1.0) {
+            player.setMetadata("Mana", new FixedMetadataValue(plugin, 100));
+            player.setMetadata("swap_slot", new FixedMetadataValue(plugin, -1));
+        }
+
     }
 
     @EventHandler

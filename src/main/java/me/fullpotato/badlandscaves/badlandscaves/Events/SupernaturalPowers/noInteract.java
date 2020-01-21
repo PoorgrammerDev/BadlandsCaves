@@ -27,7 +27,8 @@ public class noInteract implements Listener {
         if (has_powers < 1.0) return;
 
         ItemStack item = event.getCurrentItem();
-        ItemStack item_2 = event.getCursor();
+
+        if (item == null) return;
 
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
@@ -38,11 +39,7 @@ public class noInteract implements Listener {
         if (item.isSimilar(displace) ||
                 item.isSimilar(withdraw) ||
                 item.isSimilar(eyes) ||
-                item.isSimilar(possess) ||
-                item_2.isSimilar(displace) ||
-                item_2.isSimilar(withdraw) ||
-                item_2.isSimilar(eyes) ||
-                item_2.isSimilar(possess)){
+                item.isSimilar(possess)){
                     event.setCancelled(true);
             }
 
@@ -63,6 +60,7 @@ public class noInteract implements Listener {
         ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
         ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
 
+        assert item_2 != null;
         if (item.isSimilar(displace) ||
                 item.isSimilar(withdraw) ||
                 item.isSimilar(eyes) ||
@@ -108,7 +106,7 @@ public class noInteract implements Listener {
         ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
 
         List<ItemStack> items = event.getDrops();
-        for (int a = 0; a < items.size(); a++) {
+        for (int a = items.size() - 1; a >= 0; a--) {
             if (items.get(a).isSimilar(displace) ||
                     items.get(a).isSimilar(withdraw) ||
                     items.get(a).isSimilar(eyes) ||

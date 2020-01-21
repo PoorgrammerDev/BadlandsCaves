@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -18,6 +19,8 @@ public class toxEffectsRunnable extends BukkitRunnable{
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
+
             double toxicity = player.getMetadata("Toxicity").get(0).asDouble();
             int poison_lvl = 0;
             int hunger_lvl = 0;

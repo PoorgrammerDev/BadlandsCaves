@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -10,6 +11,8 @@ public class playerEffectsRunnable extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
+
             int death_slowmine = player.getMetadata("deaths_debuff_slowmine_lvl").get(0).asInt();
             int death_slow = player.getMetadata("deaths_debuff_slow_lvl").get(0).asInt();
             int death_hunger = player.getMetadata("deaths_debuff_hunger_lvl").get(0).asInt();

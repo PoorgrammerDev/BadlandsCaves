@@ -17,6 +17,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.drinking;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.naturalThirstDecrease;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.toxicWaterBottling;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInRain;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWater;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
@@ -50,7 +51,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "has_supernatural_powers",
             "is_cursed_soul",
             "Mana",
-            "max_mana",
+            "*max_mana",
             "mana_needed_timer",
             "swap_slot",
             "swap_cooldown",
@@ -109,6 +110,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
             this.getServer().getPluginManager().registerEvents(new enhancedEyes(this), this);
             this.getServer().getPluginManager().registerEvents(new Possession(this), this);
+            this.getServer().getPluginManager().registerEvents(new increaseToxInRain(this), this);
         }
 
         //command reg
@@ -136,16 +138,9 @@ public final class BadlandsCaves extends JavaPlugin {
             BukkitTask thrst_eff = new thirstEffectsRunnable(this).runTaskTimer(this, 0, 0);
             BukkitTask dth_eff = new deathEffectsRunnable(this).runTaskTimer(this, 0 ,0);
             BukkitTask tot_eff = new playerEffectsRunnable().runTaskTimer(this,0,0);
-
-            try {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    BukkitTask decr_tox = new toxSlowDecreaseRunnable(this, player).runTaskTimerAsynchronously(this, 0, 600);
-                    BukkitTask save_config = new playerSaveToConfig(this, player, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
-                    BukkitTask mana = new manaBarRunnable(this, player).runTaskTimerAsynchronously(this, 0, 5);
-                }
-            }
-            catch (NoClassDefFoundError ignored) {
-            }
+            BukkitTask decr_tox = new toxSlowDecreaseRunnable(this).runTaskTimerAsynchronously(this, 0, 600);
+            BukkitTask save_config = new playerSaveToConfig(this, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
+            BukkitTask mana = new manaBarRunnable(this).runTaskTimer(this, 0, 5);
         }
 
         //crafting recipes

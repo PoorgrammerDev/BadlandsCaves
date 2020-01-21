@@ -60,7 +60,7 @@ public class Displace implements Listener {
                                 player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
                             }
                             else {
-                                //TODO change the mana bar to alert no mana
+                                player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
                             }
                         }
                         else if (player.getLocation().distance(displace_marker) < 20) {

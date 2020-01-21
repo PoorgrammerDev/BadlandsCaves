@@ -19,7 +19,7 @@ game_values:
   give_new_starter_on_spawn: FALSE
 
   #these are the mana costs for spells. the ones with "constant" in them don't cost that much to use, but rather drain that much constantly
-  displace_mana_cost: 20
+  displace_mana_cost: 25
   constant_eyes_mana_cost: 10
   withdraw_mana_cost: 70
   constant_possess_mana_cost: 5
