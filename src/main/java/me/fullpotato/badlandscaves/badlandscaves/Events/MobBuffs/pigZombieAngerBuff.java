@@ -6,12 +6,14 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PigZombieAngerEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -38,7 +40,7 @@ public class pigZombieAngerBuff implements Listener {
 
         Random random = new Random();
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, random.nextInt(2), false, true));
-        pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999, random.nextInt(2), false, true));
+        pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999, random.nextInt(3), false, true));
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, random.nextInt(4), false, true));
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999, random.nextInt(2), false, true));
 
@@ -49,11 +51,32 @@ public class pigZombieAngerBuff implements Listener {
             world.spawnEntity(location, EntityType.MAGMA_CUBE);
         }
 
+
+        ItemStack boots = new ItemStack(Material.GOLDEN_BOOTS);
+        ItemMeta boots_meta = boots.getItemMeta();
+        boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
+        boots.setItemMeta(boots_meta);
+
+        ItemStack leggings = new ItemStack(Material.GOLDEN_LEGGINGS);
+        ItemMeta leggings_meta = leggings.getItemMeta();
+        leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
+        leggings.setItemMeta(leggings_meta);
+
+        ItemStack chestplate = new ItemStack(Material.GOLDEN_CHESTPLATE);
+        ItemMeta chestplate_meta = chestplate.getItemMeta();
+        chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
+        chestplate.setItemMeta(chestplate_meta);
+
+        ItemStack helmet = new ItemStack(Material.GOLDEN_HELMET);
+        ItemMeta helmet_meta = helmet.getItemMeta();
+        helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
+        helmet.setItemMeta(helmet_meta);
+
         ItemStack[] armor = {
-                new ItemStack(Material.GOLDEN_BOOTS),
-                new ItemStack(Material.GOLDEN_LEGGINGS),
-                new ItemStack(Material.GOLDEN_CHESTPLATE),
-                new ItemStack(Material.GOLDEN_HELMET)
+                boots,
+                leggings,
+                chestplate,
+                helmet,
         };
 
         pigZombie.getEquipment().setArmorContents(armor);

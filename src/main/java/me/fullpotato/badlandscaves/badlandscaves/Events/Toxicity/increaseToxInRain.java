@@ -25,6 +25,8 @@ public class increaseToxInRain implements Listener {
         Player player = event.getPlayer();
         Location location = player.getLocation();
         World world = location.getWorld();
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        if (!isHardmode) return;
 
         if (world == null || !world.hasStorm()) return;
         double temp = world.getTemperature(location.getBlockX(), location.getBlockY(), location.getBlockZ());

@@ -14,6 +14,9 @@ public class hellEssence implements Listener {
     }
 
     public void craft_hell_essence () {
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        if (!isHardmode) return;
+
         ItemStack hell_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
 
         ShapelessRecipe hell_ess_craft = new ShapelessRecipe(new NamespacedKey(plugin, "hell_essence"), hell_essence);

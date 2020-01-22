@@ -206,16 +206,16 @@ public class cauldronMenu implements Listener {
                                 ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
                                 ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
 
-                                System.out.print(slot);
-                                System.out.print(itemstacks_slots.get(slot));
-                                System.out.print(purge_ess);
-                                if (itemstacks_slots.get(slot).isSimilar(purge_ess)) {
-                                    ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
-                                    cauldron_inv.setItem(22, antidote);
-                                    System.out.print("asdf");
-                                }
-                                else if (isHardmode && itemstacks_slots.get(slot).isSimilar(hell_ess)) {
-                                    cauldron_inv.setItem(22, purified_water);
+                                if (itemstacks_slots.get(slot).hasItemMeta()) {
+                                    if (itemstacks_slots.get(slot).getItemMeta().hasDisplayName()) {
+                                        if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(purge_ess.getItemMeta().getDisplayName())) {
+                                            ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
+                                            cauldron_inv.setItem(22, antidote);
+                                        }
+                                        else if (isHardmode && itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(hell_ess.getItemMeta().getDisplayName())) {
+                                            cauldron_inv.setItem(22, purified_water);
+                                        }
+                                    }
                                 }
 
                             }

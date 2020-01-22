@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
@@ -44,6 +46,13 @@ public class skeleBuff implements Listener {
 
         skeleton.getEquipment().setItemInMainHand(HMbow);
         skeleton.getEquipment().setItemInMainHandDropChance(0);
+
+
+        skeleton.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999, random.nextInt(3), true, true));
+
+        if (random.nextBoolean()) {
+            skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
+        }
 
         Location one_up = location;
         one_up.setY(one_up.getBlockY() + 2);

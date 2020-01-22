@@ -134,6 +134,25 @@ items:
       lore:
         - §7Purges the toxins from your body.
       enchants:
+        DURABILITY: 50
+      ItemFlags:
+        - HIDE_ENCHANTS
+        - HIDE_POTION_EFFECTS
+      custom-color:
+        ==: Color
+        RED: 224
+        BLUE: 188
+        GREEN: 74
+  mana_potion:
+    v: 2227
+    type: POTION
+    meta:
+      ==: ItemMeta
+      meta-type: POTION
+      display-name: §9Mana Potion
+      lore:
+        - §7Recovers §9100 §7Mana points.
+      enchants:
         DURABILITY: 100
       ItemFlags:
         - HIDE_ENCHANTS
@@ -159,7 +178,7 @@ items:
     meta:
       ==: ItemMeta
       meta-type: TILE_ENTITY
-      display-name: §bEssence of Purging
+      display-name: §dEssence of Purging
       custom-model-data: 101
       blockMaterial: COMMAND_BLOCK
   tainted_powder:
@@ -208,14 +227,6 @@ items:
       meta-type: KNOWLEDGE_BOOK
       display-name: §7Withdraw
       custom-model-data: 104
-  enhanced_eyes:
-    v: 2227
-    type: KNOWLEDGE_BOOK
-    meta:
-      ==: ItemMeta
-      meta-type: KNOWLEDGE_BOOK
-      display-name: §9Enhanced Eyes
-      custom-model-data: 104
   hell_essence:
     v: 2227
     type: COMMAND_BLOCK
@@ -225,6 +236,14 @@ items:
       display-name: §cEssence of Hell
       custom-model-data: 105
       blockMaterial: COMMAND_BLOCK
+  enhanced_eyes:
+    v: 2227
+    type: KNOWLEDGE_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: KNOWLEDGE_BOOK
+      display-name: §9Enhanced Eyes
+      custom-model-data: 106
   possess:
     v: 2227
     type: KNOWLEDGE_BOOK
@@ -232,4 +251,4 @@ items:
       ==: ItemMeta
       meta-type: KNOWLEDGE_BOOK
       display-name: §2Possession
-      custom-model-data: 106
+      custom-model-data: 107
