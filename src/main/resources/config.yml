@@ -18,11 +18,12 @@ game_values:
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
 
-  #these are the mana costs for spells. the ones with "constant" in them don't cost that much to use, but rather drain that much constantly
+  #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much constantly
   displace_mana_cost: 25
-  constant_eyes_mana_cost: 10
+  eyes_mana_drain: 10
   withdraw_mana_cost: 70
-  constant_possess_mana_cost: 5
+  possess_mana_drain: 3
+  possess_mana_drain_player: 5
 
   #these values change from prehardmode to hardmode
   pre_hardmode_values:
@@ -159,9 +160,9 @@ items:
         - HIDE_POTION_EFFECTS
       custom-color:
         ==: Color
-        RED: 224
-        BLUE: 188
-        GREEN: 74
+        RED: 54
+        BLUE: 255
+        GREEN: 137
   tiny_blaze_powder:
     v: 2227
     type: STRUCTURE_BLOCK
@@ -252,3 +253,12 @@ items:
       meta-type: KNOWLEDGE_BOOK
       display-name: §2Possession
       custom-model-data: 107
+  magic_essence:
+    v: 2227
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §9Essence of Magic
+      custom-model-data: 108
+      blockMaterial: COMMAND_BLOCK

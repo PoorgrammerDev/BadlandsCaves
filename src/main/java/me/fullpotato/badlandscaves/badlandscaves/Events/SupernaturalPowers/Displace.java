@@ -36,8 +36,23 @@ public class Displace implements Listener {
                 EquipmentSlot e = event.getHand();
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
-                    int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
 
+                    int displace_level = player.getMetadata("displace_level").get(0).asInt();
+                    int place_range, warp_range;
+                    boolean cancel_fall;
+
+                    if (displace_level == 1) {
+                        place_range = 10;
+                        warp_range = 15;
+                        cancel_fall = false;
+                    }
+                    else {
+                        place_range = 20;
+                        warp_range = 30;
+                        cancel_fall = true;
+                    }
+
+                    int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
                     event.setCancelled(true);
                     if (has_displace_marker > 0.5) {
                         int mana = player.getMetadata("Mana").get(0).asInt();
@@ -50,9 +65,9 @@ public class Displace implements Listener {
                         float current_pitch = player.getLocation().getPitch();
                         Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
 
-                        if (player.getLocation().distance(displace_marker) < 15) {
+                        if (player.getLocation().distance(displace_marker) < warp_range) {
                             if (mana >= displace_mana_cost) {
-                                player.setFallDistance(0);
+                                if (cancel_fall) player.setFallDistance(0);
                                 player.teleport(displace_marker);
                                 player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
 
@@ -71,7 +86,7 @@ public class Displace implements Listener {
                         }
                     }
                     else {
-                        BlockIterator iter = new BlockIterator(player, 10);
+                        BlockIterator iter = new BlockIterator(player, place_range);
 
                         Block lastBlock = iter.next();
 

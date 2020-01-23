@@ -7,9 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class purgeEssenceRecipe implements Listener {
+public class purgeEssence implements Listener {
     private BadlandsCaves plugin;
-    public purgeEssenceRecipe(BadlandsCaves bcav) {
+    public purgeEssence(BadlandsCaves bcav) {
         plugin = bcav;
     }
 

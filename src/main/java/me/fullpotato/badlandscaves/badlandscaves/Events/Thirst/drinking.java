@@ -41,7 +41,7 @@ public class drinking implements Listener {
                     thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.tox_drink_thirst_incr");
                 }
 
-                player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
+                player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(current_thirst + thirst_add, 100)));
 
                 double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
                 double tox_add;
@@ -59,9 +59,9 @@ public class drinking implements Listener {
             else if (potionMeta.getBasePotionData().getType().equals(PotionType.UNCRAFTABLE)) {
                 ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
                 ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
+                ItemStack mana_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true));
 
                 //testing if purified
-
                 if (item.isSimilar(purified_water)) {
                         if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
                             double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
@@ -80,44 +80,32 @@ public class drinking implements Listener {
                                 buffer = thirst_threshold * -100;
                             }
 
-                            player.setMetadata("Thirst", new FixedMetadataValue(plugin, addThirst(current_thirst, thirst_add)));
+                            player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(current_thirst + thirst_add, 100)));
                             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, buffer));
                         }
                 }
-                else if (item.isSimilar(antidote)){
-                        if (potionMeta.getEnchantLevel(Enchantment.DURABILITY ) > 50) {
-                            double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                else if (item.isSimilar(antidote)) {
+                    double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                    double tox_decr;
+                    if (isHardmode) {
+                        tox_decr = plugin.getConfig().getInt("game_values.hardmode_values.antidote_drink_tox_decr");
+                    }
+                    else {
+                        tox_decr = plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
+                    }
 
-                            double tox_decr;
-                            if (isHardmode) {
-                                tox_decr = plugin.getConfig().getInt("game_values.hardmode_values.antidote_drink_tox_decr");
-                            }
-                            else {
-                                tox_decr = plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
-                            }
-
-                            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, decrTox(current_tox, tox_decr)));
-                        }
+                    player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(current_tox - tox_decr, 0)));
+                }
+                else if (item.isSimilar(mana_potion)) {
+                    int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+                    if (has_powers >= 1.0) {
+                        int Mana = player.getMetadata("Mana").get(0).asInt();
+                        int max_mana = player.getMetadata("max_mana").get(0).asInt();
+                        int new_mana = Math.min(Mana + 100, max_mana);
+                        player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                    }
                 }
             }
-        }
-    }
-
-    public double addThirst (double current_thirst, double thirst_add) {
-        if (current_thirst + thirst_add <= 100) {
-            return current_thirst + thirst_add;
-        }
-        else {
-            return 100;
-        }
-    }
-
-    public double decrTox (double current_tox, double tox_decr) {
-        if (current_tox - tox_decr >= 0) {
-            return current_tox - tox_decr;
-        }
-        else {
-            return 0;
         }
     }
 }

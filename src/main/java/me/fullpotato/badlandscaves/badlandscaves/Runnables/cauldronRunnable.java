@@ -190,6 +190,8 @@ public class cauldronRunnable extends BukkitRunnable {
 
                         ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
                         ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
+                        ItemStack magic_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
+
                         if (inventory.getItem(slot).isSimilar(purge_ess)) {
                             green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");
                             green_lore.add(ChatColor.DARK_GREEN + "Click to create antidote.");
@@ -199,6 +201,11 @@ public class cauldronRunnable extends BukkitRunnable {
                         else if (inventory.getItem(slot).isSimilar(hell_ess)) {
                             green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
                             green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
+                            is_ready = true;
+                        }
+                        else if (inventory.getItem(slot).isSimilar(magic_ess)) {
+                            green_meta.setDisplayName(ChatColor.GREEN + "Mana Potion Ready");
+                            green_lore.add(ChatColor.DARK_GREEN + "Click to create a Mana Potion.");
                             is_ready = true;
                         }
 

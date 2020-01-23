@@ -172,6 +172,7 @@ public class cauldronMenu implements Listener {
                 else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
                     hasIng = true;
                 }
+                //add more ingredients here...
 
                 ready = (hasIng && isFull);
 
@@ -195,26 +196,39 @@ public class cauldronMenu implements Listener {
                             cauldron_block.setType(Material.CAULDRON);
 
                             ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
-                            //PURIFIED WATER
+                            //PURIFIED WATER - PREHARDMODE
                             if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
                                 cauldron_inv.setItem(22, purified_water);
                             }
-                            //ANTIDOTE
+
                             else if (in_slots.contains(Material.COMMAND_BLOCK)) {
                                 int slot = in_slots.indexOf(Material.COMMAND_BLOCK);
 
                                 ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
                                 ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
+                                ItemStack mana_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
 
                                 if (itemstacks_slots.get(slot).hasItemMeta()) {
                                     if (itemstacks_slots.get(slot).getItemMeta().hasDisplayName()) {
+
+                                        //ANTIDOTE
                                         if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(purge_ess.getItemMeta().getDisplayName())) {
                                             ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
                                             cauldron_inv.setItem(22, antidote);
                                         }
+
+                                        //PURIFIED WATER - HARDMODE
                                         else if (isHardmode && itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(hell_ess.getItemMeta().getDisplayName())) {
                                             cauldron_inv.setItem(22, purified_water);
                                         }
+
+                                        //MANA POTION
+                                        else if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(mana_ess.getItemMeta().getDisplayName())) {
+                                            ItemStack mana_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true));
+                                            cauldron_inv.setItem(22, mana_potion);
+                                        }
+
+                                        //add more items that use command blocks here...
                                     }
                                 }
 
@@ -224,6 +238,8 @@ public class cauldronMenu implements Listener {
                                 ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
                                 cauldron_inv.setItem(22, tainted_powder);
                             }
+
+                            //add more items that use other materials here...
                         }
                     }
                 }

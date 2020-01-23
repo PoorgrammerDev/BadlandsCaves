@@ -30,6 +30,18 @@ public class displaceParticleRunnable extends BukkitRunnable {
             return;
         }
 
+        int displace_level = player.getMetadata("displace_level").get(0).asInt();
+        int place_range, warp_range;
+
+        if (displace_level == 1) {
+            place_range = 10;
+            warp_range = 15;
+        }
+        else {
+            place_range = 20;
+            warp_range = 30;
+        }
+
         int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
         if (has_displace_marker > 0.5) {
             World world = player.getWorld();
@@ -37,12 +49,12 @@ public class displaceParticleRunnable extends BukkitRunnable {
             double marker_y = player.getMetadata("displace_y").get(0).asDouble();
             double marker_z = player.getMetadata("displace_z").get(0).asDouble();
             Location displace_marker = new Location(world, marker_x, marker_y, marker_z);
-            if (player.getLocation().distance(displace_marker) < 15) {
+            if (player.getLocation().distance(displace_marker) < warp_range) {
                 player.spawnParticle(Particle.SPELL_WITCH, displace_marker, 10, 0,1, 0);
             }
         }
         else {
-            BlockIterator iter = new BlockIterator(player, 10);
+            BlockIterator iter = new BlockIterator(player, place_range);
             Block lastBlock = iter.next();
 
             while (iter.hasNext()) {

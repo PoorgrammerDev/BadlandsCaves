@@ -3,7 +3,6 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.purgeEssence;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useTaintPowder;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stopCustomItemsRClick;
@@ -93,7 +92,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new toxicWaterBottling(this),this);
             this.getServer().getPluginManager().registerEvents(new playerLeave(this, player_values), this);
             this.getServer().getPluginManager().registerEvents(new combineTinyBlaze(this), this);
-            this.getServer().getPluginManager().registerEvents(new purgeEssence(this), this);
+            this.getServer().getPluginManager().registerEvents(new me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.purgeEssence(this), this);
             this.getServer().getPluginManager().registerEvents(new stopCustomItemsRClick(this), this);
             this.getServer().getPluginManager().registerEvents(new useTaintPowder(this), this);
             this.getServer().getPluginManager().registerEvents(new zombieDeathLoot(this), this);
@@ -152,7 +151,7 @@ public final class BadlandsCaves extends JavaPlugin {
             tiny_blz.tiny_blaze_powder_craft();
             tiny_blz.back_to_large();
 
-            purgeEssenceRecipe prg_ess = new purgeEssenceRecipe(this);
+            purgeEssence prg_ess = new purgeEssence(this);
             prg_ess.purge_essence_craft();
 
             notchAppleCrafting e_gap = new notchAppleCrafting(this);
@@ -164,8 +163,11 @@ public final class BadlandsCaves extends JavaPlugin {
             sandCrafting sand = new sandCrafting(this);
             sand.craft_sand();
 
-            hellEssence hellEssence = new hellEssence(this);
-            hellEssence.craft_hell_essence();
+            hellEssence hell_essence = new hellEssence(this);
+            hell_essence.craft_hell_essence();
+
+            magicEssence magic_essence = new magicEssence(this);
+            magic_essence.magic_essence_craft();
         }
 
     }
