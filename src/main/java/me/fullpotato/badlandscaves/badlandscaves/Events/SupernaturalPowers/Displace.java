@@ -65,7 +65,7 @@ public class Displace implements Listener {
                         float current_pitch = player.getLocation().getPitch();
                         Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
 
-                        if (player.getLocation().distance(displace_marker) < warp_range) {
+                        if (player.getLocation().distance(displace_marker) <= warp_range) {
                             if (mana >= displace_mana_cost) {
                                 if (cancel_fall) player.setFallDistance(0);
                                 player.teleport(displace_marker);

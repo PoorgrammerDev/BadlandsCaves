@@ -37,8 +37,8 @@ public class deathEffectsRunnable extends BukkitRunnable {
                 slow_lvl = 3;
                 slowmine_lvl = 2;
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 2, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 9, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 2, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 9, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
 
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(1.0);
@@ -48,8 +48,8 @@ public class deathEffectsRunnable extends BukkitRunnable {
                 slow_lvl = 2;
                 slowmine_lvl = 1;
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 1, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 3, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 3, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
 
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10.0);
@@ -59,33 +59,33 @@ public class deathEffectsRunnable extends BukkitRunnable {
                 slow_lvl = 2;
                 slowmine_lvl = 1;
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 1, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 0, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 0, true, false), true);
             }
             else if (deaths >= 6) {
                 slow_lvl = 1;
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 1, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 1, true, false), true);
 
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
             }
             else if (deaths == 5) {
             }
             else if (deaths >= 1) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, 0, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, 0, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false), true);
 
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
             }
             else if (deaths == 0) {
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, 1, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false), true);
 
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
             }

@@ -47,6 +47,8 @@ public class deathHandler implements Listener {
         if (has_powers >= 1.0) {
             player.setMetadata("Mana", new FixedMetadataValue(plugin, 100));
             player.setMetadata("swap_slot", new FixedMetadataValue(plugin, -1));
+            player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
+            player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, "__REMOVED__"));
         }
 
     }

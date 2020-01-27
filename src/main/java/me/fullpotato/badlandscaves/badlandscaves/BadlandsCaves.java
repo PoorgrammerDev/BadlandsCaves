@@ -68,6 +68,13 @@ public final class BadlandsCaves extends JavaPlugin {
             "eyes_level",
             "eyes_timer",
             "possess_level",
+            "in_possession",
+            "possessed_entity",
+            "possess_orig_world",
+            "possess_orig_x",
+            "possess_orig_y",
+            "possess_orig_z",
+            "endurance_level",
     };
 
     @Override
@@ -112,6 +119,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new enhancedEyes(this), this);
             this.getServer().getPluginManager().registerEvents(new Possession(this), this);
             this.getServer().getPluginManager().registerEvents(new increaseToxInRain(this), this);
+            this.getServer().getPluginManager().registerEvents(new enduranceCancelHunger(this), this);
         }
 
         //command reg

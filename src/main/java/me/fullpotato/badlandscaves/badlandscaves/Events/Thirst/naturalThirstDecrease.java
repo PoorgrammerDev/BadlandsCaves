@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.Random;
+
 public class naturalThirstDecrease implements Listener {
     private BadlandsCaves plugin;
     public naturalThirstDecrease(BadlandsCaves bcav) {
@@ -32,6 +34,19 @@ public class naturalThirstDecrease implements Listener {
         double current_thirst_sys = player.getMetadata("thirst_sys_var").get(0).asDouble();
 
         if (moved) {
+            //endurance cancel
+            int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+            if (has_powers >= 1.0) {
+                int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
+                if (endurance_level > 0) {
+                    Random random = new Random();
+                    int endurance_rand_cancel = random.nextInt(100);
+                    if ((endurance_level == 1 && endurance_rand_cancel < 25) || (endurance_level == 2 && endurance_rand_cancel < 50)) {
+                        return;
+                    }
+                }
+            }
+
             if (climb) {
                 double new_thirst_sys = current_thirst_sys + 3;
                 double rounded = Math.round(new_thirst_sys * 100.0) / 100.0;

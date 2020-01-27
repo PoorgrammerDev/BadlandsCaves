@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.displaceParticleRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.possessionIndicatorRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -53,7 +54,7 @@ public class swapPowers implements Listener {
                 new displaceParticleRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1),
                 null,
                 null,
-                null,
+                new possessionIndicatorRunnable (plugin, player).runTaskTimer(plugin, 0, 5),
         };
 
         int new_swap_slot = swap_slot + incr;

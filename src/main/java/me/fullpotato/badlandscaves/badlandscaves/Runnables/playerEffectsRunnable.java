@@ -34,19 +34,19 @@ public class playerEffectsRunnable extends BukkitRunnable {
             int total_poison = death_poison + tox_poison + thirst_poison;
 
             if (total_slowmine > 0) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 90, total_slowmine - 1, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 90, total_slowmine - 1, true, false), true);
             }
 
             if (total_slow > 0) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 90, total_slow - 1, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 90, total_slow - 1, true, false), true);
             }
 
             if (total_hunger > 0) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false), true);
             }
 
             if (total_poison > 0) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 90, total_poison - 1, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 90, total_poison - 1, true, false), true);
             }
         }
     }

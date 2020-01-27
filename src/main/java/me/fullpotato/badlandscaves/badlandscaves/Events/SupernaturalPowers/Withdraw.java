@@ -18,6 +18,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -83,6 +85,7 @@ public class Withdraw implements Listener {
 
                             if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
                             player.teleport(voidloc);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
 
                             BukkitTask decrement_timer = new BukkitRunnable() {
                                 @Override
@@ -90,6 +93,11 @@ public class Withdraw implements Listener {
                                     int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
 
                                     if (withdraw_timer <= 0) {
+                                        int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+                                        if (withdraw_level == 1) {
+                                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+                                        }
+
                                         player.teleport(location);
                                         if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
                                         boolean ready_to_clear = true;
@@ -113,8 +121,10 @@ public class Withdraw implements Listener {
                                         }
 
                                         Bukkit.getScheduler().cancelTask(this.getTaskId());
-                                    } else {
+                                    }
+                                    else {
                                         player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
+                                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
                                     }
                                 }
                             }.runTaskTimer(plugin, 0, 0);

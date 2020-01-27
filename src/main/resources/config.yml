@@ -18,12 +18,11 @@ game_values:
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
 
-  #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much constantly
+  #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much per second
   displace_mana_cost: 25
-  eyes_mana_drain: 10
+  eyes_mana_drain: 20
   withdraw_mana_cost: 70
-  possess_mana_drain: 3
-  possess_mana_drain_player: 5
+  possess_mana_drain: 10
 
   #these values change from prehardmode to hardmode
   pre_hardmode_values:
