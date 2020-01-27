@@ -75,6 +75,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "possess_orig_y",
             "possess_orig_z",
             "endurance_level",
+            "agility_level",
+            "agility_jump_id",
+            "agility_jump_timer",
     };
 
     @Override
@@ -120,6 +123,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new Possession(this), this);
             this.getServer().getPluginManager().registerEvents(new increaseToxInRain(this), this);
             this.getServer().getPluginManager().registerEvents(new enduranceCancelHunger(this), this);
+            this.getServer().getPluginManager().registerEvents(new Agility(this), this);
         }
 
         //command reg
