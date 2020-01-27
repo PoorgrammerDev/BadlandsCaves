@@ -65,8 +65,7 @@ public class Agility implements Listener {
             velocity.multiply(1).setY(0.8);
         }
         else {
-            //TODO change these values around a bit to make it better
-            velocity.multiply(3).setY(1.5);
+            velocity.multiply(3).setY(1);
         }
 
         player.setVelocity(velocity);

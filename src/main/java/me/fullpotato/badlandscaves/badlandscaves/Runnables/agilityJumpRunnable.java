@@ -25,10 +25,10 @@ public class agilityJumpRunnable extends BukkitRunnable {
 
         int agility_timer = player.getMetadata("agility_jump_timer").get(0).asInt();
         if (agility_timer > 0) {
+            player.sendMessage("" + agility_timer);
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, agility_timer - 1));
         }
         else {
-
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setAllowFlight(false);
             Bukkit.getScheduler().cancelTask(this.getTaskId());

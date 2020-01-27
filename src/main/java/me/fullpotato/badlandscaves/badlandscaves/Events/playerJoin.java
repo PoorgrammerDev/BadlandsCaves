@@ -104,5 +104,9 @@ public class playerJoin implements Listener {
                 player.teleport(location);
             }
         }
+
+        //reset agility jump timer
+        player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
+        player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
     }
 }

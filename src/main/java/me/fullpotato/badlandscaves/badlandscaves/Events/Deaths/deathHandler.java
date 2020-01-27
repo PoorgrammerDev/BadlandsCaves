@@ -49,6 +49,8 @@ public class deathHandler implements Listener {
             player.setMetadata("swap_slot", new FixedMetadataValue(plugin, -1));
             player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, "__REMOVED__"));
+            player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
         }
 
     }
