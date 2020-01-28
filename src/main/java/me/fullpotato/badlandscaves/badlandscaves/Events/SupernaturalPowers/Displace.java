@@ -55,7 +55,7 @@ public class Displace implements Listener {
                     int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
                     event.setCancelled(true);
                     if (has_displace_marker > 0.5) {
-                        int mana = player.getMetadata("Mana").get(0).asInt();
+                        double mana = player.getMetadata("Mana").get(0).asDouble();
                         int displace_mana_cost = plugin.getConfig().getInt("game_values.displace_mana_cost");
 
                         double x = player.getMetadata("displace_x").get(0).asDouble();
@@ -71,7 +71,7 @@ public class Displace implements Listener {
                                 player.teleport(displace_marker);
                                 player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
 
-                                int new_mana = mana - displace_mana_cost;
+                                double new_mana = mana - (double) (displace_mana_cost);
                                 player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
                                 player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
                             }

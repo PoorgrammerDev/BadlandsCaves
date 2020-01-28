@@ -35,6 +35,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "#thirst_sys_var",
             "#tox_nat_decr_var",
             "#tox_slow_incr_var",
+            "deaths_buff_speed_lvl",
             "deaths_debuff_slowmine_lvl",
             "deaths_debuff_slow_lvl",
             "deaths_debuff_hunger_lvl",
@@ -76,6 +77,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "possess_orig_z",
             "endurance_level",
             "agility_level",
+            "agility_buff_speed_lvl",
             "agility_jump_id",
             "agility_jump_timer",
     };
@@ -128,20 +130,23 @@ public final class BadlandsCaves extends JavaPlugin {
 
         //command reg
         {
-            this.getCommand("thirst").setExecutor(new ThirstCommand());
+            this.getCommand("thirst").setExecutor(new ThirstCommand(this));
             this.getCommand("thirst").setTabCompleter(new valueCommandsTabComplete());
 
-            this.getCommand("toxicity").setExecutor(new ToxicityCommand());
+            this.getCommand("toxicity").setExecutor(new ToxicityCommand(this));
             this.getCommand("toxicity").setTabCompleter(new valueCommandsTabComplete());
 
-            this.getCommand("deaths").setExecutor(new DeathCommand());
+            this.getCommand("deaths").setExecutor(new DeathCommand(this));
             this.getCommand("deaths").setTabCompleter(new valueCommandsTabComplete());
 
             this.getCommand("hardmode").setExecutor(new HardmodeCommand(this));
             this.getCommand("hardmode").setTabCompleter(new HM_TabComplete());
 
-            this.getCommand("mana").setExecutor(new ManaCommand());
+            this.getCommand("mana").setExecutor(new ManaCommand(this));
             this.getCommand("mana").setTabCompleter(new valueCommandsTabComplete());
+
+            this.getCommand("powers").setExecutor(new PowersCommand(this));
+            this.getCommand("powers").setTabCompleter(new PowersTabComplete());
         }
 
         //runnables
@@ -155,6 +160,7 @@ public final class BadlandsCaves extends JavaPlugin {
             BukkitTask save_config = new playerSaveToConfig(this, null, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
             BukkitTask mana = new manaBarRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
             BukkitTask mana_regen = new manaRegen(this).runTaskTimerAsynchronously(this, 0, 10);
+            BukkitTask agility_speed = new agilitySpeedRunnable(this).runTaskTimerAsynchronously(this, 0, 15);
         }
 
         //crafting recipes

@@ -51,7 +51,7 @@ public class Withdraw implements Listener {
                     if (player.getLocation().getWorld().equals(void_world))
                         event.setCancelled(true);
                     else {
-                        int mana = player.getMetadata("Mana").get(0).asInt();
+                        double mana = player.getMetadata("Mana").get(0).asDouble();
                         int withdraw_mana_cost = plugin.getConfig().getInt("game_values.withdraw_mana_cost");
 
                         event.setCancelled(true);
@@ -130,7 +130,7 @@ public class Withdraw implements Listener {
                             }.runTaskTimer(plugin, 0, 0);
 
 
-                            int new_mana = mana - withdraw_mana_cost;
+                            double new_mana = mana - (double) (withdraw_mana_cost);
                             player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
                             player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
 

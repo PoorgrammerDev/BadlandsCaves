@@ -20,7 +20,6 @@ public class Agility implements Listener {
     public Agility (BadlandsCaves bcav) {
         plugin = bcav;
     }
-
     //detecting if the player is jumping
     @EventHandler
     public void firstJump (PlayerMoveEvent event) {
@@ -28,22 +27,37 @@ public class Agility implements Listener {
         int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
         if (has_powers < 1.0) return;
 
+        if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
+
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
         if (agility_level < 1.0) return;
 
-        Vector velocity = player.getVelocity();
-        Location location = player.getLocation();
-        Block block = location.getBlock();
+        double mana = player.getMetadata("Mana").get(0).asDouble();
+        int agility_jump_mana_cost = plugin.getConfig().getInt("game_values.agility_jump_mana_cost");
 
-        if (velocity.getY() > 0 && !player.isFlying() && !player.isOnGround() && !player.isSwimming() && !block.getType().equals(Material.LADDER) && !block.getType().equals(Material.VINE)) {
-            player.setAllowFlight(true);
-            player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 50));
-            int run_id = player.getMetadata("agility_jump_id").get(0).asInt();
-            if (run_id == 0) {
-                BukkitTask flight_cancel = new agilityJumpRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1);
-                player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, flight_cancel.getTaskId()));
+        if (mana >= agility_jump_mana_cost) {
+            Vector velocity = player.getVelocity();
+            Location location = player.getLocation();
+            Block block = location.getBlock();
+
+            Location below = location.clone();
+            below.subtract(0, 1, 0);
+            Block block_below = below.getBlock();
+
+            Location above = location.clone();
+            above.add(0, 2, 0);
+            Block block_above = above.getBlock();
+
+            if (velocity.getY() > 0 && !player.isFlying() && !player.isOnGround() && !player.isSwimming() && !block.getType().equals(Material.LADDER) && !block.getType().equals(Material.VINE) && !block_below.isPassable() && block_above.isPassable()) {
+                player.setAllowFlight(true);
+                player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 30));
+                int run_id = player.getMetadata("agility_jump_id").get(0).asInt();
+                if (run_id == 0) {
+                    BukkitTask flight_cancel = new agilityJumpRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1);
+                    player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, flight_cancel.getTaskId()));
+                }
+
             }
-
         }
     }
 
@@ -57,18 +71,33 @@ public class Agility implements Listener {
 
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
         if (agility_level < 1.0) return;
-        player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin , 0));
-        event.setCancelled(true);
 
-        Vector velocity = player.getVelocity();
-        if (agility_level == 1) {
-            velocity.multiply(1).setY(0.8);
+        double mana = player.getMetadata("Mana").get(0).asDouble();
+        int agility_jump_mana_cost = plugin.getConfig().getInt("game_values.agility_jump_mana_cost");
+
+        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+        if (mana >= agility_jump_mana_cost) {
+            double new_mana = mana - (double) (agility_jump_mana_cost);
+            player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+
+            player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin , 0));
+            event.setCancelled(true);
+            player.setFlying(false);
+
+            Vector velocity = player.getVelocity();
+            if (agility_level == 1) {
+                velocity.multiply(1).setY(0.8);
+            }
+            else {
+                velocity.multiply(4).setY(1.2);
+            }
+
+            player.setVelocity(velocity);
         }
         else {
-            velocity.multiply(3).setY(1);
+            player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin , 0));
+            player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
         }
-
-        player.setVelocity(velocity);
-
     }
 }

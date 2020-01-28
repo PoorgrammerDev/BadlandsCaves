@@ -52,9 +52,10 @@ public class Possession implements Listener {
                         player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
                     }
                     else {
-                        int mana = player.getMetadata("Mana").get(0).asInt();
+                        double mana = player.getMetadata("Mana").get(0).asDouble();
                         int possession_mana_drain = plugin.getConfig().getInt("game_values.possession_mana_drain");
-                        if (mana > possession_mana_drain) {
+                        double pos_drain_tick = possession_mana_drain / 20.0;
+                        if (mana >= pos_drain_tick) {
                             World world = player.getWorld();
                             RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),5);
 

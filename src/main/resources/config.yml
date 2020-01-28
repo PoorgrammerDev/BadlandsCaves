@@ -23,6 +23,7 @@ game_values:
   eyes_mana_drain: 20
   withdraw_mana_cost: 70
   possess_mana_drain: 10
+  agility_jump_mana_cost: 10
 
   #these values change from prehardmode to hardmode
   pre_hardmode_values:

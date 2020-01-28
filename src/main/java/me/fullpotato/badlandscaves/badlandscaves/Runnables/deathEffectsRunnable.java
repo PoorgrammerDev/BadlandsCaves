@@ -27,6 +27,7 @@ public class deathEffectsRunnable extends BukkitRunnable {
             int hunger_lvl = 0;
             int slow_lvl = 0;
             int slowmine_lvl = 0;
+            int speed_lvl = 0;
 
             if (deaths >= 50) {
                 //shadow realm time
@@ -82,7 +83,8 @@ public class deathEffectsRunnable extends BukkitRunnable {
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false), true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, 1, true, false), true);
+                speed_lvl = 2;
+                //player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, 1, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false), true);
@@ -94,6 +96,7 @@ public class deathEffectsRunnable extends BukkitRunnable {
             player.setMetadata("deaths_debuff_slow_lvl", new FixedMetadataValue(plugin, slow_lvl));
             player.setMetadata("deaths_debuff_hunger_lvl", new FixedMetadataValue(plugin, hunger_lvl));
             player.setMetadata("deaths_debuff_poison_lvl", new FixedMetadataValue(plugin, poison_lvl));
+            player.setMetadata("deaths_buff_speed_lvl", new FixedMetadataValue(plugin, speed_lvl));
         }
     }
 }

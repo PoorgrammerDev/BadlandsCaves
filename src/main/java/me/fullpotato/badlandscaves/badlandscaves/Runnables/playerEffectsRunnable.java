@@ -13,6 +13,9 @@ public class playerEffectsRunnable extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
 
+            int death_speed = player.getMetadata("deaths_buff_speed_lvl").get(0).asInt();
+            int agility_speed = player.getMetadata("agility_buff_speed_lvl").get(0).asInt();
+
             int death_slowmine = player.getMetadata("deaths_debuff_slowmine_lvl").get(0).asInt();
             int death_slow = player.getMetadata("deaths_debuff_slow_lvl").get(0).asInt();
             int death_hunger = player.getMetadata("deaths_debuff_hunger_lvl").get(0).asInt();
@@ -28,10 +31,15 @@ public class playerEffectsRunnable extends BukkitRunnable {
             int thirst_hunger = player.getMetadata("thirst_debuff_hunger_lvl").get(0).asInt();
             int thirst_poison = player.getMetadata("thirst_debuff_poison_lvl").get(0).asInt();
 
+            int total_speed = death_speed + agility_speed;
             int total_slowmine = death_slowmine + tox_slowmine + thirst_slowmine;
-            int total_slow = death_slow + tox_slow + thirst_slow;
+            int total_slow = (death_slow + tox_slow + thirst_slow) - agility_speed;
             int total_hunger = death_hunger + tox_hunger + thirst_hunger;
             int total_poison = death_poison + tox_poison + thirst_poison;
+
+            if (total_speed > 0) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 90, total_speed - 1, true, false), true);
+            }
 
             if (total_slowmine > 0) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 90, total_slowmine - 1, true, false), true);

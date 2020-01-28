@@ -21,3 +21,9 @@ commands:
   mana:
     usage: /mana <get|set> <username> <value>
     description: Work with Mana
+  powers:
+    usage: /powers <get|set> <username> <entry> <value>
+    description: Work with Supernatural powers.
+    aliases:
+      - supernatural
+      - magic
