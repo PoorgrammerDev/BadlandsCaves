@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.toxBottlingRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.toxBottlingRunnable;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

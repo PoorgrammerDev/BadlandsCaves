@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.agilityJumpRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.agilityJumpRunnable;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;

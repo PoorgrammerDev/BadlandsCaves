@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Runnables;
+package me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

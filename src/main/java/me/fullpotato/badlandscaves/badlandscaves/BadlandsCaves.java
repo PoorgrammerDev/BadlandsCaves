@@ -21,9 +21,18 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInRa
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWater;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.*;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorldGen;
-import org.bukkit.*;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.deathEffectsRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.playerEffectsRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.thirstEffectsRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.toxEffectsRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.agilitySpeedRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.manaBarRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.manaRegen;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.toxSlowDecreaseRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.actionbarRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.playerSaveToConfig;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -85,8 +94,10 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        gen_void_world();
         loadConfig();
+
+        emptyWorld empty_world = new emptyWorld();
+        empty_world.gen_void_world();
 
         //protocol-lib
         //ProtocolManager manager = ProtocolLibrary.getProtocolManager();
@@ -218,33 +229,6 @@ public final class BadlandsCaves extends JavaPlugin {
     public void loadConfig() {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
-    }
-
-
-    public void gen_void_world() {
-        //badlandscaves world
-        /*
-        WorldCreator worldCreator = new WorldCreator("world_badlandscaves");
-        worldCreator.generator(new chunkGenerator());
-
-        world = worldCreator.createWorld();
-         */
-
-        WorldCreator emptyworld = new WorldCreator("world_empty");
-        emptyworld.environment(World.Environment.THE_END)
-                .type(WorldType.FLAT)
-                .generator(new emptyWorldGen())
-                .generateStructures(false);
-        //emptyworld.generatorSettings("minecraft:air;minecraft:the_void;");
-        World world_empty = emptyworld.createWorld();
-        world_empty.setGameRule(GameRule.DO_INSOMNIA, false);
-        world_empty.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-        world_empty.setGameRule(GameRule.FALL_DAMAGE, false);
-        world_empty.setGameRule(GameRule.DISABLE_RAIDS, true);
-        world_empty.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-        world_empty.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        world_empty.setGameRule(GameRule.MOB_GRIEFING, false);
-        world_empty.setDifficulty(Difficulty.PEACEFUL);
     }
 
 }

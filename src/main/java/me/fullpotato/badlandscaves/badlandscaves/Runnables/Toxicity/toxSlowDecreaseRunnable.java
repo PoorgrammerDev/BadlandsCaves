@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Runnables;
+package me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
