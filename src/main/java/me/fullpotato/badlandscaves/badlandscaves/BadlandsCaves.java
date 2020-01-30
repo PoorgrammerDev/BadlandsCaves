@@ -32,6 +32,8 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.toxSlowDecre
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.actionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.playerSaveToConfig;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorld;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.preventNormalEnd;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.reincarnationWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -99,6 +101,9 @@ public final class BadlandsCaves extends JavaPlugin {
         emptyWorld empty_world = new emptyWorld();
         empty_world.gen_void_world();
 
+        reincarnationWorld reinc_world = new reincarnationWorld(this);
+        reinc_world.gen_reincarnation_world();
+
         //protocol-lib
         //ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         //manager.addPacketListener();
@@ -138,6 +143,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new increaseToxInRain(this), this);
             this.getServer().getPluginManager().registerEvents(new enduranceCancelHunger(this), this);
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
+            this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
         }
 
         //command reg
