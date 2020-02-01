@@ -21,6 +21,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInRa
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.increaseToxInWater;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.playerLeave;
+import me.fullpotato.badlandscaves.badlandscaves.Events.test;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.deathEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.playerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.thirstEffectsRunnable;
@@ -61,6 +62,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_hunger_lvl",
             "thirst_debuff_poison_lvl",
             "has_supernatural_powers",
+            "in_reincarnation",
             "is_cursed_soul",
             "*Mana",
             "*max_mana",
@@ -144,6 +146,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new enduranceCancelHunger(this), this);
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
             this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
+            this.getServer().getPluginManager().registerEvents(new test(this), this);
         }
 
         //command reg

@@ -3,6 +3,8 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -30,7 +32,14 @@ public class deathEffectsRunnable extends BukkitRunnable {
             int speed_lvl = 0;
 
             if (deaths >= 50) {
-                //shadow realm time
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
+                int in_reincarnation = player.getMetadata("in_reincarnation").get(0).asInt();
+                if (in_reincarnation < 1) {
+                    World reincarnation_world = Bukkit.getWorld("world_reincarnation");
+                    Location reincarnation_spawn = new Location(reincarnation_world, 0, 120, 0);
+                    player.teleport(reincarnation_spawn);
+                    player.setMetadata("in_reincarnation", new FixedMetadataValue(plugin, 1));
+                }
             }
             else if (deaths >= 30) {
                 poison_lvl = 2;

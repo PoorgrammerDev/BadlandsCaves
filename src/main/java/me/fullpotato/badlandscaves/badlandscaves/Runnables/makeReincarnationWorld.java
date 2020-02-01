@@ -31,7 +31,7 @@ public class makeReincarnationWorld extends BukkitRunnable {
         }
 
 
-        Random random = new Random(world.getSeed());
+        Random random = new Random();
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(random, 8);
         generator.setScale(0.1D);
         Location origin = new Location(world, 0, 64, 0);
@@ -71,8 +71,8 @@ public class makeReincarnationWorld extends BukkitRunnable {
          */
 
         generateShrine(world, -65, 0);
-        generateShrine(world, 0, 65);
-        generateShrine(world, 0, -65);
+        generateShrine(world, 46, 46);
+        generateShrine(world, 46, -46);
     }
 
     public void generateShrine (World world, int x, int z) {
