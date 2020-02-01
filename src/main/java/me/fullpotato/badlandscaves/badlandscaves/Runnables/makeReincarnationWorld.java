@@ -47,7 +47,7 @@ public class makeReincarnationWorld extends BukkitRunnable {
                 Location test = new Location(world, x, 64, z);
                 if (test.distance(origin) < inner_lim || (test.distance(origin) > lower_lim && test.distance(origin) < upper_lim)) {
                     currentHeight = (int) ((generator.noise(x, z, 0.5D, 0.05D, true) + 1) *5D + 60D);
-                    int thickness =  random.nextInt(10);
+                    int thickness =  random.nextInt(5) + 5;
                     for (int y = currentHeight; y >= currentHeight - thickness; y--) {
                         Location block_loc = new Location(world, x, y, z);
                         rand = random.nextInt(3);
@@ -69,5 +69,27 @@ public class makeReincarnationWorld extends BukkitRunnable {
         the player spawns at 65 0 so no shrine there
 
          */
+
+        generateShrine(world, -65, 0);
+        generateShrine(world, 0, 65);
+        generateShrine(world, 0, -65);
+    }
+
+    public void generateShrine (World world, int x, int z) {
+        int origin_y = 80;
+        Location top_origin = new Location(world, x, origin_y, z);
+
+        for (int x_offset = -5; x_offset <= 5; x_offset++) {
+            for (int z_offset = -5; z_offset <= 5; z_offset++) {
+                int new_x = x + x_offset;
+                int new_z = z + z_offset;
+                Location test = new Location(world, new_x, origin_y, new_z);
+                if (top_origin.distance(test) == 5) {
+                    for (int y = origin_y; world.getBlockAt(new_x, y, new_z).getType().isAir(); y--) {
+                        world.getBlockAt(new_x, y, new_z).setType(Material.BLACK_GLAZED_TERRACOTTA);
+                    }
+                }
+            }
+        }
     }
 }
