@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.makeReincarnationWorld;
 import org.bukkit.*;
 
 public class reincarnationWorld {
@@ -26,6 +25,17 @@ public class reincarnationWorld {
         world_reincarnation.setGameRule(GameRule.MOB_GRIEFING, false);
         world_reincarnation.setDifficulty(Difficulty.HARD);
 
-        new makeReincarnationWorld(plugin, world_reincarnation).runTaskLater(plugin, 20);
+        new Location(world_reincarnation, 0, 250, 0).getBlock().setType(Material.BEDROCK);
+                Location origin = new Location(world_reincarnation, 0, 120, 0);
+                for (int x = -20; x <= 20; x++) {
+                    for (int z = -20; z <= 20; z++) {
+                        for (int y = 100; y <= 140; y++) {
+                            Location test = new Location(world_reincarnation, x, y, z);
+                            if (origin.distance(test) > 3 && origin.distance(test) < 5) {
+                                test.getBlock().setType(Material.BARRIER);
+                            }
+                        }
+                    }
+                }
     }
 }

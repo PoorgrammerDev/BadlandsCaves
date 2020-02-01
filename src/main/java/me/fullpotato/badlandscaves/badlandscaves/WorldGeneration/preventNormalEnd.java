@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.makeReincarnationWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,25 +47,30 @@ public class preventNormalEnd implements Listener {
                     Location location = new Location(world, 0, -300, 0);
                     dragon.teleport(location);
 
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            for (int x = -5; x <= 5; x++) {
-                                for (int z = -5; z <= 5; z++) {
-                                    for (int y = 0; y <= 255; y++) {
-                                        Location loc = new Location(world, x, y, z);
-                                        Block block = loc.getBlock();
-                                        if (block.getType().equals(Material.BEDROCK) ||  block.getType().equals(Material.END_PORTAL) || block.getType().equals(Material.END_STONE)) {
-                                            block.setType(Material.EMERALD_BLOCK);
-                                        }
-                                        else if (block.getType().equals(Material.WALL_TORCH) || block.getType().equals(Material.DRAGON_EGG)) {
-                                            block.setType(Material.AIR);
+                    if (world.equals(Bukkit.getWorld("world_reincarnation"))) {
+                        new makeReincarnationWorld(plugin, world).runTaskLater(plugin, 201);
+                    }
+                    else {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (int x = -5; x <= 5; x++) {
+                                    for (int z = -5; z <= 5; z++) {
+                                        for (int y = 0; y <= 255; y++) {
+                                            Location loc = new Location(world, x, y, z);
+                                            Block block = loc.getBlock();
+                                            if (block.getType().equals(Material.BEDROCK) ||  block.getType().equals(Material.END_PORTAL) || block.getType().equals(Material.END_STONE)) {
+                                                block.setType(Material.EMERALD_BLOCK);
+                                            }
+                                            else if (block.getType().equals(Material.WALL_TORCH) || block.getType().equals(Material.DRAGON_EGG)) {
+                                                block.setType(Material.AIR);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    }.runTaskLater(plugin, 201); //perfect number right as the completed portal spawns
+                        }.runTaskLater(plugin, 201); //perfect number right as the completed portal spawns
+                    }
                 }
             }
         }
