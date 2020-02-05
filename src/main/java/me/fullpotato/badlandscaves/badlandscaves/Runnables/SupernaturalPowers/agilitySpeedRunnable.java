@@ -16,10 +16,13 @@ public class agilitySpeedRunnable extends BukkitRunnable {
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-            if (has_powers < 1.0) return;
-
-            int agility_level = player.getMetadata("agility_level").get(0).asInt();
-            if (agility_level >= 1) player.setMetadata("agility_buff_speed_lvl", new FixedMetadataValue(plugin, agility_level));
+            if (has_powers >= 0.5) {
+                int agility_level = player.getMetadata("agility_level").get(0).asInt();
+                player.setMetadata("agility_buff_speed_lvl", new FixedMetadataValue(plugin, agility_level));
+            }
+            else {
+                player.setMetadata("agility_buff_speed_lvl", new FixedMetadataValue(plugin, 0));
+            }
         }
     }
 }

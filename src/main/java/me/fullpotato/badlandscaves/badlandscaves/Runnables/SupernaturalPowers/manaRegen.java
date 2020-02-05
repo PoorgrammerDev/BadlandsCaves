@@ -35,9 +35,10 @@ public class manaRegen extends BukkitRunnable {
             boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
             int mana_regen_var = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("game_values.pre_hardmode_values.mana_regen_var");
             int thirst_sys_var = player.getMetadata("thirst_sys_var").get(0).asInt();
+            int in_descension = player.getMetadata("in_descension").get(0).asInt();
 
             Mana++;
-            thirst_sys_var += mana_regen_var;
+            if (in_descension != 2) thirst_sys_var += mana_regen_var;
 
             player.setMetadata("Mana", new FixedMetadataValue(plugin, Mana));
             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, thirst_sys_var));

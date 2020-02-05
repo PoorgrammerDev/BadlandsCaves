@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.makeReincarnationWorld;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.makeDescensionStage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,7 +29,7 @@ public class preventNormalEnd implements Listener {
 
     private World[] fake_ends = {
             Bukkit.getWorld("world_empty"),
-            Bukkit.getWorld("world_reincarnation"),
+            Bukkit.getWorld("world_descension"),
     };
 
     //if you can, find a better way to prevent the dragon from existing
@@ -47,8 +47,8 @@ public class preventNormalEnd implements Listener {
                     Location location = new Location(world, 0, -300, 0);
                     dragon.teleport(location);
 
-                    if (world.equals(Bukkit.getWorld("world_reincarnation"))) {
-                        new makeReincarnationWorld(plugin, world).runTaskLater(plugin, 201);
+                    if (world.equals(Bukkit.getWorld("world_descension"))) {
+                        new makeDescensionStage(plugin, world).runTaskLater(plugin, 201);
                     }
                     else {
                         new BukkitRunnable() {

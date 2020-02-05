@@ -18,6 +18,12 @@ game_values:
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
 
+  #max mobs spawn in descension stage (note: it's not always this number. it may be less, but not more)
+  descension_mob_limit: 100
+
+  #how much mobs have to detect for runner to lose
+  descension_max_detect: 100
+
   #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much per second
   displace_mana_cost: 25
   eyes_mana_drain: 20
@@ -70,7 +76,7 @@ game_values:
 
 items:
   starter_sapling:
-    v: 2227
+    v: 2230
     type: OAK_SAPLING
     meta:
       ==: ItemMeta
@@ -81,7 +87,7 @@ items:
       ItemFlags:
         - HIDE_ENCHANTS
   starter_bone_meal:
-    v: 2227
+    v: 2230
     type: BONE_MEAL
     amount: 3
     meta:
@@ -93,7 +99,7 @@ items:
       ItemFlags:
         - HIDE_ENCHANTS
   toxic_water:
-    v: 2227
+    v: 2230
     type: POTION
     meta:
       ==: ItemMeta
@@ -110,7 +116,7 @@ items:
         BLUE: 89
         GREEN: 117
   purified_water:
-    v: 2227
+    v: 2230
     type: POTION
     meta:
       ==: ItemMeta
@@ -126,7 +132,7 @@ items:
         BLUE: 255
         GREEN: 162
   antidote:
-    v: 2227
+    v: 2230
     type: POTION
     meta:
       ==: ItemMeta
@@ -145,7 +151,7 @@ items:
         BLUE: 188
         GREEN: 74
   mana_potion:
-    v: 2227
+    v: 2230
     type: POTION
     meta:
       ==: ItemMeta
@@ -164,7 +170,7 @@ items:
         BLUE: 255
         GREEN: 137
   tiny_blaze_powder:
-    v: 2227
+    v: 2230
     type: STRUCTURE_BLOCK
     amount: 9
     meta:
@@ -174,7 +180,7 @@ items:
       custom-model-data: 100
       blockMaterial: STRUCTURE_BLOCK
   purge_essence:
-    v: 2227
+    v: 2230
     type: COMMAND_BLOCK
     meta:
       ==: ItemMeta
@@ -183,7 +189,7 @@ items:
       custom-model-data: 101
       blockMaterial: COMMAND_BLOCK
   tainted_powder:
-    v: 2227
+    v: 2230
     type: COMMAND_BLOCK
     amount: 2
     meta:
@@ -199,7 +205,7 @@ items:
       custom-model-data: 102
       blockMaterial: COMMAND_BLOCK
   fishing_crate:
-    v: 2227
+    v: 2230
     type: BARREL
     meta:
       ==: ItemMeta
@@ -213,7 +219,7 @@ items:
         - HIDE_ENCHANTS
       blockMaterial: BARREL
   displace:
-    v: 2227
+    v: 2230
     type: KNOWLEDGE_BOOK
     meta:
       ==: ItemMeta
@@ -221,7 +227,7 @@ items:
       display-name: §dDisplace
       custom-model-data: 103
   withdraw:
-    v: 2227
+    v: 2230
     type: KNOWLEDGE_BOOK
     meta:
       ==: ItemMeta
@@ -229,7 +235,7 @@ items:
       display-name: §7Withdraw
       custom-model-data: 104
   hell_essence:
-    v: 2227
+    v: 2230
     type: COMMAND_BLOCK
     meta:
       ==: ItemMeta
@@ -238,7 +244,7 @@ items:
       custom-model-data: 105
       blockMaterial: COMMAND_BLOCK
   enhanced_eyes:
-    v: 2227
+    v: 2230
     type: KNOWLEDGE_BOOK
     meta:
       ==: ItemMeta
@@ -246,7 +252,7 @@ items:
       display-name: §9Enhanced Eyes
       custom-model-data: 106
   possess:
-    v: 2227
+    v: 2230
     type: KNOWLEDGE_BOOK
     meta:
       ==: ItemMeta
@@ -254,7 +260,7 @@ items:
       display-name: §2Possession
       custom-model-data: 107
   magic_essence:
-    v: 2227
+    v: 2230
     type: COMMAND_BLOCK
     meta:
       ==: ItemMeta

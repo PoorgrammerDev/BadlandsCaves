@@ -1,18 +1,21 @@
-package me.fullpotato.badlandscaves.badlandscaves.Runnables;
+package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import java.util.Random;
 
-public class makeReincarnationWorld extends BukkitRunnable {
+public class makeDescensionStage extends BukkitRunnable {
     private BadlandsCaves plugin;
     private World world;
-    public makeReincarnationWorld (BadlandsCaves bcav, World wrld) {
+    public makeDescensionStage(BadlandsCaves bcav, World wrld) {
         plugin = bcav;
         world = wrld;
     }
@@ -59,20 +62,12 @@ public class makeReincarnationWorld extends BukkitRunnable {
             }
         }
 
-        /*
-        generate shrines at:
-        -65 0
-        0 65
-        0 -65
-
-
-        the player spawns at 65 0 so no shrine there
-
-         */
-
-        generateShrine(world, -65, 0);
         generateShrine(world, 46, 46);
         generateShrine(world, 46, -46);
+        generateShrine(world, -46, 46);
+        generateShrine(world, -46, -46);
+
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
     }
 
     public void generateShrine (World world, int x, int z) {
@@ -91,5 +86,10 @@ public class makeReincarnationWorld extends BukkitRunnable {
                 }
             }
         }
+
+        top_origin.add(0.5, 3.5, 0.5);
+        EnderCrystal crystal = (EnderCrystal) world.spawnEntity(top_origin, EntityType.ENDER_CRYSTAL);
+        crystal.setShowingBottom(false);
+        crystal.setInvulnerable(true);
     }
 }

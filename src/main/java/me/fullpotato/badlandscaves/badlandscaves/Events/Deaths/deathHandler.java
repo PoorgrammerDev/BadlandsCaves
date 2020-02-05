@@ -25,7 +25,7 @@ public class deathHandler implements Listener {
         double thirst = player.getMetadata("Thirst").get(0).asDouble();
 
         if (toxicity >= 100 && thirst <= 0) {
-            event.setDeathMessage(player.getDisplayName()+ " died of multiple causes.");
+            event.setDeathMessage(player.getDisplayName() + " died of multiple causes.");
         }
         else if (toxicity >= 100) {
             event.setDeathMessage(player.getDisplayName() + " died of toxicity.");
@@ -41,8 +41,6 @@ public class deathHandler implements Listener {
         player.setMetadata("tox_nat_decr_var", new FixedMetadataValue(plugin, 0.0));
         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
 
-        player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
-
         int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
         if (has_powers >= 1.0) {
             player.setMetadata("Mana", new FixedMetadataValue(plugin, 100));
@@ -51,6 +49,18 @@ public class deathHandler implements Listener {
             player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, "__REMOVED__"));
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
+        }
+
+        int in_descension = player.getMetadata("in_descension").get(0).asInt();
+        if (in_descension >= 1) {
+            if (in_descension == 2) {
+                player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
+                player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
+            }
+        }
+        else {
+            player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
+
         }
 
     }

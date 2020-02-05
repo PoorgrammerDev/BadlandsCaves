@@ -3,8 +3,6 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -32,14 +30,41 @@ public class deathEffectsRunnable extends BukkitRunnable {
             int speed_lvl = 0;
 
             if (deaths >= 50) {
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
-                int in_reincarnation = player.getMetadata("in_reincarnation").get(0).asInt();
-                if (in_reincarnation < 1) {
-                    World reincarnation_world = Bukkit.getWorld("world_reincarnation");
-                    Location reincarnation_spawn = new Location(reincarnation_world, 0, 120, 0);
-                    player.teleport(reincarnation_spawn);
-                    player.setMetadata("in_reincarnation", new FixedMetadataValue(plugin, 1));
+                /*
+                int hasPowers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+                int in_descension = player.getMetadata("in_descension").get(0).asInt();
+                if (in_descension != 3 && hasPowers < 0.5) {
+                    if (in_descension == 0) {
+                        player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
+                    }
+                    World descension_world = Bukkit.getWorld("world_descension");
+                    if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
+                        if (!player.getWorld().equals(descension_world)) {
+                            Location descension_spawn = new Location(descension_world, 0, 117, 0);
+                            try {
+                                //if (descension_spawn != null && descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
+                            }
+                            catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
+
+                if (in_descension == 1 || in_descension == 2) {
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
+                }
+                else {
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(1.0);
+                    poison_lvl = 5;
+                    hunger_lvl = 3;
+                    slow_lvl = 5;
+                    slowmine_lvl = 4;
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 4, true, false), true);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 19, true, false), true);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
+                }
+                 */
             }
             else if (deaths >= 30) {
                 poison_lvl = 2;

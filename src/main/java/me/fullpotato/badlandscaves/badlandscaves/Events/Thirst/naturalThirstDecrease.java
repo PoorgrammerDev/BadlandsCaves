@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,8 +22,8 @@ public class naturalThirstDecrease implements Listener {
     @EventHandler
     public void decrease_thirst (PlayerMoveEvent event) {
         Player player = event.getPlayer();
-
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
+        if (player.getWorld().equals(Bukkit.getWorld("world_descension"))) return;
 
         boolean moved_x = (Math.abs(event.getTo().getX() - event.getFrom().getX()) > 0);
         boolean moved_y = (Math.abs(event.getTo().getY() - event.getFrom().getY()) > 0);
@@ -30,7 +31,7 @@ public class naturalThirstDecrease implements Listener {
         boolean moved = moved_x || moved_y || moved_z;
         boolean sprint = player.isSprinting();
         boolean sneak = player.isSneaking();
-        boolean climb = moved_y && player.getLocation().getBlock().getType() == Material.LADDER;
+        boolean climb = moved_y && (player.getLocation().getBlock().getType().equals(Material.LADDER) || player.getLocation().getBlock().getType().equals(Material.VINE));
         double current_thirst_sys = player.getMetadata("thirst_sys_var").get(0).asDouble();
 
         if (moved) {
