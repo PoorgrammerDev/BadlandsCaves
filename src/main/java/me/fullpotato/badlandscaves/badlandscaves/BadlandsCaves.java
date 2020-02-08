@@ -189,7 +189,7 @@ public final class BadlandsCaves extends JavaPlugin {
             BukkitTask descension = new descensionReset(this).runTaskTimer(this, 0, 60);
             BukkitTask descension_zombies = new lostSoulParticle().runTaskTimer(this, 0, 3);
             BukkitTask detect_bar = new detectedBar(this).runTaskTimerAsynchronously(this, 0, 3);
-            BukkitTask shrine_capt = new shrineCapture(this).runTaskTimerAsynchronously(this, 0 ,0);
+            BukkitTask shrine_capt = new shrineCapture(this).runTaskTimer(this, 0 ,0);
         }
 
         //crafting recipes

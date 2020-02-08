@@ -54,8 +54,10 @@ public class deathEffectsRunnable extends BukkitRunnable {
 
                 if (in_descension == 1 || in_descension == 2) {
                     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
+                    if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
                 }
                 else {
+                    if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
                     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(1.0);
                     poison_lvl = 5;
                     hunger_lvl = 3;

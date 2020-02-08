@@ -30,7 +30,7 @@ public class descensionReset extends BukkitRunnable {
         Player waiting = null;
         Player running = null;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getWorld().equals(world)) {
+            if (player.getWorld().equals(world) && !player.isDead()) {
                 int state = player.getMetadata("in_descension").get(0).asInt();
                 //state 1: waiting in box
                 if (state == 1) {
@@ -54,8 +54,17 @@ public class descensionReset extends BukkitRunnable {
                 }
             }
 
+            //regenerating the world has been disabled - it doesn't seem to do much and causes too much lag
+            /*
             //regenerate the world
             new makeDescensionStage(plugin, world).run();
+             */
+
+            //instead, we're just regenning the pillars.
+            generateShrine(world, 46, 46);
+            generateShrine(world, 46, -46);
+            generateShrine(world, -46, 46);
+            generateShrine(world, -46, -46);
 
             //team
             ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -114,5 +123,29 @@ public class descensionReset extends BukkitRunnable {
             Location deploy = new Location(world, 65, 127, 0, 0, 90);
             waiting.teleport(deploy);
         }
+    }
+
+    public void generateShrine (World world, int x, int z) {
+        int origin_y = 80;
+        Location top_origin = new Location(world, x, origin_y, z);
+
+        for (int x_offset = -5; x_offset <= 5; x_offset++) {
+            for (int z_offset = -5; z_offset <= 5; z_offset++) {
+                int new_x = x + x_offset;
+                int new_z = z + z_offset;
+                Location test = new Location(world, new_x, origin_y, new_z);
+                if (top_origin.distance(test) == 5) {
+                    for (int y = origin_y; world.getBlockAt(new_x, y, new_z).getType().isAir(); y--) {
+                        world.getBlockAt(new_x, y, new_z).setType(Material.BLACK_GLAZED_TERRACOTTA);
+                    }
+                }
+            }
+        }
+
+        top_origin.add(0.5, 3.5, 0.5);
+        EnderCrystal crystal = (EnderCrystal) world.spawnEntity(top_origin, EntityType.ENDER_CRYSTAL);
+        crystal.setShowingBottom(false);
+        crystal.setInvulnerable(true);
+        crystal.setMetadata("charge", new FixedMetadataValue(plugin, 0));
     }
 }

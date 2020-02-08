@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,30 @@ public class descensionMobDetection implements Listener {
         int in_descension = player.getMetadata("in_descension").get(0).asInt();
         if (in_descension != 2) return;
 
+        Location player_location = player.getLocation();
+
+        //leaving descension stage
+        if (player_location.getY() < 0) {
+            player.setMetadata("in_descension", new FixedMetadataValue(plugin, 3));
+            player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
+            //remove night vision here
+            player.getInventory().clear();
+            player.setLevel(0);
+            player.setFallDistance(0);
+
+            Location spawnpoint = player.getBedSpawnLocation();
+            if (spawnpoint == null) {
+                World default_world = Bukkit.getWorld("world");
+                player.teleport(default_world.getSpawnLocation());
+            }
+            else {
+                player.teleport(spawnpoint);
+            }
+        }
+
+
+
+
         boolean moved_x = (Math.abs(event.getTo().getX() - event.getFrom().getX()) > 0);
         boolean moved_y = (Math.abs(event.getTo().getY() - event.getFrom().getY()) > 0);
         boolean moved_z = (Math.abs(event.getTo().getZ() - event.getFrom().getZ()) > 0);
@@ -46,7 +71,6 @@ public class descensionMobDetection implements Listener {
         List<Entity> entities = player.getNearbyEntities(5, 5, 5);
         for (Entity entity : entities) {
             if (player.hasLineOfSight(entity)) {
-                Location player_location = player.getLocation();
                 Location entity_location = entity.getLocation();
                 detection = player.getMetadata("descension_detect").get(0).asDouble();
 

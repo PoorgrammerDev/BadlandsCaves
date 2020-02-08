@@ -29,19 +29,17 @@ public class detectedBar extends BukkitRunnable {
 
         World world = Bukkit.getWorld("world_descension");
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getWorld().equals(world)) {
-                int in_descension = player.getMetadata("in_descension").get(0).asInt();
-                if (in_descension == 2) {
-                    if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);
-                    double detect = player.getMetadata("descension_detect").get(0).asDouble();
-                    double detect_max = plugin.getConfig().getDouble("game_values.descension_max_detect");
-                    double detect_percentage = Math.min(Math.max(detect / detect_max, 0.0), 1.0);
+            int in_descension = player.getMetadata("in_descension").get(0).asInt();
+            if (in_descension == 2 && player.getWorld().equals(world)) {
+                if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);
+                double detect = player.getMetadata("descension_detect").get(0).asDouble();
+                double detect_max = plugin.getConfig().getDouble("game_values.descension_max_detect");
+                double detect_percentage = Math.min(Math.max(detect / detect_max, 0.0), 1.0);
 
-                    detected_bar.setProgress(detect_percentage);
-                }
-                else {
-                    detected_bar.removePlayer(player);
-                }
+                detected_bar.setProgress(detect_percentage);
+            }
+            else {
+                detected_bar.removePlayer(player);
             }
         }
     }

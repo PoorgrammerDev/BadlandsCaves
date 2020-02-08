@@ -1,10 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,7 +21,6 @@ public class shrineCapture extends BukkitRunnable {
             new Location(world, 46, 80, -46),
             new Location(world, -46, 80, -46),
     };
-    private Collection<Entity> entities = world.getEntities();
 
     public shrineCapture (BadlandsCaves bcav) {
         plugin = bcav;
@@ -32,16 +28,8 @@ public class shrineCapture extends BukkitRunnable {
 
     @Override
     public void run() {
-        ArrayList<EnderCrystal> crystals = new ArrayList<>();
-        for (Entity entity : entities) {
-            if (entity instanceof EnderCrystal) {
-                crystals.add((EnderCrystal) entity);
-            }
-        }
-
-
-
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.isDead() || (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE))) continue;
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 2) {
                 Location player_loc = player.getLocation();
@@ -49,6 +37,10 @@ public class shrineCapture extends BukkitRunnable {
                     crystal_location.setY(world.getHighestBlockYAt(crystal_location.getBlockX(),crystal_location.getBlockZ()));
                     if (player_loc.distanceSquared(crystal_location) < 16) {
                         crystal_location.setY(80);
+                        ArrayList<EnderCrystal> crystals = new ArrayList<>();
+                        for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
+                            if (entity instanceof EnderCrystal) crystals.add((EnderCrystal) entity);
+                        }
 
                         for (EnderCrystal crystal : crystals) {
                             if (crystal.getLocation().distanceSquared(crystal_location) < 16) {
