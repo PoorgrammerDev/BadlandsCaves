@@ -7,8 +7,7 @@ public class emptyWorld {
         WorldCreator emptyworld = new WorldCreator("world_empty");
         emptyworld.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
-                .generator(new emptyWorldGen())
-                .generateStructures(false);
+                .generator(new emptyWorldGen());
         World world_empty = emptyworld.createWorld();
         world_empty.setGameRule(GameRule.DO_INSOMNIA, false);
         world_empty.setGameRule(GameRule.DO_MOB_SPAWNING, false);

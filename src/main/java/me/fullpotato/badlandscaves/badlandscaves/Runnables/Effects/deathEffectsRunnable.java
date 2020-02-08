@@ -3,6 +3,8 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -30,7 +32,6 @@ public class deathEffectsRunnable extends BukkitRunnable {
             int speed_lvl = 0;
 
             if (deaths >= 50) {
-                /*
                 int hasPowers = player.getMetadata("has_supernatural_powers").get(0).asInt();
                 int in_descension = player.getMetadata("in_descension").get(0).asInt();
                 if (in_descension != 3 && hasPowers < 0.5) {
@@ -64,7 +65,6 @@ public class deathEffectsRunnable extends BukkitRunnable {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 19, true, false), true);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
                 }
-                 */
             }
             else if (deaths >= 30) {
                 poison_lvl = 2;

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.*;
 
 public class descensionWorld {
     private BadlandsCaves plugin;
@@ -8,13 +9,11 @@ public class descensionWorld {
         plugin = bcav;
     }
 
-    /*
     public void gen_descension_world() {
         WorldCreator descension = new WorldCreator("world_descensio");
         descension.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
-                .generator(new emptyWorldGen())
-                .generateStructures(false);
+                .generator(new emptyWorldGen());
         World world_descension = descension.createWorld();
         world_descension.setGameRule(GameRule.DO_INSOMNIA, false);
         world_descension.setGameRule(GameRule.DO_MOB_SPAWNING, false);
@@ -39,5 +38,4 @@ public class descensionWorld {
         }
 
     }
-    */
 }
