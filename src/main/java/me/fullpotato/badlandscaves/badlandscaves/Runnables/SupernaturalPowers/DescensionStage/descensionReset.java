@@ -7,6 +7,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 import java.util.List;
 import java.util.Random;
@@ -54,6 +57,20 @@ public class descensionReset extends BukkitRunnable {
             //regenerate the world
             new makeDescensionStage(plugin, world).run();
 
+            //team
+            ScoreboardManager manager = Bukkit.getScoreboardManager();
+            assert manager != null;
+            Scoreboard board = manager.getMainScoreboard();
+            String title = "DESCENSION_TEAM";
+            Team team;
+            if (board.getTeam(title) == null) {
+                team = board.registerNewTeam(title);
+                team.setAllowFriendlyFire(false);
+                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+            }
+            else {
+                team = board.getTeam(title);
+            }
 
             //spawn mobs
             Random random = new Random();
@@ -84,6 +101,7 @@ public class descensionReset extends BukkitRunnable {
                             zombie.setRemoveWhenFarAway(false);
                             zombie.setInvulnerable(true);
                             zombie.setCollidable(false);
+                            team.addEntry(zombie.getUniqueId().toString());
                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false), true);
 
                             counter++;

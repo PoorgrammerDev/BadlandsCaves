@@ -25,14 +25,19 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.deathEffectsR
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.playerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.thirstEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.toxEffectsRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.descensionReset;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.detectedBar;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.lostSoulParticle;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.shrineCapture;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.agilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.manaBarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.manaRegen;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.toxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.actionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.playerSaveToConfig;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.descensionWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorld;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.test;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.preventNormalEnd;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -102,8 +107,8 @@ public final class BadlandsCaves extends JavaPlugin {
         emptyWorld empty_world = new emptyWorld();
         empty_world.gen_void_world();
 
-        test a = new test();
-        a.gen_void_world();
+        descensionWorld desc_world = new descensionWorld(this);
+        desc_world.gen_descension_world();
 
         //protocol-lib
         //ProtocolManager manager = ProtocolLibrary.getProtocolManager();
@@ -144,8 +149,8 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new increaseToxInRain(this), this);
             this.getServer().getPluginManager().registerEvents(new enduranceCancelHunger(this), this);
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
-            //this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
-            //this.getServer().getPluginManager().registerEvents(new descensionMobDetection(this), this);
+            this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
+            this.getServer().getPluginManager().registerEvents(new descensionMobDetection(this), this);
         }
 
         //command reg
@@ -174,16 +179,17 @@ public final class BadlandsCaves extends JavaPlugin {
             BukkitTask act_bar = new actionbarRunnable().runTaskTimerAsynchronously(this, 0 ,0);
             BukkitTask tox_eff = new toxEffectsRunnable(this).runTaskTimer(this, 0, 0);
             BukkitTask thrst_eff = new thirstEffectsRunnable(this).runTaskTimer(this, 0, 0);
-            BukkitTask dth_eff = new deathEffectsRunnable(this).runTaskTimer(this, 120, 0);
+            BukkitTask dth_eff = new deathEffectsRunnable(this).runTaskTimer(this, 0, 0);
             BukkitTask tot_eff = new playerEffectsRunnable().runTaskTimer(this,0,0);
             BukkitTask decr_tox = new toxSlowDecreaseRunnable(this).runTaskTimerAsynchronously(this, 0, 600);
             BukkitTask save_config = new playerSaveToConfig(this, null, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
             BukkitTask mana = new manaBarRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
             BukkitTask mana_regen = new manaRegen(this).runTaskTimerAsynchronously(this, 0, 10);
             BukkitTask agility_speed = new agilitySpeedRunnable(this).runTaskTimerAsynchronously(this, 0, 15);
-            //BukkitTask descension = new descensionReset(this).runTaskTimer(this, 0, 60);
-            //BukkitTask descension_zombies = new lostSoulParticle().runTaskTimer(this, 0, 3);
-            //BukkitTask detect_bar = new detectedBar(this).runTaskTimerAsynchronously(this, 0, 3);
+            BukkitTask descension = new descensionReset(this).runTaskTimer(this, 0, 60);
+            BukkitTask descension_zombies = new lostSoulParticle().runTaskTimer(this, 0, 3);
+            BukkitTask detect_bar = new detectedBar(this).runTaskTimerAsynchronously(this, 0, 3);
+            BukkitTask shrine_capt = new shrineCapture(this).runTaskTimerAsynchronously(this, 0 ,0);
         }
 
         //crafting recipes

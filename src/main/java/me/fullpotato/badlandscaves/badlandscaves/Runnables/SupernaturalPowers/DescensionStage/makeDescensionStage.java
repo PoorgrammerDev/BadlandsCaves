@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
@@ -32,6 +33,22 @@ public class makeDescensionStage extends BukkitRunnable {
                 }
             }
         }
+
+
+        //barrier cage
+        Location cage_origin = new Location(world, 0, 200, 0);
+        for (int x = -5; x <= 5; x++) {
+            for (int z = -5; z <= 5; z++) {
+                for (int y = 180; y <= 220; y++) {
+                    Location test = new Location(world, x, y, z);
+                    if (cage_origin.distance(test) > 3 && cage_origin.distance(test) < 5) {
+                        test.getBlock().setType(Material.BARRIER);
+                    }
+                }
+            }
+        }
+
+
 
 
         Random random = new Random();
@@ -91,5 +108,6 @@ public class makeDescensionStage extends BukkitRunnable {
         EnderCrystal crystal = (EnderCrystal) world.spawnEntity(top_origin, EntityType.ENDER_CRYSTAL);
         crystal.setShowingBottom(false);
         crystal.setInvulnerable(true);
+        crystal.setMetadata("charge", new FixedMetadataValue(plugin, 0));
     }
 }

@@ -41,9 +41,9 @@ public class deathEffectsRunnable extends BukkitRunnable {
                     World descension_world = Bukkit.getWorld("world_descension");
                     if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
                         if (!player.getWorld().equals(descension_world)) {
-                            Location descension_spawn = new Location(descension_world, 0, 117, 0);
+                            Location descension_spawn = new Location(descension_world, 0, 197, 0);
                             try {
-                                //if (descension_spawn != null && descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
+                                if (descension_spawn != null && descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
                             }
                             catch (NullPointerException e) {
                                 e.printStackTrace();
