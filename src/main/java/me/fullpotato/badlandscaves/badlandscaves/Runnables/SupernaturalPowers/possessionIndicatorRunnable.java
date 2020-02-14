@@ -37,8 +37,10 @@ public class possessionIndicatorRunnable extends BukkitRunnable {
 
         if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof LivingEntity && !(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither)) {
             LivingEntity entity = (LivingEntity) result.getHitEntity();
-            Location location = entity.getLocation();
+            boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();
+            if (target_already_pos) return;
 
+            Location location = entity.getLocation();
             for (double theta = 0; theta <= 2*Math.PI; theta += Math.PI / 4.0) {
                 double x = Math.cos(theta);
                 double z = Math.sin(theta);

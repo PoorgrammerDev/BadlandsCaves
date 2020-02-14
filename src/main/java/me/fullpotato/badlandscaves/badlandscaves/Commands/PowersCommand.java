@@ -75,38 +75,39 @@ public class PowersCommand implements CommandExecutor {
                     }
                     else {
                         for (Player target : Bukkit.getOnlinePlayers()) {
-                            if (args[1].equalsIgnoreCase(target.getDisplayName()) || args[1].equalsIgnoreCase(target.getName()) || args[1].equalsIgnoreCase(target.getUniqueId().toString())) {
-                                if (args.length < 3) {
-                                    sender.sendMessage(ChatColor.RED + "Too few arguments. Please specify an entry.");
+                            if (!args[1].equalsIgnoreCase(target.getDisplayName()) && !args[1].equalsIgnoreCase(target.getName()) && !args[1].equalsIgnoreCase(target.getUniqueId().toString())) continue;
+
+                            if (args.length < 3) {
+                                sender.sendMessage(ChatColor.RED + "Too few arguments. Please specify an entry.");
+                                return true;
+                            }
+                            else if (powers.containsKey(args[2])) {
+                                if (args.length < 4) {
+                                    sender.sendMessage(ChatColor.RED + "Too few arguments. You need to specify a level to set. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
+                                    return true;
                                 }
-                                else if (powers.containsKey(args[2])) {
-                                    if (args.length < 4) {
-                                        sender.sendMessage(ChatColor.RED + "Too few arguments. You need to specify a level to set. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
+                                else {
+                                    int input_value;
+                                    try {
+                                        input_value = Integer.parseInt(args[3]);
+                                    }
+                                    catch (NumberFormatException exception) {
+                                        sender.sendMessage(ChatColor.RED + "Please enter a valid integer.");
+                                        return true;
+                                    }
+
+                                    if (input_value >= 0 && input_value <= powers_max_levels.get(args[2])) {
+                                        target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
+                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
+                                        return true;
                                     }
                                     else {
-                                        int input_value;
-                                        try {
-                                            input_value = Integer.parseInt(args[3]);
-                                        }
-                                        catch (NumberFormatException exception) {
-                                            sender.sendMessage(ChatColor.RED + "Please enter a valid integer.");
-                                            return true;
-                                        }
-
-                                        if (input_value >= 0 && input_value <= powers_max_levels.get(args[2])) {
-                                            target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
-                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
-                                        }
-                                        else {
-                                            sender.sendMessage(ChatColor.RED + "Please make sure the level stays within bounds. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
-                                            return true;
-                                        }
+                                        sender.sendMessage(ChatColor.RED + "Please make sure the level stays within bounds. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
+                                        return true;
                                     }
                                 }
                             }
-                            else {
-                                    sender.sendMessage(ChatColor.RED + "You must provide a valid entry!");
-                            }
+                            sender.sendMessage(ChatColor.RED + "You must specify a valid player!");
                             return true;
                         }
                     }

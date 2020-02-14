@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -58,41 +59,44 @@ public class Possession implements Listener {
                         if (mana >= pos_drain_tick) {
                             World world = player.getWorld();
                             RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),5);
-
                             if (result != null && result.getHitEntity() != null) {
                                 if (result.getHitEntity() instanceof LivingEntity) {
-                                    if (!(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither)){
-                                        //cancel mana regen and keep mana bar active
-                                        player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
-                                        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+                                    target = (LivingEntity) result.getHitEntity();
+                                    if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither)){
+                                        boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
 
-                                        //readying the player and the target
-                                        target = (LivingEntity) result.getHitEntity();
-                                        target.setMetadata("possessed", new FixedMetadataValue(plugin, true));
-                                        player.setMetadata("in_possession", new FixedMetadataValue(plugin, true));
-                                        player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, player.getWorld().getName()));
-                                        player.setMetadata("possess_orig_x", new FixedMetadataValue(plugin, player.getLocation().getX()));
-                                        player.setMetadata("possess_orig_y", new FixedMetadataValue(plugin, player.getLocation().getY()));
-                                        player.setMetadata("possess_orig_z", new FixedMetadataValue(plugin, player.getLocation().getZ()));
-                                        target.setAI(false);
+                                        if (!target_already_pos) {
+                                            //cancel mana regen and keep mana bar active
+                                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+                                            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
 
-                                        //team
-                                        ScoreboardManager manager = Bukkit.getScoreboardManager();
-                                        assert manager != null;
-                                        Scoreboard board = manager.getMainScoreboard();
-                                        Team team = board.registerNewTeam("POS_" + player.getUniqueId().toString().substring(0, 12));
-                                        team.setAllowFriendlyFire(false);
-                                        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OTHER_TEAMS);
-                                        team.addEntry(player.getUniqueId().toString());
-                                        team.addEntry(target.getUniqueId().toString());
-                                        player.setScoreboard(board);
+                                            //readying the player and the target
+                                            target.setMetadata("possessed", new FixedMetadataValue(plugin, true));
+                                            player.setMetadata("in_possession", new FixedMetadataValue(plugin, true));
+                                            player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, player.getWorld().getName()));
+                                            player.setMetadata("possess_orig_x", new FixedMetadataValue(plugin, player.getLocation().getX()));
+                                            player.setMetadata("possess_orig_y", new FixedMetadataValue(plugin, player.getLocation().getY()));
+                                            player.setMetadata("possess_orig_z", new FixedMetadataValue(plugin, player.getLocation().getZ()));
+                                            target.setAI(false);
+
+                                            //team
+                                            ScoreboardManager manager = Bukkit.getScoreboardManager();
+                                            assert manager != null;
+                                            Scoreboard board = manager.getMainScoreboard();
+                                            Team team = board.registerNewTeam("POS_" + player.getUniqueId().toString().substring(0, 12));
+                                            team.setAllowFriendlyFire(false);
+                                            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OTHER_TEAMS);
+                                            team.addEntry(player.getUniqueId().toString());
+                                            team.addEntry(target.getUniqueId().toString());
+                                            player.setScoreboard(board);
 
 
-                                        if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
-                                        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 0));
-                                        player.teleport(target);
-                                        player.hidePlayer(plugin, player);
-                                        new possessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
+                                            if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
+                                            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 0));
+                                            player.teleport(target);
+
+                                            new possessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
+                                        }
                                     }
                                 }
                             }
@@ -108,6 +112,26 @@ public class Possession implements Listener {
 
     @EventHandler
     public void prevent_damage (EntityDamageByEntityEvent event) {
-        if (event.getDamager().equals(this.player) && event.getEntity().equals(this.target)) event.setCancelled(true);
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            boolean in_possession = player.hasMetadata("in_possession") && player.getMetadata("in_possession").get(0).asBoolean();
+
+            if (in_possession) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void target_possesed (EntityTargetLivingEntityEvent event) {
+        if (event.getTarget() instanceof Player) {
+            Player player = (Player) event.getTarget();
+            boolean in_possession = player.hasMetadata("in_possession") && player.getMetadata("in_possession").get(0).asBoolean();
+
+            if (in_possession) {
+                event.setTarget(null);
+                event.setCancelled(true);
+            }
+        }
     }
 }

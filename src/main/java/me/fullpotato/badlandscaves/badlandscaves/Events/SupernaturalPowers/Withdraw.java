@@ -26,7 +26,6 @@ public class Withdraw implements Listener {
         plugin = bcav;
     }
 
-    private Location voidloc;
     private World void_world = Bukkit.getWorld("world_empty");
 
     @EventHandler
@@ -51,6 +50,8 @@ public class Withdraw implements Listener {
                         event.setCancelled(true);
                         if (mana >= withdraw_mana_cost) {
                             Random random = new Random();
+
+                            //generating the void chunk
                             for (int x = 0; x < 16; x++) {
                                 for (int y = 0; y < 256; y++) {
                                     for (int z = 0; z < 16; z++) {
@@ -72,8 +73,13 @@ public class Withdraw implements Listener {
                             Location location = player.getLocation();
                             plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
 
-                            voidloc = player.getLocation();
+                            Location voidloc = player.getLocation();
                             voidloc.setWorld(void_world);
+                            int voidloc_x = voidloc.getBlockX();
+                            int voidloc_z = voidloc.getBlockZ();
+
+                            player.setMetadata("withdraw_x", new FixedMetadataValue(plugin, voidloc_x));
+                            player.setMetadata("withdraw_z", new FixedMetadataValue(plugin, voidloc_z));
 
                             player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, random.nextInt(200) + 500));
 
@@ -152,12 +158,17 @@ public class Withdraw implements Listener {
         if (!world.equals(void_world)) return;
 
         Chunk chunk = location.getChunk();
-        if (!player.getLocation().getChunk().equals(voidloc.getChunk())) {
-            Location voidloc_keeplook = voidloc;
-            voidloc_keeplook.setYaw(player.getLocation().getYaw());
-            voidloc_keeplook.setPitch(player.getLocation().getPitch());
 
-            player.teleport(voidloc_keeplook);
+        int voidloc_x = player.getMetadata("withdraw_x").get(0).asInt();
+        int voidloc_z = player.getMetadata("withdraw_z").get(0).asInt();
+
+        Location voidloc = new Location(void_world, voidloc_x, 0, voidloc_z);
+        Chunk voidchunk = voidloc.getChunk();
+
+        if (!chunk.equals(voidchunk)) {
+            voidloc.setYaw(player.getLocation().getYaw());
+            voidloc.setPitch(player.getLocation().getPitch());
+            player.teleport(voidloc);
         }
     }
 

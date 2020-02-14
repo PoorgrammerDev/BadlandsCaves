@@ -19,9 +19,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class cauldronMenu implements Listener {
     private BadlandsCaves plugin;
@@ -104,10 +106,42 @@ public class cauldronMenu implements Listener {
                     boolean otherAction = (player.isSneaking() || holding.equals(Material.WATER_BUCKET) || holding.equals(Material.POTION) || holding.equals(Material.BUCKET) || holding.equals(Material.GLASS_BOTTLE));
                     if (block_under.getType().equals(Material.FIRE)) {
                         if (!otherAction) {
-                            event.setCancelled(true);
-                            purification_menu(player, cauldron_block, cauldron_title);
-                            BukkitTask inv_refresh = new cauldronRunnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
-                            refresh_id = inv_refresh.getTaskId();
+
+                            int x = loc_of_cauld.getBlockX();
+                            int y = loc_of_cauld.getBlockY();
+                            int z = loc_of_cauld.getBlockZ();
+                            boolean already_opened = false;
+
+                            for (Player check_nearby : Bukkit.getOnlinePlayers()) {
+                                if (check_nearby.getLocation().distanceSquared(loc_of_cauld) < 100) {
+                                    int open = check_nearby.getMetadata("opened_cauldron").get(0).asInt();
+                                    if (open >= 0.5) {
+                                        int test_x = check_nearby.getMetadata("opened_cauldron_x").get(0).asInt();
+                                        int test_y = check_nearby.getMetadata("opened_cauldron_y").get(0).asInt();
+                                        int test_z = check_nearby.getMetadata("opened_cauldron_z").get(0).asInt();
+
+                                        if (test_x == x && test_y == y && test_z == z) {
+                                            already_opened = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (already_opened) {
+                                player.sendMessage(ChatColor.RED + "Only one player can use the Cauldron at a time.");
+                            }
+                            else {
+                                event.setCancelled(true);
+                                player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, 1));
+                                player.setMetadata("opened_cauldron_x", new FixedMetadataValue(plugin, x));
+                                player.setMetadata("opened_cauldron_y", new FixedMetadataValue(plugin, y));
+                                player.setMetadata("opened_cauldron_z", new FixedMetadataValue(plugin, z));
+
+                                purification_menu(player, cauldron_block, cauldron_title);
+                                BukkitTask inv_refresh = new cauldronRunnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
+                                refresh_id = inv_refresh.getTaskId();
+                            }
                         }
                     }
                     else if (!otherAction) {
@@ -253,6 +287,7 @@ public class cauldronMenu implements Listener {
         Player player = (Player) event.getPlayer();
         if (inv.equals(cauldron_inv)) {
             Bukkit.getScheduler().cancelTask(refresh_id);
+            player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, 0));
 
             if (cauldron_inv.getItem(11) != null) {
                 player.getInventory().addItem(cauldron_inv.getItem(11));

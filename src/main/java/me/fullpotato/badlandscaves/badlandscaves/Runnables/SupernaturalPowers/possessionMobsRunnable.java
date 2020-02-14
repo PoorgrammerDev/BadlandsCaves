@@ -38,6 +38,12 @@ public class possessionMobsRunnable extends BukkitRunnable {
                 player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             }
 
+            for (Player online_player : Bukkit.getOnlinePlayers()) {
+                if (!online_player.equals(player)) {
+                    online_player.hidePlayer(plugin, player);
+                }
+            }
+
             //cancel mana regen and keep mana bar active
             player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
             player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
@@ -56,7 +62,12 @@ public class possessionMobsRunnable extends BukkitRunnable {
             player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             target.setAI(true);
             if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-            player.showPlayer(plugin, player);
+
+            for (Player online_player : Bukkit.getOnlinePlayers()) {
+                if (!online_player.equals(player)) {
+                    online_player.showPlayer(plugin, player);
+                }
+            }
 
             //teleport player back to orig location
             if (player.hasMetadata("possess_orig_world") && !player.getMetadata("possess_orig_world").get(0).asString().equalsIgnoreCase("__REMOVED__")) {
