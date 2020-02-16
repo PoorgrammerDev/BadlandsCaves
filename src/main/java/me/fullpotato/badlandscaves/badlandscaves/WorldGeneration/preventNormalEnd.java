@@ -59,10 +59,7 @@ public class preventNormalEnd implements Listener {
                                         for (int y = 0; y <= 255; y++) {
                                             Location loc = new Location(world, x, y, z);
                                             Block block = loc.getBlock();
-                                            if (block.getType().equals(Material.BEDROCK) ||  block.getType().equals(Material.END_PORTAL) || block.getType().equals(Material.END_STONE)) {
-                                                block.setType(Material.EMERALD_BLOCK);
-                                            }
-                                            else if (block.getType().equals(Material.WALL_TORCH) || block.getType().equals(Material.DRAGON_EGG)) {
+                                            if (block.getType().equals(Material.BEDROCK) ||  block.getType().equals(Material.END_PORTAL) || block.getType().equals(Material.END_STONE) || block.getType().equals(Material.WALL_TORCH) || block.getType().equals(Material.DRAGON_EGG)) {
                                                 block.setType(Material.AIR);
                                             }
                                         }

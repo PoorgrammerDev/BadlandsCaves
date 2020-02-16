@@ -49,91 +49,98 @@ public class Withdraw implements Listener {
 
                         event.setCancelled(true);
                         if (mana >= withdraw_mana_cost) {
-                            Random random = new Random();
+                            boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
+                            if (!in_possession) {
+                                Random random = new Random();
 
-                            //generating the void chunk
-                            for (int x = 0; x < 16; x++) {
-                                for (int y = 0; y < 256; y++) {
-                                    for (int z = 0; z < 16; z++) {
-                                        Block block = player.getLocation().getChunk().getBlock(x, y, z);
-                                        Location block_loc = block.getLocation();
-                                        block_loc.setWorld(void_world);
-                                        if (block.getType().isSolid()) {
-                                            int rand = random.nextInt(3);
-                                            if (rand == 0) block_loc.getBlock().setType(Material.COAL_BLOCK);
-                                            else if (rand == 1) block_loc.getBlock().setType(Material.BLACK_CONCRETE);
-                                            else block_loc.getBlock().setType(Material.BLACK_WOOL);
-                                        } else {
-                                            block_loc.getBlock().setType(Material.AIR);
+                                //generating the void chunk
+                                for (int x = 0; x < 16; x++) {
+                                    for (int y = 0; y < 256; y++) {
+                                        for (int z = 0; z < 16; z++) {
+                                            Block block = player.getLocation().getChunk().getBlock(x, y, z);
+                                            Location block_loc = block.getLocation();
+                                            block_loc.setWorld(void_world);
+                                            if (block.getType().isSolid()) {
+                                                int rand = random.nextInt(3);
+                                                if (rand == 0) block_loc.getBlock().setType(Material.COAL_BLOCK);
+                                                else if (rand == 1) block_loc.getBlock().setType(Material.BLACK_CONCRETE);
+                                                else block_loc.getBlock().setType(Material.BLACK_WOOL);
+                                            } else {
+                                                block_loc.getBlock().setType(Material.AIR);
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Location location = player.getLocation();
-                            plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
+                                Location location = player.getLocation();
+                                plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
 
-                            Location voidloc = player.getLocation();
-                            voidloc.setWorld(void_world);
-                            int voidloc_x = voidloc.getBlockX();
-                            int voidloc_z = voidloc.getBlockZ();
+                                Location voidloc = player.getLocation();
+                                voidloc.setWorld(void_world);
 
-                            player.setMetadata("withdraw_x", new FixedMetadataValue(plugin, voidloc_x));
-                            player.setMetadata("withdraw_z", new FixedMetadataValue(plugin, voidloc_z));
+                                Chunk voidchunk = voidloc.getChunk();
 
-                            player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, random.nextInt(200) + 500));
+                                player.setMetadata("withdraw_x", new FixedMetadataValue(plugin, voidloc.getX()));
+                                player.setMetadata("withdraw_y", new FixedMetadataValue(plugin, voidloc.getY()));
+                                player.setMetadata("withdraw_z", new FixedMetadataValue(plugin, voidloc.getZ()));
+                                player.setMetadata("withdraw_chunk_x", new FixedMetadataValue(plugin, voidchunk.getX()));
+                                player.setMetadata("withdraw_chunk_z", new FixedMetadataValue(plugin, voidchunk.getZ()));
 
-                            if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
-                            player.teleport(voidloc);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
+                                player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, random.nextInt(200) + 500));
 
-                            BukkitTask decrement_timer = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
+                                if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
+                                player.teleport(voidloc);
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
 
-                                    if (withdraw_timer <= 0) {
-                                        int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
-                                        if (withdraw_level == 1) {
-                                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
-                                        }
+                                BukkitTask decrement_timer = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
 
-                                        player.teleport(location);
-                                        if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-                                        boolean ready_to_clear = true;
+                                        if (withdraw_timer <= 0) {
+                                            int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+                                            if (withdraw_level == 1) {
+                                                player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+                                            }
 
-                                        for (Player player : Bukkit.getOnlinePlayers()) {
-                                            if (player.getLocation().getWorld().equals(voidloc.getWorld()))
-                                                ready_to_clear = false;
-                                        }
+                                            player.setFallDistance(0);
+                                            player.teleport(location);
+                                            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+                                            boolean ready_to_clear = true;
 
-                                        if (ready_to_clear) {
-                                            for (int x = 0; x < 16; x++) {
-                                                for (int y = 0; y < 256; y++) {
-                                                    for (int z = 0; z < 16; z++) {
-                                                        Block block = player.getLocation().getChunk().getBlock(x, y, z);
-                                                        Location block_loc = block.getLocation();
-                                                        block_loc.setWorld(void_world);
-                                                        block_loc.getBlock().setType(Material.AIR);
+                                            for (Player player : Bukkit.getOnlinePlayers()) {
+                                                if (player.getLocation().getWorld().equals(voidloc.getWorld()))
+                                                    ready_to_clear = false;
+                                            }
+
+                                            if (ready_to_clear) {
+                                                for (int x = 0; x < 16; x++) {
+                                                    for (int y = 0; y < 256; y++) {
+                                                        for (int z = 0; z < 16; z++) {
+                                                            Block block = player.getLocation().getChunk().getBlock(x, y, z);
+                                                            Location block_loc = block.getLocation();
+                                                            block_loc.setWorld(void_world);
+                                                            block_loc.getBlock().setType(Material.AIR);
+                                                        }
                                                     }
                                                 }
                                             }
+
+                                            Bukkit.getScheduler().cancelTask(this.getTaskId());
                                         }
-
-                                        Bukkit.getScheduler().cancelTask(this.getTaskId());
+                                        else {
+                                            player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
+                                            player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
+                                            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
+                                        }
                                     }
-                                    else {
-                                        player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
-                                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
-                                    }
-                                }
-                            }.runTaskTimer(plugin, 0, 0);
+                                }.runTaskTimer(plugin, 0, 0);
 
 
-                            double new_mana = mana - (double) (withdraw_mana_cost);
-                            player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
-                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
-
+                                double new_mana = mana - (double) (withdraw_mana_cost);
+                                player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+                            }
                         }
                         else {
                             player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
@@ -153,22 +160,20 @@ public class Withdraw implements Listener {
 
         Location location = player.getLocation();
         World world = location.getWorld();
+        Chunk chunk = location.getChunk();
 
         assert world != null;
         if (!world.equals(void_world)) return;
 
-        Chunk chunk = location.getChunk();
+        double void_x = player.getMetadata("withdraw_x").get(0).asDouble();
+        double void_y = player.getMetadata("withdraw_y").get(0).asDouble();
+        double void_z = player.getMetadata("withdraw_z").get(0).asDouble();
+        int chunk_x = player.getMetadata("withdraw_chunk_x").get(0).asInt();
+        int chunk_z = player.getMetadata("withdraw_chunk_z").get(0).asInt();
 
-        int voidloc_x = player.getMetadata("withdraw_x").get(0).asInt();
-        int voidloc_z = player.getMetadata("withdraw_z").get(0).asInt();
-
-        Location voidloc = new Location(void_world, voidloc_x, 0, voidloc_z);
-        Chunk voidchunk = voidloc.getChunk();
-
-        if (!chunk.equals(voidchunk)) {
-            voidloc.setYaw(player.getLocation().getYaw());
-            voidloc.setPitch(player.getLocation().getPitch());
-            player.teleport(voidloc);
+        if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
+            Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
+            player.teleport(origin);
         }
     }
 

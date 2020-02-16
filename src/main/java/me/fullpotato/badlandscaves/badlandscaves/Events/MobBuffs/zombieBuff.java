@@ -36,7 +36,7 @@ public class zombieBuff implements Listener {
         Random random = new Random();
         ItemStack sword = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta sword_meta = sword.getItemMeta();
-        sword_meta.addEnchant(Enchantment.DAMAGE_ALL, random.nextInt(7), true);
+        sword_meta.addEnchant(Enchantment.DAMAGE_ALL, random.nextInt(5) + 3, true);
         sword_meta.addEnchant(Enchantment.FIRE_ASPECT, random.nextInt(2), false);
         sword_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Sword");
         sword.setItemMeta(sword_meta);
@@ -44,25 +44,25 @@ public class zombieBuff implements Listener {
         boolean dia_upg = random.nextBoolean();
         ItemStack boots = dia_upg ? new ItemStack(Material.DIAMOND_BOOTS) : new ItemStack(Material.IRON_BOOTS);
         ItemMeta boots_meta = boots.getItemMeta();
-        boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(5), true);
+        boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
         boots.setItemMeta(boots_meta);
 
         dia_upg = random.nextBoolean();
         ItemStack leggings = dia_upg ? new ItemStack(Material.DIAMOND_LEGGINGS) : new ItemStack(Material.IRON_LEGGINGS);
         ItemMeta leggings_meta = leggings.getItemMeta();
-        leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(5), true);
+        leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
         leggings.setItemMeta(leggings_meta);
 
         dia_upg = random.nextBoolean();
         ItemStack chestplate = dia_upg ? new ItemStack(Material.DIAMOND_CHESTPLATE) : new ItemStack(Material.IRON_CHESTPLATE);
         ItemMeta chestplate_meta = chestplate.getItemMeta();
-        chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(5), true);
+        chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
         chestplate.setItemMeta(chestplate_meta);
 
         dia_upg = random.nextBoolean();
         ItemStack helmet = dia_upg ? new ItemStack(Material.DIAMOND_HELMET) : new ItemStack(Material.IRON_HELMET);
         ItemMeta helmet_meta = helmet.getItemMeta();
-        helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(5), true);
+        helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
         helmet.setItemMeta(helmet_meta);
 
         ItemStack[] armor = {

@@ -31,7 +31,7 @@ public class playerEffectsRunnable extends BukkitRunnable {
             int thirst_hunger = player.getMetadata("thirst_debuff_hunger_lvl").get(0).asInt();
             int thirst_poison = player.getMetadata("thirst_debuff_poison_lvl").get(0).asInt();
 
-            int total_speed = death_speed + agility_speed;
+            int total_speed = (death_speed + agility_speed) - death_slow;
             int total_slowmine = death_slowmine + tox_slowmine + thirst_slowmine;
             int total_slow = (death_slow + tox_slow + thirst_slow) - agility_speed;
             int total_hunger = death_hunger + tox_hunger + thirst_hunger;

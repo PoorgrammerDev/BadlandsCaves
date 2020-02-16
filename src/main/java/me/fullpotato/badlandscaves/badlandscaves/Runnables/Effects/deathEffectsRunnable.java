@@ -98,6 +98,7 @@ public class deathEffectsRunnable extends BukkitRunnable {
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 1, true, false), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 0, true, false), true);
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
             }
             else if (deaths >= 6) {
                 slow_lvl = 1;
