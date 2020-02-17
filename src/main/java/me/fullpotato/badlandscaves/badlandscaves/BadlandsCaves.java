@@ -25,10 +25,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.deathEffectsR
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.playerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.thirstEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.toxEffectsRunnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.descensionReset;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.detectedBar;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.lostSoulParticle;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.shrineCapture;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.agilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.manaBarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.manaRegen;
@@ -71,6 +68,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "has_supernatural_powers",
             "in_descension",
             "descension_detect",
+            "descension_detect_cooldown",
+            "descension_timer",
+            "descension_shrines_capped",
             "is_cursed_soul",
             "*Mana",
             "*max_mana",
@@ -111,17 +111,17 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        //config
         loadConfig();
 
-        emptyWorld empty_world = new emptyWorld();
-        empty_world.gen_void_world();
+        //worlds
+        {
+            emptyWorld empty_world = new emptyWorld();
+            empty_world.gen_void_world();
 
-        descensionWorld desc_world = new descensionWorld(this);
-        desc_world.gen_descension_world();
-
-        //protocol-lib
-        //ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-        //manager.addPacketListener();
+            descensionWorld desc_world = new descensionWorld(this);
+            desc_world.gen_descension_world();
+        }
 
         //event registering
         {
@@ -199,6 +199,7 @@ public final class BadlandsCaves extends JavaPlugin {
             BukkitTask descension_zombies = new lostSoulParticle().runTaskTimer(this, 0, 3);
             BukkitTask detect_bar = new detectedBar(this).runTaskTimerAsynchronously(this, 0, 3);
             BukkitTask shrine_capt = new shrineCapture(this).runTaskTimer(this, 0 ,0);
+            BukkitTask desc_time = new descensionTimeLimit(this).runTaskTimer(this, 0, 20);
         }
 
         //crafting recipes

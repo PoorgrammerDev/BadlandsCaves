@@ -56,6 +56,13 @@ public class deathHandler implements Listener {
             if (in_descension == 2) {
                 player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
                 player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
+                player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, 0));
+                player.setMetadata("agility_level", new FixedMetadataValue(plugin, 0));
+                player.setMetadata("displace_level", new FixedMetadataValue(plugin, 0));
+                player.setMetadata("possess_level", new FixedMetadataValue(plugin, 0));
+                player.setMetadata("descension_shrines_capped", new FixedMetadataValue(plugin, 0));
+                player.setMetadata("max_mana", new FixedMetadataValue(plugin, 100));
+
             }
         }
         else if (in_descension == 3) {

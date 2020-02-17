@@ -34,21 +34,8 @@ public class descensionMobDetection implements Listener {
         Location player_location = player.getLocation();
         //leaving descension stage
         if (player_location.getY() < 0) {
+            player.setHealth(0);
             player.setMetadata("in_descension", new FixedMetadataValue(plugin, 3));
-            player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
-            //remove night vision here
-            player.getInventory().clear();
-            player.setLevel(0);
-            player.setFallDistance(0);
-
-            Location spawnpoint = player.getBedSpawnLocation();
-            if (spawnpoint == null) {
-                World default_world = Bukkit.getWorld("world");
-                player.teleport(default_world.getSpawnLocation());
-            }
-            else {
-                player.teleport(spawnpoint);
-            }
             return;
         }
 

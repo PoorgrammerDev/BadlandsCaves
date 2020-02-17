@@ -18,6 +18,9 @@ game_values:
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
 
+  #time limit in seconds for players to go through the entire descension course
+  descension_time_limit: 300
+
   #max mobs spawn in descension stage (note: it's not always this number. it may be less, but not more)
   descension_mob_limit: 100
 

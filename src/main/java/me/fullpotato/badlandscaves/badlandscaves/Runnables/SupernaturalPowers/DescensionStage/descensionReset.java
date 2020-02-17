@@ -16,13 +16,13 @@ import java.util.Random;
 
 public class descensionReset extends BukkitRunnable {
     private BadlandsCaves plugin;
+    private World world = Bukkit.getWorld("world_descension");
     public descensionReset(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @Override
     public void run() {
-        World world = Bukkit.getWorld("world_descension");
         if (world == null) return;
         if (world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE) == null) return;
         if (world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE)) return;
@@ -66,58 +66,13 @@ public class descensionReset extends BukkitRunnable {
             generateShrine(world, -46, 46);
             generateShrine(world, -46, -46);
 
-            //team
-            ScoreboardManager manager = Bukkit.getScoreboardManager();
-            assert manager != null;
-            Scoreboard board = manager.getMainScoreboard();
-            String title = "DESCENSION_TEAM";
-            Team team;
-            if (board.getTeam(title) == null) {
-                team = board.registerNewTeam(title);
-                team.setAllowFriendlyFire(false);
-                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-            }
-            else {
-                team = board.getTeam(title);
-            }
+            Team team = getDescensionTeam();
+            spawnMobs(team);
 
-            //spawn mobs
-            Random random = new Random();
-            Location origin = new Location(world, 0, 64, 0);
-            int upper_lim = 80;
-            int lower_lim = 50;
-            int mob_cap = plugin.getConfig().getInt("game_values.descension_mob_limit");
-            int mob_rate = mob_cap / 14;
-            int counter = 0;
-            for (int x = -upper_lim; x <= upper_lim; x++) {
-                for (int z = -upper_lim; z <= upper_lim; z++) {
-                    if (counter >= mob_cap) break;
+            //setting timer
+            int time_limit = plugin.getConfig().getInt("game_values.descension_time_limit");
+            waiting.setMetadata("descension_timer", new FixedMetadataValue(plugin, time_limit));
 
-                    double rand = random.nextInt(1000);
-                    if (rand <= mob_rate) {
-                        Location test = new Location(world, x, 64, z);
-                        if (test.distance(origin) > lower_lim && test.distance(origin) < upper_lim) {
-                            int y = world.getHighestBlockYAt(x, z);
-
-                            test.setY(y);
-                            Zombie zombie = (Zombie) world.spawnEntity(test, EntityType.ZOMBIE);
-                            zombie.setCustomName(ChatColor.GRAY + "Lost Soul");
-                            zombie.setBaby(false);
-                            zombie.setSilent(true);
-                            zombie.getEquipment().clear();
-                            zombie.getEquipment().getItemInMainHand().setAmount(0);
-                            zombie.getEquipment().getItemInOffHand().setAmount(0);
-                            zombie.setRemoveWhenFarAway(false);
-                            zombie.setInvulnerable(true);
-                            zombie.setCollidable(false);
-                            team.addEntry(zombie.getUniqueId().toString());
-                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false), true);
-
-                            counter++;
-                        }
-                    }
-                }
-            }
             //teleport player out
             waiting.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0));
             Location deploy = new Location(world, 65, 127, 0, 0, 90);
@@ -147,5 +102,69 @@ public class descensionReset extends BukkitRunnable {
         crystal.setShowingBottom(false);
         crystal.setInvulnerable(true);
         crystal.setMetadata("charge", new FixedMetadataValue(plugin, 0));
+    }
+
+    //default spawnmobs
+    public void spawnMobs(Team team) {
+        int mob_cap = plugin.getConfig().getInt("game_values.descension_mob_limit");
+        spawnMobs(team, mob_cap);
+    }
+
+    //spawnmobs w/ custom mobcap
+    public void spawnMobs (Team team, int mob_cap) {
+        Random random = new Random();
+        Location origin = new Location(world, 0, 64, 0);
+        int upper_lim = 80;
+        int lower_lim = 50;
+        int mob_rate = mob_cap / 14;
+        int counter = 0;
+        for (int x = -upper_lim; x <= upper_lim; x++) {
+            for (int z = -upper_lim; z <= upper_lim; z++) {
+                if (counter >= mob_cap) break;
+
+                double rand = random.nextInt(1000);
+                if (rand <= mob_rate) {
+                    Location test = new Location(world, x, 64, z);
+                    if (test.distance(origin) > lower_lim && test.distance(origin) < upper_lim) {
+                        int y = world.getHighestBlockYAt(x, z);
+
+                        test.setY(y);
+                        Zombie zombie = (Zombie) world.spawnEntity(test, EntityType.ZOMBIE);
+                        zombie.setCustomName(ChatColor.GRAY + "Lost Soul");
+                        zombie.setBaby(false);
+                        zombie.setSilent(true);
+                        zombie.getEquipment().clear();
+                        zombie.getEquipment().getItemInMainHand().setAmount(0);
+                        zombie.getEquipment().getItemInOffHand().setAmount(0);
+                        zombie.setRemoveWhenFarAway(false);
+                        zombie.setInvulnerable(true);
+                        zombie.setCollidable(false);
+                        team.addEntry(zombie.getUniqueId().toString());
+                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false), true);
+
+                        counter++;
+                    }
+                }
+            }
+        }
+    }
+
+    public Team getDescensionTeam() {
+        //team
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        assert manager != null;
+        Scoreboard board = manager.getMainScoreboard();
+        String title = "DESCENSION_TEAM";
+        Team team;
+        if (board.getTeam(title) == null) {
+            team = board.registerNewTeam(title);
+            team.setAllowFriendlyFire(false);
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+        }
+        else {
+            team = board.getTeam(title);
+        }
+
+        return team;
     }
 }

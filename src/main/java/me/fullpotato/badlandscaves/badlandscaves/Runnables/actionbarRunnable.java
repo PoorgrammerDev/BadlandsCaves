@@ -40,8 +40,6 @@ public class actionbarRunnable extends BukkitRunnable {
                 actionbarmsg += ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "Toxicity: " + ChatColor.GREEN + ChatColor.BOLD.toString() + tox_count_rounded + ChatColor.BOLD.toString() + "%";
             }
 
-
-
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionbarmsg));
         }
     }

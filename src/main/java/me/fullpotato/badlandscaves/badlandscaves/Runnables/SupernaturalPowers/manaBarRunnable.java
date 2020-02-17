@@ -22,9 +22,10 @@ public class manaBarRunnable extends BukkitRunnable {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+
+            NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
+            KeyedBossBar manaBar = Bukkit.getBossBar(key);
             if (has_powers >= 1.0) {
-                NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
-                KeyedBossBar manaBar = Bukkit.getBossBar(key);
                 String title = ChatColor.DARK_AQUA + "Mana";
                 if (manaBar == null) {
                     manaBar = Bukkit.createBossBar(key, title, BarColor.BLUE, BarStyle.SEGMENTED_10);
@@ -74,7 +75,12 @@ public class manaBarRunnable extends BukkitRunnable {
                 else {
                     manaBar.setVisible(false);
                 }
-
+            }
+            else {
+                if (manaBar != null) {
+                    manaBar.setVisible(false);
+                    Bukkit.removeBossBar(key);
+                }
             }
         }
     }
