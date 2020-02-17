@@ -200,7 +200,7 @@ public final class BadlandsCaves extends JavaPlugin {
             new detectedBar(this).runTaskTimerAsynchronously(this, 0, 3);
             new shrineCapture(this).runTaskTimer(this, 0 ,0);
             new descensionTimeLimit(this).runTaskTimer(this, 0, 20);
-            new detectionDecrease(this).runTaskTimerAsynchronously(this, 0, 10);
+            new detectionDecrease(this).runTaskTimerAsynchronously(this, 0, 20);
 
         }
 

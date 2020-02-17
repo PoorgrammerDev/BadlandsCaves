@@ -82,7 +82,7 @@ public class shrineCapture extends BukkitRunnable {
                                             int normal_mob_cap = plugin.getConfig().getInt("game_values.descension_mob_limit");
                                             descensionReset descReset = new descensionReset(plugin);
                                             Team desc_team = descReset.getDescensionTeam();
-                                            descReset.spawnMobs(desc_team, normal_mob_cap / 2);
+                                            descReset.spawnMobs(desc_team, normal_mob_cap / 4);
 
                                             //metadata changes
                                             player.setMetadata("descension_shrines_capped", new FixedMetadataValue(plugin, a + 1));
@@ -90,10 +90,10 @@ public class shrineCapture extends BukkitRunnable {
                                                 case 0:
                                                     player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, 1));
                                                     player.setMetadata("agility_level", new FixedMetadataValue(plugin, 1));
+                                                    player.setMetadata("displace_level", new FixedMetadataValue(plugin, 1));
                                                     break;
                                                 case 1:
                                                     player.setMetadata("agility_level", new FixedMetadataValue(plugin, 2));
-                                                    player.setMetadata("displace_level", new FixedMetadataValue(plugin, 1));
                                                     player.setMetadata("possess_level", new FixedMetadataValue(plugin, 1));
                                                     break;
                                                 case 2:
@@ -101,7 +101,7 @@ public class shrineCapture extends BukkitRunnable {
                                                     player.setMetadata("possess_level", new FixedMetadataValue(plugin, 2));
                                                     break;
                                                 case 3:
-                                                    player.setMetadata("max_mana", new FixedMetadataValue(plugin, 200));
+                                                    new descensionFinish(plugin).runTaskAsynchronously(plugin);
                                                     break;
                                             }
                                         }

@@ -17,11 +17,11 @@ public class detectionDecrease extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 2) {
-                int detection = player.hasMetadata("descension_detect") ? player.getMetadata("descension_detect").get(0).asInt() : 0;
+                double detection = player.hasMetadata("descension_detect") ? player.getMetadata("descension_detect").get(0).asDouble() : 0;
                 if (detection > 0) {
                     int detect_cooldown = player.getMetadata("descension_detect_cooldown").get(0).asInt();
                     if (detect_cooldown <= 0) {
-                        detection--;
+                        detection -= 0.5;
                         player.setMetadata("descension_detect", new FixedMetadataValue(plugin, detection));
                     }
                     else {

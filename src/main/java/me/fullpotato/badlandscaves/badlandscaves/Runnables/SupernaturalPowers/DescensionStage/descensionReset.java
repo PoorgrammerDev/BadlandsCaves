@@ -147,6 +147,12 @@ public class descensionReset extends BukkitRunnable {
                 }
             }
         }
+
+        for (Entity entity : world.getEntities()) {
+            if (entity instanceof Chicken) {
+                entity.remove();
+            }
+        }
     }
 
     public Team getDescensionTeam() {

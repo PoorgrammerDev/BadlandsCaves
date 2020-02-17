@@ -56,26 +56,29 @@ public class descensionMobDetection implements Listener {
         List<Entity> entities = player.getNearbyEntities(5, 5, 5);
         for (Entity entity : entities) {
             if (player.hasLineOfSight(entity)) {
-                Location entity_location = entity.getLocation();
-                detection = player.getMetadata("descension_detect").get(0).asDouble();
+                boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
+                if (!in_possession) {
+                    Location entity_location = entity.getLocation();
+                    detection = player.getMetadata("descension_detect").get(0).asDouble();
 
-                int multiplier = 1;
-                if (player_location.distance(entity_location) < 0.5) multiplier = 8;
-                else if (player_location.distance(entity_location) < 1) multiplier = 4;
-                else if (player_location.distance(entity_location) < 3) multiplier = 2;
+                    int multiplier = 1;
+                    if (player_location.distance(entity_location) < 0.5) multiplier = 8;
+                    else if (player_location.distance(entity_location) < 1) multiplier = 4;
+                    else if (player_location.distance(entity_location) < 3) multiplier = 2;
 
-                if (sprinting) {
-                    detection += multiplier;
-                }
-                else if (sneaking) {
-                    detection += 0.05 * multiplier;
-                }
-                else {
-                    detection += 0.1 * multiplier;
-                }
+                    if (sprinting) {
+                        detection += multiplier;
+                    }
+                    else if (sneaking) {
+                        detection += 0.05 * multiplier;
+                    }
+                    else {
+                        detection += 0.1 * multiplier;
+                    }
 
-                player.setMetadata("descension_detect", new FixedMetadataValue(plugin, detection));
-                player.setMetadata("descension_detect_cooldown", new FixedMetadataValue(plugin, 30));
+                    player.setMetadata("descension_detect", new FixedMetadataValue(plugin, detection));
+                    player.setMetadata("descension_detect_cooldown", new FixedMetadataValue(plugin, 30));
+                }
             }
         }
 
