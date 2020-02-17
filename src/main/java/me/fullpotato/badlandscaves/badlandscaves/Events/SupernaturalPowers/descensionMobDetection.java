@@ -75,6 +75,7 @@ public class descensionMobDetection implements Listener {
                 }
 
                 player.setMetadata("descension_detect", new FixedMetadataValue(plugin, detection));
+                player.setMetadata("descension_detect_cooldown", new FixedMetadataValue(plugin, 30));
             }
         }
 
