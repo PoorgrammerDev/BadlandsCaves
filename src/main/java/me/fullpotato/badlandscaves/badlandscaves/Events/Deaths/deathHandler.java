@@ -54,11 +54,20 @@ public class deathHandler implements Listener {
         int in_descension = player.getMetadata("in_descension").get(0).asInt();
         if (in_descension == 1 || in_descension == 2) {
             if (in_descension == 2) {
-                player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
+                int towers_capped = player.hasMetadata("descension_shrines_capped") ? player.getMetadata("descension_shrines_capped").get(0).asInt() : 0;
+                int supernatural = towers_capped == 4 ? 1 : 0;
+                int displace = towers_capped == 4 ? 1 : 0;
+                int desc = towers_capped == 4 ? 0 : 1;
+
+                //silent death
+                event.setDeathMessage(null);
+
+                //resetting values
+                player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, supernatural));
+                player.setMetadata("displace_level", new FixedMetadataValue(plugin, displace));
+                player.setMetadata("in_descension", new FixedMetadataValue(plugin, desc));
                 player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
-                player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, 0));
                 player.setMetadata("agility_level", new FixedMetadataValue(plugin, 0));
-                player.setMetadata("displace_level", new FixedMetadataValue(plugin, 0));
                 player.setMetadata("possess_level", new FixedMetadataValue(plugin, 0));
                 player.setMetadata("descension_shrines_capped", new FixedMetadataValue(plugin, 0));
                 player.setMetadata("max_mana", new FixedMetadataValue(plugin, 100));

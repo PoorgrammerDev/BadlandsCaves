@@ -1,8 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -18,6 +17,7 @@ import java.util.Random;
 
 public class zombieBuff implements Listener {
     private BadlandsCaves plugin;
+    private World descension_world = Bukkit.getWorld("world_descension");
     public zombieBuff (BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -30,8 +30,10 @@ public class zombieBuff implements Listener {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
 
+        //make sure zombie is not a descension "Lost Soul"
         LivingEntity zombie = event.getEntity();
-        //World world = location.getWorld();
+        World world = zombie.getWorld();
+        if (world.equals(descension_world)) return;
 
         Random random = new Random();
         ItemStack sword = new ItemStack(Material.DIAMOND_SWORD, 1);

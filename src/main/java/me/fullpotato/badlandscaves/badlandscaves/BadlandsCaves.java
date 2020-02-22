@@ -38,7 +38,6 @@ import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.preventNormalEn
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 public final class BadlandsCaves extends JavaPlugin {
     private final String[] player_values = {
@@ -159,7 +158,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new enduranceCancelHunger(this), this);
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
             this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
-            this.getServer().getPluginManager().registerEvents(new descensionMobDetection(this), this);
+            this.getServer().getPluginManager().registerEvents(new descensionPlayerMove(this), this);
         }
 
         //command reg

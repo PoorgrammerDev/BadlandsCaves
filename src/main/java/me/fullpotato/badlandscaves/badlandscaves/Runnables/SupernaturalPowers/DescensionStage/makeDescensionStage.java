@@ -27,13 +27,12 @@ public class makeDescensionStage extends BukkitRunnable {
         //clears the area first
         for (int x = -clear_lim; x <= clear_lim; x++) {
             for (int z = -clear_lim; z <= clear_lim; z++) {
-                for (int y = -clear_lim; y <= clear_lim; y++) {
+                for (int y = 0; y <= 256; y++) {
                     Location clear = new Location(world, x, y, z);
                     clear.getBlock().setType(Material.AIR);
                 }
             }
         }
-
 
         //barrier cage
         Location cage_origin = new Location(world, 0, 200, 0);
@@ -47,9 +46,6 @@ public class makeDescensionStage extends BukkitRunnable {
                 }
             }
         }
-
-
-
 
         Random random = new Random();
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(random, 8);
@@ -79,12 +75,16 @@ public class makeDescensionStage extends BukkitRunnable {
             }
         }
 
+        genDefaultShrines();
+
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+    }
+
+    public void genDefaultShrines() {
         generateShrine(world, 46, 46);
         generateShrine(world, 46, -46);
         generateShrine(world, -46, 46);
         generateShrine(world, -46, -46);
-
-        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
     }
 
     public void generateShrine (World world, int x, int z) {

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.D
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -10,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.BlockIterator;
 
 import java.util.List;
 import java.util.Random;
@@ -60,11 +62,12 @@ public class descensionReset extends BukkitRunnable {
             new makeDescensionStage(plugin, world).run();
              */
 
-            //instead, we're just regenning the pillars.
-            generateShrine(world, 46, 46);
-            generateShrine(world, 46, -46);
-            generateShrine(world, -46, 46);
-            generateShrine(world, -46, -46);
+            //instead, we're just regenning the pillars / shrines.
+            makeDescensionStage mkDscStg = new makeDescensionStage(plugin, world);
+            mkDscStg.genDefaultShrines();
+
+            //removing bridges, if any
+            removeBridge();
 
             Team team = getDescensionTeam();
             spawnMobs(team);
@@ -73,35 +76,11 @@ public class descensionReset extends BukkitRunnable {
             int time_limit = plugin.getConfig().getInt("game_values.descension_time_limit");
             waiting.setMetadata("descension_timer", new FixedMetadataValue(plugin, time_limit));
 
-            //teleport player out
+            //deploy player in stage
             waiting.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0));
             Location deploy = new Location(world, 65, 127, 0, 0, 90);
             waiting.teleport(deploy);
         }
-    }
-
-    public void generateShrine (World world, int x, int z) {
-        int origin_y = 80;
-        Location top_origin = new Location(world, x, origin_y, z);
-
-        for (int x_offset = -5; x_offset <= 5; x_offset++) {
-            for (int z_offset = -5; z_offset <= 5; z_offset++) {
-                int new_x = x + x_offset;
-                int new_z = z + z_offset;
-                Location test = new Location(world, new_x, origin_y, new_z);
-                if (top_origin.distance(test) == 5) {
-                    for (int y = origin_y; world.getBlockAt(new_x, y, new_z).getType().isAir(); y--) {
-                        world.getBlockAt(new_x, y, new_z).setType(Material.BLACK_GLAZED_TERRACOTTA);
-                    }
-                }
-            }
-        }
-
-        top_origin.add(0.5, 3.5, 0.5);
-        EnderCrystal crystal = (EnderCrystal) world.spawnEntity(top_origin, EntityType.ENDER_CRYSTAL);
-        crystal.setShowingBottom(false);
-        crystal.setInvulnerable(true);
-        crystal.setMetadata("charge", new FixedMetadataValue(plugin, 0));
     }
 
     //default spawnmobs
@@ -172,5 +151,29 @@ public class descensionReset extends BukkitRunnable {
         }
 
         return team;
+    }
+
+    public void removeBridge () {
+        Location[] crystal_locations = {
+                new Location(world, 46, 80, 46, 135, 0),
+                new Location(world, -46, 80, 46, -135, 0),
+                new Location(world, -46, 80, -46, -45, 0),
+                new Location(world, 46, 80, -46, 45, 0),
+        };
+
+        for (Location location : crystal_locations) {
+            BlockIterator iterator = new BlockIterator(location, 4, 65);
+
+            Block lastBlock = iterator.next();
+
+            while (iterator.hasNext()) {
+
+                lastBlock = iterator.next();
+
+                if (lastBlock.getType().equals(Material.BARRIER)) {
+                    lastBlock.setType(Material.AIR);
+                }
+            }
+        }
     }
 }

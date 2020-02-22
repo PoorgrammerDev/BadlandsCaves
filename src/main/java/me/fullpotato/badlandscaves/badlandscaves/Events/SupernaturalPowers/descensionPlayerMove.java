@@ -1,10 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,10 +16,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class descensionMobDetection implements Listener {
+public class descensionPlayerMove implements Listener {
     private World world = Bukkit.getWorld("world_descension");
     private BadlandsCaves plugin;
-    public descensionMobDetection (BadlandsCaves bcav) {
+    public descensionPlayerMove(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -32,7 +29,8 @@ public class descensionMobDetection implements Listener {
         if (!player.getWorld().equals(world)) return;
 
         Location player_location = player.getLocation();
-        //leaving descension stage
+
+        //leaving descension stage (quitting)
         if (player_location.getY() < 0) {
             player.setHealth(0);
             player.setMetadata("in_descension", new FixedMetadataValue(plugin, 3));
@@ -44,6 +42,19 @@ public class descensionMobDetection implements Listener {
         int in_descension = player.getMetadata("in_descension").get(0).asInt();
         if (in_descension != 2) return;
 
+        //leaving descension stage (winning)
+        Location center_loc = new Location(world, 0, 85, 0);
+        if (player_location.distanceSquared(center_loc) < 25) {
+            int towers_capped = player.getMetadata("descension_shrines_capped").get(0).asInt();
+            if (towers_capped == 4) {
+                player.setHealth(0);
+                player.sendMessage(ChatColor.GRAY + "The strange sensation follows you back to reality.");
+            }
+        }
+
+
+
+
         boolean moved_x = (Math.abs(event.getTo().getX() - event.getFrom().getX()) > 0);
         boolean moved_y = (Math.abs(event.getTo().getY() - event.getFrom().getY()) > 0);
         boolean moved_z = (Math.abs(event.getTo().getZ() - event.getFrom().getZ()) > 0);
@@ -53,12 +64,19 @@ public class descensionMobDetection implements Listener {
         boolean sneaking = player.isSneaking();
         boolean sprinting = player.isSprinting();
         double detection;
-        List<Entity> entities = player.getNearbyEntities(5, 5, 5);
-        for (Entity entity : entities) {
-            if (player.hasLineOfSight(entity)) {
+        List<Zombie> zombies = new ArrayList<>();
+
+        for (Entity entity : player.getNearbyEntities(5, 5, 5)) {
+            if (entity instanceof Zombie) {
+                zombies.add((Zombie) entity);
+            }
+        }
+
+        for (Zombie zombie : zombies) {
+            if (player.hasLineOfSight(zombie)) {
                 boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
                 if (!in_possession) {
-                    Location entity_location = entity.getLocation();
+                    Location entity_location = zombie.getLocation();
                     detection = player.getMetadata("descension_detect").get(0).asDouble();
 
                     int multiplier = 1;

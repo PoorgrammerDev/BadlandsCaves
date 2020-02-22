@@ -21,6 +21,7 @@ public class playerSaveToConfig extends BukkitRunnable {
 
     @Override
     public void run() {
+        //TODO this code is horrible redo it pls
         if (this.plyr == null) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for (String meta : values) {
