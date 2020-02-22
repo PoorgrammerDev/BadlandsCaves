@@ -36,6 +36,7 @@ import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.descensionWorld
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.preventNormalEnd;
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -184,22 +185,24 @@ public final class BadlandsCaves extends JavaPlugin {
 
         //runnables
         {
-            new actionbarRunnable().runTaskTimerAsynchronously(this, 0 ,0);
+            new actionbarRunnable().runTaskTimer(this, 0 ,0);
             new toxEffectsRunnable(this).runTaskTimer(this, 0, 0);
             new thirstEffectsRunnable(this).runTaskTimer(this, 0, 0);
             new deathEffectsRunnable(this).runTaskTimer(this, 0, 0);
             new playerEffectsRunnable().runTaskTimer(this,0,0);
-            new toxSlowDecreaseRunnable(this).runTaskTimerAsynchronously(this, 0, 600);
-            new playerSaveToConfig(this, null, player_values, true).runTaskTimerAsynchronously(this, 5, 3600);
-            new manaBarRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
-            new manaRegen(this).runTaskTimerAsynchronously(this, 0, 10);
-            new agilitySpeedRunnable(this).runTaskTimerAsynchronously(this, 0, 15);
+            new toxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
+            new playerSaveToConfig(this, null, player_values, true).runTaskTimer(this, 5, 3600);
+            new manaBarRunnable(this).runTaskTimer(this, 0, 5);
+            new manaRegen(this).runTaskTimer(this, 0, 10);
+            new agilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
+            new StageEnter(this).runTaskTimer(this, 0, 20);
             new descensionReset(this).runTaskTimer(this, 0, 60);
             new lostSoulParticle().runTaskTimer(this, 0, 3);
-            new detectedBar(this).runTaskTimerAsynchronously(this, 0, 3);
+            new detectedBar(this).runTaskTimer(this, 0, 3);
             new shrineCapture(this).runTaskTimer(this, 0 ,0);
             new descensionTimeLimit(this).runTaskTimer(this, 0, 20);
-            new detectionDecrease(this).runTaskTimerAsynchronously(this, 0, 20);
+            new detectionDecrease(this).runTaskTimer(this, 0, 20);
+            new ExitPortal().runTaskTimer(this, 0, 3);
 
         }
 

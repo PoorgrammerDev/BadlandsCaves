@@ -31,42 +31,18 @@ public class deathEffectsRunnable extends BukkitRunnable {
             int slowmine_lvl = 0;
             int speed_lvl = 0;
 
-            if (deaths >= 50) {
-                int hasPowers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-                int in_descension = player.getMetadata("in_descension").get(0).asInt();
-                if (in_descension != 3 && hasPowers < 0.5) {
-                    if (in_descension == 0) {
-                        player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
-                    }
-                    World descension_world = Bukkit.getWorld("world_descension");
-                    if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
-                        if (!player.getWorld().equals(descension_world)) {
-                            Location descension_spawn = new Location(descension_world, 0, 197, 0);
-                            try {
-                                if (descension_spawn != null && descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
-                            }
-                            catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
+            //TODO finish death effects
+            if (deaths >= 1000) {
 
-                if (in_descension == 1 || in_descension == 2) {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
-                    if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
-                }
-                else {
-                    if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(1.0);
-                    poison_lvl = 5;
-                    hunger_lvl = 3;
-                    slow_lvl = 5;
-                    slowmine_lvl = 4;
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 90, 4, true, false), true);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 90, 19, true, false), true);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
-                }
+            }
+            else if (deaths >= 100) {
+
+            }
+            else if (deaths >= 70) {
+
+            }
+            else if (deaths >= 50) {
+
             }
             else if (deaths >= 30) {
                 poison_lvl = 2;

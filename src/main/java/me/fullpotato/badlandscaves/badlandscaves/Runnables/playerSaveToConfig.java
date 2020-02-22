@@ -21,56 +21,36 @@ public class playerSaveToConfig extends BukkitRunnable {
 
     @Override
     public void run() {
-        //TODO this code is horrible redo it pls
         if (this.plyr == null) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                for (String meta : values) {
-                    String filtered;
-                    String dot_meta;
-                    if (meta.contains("!")) {
-                        continue;
-                    }
-                    else if (meta.contains("#") || meta.contains("*")) {
-                        filtered = meta.substring(1);
-                    }
-                    else {
-                        filtered = meta;
-                    }
-                    dot_meta = "." + filtered;
-                    plugin.getConfig().set("Scores.users." + player.getUniqueId() + dot_meta, player.getMetadata(filtered).get(0).asDouble());
-                    plugin.saveConfig();
-                }
-
-                if (!silent) {
-                    plugin.getServer().getConsoleSender().sendMessage("[BadlandsCaves] Saved to Config for Player " + player.getDisplayName() + " (" + player.getUniqueId() + ")");
-                }
+                saveToConfig(player);
             }
         }
         else {
-            for (String meta : values) {
-                String filtered;
-                String dot_meta;
-                if (meta.contains("!")) {
-                    continue;
-                }
-                else if (meta.contains("#") || meta.contains("*")) {
-                    filtered = meta.substring(1);
-                }
-                else {
-                    filtered = meta;
-                }
-                dot_meta = "." + filtered;
-                plugin.getConfig().set("Scores.users." + plyr.getUniqueId() + dot_meta, plyr.getMetadata(filtered).get(0).asDouble());
-                plugin.saveConfig();
-            }
+            saveToConfig(plyr);
+        }
+    }
 
-            if (!silent) {
-                plugin.getServer().getConsoleSender().sendMessage("[BadlandsCaves] Saved to Config for Player " + plyr.getDisplayName() + " (" + plyr.getUniqueId() + ")");
+    public void saveToConfig (Player player) {
+        for (String meta : values) {
+            String filtered;
+            String dot_meta;
+            if (meta.contains("!")) {
+                continue;
             }
+            else if (meta.contains("#") || meta.contains("*")) {
+                filtered = meta.substring(1);
+            }
+            else {
+                filtered = meta;
+            }
+            dot_meta = "." + filtered;
+            plugin.getConfig().set("Scores.users." + player.getUniqueId() + dot_meta, player.getMetadata(filtered).get(0).asDouble());
+            plugin.saveConfig();
         }
 
-
-
-
+        if (!silent) {
+            plugin.getServer().getConsoleSender().sendMessage("[BadlandsCaves] Saved to Config for Player " + player.getDisplayName() + " (" + player.getUniqueId() + ")");
+        }
     }
 }

@@ -40,7 +40,7 @@ public class descensionTimeLimit extends BukkitRunnable {
         int max_bars = 20;
         int starting_time = plugin.getConfig().getInt("game_values.descension_time_limit");
         int dividing_num = starting_time / max_bars;
-        int bar_value = (int) Math.ceil(1.0 * timer_value / dividing_num);
+        int bar_value = Math.min(Math.max((int) Math.ceil(1.0 * timer_value / dividing_num), 0), max_bars);
         double bar_perc = 100.0 * timer_value / starting_time;
 
         StringBuilder builder = new StringBuilder();

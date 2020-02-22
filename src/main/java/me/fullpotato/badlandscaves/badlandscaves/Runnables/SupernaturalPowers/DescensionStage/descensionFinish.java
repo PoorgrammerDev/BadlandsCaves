@@ -1,10 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -19,7 +16,7 @@ import java.util.Random;
 public class descensionFinish extends BukkitRunnable {
     private BadlandsCaves plugin;
     private World world = Bukkit.getWorld("world_descension");
-    private Location portal_center = new Location(world, 0, 80, 0);
+    private Location portal_center = new Location(world, 0, 85, 0);
     private Location[] crystal_locations = {
             new Location(world, 46, 80, 46, 135, 0),
             new Location(world, -46, 80, 46, -135, 0),
@@ -55,7 +52,6 @@ public class descensionFinish extends BukkitRunnable {
                 }
             }
         }
-
     }
 
 }

@@ -101,7 +101,7 @@ public class shrineCapture extends BukkitRunnable {
                                                     player.setMetadata("possess_level", new FixedMetadataValue(plugin, 2));
                                                     break;
                                                 case 3:
-                                                    new descensionFinish(plugin).runTaskAsynchronously(plugin);
+                                                    new descensionFinish(plugin).runTask(plugin);
                                                     break;
                                             }
                                         }
