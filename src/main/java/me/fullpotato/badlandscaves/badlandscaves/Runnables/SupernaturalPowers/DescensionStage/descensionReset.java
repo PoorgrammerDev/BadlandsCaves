@@ -32,7 +32,7 @@ public class descensionReset extends BukkitRunnable {
         Player waiting = null;
         Player running = null;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getWorld().equals(world) && !player.isDead()) {
+            if (player.getWorld().equals(world) && !player.isDead() && (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL))) {
                 int state = player.getMetadata("in_descension").get(0).asInt();
                 //state 1: waiting in box
                 if (state == 1) {

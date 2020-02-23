@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.deathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.descensionFinish;
 import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
@@ -48,8 +49,11 @@ public class descensionPlayerMove implements Listener {
         if (player_location.distanceSquared(center_loc) < 25) {
             int towers_capped = player.getMetadata("descension_shrines_capped").get(0).asInt();
             if (towers_capped == 4) {
-                player.setHealth(0);
                 player.sendMessage(ChatColor.GRAY + "The strange sensation follows you back to reality.");
+
+                deathHandler reset = new deathHandler(plugin);
+                reset.resetPlayer(player, true, true);
+
             }
         }
 

@@ -41,6 +41,14 @@ public class StageEnter extends BukkitRunnable {
                         }
                     }
                 }
+
+                if (in_descension == 1 || in_descension == 2) {
+                    if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
+                }
+                else {
+                    if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+                }
+
             }
         }
     }

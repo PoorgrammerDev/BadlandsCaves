@@ -43,16 +43,15 @@ public class gappleEat implements Listener {
                     decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_ench_gapple");
                 }
             }
-            player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
+
+            boolean supernatural = (player.hasMetadata("has_supernatural_powers") ? player.getMetadata("has_supernatural_powers").get(0).asInt() : 0) >= 1;
+            int bottomLimit = supernatural ? 50 : 0;
+
+            player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by, bottomLimit)));
         }
     }
 
-    public int remove_deaths(int current_deaths, int decrease_by) {
-        if (current_deaths - decrease_by >= 0) {
-            return current_deaths-decrease_by;
-        }
-        else {
-            return 0;
-        }
+    public int remove_deaths(int current_deaths, int decrease_by, int bottomLimit) {
+        return Math.max(current_deaths - decrease_by, bottomLimit);
     }
 }

@@ -50,7 +50,7 @@ public class playerEffectsRunnable extends BukkitRunnable {
             }
 
             if (total_hunger > 0) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false), false);
             }
 
             if (total_poison > 0) {

@@ -65,6 +65,7 @@ public class shrineCapture extends BukkitRunnable {
                                         }
 
                                         //done charging
+
                                         if (crystal.getMetadata("charge").get(0).asInt() >= 400) {
                                             //crystal
                                             crystal.setMetadata("charged", new FixedMetadataValue(plugin, true));
