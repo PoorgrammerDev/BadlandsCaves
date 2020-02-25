@@ -83,30 +83,25 @@ public class deathEffectsRunnable extends BukkitRunnable {
                 }
 
                 //55+ DEATHS (AFFECTS SUPERNATURAL USERS ONLY)------------
-                else if (deaths >= 55) {
-                    poison_lvl = supernatural ? 0 : 2;
-                    hunger_lvl = supernatural ? 1 : 4;
-                    slow_lvl = supernatural ? 2 : 4;
-                    slowmine_lvl = supernatural ? 2 : 3;
-                    weakness = supernatural ? 2 : 3;
-                    unluck = supernatural ? 10 : 4;
-                    blindness = !supernatural;
+                else if (supernatural && deaths >= 55) {
+                    hunger_lvl = 1;
+                    slow_lvl = 2;
+                    slowmine_lvl = 2;
+                    weakness = 2;
+                    unluck = 10;
 
-                    health = supernatural ? 10.0 : 6.0;
+                    health = 10.0;
 
                 }
 
                 //51+ DEATHS (AFFECTS SUPERNATURAL USERS ONLY)------------
-                else if (deaths >= 51) {
-                    poison_lvl = supernatural ? 0 : 2;
-                    hunger_lvl = supernatural ? 0 : 4;
-                    slow_lvl = supernatural ? 2 : 4;
-                    slowmine_lvl = supernatural ? 1 : 3;
-                    weakness = supernatural ? 1 : 3;
-                    unluck = supernatural ? 10 : 4;
-                    blindness = !supernatural;
+                else if (supernatural && deaths >= 51) {
+                    slow_lvl = 2;
+                    slowmine_lvl = 1;
+                    weakness = 1;
+                    unluck = 10;
 
-                    health = supernatural ? 10.0 : 6.0;
+                    health = 10.0;
 
                 }
 

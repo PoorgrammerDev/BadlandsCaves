@@ -94,7 +94,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "withdraw_chunk_z",
             "withdraw_timer",
             "eyes_level",
-            "eyes_timer",
+            "using_eyes",
             "possess_level",
             "in_possession",
             "possessed_entity",

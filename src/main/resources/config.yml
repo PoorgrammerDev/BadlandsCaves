@@ -29,9 +29,10 @@ game_values:
 
   #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much per second
   displace_mana_cost: 25
-  eyes_mana_drain: 20
+  eyes_mana_cost: 50
+  eyes_mana_drain: 10
   withdraw_mana_cost: 70
-  possess_mana_drain: 10
+  possess_mana_drain: 5
   agility_jump_mana_cost: 10
 
   #these values change from prehardmode to hardmode
