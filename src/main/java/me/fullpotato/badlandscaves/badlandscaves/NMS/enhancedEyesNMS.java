@@ -30,6 +30,18 @@ public class enhancedEyesNMS {
         shulker.setNoGravity(true);
         shulker.setSilent(true);
 
+        /*
+        Scoreboard board = new Scoreboard();
+        ScoreboardTeam ore = new ScoreboardTeam(board, "INDICATOR_ORE");
+        ScoreboardTeam loot = new ScoreboardTeam(board, "INDICATOR_LOOT");
+        ScoreboardTeam danger = new ScoreboardTeam(board, "INDICATOR_DANGER");
+
+        ore.setColor(EnumChatFormat.BLUE);
+        loot.setColor(EnumChatFormat.GREEN);
+        danger.setColor(EnumChatFormat.RED);
+
+         */
+
         PacketPlayOutSpawnEntityLiving spawn = new PacketPlayOutSpawnEntityLiving(shulker);
         ply.getHandle().playerConnection.sendPacket(spawn);
 
@@ -57,6 +69,7 @@ public class enhancedEyesNMS {
         ply.getHandle().playerConnection.sendPacket(destroy);
     }
 
+    /*
     public int spawnFakeClone(Location location) {
         CraftPlayer ply = (CraftPlayer) player;
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
@@ -77,4 +90,5 @@ public class enhancedEyesNMS {
 
         return clone.getId();
     }
+     */
 }

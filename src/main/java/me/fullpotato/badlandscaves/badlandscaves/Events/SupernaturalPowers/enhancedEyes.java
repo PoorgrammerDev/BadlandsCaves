@@ -3,9 +3,8 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.enhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.EyesRunnable;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,14 +15,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
 
 
 public class enhancedEyes implements Listener {
@@ -47,6 +45,12 @@ public class enhancedEyes implements Listener {
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
+
+                    final int eyes_level = player.hasMetadata("eyes_level") ? player.getMetadata("eyes_level").get(0).asInt() : 0;
+
+                    if (eyes_level < 1) return;
+
+
                     final boolean using_eyes = player.getMetadata("using_eyes").get(0).asBoolean();
 
                     if (using_eyes) {
@@ -103,7 +107,7 @@ public class enhancedEyes implements Listener {
                             final double x = location.getX();
                             final double y = location.getY();
                             final double z = location.getZ();
-                            final int block_range = 7;
+                            final int block_range = (eyes_level >= 2) ? 15 : 7;
                             final double dist_range = Math.pow(block_range - 1, 2);
 
                             //highlights important blocks
@@ -138,10 +142,38 @@ public class enhancedEyes implements Listener {
                             player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                             player.setMetadata("using_eyes", new FixedMetadataValue(plugin, true));
 
-                            //TODO experimental clone
-                            int cloneid = nms.spawnFakeClone(location);
+                            //particle effects
+                            final double[] radius = {2};
+                            Location eyes_particle_origin = location.clone();
+                            eyes_particle_origin.subtract(0, 1, 0);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
 
-                            BukkitTask runnable = new EyesRunnable(plugin, player, location, ids, cloneid).runTaskTimer(plugin, 0, 0);
+                                    if (radius[0] > block_range + 2) {
+                                        this.cancel();
+                                    }
+                                    else {
+                                        double phi = 0;
+                                        while (phi <= Math.PI) {
+                                            phi += Math.PI / 10;
+
+                                            for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 20) {
+                                                double particle_x = radius[0] * Math.cos(theta) * Math.sin(phi);
+                                                double particle_y = radius[0] * Math.cos(phi) + 1.5;
+                                                double particle_z = radius[0] * Math.sin(theta) * Math.sin(phi);
+
+                                                eyes_particle_origin.add(particle_x, particle_y, particle_z);
+                                                player.spawnParticle(Particle.REDSTONE, eyes_particle_origin, 1, new Particle.DustOptions(Color.BLUE, 1));
+                                                eyes_particle_origin.subtract(particle_x, particle_y, particle_z);
+
+                                            }
+                                        }
+                                        radius[0] += 0.25;
+                                    }
+                                }
+                            }.runTaskTimerAsynchronously(plugin, 0, 1);
+                            new EyesRunnable(plugin, player, location, ids).runTaskTimer(plugin, 0, 0);
                         }
                         else {
                             player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
