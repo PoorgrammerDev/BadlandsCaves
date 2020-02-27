@@ -1,15 +1,10 @@
 package me.fullpotato.badlandscaves.badlandscaves.NMS;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_15_R1.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPig;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 
 public class enhancedEyesNMS {
@@ -29,18 +24,6 @@ public class enhancedEyesNMS {
         shulker.setNoAI(true);
         shulker.setNoGravity(true);
         shulker.setSilent(true);
-
-        /*
-        Scoreboard board = new Scoreboard();
-        ScoreboardTeam ore = new ScoreboardTeam(board, "INDICATOR_ORE");
-        ScoreboardTeam loot = new ScoreboardTeam(board, "INDICATOR_LOOT");
-        ScoreboardTeam danger = new ScoreboardTeam(board, "INDICATOR_DANGER");
-
-        ore.setColor(EnumChatFormat.BLUE);
-        loot.setColor(EnumChatFormat.GREEN);
-        danger.setColor(EnumChatFormat.RED);
-
-         */
 
         PacketPlayOutSpawnEntityLiving spawn = new PacketPlayOutSpawnEntityLiving(shulker);
         ply.getHandle().playerConnection.sendPacket(spawn);

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.possessionNMS;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -28,10 +29,11 @@ public class possessionMobsRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
+        final boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
         double mana = player.getMetadata("Mana").get(0).asDouble();
-        int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
-        double possession_mana_drain_tick = possession_mana_drain / 20.0;
+        final int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
+        final double possession_mana_drain_tick = possession_mana_drain / 20.0;
+        possessionNMS nms = new possessionNMS(player);
 
         if (in_possession && mana > possession_mana_drain_tick) {
             if (target.isDead() || player.isDead()) {
@@ -44,11 +46,15 @@ public class possessionMobsRunnable extends BukkitRunnable {
                 }
             }
 
+
             //cancel mana regen and keep mana bar active
             player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
             player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 10, 0), true);
+            //make target invis to player
+            nms.markTarget(target);
+
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 5, 0), true);
             target.teleport(player.getLocation());
 
             player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_drain_tick));
@@ -58,6 +64,7 @@ public class possessionMobsRunnable extends BukkitRunnable {
             //set target and player back to normal
             team.unregister();
 
+            nms.unmarkTarget(target);
             target.setMetadata("possessed", new FixedMetadataValue(plugin, false));
             player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             target.setAI(true);

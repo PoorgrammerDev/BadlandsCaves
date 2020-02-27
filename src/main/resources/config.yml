@@ -201,11 +201,7 @@ items:
       meta-type: TILE_ENTITY
       display-name: §2Tainted Powder
       lore:
-        - §aRight click to use.
-        - ''
-        - §7Formulated to cripple silverfish's nervous systems.
-        - §7Works best when they are sleeping, in their blocks.
-        - §7Also works on humans, but not as well.
+        - §7Right click to throw.
       custom-model-data: 102
       blockMaterial: COMMAND_BLOCK
   fishing_crate:

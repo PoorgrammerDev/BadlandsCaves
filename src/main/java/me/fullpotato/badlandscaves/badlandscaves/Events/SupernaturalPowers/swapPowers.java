@@ -54,7 +54,7 @@ public class swapPowers implements Listener {
                 new displaceParticleRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1),
                 null,
                 null,
-                new possessionIndicatorRunnable (plugin, player).runTaskTimer(plugin, 0, 5),
+                new possessionIndicatorRunnable (plugin, player).runTaskTimer(plugin, 0, 0),
         };
 
         int new_swap_slot = swap_slot + incr;

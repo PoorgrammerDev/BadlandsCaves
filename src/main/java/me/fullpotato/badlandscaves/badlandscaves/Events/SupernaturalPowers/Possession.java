@@ -18,8 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -58,7 +56,7 @@ public class Possession implements Listener {
                         double pos_drain_tick = possession_mana_drain / 20.0;
                         if (mana >= pos_drain_tick) {
                             World world = player.getWorld();
-                            RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),5);
+                            RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);
                             if (result != null && result.getHitEntity() != null) {
                                 if (result.getHitEntity() instanceof LivingEntity) {
                                     target = (LivingEntity) result.getHitEntity();
@@ -92,7 +90,6 @@ public class Possession implements Listener {
 
 
                                             if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
-                                            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 0));
                                             player.teleport(target);
 
                                             new possessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
