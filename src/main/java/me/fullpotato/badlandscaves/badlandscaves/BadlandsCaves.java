@@ -9,8 +9,10 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useTai
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stopCustomItemsRClick;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.deathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gappleEat;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.creeperDeathLoot;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.spiderDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.zombieDeathLoot;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.zombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.cauldronMenu;
@@ -36,7 +38,6 @@ import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.descensionWorld
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.emptyWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.preventNormalEnd;
 import org.bukkit.Bukkit;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -114,6 +115,9 @@ public final class BadlandsCaves extends JavaPlugin {
         //config
         loadConfig();
 
+        //adding new items
+        //LoadCustomItems.saveCustomItemsToConfig(this);
+
         //worlds
         {
             emptyWorld empty_world = new emptyWorld();
@@ -160,6 +164,8 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
             this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
             this.getServer().getPluginManager().registerEvents(new descensionPlayerMove(this), this);
+            this.getServer().getPluginManager().registerEvents(new creeperDeathLoot(this), this);
+            this.getServer().getPluginManager().registerEvents(new spiderDeathLoot(this), this);
         }
 
         //command reg

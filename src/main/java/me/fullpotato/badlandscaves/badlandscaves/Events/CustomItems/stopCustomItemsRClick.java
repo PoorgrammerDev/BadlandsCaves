@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -24,25 +25,27 @@ public class stopCustomItemsRClick implements Listener {
             if (item != null) {
                 ArrayList<ItemStack> cancelled_items = new ArrayList<>();
 
-                ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
-                cancelled_items.add(tiny_blz);
+                String[] cancelled_items_paths = {
+                        "purge_essence",
+                        "hell_essence",
+                        "magic_essence",
+                        "zombie_soul",
+                        "creeper_soul",
+                        "skeleton_soul",
+                        "spider_soul",
+                        "pigzombie_soul",
+                        "ghast_soul",
+                        "silverfish_soul",
+                        "witch_soul",
+                        "phantom_soul",
+                        "tiny_blaze_powder",
+                };
 
-                ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
-                cancelled_items.add(purge_essence);
-
-                ItemStack hell_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
-                cancelled_items.add(hell_essence);
-
-                //keep adding more custom items here...
-
-                boolean found = false;
-                for (int a = 0; a < cancelled_items.size(); a++) {
-                    if (item.isSimilar(cancelled_items.get(a))) {
-                        found = true;
-                    }
+                for (String path : cancelled_items_paths) {
+                    cancelled_items.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + path).getValues(true)));
                 }
 
-                if (found) {
+                if (cancelled_items.contains(item)) {
                     event.setCancelled(true);
                 }
             }

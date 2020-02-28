@@ -12,10 +12,12 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public class LoadCustomItems {
 
-    public static void loadCustomItems(BadlandsCaves plugin) {
+    public static void saveCustomItemsToConfig(BadlandsCaves plugin) {
         ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING);
         ItemMeta starter_sapling_meta = starter_sapling.getItemMeta();
         starter_sapling_meta.setDisplayName("§8[§aStarter Sapling§8]");
@@ -23,7 +25,6 @@ public class LoadCustomItems {
         starter_sapling_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         starter_sapling.setItemMeta(starter_sapling_meta);
         plugin.getConfig().set("items.starter_sapling", starter_sapling.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -34,7 +35,6 @@ public class LoadCustomItems {
         starter_bone_meal_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         starter_bone_meal.setItemMeta(starter_bone_meal_meta);
         plugin.getConfig().set("items.starter_bone_meal", starter_bone_meal.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -52,7 +52,6 @@ public class LoadCustomItems {
         toxic_water_meta.setBasePotionData(new PotionData(PotionType.WATER));
         toxic_water.setItemMeta(toxic_water_meta);
         plugin.getConfig().set("items.toxic_water", toxic_water.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -70,7 +69,6 @@ public class LoadCustomItems {
         purified_water_meta.setColor(Color.fromRGB(76, 162, 255));
         purified_water.setItemMeta(purified_water_meta);
         plugin.getConfig().set("items.purified_water", purified_water.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -90,7 +88,6 @@ public class LoadCustomItems {
 
         antidote.setItemMeta(antidote_meta);
         plugin.getConfig().set("items.antidote", antidote.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -110,7 +107,6 @@ public class LoadCustomItems {
 
         mana_potion.setItemMeta(mana_potion_meta);
         plugin.getConfig().set("items.mana_potion", mana_potion.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -120,7 +116,6 @@ public class LoadCustomItems {
         tiny_blaze_powder_meta.setCustomModelData(100);
         tiny_blaze_powder.setItemMeta(tiny_blaze_powder_meta);
         plugin.getConfig().set("items.tiny_blaze_powder", tiny_blaze_powder.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -130,7 +125,6 @@ public class LoadCustomItems {
         purge_essence_meta.setCustomModelData(101);
         purge_essence.setItemMeta(purge_essence_meta);
         plugin.getConfig().set("items.purge_essence", purge_essence.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -145,7 +139,6 @@ public class LoadCustomItems {
         tainted_powder_meta.setCustomModelData(102);
         tainted_powder.setItemMeta(tainted_powder_meta);
         plugin.getConfig().set("items.tainted_powder", tainted_powder.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -161,7 +154,6 @@ public class LoadCustomItems {
         fishing_crate_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         fishing_crate.setItemMeta(fishing_crate_meta);
         plugin.getConfig().set("items.fishing_crate", fishing_crate.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -171,7 +163,6 @@ public class LoadCustomItems {
         displace_meta.setCustomModelData(103);
         displace.setItemMeta(displace_meta);
         plugin.getConfig().set("items.displace", displace.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -181,7 +172,6 @@ public class LoadCustomItems {
         withdraw_meta.setCustomModelData(104);
         withdraw.setItemMeta(withdraw_meta);
         plugin.getConfig().set("items.withdraw", withdraw.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -191,7 +181,6 @@ public class LoadCustomItems {
         hell_essence_meta.setCustomModelData(105);
         hell_essence.setItemMeta(hell_essence_meta);
         plugin.getConfig().set("items.hell_essence", hell_essence.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -201,7 +190,6 @@ public class LoadCustomItems {
         enhanced_eyes_meta.setCustomModelData(106);
         enhanced_eyes.setItemMeta(enhanced_eyes_meta);
         plugin.getConfig().set("items.enhanced_eyes", enhanced_eyes.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -211,7 +199,6 @@ public class LoadCustomItems {
         possess_meta.setCustomModelData(107);
         possess.setItemMeta(possess_meta);
         plugin.getConfig().set("items.possess", possess.serialize());
-        plugin.saveConfig();
 
     //---------------------------
 
@@ -221,6 +208,89 @@ public class LoadCustomItems {
         magic_essence_meta.setCustomModelData(108);
         magic_essence.setItemMeta(magic_essence_meta);
         plugin.getConfig().set("items.magic_essence", magic_essence.serialize());
+
+    //---------------------------
+
+        ItemStack zombie_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta zombie_soul_meta = zombie_soul.getItemMeta();
+        zombie_soul_meta.setDisplayName("§rSoul of Decay");
+        zombie_soul_meta.setCustomModelData(109);
+        zombie_soul.setItemMeta(zombie_soul_meta);
+        plugin.getConfig().set("items.zombie_soul", zombie_soul.serialize());
+
+    //---------------------------
+
+        ItemStack creeper_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta creeper_soul_meta = creeper_soul.getItemMeta();
+        creeper_soul_meta.setDisplayName("§rSoul of Destruction");
+        creeper_soul_meta.setCustomModelData(110);
+        creeper_soul.setItemMeta(creeper_soul_meta);
+        plugin.getConfig().set("items.creeper_soul", creeper_soul.serialize());
+
+    //---------------------------
+
+        ItemStack skeleton_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta skeleton_soul_meta = skeleton_soul.getItemMeta();
+        skeleton_soul_meta.setDisplayName("§rSoul of War");
+        skeleton_soul_meta.setCustomModelData(111);
+        skeleton_soul.setItemMeta(skeleton_soul_meta);
+        plugin.getConfig().set("items.skeleton_soul", skeleton_soul.serialize());
+
+    //---------------------------
+
+        ItemStack spider_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta spider_soul_meta = spider_soul.getItemMeta();
+        spider_soul_meta.setDisplayName("§rSoul of Arachnid");
+        spider_soul_meta.setCustomModelData(112);
+        spider_soul.setItemMeta(spider_soul_meta);
+        plugin.getConfig().set("items.spider_soul", spider_soul.serialize());
+
+        //---------------------------
+
+        ItemStack pigzombie_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta pigzombie_soul_meta = pigzombie_soul.getItemMeta();
+        pigzombie_soul_meta.setDisplayName("§rSoul of Hellish Decay");
+        pigzombie_soul_meta.setCustomModelData(113);
+        pigzombie_soul.setItemMeta(pigzombie_soul_meta);
+        plugin.getConfig().set("items.pigzombie_soul", pigzombie_soul.serialize());
+
+    //---------------------------
+
+        ItemStack ghast_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta ghast_soul_meta = ghast_soul.getItemMeta();
+        ghast_soul_meta.setDisplayName("§rSoul of Suffering");
+        ghast_soul_meta.setCustomModelData(114);
+        ghast_soul.setItemMeta(ghast_soul_meta);
+        plugin.getConfig().set("items.ghast_soul", ghast_soul.serialize());
+
+    //---------------------------
+
+        ItemStack silverfish_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta silverfish_soul_meta = silverfish_soul.getItemMeta();
+        silverfish_soul_meta.setDisplayName("§rSoul of Parasite");
+        silverfish_soul_meta.setCustomModelData(115);
+        silverfish_soul.setItemMeta(silverfish_soul_meta);
+        plugin.getConfig().set("items.silverfish_soul", silverfish_soul.serialize());
+
+    //---------------------------
+
+        ItemStack witch_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta witch_soul_meta = witch_soul.getItemMeta();
+        witch_soul_meta.setDisplayName("§rSoul of Supernatural");
+        witch_soul_meta.setCustomModelData(116);
+        witch_soul.setItemMeta(witch_soul_meta);
+        plugin.getConfig().set("items.witch_soul", witch_soul.serialize());
+
+    //---------------------------
+
+        ItemStack phantom_soul = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta phantom_soul_meta = phantom_soul.getItemMeta();
+        phantom_soul_meta.setDisplayName("§rSoul of Insomnia");
+        phantom_soul_meta.setCustomModelData(117);
+        phantom_soul.setItemMeta(phantom_soul_meta);
+        plugin.getConfig().set("items.phantom_soul", phantom_soul.serialize());
+
+    //---------------------------
         plugin.saveConfig();
     }
 }

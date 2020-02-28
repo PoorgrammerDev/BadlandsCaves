@@ -35,6 +35,9 @@ game_values:
   possess_mana_drain: 5
   agility_jump_mana_cost: 10
 
+  #default soul drop chance (%)
+  soul_drop_chance: 5
+
   #these values change from prehardmode to hardmode
   pre_hardmode_values:
     #how many deaths a golden apple will reverse
@@ -267,4 +270,85 @@ items:
       meta-type: TILE_ENTITY
       display-name: §9Essence of Magic
       custom-model-data: 108
+      blockMaterial: COMMAND_BLOCK
+  zombie_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Decay
+      custom-model-data: 109
+      blockMaterial: COMMAND_BLOCK
+  creeper_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Destruction
+      custom-model-data: 110
+      blockMaterial: COMMAND_BLOCK
+  skeleton_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of War
+      custom-model-data: 111
+      blockMaterial: COMMAND_BLOCK
+  spider_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Arachnid
+      custom-model-data: 112
+      blockMaterial: COMMAND_BLOCK
+  pigzombie_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Hellish Decay
+      custom-model-data: 113
+      blockMaterial: COMMAND_BLOCK
+  ghast_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Suffering
+      custom-model-data: 114
+      blockMaterial: COMMAND_BLOCK
+  silverfish_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Parasite
+      custom-model-data: 115
+      blockMaterial: COMMAND_BLOCK
+  witch_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Supernatural
+      custom-model-data: 116
+      blockMaterial: COMMAND_BLOCK
+  phantom_soul:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §rSoul of Insomnia
+      custom-model-data: 117
       blockMaterial: COMMAND_BLOCK
