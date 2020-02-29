@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
-public class tinyBlazePowder implements Listener {
+public class tinyBlazePowder {
     private BadlandsCaves plugin;
     public tinyBlazePowder(BadlandsCaves bcav) {
         plugin = bcav;

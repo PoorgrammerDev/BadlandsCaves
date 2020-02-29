@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class combineTinyBlaze implements Listener {
+public class combineTinyBlaze extends MatchCrafting implements Listener {
     private BadlandsCaves plugin;
 
     public combineTinyBlaze(BadlandsCaves bcav) {
@@ -16,28 +16,13 @@ public class combineTinyBlaze implements Listener {
 
     @EventHandler
     public void tiny_blaze_into_large(PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
-        if (event.getRecipe() == null) {
-            return;
-        }
-
-        if (event.getRecipe().getResult() == null) {
-            return;
-        }
-
-
-        Material result = event.getRecipe().getResult().getType();
+        final Material result = event.getRecipe().getResult().getType();
         if (result.equals(Material.BLAZE_POWDER)) {
-            ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
-            boolean found = true;
-            for (ItemStack item : event.getInventory().getMatrix()) {
-                if (!item.isSimilar(tiny_blz)) {
-                    found = false;
-                }
-
-                if (!found) {
-                    event.getInventory().setResult(null);
-                }
+            final ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
+            if (!isMatching(event.getInventory().getMatrix(), tiny_blz)) {
+                event.getInventory().setResult(null);
             }
         }
     }

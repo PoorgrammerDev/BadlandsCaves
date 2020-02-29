@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class purgeEssence implements Listener {
+public class purgeEssence extends MatchCrafting implements Listener {
     private BadlandsCaves plugin;
     public purgeEssence(BadlandsCaves bcav) {
         plugin = bcav;
@@ -15,27 +15,15 @@ public class purgeEssence implements Listener {
 
     @EventHandler
     public void purge_ess (PrepareItemCraftEvent event) {
-        if (event.getRecipe() == null) {
-            return;
-        }
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
-        if (event.getRecipe().getResult() == null) {
-            return;
-        }
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
 
-        ItemStack result = event.getRecipe().getResult();
-        ItemStack prg_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
-        if (result.isSimilar(prg_ess)) {
-            ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
-            boolean matching = true;
+        if (result.isSimilar(purge_essence)) {
+            final ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
 
-            for (ItemStack item : event.getInventory().getMatrix()) {
-                if (item.getType().equals(Material.STRUCTURE_BLOCK) && (!item.isSimilar(tiny_blz))) {
-                    matching = false;
-                }
-            }
-
-            if (!matching) {
+            if (!isMatching(event.getInventory().getMatrix(), tiny_blz)) {
                 event.getInventory().setResult(null);
             }
         }

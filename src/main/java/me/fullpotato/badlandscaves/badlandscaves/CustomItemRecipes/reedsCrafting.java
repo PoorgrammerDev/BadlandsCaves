@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class reedsCrafting implements Listener {
+public class reedsCrafting {
     private BadlandsCaves plugin;
     public reedsCrafting (BadlandsCaves bcav) {
         plugin = bcav;

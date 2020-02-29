@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class notchAppleCrafting implements Listener {
+public class notchAppleCrafting {
     private BadlandsCaves plugin;
     public notchAppleCrafting (BadlandsCaves bcav) {
         plugin = bcav;

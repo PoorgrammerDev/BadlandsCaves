@@ -27,3 +27,8 @@ commands:
     aliases:
       - supernatural
       - magic
+  customitem:
+    usage: /customitem <player> [amount]
+    description: Give Custom Items
+    aliases:
+      - givecustomitem

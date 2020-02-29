@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
-public class sandCrafting implements Listener {
+public class sandCrafting {
     private BadlandsCaves plugin;
     public sandCrafting (BadlandsCaves bcav) {
         plugin = bcav;

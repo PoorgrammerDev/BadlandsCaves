@@ -47,22 +47,6 @@ public class zombieDeathLoot implements Listener {
                 drops.add(leather);
             }
 
-            //can drop soul of decay if player killed
-            if (player != null) {
-                final int soul_chance = plugin.getConfig().getInt("game_values.soul_drop_chance");
-                final ItemStack zombie_soul = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true));
-                final ItemStack pigzombie_soul = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true));
-
-                if (random.nextInt(100) <= soul_chance) {
-                    if (zombie instanceof PigZombie) {
-                        drops.add(pigzombie_soul);
-                    }
-                    else {
-                        drops.add(zombie_soul);
-                    }
-                }
-            }
-
         }
     }
 

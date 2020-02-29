@@ -7,9 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
-public class hellEssence implements Listener {
+public class hellEssenceCrafting {
     private BadlandsCaves plugin;
-    public hellEssence (BadlandsCaves bcav) {
+    public hellEssenceCrafting(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -22,6 +22,7 @@ public class hellEssence implements Listener {
         ShapelessRecipe hell_ess_craft = new ShapelessRecipe(new NamespacedKey(plugin, "hell_essence"), hell_essence);
         hell_ess_craft.addIngredient(Material.BLAZE_POWDER);
         hell_ess_craft.addIngredient(Material.MAGMA_CREAM);
+        hell_ess_craft.addIngredient(Material.COMMAND_BLOCK);
 
         plugin.getServer().addRecipe(hell_ess_craft);
     }

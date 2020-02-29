@@ -11,35 +11,37 @@ public class HM_TabComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equalsIgnoreCase("hardmode")) {
-            List<String> list = new ArrayList<>();
+            if (sender.isOp()) {
+                List<String> list = new ArrayList<>();
 
-            if (args.length == 1) {
-                if (args[0].startsWith("g")) list.add("get");
-                else if (args[0].startsWith("s")) list.add("set");
-                else {
-                    list.add("get");
-                    list.add("set");
+                if (args.length == 1) {
+                    if (args[0].startsWith("g")) list.add("get");
+                    else if (args[0].startsWith("s")) list.add("set");
+                    else {
+                        list.add("get");
+                        list.add("set");
+                    }
                 }
-            }
 
-            else if (args.length == 2) {
-                if (args[1].startsWith("t")) list.add("true");
-                else if (args[1].startsWith("f")) list.add("false");
-                else {
-                    list.add("true");
-                    list.add("false");
+                else if (args.length == 2) {
+                    if (args[1].startsWith("t")) list.add("true");
+                    else if (args[1].startsWith("f")) list.add("false");
+                    else {
+                        list.add("true");
+                        list.add("false");
+                    }
                 }
-            }
 
-            else if (args.length == 3) {
-                if (args[2].startsWith("r")) list.add("reload");
-                else if (args[2].startsWith("n")) list.add("noreload");
-                else {
-                    list.add("reload");
-                    list.add("noreload");
+                else if (args.length == 3) {
+                    if (args[2].startsWith("r")) list.add("reload");
+                    else if (args[2].startsWith("n")) list.add("noreload");
+                    else {
+                        list.add("reload");
+                        list.add("noreload");
+                    }
                 }
+                return list;
             }
-            return list;
         }
         return null;
     }

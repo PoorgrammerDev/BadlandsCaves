@@ -3,14 +3,15 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.combineTinyBlaze;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.hellEssence;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.magicEssence;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.purgeEssence;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.useTaintPowder;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.stopCustomItemsRClick;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.deathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.gappleEat;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.creeperDeathLoot;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.spiderDeathLoot;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.getFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.zombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
@@ -164,8 +165,9 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
             this.getServer().getPluginManager().registerEvents(new preventNormalEnd(this), this);
             this.getServer().getPluginManager().registerEvents(new descensionPlayerMove(this), this);
-            this.getServer().getPluginManager().registerEvents(new creeperDeathLoot(this), this);
-            this.getServer().getPluginManager().registerEvents(new spiderDeathLoot(this), this);
+            this.getServer().getPluginManager().registerEvents(new SoulDrop(this), this);
+            this.getServer().getPluginManager().registerEvents(new hellEssence(this), this);
+            this.getServer().getPluginManager().registerEvents(new magicEssence(this), this);
         }
 
         //command reg
@@ -187,6 +189,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
             this.getCommand("powers").setExecutor(new PowersCommand(this));
             this.getCommand("powers").setTabCompleter(new PowersTabComplete());
+
+            this.getCommand("customitem").setExecutor(new CustomItemCommand(this));
+            this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete());
         }
 
         //runnables
@@ -230,11 +235,14 @@ public final class BadlandsCaves extends JavaPlugin {
             sandCrafting sand = new sandCrafting(this);
             sand.craft_sand();
 
-            hellEssence hell_essence = new hellEssence(this);
+            hellEssenceCrafting hell_essence = new hellEssenceCrafting(this);
             hell_essence.craft_hell_essence();
 
-            magicEssence magic_essence = new magicEssence(this);
+            magicEssenceCrafting magic_essence = new magicEssenceCrafting(this);
             magic_essence.magic_essence_craft();
+
+            mergedSoulsCrafting merged_souls = new mergedSoulsCrafting(this);
+            merged_souls.merge_souls();
         }
     }
 

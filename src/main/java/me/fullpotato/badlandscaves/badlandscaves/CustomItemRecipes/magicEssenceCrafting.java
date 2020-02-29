@@ -7,9 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class magicEssence implements Listener {
+public class magicEssenceCrafting {
     private BadlandsCaves plugin;
-    public magicEssence (BadlandsCaves bcav) {
+    public magicEssenceCrafting(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -21,11 +21,11 @@ public class magicEssence implements Listener {
         *  ###
         *  #*#
         *  ###
-        * where # = lapis, * = ghast tear
+        * where # = lapis, * = witch soul
          */
         recipe.shape("###", "#*#", "###");
         recipe.setIngredient('#', Material.LAPIS_LAZULI);
-        recipe.setIngredient('*', Material.GHAST_TEAR);
+        recipe.setIngredient('*', Material.COMMAND_BLOCK);
 
         plugin.getServer().addRecipe(recipe);
     }
