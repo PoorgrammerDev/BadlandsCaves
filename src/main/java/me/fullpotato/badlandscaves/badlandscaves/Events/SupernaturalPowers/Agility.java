@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.agilityJumpRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilityJumpRunnable;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,7 +55,7 @@ public class Agility implements Listener {
                 player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 30));
                 int run_id = player.getMetadata("agility_jump_id").get(0).asInt();
                 if (run_id == 0) {
-                    BukkitTask flight_cancel = new agilityJumpRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1);
+                    BukkitTask flight_cancel = new AgilityJumpRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1);
                     player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, flight_cancel.getTaskId()));
                 }
 

@@ -352,3 +352,41 @@ items:
       display-name: §rSoul of Insomnia
       custom-model-data: 117
       blockMaterial: COMMAND_BLOCK
+  merged_souls:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §9§k%§r§d§lMerged Souls§r§9§k%
+      lore:
+        - §7If you listen closely, you can hear the screams.
+      custom-model-data: 118
+      blockMaterial: COMMAND_BLOCK
+  soul_crystal_incomplete:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §3§k%§r§5§lIncomplete Soul Crystal§r§3§k%
+      lore:
+        - '§7Requires one more soul: a human soul.'
+        - ''
+        - §9§lRight Click §r§7to collect your own soul.
+        - '§4Warning: §cUsing this item will kill you instantly.'
+      custom-model-data: 119
+      blockMaterial: COMMAND_BLOCK
+  soul_crystal:
+    v: 2230
+    type: COMMAND_BLOCK
+    meta:
+      ==: ItemMeta
+      meta-type: TILE_ENTITY
+      display-name: §b§k%§r§d§lSoul Crystal§r§b§k%
+      lore:
+        - §7Can be used as a sacrifice to §kenter Descension§r§7.
+        - ''
+        - §9§lRight Click §r§7to use.
+      custom-model-data: 120
+      blockMaterial: COMMAND_BLOCK

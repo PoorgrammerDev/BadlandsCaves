@@ -1,9 +1,8 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.NMS.enhancedEyesNMS;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -31,7 +30,7 @@ public class EyesRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        enhancedEyesNMS nms = new enhancedEyesNMS(player);
+        EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
         final int eyes_level = player.hasMetadata("eyes_level") ? player.getMetadata("eyes_level").get(0).asInt() : 0;
         final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;

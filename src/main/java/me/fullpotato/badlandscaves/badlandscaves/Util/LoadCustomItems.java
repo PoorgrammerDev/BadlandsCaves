@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Util;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -291,6 +293,54 @@ public class LoadCustomItems {
         plugin.getConfig().set("items.phantom_soul", phantom_soul.serialize());
 
     //---------------------------
+
+        ItemStack merged_souls = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta merged_souls_meta = merged_souls.getItemMeta();
+        ArrayList<String> merged_souls_lore = new ArrayList<>();
+
+        merged_souls_meta.setDisplayName("§9§k%§r§d§lMerged Souls§r§9§k%");
+        merged_souls_lore.add(ChatColor.GRAY + "If you listen closely, you can hear the screams.");
+        merged_souls_meta.setLore(merged_souls_lore);
+        merged_souls_meta.setCustomModelData(118);
+        merged_souls.setItemMeta(merged_souls_meta);
+        plugin.getConfig().set("items.merged_souls", merged_souls.serialize());
+
+    //---------------------------
+
+        ItemStack soul_crystal_incomplete = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta soul_crystal_incomplete_meta = soul_crystal_incomplete.getItemMeta();
+        ArrayList<String> soul_crystal_incomplete_lore = new ArrayList<>();
+
+        soul_crystal_incomplete_meta.setDisplayName("§3§k%§r§5§lIncomplete Soul Crystal§r§3§k%");
+
+        soul_crystal_incomplete_lore.add("§7Requires one more soul: a human soul.");
+        soul_crystal_incomplete_lore.add("");
+        soul_crystal_incomplete_lore.add("§9§lRight Click §r§7to collect your own soul.");
+        soul_crystal_incomplete_lore.add("§4Warning: §cUsing this item will kill you instantly.");
+        soul_crystal_incomplete_meta.setLore(soul_crystal_incomplete_lore);
+
+        soul_crystal_incomplete_meta.setCustomModelData(119);
+        soul_crystal_incomplete.setItemMeta(soul_crystal_incomplete_meta);
+        plugin.getConfig().set("items.soul_crystal_incomplete", soul_crystal_incomplete.serialize());
+//---------------------------
+
+        ItemStack soul_crystal = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta soul_crystal_meta = soul_crystal.getItemMeta();
+        ArrayList<String> soul_crystal_lore = new ArrayList<>();
+
+        soul_crystal_meta.setDisplayName("§b§k%§r§d§lSoul Crystal§r§b§k%");
+
+        soul_crystal_lore.add("§7Can be used as a sacrifice to §kenter Descension§r§7.");
+        soul_crystal_lore.add("");
+        soul_crystal_lore.add("§9§lRight Click §r§7to use.");
+        soul_crystal_meta.setLore(soul_crystal_lore);
+
+        soul_crystal_meta.setCustomModelData(120);
+        soul_crystal.setItemMeta(soul_crystal_meta);
+        plugin.getConfig().set("items.soul_crystal", soul_crystal.serialize());
+
+
+
         plugin.saveConfig();
     }
 }

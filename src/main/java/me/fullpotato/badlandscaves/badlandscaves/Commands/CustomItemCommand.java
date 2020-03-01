@@ -39,6 +39,7 @@ public class CustomItemCommand implements CommandExecutor {
                             }
 
                             target.getInventory().addItem(item);
+                            sender.sendMessage("§6Gave §c" + item.getAmount() + "§6 [§r" + item.getItemMeta().getDisplayName() + "§6] to §c" + target.getDisplayName() + "§6.");
                             return true;
                         }
                         catch (NullPointerException e) {

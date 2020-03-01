@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.possessionMobsRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionMobsRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -92,7 +92,7 @@ public class Possession implements Listener {
                                             if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
                                             player.teleport(target);
 
-                                            new possessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
+                                            new PossessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
                                         }
                                     }
                                 }

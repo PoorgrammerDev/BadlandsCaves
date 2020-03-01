@@ -11,6 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomItemTabComplete implements TabCompleter {
+
+    private String[] items;
+    public CustomItemTabComplete (String[] items) {
+        this.items = items;
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("customitem")) {
@@ -26,33 +32,6 @@ public class CustomItemTabComplete implements TabCompleter {
                 }
 
                 else if (args.length == 2) {
-                    final String[] items = {
-                            "starter_sapling",
-                            "starter_bone_meal",
-                            "toxic_water",
-                            "purified_water",
-                            "antidote",
-                            "mana_potion",
-                            "purge_essence",
-                            "hell_essence",
-                            "magic_essence",
-                            "displace",
-                            "withdraw",
-                            "enhanced_eyes",
-                            "possess",
-                            "tiny_blaze_powder",
-                            "tainted_powder",
-                            "zombie_soul",
-                            "creeper_soul",
-                            "skeleton_soul",
-                            "spider_soul",
-                            "pigzombie_soul",
-                            "ghast_soul",
-                            "silverfish_soul",
-                            "witch_soul",
-                            "phantom_soul",
-                    };
-
                     if (args[1].isEmpty()) {
                         list.addAll(Arrays.asList(items));
                     }
