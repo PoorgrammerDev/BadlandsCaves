@@ -30,6 +30,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.De
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaRegen;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ReflectionZombieBoss;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.PlayerSaveToConfig;
@@ -249,7 +250,7 @@ public final class BadlandsCaves extends JavaPlugin {
             new DescensionTimeLimit(this).runTaskTimer(this, 0, 20);
             new DetectionDecrease(this).runTaskTimer(this, 0, 20);
             new ExitPortal().runTaskTimer(this, 0, 3);
-            new ReflectionZombieTrack(this).runTaskTimer(this, 0, 0);
+            new ReflectionZombieBoss(this).runTaskTimer(this, 0, 0);
 
         }
 

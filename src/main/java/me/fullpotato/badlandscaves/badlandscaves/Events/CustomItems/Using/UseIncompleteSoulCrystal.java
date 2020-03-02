@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,7 +33,16 @@ public class UseIncompleteSoulCrystal implements Listener {
         final Player player = event.getPlayer();
         event.setCancelled(true);
 
-        //player.setMetadata("in_reflection", new FixedMetadataValue(plugin, true));
-        player.teleport(Bukkit.getWorld("world_reflection").getSpawnLocation());
+        final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+        if (in_reflection) return;
+
+
+        final World reflection = Bukkit.getWorld("world_reflection");
+        if (reflection == null) return;
+
+        Location worldspawn = reflection.getSpawnLocation();
+        worldspawn.setY(255);
+        player.teleport(worldspawn);
+        player.setMetadata("in_reflection", new FixedMetadataValue(plugin, true));
     }
 }

@@ -53,19 +53,27 @@ public class ReflectionGen extends ChunkGenerator {
     }
 
     public Material randomIceVariant (Random random, boolean snow) {
-        int rand = snow ? random.nextInt(4) : random.nextInt(3);
+        int rand = random.nextInt(102);
 
-        if (rand == 0) {
+        if (rand <= 25) {
             return Material.ICE;
         }
-        else if (rand == 1) {
+        else if (rand <= 50) {
             return Material.BLUE_ICE;
         }
-        else if (rand == 2) {
+        else if (rand <= 75) {
             return Material.PACKED_ICE;
         }
+        else if (rand <= 100) {
+            rand = snow ? random.nextInt(4) : random.nextInt(5);
+            if (rand == 0) return Material.LIGHT_BLUE_CONCRETE;
+            else if (rand == 1) return Material.LIGHT_BLUE_GLAZED_TERRACOTTA;
+            else if (rand == 2) return Material.LIGHT_BLUE_STAINED_GLASS;
+            else if (rand == 3) return Material.LIGHT_BLUE_WOOL;
+            else return Material.LIGHT_BLUE_CONCRETE_POWDER;
+        }
         else {
-            return Material.SNOW_BLOCK;
+            return snow ? Material.SNOW_BLOCK : Material.SEA_LANTERN;
         }
     }
 }

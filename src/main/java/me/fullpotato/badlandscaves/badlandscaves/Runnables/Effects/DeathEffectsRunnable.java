@@ -25,9 +25,10 @@ public class DeathEffectsRunnable extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
 
-            int deaths = player.getMetadata("Deaths").get(0).asInt();
-            boolean supernatural = (player.hasMetadata("has_supernatural_powers") ? player.getMetadata("has_supernatural_powers").get(0).asInt() : 0) >= 1;
-            int in_descension = player.hasMetadata("in_descension") ? player.getMetadata("in_descension").get(0).asInt() : 0;
+            final int deaths = player.getMetadata("Deaths").get(0).asInt();
+            final boolean supernatural = (player.hasMetadata("has_supernatural_powers") ? player.getMetadata("has_supernatural_powers").get(0).asInt() : 0) >= 1;
+            final int in_descension = player.hasMetadata("in_descension") ? player.getMetadata("in_descension").get(0).asInt() : 0;
+            final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
 
             //passing into main player effects
             int poison_lvl = 0;
@@ -42,7 +43,7 @@ public class DeathEffectsRunnable extends BukkitRunnable {
             boolean blindness = false;
             double health = 20.0;
 
-            if (in_descension != 1 && in_descension != 2) {
+            if (in_descension != 1 && in_descension != 2 && !in_reflection) {
 
                 //100+ DEATHS---------------------------------------------
                 if (deaths >= 100) {

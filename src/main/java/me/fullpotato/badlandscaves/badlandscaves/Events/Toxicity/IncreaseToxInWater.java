@@ -24,6 +24,10 @@ public class IncreaseToxInWater implements Listener {
     public void incr_tox_in_water (PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Block block = player.getLocation().getBlock();
+
+        final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+        if (in_reflection) return;
+
         if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
             if (block.getType() == Material.WATER) {
                 double current_tox = player.getMetadata("Toxicity").get(0).asDouble();

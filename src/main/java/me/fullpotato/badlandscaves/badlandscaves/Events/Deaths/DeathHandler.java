@@ -112,7 +112,14 @@ public class DeathHandler implements Listener {
             player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
         }
         else {
-            player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
+            final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+            if (in_reflection) {
+                player.setMetadata("in_reflection", new FixedMetadataValue(plugin, false));
+                player.setMetadata("reflection_zombie", new FixedMetadataValue(plugin, false));
+            }
+            else {
+                player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
+            }
         }
 
         //simulate death
