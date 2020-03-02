@@ -8,30 +8,27 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PlayerSaveToConfig extends BukkitRunnable {
 
     private BadlandsCaves plugin;
-    private Player plyr;
     private String[] values;
-    private boolean silent;
 
-    public PlayerSaveToConfig(BadlandsCaves bcav, Player ply, String[] ply_vals, boolean slnt) {
+    public PlayerSaveToConfig(BadlandsCaves bcav, String[] ply_vals) {
         plugin = bcav;
-        plyr = ply;
         values = ply_vals;
-        silent = slnt;
     }
 
+    //autosave
     @Override
     public void run() {
-        if (this.plyr == null) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                saveToConfig(player);
-            }
-        }
-        else {
-            saveToConfig(plyr);
+        saveToConfig(true);
+    }
+
+
+    public void saveToConfig (boolean silent) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            saveToConfig(player, silent);
         }
     }
 
-    public void saveToConfig (Player player) {
+    public void saveToConfig (Player player, boolean silent) {
         for (String meta : values) {
             String filtered;
             String dot_meta;

@@ -43,6 +43,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BadlandsCaves extends JavaPlugin {
+    //constants
     private final String[] player_values = {
             "Deaths",
             "*Thirst",
@@ -70,6 +71,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "has_supernatural_powers",
             "in_descension",
             "in_reflection",
+            "reflection_zombie",
             "descension_detect",
             "descension_detect_cooldown",
             "descension_timer",
@@ -145,6 +147,10 @@ public final class BadlandsCaves extends JavaPlugin {
     public void onEnable() {
         //config
         loadConfig();
+
+        //load players metadata
+        PlayerJoin join = new PlayerJoin(this, player_values);
+        join.loadPlayers();
 
         //adding new items
         //LoadCustomItems.saveCustomItemsToConfig(this);
@@ -238,7 +244,7 @@ public final class BadlandsCaves extends JavaPlugin {
             new DeathEffectsRunnable(this).runTaskTimer(this, 0, 0);
             new PlayerEffectsRunnable().runTaskTimer(this,0,0);
             new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
-            new PlayerSaveToConfig(this, null, player_values, true).runTaskTimer(this, 5, 3600);
+            new PlayerSaveToConfig(this, player_values).runTaskTimer(this, 5, 3600);
             new ManaBarRunnable(this).runTaskTimer(this, 0, 5);
             new ManaRegen(this).runTaskTimer(this, 0, 10);
             new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
@@ -288,25 +294,8 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //just a copy of the playersavetoconfig runnable (idk why, but if i just call the runnable, it spits out an error)
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            for (String meta : player_values) {
-                String filtered;
-                String dot_meta;
-                if (meta.contains("!")) {
-                    continue;
-                }
-                else if (meta.contains("#") || meta.contains("*")) {
-                    filtered = meta.substring(1);
-                }
-                else {
-                    filtered = meta;
-                }
-                dot_meta = "." + filtered;
-                this.getConfig().set("Scores.users." + player.getUniqueId() + dot_meta, player.getMetadata(filtered).get(0).asDouble());
-                this.saveConfig();
-            }
-        }
+        PlayerSaveToConfig save_player = new PlayerSaveToConfig(this, player_values);
+        save_player.saveToConfig(true);
         this.saveConfig();
     }
 

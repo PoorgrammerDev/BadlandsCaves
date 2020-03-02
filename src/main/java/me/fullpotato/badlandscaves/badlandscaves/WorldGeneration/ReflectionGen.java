@@ -15,14 +15,16 @@ public class ReflectionGen extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
         ChunkData chunk = createChunkData(world);
-        generator.setScale(random.nextDouble() / 10);
+        generator.setScale(random.nextDouble() / 15);
 
-        int chunk_offset = random.nextInt(50);
+        final int offsets = 20;
+        final int chunk_offset = random.nextInt(offsets);
+        final int constant = 200 - offsets;
 
 
         for (int X = 0; X < 16; X++) {
             for (int Z = 0; Z < 16; Z++) {
-                int currentHeight = (int) ((generator.noise(chunkX * 16 + X, chunkZ * 16 + Z, 0.5D, 0.05D, true) + 1) * 15D + chunk_offset + 150);
+                int currentHeight = (int) ((generator.noise(chunkX * 16 + X, chunkZ * 16 + Z, 0.5D, 0.05D, true) + 1) * 15D + chunk_offset + constant);
 
                 //top ceiling
                 for (int Y = currentHeight; Y >= currentHeight - 5; Y--) {

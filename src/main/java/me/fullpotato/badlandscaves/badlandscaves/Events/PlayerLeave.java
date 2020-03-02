@@ -18,6 +18,7 @@ public class PlayerLeave implements Listener {
     @EventHandler
     public void player_leave (PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        new PlayerSaveToConfig(plugin, player, player_values, false).runTaskAsynchronously(plugin);
+        PlayerSaveToConfig save_player = new PlayerSaveToConfig(plugin, player_values);
+        save_player.saveToConfig(player, false);
     }
 }
