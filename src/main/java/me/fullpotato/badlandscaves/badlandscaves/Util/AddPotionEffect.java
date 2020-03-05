@@ -6,7 +6,13 @@ import org.bukkit.potion.PotionEffectType;
 
 public class AddPotionEffect {
 
-    public static void addPotionEffect (Player player, PotionEffect effect, boolean force) {
+    /**
+     * Adds a Potion Effect to a player, but only if they already don't have anything that lasts longer or is stronger.
+     *
+     * @param player a valid online player
+     * @param effect a valid potion effect
+     * **/
+    public static void addPotionEffect (Player player, PotionEffect effect) {
         PotionEffectType type = effect.getType();
         int amplifier = effect.getAmplifier();
         int duration = effect.getDuration();
@@ -20,7 +26,7 @@ public class AddPotionEffect {
             }
         }
 
-        player.addPotionEffect(effect, force);
+        player.addPotionEffect(effect);
     }
 
 

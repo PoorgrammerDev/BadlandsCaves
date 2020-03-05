@@ -162,20 +162,20 @@ public class DeathEffectsRunnable extends BukkitRunnable {
 
                 //1+ DEATHS-----------------------------------------------
                 else if (deaths >= 1) {
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false), true);
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SPEED, 90, 0, true, false), true);
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false), true);
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false));
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SPEED, 90, 0, true, false));
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false));
                 }
 
                 //NO DEATHS-----------------------------------------------
                 else if (deaths == 0) {
                     speed_lvl = 2;
 
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false), true);
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false), true);
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false), true);
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false), true);
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false), true);
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false));
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));
+                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false));
 
                     health = 40.0;
                 }
@@ -191,11 +191,11 @@ public class DeathEffectsRunnable extends BukkitRunnable {
 
             //only death-related effects
             if (weakness > 0) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.WEAKNESS, 90, weakness - 1, true, false), true);
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.WEAKNESS, 90, weakness - 1, true, false));
             }
 
             if (unluck > 0) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.UNLUCK, 90, unluck - 1, true, false), true);
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.UNLUCK, 90, unluck - 1, true, false));
             }
 
             if (blindness) {

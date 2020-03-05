@@ -14,6 +14,8 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionZombie;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.CauldronMenu;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.Drinking;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.NaturalThirstDecrease;
@@ -33,24 +35,22 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.Ma
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ReflectionZombieBoss;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.PlayerSaveToConfig;
+import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.DescensionWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.EmptyWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.PreventNormalEnd;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.ReflectionWorld;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BadlandsCaves extends JavaPlugin {
     //constants
     private final String[] player_values = {
             "Deaths",
-            "*Thirst",
-            "#Toxicity",
-            "#thirst_sys_var",
-            "#tox_nat_decr_var",
-            "#tox_slow_incr_var",
+            "Thirst",
+            "Toxicity",
+            "thirst_sys_var",
+            "tox_nat_decr_var",
+            "tox_slow_incr_var",
             "deaths_buff_speed_lvl",
             "deaths_debuff_slowmine_lvl",
             "deaths_debuff_slow_lvl",
@@ -64,20 +64,20 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_debuff_slow_lvl",
             "thirst_debuff_hunger_lvl",
             "thirst_debuff_poison_lvl",
-            "opened_cauldron",
+            "opened_cauldron", //TODO replace this with boolean
             "opened_cauldron_x",
             "opened_cauldron_y",
             "opened_cauldron_z",
-            "has_supernatural_powers",
+            "has_supernatural_powers", //TODO replace this with boolean
             "in_descension",
-            "in_reflection",
+            "$in_reflection",
             "reflection_zombie",
             "descension_detect",
             "descension_detect_cooldown",
             "descension_timer",
             "descension_shrines_capped",
-            "*Mana",
-            "*max_mana",
+            "Mana",
+            "max_mana",
             "mana_needed_timer",
             "mana_regen_delay_timer",
             "mana_bar_active_timer",
@@ -86,7 +86,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "swap_name_timer",
             "displace_level",
             "displace_particle_id",
-            "has_displace_marker",
+            "has_displace_marker", //TODO replace this with boolean
             "displace_x",
             "displace_y",
             "displace_z",
@@ -98,9 +98,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "withdraw_chunk_z",
             "withdraw_timer",
             "eyes_level",
-            "using_eyes",
+            "using_eyes", //TODO replace this with boolean
             "possess_level",
-            "in_possession",
+            "$in_possession",
             "possessed_entity",
             "possess_orig_world",
             "possess_orig_x",
@@ -149,8 +149,8 @@ public final class BadlandsCaves extends JavaPlugin {
         loadConfig();
 
         //load players metadata
-        PlayerJoin join = new PlayerJoin(this, player_values);
-        join.loadPlayers();
+        PlayerConfigLoadSave loader = new PlayerConfigLoadSave(this, player_values);
+        loader.loadPlayers();
 
         //adding new items
         //LoadCustomItems.saveCustomItemsToConfig(this);
@@ -210,6 +210,8 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new MergedSouls(this), this);
             this.getServer().getPluginManager().registerEvents(new SoulCrystalIncomplete(this), this);
             this.getServer().getPluginManager().registerEvents(new UseIncompleteSoulCrystal(this), this);
+            this.getServer().getPluginManager().registerEvents(new ReflectionBuild(this), this);
+            this.getServer().getPluginManager().registerEvents(new ReflectionZombie(this), this);
         }
 
         //command reg
@@ -244,7 +246,7 @@ public final class BadlandsCaves extends JavaPlugin {
             new DeathEffectsRunnable(this).runTaskTimer(this, 0, 0);
             new PlayerEffectsRunnable().runTaskTimer(this,0,0);
             new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
-            new PlayerSaveToConfig(this, player_values).runTaskTimer(this, 5, 3600);
+            new PlayerConfigLoadSave(this, player_values).runTaskTimer(this, 5, 3600);
             new ManaBarRunnable(this).runTaskTimer(this, 0, 5);
             new ManaRegen(this).runTaskTimer(this, 0, 10);
             new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
@@ -294,7 +296,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        PlayerSaveToConfig save_player = new PlayerSaveToConfig(this, player_values);
+        PlayerConfigLoadSave save_player = new PlayerConfigLoadSave(this, player_values);
         save_player.saveToConfig(true);
         this.saveConfig();
     }

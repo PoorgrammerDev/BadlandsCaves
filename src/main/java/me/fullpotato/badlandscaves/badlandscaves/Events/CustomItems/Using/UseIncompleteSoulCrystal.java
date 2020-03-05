@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class UseIncompleteSoulCrystal implements Listener {
@@ -23,7 +26,6 @@ public class UseIncompleteSoulCrystal implements Listener {
     public void use_crystal (PlayerInteractEvent event) {
         final Action action = event.getAction();
         if (!action.equals(Action.RIGHT_CLICK_BLOCK) && !action.equals(Action.RIGHT_CLICK_AIR)) return;
-
         final ItemStack item = event.getItem();
         if (item == null) return;
 
@@ -36,13 +38,29 @@ public class UseIncompleteSoulCrystal implements Listener {
         final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
         if (in_reflection) return;
 
-
         final World reflection = Bukkit.getWorld("world_reflection");
         if (reflection == null) return;
 
         Location worldspawn = reflection.getSpawnLocation();
         worldspawn.setY(255);
-        player.teleport(worldspawn);
+
+        //removing all effects
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
+
+        //entering
         player.setMetadata("in_reflection", new FixedMetadataValue(plugin, true));
+        player.teleport(worldspawn);
+
+        //heal and full hunger
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                player.setSaturation(20);
+                player.setFoodLevel(20);
+            }
+        }.runTaskLaterAsynchronously(plugin, 1);
     }
 }

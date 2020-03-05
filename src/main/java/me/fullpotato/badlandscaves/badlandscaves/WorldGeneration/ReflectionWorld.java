@@ -8,6 +8,8 @@ public class ReflectionWorld {
         reflectionworld.environment(World.Environment.NORMAL)
                 .generator(new ReflectionGen());
         World world_reflection = reflectionworld.createWorld();
+        world_reflection.setDifficulty(Difficulty.HARD);
+        //gamerules
         world_reflection.setGameRule(GameRule.DO_INSOMNIA, false);
         world_reflection.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world_reflection.setGameRule(GameRule.FALL_DAMAGE, false);
@@ -25,6 +27,12 @@ public class ReflectionWorld {
         world_reflection.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
         world_reflection.setGameRule(GameRule.DROWNING_DAMAGE, true);
         world_reflection.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
-        world_reflection.setDifficulty(Difficulty.HARD);
+
+        //spawn and border
+        world_reflection.setSpawnLocation(0, 255, 0);
+        world_reflection.getWorldBorder().setCenter(0, 0);
+        world_reflection.getWorldBorder().setSize(1000);
+
     }
+
 }

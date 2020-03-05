@@ -41,7 +41,7 @@ public class EyesRunnable extends BukkitRunnable {
 
         if (using_eyes && mana >= drain_per_tick) {
             //night vision
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 10, 0, true, false), true);
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 10, 0, true, false));
 
             //highlights living entities
             for (Entity entity : origin.getWorld().getNearbyEntities(origin, block_range, block_range, block_range)) {

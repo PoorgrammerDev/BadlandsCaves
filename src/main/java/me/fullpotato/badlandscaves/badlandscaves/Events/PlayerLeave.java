@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.PlayerSaveToConfig;
+import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +18,7 @@ public class PlayerLeave implements Listener {
     @EventHandler
     public void player_leave (PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        PlayerSaveToConfig save_player = new PlayerSaveToConfig(plugin, player_values);
+        PlayerConfigLoadSave save_player = new PlayerConfigLoadSave(plugin, player_values);
         save_player.saveToConfig(player, false);
     }
 }

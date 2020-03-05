@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -68,7 +69,8 @@ public class PlayerJoin implements Listener {
 
         //EVERYONE---------------------------------------
         //load config back into metadata
-        loadPlayer(player);
+        PlayerConfigLoadSave loader = new PlayerConfigLoadSave(plugin, values);
+        loader.loadPlayer(player);
 
         //REGARDING SUPERNATURAL POWERS----------------------------------
 
@@ -93,29 +95,5 @@ public class PlayerJoin implements Listener {
         //reset agility jump timer
         player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
         player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
-    }
-
-    public void loadPlayer (Player player) {
-        for (String meta: values) {
-            String filtered;
-            String dot_meta;
-            if (meta.contains("!")) {
-                continue;
-            }
-            else if (meta.contains("#") || meta.contains("*")) {
-                filtered = meta.substring(1);
-            }
-            else {
-                filtered = meta;
-            }
-            dot_meta = "." + filtered;
-            player.setMetadata(filtered, new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + dot_meta)));
-        }
-    }
-
-    public void loadPlayers () {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            loadPlayer(player);
-        }
     }
 }
