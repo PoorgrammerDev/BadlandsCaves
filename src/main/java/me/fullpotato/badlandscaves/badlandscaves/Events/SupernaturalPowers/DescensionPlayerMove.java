@@ -56,8 +56,6 @@ public class DescensionPlayerMove implements Listener {
         }
 
 
-
-
         boolean moved_x = (Math.abs(event.getTo().getX() - event.getFrom().getX()) > 0);
         boolean moved_y = (Math.abs(event.getTo().getY() - event.getFrom().getY()) > 0);
         boolean moved_z = (Math.abs(event.getTo().getZ() - event.getFrom().getZ()) > 0);
@@ -76,6 +74,8 @@ public class DescensionPlayerMove implements Listener {
         }
 
         for (Zombie zombie : zombies) {
+            if (!player.getWorld().equals(zombie.getWorld())) continue;
+
             if (player.hasLineOfSight(zombie)) {
                 boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
                 if (!in_possession) {

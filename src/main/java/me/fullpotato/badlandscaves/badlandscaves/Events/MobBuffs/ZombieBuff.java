@@ -18,6 +18,7 @@ import java.util.Random;
 public class ZombieBuff implements Listener {
     private BadlandsCaves plugin;
     private World descension_world = Bukkit.getWorld("world_descension");
+    private World reflection_world = Bukkit.getWorld("world_reflection");
     public ZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -34,6 +35,7 @@ public class ZombieBuff implements Listener {
         LivingEntity zombie = event.getEntity();
         World world = zombie.getWorld();
         if (world.equals(descension_world)) return;
+        if (world.equals(reflection_world)) return;
 
         Random random = new Random();
         ItemStack sword = new ItemStack(Material.DIAMOND_SWORD, 1);

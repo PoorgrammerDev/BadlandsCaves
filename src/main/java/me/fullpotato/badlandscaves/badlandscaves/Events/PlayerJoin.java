@@ -26,6 +26,7 @@ public class PlayerJoin implements Listener {
         //give items
         Player player = event.getPlayer();
 
+        PlayerConfigLoadSave loader = new PlayerConfigLoadSave(plugin, values);
         //NEW PLAYER--------------------------------
         if (!player.hasPlayedBefore()) {
 
@@ -34,42 +35,12 @@ public class PlayerJoin implements Listener {
             player.getInventory().addItem(starter_sapling);
             player.getInventory().addItem(starter_bone_meal);
 
-            for (String meta: values) {
-                String filtered;
-                String dot_meta;
-                double default_val;
-                boolean to_int;
-
-                if (meta.contains("!")) {
-                    continue;
-                }
-                else if (meta.contains("#")) {
-                    filtered = meta.substring(1);
-                    default_val = 0.0;
-                    to_int = false;
-                }
-                else if (meta.contains("*")) {
-                    filtered = meta.substring(1);
-                    default_val = 100.0;
-                    to_int = false;
-                }
-                else {
-                    filtered = meta;
-                    default_val = 0;
-                    to_int = true;
-                }
-
-                dot_meta = "." + filtered;
-
-                if (to_int) plugin.getConfig().set("Scores.users." + player.getUniqueId() + dot_meta , (int) default_val);
-                else plugin.getConfig().set("Scores.users." + player.getUniqueId() + dot_meta , default_val);
-                plugin.saveConfig();
-            }
+            //default values
+            loader.saveDefault(player);
         }
 
         //EVERYONE---------------------------------------
         //load config back into metadata
-        PlayerConfigLoadSave loader = new PlayerConfigLoadSave(plugin, values);
         loader.loadPlayer(player);
 
         //REGARDING SUPERNATURAL POWERS----------------------------------
@@ -78,7 +49,7 @@ public class PlayerJoin implements Listener {
         int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
         if (has_powers < 1.0) return;
 
-        if (player.getLocation().getWorld().equals(Bukkit.getWorld("world_empty"))) {
+        if (player.getWorld().equals(Bukkit.getWorld("world_empty"))) {
 
             if (player.getMetadata("withdraw_timer").get(0).asInt() <= 0) {
                 String origworldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");

@@ -4,19 +4,34 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.ReflectionWorldNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Silverfish;
+import org.bukkit.entity.Trident;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +60,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         for (Player ply : world.getEntitiesByClass(Player.class)) {
             if (ply.getGameMode().equals(GameMode.SURVIVAL) || ply.getGameMode().equals(GameMode.ADVENTURE)) {
                 player = ply;
+                break;
             }
         }
         if (player == null) return;
@@ -86,6 +102,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         //arrow reflection
         for (Entity entity : zombie.getNearbyEntities(1.5, 1.5, 1.5)) {
             boolean activated = false;
+            final Location location = entity.getLocation();
             if (entity instanceof Arrow) {
                 Arrow arrow = (Arrow) entity;
                 activated = !arrow.isInBlock();
@@ -97,8 +114,8 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
             if (activated) {
                 entity.setVelocity(entity.getVelocity().multiply(-2));
-                player.playSound(zombie.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2, 2);
-                player.spawnParticle(Particle.SWEEP_ATTACK, entity.getLocation(), 1);
+                player.playSound(location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2, 2);
+                player.spawnParticle(Particle.SWEEP_ATTACK, location, 1);
             }
         }
 
@@ -208,6 +225,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         player.spawnParticle(Particle.FLASH, zombie_orig_loc, 1);
         player.spawnParticle(Particle.PORTAL, zombie_orig_loc, 20, 1, 1, 1);
         player.spawnParticle(Particle.SMOKE_NORMAL, player_loc, 20, 1, 1, 1);
+
         player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 0.5F, 0.2F);
     }
 
@@ -640,14 +658,27 @@ public class ZombieBossBehavior extends BukkitRunnable {
         final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
         KeyedBossBar health_bar = Bukkit.getBossBar(key);
         if (health_bar == null) {
-            health_bar = Bukkit.createBossBar(key,(player.getDisplayName()), BarColor.BLUE, BarStyle.SEGMENTED_10);
+            health_bar = Bukkit.createBossBar(key, ChatColor.DARK_AQUA + ChatColor.stripColor(player.getDisplayName()), BarColor.BLUE, BarStyle.SEGMENTED_10);
         }
-
-        if (!health_bar.getPlayers().contains(player)) health_bar.addPlayer(player);
 
         health_bar.setVisible(true);
         final double zombie_health = Math.max(Math.min(zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 1), 0);
         health_bar.setProgress(zombie_health);
+
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.getWorld().equals(world)) {
+                    if (online.isDead()) {
+                        health_bar.removePlayer(online);
+                    }
+                    else if (!health_bar.getPlayers().contains(online)) {
+                        health_bar.addPlayer(online);
+                    }
+            }
+            else if (health_bar.getPlayers().contains(online)) {
+                health_bar.removePlayer(online);
+            }
+        }
+
     }
 
     public Silverfish summonMarker (Location location, int delay) {

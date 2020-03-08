@@ -30,14 +30,24 @@ public class PlayerConfigLoadSave extends BukkitRunnable {
     }
 
     public void saveToConfig (Player player, boolean silent) {
-        loadOrSavePlayer(player, true);
+        playerValuesManager(player, true, false);
         if (!silent) {
             plugin.getServer().getConsoleSender().sendMessage("[BadlandsCaves] Saved to Config for Player " + player.getDisplayName() + " (" + player.getUniqueId() + ")");
         }
     }
 
+    public void loadPlayers () {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            loadPlayer(player);
+        }
+    }
+
     public void loadPlayer (Player player) {
-        loadOrSavePlayer(player, false);
+        playerValuesManager(player, false, false);
+    }
+
+    public void saveDefault (Player player) {
+        playerValuesManager(player, true, true);
     }
 
     /**
@@ -45,22 +55,28 @@ public class PlayerConfigLoadSave extends BukkitRunnable {
      *
      * @param player a valid online player
      * @param save if boolean is true, then it'll save. if false, it'll load instead
+     * @param def only works if save is also true. saves the default values
      **/
-    public void loadOrSavePlayer (Player player, boolean save) {
-        String type = "double";
+    public void playerValuesManager (Player player, boolean save, boolean def) {
         for (String meta: values) {
+            double default_val = 0;
+            String type = "double";
             if (meta.startsWith("$")) {
                 meta = meta.substring(1);
                 type = "boolean";
             }
+            else if (meta.startsWith("%")) {
+                meta = meta.substring(1);
+                default_val = 100;
+            }
 
             if (save) {
                 if (type.equals("boolean")) {
-                    boolean metadata = player.getMetadata(meta).get(0).asBoolean();
+                    boolean metadata = def ? default_val != 0 : player.getMetadata(meta).get(0).asBoolean();
                     plugin.getConfig().set("Scores.users." + player.getUniqueId() + "." + meta, metadata);
                 }
                 else {
-                    double metadata = player.getMetadata(meta).get(0).asDouble();
+                    double metadata = def ? default_val : player.getMetadata(meta).get(0).asDouble();
                     plugin.getConfig().set("Scores.users." + player.getUniqueId() + "." + meta, metadata);
                 }
                 plugin.saveConfig();
@@ -69,11 +85,6 @@ public class PlayerConfigLoadSave extends BukkitRunnable {
                 player.setMetadata(meta, new FixedMetadataValue(plugin, plugin.getConfig().get("Scores.users." + player.getUniqueId() + "." + meta)));
             }
         }
-    }
-
-    public void loadPlayers () {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            loadPlayer(player);
-        }
+        plugin.saveConfig();
     }
 }

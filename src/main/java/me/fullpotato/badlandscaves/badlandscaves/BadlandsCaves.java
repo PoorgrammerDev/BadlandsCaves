@@ -44,10 +44,16 @@ import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.ReflectionWorld
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BadlandsCaves extends JavaPlugin {
-    //constants
+
+    /**
+     * PLAYER VALUE CONSTANTS
+     * Prefixes:
+     * $ - boolean type
+     * % - default value 100
+     */
     private final String[] player_values = {
             "Deaths",
-            "Thirst",
+            "%Thirst",
             "Toxicity",
             "thirst_sys_var",
             "tox_nat_decr_var",
@@ -77,8 +83,8 @@ public final class BadlandsCaves extends JavaPlugin {
             "descension_detect_cooldown",
             "descension_timer",
             "descension_shrines_capped",
-            "Mana",
-            "max_mana",
+            "%Mana",
+            "%max_mana",
             "mana_needed_timer",
             "mana_regen_delay_timer",
             "mana_bar_active_timer",
@@ -114,6 +120,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "agility_jump_timer",
     };
 
+    //all custom items' names
     private final String[] custom_items = {
             "starter_sapling",
             "starter_bone_meal",

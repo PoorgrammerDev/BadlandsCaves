@@ -36,15 +36,14 @@ public class SpawnBoss extends BukkitRunnable {
         reflection_world.setTime(18000);
 
         final Location player_loc = player.getLocation();
-        player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, 1.2F, 0.5F);
+        player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, 1.2F, 1);
         player.playSound(player_loc, Sound.BLOCK_CONDUIT_ACTIVATE, 1.2F, 0.5F);
         player.playSound(player_loc, Sound.BLOCK_BEACON_ACTIVATE, 1.2F, 0.5F);
-        player.playSound(player_loc, Sound.ENTITY_ENDERMAN_DEATH, 0.2F, 0.1F);
-        player.playSound(player_loc, Sound.ENTITY_ENDERMAN_STARE, 0.1F, 0.1F);
     }
 
     public Zombie spawnBoss (Location spawn_loc) {
         Zombie boss = (Zombie) reflection_world.spawnEntity(spawn_loc, EntityType.ZOMBIE);
+        boss.setBaby(false);
         boss.setSilent(true);
         boss.setCustomName(player.getDisplayName());
         boss.setCustomNameVisible(false);
@@ -56,6 +55,13 @@ public class SpawnBoss extends BukkitRunnable {
         boss.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0, false, false));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 99999, 0, false, false));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 1, false, false));
+
+        boss.getEquipment().setItemInMainHand(null);
+        boss.getEquipment().setItemInOffHand(null);
+        boss.getEquipment().setHelmet(null);
+        boss.getEquipment().setChestplate(null);
+        boss.getEquipment().setLeggings(null);
+        boss.getEquipment().setBoots(null);
 
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR).getValue());
         boss.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue());
@@ -86,8 +92,6 @@ public class SpawnBoss extends BukkitRunnable {
             }
         }
 
-        //TODO remove this
-        player.sendMessage("HIGHEST DAMAGE: " + highest_damage);
         return highest_damage;
     }
 
