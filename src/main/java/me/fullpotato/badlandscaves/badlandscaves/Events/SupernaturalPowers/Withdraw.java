@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -90,7 +91,7 @@ public class Withdraw implements Listener {
 
                                 if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
                                 player.teleport(voidloc);
-                                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
+                                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0));
 
                                 BukkitTask decrement_timer = new BukkitRunnable() {
                                     @Override
@@ -131,7 +132,7 @@ public class Withdraw implements Listener {
                                         else {
                                             player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
                                             player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
-                                            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0), true);
+                                            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0));
                                         }
                                     }
                                 }.runTaskTimer(plugin, 0, 0);

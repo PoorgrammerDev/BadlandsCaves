@@ -30,8 +30,6 @@ public class ZombieBossBehavior extends BukkitRunnable {
         plugin = bcav;
     }
 
-    //TODO basically just test this entire thing
-
     @Override
     public void run () {
         final Random random = new Random();
@@ -153,14 +151,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
                     int pick_event = random.nextInt(100);
                     if (pick_event < 30) {
                         if (zombie.getLocation().distanceSquared(player_loc) < 4) {
-                            player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 2, 0.5F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 0.1F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 0.5F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 1);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 1.5F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 2);
-                            player.damage(zombie_damage * (random.nextInt(3) + 1), zombie);
-                            player.setVelocity(player.getVelocity().multiply(5));
+                            Donut(zombie, player, random);
                         }
                     }
                     else {
@@ -217,7 +208,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         player.spawnParticle(Particle.FLASH, zombie_orig_loc, 1);
         player.spawnParticle(Particle.PORTAL, zombie_orig_loc, 20, 1, 1, 1);
         player.spawnParticle(Particle.SMOKE_NORMAL, player_loc, 20, 1, 1, 1);
-        player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 1, 0.2F);
+        player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 0.5F, 0.2F);
     }
 
     public void timeSkipPlayerAction (final Player player, final Random random) {
@@ -437,19 +428,9 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     public void zombieHeal (final Zombie zombie, final Player player, final Random random) {
         if (zombie.getLocation().distanceSquared(player.getLocation()) > 225) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (zombie.hasLineOfSight(player)) {
-                        this.cancel();
-                    }
-                    else {
-                        if (random.nextBoolean()) {
-                            zombie.setHealth(Math.min(zombie.getHealth() + 1, zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-                        }
-                    }
-                }
-            }.runTaskTimerAsynchronously(plugin, 60, 20);
+            if (!zombie.hasLineOfSight(player) && random.nextBoolean()) {
+                zombie.setHealth(Math.min(zombie.getHealth() + random.nextDouble(), zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+            }
         }
     }
 
@@ -628,21 +609,23 @@ public class ZombieBossBehavior extends BukkitRunnable {
     public Location getFarthestLocation (final Player player, final Zombie zombie, final int range, final boolean reverse) {
         final Location zombie_location = zombie.getLocation();
         final Location player_location = player.getLocation();
+
         final double distance_range = Math.pow(range - 1, 2);
 
         double farthest_distance = reverse ? Integer.MAX_VALUE : 0;
         Location farthest_location = null;
 
-        //finding farthest location from player
-        for (int x = -range; x <= range; x++) {
-            for (int y = -range; y <= range; y++) {
-                for (int z = -range; z <= range; z++) {
-                    Location test_loc = new Location(zombie.getWorld(), zombie_location.getX() + x, zombie_location.getY() + y, zombie_location.getZ() + z);
-                    if (test_loc.distanceSquared(zombie_location) < distance_range) {
-                        if ((test_loc.distanceSquared(player_location) < farthest_distance && reverse) || (test_loc.distanceSquared(player_location) > farthest_distance && !reverse)) {
-                            if (locationViable(test_loc)) {
-                                farthest_distance = test_loc.distanceSquared(player_location);
-                                farthest_location = test_loc.clone();
+        if (zombie_location.getWorld() != null && player_location.getWorld() != null && zombie_location.getWorld().equals(player_location.getWorld())) {
+            for (int x = -range; x <= range; x++) {
+                for (int y = -range; y <= range; y++) {
+                    for (int z = -range; z <= range; z++) {
+                        Location test_loc = new Location(zombie.getWorld(), zombie_location.getX() + x, zombie_location.getY() + y, zombie_location.getZ() + z);
+                        if (test_loc.distanceSquared(zombie_location) < distance_range) {
+                            if ((test_loc.distanceSquared(player_location) < farthest_distance && reverse) || (test_loc.distanceSquared(player_location) > farthest_distance && !reverse)) {
+                                if (locationViable(test_loc)) {
+                                    farthest_distance = test_loc.distanceSquared(player_location);
+                                    farthest_location = test_loc.clone();
+                                }
                             }
                         }
                     }
@@ -690,30 +673,48 @@ public class ZombieBossBehavior extends BukkitRunnable {
     }
 
     public void OraOraOra (final Zombie zombie, final Player player, final Random random) {
-        if (player.getLocation().distanceSquared(zombie.getLocation()) < 4) {
-            final int hits = random.nextInt(10);
-            if (hits > 0) {
-                final int[] hit = {0};
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (player.getLocation().distanceSquared(zombie.getLocation()) < 9) {
-                            if (hit[0] >= hits) {
-                                this.cancel();
+        if (zombie.getWorld().equals(player.getWorld())) {
+            if (player.getLocation().distanceSquared(zombie.getLocation()) < 4) {
+                final double zombie_damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+                final int hits = random.nextInt(20);
+                if (hits > 0) {
+                    final int[] hit = {0};
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (player.getLocation().distanceSquared(zombie.getLocation()) < 9) {
+                                if (hit[0] >= hits) {
+                                    this.cancel();
+                                }
+                                else {
+                                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+                                    player.spawnParticle(Particle.SWEEP_ATTACK, player.getLocation(), 20, 1, 1, 1, 0);
+                                    player.damage((zombie_damage / 2), zombie);
+                                    hit[0]++;
+                                }
                             }
                             else {
-                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
-                                player.spawnParticle(Particle.SWEEP_ATTACK, player.getLocation(), 20, 1, 1, 1, 0);
-                                player.damage((random.nextDouble() / 2) + 0.5, zombie);
-                                hit[0]++;
+                                this.cancel();
                             }
                         }
-                        else {
-                            this.cancel();
-                        }
-                    }
-                }.runTaskTimer(plugin, 0, 5);
+                    }.runTaskTimer(plugin, 0, 5);
+                }
             }
         }
+    }
+
+    public void Donut (final Zombie zombie, final Player player, final Random random) {
+        final double zombie_damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+
+        player.damage(zombie_damage * (random.nextInt(3) + 2), zombie);
+        player.setVelocity(player.getVelocity().multiply(5));
+
+        //effects
+        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 2, 0.5F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 0.1F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 0.5F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 1);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 1.5F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 2);
     }
 }

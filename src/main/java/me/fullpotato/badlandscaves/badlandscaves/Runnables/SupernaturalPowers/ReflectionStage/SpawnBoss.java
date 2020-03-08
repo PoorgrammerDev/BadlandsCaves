@@ -65,7 +65,7 @@ public class SpawnBoss extends BukkitRunnable {
     }
 
     public int getHighestDamage() {
-        int highest_damage = 0;
+        int highest_damage = 1;
         HashMap<Material, Integer> dmg = new HashMap<>();
         dmg.put(Material.WOODEN_SWORD, 4);
         dmg.put(Material.GOLDEN_SWORD, 4);

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.PossessionNMS;
+import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -54,7 +55,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             //make target invis to player
             nms.markTarget(target);
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 5, 0), true);
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INVISIBILITY, 5, 0));
             target.teleport(player.getLocation());
 
             player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_drain_tick));

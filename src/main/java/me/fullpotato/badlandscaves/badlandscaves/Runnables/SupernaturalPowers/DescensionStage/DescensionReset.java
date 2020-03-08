@@ -119,7 +119,7 @@ public class DescensionReset extends BukkitRunnable {
                         zombie.setInvulnerable(true);
                         zombie.setCollidable(false);
                         team.addEntry(zombie.getUniqueId().toString());
-                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false), true);
+                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false));
 
                         counter++;
                     }
