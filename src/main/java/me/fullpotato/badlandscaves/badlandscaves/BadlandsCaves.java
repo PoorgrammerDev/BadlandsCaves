@@ -14,6 +14,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.PlayerUnderSht;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionZombie;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.CauldronMenu;
@@ -32,7 +33,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.De
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaRegen;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ReflectionZombieBoss;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
@@ -212,6 +213,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new UseIncompleteSoulCrystal(this), this);
             this.getServer().getPluginManager().registerEvents(new ReflectionBuild(this), this);
             this.getServer().getPluginManager().registerEvents(new ReflectionZombie(this), this);
+            this.getServer().getPluginManager().registerEvents(new PlayerUnderSht(), this);
         }
 
         //command reg
@@ -258,7 +260,7 @@ public final class BadlandsCaves extends JavaPlugin {
             new DescensionTimeLimit(this).runTaskTimer(this, 0, 20);
             new DetectionDecrease(this).runTaskTimer(this, 0, 20);
             new ExitPortal().runTaskTimer(this, 0, 3);
-            new ReflectionZombieBoss(this).runTaskTimer(this, 0, 0);
+            new ZombieBossBehavior(this).runTaskTimer(this, 0, 0);
 
         }
 

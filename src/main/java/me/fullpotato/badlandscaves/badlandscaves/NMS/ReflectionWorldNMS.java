@@ -32,6 +32,7 @@ public class ReflectionWorldNMS {
 
             clone.setNoGravity(true);
             clone.setFlag(6, true);
+
             //clone.setInvulnerable(true);
 
             PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, clone);

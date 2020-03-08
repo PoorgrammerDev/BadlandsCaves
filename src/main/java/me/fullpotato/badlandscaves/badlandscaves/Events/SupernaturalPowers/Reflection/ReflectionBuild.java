@@ -66,6 +66,43 @@ public class ReflectionBuild implements Listener {
         if (!event.getBlock().getWorld().equals(reflection_world) || !event.getPlayer().getWorld().equals(reflection_world)) return;
         final Player player = event.getPlayer();
         final Location location = event.getBlockPlaced().getLocation();
+
+        ArrayList<Material> blacklisted = new ArrayList<>();
+        blacklisted.add(Material.BEDROCK);
+        blacklisted.add(Material.BARRIER);
+        blacklisted.add(Material.COMMAND_BLOCK);
+        blacklisted.add(Material.STRUCTURE_BLOCK);
+        blacklisted.add(Material.TNT);
+        blacklisted.add(Material.CHEST);
+        blacklisted.add(Material.SHULKER_BOX);
+        blacklisted.add(Material.BLACK_SHULKER_BOX);
+        blacklisted.add(Material.BLUE_SHULKER_BOX);
+        blacklisted.add(Material.BROWN_SHULKER_BOX);
+        blacklisted.add(Material.CYAN_SHULKER_BOX);
+        blacklisted.add(Material.GRAY_SHULKER_BOX);
+        blacklisted.add(Material.GREEN_SHULKER_BOX);
+        blacklisted.add(Material.LIGHT_BLUE_SHULKER_BOX);
+        blacklisted.add(Material.LIGHT_GRAY_SHULKER_BOX);
+        blacklisted.add(Material.LIME_SHULKER_BOX);
+        blacklisted.add(Material.MAGENTA_SHULKER_BOX);
+        blacklisted.add(Material.ORANGE_SHULKER_BOX);
+        blacklisted.add(Material.PINK_SHULKER_BOX);
+        blacklisted.add(Material.PURPLE_SHULKER_BOX);
+        blacklisted.add(Material.RED_SHULKER_BOX);
+        blacklisted.add(Material.WHITE_SHULKER_BOX);
+        blacklisted.add(Material.YELLOW_SHULKER_BOX);
+        blacklisted.add(Material.ENDER_CHEST);
+        blacklisted.add(Material.BARREL);
+        blacklisted.add(Material.FURNACE);
+        blacklisted.add(Material.BLAST_FURNACE);
+        blacklisted.add(Material.DISPENSER);
+        blacklisted.add(Material.DROPPER);
+        blacklisted.add(Material.TRAPPED_CHEST);
+        if (blacklisted.contains(event.getBlock().getType())) {
+            event.setCancelled(true);
+            return;
+        }
+
         undoEdit(location, Material.AIR,location.getBlock().getType(), 10, true);
 
         if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.SpawnBoss;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -62,5 +63,9 @@ public class UseIncompleteSoulCrystal implements Listener {
                 player.setFoodLevel(20);
             }
         }.runTaskLaterAsynchronously(plugin, 1);
+
+
+        //spawning the boss, delay of 10 seconds
+        new SpawnBoss(plugin, player).runTaskLater(plugin, 200);
     }
 }

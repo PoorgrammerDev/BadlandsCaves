@@ -10,10 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Silverfish;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -25,11 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class ReflectionZombieBoss extends BukkitRunnable {
+public class ZombieBossBehavior extends BukkitRunnable {
     private BadlandsCaves plugin;
     private Zombie zombie;
     private World world = Bukkit.getWorld("world_reflection");
-    public ReflectionZombieBoss(BadlandsCaves bcav) {
+    public ZombieBossBehavior(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -57,6 +54,8 @@ public class ReflectionZombieBoss extends BukkitRunnable {
 
         //NOT RELATED TO ABILITY----------------------------------------------------------------------------------------
         double zombie_health = zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        final double zombie_damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+
         //retreats if low health, regardless of ability cooldown
         if (zombie_health < 0.3) {
             if (zombie_health < 0.15) {
@@ -80,6 +79,28 @@ public class ReflectionZombieBoss extends BukkitRunnable {
             }
             else {
                 zombie.setMetadata("retreating_target_timer", new FixedMetadataValue(plugin, retreating_target_timer - 1));
+            }
+        }
+        else {
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 1, false, false));
+        }
+
+        //arrow reflection
+        for (Entity entity : zombie.getNearbyEntities(1.5, 1.5, 1.5)) {
+            boolean activated = false;
+            if (entity instanceof Arrow) {
+                Arrow arrow = (Arrow) entity;
+                activated = !arrow.isInBlock();
+            }
+            else if (entity instanceof Trident) {
+                Trident trident = (Trident) entity;
+                activated = !trident.isInBlock();
+            }
+
+            if (activated) {
+                entity.setVelocity(entity.getVelocity().multiply(-2));
+                player.playSound(zombie.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2, 2);
+                player.spawnParticle(Particle.SWEEP_ATTACK, entity.getLocation(), 1);
             }
         }
 
@@ -117,7 +138,7 @@ public class ReflectionZombieBoss extends BukkitRunnable {
                     //small hit
                     if (random.nextBoolean()) {
                         if (zombie.getLocation().distanceSquared(player_loc) < 4) {
-                            player.damage((random.nextDouble() * 1.5), zombie);
+                            player.damage(zombie_damage / (random.nextDouble() + 0.1), zombie);
                         }
                     }
                 }
@@ -138,7 +159,7 @@ public class ReflectionZombieBoss extends BukkitRunnable {
                             player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 1);
                             player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 1.5F);
                             player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 2);
-                            player.damage((random.nextDouble() * 5) + 5, zombie);
+                            player.damage(zombie_damage * (random.nextInt(3) + 1), zombie);
                             player.setVelocity(player.getVelocity().multiply(5));
                         }
                     }
@@ -186,7 +207,7 @@ public class ReflectionZombieBoss extends BukkitRunnable {
 
         zombie.teleport(zombie_warp);
 
-        int cooldown = running ? random.nextInt(50) + 50 : random.nextInt(100) + 100;
+        int cooldown = running ? random.nextInt(200) : random.nextInt(100) + 100;
 
 
         zombie.setMetadata("teleport_cooldown", new FixedMetadataValue(plugin, cooldown));
@@ -478,22 +499,25 @@ public class ReflectionZombieBoss extends BukkitRunnable {
     }
 
     public Location getLocationBehindPlayer (final Player player) {
+        final Location player_loc = player.getEyeLocation();
+        try {
+            BlockIterator iterator = new BlockIterator(world, player_loc.toVector(), player_loc.getDirection().multiply(-1), 0, 2);
+            Block block = iterator.next();
+            while (iterator.hasNext()) {
+                block = iterator.next();
+                if (!block.isPassable()) {
+                    break;
+                }
+            }
 
-        Location player_loc = player.getEyeLocation();
-        BlockIterator iterator = new BlockIterator(world, player_loc.toVector(), player_loc.getDirection().multiply(-1), 0, 2);
-        Block block = iterator.next();
-        while (iterator.hasNext()) {
-            block = iterator.next();
-            if (!block.isPassable()) {
-                break;
+            if (block.isPassable()) {
+                final Location tele = block.getLocation();
+                if (locationViable(tele)) {
+                    return tele;
+                }
             }
         }
-
-        if (block.isPassable()) {
-            final Location tele = block.getLocation();
-            if (locationViable(tele)) {
-                return tele;
-            }
+        catch (IllegalStateException ignore) {
         }
         return null;
     }

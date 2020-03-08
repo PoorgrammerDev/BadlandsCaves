@@ -1,6 +1,14 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.GameRule;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class ReflectionWorld {
     public void gen_refl_world() {
@@ -34,5 +42,4 @@ public class ReflectionWorld {
         world_reflection.getWorldBorder().setSize(1000);
 
     }
-
 }
