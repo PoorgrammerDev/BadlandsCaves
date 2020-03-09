@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,6 +42,11 @@ public class UseIncompleteSoulCrystal implements Listener {
 
         final World reflection = Bukkit.getWorld("world_reflection");
         if (reflection == null) return;
+
+        PlayerInventory inventory = player.getInventory();
+
+
+
 
         Location worldspawn = reflection.getSpawnLocation();
         worldspawn.setY(255);

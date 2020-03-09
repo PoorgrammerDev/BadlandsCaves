@@ -55,6 +55,14 @@ public class ReflectionWorldNMS {
         }
     }
 
+    public void remove () {
+        if (clone != null) {
+            PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(clone.getId());
+            sendToAll(destroy);
+            clone = null;
+        }
+    }
+
     public void sendToAll (Packet<?>... packets) {
         if (packets.length < 1) return;
 
