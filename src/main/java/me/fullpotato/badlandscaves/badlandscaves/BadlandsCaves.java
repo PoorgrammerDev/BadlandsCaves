@@ -3,17 +3,20 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseTaintPowder;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.GappleEat;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoin;
+import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.EndGame;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.PlayerUnderSht;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionZombie;
@@ -23,19 +26,17 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.NaturalThirstDecr
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.ToxicWaterBottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInWater;
-import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoin;
-import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerLeave;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.DeathEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.ThirstEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.ToxEffectsRunnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilitySpeedRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaRegen;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.DescensionWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.EmptyWorld;
@@ -79,6 +80,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "in_descension",
             "$in_reflection",
             "reflection_zombie",
+            "$refl_respawn_inv",
             "descension_detect",
             "descension_detect_cooldown",
             "descension_timer",
@@ -221,6 +223,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new ReflectionBuild(this), this);
             this.getServer().getPluginManager().registerEvents(new ReflectionZombie(this), this);
             this.getServer().getPluginManager().registerEvents(new PlayerUnderSht(), this);
+            this.getServer().getPluginManager().registerEvents(new EndGame(this), this);
         }
 
         //command reg

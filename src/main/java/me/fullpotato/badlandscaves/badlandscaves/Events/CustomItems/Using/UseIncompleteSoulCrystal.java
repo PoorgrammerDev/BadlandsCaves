@@ -2,17 +2,19 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.SpawnBoss;
+import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -43,10 +45,10 @@ public class UseIncompleteSoulCrystal implements Listener {
         final World reflection = Bukkit.getWorld("world_reflection");
         if (reflection == null) return;
 
-        PlayerInventory inventory = player.getInventory();
-
-
-
+        //save inventory, then disenchant all items
+        InventorySerialize saveInv = new InventorySerialize(plugin);
+        saveInv.saveInventory(player, "reflection_inv");
+        disenchantInventory(player);
 
         Location worldspawn = reflection.getSpawnLocation();
         worldspawn.setY(255);
@@ -73,5 +75,19 @@ public class UseIncompleteSoulCrystal implements Listener {
 
         //spawning the boss, delay of 10 seconds
         new SpawnBoss(plugin, player).runTaskLater(plugin, 200);
+    }
+
+    public void disenchantInventory (final Player player) {
+        for (ItemStack item : player.getInventory()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
+                ItemMeta item_meta = item.getItemMeta();
+                for (Enchantment enchantment : Enchantment.values()) {
+                    if (item_meta.hasEnchant(enchantment)) {
+                        item_meta.removeEnchant(enchantment);
+                    }
+                }
+                item.setItemMeta(item_meta);
+            }
+        }
     }
 }

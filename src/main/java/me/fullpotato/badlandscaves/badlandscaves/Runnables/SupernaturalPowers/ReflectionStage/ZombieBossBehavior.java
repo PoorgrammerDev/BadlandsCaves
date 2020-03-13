@@ -4,34 +4,19 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.ReflectionWorldNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Silverfish;
-import org.bukkit.entity.Trident;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +32,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     @Override
     public void run () {
+        healthBarVisibility();
         final Random random = new Random();
         //get zombie
         ArrayList<Zombie> zombie_list = (ArrayList<Zombie>) (world.getEntitiesByClass(Zombie.class));
@@ -664,21 +650,26 @@ public class ZombieBossBehavior extends BukkitRunnable {
         health_bar.setVisible(true);
         final double zombie_health = Math.max(Math.min(zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 1), 0);
         health_bar.setProgress(zombie_health);
+    }
+
+    public void healthBarVisibility () {
+        final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
+        final KeyedBossBar health_bar = Bukkit.getBossBar(key);
+        if (health_bar == null) return;
 
         for (Player online : Bukkit.getOnlinePlayers()) {
             if (online.getWorld().equals(world)) {
-                    if (online.isDead()) {
-                        health_bar.removePlayer(online);
-                    }
-                    else if (!health_bar.getPlayers().contains(online)) {
-                        health_bar.addPlayer(online);
-                    }
+                if (online.isDead()) {
+                    health_bar.removePlayer(online);
+                }
+                else if (!health_bar.getPlayers().contains(online)) {
+                    health_bar.addPlayer(online);
+                }
             }
             else if (health_bar.getPlayers().contains(online)) {
                 health_bar.removePlayer(online);
             }
         }
-
     }
 
     public Silverfish summonMarker (Location location, int delay) {
