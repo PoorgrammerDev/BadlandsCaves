@@ -27,6 +27,7 @@ public class InventorySerialize {
             }
         }
         plugin.saveConfig();
+        plugin.reloadConfig();
     }
 
     /** Takes the saved inventory in the player's config and gives it to the player.
@@ -37,33 +38,26 @@ public class InventorySerialize {
      */
     // FIXME: 3/13/2020 
     public void loadInventory (final Player player, final String inventoryName, final boolean clearCurrent, final boolean clearConfig) {
-        player.sendMessage("c");
         final String base_key = "Scores.users." + player.getUniqueId() + ".saved_inventories." + inventoryName;
         final ConfigurationSection inv_section = plugin.getConfig().getConfigurationSection(base_key);
         if (inv_section != null) {
-            player.sendMessage("d");
             if (clearCurrent) {
-                player.sendMessage("e");
                 player.getInventory().clear();
             }
             for (int a = 0; a <= 40; a++) {
                 final ConfigurationSection item_section = plugin.getConfig().getConfigurationSection(base_key + "." + a);
                 if (item_section != null) {
                     final ItemStack item = ItemStack.deserialize(item_section.getValues(true));
-                    player.sendMessage("Item " + a + ": " + item);
                     if (clearCurrent) {
-                        player.sendMessage("replace ja");
                         player.getInventory().setItem(a, item);
                     }
                     else {
-                        player.sendMessage("just adding ya");
                         player.getInventory().addItem(item);
                     }
                 }
             }
 
             if (clearConfig) {
-                player.sendMessage("clear config ja");
                 plugin.getConfig().set(base_key, null);
                 plugin.saveConfig();
             }

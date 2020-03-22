@@ -704,7 +704,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (player.getLocation().distanceSquared(zombie.getLocation()) < 9) {
+                            if (player.getWorld().equals(zombie.getWorld()) && player.getLocation().distanceSquared(zombie.getLocation()) < 9) {
                                 if (hit[0] >= hits) {
                                     this.cancel();
                                 }

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.ReflectionWorldNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
@@ -31,7 +32,6 @@ public class EndGame implements Listener {
         final Player player = event.getEntity();
         if (player.getWorld().equals(world)) {
             event.setDeathMessage(null);
-            player.sendMessage("a1");
             player.setMetadata("refl_respawn_inv", new FixedMetadataValue(plugin, true));
             resetWorld(player);
         }
@@ -40,9 +40,7 @@ public class EndGame implements Listener {
     @EventHandler
     public void playerRespawnAfterLosing (PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
-        player.sendMessage("respawn");
         if (player.getMetadata("refl_respawn_inv").get(0).asBoolean()) {
-            player.sendMessage("has inventory thingus lel");
             restoreInventory(player);
             player.setMetadata("refl_respawn_inv", new FixedMetadataValue(plugin,  false));
         }
@@ -63,8 +61,7 @@ public class EndGame implements Listener {
             if (player != null) {
                 DeathHandler resetter = new DeathHandler(plugin);
                 resetWorld(player);
-                resetter.resetPlayer(player, false, true);
-                player.sendMessage("a2");
+                resetter.resetPlayer(player, false, true, false);
                 restoreInventory(player);
                 completeSoul(player);
             }
@@ -91,21 +88,21 @@ public class EndGame implements Listener {
     }
 
     public void completeSoul (final Player player) {
+        UseIncompleteSoulCrystal usecrystal = new UseIncompleteSoulCrystal(plugin);
         final ItemStack incomplete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
         final ItemStack complete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
         for (ItemStack item : player.getInventory()) {
-            if (item.isSimilar(incomplete)) {
-                item.setAmount(0);
-                player.getInventory().addItem(complete);
-                return;
+            if (item == null) continue;
+            if (usecrystal.checkMatchIgnoreUses(item, incomplete, 3)) {
+                item.setAmount(item.getAmount() - 1);
+                break;
             }
         }
+        player.getInventory().addItem(complete);
     }
 
     public void restoreInventory (final Player player) {
-        player.sendMessage("b");
         final InventorySerialize inv = new InventorySerialize(plugin);
         inv.loadInventory(player, "reflection_inv", true, true);
-        player.sendMessage("finale");
     }
 }

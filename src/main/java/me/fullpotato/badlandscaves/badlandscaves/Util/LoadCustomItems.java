@@ -28,7 +28,7 @@ public class LoadCustomItems {
         starter_sapling.setItemMeta(starter_sapling_meta);
         plugin.getConfig().set("items.starter_sapling", starter_sapling.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack starter_bone_meal = new ItemStack(Material.BONE_MEAL, 3);
         ItemMeta starter_bone_meal_meta = starter_bone_meal.getItemMeta();
@@ -38,7 +38,7 @@ public class LoadCustomItems {
         starter_bone_meal.setItemMeta(starter_bone_meal_meta);
         plugin.getConfig().set("items.starter_bone_meal", starter_bone_meal.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack toxic_water = new ItemStack(Material.POTION);
         PotionMeta toxic_water_meta = (PotionMeta) toxic_water.getItemMeta();
@@ -55,7 +55,7 @@ public class LoadCustomItems {
         toxic_water.setItemMeta(toxic_water_meta);
         plugin.getConfig().set("items.toxic_water", toxic_water.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack purified_water = new ItemStack(Material.POTION);
         PotionMeta purified_water_meta = (PotionMeta) purified_water.getItemMeta();
@@ -72,7 +72,7 @@ public class LoadCustomItems {
         purified_water.setItemMeta(purified_water_meta);
         plugin.getConfig().set("items.purified_water", purified_water.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack antidote = new ItemStack(Material.POTION);
         PotionMeta antidote_meta = (PotionMeta) antidote.getItemMeta();
@@ -91,7 +91,7 @@ public class LoadCustomItems {
         antidote.setItemMeta(antidote_meta);
         plugin.getConfig().set("items.antidote", antidote.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack mana_potion = new ItemStack(Material.POTION);
         PotionMeta mana_potion_meta = (PotionMeta) mana_potion.getItemMeta();
@@ -110,7 +110,7 @@ public class LoadCustomItems {
         mana_potion.setItemMeta(mana_potion_meta);
         plugin.getConfig().set("items.mana_potion", mana_potion.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack tiny_blaze_powder = new ItemStack(Material.STRUCTURE_BLOCK, 9);
         ItemMeta tiny_blaze_powder_meta = tiny_blaze_powder.getItemMeta();
@@ -119,7 +119,7 @@ public class LoadCustomItems {
         tiny_blaze_powder.setItemMeta(tiny_blaze_powder_meta);
         plugin.getConfig().set("items.tiny_blaze_powder", tiny_blaze_powder.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack purge_essence = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta purge_essence_meta = purge_essence.getItemMeta();
@@ -128,7 +128,7 @@ public class LoadCustomItems {
         purge_essence.setItemMeta(purge_essence_meta);
         plugin.getConfig().set("items.purge_essence", purge_essence.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack tainted_powder = new ItemStack(Material.COMMAND_BLOCK, 2);
         ItemMeta tainted_powder_meta = tainted_powder.getItemMeta();
@@ -142,7 +142,7 @@ public class LoadCustomItems {
         tainted_powder.setItemMeta(tainted_powder_meta);
         plugin.getConfig().set("items.tainted_powder", tainted_powder.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack fishing_crate = new ItemStack(Material.BARREL);
         ItemMeta fishing_crate_meta = fishing_crate.getItemMeta();
@@ -157,7 +157,7 @@ public class LoadCustomItems {
         fishing_crate.setItemMeta(fishing_crate_meta);
         plugin.getConfig().set("items.fishing_crate", fishing_crate.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack displace = new ItemStack(Material.KNOWLEDGE_BOOK);
         ItemMeta displace_meta = displace.getItemMeta();
@@ -166,7 +166,7 @@ public class LoadCustomItems {
         displace.setItemMeta(displace_meta);
         plugin.getConfig().set("items.displace", displace.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack withdraw = new ItemStack(Material.KNOWLEDGE_BOOK);
         ItemMeta withdraw_meta = withdraw.getItemMeta();
@@ -175,7 +175,7 @@ public class LoadCustomItems {
         withdraw.setItemMeta(withdraw_meta);
         plugin.getConfig().set("items.withdraw", withdraw.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack hell_essence = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta hell_essence_meta = hell_essence.getItemMeta();
@@ -184,7 +184,7 @@ public class LoadCustomItems {
         hell_essence.setItemMeta(hell_essence_meta);
         plugin.getConfig().set("items.hell_essence", hell_essence.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack enhanced_eyes = new ItemStack(Material.KNOWLEDGE_BOOK);
         ItemMeta enhanced_eyes_meta = enhanced_eyes.getItemMeta();
@@ -193,7 +193,7 @@ public class LoadCustomItems {
         enhanced_eyes.setItemMeta(enhanced_eyes_meta);
         plugin.getConfig().set("items.enhanced_eyes", enhanced_eyes.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack possess = new ItemStack(Material.KNOWLEDGE_BOOK);
         ItemMeta possess_meta = possess.getItemMeta();
@@ -202,7 +202,7 @@ public class LoadCustomItems {
         possess.setItemMeta(possess_meta);
         plugin.getConfig().set("items.possess", possess.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack magic_essence = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta magic_essence_meta = magic_essence.getItemMeta();
@@ -211,7 +211,7 @@ public class LoadCustomItems {
         magic_essence.setItemMeta(magic_essence_meta);
         plugin.getConfig().set("items.magic_essence", magic_essence.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack zombie_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta zombie_soul_meta = zombie_soul.getItemMeta();
@@ -220,7 +220,7 @@ public class LoadCustomItems {
         zombie_soul.setItemMeta(zombie_soul_meta);
         plugin.getConfig().set("items.zombie_soul", zombie_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack creeper_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta creeper_soul_meta = creeper_soul.getItemMeta();
@@ -229,7 +229,7 @@ public class LoadCustomItems {
         creeper_soul.setItemMeta(creeper_soul_meta);
         plugin.getConfig().set("items.creeper_soul", creeper_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack skeleton_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta skeleton_soul_meta = skeleton_soul.getItemMeta();
@@ -238,7 +238,7 @@ public class LoadCustomItems {
         skeleton_soul.setItemMeta(skeleton_soul_meta);
         plugin.getConfig().set("items.skeleton_soul", skeleton_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack spider_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta spider_soul_meta = spider_soul.getItemMeta();
@@ -256,7 +256,7 @@ public class LoadCustomItems {
         pigzombie_soul.setItemMeta(pigzombie_soul_meta);
         plugin.getConfig().set("items.pigzombie_soul", pigzombie_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack ghast_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta ghast_soul_meta = ghast_soul.getItemMeta();
@@ -265,7 +265,7 @@ public class LoadCustomItems {
         ghast_soul.setItemMeta(ghast_soul_meta);
         plugin.getConfig().set("items.ghast_soul", ghast_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack silverfish_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta silverfish_soul_meta = silverfish_soul.getItemMeta();
@@ -274,7 +274,7 @@ public class LoadCustomItems {
         silverfish_soul.setItemMeta(silverfish_soul_meta);
         plugin.getConfig().set("items.silverfish_soul", silverfish_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack witch_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta witch_soul_meta = witch_soul.getItemMeta();
@@ -283,7 +283,7 @@ public class LoadCustomItems {
         witch_soul.setItemMeta(witch_soul_meta);
         plugin.getConfig().set("items.witch_soul", witch_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack phantom_soul = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta phantom_soul_meta = phantom_soul.getItemMeta();
@@ -292,7 +292,7 @@ public class LoadCustomItems {
         phantom_soul.setItemMeta(phantom_soul_meta);
         plugin.getConfig().set("items.phantom_soul", phantom_soul.serialize());
 
-    //---------------------------
+        //---------------------------
 
         ItemStack merged_souls = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta merged_souls_meta = merged_souls.getItemMeta();
@@ -305,42 +305,43 @@ public class LoadCustomItems {
         merged_souls.setItemMeta(merged_souls_meta);
         plugin.getConfig().set("items.merged_souls", merged_souls.serialize());
 
-    //---------------------------
+        //---------------------------
 
-        ItemStack soul_crystal_incomplete = new ItemStack(Material.COMMAND_BLOCK);
+        ItemStack soul_crystal_incomplete = new ItemStack(Material.KNOWLEDGE_BOOK);
         ItemMeta soul_crystal_incomplete_meta = soul_crystal_incomplete.getItemMeta();
         ArrayList<String> soul_crystal_incomplete_lore = new ArrayList<>();
 
         soul_crystal_incomplete_meta.setDisplayName("§3§k%§r§5§lIncomplete Soul Crystal§r§3§k%");
 
-        soul_crystal_incomplete_lore.add("§7Requires one more soul: a human soul.");
+        soul_crystal_incomplete_lore.add("§7Requires one more soul.");
+        soul_crystal_incomplete_lore.add("§9§lRight Click §r§7to collect your own soul. Be prepared to fight.");
         soul_crystal_incomplete_lore.add("");
-        soul_crystal_incomplete_lore.add("§9§lRight Click §r§7to collect your own soul.");
-        soul_crystal_incomplete_lore.add("§4Warning: §cUsing this item will kill you instantly.");
+        soul_crystal_incomplete_lore.add("§7Uses Left: 9");
         soul_crystal_incomplete_meta.setLore(soul_crystal_incomplete_lore);
 
         soul_crystal_incomplete_meta.setCustomModelData(119);
         soul_crystal_incomplete.setItemMeta(soul_crystal_incomplete_meta);
         plugin.getConfig().set("items.soul_crystal_incomplete", soul_crystal_incomplete.serialize());
-//---------------------------
+        //---------------------------
 
-        ItemStack soul_crystal = new ItemStack(Material.COMMAND_BLOCK);
+        ItemStack soul_crystal = new ItemStack(Material.KNOWLEDGE_BOOK);
         ItemMeta soul_crystal_meta = soul_crystal.getItemMeta();
         ArrayList<String> soul_crystal_lore = new ArrayList<>();
 
         soul_crystal_meta.setDisplayName("§b§k%§r§d§lSoul Crystal§r§b§k%");
 
         soul_crystal_lore.add("§7Can be used as a sacrifice to §kenter Descension§r§7.");
-        soul_crystal_lore.add("");
         soul_crystal_lore.add("§9§lRight Click §r§7to use.");
+        soul_crystal_lore.add("");
+        soul_crystal_lore.add("§7Uses Left: 10");
         soul_crystal_meta.setLore(soul_crystal_lore);
 
         soul_crystal_meta.setCustomModelData(120);
         soul_crystal.setItemMeta(soul_crystal_meta);
         plugin.getConfig().set("items.soul_crystal", soul_crystal.serialize());
 
-
-
+        //---------------------------
         plugin.saveConfig();
+        plugin.reloadConfig();
     }
 }

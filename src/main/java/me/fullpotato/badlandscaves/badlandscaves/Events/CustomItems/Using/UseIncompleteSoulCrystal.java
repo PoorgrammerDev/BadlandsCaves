@@ -19,8 +19,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class UseIncompleteSoulCrystal implements Listener {
+
+public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listener {
     private BadlandsCaves plugin;
     public UseIncompleteSoulCrystal (BadlandsCaves bcav) {
         plugin = bcav;
@@ -30,11 +33,11 @@ public class UseIncompleteSoulCrystal implements Listener {
     public void use_crystal (PlayerInteractEvent event) {
         final Action action = event.getAction();
         if (!action.equals(Action.RIGHT_CLICK_BLOCK) && !action.equals(Action.RIGHT_CLICK_AIR)) return;
-        final ItemStack item = event.getItem();
-        if (item == null) return;
+        if (event.getItem() == null) return;
 
+        final ItemStack current = event.getItem();
         final ItemStack soul_crystal_incomplete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
-        if (!item.isSimilar(soul_crystal_incomplete)) return;
+        if (!checkMatchIgnoreUses(current, soul_crystal_incomplete, 3)) return;
 
         final Player player = event.getPlayer();
         event.setCancelled(true);
@@ -44,6 +47,13 @@ public class UseIncompleteSoulCrystal implements Listener {
 
         final World reflection = Bukkit.getWorld("world_reflection");
         if (reflection == null) return;
+
+        //removes a use
+        depleteUse(current, 3);
+
+        //adds a death
+        player.setMetadata("Deaths", new FixedMetadataValue(plugin, player.getMetadata("Deaths").get(0).asInt() + 1));
+
 
         //save inventory, then disenchant all items
         InventorySerialize saveInv = new InventorySerialize(plugin);
@@ -78,7 +88,11 @@ public class UseIncompleteSoulCrystal implements Listener {
     }
 
     public void disenchantInventory (final Player player) {
-        for (ItemStack item : player.getInventory()) {
+        disenchantItems(player.getInventory().getContents());
+    }
+
+    public void disenchantItems (ItemStack[] items) {
+        for (ItemStack item : items) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
                 ItemMeta item_meta = item.getItemMeta();
                 for (Enchantment enchantment : Enchantment.values()) {

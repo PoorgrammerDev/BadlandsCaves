@@ -11,45 +11,28 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class StageEnter extends BukkitRunnable {
     private BadlandsCaves plugin;
-    public StageEnter(BadlandsCaves bcav) {
-        plugin = bcav;
+    private Player player;
+
+    public StageEnter(BadlandsCaves plugin, Player player) {
+        this.plugin = plugin;
+        this.player = player;
     }
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
-
-            int deaths = player.getMetadata("Deaths").get(0).asInt();
-            if (deaths >= 50) {
-                int hasPowers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-                int in_descension = player.getMetadata("in_descension").get(0).asInt();
-                if (in_descension != 3 && hasPowers < 0.5) {
-                    if (in_descension == 0) {
-                        player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
-                    }
-                    World descension_world = Bukkit.getWorld("world_descension");
-                    if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
-                        if (!player.getWorld().equals(descension_world)) {
-                            Location descension_spawn = new Location(descension_world, 0, 197, 0);
-                            try {
-                                if (descension_spawn != null && descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
-                            }
-                            catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+        final World descension_world = Bukkit.getWorld("world_descension");
+        player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
+        if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
+            if (!player.getWorld().equals(descension_world)) {
+                Location descension_spawn = new Location(descension_world, 0, 197, 0);
+                try {
+                    if (descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
                 }
-
-                if (in_descension == 1 || in_descension == 2) {
-                    if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
+                catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
-                else {
-                    if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-                }
-
             }
         }
+        if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
     }
 }

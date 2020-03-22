@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseCompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseTaintPowder;
@@ -16,10 +17,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoin;
 import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.EndGame;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.PlayerUnderSht;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
-import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionZombie;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.CauldronMenu;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.Drinking;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.NaturalThirstDecrease;
@@ -37,6 +35,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.Ma
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaRegen;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.DescensionWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.EmptyWorld;
@@ -162,8 +161,8 @@ public final class BadlandsCaves extends JavaPlugin {
         PlayerConfigLoadSave loader = new PlayerConfigLoadSave(this, player_values);
         loader.loadPlayers();
 
-        //adding new items
-        //LoadCustomItems.saveCustomItemsToConfig(this);
+        //adding custom items
+        LoadCustomItems.saveCustomItemsToConfig(this);
 
         //worlds
         {
@@ -224,6 +223,8 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new ReflectionZombie(this), this);
             this.getServer().getPluginManager().registerEvents(new PlayerUnderSht(), this);
             this.getServer().getPluginManager().registerEvents(new EndGame(this), this);
+            this.getServer().getPluginManager().registerEvents(new LimitActions(this), this);
+            this.getServer().getPluginManager().registerEvents(new UseCompleteSoulCrystal(this), this);
         }
 
         //command reg
@@ -262,7 +263,6 @@ public final class BadlandsCaves extends JavaPlugin {
             new ManaBarRunnable(this).runTaskTimer(this, 0, 5);
             new ManaRegen(this).runTaskTimer(this, 0, 10);
             new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
-            new StageEnter(this).runTaskTimer(this, 0, 20);
             new DescensionReset(this).runTaskTimer(this, 0, 60);
             new LostSoulParticle().runTaskTimer(this, 0, 3);
             new DetectedBar(this).runTaskTimer(this, 0, 3);
@@ -271,6 +271,8 @@ public final class BadlandsCaves extends JavaPlugin {
             new DetectionDecrease(this).runTaskTimer(this, 0, 20);
             new ExitPortal().runTaskTimer(this, 0, 3);
             new ZombieBossBehavior(this).runTaskTimer(this, 0, 0);
+            new LimitActions(this).runTaskTimer(this, 0, 20);
+            new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
 
         }
 

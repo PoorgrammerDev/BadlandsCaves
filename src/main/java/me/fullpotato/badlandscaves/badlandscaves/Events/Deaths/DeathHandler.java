@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Deaths;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -14,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.Vector;
 
 public class DeathHandler implements Listener {
 
@@ -41,7 +44,13 @@ public class DeathHandler implements Listener {
 
         //silent death in descension
         int in_descension = player.getMetadata("in_descension").get(0).asInt();
-        if (in_descension == 2) event.setDeathMessage(null);
+        if (in_descension == 2) {
+            event.setDeathMessage(null);
+            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+            InventorySerialize invser = new InventorySerialize(plugin);
+            invser.loadInventory(player, "descension_inv", true, true);
+            return;
+        }
 
         resetPlayer(player);
 
@@ -64,10 +73,10 @@ public class DeathHandler implements Listener {
     }
 
     public void resetPlayer (Player player) {
-        resetPlayer(player, false, false);
+        resetPlayer(player, false, false, false);
     }
 
-    public void resetPlayer (Player player, boolean simulateDeath, boolean sendToSpawn) {
+    public void resetPlayer (Player player, boolean simulateDeath, boolean sendToSpawn, boolean addDeath) {
         int death_count = player.getMetadata("Deaths").get(0).asInt();
 
         //resetting thirst/tox values on death
@@ -87,18 +96,18 @@ public class DeathHandler implements Listener {
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
         }
 
-        int in_descension = player.getMetadata("in_descension").get(0).asInt();
-        if (in_descension == 1 || in_descension == 2) {
+        final int in_descension = player.getMetadata("in_descension").get(0).asInt();
+        final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+        if (in_descension >= 1 && in_descension <= 3) {
             if (in_descension == 2) {
                 int towers_capped = player.hasMetadata("descension_shrines_capped") ? player.getMetadata("descension_shrines_capped").get(0).asInt() : 0;
                 int supernatural = towers_capped == 4 ? 1 : 0;
                 int displace = towers_capped == 4 ? 1 : 0;
-                int desc = towers_capped == 4 ? 0 : 1;
 
                 //resetting values
                 player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, supernatural));
                 player.setMetadata("displace_level", new FixedMetadataValue(plugin, displace));
-                player.setMetadata("in_descension", new FixedMetadataValue(plugin, desc));
+
                 player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
                 player.setMetadata("agility_level", new FixedMetadataValue(plugin, 0));
                 player.setMetadata("possess_level", new FixedMetadataValue(plugin, 0));
@@ -106,20 +115,12 @@ public class DeathHandler implements Listener {
                 player.setMetadata("max_mana", new FixedMetadataValue(plugin, 100));
 
             }
-        }
-        else if (in_descension == 3) {
+
             player.setMetadata("in_descension", new FixedMetadataValue(plugin, 0));
-            player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
         }
-        else {
-            final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
-            if (in_reflection) {
-                player.setMetadata("in_reflection", new FixedMetadataValue(plugin, false));
-                player.setMetadata("reflection_zombie", new FixedMetadataValue(plugin, false));
-            }
-            else {
-                player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
-            }
+        else if (in_reflection) {
+            player.setMetadata("in_reflection", new FixedMetadataValue(plugin, false));
+            player.setMetadata("reflection_zombie", new FixedMetadataValue(plugin, false));
         }
 
         //simulate death
@@ -131,6 +132,12 @@ public class DeathHandler implements Listener {
 
             for (PotionEffect effect : player.getActivePotionEffects()) {
                 player.removePotionEffect(effect.getType());
+            }
+        }
+
+        if (addDeath) {
+            if (in_descension != 1 && in_descension != 2 && !in_reflection) {
+                player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
             }
         }
 

@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseCompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
+import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -11,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
@@ -32,12 +35,14 @@ public class DescensionPlayerMove implements Listener {
 
         //leaving descension stage (quitting)
         if (player_location.getY() < 0) {
-            player.setHealth(0);
+            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+            player.setFallDistance(0);
+            resetPlayer(player);
             player.setMetadata("in_descension", new FixedMetadataValue(plugin, 3));
             return;
         }
 
-        if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
+        if (!player.getGameMode().equals(GameMode.ADVENTURE) && !player.getGameMode().equals(GameMode.SURVIVAL)) return;
 
         int in_descension = player.getMetadata("in_descension").get(0).asInt();
         if (in_descension != 2) return;
@@ -48,10 +53,10 @@ public class DescensionPlayerMove implements Listener {
             int towers_capped = player.getMetadata("descension_shrines_capped").get(0).asInt();
             if (towers_capped == 4) {
                 player.sendMessage(ChatColor.GRAY + "The strange sensation follows you back to reality.");
-
-                DeathHandler reset = new DeathHandler(plugin);
-                reset.resetPlayer(player, true, true);
-
+                if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+                player.setFallDistance(0);
+                resetPlayer(player, true);
+                return;
             }
         }
 
@@ -131,16 +136,37 @@ public class DescensionPlayerMove implements Listener {
 
     public void playerDetected (Player player) {
         Location player_location = player.getLocation();
-
         ArrayList<EnderCrystal> crystals = (ArrayList<EnderCrystal>) world.getEntitiesByClass(EnderCrystal.class);
         player_location.subtract(0, 0.5, 0);
         for (EnderCrystal crystal : crystals) {
-                crystal.setBeamTarget(player_location);
-                double health = player.getHealth();
-                if (!player.isDead()) {
-                    health = health > 1 ? health / 2 : 0;
-                    player.setHealth(health);
+            crystal.setBeamTarget(player_location);
+        }
+        resetPlayer(player);
+    }
+
+    public void resetPlayer (Player player) {
+        resetPlayer(player, false);
+    }
+
+    public void resetPlayer (Player player, boolean win) {
+        DeathHandler reset = new DeathHandler(plugin);
+        reset.resetPlayer(player, true, true, false);
+
+        InventorySerialize invser = new InventorySerialize(plugin);
+        invser.loadInventory(player, "descension_inv", true, true);
+
+        if (win) {
+            // FIXME: 3/21/2020 not clearing the soul crystal
+            final UseCompleteSoulCrystal tester = new UseCompleteSoulCrystal(plugin);
+            final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
+            player.sendMessage("SOUL CRYSTAL: " + soul_crystal);
+            for (ItemStack item : player.getInventory()) {
+                player.sendMessage(item.toString());
+                if (tester.checkMatchIgnoreUses(item, soul_crystal, 3)) {
+                    item.setAmount(0);
+                    return;
                 }
+            }
         }
     }
 }
