@@ -4,8 +4,6 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -60,11 +58,11 @@ public class DeathEffectsRunnable extends BukkitRunnable {
 
                 //80+ DEATHS----------------------------------------------
                 else if (deaths >= 80) {
-                    poison_lvl = supernatural ? 5 : 10;
-                    hunger_lvl = supernatural ? 5 : 10;
-                    slow_lvl = supernatural ? 3 : 10;
-                    slowmine_lvl = supernatural ? 5 : 10;
-                    weakness = supernatural ? 5 : 10;
+                    poison_lvl = supernatural ? 8 : 10;
+                    hunger_lvl = supernatural ? 8 : 10;
+                    slow_lvl = supernatural ? 8 : 10;
+                    slowmine_lvl = supernatural ? 8 : 10;
+                    weakness = supernatural ? 8 : 10;
                     unluck = supernatural ? 50 : 10;
                     blindness = true;
 
@@ -74,108 +72,107 @@ public class DeathEffectsRunnable extends BukkitRunnable {
                 //60+ DEATHS----------------------------------------------
                 else if (deaths >= 60) {
                     poison_lvl = supernatural ? 0 : 5;
-                    hunger_lvl = supernatural ? 3 : 6;
-                    slow_lvl = supernatural ? 3 : 6;
-                    slowmine_lvl = supernatural ? 3 : 5;
-                    weakness = supernatural ? 3 : 5;
-                    unluck = supernatural ? 20 : 6;
+                    hunger_lvl = supernatural ? 5 : 6;
+                    slow_lvl = supernatural ? 5 : 6;
+                    slowmine_lvl = supernatural ? 4 : 5;
+                    weakness = supernatural ? 4 : 5;
+                    unluck = supernatural ? 25 : 6;
                     blindness = true;
 
-                    health = supernatural ? 6.0 : 1.0;
-                }
-
-                //55+ DEATHS (AFFECTS SUPERNATURAL USERS ONLY)------------
-                else if (supernatural && deaths >= 55) {
-                    hunger_lvl = 1;
-                    slow_lvl = 2;
-                    slowmine_lvl = 2;
-                    weakness = 2;
-                    unluck = 10;
-
-                    health = 10.0;
-
-                }
-
-                //51+ DEATHS (AFFECTS SUPERNATURAL USERS ONLY)------------
-                else if (supernatural && deaths >= 51) {
-                    slow_lvl = 2;
-                    slowmine_lvl = 1;
-                    weakness = 1;
-                    unluck = 10;
-
-                    health = 10.0;
-
+                    health = supernatural ? 4.0 : 1.0;
                 }
 
                 //50+ DEATHS----------------------------------------------
                 else if (deaths >= 50) {
                     poison_lvl = supernatural ? 0 : 2;
-                    hunger_lvl = supernatural ? 0 : 4;
-                    slow_lvl = supernatural ? 0 : 4;
-                    slowmine_lvl = supernatural ? 0 : 3;
-                    weakness = supernatural ? 0 : 3;
+                    hunger_lvl = supernatural ? 2 : 4;
+                    slow_lvl = supernatural ? 3 : 4;
+                    slowmine_lvl = supernatural ? 2 : 3;
+                    weakness = supernatural ? 2 : 3;
                     unluck = supernatural ? 10 : 4;
-                    blindness = !supernatural;
+                    blindness = true;
 
-                    health = supernatural ? 20.0 : 6.0;
-
+                    health = supernatural ? 10.0 : 6.0;
                 }
 
                 //30+ DEATHS----------------------------------------------
                 else if (deaths >= 30) {
-                    hunger_lvl = 2;
-                    slow_lvl = 3;
-                    slowmine_lvl = 2;
-                    weakness = 2;
-                    unluck = 3;
-                    blindness = true;
+                    hunger_lvl = supernatural ? 1 : 2;
+                    slow_lvl = supernatural ? 2 : 3;
+                    slowmine_lvl = supernatural ? 1 : 2;
+                    weakness = supernatural ? 1 : 2;
+                    unluck = supernatural ? 10 : 3;
+                    blindness = !supernatural;
 
-                    health = 10.0;
+                    health = supernatural ? 13.0 : 10.0;
                 }
 
                 //20+ DEATHS----------------------------------------------
                 else if (deaths >= 20) {
-                    slow_lvl = 2;
-                    slowmine_lvl = 1;
-                    weakness = 1;
-                    unluck = 2;
+                    slow_lvl = supernatural ? 1 : 2;
+                    slowmine_lvl = supernatural ? 0 : 1;
+                    weakness = supernatural ? 1 : 1;
+                    unluck = supernatural ? 10 : 2;
 
                     health = 16.0;
                 }
 
                 //10+ DEATHS----------------------------------------------
                 else if (deaths >= 10) {
-                    slow_lvl = 2;
-                    unluck = 2;
-                    weakness = 1;
+                    slow_lvl = supernatural ? 1 : 2;
+                    unluck = supernatural ? 10 : 2;
+                    weakness = supernatural ? 0 : 1;
                 }
 
                 //6+ DEATHS-----------------------------------------------
                 else if (deaths >= 6) {
-                    slow_lvl = 1;
-                    unluck = 1;
+                    if (supernatural) {
+                        unluck = 10;
+                    }
+                    else {
+                        slow_lvl = 1;
+                        unluck = 1;
+                    }
                 }
 
                 //5+ DEATHS-----------------------------------------------
                 else if (deaths == 5) {
+                    if (supernatural) {
+                        unluck = 10;
+                        speed_lvl = 1;
+                    }
                 }
 
                 //1+ DEATHS-----------------------------------------------
                 else if (deaths >= 1) {
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false));
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SPEED, 90, 0, true, false));
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false));
+                    if (supernatural) {
+                        unluck = 10;
+                        speed_lvl = 1;
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false));
+                    }
+                    else {
+                        speed_lvl = 1;
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false));
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false));
+                    }
                 }
 
                 //NO DEATHS-----------------------------------------------
                 else if (deaths == 0) {
-                    speed_lvl = 2;
-
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false));
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));
-                    AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false));
+                    if (supernatural) {
+                        speed_lvl = 1;
+                        unluck = 10;
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 0, true, false));
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
+                    }
+                    else {
+                        speed_lvl = 2;
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, 1, true, false));
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));
+                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false));
+                    }
 
                     health = 40.0;
                 }

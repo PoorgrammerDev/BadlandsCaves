@@ -37,7 +37,6 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
         World world = player.getWorld();
         RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);
 
-
         if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof LivingEntity && !(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither)) {
             LivingEntity entity = (LivingEntity) result.getHitEntity();
             boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();

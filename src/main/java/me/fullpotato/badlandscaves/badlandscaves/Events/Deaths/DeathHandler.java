@@ -16,7 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.util.Vector;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class DeathHandler implements Listener {
 
@@ -52,7 +52,7 @@ public class DeathHandler implements Listener {
             return;
         }
 
-        resetPlayer(player);
+        resetPlayer(player, false, false, true);
 
     }
 
@@ -70,6 +70,22 @@ public class DeathHandler implements Listener {
 
         inventory.addItem(starter_sapling);
         inventory.addItem(starter_bone_meal);
+    }
+
+    @EventHandler
+    public void correctHealth (PlayerRespawnEvent event) {
+        final Player player = event.getPlayer();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null) {
+                    player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                }
+                else {
+                    player.setHealth(20);
+                }
+            }
+        }.runTaskLaterAsynchronously(plugin, 20);
     }
 
     public void resetPlayer (Player player) {

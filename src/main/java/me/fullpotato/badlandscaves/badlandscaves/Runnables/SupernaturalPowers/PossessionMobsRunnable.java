@@ -83,10 +83,9 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                 float current_yaw = player.getLocation().getYaw();
                 float current_pitch = player.getLocation().getPitch();
 
-                //LEVEL 2: WARP TO DISPLACE------------
+                //LEVEL 2: WARP TO DISPLACE------------ (no mana cost)
                 boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt() == 1;
-                int displace_cost = plugin.getConfig().getInt("game_values.displace_mana_cost");
-                if (possess_level > 1 && has_displace_marker && mana >= displace_cost) {
+                if (possess_level > 1 && has_displace_marker) {
                     int displace_level = player.getMetadata("displace_level").get(0).asInt();
                     double disp_x = player.getMetadata("displace_x").get(0).asDouble();
                     double disp_y = player.getMetadata("displace_y").get(0).asDouble();
@@ -107,12 +106,8 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
                     if (player.getLocation().distance(displace_marker) <= warp_range) {
                         if (cancel_fall) player.setFallDistance(0);
+                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
                         player.teleport(displace_marker);
-
-                        //mana
-                        player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - displace_cost));
-                        player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
-                        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                         return;
                     }
                 }

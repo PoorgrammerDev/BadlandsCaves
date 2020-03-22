@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseCompleteSoulCrystal;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.*;
@@ -156,15 +156,16 @@ public class DescensionPlayerMove implements Listener {
         invser.loadInventory(player, "descension_inv", true, true);
 
         if (win) {
-            // FIXME: 3/21/2020 not clearing the soul crystal
-            final UseCompleteSoulCrystal tester = new UseCompleteSoulCrystal(plugin);
+            UseIncompleteSoulCrystal tester = new UseIncompleteSoulCrystal(plugin);
             final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
-            player.sendMessage("SOUL CRYSTAL: " + soul_crystal);
             for (ItemStack item : player.getInventory()) {
-                player.sendMessage(item.toString());
-                if (tester.checkMatchIgnoreUses(item, soul_crystal, 3)) {
-                    item.setAmount(0);
-                    return;
+                if (item != null) {
+                    player.sendMessage(item.toString());
+                    if (tester.checkMatchIgnoreUses(item, soul_crystal, 3)) {
+                        item.setAmount(0);
+                        player.updateInventory();
+                        return;
+                    }
                 }
             }
         }

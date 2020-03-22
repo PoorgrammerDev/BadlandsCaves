@@ -41,6 +41,7 @@ import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.DescensionWorld
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.EmptyWorld;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.PreventNormalEnd;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.ReflectionWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BadlandsCaves extends JavaPlugin {
@@ -313,6 +314,8 @@ public final class BadlandsCaves extends JavaPlugin {
         PlayerConfigLoadSave save_player = new PlayerConfigLoadSave(this, player_values);
         save_player.saveToConfig(true);
         this.saveConfig();
+
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     public void loadConfig() {
