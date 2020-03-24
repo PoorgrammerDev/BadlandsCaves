@@ -214,11 +214,13 @@ public class CauldronMenu implements Listener {
                             item.getType().equals(Material.BLACK_STAINED_GLASS_PANE) ||
                             item.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE) ||
                             item.getType().equals(Material.GRAY_STAINED_GLASS_PANE) ||
-                            item.getType().equals(Material.GLASS_PANE) ||
-                            item.getType().equals(Material.RED_STAINED_GLASS_PANE)) {
+                            item.getType().equals(Material.GLASS_PANE)) {
                         event.setCancelled(true);
                     }
-                    else if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
+                    else if (item.getType().equals(Material.RED_STAINED_GLASS_PANE) && event.getSlot() == 13) {
+                        event.setCancelled(true);
+                    }
+                    else if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE) && event.getSlot() == 13) {
                         event.setCancelled(true);
                         if (ready) {
                             int item_1_amt = cauldron_inv.getItem(11).getAmount();

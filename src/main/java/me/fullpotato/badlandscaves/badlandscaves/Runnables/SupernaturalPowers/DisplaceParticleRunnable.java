@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -94,36 +95,17 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
         final double radius = 1;
 
         if (active) {
-            //circle
-            for (double theta = 0; theta <= 2*Math.PI; theta += Math.PI / 5) {
-                double x = (radius / 2) * Math.cos(theta);
-                double z = (radius / 2) * Math.sin(theta);
-
-                location.add(x, 0, z);
-                player.spawnParticle(Particle.SPELL_WITCH, location, 1, 0, 0, 0, 1);
-                location.subtract(x, 0, z);
-            }
+            ParticleShapes.particleCircle(player, Particle.SPELL_WITCH, location, radius, 0, null);
         }
 
         player.spawnParticle(Particle.BLOCK_DUST, location, 10, 0.05, 0.5, 0.05, 0, Material.PURPLE_GLAZED_TERRACOTTA.createBlockData());
     }
 
-    public void trackerParticle (Location location) {
+    public void trackerParticle (Location target) {
         Location player_loc = player.getLocation();
         player_loc.add(0,  1, 0);
-        Location origin = player.getMainHand().equals(MainHand.RIGHT) ? getLeftSide(player_loc, 1) : getRightSide(player_loc, 1);
-        Vector target = location.toVector();
-        origin.setDirection(target.subtract(origin.toVector()));
-        Vector incr = origin.getDirection();
-        for (int i = 0; i < 100; i++) {
-            Location loc = origin.add(incr);
-            if (loc.distanceSquared(location) < 2) {
-                break;
-            }
-            else {
-                player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 255), 0.5F));
-            }
-        }
+        final Location origin = player.getMainHand().equals(MainHand.RIGHT) ? getLeftSide(player_loc, 1) : getRightSide(player_loc, 1);
+        ParticleShapes.particleLine(player, Particle.REDSTONE, origin, target, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 255), 0.5F), 1);
     }
 
     //

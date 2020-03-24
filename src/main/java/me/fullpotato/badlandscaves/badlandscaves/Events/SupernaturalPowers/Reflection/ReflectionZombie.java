@@ -39,6 +39,7 @@ public class ReflectionZombie implements Listener {
         event.getEntity().getWorld().equals(world) &&
         event.getDamager() instanceof Player &&
         event.getDamager().getWorld().equals(world)) {
+            //TODO also incorporate anti-health potion into this (if damager is potion, cancel event)
             final Zombie zombie = (Zombie) event.getEntity();
             final Player player = (Player) event.getDamager();
             final double damage = event.getFinalDamage();

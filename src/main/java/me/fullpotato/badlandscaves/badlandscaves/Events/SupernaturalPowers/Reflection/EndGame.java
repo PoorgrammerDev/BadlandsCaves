@@ -18,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class EndGame implements Listener {
     private BadlandsCaves plugin;
@@ -60,10 +61,18 @@ public class EndGame implements Listener {
 
             if (player != null) {
                 DeathHandler resetter = new DeathHandler(plugin);
+                Bukkit.broadcastMessage(player.toString());
                 resetWorld(player);
-                resetter.resetPlayer(player, false, true, false);
-                restoreInventory(player);
-                completeSoul(player);
+
+                final Player ply = player;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        resetter.resetPlayer(ply, false, true, false);
+                        restoreInventory(ply);
+                        completeSoul(ply);
+                    }
+                }.runTaskLater(plugin, 5);
             }
         }
     }

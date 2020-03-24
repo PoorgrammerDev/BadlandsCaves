@@ -37,10 +37,20 @@ public class SkeleBuff implements Listener {
         World world = location.getWorld();
 
         Random random = new Random();
+
+        final int augment = plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+
+        if (random.nextInt(100) > 100) { //TODO change after testing
+
+        }
+
         ItemStack HMbow = new ItemStack(Material.BOW, 1);
         ItemMeta bow_meta = HMbow.getItemMeta();
         bow_meta.addEnchant(Enchantment.ARROW_DAMAGE, random.nextInt(5) + 3, false);
-        bow_meta.addEnchant(Enchantment.ARROW_KNOCKBACK, random.nextInt(2), false);
+        final int knockback = random.nextInt(2);
+        if (knockback > 0) {
+            bow_meta.addEnchant(Enchantment.ARROW_KNOCKBACK, knockback, false);
+        }
         bow_meta.addEnchant(Enchantment.ARROW_FIRE, 1, false);
         bow_meta.setDisplayName(ChatColor.GRAY + "Skeleton's Bow");
         HMbow.setItemMeta(bow_meta);

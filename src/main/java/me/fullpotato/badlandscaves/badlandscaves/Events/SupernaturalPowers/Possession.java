@@ -5,10 +5,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.Po
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Wither;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -60,7 +57,7 @@ public class Possession implements Listener {
                             if (result != null && result.getHitEntity() != null) {
                                 if (result.getHitEntity() instanceof LivingEntity) {
                                     target = (LivingEntity) result.getHitEntity();
-                                    if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither)){
+                                    if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.hasMetadata("augmented") && target.getMetadata("augmented").get(0).asBoolean())){
                                         boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
 
                                         if (!target_already_pos) {
@@ -128,6 +125,10 @@ public class Possession implements Listener {
             if (in_possession) {
                 event.setTarget(null);
                 event.setCancelled(true);
+                if (event.getEntity() instanceof Mob) {
+                    Mob mob = (Mob) event.getEntity();
+                    mob.setTarget(null);
+                }
             }
         }
     }

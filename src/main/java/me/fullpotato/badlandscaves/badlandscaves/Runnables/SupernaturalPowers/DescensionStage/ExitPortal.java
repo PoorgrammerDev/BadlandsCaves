@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage;
 
+import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -30,21 +31,6 @@ public class ExitPortal extends BukkitRunnable {
             return;
         }
 
-        double phi = 0;
-        while (phi <= Math.PI) {
-            phi += Math.PI / 10;
-
-            for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 40) {
-                double radius = 5;
-                double x = radius * Math.cos(theta) * Math.sin(phi);
-                double y = radius * Math.cos(phi) + 1.5;
-                double z = radius * Math.sin(theta) * Math.sin(phi);
-
-                location.add(x, y, z);
-                world.spawnParticle(Particle.SPELL_WITCH, location, 1);
-                location.subtract(x, y, z);
-
-            }
-        }
+        ParticleShapes.particleSphere(null, Particle.SPELL_WITCH, location, 5, -1, null);
     }
 }

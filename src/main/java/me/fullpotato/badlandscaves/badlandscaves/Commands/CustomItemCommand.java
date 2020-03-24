@@ -37,6 +37,9 @@ public class CustomItemCommand implements CommandExecutor {
                                     sender.sendMessage(ChatColor.RED + "The amount must be an integer!");
                                 }
                             }
+                            else {
+                                item.setAmount(1);
+                            }
 
                             target.getInventory().addItem(item);
                             sender.sendMessage("§6Gave §c" + item.getAmount() + "§6 [§r" + item.getItemMeta().getDisplayName() + "§6] to §c" + target.getDisplayName() + "§6.");

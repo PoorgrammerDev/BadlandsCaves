@@ -98,6 +98,7 @@ public class ReflectionBuild implements Listener {
         blacklisted.add(Material.DISPENSER);
         blacklisted.add(Material.DROPPER);
         blacklisted.add(Material.TRAPPED_CHEST);
+
         if (blacklisted.contains(event.getBlock().getType())) {
             event.setCancelled(true);
             return;

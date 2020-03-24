@@ -79,4 +79,8 @@ game_values:
 
     #in hardmode, creepers' explosions are larger. this value changes the size of the explosion.
     #for scale, a normal creeper's radius value is 3
-    creeper_radius: 10
+    creeper_radius: 7
+
+    #in hardmode, mini-boss versions of mobs can spawn instead of regular version of common enemies
+    #this is the percent chance that happens
+    augmented_spawn_chance: 5

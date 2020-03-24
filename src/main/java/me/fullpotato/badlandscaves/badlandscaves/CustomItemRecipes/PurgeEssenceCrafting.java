@@ -25,7 +25,7 @@ public class PurgeEssenceCrafting {
          *  ###
          */
         if (!isHardmode) {
-            //where # = gold nuggets, @ = tiny pile of blaze powder
+            //where # = gold ingots, @ = tiny pile of blaze powder
             purge_ess_craft.setIngredient('#', Material.GOLD_INGOT);
             purge_ess_craft.setIngredient('@', Material.STRUCTURE_BLOCK);
         }

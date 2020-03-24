@@ -9,6 +9,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+import java.util.Random;
+
 public class TaintedPowderRunnable extends BukkitRunnable {
 
     private BadlandsCaves plugin;
@@ -24,6 +27,15 @@ public class TaintedPowderRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
+
+        HashMap<Material, Material> stones = new HashMap<>();
+        stones.put(Material.INFESTED_STONE, Material.STONE);
+        stones.put(Material.INFESTED_COBBLESTONE, Material.COBBLESTONE);
+        stones.put(Material.INFESTED_STONE_BRICKS, Material.STONE_BRICKS);
+        stones.put(Material.INFESTED_CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS);
+        stones.put(Material.INFESTED_CRACKED_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
+        stones.put(Material.INFESTED_MOSSY_STONE_BRICKS, Material.MOSSY_STONE_BRICKS);
+
         Location location = item.getLocation();
         World world = location.getWorld();
         int X = location.getBlockX();
@@ -40,32 +52,12 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                     boolean foundblock = false;
 
                     if (affected_block.getType() != null) {
-                        if (affected_block.getType().equals(Material.INFESTED_STONE)) {
-                            affected_block.setType(Material.STONE);
+                        if (stones.containsKey(affected_block.getType())) {
+                            affected_block.setType(stones.get(affected_block.getType()));
                             foundblock = true;
                         }
-                        else if (affected_block.getType().equals(Material.INFESTED_COBBLESTONE)) {
-                            affected_block.setType(Material.COBBLESTONE);
-                            foundblock = true;
-                        }
-                        else if (affected_block.getType().equals(Material.INFESTED_STONE_BRICKS)) {
-                            affected_block.setType(Material.STONE_BRICKS);
-                            foundblock = true;
-                        }
-                        else if (affected_block.getType().equals(Material.INFESTED_CHISELED_STONE_BRICKS)) {
-                            affected_block.setType(Material.CHISELED_STONE_BRICKS);
-                            foundblock = true;
-                        }
-                        else if (affected_block.getType().equals(Material.INFESTED_CRACKED_STONE_BRICKS)) {
-                            affected_block.setType(Material.CRACKED_STONE_BRICKS);
-                            foundblock = true;
-                        }
-                        else if (affected_block.getType().equals(Material.INFESTED_MOSSY_STONE_BRICKS)) {
-                            affected_block.setType(Material.MOSSY_STONE_BRICKS);
-                            foundblock = true;
-                        }
-                        affected_block.getState().update(true);
 
+                        affected_block.getState().update(true);
                         if (foundblock) {
                             world.spawnParticle(Particle.SMOKE_NORMAL, affected_block_loc, 1);
                             thrower.playSound(affected_block_loc,Sound.ENTITY_SILVERFISH_DEATH, (float) 0.1, (float) Math.random() * 2);
@@ -103,17 +95,14 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                         if (!player.getUniqueId().equals(thrower.getUniqueId())) {
                             player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100, 1));
                             double tox = player.getMetadata("Toxicity").get(0).asDouble();
-                            int tox_incr, part_num;
-                            if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
-                                tox_incr = 1;
-                                part_num = 10;
+                            final Random random = new Random();
+                            if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
+                                final int tox_incr = random.nextInt(1) + 1;
+                                final int part_num = random.nextInt(3) + 5;
+
+                                player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
+                                world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
                             }
-                            else {
-                                tox_incr = 10;
-                                part_num = 20;
-                            }
-                            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
-                            world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
                         }
                     }
                 }

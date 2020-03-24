@@ -37,37 +37,59 @@ public class ZombieBuff implements Listener {
         if (world.equals(descension_world)) return;
         if (world.equals(reflection_world)) return;
 
+        //giving armor
         Random random = new Random();
+
+        //SWORD-------------------------------------------------------------------
         ItemStack sword = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta sword_meta = sword.getItemMeta();
         sword_meta.addEnchant(Enchantment.DAMAGE_ALL, random.nextInt(5) + 3, true);
-        sword_meta.addEnchant(Enchantment.FIRE_ASPECT, random.nextInt(2), false);
+        final int fire = random.nextInt(2);
+        if (fire > 0) {
+            sword_meta.addEnchant(Enchantment.FIRE_ASPECT, fire, false);
+        }
         sword_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Sword");
         sword.setItemMeta(sword_meta);
 
+        //ARMOR----------------------------------------------------------------
+        int[] armor_protections = random.ints(4, 0, 3).toArray();
+
+        //BOOTS-----------------------------
         boolean dia_upg = random.nextBoolean();
         ItemStack boots = dia_upg ? new ItemStack(Material.DIAMOND_BOOTS) : new ItemStack(Material.IRON_BOOTS);
-        ItemMeta boots_meta = boots.getItemMeta();
-        boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
-        boots.setItemMeta(boots_meta);
+        if (armor_protections[0] > 0) {
+            ItemMeta boots_meta = boots.getItemMeta();
+            boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[0], true);
+            boots.setItemMeta(boots_meta);
+        }
 
+        //LEGGINGS--------------------------
         dia_upg = random.nextBoolean();
         ItemStack leggings = dia_upg ? new ItemStack(Material.DIAMOND_LEGGINGS) : new ItemStack(Material.IRON_LEGGINGS);
-        ItemMeta leggings_meta = leggings.getItemMeta();
-        leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
-        leggings.setItemMeta(leggings_meta);
+        if (armor_protections[1] > 0){
+            ItemMeta leggings_meta = leggings.getItemMeta();
+            leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[1], true);
+            leggings.setItemMeta(leggings_meta);
+        }
 
+        //CHESTPLATE------------------------
         dia_upg = random.nextBoolean();
         ItemStack chestplate = dia_upg ? new ItemStack(Material.DIAMOND_CHESTPLATE) : new ItemStack(Material.IRON_CHESTPLATE);
-        ItemMeta chestplate_meta = chestplate.getItemMeta();
-        chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
-        chestplate.setItemMeta(chestplate_meta);
+        if (armor_protections[2] > 0){
+            ItemMeta chestplate_meta = chestplate.getItemMeta();
+            chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[2], true);
+            chestplate.setItemMeta(chestplate_meta);
+        }
 
+        //HELMET-----------------------------
         dia_upg = random.nextBoolean();
         ItemStack helmet = dia_upg ? new ItemStack(Material.DIAMOND_HELMET) : new ItemStack(Material.IRON_HELMET);
-        ItemMeta helmet_meta = helmet.getItemMeta();
-        helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(3), true);
-        helmet.setItemMeta(helmet_meta);
+        if (armor_protections[3] > 0){
+            ItemMeta helmet_meta = helmet.getItemMeta();
+            helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[3], true);
+            helmet.setItemMeta(helmet_meta);
+        }
+        //------------------------------------------------------------------------
 
         ItemStack[] armor = {
                 boots,

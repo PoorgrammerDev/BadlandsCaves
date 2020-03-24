@@ -39,6 +39,7 @@ public class PigZombieAngerBuff implements Listener {
         World world = location.getWorld();
 
         Random random = new Random();
+
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, random.nextInt(2), false, true));
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999, random.nextInt(3), false, true));
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, random.nextInt(4), false, true));
@@ -51,26 +52,35 @@ public class PigZombieAngerBuff implements Listener {
             world.spawnEntity(location, EntityType.MAGMA_CUBE);
         }
 
+        int[] armor_protections = random.ints(4, 0, 4).toArray();
 
         ItemStack boots = new ItemStack(Material.GOLDEN_BOOTS);
-        ItemMeta boots_meta = boots.getItemMeta();
-        boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
-        boots.setItemMeta(boots_meta);
+        if (armor_protections[0] > 0) {
+            ItemMeta boots_meta = boots.getItemMeta();
+            boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[0], false);
+            boots.setItemMeta(boots_meta);
+        }
 
         ItemStack leggings = new ItemStack(Material.GOLDEN_LEGGINGS);
-        ItemMeta leggings_meta = leggings.getItemMeta();
-        leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
-        leggings.setItemMeta(leggings_meta);
+        if (armor_protections[1] > 0) {
+            ItemMeta leggings_meta = leggings.getItemMeta();
+            leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[1], false);
+            leggings.setItemMeta(leggings_meta);
+        }
 
         ItemStack chestplate = new ItemStack(Material.GOLDEN_CHESTPLATE);
-        ItemMeta chestplate_meta = chestplate.getItemMeta();
-        chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
-        chestplate.setItemMeta(chestplate_meta);
+        if (armor_protections[2] > 0) {
+            ItemMeta chestplate_meta = chestplate.getItemMeta();
+            chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[2], false);
+            chestplate.setItemMeta(chestplate_meta);
+        }
 
         ItemStack helmet = new ItemStack(Material.GOLDEN_HELMET);
-        ItemMeta helmet_meta = helmet.getItemMeta();
-        helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, random.nextInt(4), false);
-        helmet.setItemMeta(helmet_meta);
+        if (armor_protections[3] > 0) {
+            ItemMeta helmet_meta = helmet.getItemMeta();
+            helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[3], false);
+            helmet.setItemMeta(helmet_meta);
+        }
 
         ItemStack[] armor = {
                 boots,

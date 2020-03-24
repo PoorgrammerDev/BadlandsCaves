@@ -160,7 +160,6 @@ public class DescensionPlayerMove implements Listener {
             final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
             for (ItemStack item : player.getInventory()) {
                 if (item != null) {
-                    player.sendMessage(item.toString());
                     if (tester.checkMatchIgnoreUses(item, soul_crystal, 3)) {
                         item.setAmount(0);
                         player.updateInventory();

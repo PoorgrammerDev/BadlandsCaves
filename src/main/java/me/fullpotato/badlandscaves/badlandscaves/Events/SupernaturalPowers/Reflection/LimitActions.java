@@ -9,9 +9,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +51,17 @@ public class LimitActions extends BukkitRunnable implements Listener {
 
     public LimitActions(BadlandsCaves plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Disallows placing of fluids (water, lava)
+     * */
+    @EventHandler
+    public void noFluids (PlayerBucketEmptyEvent event) {
+        final Player player = event.getPlayer();
+        if (player.getWorld().equals(reflection_world)) {
+            event.setCancelled(true);
+        }
     }
 
     /**

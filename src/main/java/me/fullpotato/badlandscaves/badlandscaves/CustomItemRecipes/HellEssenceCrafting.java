@@ -22,6 +22,8 @@ public class HellEssenceCrafting {
         ShapelessRecipe hell_ess_craft = new ShapelessRecipe(new NamespacedKey(plugin, "hell_essence"), hell_essence);
         hell_ess_craft.addIngredient(Material.BLAZE_POWDER);
         hell_ess_craft.addIngredient(Material.MAGMA_CREAM);
+
+        //pigman soul
         hell_ess_craft.addIngredient(Material.COMMAND_BLOCK);
 
         plugin.getServer().addRecipe(hell_ess_craft);

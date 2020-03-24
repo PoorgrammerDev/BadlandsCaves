@@ -25,6 +25,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.ToxicWaterBottlin
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInWater;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.AugmentedSpider;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.DeathEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.ThirstEffectsRunnable;
@@ -274,6 +275,7 @@ public final class BadlandsCaves extends JavaPlugin {
             new ZombieBossBehavior(this).runTaskTimer(this, 0, 0);
             new LimitActions(this).runTaskTimer(this, 0, 20);
             new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
+            new AugmentedSpider(this).runTaskTimer(this, 0, 5);
 
         }
 
