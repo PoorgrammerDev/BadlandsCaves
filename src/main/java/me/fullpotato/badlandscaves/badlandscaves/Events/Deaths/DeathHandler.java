@@ -18,6 +18,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Objects;
+
 public class DeathHandler implements Listener {
 
     private BadlandsCaves plugin;
@@ -79,7 +81,7 @@ public class DeathHandler implements Listener {
             @Override
             public void run() {
                 if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null) {
-                    player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                    player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
                 }
                 else {
                     player.setHealth(20);
@@ -110,6 +112,7 @@ public class DeathHandler implements Listener {
             player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, "__REMOVED__"));
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, -255));
         }
 
         final int in_descension = player.getMetadata("in_descension").get(0).asInt();

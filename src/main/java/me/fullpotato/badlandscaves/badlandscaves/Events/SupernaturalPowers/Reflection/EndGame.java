@@ -5,9 +5,10 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseInc
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.ReflectionWorldNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -81,6 +82,13 @@ public class EndGame implements Listener {
         ClearEntities();
         removeClone(player);
         world.setTime(6000);
+
+        final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
+        KeyedBossBar health_bar = Bukkit.getBossBar(key);
+        if (health_bar != null) {
+            health_bar.setVisible(false);
+        }
+
     }
 
     public void ClearEntities () {

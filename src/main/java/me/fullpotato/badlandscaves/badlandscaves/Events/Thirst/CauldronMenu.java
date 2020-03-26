@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,61 +32,9 @@ public class CauldronMenu implements Listener {
     }
 
     private String cauldron_title = ChatColor.DARK_GRAY + "Cauldron";
-    private int cdr_lvl = 0;
-    private boolean ready;
     private Inventory cauldron_inv;
     private int refresh_id;
     private Block cauldron_block;
-    private Location loc_of_cauld;
-
-
-    public void purification_menu(Player player, Block block, String cauldron_title) {
-        Inventory pure_inv = plugin.getServer().createInventory(null, 27, cauldron_title);
-        cauldron_inv = pure_inv;
-
-        ItemStack black = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
-        ItemMeta black_meta = black.getItemMeta();
-        assert black_meta != null;
-        black_meta.setDisplayName(ChatColor.RESET + "");
-        black.setItemMeta(black_meta);
-
-        ItemStack blue = new ItemStack(Material.BLUE_STAINED_GLASS_PANE, 1);
-
-        ItemStack d_gray = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
-        ItemMeta d_gray_meta = d_gray.getItemMeta();
-        assert d_gray_meta != null;
-        d_gray_meta.setDisplayName(ChatColor.RESET + "");
-        d_gray.setItemMeta(d_gray_meta);
-
-        ItemStack l_gray = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1);
-        ItemMeta l_gray_meta = l_gray.getItemMeta();
-        assert l_gray_meta != null;
-        l_gray_meta.setDisplayName(ChatColor.RESET + "");
-        l_gray.setItemMeta(l_gray_meta);
-
-        String cauldron_level = block.getBlockData().getAsString();
-
-        //making the inv
-        pure_inv.setItem(1, black);
-        pure_inv.setItem(2, d_gray);
-        pure_inv.setItem(3, d_gray);
-        pure_inv.setItem(4, d_gray);
-        pure_inv.setItem(5, d_gray);
-        pure_inv.setItem(6, d_gray);
-        pure_inv.setItem(7, black);
-        pure_inv.setItem(10, black);
-        pure_inv.setItem(12, d_gray);
-        pure_inv.setItem(14, d_gray);
-        pure_inv.setItem(16, black);
-        pure_inv.setItem(19, black);
-        pure_inv.setItem(20, d_gray);
-        pure_inv.setItem(21, d_gray);
-        pure_inv.setItem(22, d_gray);
-        pure_inv.setItem(23, d_gray);
-        pure_inv.setItem(24, d_gray);
-        pure_inv.setItem(25, black);
-        player.openInventory(pure_inv);
-    }
 
     @EventHandler
     public void cauldron_open (PlayerInteractEvent event) {
@@ -98,7 +47,7 @@ public class CauldronMenu implements Listener {
             if (eqSlot.equals(EquipmentSlot.HAND)) {
                 assert cauldron_block != null;
                 if (cauldron_block.getType().equals(Material.CAULDRON)) {
-                    loc_of_cauld = cauldron_block.getLocation();
+                    Location loc_of_cauld = cauldron_block.getLocation();
                     Location block_under_loc = new Location(loc_of_cauld.getWorld(), loc_of_cauld.getX(), loc_of_cauld.getY() - 1, loc_of_cauld.getZ());
                     Block block_under = block_under_loc.getBlock();
                     Material holding = player.getInventory().getItemInMainHand().getType();
@@ -165,22 +114,9 @@ public class CauldronMenu implements Listener {
                 ClickType click = event.getClick();
                 ItemStack item = event.getCurrentItem();
 
-                if (cauldron_block.getBlockData().getAsString().contains("0")) {
-                    cdr_lvl = 0;
-                }
-                else if (cauldron_block.getBlockData().getAsString().contains("1")) {
-                    cdr_lvl = 1;
-                }
-                else if (cauldron_block.getBlockData().getAsString().contains("2")) {
-                    cdr_lvl = 2;
-                }
-                else if (cauldron_block.getBlockData().getAsString().contains("3")) {
-                    cdr_lvl = 3;
-                }
-
+                int cdr_lvl = ((Levelled) (cauldron_block.getBlockData())).getLevel();
 
                 boolean hasIng = false;
-                boolean isFull = cdr_lvl == 3;
 
                 ArrayList<Material> in_slots = new ArrayList<>();
                 ArrayList<ItemStack> itemstacks_slots = new ArrayList<>();
@@ -193,21 +129,18 @@ public class CauldronMenu implements Listener {
                     itemstacks_slots.add(cauldron_inv.getItem(15));
                 }
 
-                if (target_inv.getItem(11) == null || target_inv.getItem(15) == null) {
-                    hasIng = false;
+                if (target_inv.getItem(11) != null && target_inv.getItem(15) != null) {
+                  if (in_slots.contains(Material.GLASS_BOTTLE) && ((in_slots.contains(Material.BLAZE_POWDER) ))) {
+                        hasIng = true;
+                    }
+                    else if (in_slots.contains(Material.GLASS_BOTTLE) && in_slots.contains(Material.COMMAND_BLOCK)) {
+                        hasIng = true;
+                    }
+                    else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
+                        hasIng = true;
+                    }
+                    //add more ingredients here...
                 }
-                else if (in_slots.contains(Material.GLASS_BOTTLE) && ((in_slots.contains(Material.BLAZE_POWDER) ))) {
-                    hasIng = true;
-                }
-                else if (in_slots.contains(Material.GLASS_BOTTLE) && in_slots.contains(Material.COMMAND_BLOCK)) {
-                    hasIng = true;
-                }
-                else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
-                    hasIng = true;
-                }
-                //add more ingredients here...
-
-                ready = (hasIng && isFull);
 
                 if (item != null) {
                     if (item.getType().equals(Material.GREEN_STAINED_GLASS_PANE) ||
@@ -222,13 +155,16 @@ public class CauldronMenu implements Listener {
                     }
                     else if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE) && event.getSlot() == 13) {
                         event.setCancelled(true);
-                        if (ready) {
+                        if (hasIng && cdr_lvl == 3) {
                             int item_1_amt = cauldron_inv.getItem(11).getAmount();
                             int item_2_amt = cauldron_inv.getItem(15).getAmount();
 
                             cauldron_inv.getItem(11).setAmount(item_1_amt - 1);
                             cauldron_inv.getItem(15).setAmount(item_2_amt - 1);
-                            cauldron_block.setType(Material.CAULDRON);
+
+                            Levelled reset_level = ((Levelled) cauldron_block.getBlockData());
+                            reset_level.setLevel(0);
+                            cauldron_block.setBlockData(reset_level);
 
                             ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
                             //PURIFIED WATER - PREHARDMODE
@@ -302,5 +238,53 @@ public class CauldronMenu implements Listener {
                 player.getInventory().addItem(cauldron_inv.getItem(22));
             }
         }
+    }
+
+    public void purification_menu(Player player, Block block, String cauldron_title) {
+        Inventory pure_inv = plugin.getServer().createInventory(null, 27, cauldron_title);
+        cauldron_inv = pure_inv;
+
+        ItemStack black = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
+        ItemMeta black_meta = black.getItemMeta();
+        assert black_meta != null;
+        black_meta.setDisplayName(ChatColor.RESET + "");
+        black.setItemMeta(black_meta);
+
+        ItemStack blue = new ItemStack(Material.BLUE_STAINED_GLASS_PANE, 1);
+
+        ItemStack d_gray = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
+        ItemMeta d_gray_meta = d_gray.getItemMeta();
+        assert d_gray_meta != null;
+        d_gray_meta.setDisplayName(ChatColor.RESET + "");
+        d_gray.setItemMeta(d_gray_meta);
+
+        ItemStack l_gray = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1);
+        ItemMeta l_gray_meta = l_gray.getItemMeta();
+        assert l_gray_meta != null;
+        l_gray_meta.setDisplayName(ChatColor.RESET + "");
+        l_gray.setItemMeta(l_gray_meta);
+
+        String cauldron_level = block.getBlockData().getAsString();
+
+        //making the inv
+        pure_inv.setItem(1, black);
+        pure_inv.setItem(2, d_gray);
+        pure_inv.setItem(3, d_gray);
+        pure_inv.setItem(4, d_gray);
+        pure_inv.setItem(5, d_gray);
+        pure_inv.setItem(6, d_gray);
+        pure_inv.setItem(7, black);
+        pure_inv.setItem(10, black);
+        pure_inv.setItem(12, d_gray);
+        pure_inv.setItem(14, d_gray);
+        pure_inv.setItem(16, black);
+        pure_inv.setItem(19, black);
+        pure_inv.setItem(20, d_gray);
+        pure_inv.setItem(21, d_gray);
+        pure_inv.setItem(22, d_gray);
+        pure_inv.setItem(23, d_gray);
+        pure_inv.setItem(24, d_gray);
+        pure_inv.setItem(25, black);
+        player.openInventory(pure_inv);
     }
 }

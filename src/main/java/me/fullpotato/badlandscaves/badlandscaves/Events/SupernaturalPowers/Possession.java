@@ -87,6 +87,18 @@ public class Possession implements Listener {
 
 
                                             if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
+
+                                            for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
+                                                if (entity instanceof Mob) {
+                                                    final Mob mob = (Mob) entity;
+                                                    if (mob.getTarget() != null && mob.getTarget().equals(player)) {
+                                                        mob.setTarget(null);
+                                                    }
+                                                }
+                                            }
+
+
+
                                             player.teleport(target);
 
                                             new PossessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);

@@ -646,6 +646,9 @@ public class ZombieBossBehavior extends BukkitRunnable {
         if (health_bar == null) {
             health_bar = Bukkit.createBossBar(key, ChatColor.DARK_AQUA + ChatColor.stripColor(player.getDisplayName()), BarColor.BLUE, BarStyle.SEGMENTED_10);
         }
+        else {
+            health_bar.setTitle(ChatColor.DARK_AQUA + ChatColor.stripColor(player.getDisplayName()));
+        }
 
         health_bar.setVisible(true);
         final double zombie_health = Math.max(Math.min(zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 1), 0);

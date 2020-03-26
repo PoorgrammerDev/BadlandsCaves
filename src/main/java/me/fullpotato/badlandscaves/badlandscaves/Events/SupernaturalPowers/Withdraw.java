@@ -96,38 +96,9 @@ public class Withdraw implements Listener {
                                 BukkitTask decrement_timer = new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
-
+                                        final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
                                         if (withdraw_timer <= 0) {
-                                            int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
-                                            if (withdraw_level == 1) {
-                                                player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
-                                            }
-
-                                            player.setFallDistance(0);
-                                            player.teleport(location);
-                                            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-                                            boolean ready_to_clear = true;
-
-                                            for (Player player : Bukkit.getOnlinePlayers()) {
-                                                if (player.getLocation().getWorld().equals(voidloc.getWorld()))
-                                                    ready_to_clear = false;
-                                            }
-
-                                            if (ready_to_clear) {
-                                                for (int x = 0; x < 16; x++) {
-                                                    for (int y = 0; y < 256; y++) {
-                                                        for (int z = 0; z < 16; z++) {
-                                                            Block block = player.getLocation().getChunk().getBlock(x, y, z);
-                                                            Location block_loc = block.getLocation();
-                                                            block_loc.setWorld(void_world);
-                                                            block_loc.getBlock().setType(Material.AIR);
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            Bukkit.getScheduler().cancelTask(this.getTaskId());
+                                            getOuttaHere(player, location, voidloc, true, this.getTaskId());
                                         }
                                         else {
                                             player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
@@ -175,6 +146,51 @@ public class Withdraw implements Listener {
         if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
             Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
             player.teleport(origin);
+        }
+    }
+
+    public void getOuttaHere (Player player, Location returnLocation, Location voidLocation) {
+        getOuttaHere(player, returnLocation, voidLocation, false, 0);
+    }
+
+    public void getOuttaHere (Player player, Location returnLocation, Location voidLocation, boolean cancel, int taskID) {
+        final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
+        final int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+        if (withdraw_level == 1) {
+            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+        }
+
+
+        player.setFallDistance(0);
+        if (withdraw_timer != -255) player.teleport(returnLocation);
+        if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+        boolean ready_to_clear = true;
+
+        for (Player scout : Bukkit.getOnlinePlayers()) {
+            if (scout.getLocation().getWorld().equals(voidLocation.getWorld()) && scout.getLocation().getChunk().equals(voidLocation.getChunk())) {
+                ready_to_clear = false;
+                break;
+            }
+        }
+
+        if (ready_to_clear) {
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 256; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        Block block = player.getLocation().getChunk().getBlock(x, y, z);
+                        if (!block.getType().isAir()) {
+                            Location block_loc = block.getLocation();
+                            block_loc.setWorld(void_world);
+                            block_loc.getBlock().setType(Material.AIR);
+                        }
+                    }
+                }
+            }
+        }
+
+        player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
+        if (cancel) {
+            Bukkit.getScheduler().cancelTask(taskID);
         }
     }
 

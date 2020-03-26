@@ -14,8 +14,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
-import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoin;
-import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerLeave;
+import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoinLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.CauldronMenu;
@@ -24,6 +23,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.NaturalThirstDecr
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.ToxicWaterBottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInWater;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.CustomBlocks.TestBlock;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.AugmentedSpider;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.DeathEffectsRunnable;
@@ -180,7 +180,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         //event registering
         {
-            this.getServer().getPluginManager().registerEvents(new PlayerJoin(this, player_values), this);
+            this.getServer().getPluginManager().registerEvents(new PlayerJoinLeave(this, player_values), this);
             this.getServer().getPluginManager().registerEvents(new NaturalThirstDecrease(this), this);
             this.getServer().getPluginManager().registerEvents(new IncreaseToxInWater(this), this);
             this.getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
@@ -189,7 +189,6 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this), this);
             this.getServer().getPluginManager().registerEvents(new Drinking(this), this);
             this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this),this);
-            this.getServer().getPluginManager().registerEvents(new PlayerLeave(this, player_values), this);
             this.getServer().getPluginManager().registerEvents(new CombineTinyBlaze(this), this);
             this.getServer().getPluginManager().registerEvents(new PurgeEssence(this), this);
             this.getServer().getPluginManager().registerEvents(new StopCustomItemsInteract(this), this);
@@ -227,6 +226,8 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new EndGame(this), this);
             this.getServer().getPluginManager().registerEvents(new LimitActions(this), this);
             this.getServer().getPluginManager().registerEvents(new UseCompleteSoulCrystal(this), this);
+            this.getServer().getPluginManager().registerEvents(new TestBlock(this), this);
+
         }
 
         //command reg
