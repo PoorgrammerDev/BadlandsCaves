@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Commands;
+package me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

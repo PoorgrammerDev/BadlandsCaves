@@ -29,7 +29,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
 
         final ItemStack current = event.getItem();
         final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
-        if (!checkMatchIgnoreUses(current, soul_crystal, 3)) return;
+        if (!checkMatchIgnoreUses(current, soul_crystal, 2)) return;
 
         final Player player = event.getPlayer();
         event.setCancelled(true);
@@ -39,10 +39,10 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         if (player.getWorld().equals(descension)) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
-        if (player.getMetadata("has_supernatural_powers").get(0).asInt() >= 1) return;
+        if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
 
         //deplete use
-        depleteUse(current, 3);
+        depleteUse(current, 2);
 
         //save inventory
         InventorySerialize invser = new InventorySerialize(plugin);

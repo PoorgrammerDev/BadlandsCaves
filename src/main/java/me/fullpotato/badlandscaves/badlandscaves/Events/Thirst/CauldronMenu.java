@@ -62,8 +62,8 @@ public class CauldronMenu implements Listener {
 
                             for (Player check_nearby : Bukkit.getOnlinePlayers()) {
                                 if (check_nearby.getLocation().distanceSquared(loc_of_cauld) < 100) {
-                                    int open = check_nearby.getMetadata("opened_cauldron").get(0).asInt();
-                                    if (open >= 0.5) {
+                                    boolean open = check_nearby.getMetadata("opened_cauldron").get(0).asBoolean();
+                                    if (open) {
                                         int test_x = check_nearby.getMetadata("opened_cauldron_x").get(0).asInt();
                                         int test_y = check_nearby.getMetadata("opened_cauldron_y").get(0).asInt();
                                         int test_z = check_nearby.getMetadata("opened_cauldron_z").get(0).asInt();
@@ -81,7 +81,7 @@ public class CauldronMenu implements Listener {
                             }
                             else {
                                 event.setCancelled(true);
-                                player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, 1));
+                                player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, true));
                                 player.setMetadata("opened_cauldron_x", new FixedMetadataValue(plugin, x));
                                 player.setMetadata("opened_cauldron_y", new FixedMetadataValue(plugin, y));
                                 player.setMetadata("opened_cauldron_z", new FixedMetadataValue(plugin, z));
@@ -224,18 +224,33 @@ public class CauldronMenu implements Listener {
         Player player = (Player) event.getPlayer();
         if (inv.equals(cauldron_inv)) {
             Bukkit.getScheduler().cancelTask(refresh_id);
-            player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, false));
 
             if (cauldron_inv.getItem(11) != null) {
-                player.getInventory().addItem(cauldron_inv.getItem(11));
+                if (player.getInventory().firstEmpty() != -1) {
+                    player.getInventory().addItem(cauldron_inv.getItem(11));
+                }
+                else {
+                    player.getWorld().dropItemNaturally(player.getLocation(), cauldron_inv.getItem(11));
+                }
             }
 
             if (cauldron_inv.getItem(15) != null) {
-                player.getInventory().addItem(cauldron_inv.getItem(15));
+                if (player.getInventory().firstEmpty() != -1) {
+                    player.getInventory().addItem(cauldron_inv.getItem(15));
+                }
+                else {
+                    player.getWorld().dropItemNaturally(player.getLocation(), cauldron_inv.getItem(15));
+                }
             }
 
             if (cauldron_inv.getItem(22) != null && !cauldron_inv.getItem(22).getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
-                player.getInventory().addItem(cauldron_inv.getItem(22));
+                if (player.getInventory().firstEmpty() != -1) {
+                    player.getInventory().addItem(cauldron_inv.getItem(22));
+                }
+                else {
+                    player.getWorld().dropItemNaturally(player.getLocation(), cauldron_inv.getItem(22));
+                }
             }
         }
     }

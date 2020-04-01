@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerJoinLeave implements Listener {
 
@@ -39,6 +40,14 @@ public class PlayerJoinLeave implements Listener {
 
             //default values
             loader.saveDefault(player);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.setHealth(40.0);
+                    player.setSaturation(20.0F);
+                }
+            }.runTaskLaterAsynchronously(plugin, 5);
         }
 
         //EVERYONE---------------------------------------
@@ -48,14 +57,10 @@ public class PlayerJoinLeave implements Listener {
         //REGARDING SUPERNATURAL POWERS----------------------------------
 
         //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers >= 1.0) {
-
-        }
-
-        if (player.getWorld().equals(Bukkit.getWorld("world_empty"))) {
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (has_powers) {
+            if (player.getWorld().equals(Bukkit.getWorld("world_empty"))) {
                 String origworldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
-
                 if (origworldname == null) {
                     player.setHealth(0);
                 }
@@ -70,11 +75,16 @@ public class PlayerJoinLeave implements Listener {
                     Withdraw sendback = new Withdraw(plugin);
                     sendback.getOuttaHere(player, location, player.getLocation());
                 }
-        }
+            }
 
-        //reset agility jump timer
-        player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
-        player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
+            //reset agility jump timer
+            player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
+
+            //reset swapping
+            player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, false));
+            player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
+        }
     }
 
     @EventHandler

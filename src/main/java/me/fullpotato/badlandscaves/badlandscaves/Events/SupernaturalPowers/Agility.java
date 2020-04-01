@@ -27,9 +27,9 @@ public class Agility implements Listener {
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
 
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
-        if (has_powers < 1.0 || agility_level < 1.0) {
+        if (!has_powers || agility_level < 1.0) {
             player.setAllowFlight(false);
             return;
         }
@@ -68,8 +68,8 @@ public class Agility implements Listener {
         Player player = event.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
 
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
         if (agility_level < 1.0) return;

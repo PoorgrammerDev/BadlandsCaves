@@ -21,11 +21,11 @@ public class ManaBarRunnable extends BukkitRunnable {
     public void run() {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
+            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
 
             NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
             KeyedBossBar manaBar = Bukkit.getBossBar(key);
-            if (has_powers >= 1.0) {
+            if (has_powers) {
                 String title = ChatColor.DARK_AQUA + "Mana";
                 if (manaBar == null) {
                     manaBar = Bukkit.createBossBar(key, title, BarColor.BLUE, BarStyle.SEGMENTED_10);

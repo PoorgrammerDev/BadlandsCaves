@@ -11,7 +11,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
 
-public class PowersCommand implements CommandExecutor {
+public class PowersCommand extends Commands implements CommandExecutor {
     private BadlandsCaves plugin;
     public PowersCommand (BadlandsCaves bcav) {
         plugin = bcav;
@@ -32,7 +32,6 @@ public class PowersCommand implements CommandExecutor {
                 powers.put("agility","agility_level");
 
                 HashMap<String, Integer> powers_max_levels = new HashMap<>();
-                powers_max_levels.put("supernatural", 1);
                 powers_max_levels.put("displace", 2);
                 powers_max_levels.put("enhanced_eyes", 2);
                 powers_max_levels.put("withdraw", 2);
@@ -41,12 +40,12 @@ public class PowersCommand implements CommandExecutor {
                 powers_max_levels.put("agility", 2);
 
                 if (args.length == 0) {
-                    sender.sendMessage(ChatColor.RED + "Too few arguments.");
+                    tooFewArgs(sender);
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("get")) {
                     if (args.length < 2) {
-                        sender.sendMessage(ChatColor.RED + "Too few arguments. Please specify a player.");
+                        tooFewArgs(sender);
                         return true;
                     }
                     else {
@@ -55,66 +54,105 @@ public class PowersCommand implements CommandExecutor {
                                 if (args.length < 3) {
                                     sender.sendMessage(ChatColor.GOLD + "Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has the following values:");
                                     for (String str : powers.keySet()) {
-                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(str)).get(0).asInt() + ChatColor.GOLD + ".");
+                                        if (str.equals("supernatural")) {
+                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(str)).get(0).asBoolean() + ChatColor.GOLD + ".");
+                                        }
+                                        else {
+                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(str)).get(0).asInt() + ChatColor.GOLD + ".");
+                                        }
                                     }
                                 }
                                 else if (powers.containsKey(args[2])) {
-                                    sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(args[2])).get(0).asInt() + ChatColor.GOLD + ".");
+                                    if (args[2].equals("supernatural")) {
+                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(args[2])).get(0).asBoolean() + ChatColor.GOLD + ".");
+                                    }
+                                    else {
+                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(args[2])).get(0).asInt() + ChatColor.GOLD + ".");
+                                    }
                                 }
                                 else {
-                                    sender.sendMessage(ChatColor.RED + "You must provide a valid entry!");
+                                    valueNotValid(sender);
                                 }
                                 return true;
                             }
                         }
+                        playerNotValid(sender);
+                        return true;
                     }
                 }
                 else if (args[0].equalsIgnoreCase("set")) {
                     if (args.length < 2) {
-                        sender.sendMessage(ChatColor.RED + "Too few arguments. Please specify a player.");
+                        tooFewArgs(sender);
+                        return true;
                     }
                     else {
                         for (Player target : Bukkit.getOnlinePlayers()) {
-                            if (!args[1].equalsIgnoreCase(target.getDisplayName()) && !args[1].equalsIgnoreCase(target.getName()) && !args[1].equalsIgnoreCase(target.getUniqueId().toString())) continue;
+                            if (args[1].equalsIgnoreCase(target.getDisplayName()) || args[1].equalsIgnoreCase(target.getName()) || args[1].equalsIgnoreCase(target.getUniqueId().toString())) {
+                                if (args.length < 3) {
+                                    tooFewArgs(sender);
+                                    return true;
+                                }
+                                else if (powers.containsKey(args[2])) {
+                                    if (args.length < 4) {
+                                        if (args[2].equals("supernatural")) {
+                                            sender.sendMessage(ChatColor.RED + "Too few arguments. Possible values are TRUE or FALSE.");
+                                        }
+                                        else {
+                                            sender.sendMessage(ChatColor.RED + "Too few arguments. You need to specify a level to set. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
+                                        }
+                                    }
+                                    else {
+                                        if (args[2].equals("supernatural")) {
+                                            if (args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("false")) {
+                                                boolean input_value;
+                                                input_value = Boolean.parseBoolean(args[3]);
 
-                            if (args.length < 3) {
-                                sender.sendMessage(ChatColor.RED + "Too few arguments. Please specify an entry.");
-                                return true;
-                            }
-                            else if (powers.containsKey(args[2])) {
-                                if (args.length < 4) {
-                                    sender.sendMessage(ChatColor.RED + "Too few arguments. You need to specify a level to set. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
+                                                target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
+                                                sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
+                                            }
+                                            else {
+                                                sender.sendMessage(ChatColor.RED + "Possible Parameters: TRUE or FALSE.");
+                                                return true;
+                                            }
+                                        }
+                                        else {
+                                            int input_value;
+                                            try {
+                                                input_value = Integer.parseInt(args[3]);
+                                            }
+                                            catch (NumberFormatException exception) {
+                                                sender.sendMessage(ChatColor.RED + "Please enter a valid integer.");
+                                                return true;
+                                            }
+
+                                            if (input_value >= 0 && input_value <= powers_max_levels.get(args[2])) {
+                                                target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
+                                                sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
+                                            }
+                                            else {
+                                                sender.sendMessage(ChatColor.RED + "Please make sure the level stays within bounds. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
+                                            }
+                                        }
+                                    }
                                     return true;
                                 }
                                 else {
-                                    int input_value;
-                                    try {
-                                        input_value = Integer.parseInt(args[3]);
-                                    }
-                                    catch (NumberFormatException exception) {
-                                        sender.sendMessage(ChatColor.RED + "Please enter a valid integer.");
-                                        return true;
-                                    }
-
-                                    if (input_value >= 0 && input_value <= powers_max_levels.get(args[2])) {
-                                        target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
-                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
-                                        return true;
-                                    }
-                                    else {
-                                        sender.sendMessage(ChatColor.RED + "Please make sure the level stays within bounds. The max level of " + args[2] + " is " + powers_max_levels.get(args[2]) + ".");
-                                        return true;
-                                    }
+                                    valueNotValid(sender);
+                                    return true;
                                 }
                             }
-                            sender.sendMessage(ChatColor.RED + "You must specify a valid player!");
-                            return true;
                         }
+                        playerNotValid(sender);
+                        return true;
                     }
+                }
+                else {
+                    getOrSet(sender);
+                    return true;
                 }
             }
             else {
-                sender.sendMessage(ChatColor.RED + "You must be an operator to access this command.");
+                notOp(sender);
                 return true;
             }
         }

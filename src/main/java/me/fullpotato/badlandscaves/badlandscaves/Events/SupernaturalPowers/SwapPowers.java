@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,13 +22,50 @@ public class SwapPowers implements Listener {
     }
 
     @EventHandler
+    public void doubleShift (PlayerToggleSneakEvent event) {
+        final Player player = event.getPlayer();
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
+
+        if (player.isSneaking()) {
+            player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
+        }
+        else {
+            final boolean doubleshift_window = player.hasMetadata("swap_doubleshift_window") && player.getMetadata("swap_doubleshift_window").get(0).asBoolean();
+            if (doubleshift_window) {
+                player.setMetadata("swap_window", new FixedMetadataValue(plugin, true));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
+                    }
+                }.runTaskLaterAsynchronously(plugin, 100);
+            }
+            else {
+                player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, true));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, false));
+                    }
+                }.runTaskLaterAsynchronously(plugin, 20);
+            }
+        }
+    }
+
+
+    @EventHandler
     public void swap_to_powers (PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         boolean sneaking = player.isSneaking();
         if (!sneaking) return;
+
+        final boolean in_window = player.hasMetadata("swap_window") && player.getMetadata("swap_window").get(0).asBoolean();
+        if (!in_window) return;
+
 
         int swap_cd_num = player.getMetadata("swap_cooldown").get(0).asInt();
         if (swap_cd_num > 0) return;
@@ -101,7 +139,7 @@ public class SwapPowers implements Listener {
             }
 
         player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
-        player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 5));
+        player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 10));
         player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, 60));
         BukkitTask decrement = new BukkitRunnable() {
             @Override

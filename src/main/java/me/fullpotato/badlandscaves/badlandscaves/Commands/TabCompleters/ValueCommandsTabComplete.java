@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.badlandscaves.Commands;
+package me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -9,10 +9,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowersTabComplete implements TabCompleter {
+public class ValueCommandsTabComplete implements TabCompleter {
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("powers")) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+        if (command.getName().equalsIgnoreCase("deaths") ||
+                command.getName().equalsIgnoreCase("thirst") ||
+                command.getName().equalsIgnoreCase("toxicity") ||
+                command.getName().equalsIgnoreCase("mana")) {
             if (sender.isOp()) {
                 List<String> list = new ArrayList<>();
 
@@ -33,23 +37,6 @@ public class PowersTabComplete implements TabCompleter {
                     }
                 }
 
-                else if (args.length == 3) {
-                    String[] strings = {
-                            "supernatural",
-                            "displace",
-                            "enhanced_eyes",
-                            "withdraw",
-                            "possession",
-                            "endurance",
-                            "agility",
-                    };
-
-                    for (String str : strings) {
-                        if (str.toUpperCase().startsWith(args[2].toUpperCase())) {
-                            list.add(str);
-                        }
-                    }
-                }
                 return list;
             }
         }

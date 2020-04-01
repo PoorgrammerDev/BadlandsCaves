@@ -87,7 +87,7 @@ public class ShrineCapture extends BukkitRunnable {
                                             player.setMetadata("descension_shrines_capped", new FixedMetadataValue(plugin, a + 1));
                                             switch (a) {
                                                 case 0:
-                                                    player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, 1));
+                                                    player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, true));
                                                     player.setMetadata("agility_level", new FixedMetadataValue(plugin, 1));
                                                     player.setMetadata("displace_level", new FixedMetadataValue(plugin, 1));
                                                     break;

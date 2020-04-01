@@ -18,8 +18,8 @@ public class AgilityJumpRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
 

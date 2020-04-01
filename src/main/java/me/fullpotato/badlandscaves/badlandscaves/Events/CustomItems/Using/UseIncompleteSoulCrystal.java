@@ -37,7 +37,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
 
         final ItemStack current = event.getItem();
         final ItemStack soul_crystal_incomplete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
-        if (!checkMatchIgnoreUses(current, soul_crystal_incomplete, 3)) return;
+        if (!checkMatchIgnoreUses(current, soul_crystal_incomplete, 2)) return;
 
         final Player player = event.getPlayer();
         event.setCancelled(true);
@@ -49,7 +49,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         if (reflection == null) return;
 
         //removes a use
-        depleteUse(current, 3);
+        depleteUse(current, 2);
 
         //adds a death
         player.setMetadata("Deaths", new FixedMetadataValue(plugin, player.getMetadata("Deaths").get(0).asInt() + 1));

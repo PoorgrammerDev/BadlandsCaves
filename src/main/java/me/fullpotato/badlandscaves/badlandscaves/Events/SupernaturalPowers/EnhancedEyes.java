@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class EnhancedEyes implements Listener {
     public void use_eyes (PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        final int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
         if (player.getInventory().getItemInOffHand().isSimilar(eyes)) {
@@ -169,7 +170,8 @@ public class EnhancedEyes implements Listener {
                                     }
                                 }
                             }.runTaskTimerAsynchronously(plugin, 0, 1);
-                            new EyesRunnable(plugin, player, location, ids).runTaskTimer(plugin, 0, 0);
+
+                            new EyesRunnable(plugin, player, location, ids, player.hasPotionEffect(PotionEffectType.NIGHT_VISION)).runTaskTimer(plugin, 0, 0);
                         }
                         else {
                             player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
@@ -184,8 +186,8 @@ public class EnhancedEyes implements Listener {
     public void breakBlock (BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        final int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         final boolean using_eyes = player.getMetadata("using_eyes").get(0).asBoolean();
         if (!using_eyes) return;

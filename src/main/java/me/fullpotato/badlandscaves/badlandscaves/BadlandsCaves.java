@@ -1,15 +1,17 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.CustomItemTabComplete;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.HM_TabComplete;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.PowersTabComplete;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.ValueCommandsTabComplete;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseCompleteSoulCrystal;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseFishingCrate;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseTaintPowder;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.GappleEat;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
@@ -23,13 +25,9 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.NaturalThirstDecr
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.ToxicWaterBottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInWater;
-import me.fullpotato.badlandscaves.badlandscaves.NMS.CustomBlocks.TestBlock;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.AugmentedSpider;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.DeathEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.PlayerEffectsRunnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.ThirstEffectsRunnable;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.ToxEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarRunnable;
@@ -60,24 +58,11 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_sys_var",
             "tox_nat_decr_var",
             "tox_slow_incr_var",
-            "deaths_buff_speed_lvl",
-            "deaths_debuff_slowmine_lvl",
-            "deaths_debuff_slow_lvl",
-            "deaths_debuff_hunger_lvl",
-            "deaths_debuff_poison_lvl",
-            "tox_debuff_slowmine_lvl",
-            "tox_debuff_slow_lvl",
-            "tox_debuff_hunger_lvl",
-            "tox_debuff_poison_lvl",
-            "thirst_debuff_slowmine_lvl",
-            "thirst_debuff_slow_lvl",
-            "thirst_debuff_hunger_lvl",
-            "thirst_debuff_poison_lvl",
-            "opened_cauldron", //TODO replace this with boolean
+            "$opened_cauldron", //TODO test new mechanic to make sure it works
             "opened_cauldron_x",
             "opened_cauldron_y",
             "opened_cauldron_z",
-            "has_supernatural_powers", //TODO replace this with boolean
+            "$has_supernatural_powers",
             "in_descension",
             "$in_reflection",
             "reflection_zombie",
@@ -92,11 +77,13 @@ public final class BadlandsCaves extends JavaPlugin {
             "mana_regen_delay_timer",
             "mana_bar_active_timer",
             "swap_slot",
+            "swap_doubleshift_window",
+            "swap_window",
             "swap_cooldown",
             "swap_name_timer",
             "displace_level",
             "displace_particle_id",
-            "has_displace_marker", //TODO replace this with boolean
+            "$has_displace_marker",
             "displace_x",
             "displace_y",
             "displace_z",
@@ -108,7 +95,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "withdraw_chunk_z",
             "withdraw_timer",
             "eyes_level",
-            "using_eyes", //TODO replace this with boolean
+            "$using_eyes",
             "possess_level",
             "$in_possession",
             "possessed_entity",
@@ -129,6 +116,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "starter_bone_meal",
             "toxic_water",
             "purified_water",
+            "fishing_crate",
             "antidote",
             "mana_potion",
             "purge_essence",
@@ -152,6 +140,8 @@ public final class BadlandsCaves extends JavaPlugin {
             "merged_souls",
             "soul_crystal_incomplete",
             "soul_crystal",
+            "rune",
+            "charged_rune",
     };
 
     @Override
@@ -226,7 +216,11 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new EndGame(this), this);
             this.getServer().getPluginManager().registerEvents(new LimitActions(this), this);
             this.getServer().getPluginManager().registerEvents(new UseCompleteSoulCrystal(this), this);
-            this.getServer().getPluginManager().registerEvents(new TestBlock(this), this);
+            //this.getServer().getPluginManager().registerEvents(new TestBlock(this), this);
+            this.getServer().getPluginManager().registerEvents(new MushroomStew(this), this);
+            this.getServer().getPluginManager().registerEvents(new DestroySpawner(this), this);
+            this.getServer().getPluginManager().registerEvents(new UseRune(this), this);
+            this.getServer().getPluginManager().registerEvents(new UseChargedRune(this), this);
 
         }
 
@@ -257,9 +251,6 @@ public final class BadlandsCaves extends JavaPlugin {
         //runnables
         {
             new ActionbarRunnable().runTaskTimer(this, 0 ,0);
-            new ToxEffectsRunnable(this).runTaskTimer(this, 0, 0);
-            new ThirstEffectsRunnable(this).runTaskTimer(this, 0, 0);
-            new DeathEffectsRunnable(this).runTaskTimer(this, 0, 0);
             new PlayerEffectsRunnable().runTaskTimer(this,0,0);
             new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
             new PlayerConfigLoadSave(this, player_values).runTaskTimer(this, 5, 3600);

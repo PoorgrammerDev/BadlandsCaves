@@ -15,8 +15,8 @@ public class ManaRegen extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-            if (has_powers < 1.0) return;
+            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            if (!has_powers) return;
 
             int Mana = player.getMetadata("Mana").get(0).asInt();
             int max_mana = player.getMetadata("max_mana").get(0).asInt();

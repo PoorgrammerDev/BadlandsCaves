@@ -20,8 +20,8 @@ public class EnduranceCancelHunger implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         ItemStack item = event.getItem();
         if (item != null) return;

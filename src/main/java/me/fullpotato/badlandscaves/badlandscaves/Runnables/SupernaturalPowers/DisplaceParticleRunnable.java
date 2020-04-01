@@ -44,8 +44,8 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             warp_range = 30;
         }
 
-        int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
-        if (has_displace_marker > 0.5) {
+        boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asBoolean();
+        if (has_displace_marker) {
             //yes marker
             World world = player.getWorld();
             final double mana = player.getMetadata("Mana").get(0).asDouble();

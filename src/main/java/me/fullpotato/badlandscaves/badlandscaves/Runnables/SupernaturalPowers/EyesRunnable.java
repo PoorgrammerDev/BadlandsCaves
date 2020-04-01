@@ -19,12 +19,14 @@ public class EyesRunnable extends BukkitRunnable {
     private Player player;
     private Location origin;
     private ArrayList<Integer> shulker_ids;
+    private boolean hasNightVision;
 
-    public EyesRunnable (BadlandsCaves bcav, Player ply, Location og, ArrayList<Integer> ids) {
+    public EyesRunnable (BadlandsCaves bcav, Player ply, Location og, ArrayList<Integer> ids, boolean hasNightVision) {
         plugin = bcav;
         player = ply;
         shulker_ids = ids;
         origin = og;
+        this.hasNightVision = hasNightVision;
     }
 
 
@@ -41,7 +43,9 @@ public class EyesRunnable extends BukkitRunnable {
 
         if (using_eyes && mana >= drain_per_tick) {
             //night vision
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 10, 0, true, false));
+            if (!hasNightVision) {
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 300, 0, true, false));
+            }
 
             //highlights living entities
             for (Entity entity : origin.getWorld().getNearbyEntities(origin, block_range, block_range, block_range)) {
@@ -64,6 +68,10 @@ public class EyesRunnable extends BukkitRunnable {
             //removing indicators
             for (int id : shulker_ids) {
                 nms.removeIndicator(id);
+            }
+
+            if (!hasNightVision) {
+                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             }
 
             this.cancel();

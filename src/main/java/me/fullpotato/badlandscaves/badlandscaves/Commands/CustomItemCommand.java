@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CustomItemCommand implements CommandExecutor {
+public class CustomItemCommand extends Commands implements CommandExecutor {
     private BadlandsCaves plugin;
     public CustomItemCommand (BadlandsCaves bcav) {
         plugin = bcav;
@@ -19,43 +19,50 @@ public class CustomItemCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("customitem")) {
             if (sender.isOp()) {
-                if (args.length < 2) {
-                    sender.sendMessage(ChatColor.RED + "Too few arguments.");
+                if (args.length < 1) {
+                    tooFewArgs(sender);
                     return true;
                 }
                 else {
                     Player target = getPlayer(args[0]);
                     if (target != null) {
-                        try {
-                            ItemStack item = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + args[1]).getValues(true));
-                            if (args.length >= 3) {
-                                try {
-                                    int amount = Math.max(Math.min(Integer.parseInt(args[2]), 2304), 0);
-                                    item.setAmount(amount);
+                        if (args.length > 1) {
+                            try {
+                                ItemStack item = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + args[1]).getValues(true));
+                                int amount = 1;
+                                if (args.length >= 3) {
+                                    try {
+                                        amount = Math.max(Math.min(Integer.parseInt(args[2]), 2304), 0);
+                                    }
+                                    catch (NumberFormatException e) {
+                                        sender.sendMessage(ChatColor.RED + "The amount must be an integer!");
+                                    }
                                 }
-                                catch (NumberFormatException e) {
-                                    sender.sendMessage(ChatColor.RED + "The amount must be an integer!");
-                                }
-                            }
-                            else {
-                                item.setAmount(1);
-                            }
 
-                            target.getInventory().addItem(item);
-                            sender.sendMessage("§6Gave §c" + item.getAmount() + "§6 [§r" + item.getItemMeta().getDisplayName() + "§6] to §c" + target.getDisplayName() + "§6.");
-                            return true;
+                                item.setAmount(amount);
+                                target.getInventory().addItem(item);
+                                sender.sendMessage("§6Gave §c" + amount + "§6 [§r" + item.getItemMeta().getDisplayName() + "§6] to §c" + target.getDisplayName() + "§6.");
+                                return true;
+                            }
+                            catch (NullPointerException e) {
+                                sender.sendMessage(ChatColor.RED + "You must specify a valid custom item.");
+                                return true;
+                            }
                         }
-                        catch (NullPointerException e) {
-                            sender.sendMessage(ChatColor.RED + "You must specify a valid custom item!");
-                            return true;
+                        else {
+                         tooFewArgs(sender);
+                         return true;
                         }
-
                     }
                     else {
-                        sender.sendMessage(ChatColor.RED + "You must specify a valid player!");
+                        playerNotValid(sender);
                         return true;
                     }
                 }
+            }
+            else {
+                notOp(sender);
+                return true;
             }
         }
         return false;

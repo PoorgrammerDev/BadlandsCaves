@@ -7,7 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class HardmodeCommand implements CommandExecutor {
+public class HardmodeCommand extends Commands implements CommandExecutor {
 
     private BadlandsCaves plugin;
     public HardmodeCommand (BadlandsCaves bcav) {
@@ -24,47 +24,47 @@ public class HardmodeCommand implements CommandExecutor {
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("set")) {
-                    int value = -1;
+                    boolean value;
                     if (args.length < 2) {
                         sender.sendMessage(ChatColor.RED + "You must specify a value to set it to. (TRUE/FALSE)");
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("true")) {
-                        value = 1;
+                        value = true;
                     }
                     else if (args[1].equalsIgnoreCase("false")) {
-                        value = 0;
+                        value = false;
                     }
                     else {
                         sender.sendMessage(ChatColor.RED + "Possible Parameters: TRUE or FALSE.");
                         return true;
                     }
 
-
-                    boolean set_to = false;
-                    if (value == 0) {
-                        set_to = false;
-                    }
-                    else if (value == 1) {
-                        set_to = true;
-                    }
-
-                    plugin.getConfig().set("game_values.hardmode", set_to);
+                    plugin.getConfig().set("game_values.hardmode", value);
                     plugin.saveConfig();
-                    sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + set_to + ChatColor.GOLD + ".");
+                    sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + value + ChatColor.GOLD + ".");
 
                     if (args.length < 3 || args[2] == null || args[2].equalsIgnoreCase("reload")) {
-                        Bukkit.reload();
+                        plugin.getServer().reload();
                     }
                     else if (args[2].equalsIgnoreCase("noreload")) {
                     }
                     else {
-                        Bukkit.reload();
+                        sender.sendMessage(ChatColor.RED + "Possible Parameters: RELOAD or NORELOAD.");
+                        return true;
                     }
                     return true;
                 }
+                else {
+                    getOrSet(sender);
+                    return true;
+                }
+            }
+            else {
+                notOp(sender);
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

@@ -24,8 +24,8 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
         if (!player.getInventory().getItemInOffHand().isSimilar(possess)) {

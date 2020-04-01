@@ -104,8 +104,8 @@ public class DeathHandler implements Listener {
         player.setMetadata("tox_nat_decr_var", new FixedMetadataValue(plugin, 0.0));
         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
 
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers >= 1.0) {
+        boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (has_powers) {
             player.setMetadata("Mana", new FixedMetadataValue(plugin, 100));
             player.setMetadata("swap_slot", new FixedMetadataValue(plugin, -1));
             player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
@@ -120,7 +120,7 @@ public class DeathHandler implements Listener {
         if (in_descension >= 1 && in_descension <= 3) {
             if (in_descension == 2) {
                 int towers_capped = player.hasMetadata("descension_shrines_capped") ? player.getMetadata("descension_shrines_capped").get(0).asInt() : 0;
-                int supernatural = towers_capped == 4 ? 1 : 0;
+                boolean supernatural = towers_capped == 4;
                 int displace = towers_capped == 4 ? 1 : 0;
 
                 //resetting values

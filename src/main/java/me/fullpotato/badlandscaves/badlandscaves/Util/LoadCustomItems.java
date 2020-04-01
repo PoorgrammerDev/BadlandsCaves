@@ -313,9 +313,8 @@ public class LoadCustomItems {
 
         soul_crystal_incomplete_meta.setDisplayName("§3§k%§r§5§lIncomplete Soul Crystal§r§3§k%");
 
-        soul_crystal_incomplete_lore.add("§7Requires one more soul.");
-        soul_crystal_incomplete_lore.add("§9§lRight Click §r§7to collect your own soul. Be prepared to fight.");
-        soul_crystal_incomplete_lore.add("");
+        soul_crystal_incomplete_lore.add("§9§lRight Click§r§7 to collect your own soul. Be prepared to fight.");
+        soul_crystal_incomplete_lore.add("§7Requires a human soul to complete.");
         soul_crystal_incomplete_lore.add("§7Uses Left: 9");
         soul_crystal_incomplete_meta.setLore(soul_crystal_incomplete_lore);
 
@@ -330,9 +329,8 @@ public class LoadCustomItems {
 
         soul_crystal_meta.setDisplayName("§b§k%§r§d§lSoul Crystal§r§b§k%");
 
+        soul_crystal_lore.add("§9§lRight Click§r§7 to use.");
         soul_crystal_lore.add("§7Can be used as a sacrifice to §kenter Descension§r§7.");
-        soul_crystal_lore.add("§9§lRight Click §r§7to use.");
-        soul_crystal_lore.add("");
         soul_crystal_lore.add("§7Uses Left: 10");
         soul_crystal_meta.setLore(soul_crystal_lore);
 
@@ -341,6 +339,46 @@ public class LoadCustomItems {
         plugin.getConfig().set("items.soul_crystal", soul_crystal.serialize());
 
         //---------------------------
+        ItemStack rune = new ItemStack(Material.KNOWLEDGE_BOOK);
+        ItemMeta rune_meta = rune.getItemMeta();
+        ArrayList<String> rune_lore = new ArrayList<>();
+
+        rune_meta.setDisplayName("§8§lRune");
+
+        rune_lore.add("§9§lRight Click§r§7 to use.");
+        rune_lore.add("§7Used to upgrade Supernatural Abilities.");
+        rune_lore.add("§70 / 8 §dMerged Souls");
+        rune_lore.add("§70 / 8 §9Essences of Magic");
+
+        rune_meta.setLore(rune_lore);
+
+        rune_meta.setCustomModelData(121);
+        rune.setItemMeta(rune_meta);
+        plugin.getConfig().set("items.rune", rune.serialize());
+
+
+        //---------------------------
+
+        ItemStack charged_rune = new ItemStack(Material.KNOWLEDGE_BOOK);
+        ItemMeta charged_rune_meta = rune.getItemMeta();
+        ArrayList<String> charged_rune_lore = new ArrayList<>();
+
+        charged_rune_meta.setDisplayName("§d§k%§r§8§lRune§r§9§k%");
+
+        charged_rune_lore.add("§9§lRight Click§r§7 to upgrade Supernatural Abilities.");
+
+        charged_rune_meta.setLore(charged_rune_lore);
+
+        charged_rune_meta.setCustomModelData(122);
+        charged_rune.setItemMeta(charged_rune_meta);
+        plugin.getConfig().set("items.charged_rune", charged_rune.serialize());
+
+
+        //---------------------------
+        //CUSTOM MODEL DATA 123 USED BY ENDURANCE ICON
+        //---------------------------
+
+
         plugin.saveConfig();
         plugin.reloadConfig();
     }

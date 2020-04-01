@@ -97,8 +97,8 @@ public class Drinking implements Listener {
                     player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(current_tox - tox_decr, 0)));
                 }
                 else if (item.isSimilar(mana_potion)) {
-                    int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-                    if (has_powers >= 1.0) {
+                    final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+                    if (has_powers) {
                         int Mana = player.getMetadata("Mana").get(0).asInt();
                         int max_mana = player.getMetadata("max_mana").get(0).asInt();
                         int new_mana = Math.min(Mana + 100, max_mana);

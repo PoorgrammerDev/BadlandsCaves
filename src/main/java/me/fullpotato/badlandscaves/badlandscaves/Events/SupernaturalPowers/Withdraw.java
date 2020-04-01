@@ -32,8 +32,8 @@ public class Withdraw implements Listener {
     @EventHandler
     public void use_withdraw(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
         if (player.getInventory().getItemInOffHand().isSimilar(withdraw)) {
@@ -127,8 +127,8 @@ public class Withdraw implements Listener {
     @EventHandler
     public void keep_in_chunk (PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         Location location = player.getLocation();
         World world = location.getWorld();
@@ -157,7 +157,7 @@ public class Withdraw implements Listener {
         final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
         final int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
         if (withdraw_level == 1) {
-            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
         }
 
 

@@ -37,8 +37,8 @@ public class NaturalThirstDecrease implements Listener {
 
         if (moved) {
             //endurance cancel
-            int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-            if (has_powers >= 1.0) {
+            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            if (has_powers) {
                 int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
                 if (endurance_level > 0) {
                     Random random = new Random();

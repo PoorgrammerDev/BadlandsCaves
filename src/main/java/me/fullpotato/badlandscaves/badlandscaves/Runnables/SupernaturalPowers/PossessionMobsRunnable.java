@@ -84,7 +84,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                 float current_pitch = player.getLocation().getPitch();
 
                 //LEVEL 2: WARP TO DISPLACE------------ (no mana cost)
-                boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt() == 1;
+                boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asBoolean();
                 if (possess_level > 1 && has_displace_marker) {
                     int displace_level = player.getMetadata("displace_level").get(0).asInt();
                     double disp_x = player.getMetadata("displace_x").get(0).asDouble();
@@ -106,7 +106,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
                     if (player.getLocation().distance(displace_marker) <= warp_range) {
                         if (cancel_fall) player.setFallDistance(0);
-                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
                         player.teleport(displace_marker);
                         return;
                     }

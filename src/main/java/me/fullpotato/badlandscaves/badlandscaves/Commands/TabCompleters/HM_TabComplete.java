@@ -1,22 +1,16 @@
-package me.fullpotato.badlandscaves.badlandscaves.Commands;
+package me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValueCommandsTabComplete implements TabCompleter {
+public class HM_TabComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
-        if (command.getName().equalsIgnoreCase("deaths") ||
-                command.getName().equalsIgnoreCase("thirst") ||
-                command.getName().equalsIgnoreCase("toxicity") ||
-                command.getName().equalsIgnoreCase("mana")) {
+        if (command.getName().equalsIgnoreCase("hardmode")) {
             if (sender.isOp()) {
                 List<String> list = new ArrayList<>();
 
@@ -30,13 +24,22 @@ public class ValueCommandsTabComplete implements TabCompleter {
                 }
 
                 else if (args.length == 2) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (args[1].isEmpty() || player.getName().toUpperCase().startsWith(args[1].toUpperCase())) {
-                            list.add(player.getName());
-                        }
+                    if (args[1].startsWith("t")) list.add("true");
+                    else if (args[1].startsWith("f")) list.add("false");
+                    else {
+                        list.add("true");
+                        list.add("false");
                     }
                 }
 
+                else if (args.length == 3) {
+                    if (args[2].startsWith("r")) list.add("reload");
+                    else if (args[2].startsWith("n")) list.add("noreload");
+                    else {
+                        list.add("reload");
+                        list.add("noreload");
+                    }
+                }
                 return list;
             }
         }

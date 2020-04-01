@@ -24,8 +24,8 @@ public class Displace implements Listener {
     @EventHandler
     public void use_displace(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        int has_powers = player.getMetadata("has_supernatural_powers").get(0).asInt();
-        if (has_powers < 1.0) return;
+        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        if (!has_powers) return;
 
         World world = player.getWorld();
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
@@ -52,9 +52,9 @@ public class Displace implements Listener {
                         cancel_fall = true;
                     }
 
-                    int has_displace_marker = player.getMetadata("has_displace_marker").get(0).asInt();
+                    boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asBoolean();
                     event.setCancelled(true);
-                    if (has_displace_marker > 0.5) {
+                    if (has_displace_marker) {
                         double mana = player.getMetadata("Mana").get(0).asDouble();
                         int displace_mana_cost = plugin.getConfig().getInt("game_values.displace_mana_cost");
 
@@ -69,7 +69,7 @@ public class Displace implements Listener {
                             if (mana >= displace_mana_cost) {
                                 if (cancel_fall) player.setFallDistance(0);
                                 player.teleport(displace_marker);
-                                player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+                                player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
 
                                 double new_mana = mana - (double) (displace_mana_cost);
                                 player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
@@ -82,7 +82,7 @@ public class Displace implements Listener {
                         else if (player.getLocation().distance(displace_marker) < 20) {
                         }
                         else {
-                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 0));
+                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
                         }
                     }
                     else {
@@ -106,7 +106,7 @@ public class Displace implements Listener {
                         location.setY(location.getY() + 1.5);
                         location.setZ(location.getZ() + 0.5);
 
-                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, 1));
+                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, true));
                         player.setMetadata("displace_x", new FixedMetadataValue(plugin, location.getX()));
                         player.setMetadata("displace_y", new FixedMetadataValue(plugin, location.getY()));
                         player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));
