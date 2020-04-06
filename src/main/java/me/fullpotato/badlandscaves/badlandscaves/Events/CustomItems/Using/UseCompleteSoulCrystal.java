@@ -39,7 +39,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         if (player.getWorld().equals(descension)) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
-        if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
+        if (player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
 
         //deplete use
         depleteUse(current, 2);

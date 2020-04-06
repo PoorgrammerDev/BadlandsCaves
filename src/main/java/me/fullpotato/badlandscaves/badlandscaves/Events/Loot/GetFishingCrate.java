@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.Loot;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -22,38 +23,27 @@ public class GetFishingCrate implements Listener {
 
     @EventHandler
     public void fishing (PlayerFishEvent event) {
-        if (event.getCaught() == null) return;
-
-        if (event.getCaught() instanceof Item) {
-            Player player = event.getPlayer();
+        if (event.getCaught() != null && event.getCaught() instanceof Item) {
+            final Player player = event.getPlayer();
             Item item = (Item) event.getCaught();
-            Material itemtype = item.getItemStack().getType();
+            final Random random = new Random();
+            final int default_bound = plugin.getConfig().getInt("game_values.fishing_crate_chance");
+            final double player_luck = player.getAttribute(Attribute.GENERIC_LUCK).getValue();
 
-            if (itemtype.equals(Material.TROPICAL_FISH)) {
-                int default_bound = plugin.getConfig().getInt("game_values.fishing_crate_chance");
+            int rod_luck = 0;
+            if (player.getInventory().getItemInMainHand().getType().equals(Material.FISHING_ROD)) {
+                rod_luck = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LUCK);
+            }
+            else if (player.getInventory().getItemInOffHand().getType().equals(Material.FISHING_ROD)) {
+                rod_luck = player.getInventory().getItemInOffHand().getEnchantmentLevel(Enchantment.LUCK);
+            }
 
-                int luck_effect = 0;
-                if (player.hasPotionEffect(PotionEffectType.LUCK)) {
-                    luck_effect = player.getPotionEffect(PotionEffectType.LUCK).getAmplifier();
-                }
+            final double chance = 100 * (Math.pow(rod_luck / 15.0, 1.5) + (player_luck / 150.0)) + default_bound;
 
-                int rod_luck = 0;
-                if (player.getInventory().getItemInMainHand().getType().equals(Material.FISHING_ROD)) {
-                    rod_luck = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LUCK);
-                }
-                else if (player.getInventory().getItemInOffHand().getType().equals(Material.FISHING_ROD)) {
-                    rod_luck = player.getInventory().getItemInOffHand().getEnchantmentLevel(Enchantment.LUCK);
-                }
-
-                int bound = default_bound - (luck_effect + rod_luck);
-                int random = 0;
-                if (bound > 0) {
-                    random = new Random().nextInt(bound);
-                }
-                if (random == 0) {
-                    ItemStack crate = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate").getValues(true));
-                    item.setItemStack(crate);
-                }
+            if (chance > 0 && random.nextInt(100) < chance) {
+                final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+                final ItemStack crate = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate" + (hardmode ? "_hardmode" : "")).getValues(true));
+                item.setItemStack(crate);
             }
         }
     }

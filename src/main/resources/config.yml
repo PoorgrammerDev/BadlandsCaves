@@ -2,18 +2,15 @@ game_values:
   #value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
   hardmode: FALSE
 
-  #to get a fishing crate, the chance is 1 in "x" when catching a tropical fish, "x" being this number
-  #decreasing this value will cause fishing crates to be more common
-  #increasing this value will cause fishing crates to be less common
-  fishing_crate_chance: 20
+  #base percentage without luck effect or luck of the sea modifiers for getting a fishing crate
+  fishing_crate_chance: 25
 
-  #when opening a fishing crate, the chance is 1 in "x" to get treasure instead of fish, "x" being this number
-  #decreasing this value will cause treasure to be more common
-  #increasing this value will cause treasure to be less common
-  fish_or_treasure_base: 200
+  #opening fishing crate: base percentage to get treasure w/o luck effect
+  fishing_crate_treasure_base: 10
 
-  #the max amount of fish you can get from a fishing crate at one time
-  fish_bound_base: 32
+  #every time you open a crate, there's {x}% to upgrade a tier of loot, and {100 - x}% to not.
+  #Everytime it's upgraded, it goes back through this again until it either fails, or gets to max tier.
+  fishing_crate_tier_upgrade: 50
 
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE

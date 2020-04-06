@@ -147,15 +147,32 @@ public class LoadCustomItems {
         ItemStack fishing_crate = new ItemStack(Material.BARREL);
         ItemMeta fishing_crate_meta = fishing_crate.getItemMeta();
         ArrayList<String> fishing_crate_lore = new ArrayList<>();
-        fishing_crate_meta.setDisplayName("§6Fishing Crate");
+        fishing_crate_meta.setDisplayName("§2Fishing Crate");
 
         fishing_crate_lore.add("§7Right click to open.");
+        fishing_crate_lore.add("§2Contains Prehardmode Loot.");
         fishing_crate_meta.setLore(fishing_crate_lore);
 
         fishing_crate_meta.addEnchant(Enchantment.DURABILITY, 1, false);
         fishing_crate_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         fishing_crate.setItemMeta(fishing_crate_meta);
         plugin.getConfig().set("items.fishing_crate", fishing_crate.serialize());
+
+        //---------------------------
+
+        ItemStack fishing_crate_hardmode = new ItemStack(Material.BARREL);
+        ItemMeta fishing_crate_hardmode_meta = fishing_crate.getItemMeta();
+        ArrayList<String> fishing_crate_hardmode_lore = new ArrayList<>();
+        fishing_crate_hardmode_meta.setDisplayName("§6Fishing Crate");
+
+        fishing_crate_hardmode_lore.add("§7Right click to open.");
+        fishing_crate_hardmode_lore.add("§6Contains Hardmode Loot.");
+        fishing_crate_hardmode_meta.setLore(fishing_crate_hardmode_lore);
+
+        fishing_crate_hardmode_meta.addEnchant(Enchantment.DURABILITY, 1, false);
+        fishing_crate_hardmode_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        fishing_crate_hardmode.setItemMeta(fishing_crate_hardmode_meta);
+        plugin.getConfig().set("items.fishing_crate_hardmode", fishing_crate_hardmode.serialize());
 
         //---------------------------
 

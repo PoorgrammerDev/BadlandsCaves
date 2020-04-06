@@ -15,6 +15,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.UseFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoinLeave;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.*;
@@ -117,6 +118,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "toxic_water",
             "purified_water",
             "fishing_crate",
+            "fishing_crate_hardmode",
             "antidote",
             "mana_potion",
             "purge_essence",
