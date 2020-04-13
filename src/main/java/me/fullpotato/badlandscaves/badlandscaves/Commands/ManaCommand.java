@@ -35,7 +35,12 @@ public class ManaCommand extends Commands implements CommandExecutor {
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Mana").get(0).asDouble() + ChatColor.GOLD + ".");
+                                if (args.length > 2 && args[2].equalsIgnoreCase("max")) {
+                                    sender.sendMessage(ChatColor.GOLD + "The Max Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("max_mana").get(0).asDouble() + ChatColor.GOLD + ".");
+                                }
+                                else {
+                                    sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Mana").get(0).asDouble() + ChatColor.GOLD + ".");
+                                }
                                 return true;
                             }
                         }
@@ -45,21 +50,25 @@ public class ManaCommand extends Commands implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (args.length < 2) {
                         tooFewArgs(sender);
-                        return true;
                     }
                     else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 if (args.length > 2) {
-                                    // TODO: 3/31/2020 also make the command be able to set MAX mana too
                                     try {
                                         double change = Double.parseDouble(args[2]);
-                                        targets.setMetadata("Mana", new FixedMetadataValue(plugin, change));
-                                        sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                        if (args.length > 3 && args[3].equalsIgnoreCase("max")) {
+                                            targets.setMetadata("max_mana", new FixedMetadataValue(plugin, change));
+                                            sender.sendMessage(ChatColor.GOLD + "The Max Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                        }
+                                        else {
+                                            targets.setMetadata("Mana", new FixedMetadataValue(plugin, change));
+                                            sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                        }
                                         return true;
                                     }
                                     catch (NumberFormatException e) {
-                                        sender.sendMessage(ChatColor.RED + "You must set the Mana count to a double.");
+                                        sender.sendMessage(ChatColor.RED + "You must set the Mana count to a number.");
                                         return true;
                                     }
                                 }
@@ -70,8 +79,8 @@ public class ManaCommand extends Commands implements CommandExecutor {
                             }
                         }
                         playerNotValid(sender);
-                        return true;
                     }
+                    return true;
                 }
                 else {
                     getOrSet(sender);

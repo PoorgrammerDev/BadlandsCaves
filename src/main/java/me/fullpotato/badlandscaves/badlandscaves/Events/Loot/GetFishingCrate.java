@@ -38,6 +38,8 @@ public class GetFishingCrate implements Listener {
                 rod_luck = player.getInventory().getItemInOffHand().getEnchantmentLevel(Enchantment.LUCK);
             }
 
+
+            // TODO: 4/6/2020 review this
             final double chance = 100 * (Math.pow(rod_luck / 15.0, 1.5) + (player_luck / 150.0)) + default_bound;
 
             if (chance > 0 && random.nextInt(100) < chance) {

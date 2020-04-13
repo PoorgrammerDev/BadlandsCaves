@@ -37,6 +37,10 @@ public class ValueCommandsTabComplete implements TabCompleter {
                     }
                 }
 
+                if (command.getName().equalsIgnoreCase("mana") && args.length == 4) {
+                    list.add("max");
+                }
+
                 return list;
             }
         }

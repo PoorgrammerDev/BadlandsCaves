@@ -35,13 +35,13 @@ public class DeathHandler implements Listener {
         double thirst = player.getMetadata("Thirst").get(0).asDouble();
 
         if (toxicity >= 100 && thirst <= 0) {
-            event.setDeathMessage(player.getDisplayName() + " died of multiple causes.");
+            event.setDeathMessage(player.getDisplayName() + " died of multiple causes");
         }
         else if (toxicity >= 100) {
-            event.setDeathMessage(player.getDisplayName() + " died of toxicity.");
+            event.setDeathMessage(player.getDisplayName() + " died of toxicity");
         }
         else if (thirst <= 0) {
-            event.setDeathMessage(player.getDisplayName() + " died of dehydration.");
+            event.setDeathMessage(player.getDisplayName() + " died of dehydration");
         }
 
         //silent death in descension

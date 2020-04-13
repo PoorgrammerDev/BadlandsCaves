@@ -61,7 +61,6 @@ public class ParticleShapes {
         }
     }
 
-    //TODO there must be a better way to do this
     private static void findCorrectParticleMethod (Player player, World world, Particle particle, Location scout, double extra, Object options) {
         if (options != null) {
             if (extra != -1) {

@@ -3,11 +3,10 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Refl
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
-import me.fullpotato.badlandscaves.badlandscaves.NMS.ReflectionWorldNMS;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.FakePlayer;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.*;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -62,7 +61,6 @@ public class EndGame implements Listener {
 
             if (player != null) {
                 DeathHandler resetter = new DeathHandler(plugin);
-                Bukkit.broadcastMessage(player.toString());
                 resetWorld(player);
 
                 final Player ply = player;
@@ -80,7 +78,7 @@ public class EndGame implements Listener {
 
     public void resetWorld(final Player player) {
         ClearEntities();
-        removeClone(player);
+        removeClone();
         world.setTime(6000);
 
         final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
@@ -99,9 +97,11 @@ public class EndGame implements Listener {
         }
     }
 
-    public void removeClone(final Player player) {
-        ReflectionWorldNMS nms = new ReflectionWorldNMS(player);
-        nms.remove();
+    public void removeClone() {
+        FakePlayer nms = new FakePlayer(world);
+        nms.remove(ZombieBossBehavior.fakePlayer);
+
+        ZombieBossBehavior.fakePlayer = null;
     }
 
     public void completeSoul (final Player player) {
@@ -110,12 +110,12 @@ public class EndGame implements Listener {
         final ItemStack complete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
         for (ItemStack item : player.getInventory()) {
             if (item == null) continue;
-            if (usecrystal.checkMatchIgnoreUses(item, incomplete, 3)) {
+            if (usecrystal.checkMatchIgnoreUses(item, incomplete, 2)) {
                 item.setAmount(item.getAmount() - 1);
-                break;
+                player.getInventory().addItem(complete);
+                return;
             }
         }
-        player.getInventory().addItem(complete);
     }
 
     public void restoreInventory (final Player player) {

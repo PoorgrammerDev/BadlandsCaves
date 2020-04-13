@@ -36,7 +36,6 @@ public class InventorySerialize {
      * @param clearCurrent If true, clear the player's current inventory and replace it with this. If false, simply just give them the items on top of their current inventory.
      * @param clearConfig If true, remove the saved inventory in the config after giving it to the player.
      */
-    // FIXME: 3/13/2020 
     public void loadInventory (final Player player, final String inventoryName, final boolean clearCurrent, final boolean clearConfig) {
         final String base_key = "Scores.users." + player.getUniqueId() + ".saved_inventories." + inventoryName;
         final ConfigurationSection inv_section = plugin.getConfig().getConfigurationSection(base_key);

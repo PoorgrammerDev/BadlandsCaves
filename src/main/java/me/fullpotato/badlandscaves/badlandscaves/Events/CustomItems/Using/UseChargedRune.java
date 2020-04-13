@@ -23,6 +23,13 @@ public class UseChargedRune implements Listener {
     private String title = "§8Upgrade Supernatural Abilities";
     private String confirm_title;
     private ItemStack empty;
+    private final int displace_max_level = 2;
+    private final int eyes_max_level = 2;
+    private final int withdraw_max_level = 2;
+    private final int possess_max_level = 2;
+    private final int agility_max_level = 2;
+    private final int endurance_max_level = 2;
+    private final int max_mana_max = 500;
 
     public UseChargedRune(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -172,8 +179,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generateDisplaceIcon(final Player player) {
         final int displace_level = player.getMetadata("displace_level").get(0).asInt();
-        // TODO: 3/31/2020 change the "2" to an actual max level variable defined throughout the entire project
-        if (displace_level >= 2) {
+        if (displace_level >= displace_max_level) {
             ItemStack displace_cancel = new ItemStack(Material.BARRIER);
             ItemMeta displace_cancel_meta = displace_cancel.getItemMeta();
             displace_cancel_meta.setDisplayName("§dDisplace §8| §aMAX LEVEL");
@@ -217,8 +223,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generateWithdrawIcon(final Player player) {
         final int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
-        // TODO: 3/31/2020 change the "2" to an actual max level variable defined throughout the entire project
-        if (withdraw_level >= 2) {
+        if (withdraw_level >= withdraw_max_level) {
             ItemStack withdraw_cancel = new ItemStack(Material.BARRIER);
             ItemMeta withdraw_cancel_meta = withdraw_cancel.getItemMeta();
             withdraw_cancel_meta.setDisplayName("§7Withdraw §8| §aMAX LEVEL");
@@ -261,8 +266,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generateEyesIcon(final Player player) {
         final int eyes_level = player.getMetadata("eyes_level").get(0).asInt();
-        // TODO: 3/31/2020 change the "2" to an actual max level variable defined throughout the entire project
-        if (eyes_level >= 2) {
+        if (eyes_level >= eyes_max_level) {
             ItemStack eyes_cancel = new ItemStack(Material.BARRIER);
             ItemMeta eyes_cancel_meta = eyes_cancel.getItemMeta();
             eyes_cancel_meta.setDisplayName("§9Enhanced Eyes §8| §aMAX LEVEL");
@@ -305,8 +309,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generatePossessIcon(final Player player) {
         final int possess_level = player.getMetadata("possess_level").get(0).asInt();
-        // TODO: 3/31/2020 change the "2" to an actual max level variable defined throughout the entire project
-        if (possess_level >= 2) {
+        if (possess_level >= possess_max_level) {
             ItemStack possess_cancel = new ItemStack(Material.BARRIER);
             ItemMeta possess_cancel_meta = possess_cancel.getItemMeta();
             possess_cancel_meta.setDisplayName("§2Possession §8| §aMAX LEVEL");
@@ -350,8 +353,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generateAgilityIcon(final Player player) {
         final int agility_level = player.getMetadata("agility_level").get(0).asInt();
-        // TODO: 3/31/2020 change the "2" to an actual max level variable defined throughout the entire project
-        if (agility_level >= 2) {
+        if (agility_level >= agility_max_level) {
             ItemStack agility_cancel = new ItemStack(Material.BARRIER);
             ItemMeta agility_cancel_meta = agility_cancel.getItemMeta();
             agility_cancel_meta.setDisplayName("§bAgility §8| §aMAX LEVEL");
@@ -392,8 +394,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generateEnduranceIcon(final Player player) {
         final int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
-        // TODO: 3/31/2020 change the "2" to an actual max level variable defined throughout the entire project
-        if (endurance_level >= 2) {
+        if (endurance_level >= endurance_max_level) {
             ItemStack endurance_cancel = new ItemStack(Material.BARRIER);
             ItemMeta endurance_cancel_meta = endurance_cancel.getItemMeta();
             endurance_cancel_meta.setDisplayName("§6Endurance §8| §aMAX LEVEL");
@@ -432,7 +433,7 @@ public class UseChargedRune implements Listener {
 
     private ItemStack generateManaIcon(final Player player) {
         final int max_mana = player.getMetadata("max_mana").get(0).asInt();
-        if (max_mana >= 500) {
+        if (max_mana >= max_mana_max) {
             ItemStack max_mana_cancel = new ItemStack(Material.BARRIER);
             ItemMeta cancel_meta = max_mana_cancel.getItemMeta();
             cancel_meta.setDisplayName("§3Max Mana §8| §aMAX LEVEL");

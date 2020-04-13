@@ -1,16 +1,27 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Loot;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class TreasureGear extends RandomlyEnchantedGear {
+public class TreasureGear extends RandomlyEnchantedGear implements Listener {
+    private String prehardmode_label = "§2Prehardmode Treasure Gear";
+    private String hardmode_label = "§6Hardmode Treasure Gear";
+
+
+
     public ItemStack getTreasureGear (boolean hardmode, Material material, Random random) {
         ItemStack output = new ItemStack(material);
         ItemMeta meta = output.getItemMeta();
@@ -19,7 +30,7 @@ public class TreasureGear extends RandomlyEnchantedGear {
 
         meta.setDisplayName((hardmode ? "§6" : "§2") + "\"" + getRandomName(random) + "\"");
         ArrayList<String> lore = new ArrayList<>();
-        lore.add((hardmode ? "§6Hardmode" : "§2Prehardmode") + " Treasure Gear");
+        lore.add(hardmode ? hardmode_label : prehardmode_label);
         meta.setLore(lore);
 
         if (material.equals(Material.DIAMOND_HELMET) || material.equals(Material.DIAMOND_CHESTPLATE) || material.equals(Material.DIAMOND_LEGGINGS) || material.equals(Material.DIAMOND_BOOTS)) {
@@ -240,5 +251,46 @@ public class TreasureGear extends RandomlyEnchantedGear {
         };
 
         return names[random.nextInt(names.length)];
+    }
+
+    public boolean isTreasureGear (ItemStack item) {
+        ArrayList<Material> treasure_gear_materials = new ArrayList<>();
+        treasure_gear_materials.add(Material.DIAMOND_HELMET);
+        treasure_gear_materials.add(Material.DIAMOND_CHESTPLATE);
+        treasure_gear_materials.add(Material.DIAMOND_LEGGINGS);
+        treasure_gear_materials.add(Material.DIAMOND_BOOTS);
+        treasure_gear_materials.add(Material.DIAMOND_SWORD);
+        treasure_gear_materials.add(Material.DIAMOND_SHOVEL);
+        treasure_gear_materials.add(Material.DIAMOND_PICKAXE);
+        treasure_gear_materials.add(Material.DIAMOND_AXE);
+
+        if (treasure_gear_materials.contains(item.getType())) {
+            if (item.hasItemMeta()) {
+                if (item.getItemMeta().hasLore()) {
+                    List<String> lore = item.getItemMeta().getLore();
+                    if (lore != null && lore.size() >= 1) {
+                        if (lore.get(0).equalsIgnoreCase(prehardmode_label) || lore.get(0).equalsIgnoreCase(hardmode_label)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+    @EventHandler
+    public void preventGrindstone (InventoryClickEvent event) {
+        final Inventory inventory = event.getClickedInventory();
+        if (inventory != null && inventory.getLocation() != null && inventory.getLocation().getBlock().getType().equals(Material.GRINDSTONE) && event.getSlot() == 2) {
+            final ItemStack item = event.getCurrentItem();
+            if (item != null) {
+                TreasureGear treasureGear = new TreasureGear();
+                if (treasureGear.isTreasureGear(item)) {
+                    event.setCancelled(true);
+                }
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.ZombieDeathLoot;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.UseFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.PlayerJoinLeave;
@@ -37,10 +38,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.Re
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.DescensionWorld;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.EmptyWorld;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.PreventNormalEnd;
-import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.ReflectionWorld;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -109,6 +107,8 @@ public final class BadlandsCaves extends JavaPlugin {
             "agility_buff_speed_lvl",
             "agility_jump_id",
             "agility_jump_timer",
+            "$has_seen_backrooms",
+            "backrooms_timer",
     };
 
     //all custom items' names
@@ -168,6 +168,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
             ReflectionWorld refl_world = new ReflectionWorld();
             refl_world.gen_refl_world();
+
+            Backrooms backrooms = new Backrooms();
+            backrooms.gen_backrooms();
         }
 
         //event registering
@@ -183,7 +186,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this),this);
             this.getServer().getPluginManager().registerEvents(new CombineTinyBlaze(this), this);
             this.getServer().getPluginManager().registerEvents(new PurgeEssence(this), this);
-            this.getServer().getPluginManager().registerEvents(new StopCustomItemsInteract(this), this);
+            this.getServer().getPluginManager().registerEvents(new StopCustomItemsInteract(this, custom_items), this);
             this.getServer().getPluginManager().registerEvents(new UseTaintPowder(this), this);
             this.getServer().getPluginManager().registerEvents(new ZombieDeathLoot(this), this);
             this.getServer().getPluginManager().registerEvents(new GetFishingCrate(this), this);
@@ -223,6 +226,9 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new DestroySpawner(this), this);
             this.getServer().getPluginManager().registerEvents(new UseRune(this), this);
             this.getServer().getPluginManager().registerEvents(new UseChargedRune(this), this);
+            this.getServer().getPluginManager().registerEvents(new BackroomsManager(this), this);
+            this.getServer().getPluginManager().registerEvents(new TreasureGear(), this);
+            this.getServer().getPluginManager().registerEvents(new EXPBottle(), this);
 
         }
 

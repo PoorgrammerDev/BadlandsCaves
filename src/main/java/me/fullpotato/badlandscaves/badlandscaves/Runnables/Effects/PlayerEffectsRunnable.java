@@ -22,6 +22,8 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
             final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
             if (in_reflection) continue;
 
+            if (player.getWorld().equals(Bukkit.getWorld("world_backrooms"))) continue;
+
             final int agility_speed = player.getMetadata("agility_buff_speed_lvl").get(0).asInt();
 
             DeathEffects deathEffects = new DeathEffects();
@@ -53,17 +55,16 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW_DIGGING, 90, total_mine_speed + 1, true, false));
             }
 
-            // FIXME: 3/28/2020 these are completely solid and won't run out constantly like before. this renders hunger and poison useless
-            if (total_hunger > 0) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false));
+            if (total_hunger > 0 && (!player.hasPotionEffect(PotionEffectType.HUNGER) || player.getPotionEffect(PotionEffectType.HUNGER).getDuration() <= 2)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false));
             }
 
-            if (total_poison > 0) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.POISON, 90, total_poison - 1, true, false));
+            if (total_poison > 0 && (!player.hasPotionEffect(PotionEffectType.POISON) || player.getPotionEffect(PotionEffectType.POISON).getDuration() <= 2)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 90, total_poison - 1, true, false));
             }
 
-            if (blindness) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
+            if (blindness && !player.hasPotionEffect(PotionEffectType.BLINDNESS)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 90, 0, true, false));
             }
         }
     }

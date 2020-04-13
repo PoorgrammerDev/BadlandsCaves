@@ -17,6 +17,8 @@ public class ActionbarRunnable extends BukkitRunnable {
             final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
             if (in_reflection) continue;
 
+            if (player.getWorld().equals(Bukkit.getWorld("world_backrooms"))) continue;
+
             int death_count = player.getMetadata("Deaths").get(0).asInt();
             String separator = ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + " | ";
             String actionbarmsg = (ChatColor.GOLD + ChatColor.BOLD.toString() + "Deaths: " + ChatColor.RED + ChatColor.BOLD.toString() + death_count + separator);

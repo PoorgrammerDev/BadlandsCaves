@@ -2,7 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.R
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection.ReflectionBuild;
-import me.fullpotato.badlandscaves.badlandscaves.NMS.ReflectionWorldNMS;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.FakePlayer;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -26,6 +26,8 @@ public class ZombieBossBehavior extends BukkitRunnable {
     private BadlandsCaves plugin;
     private Zombie zombie;
     private World world = Bukkit.getWorld("world_reflection");
+    public static Player fakePlayer = null;
+
     public ZombieBossBehavior(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -185,12 +187,12 @@ public class ZombieBossBehavior extends BukkitRunnable {
     }
 
     public void CloneMechanism (final Player player) {
-        ReflectionWorldNMS nms = new ReflectionWorldNMS(player);
+        FakePlayer nms = new FakePlayer(world);
         if (player.hasMetadata("reflection_zombie") && player.getMetadata("reflection_zombie").get(0).asBoolean()) {
-            nms.move(zombie);
+            nms.move(zombie.getLocation(), fakePlayer, null, true);
         }
         else {
-            nms.disguiseAsPlayer(zombie);
+            fakePlayer = nms.summonFakePlayer(zombie.getLocation(), player, null, null);
             player.setMetadata("reflection_zombie" , new FixedMetadataValue(plugin, true));
         }
     }

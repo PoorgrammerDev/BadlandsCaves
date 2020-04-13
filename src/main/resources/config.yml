@@ -33,7 +33,7 @@ game_values:
   agility_jump_mana_cost: 10
 
   #default soul drop chance (%)
-  soul_drop_chance: 5
+  soul_drop_chance: 25
 
   #these values change from prehardmode to hardmode
   pre_hardmode_values:
