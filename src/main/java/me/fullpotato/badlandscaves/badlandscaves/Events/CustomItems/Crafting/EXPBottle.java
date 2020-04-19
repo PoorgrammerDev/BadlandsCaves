@@ -48,24 +48,54 @@ public class EXPBottle implements Listener {
                                 }
                             }
                             else {
-                                ItemMeta meta = item.getItemMeta();
-                                if (meta != null) {
+                                if (item.getAmount() == 1) {
+                                    ItemMeta meta = item.getItemMeta();
+                                    if (meta != null) {
+                                        List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+                                        if (lore != null) {
+                                            try {
+                                                int points = lore.size() >= 1 ? Integer.parseInt(lore.get(0).split(" ")[0].substring(2)) : 0;
+                                                if (lore.size() >= 1) {
+                                                    lore.set(0, "§a" + (Math.min(points + amount, 999999999)) + " §7Experience Points");
+                                                }
+                                                else {
+                                                    lore.add("§a" + (amount) + " §7Experience Points");
+                                                }
+
+                                                meta.setLore(lore);
+                                                item.setItemMeta(meta);
+                                            }
+                                            catch (NumberFormatException ignore) {
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    item.setAmount(item.getAmount() - 1);
+                                    ItemStack exp_bottle = new ItemStack(Material.EXPERIENCE_BOTTLE);
+                                    ItemMeta meta = exp_bottle.getItemMeta();
                                     List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
                                     if (lore != null) {
                                         try {
                                             int points = lore.size() >= 1 ? Integer.parseInt(lore.get(0).split(" ")[0].substring(2)) : 0;
                                             if (lore.size() >= 1) {
-                                                lore.set(0, "§a" + (points + amount) + " §7Experience Points");
+                                                lore.set(0, "§a" + (Math.min(points + amount, 999999999)) + " §7Experience Points");
                                             }
                                             else {
                                                 lore.add("§a" + (amount) + " §7Experience Points");
                                             }
 
                                             meta.setLore(lore);
-                                            item.setItemMeta(meta);
+                                            exp_bottle.setItemMeta(meta);
                                         }
                                         catch (NumberFormatException ignore) {
                                         }
+                                    }
+                                    if (player.getInventory().firstEmpty() == -1) {
+                                        player.getWorld().dropItemNaturally(player.getLocation(), exp_bottle);
+                                    }
+                                    else {
+                                        player.getInventory().addItem(exp_bottle);
                                     }
                                 }
                             }

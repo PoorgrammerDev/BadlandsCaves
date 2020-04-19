@@ -377,7 +377,7 @@ public class LoadCustomItems {
         //---------------------------
 
         ItemStack charged_rune = new ItemStack(Material.KNOWLEDGE_BOOK);
-        ItemMeta charged_rune_meta = rune.getItemMeta();
+        ItemMeta charged_rune_meta = charged_rune.getItemMeta();
         ArrayList<String> charged_rune_lore = new ArrayList<>();
 
         charged_rune_meta.setDisplayName("§d§k%§r§8§lRune§r§9§k%");
@@ -395,6 +395,63 @@ public class LoadCustomItems {
         //CUSTOM MODEL DATA 123 USED BY ENDURANCE ICON
         //---------------------------
 
+        ItemStack voltshock_battery = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta voltshock_batter_meta = voltshock_battery.getItemMeta();
+        voltshock_batter_meta.setDisplayName("§rBattery");
+        voltshock_batter_meta.setCustomModelData(125);
+        voltshock_battery.setItemMeta(voltshock_batter_meta);
+        plugin.getConfig().set("items.voltshock_battery", voltshock_battery.serialize());
+
+        //---------------------------
+
+        ItemStack voltshock_shocker = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta voltshock_shocker_meta = voltshock_shocker.getItemMeta();
+        voltshock_shocker_meta.setDisplayName("§rShocker");
+        voltshock_shocker_meta.setCustomModelData(126);
+        voltshock_shocker.setItemMeta(voltshock_shocker_meta);
+        plugin.getConfig().set("items.voltshock_shocker", voltshock_shocker.serialize());
+
+        //---------------------------
+
+        ItemStack voltshock_module = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta voltshock_module_meta = voltshock_module.getItemMeta();
+        voltshock_module_meta.setDisplayName("§3Voltshock Module");
+        voltshock_module_meta.setCustomModelData(127);
+        voltshock_module.setItemMeta(voltshock_module_meta);
+        plugin.getConfig().set("items.voltshock_module", voltshock_module.serialize());
+
+        //---------------------------
+
+        ItemStack voltshock_placeholder = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta voltshock_placeholder_meta = voltshock_placeholder.getItemMeta();
+        voltshock_placeholder_meta.setDisplayName("§rVoltshock Placeholder");
+        voltshock_placeholder.setItemMeta(voltshock_placeholder_meta);
+        plugin.getConfig().set("items.voltshock_placeholder", voltshock_placeholder.serialize());
+
+        //---------------------------
+
+        ItemStack voltshock_sword_charge_placeholder = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta voltshock_sword_charge_placeholder_meta = voltshock_sword_charge_placeholder.getItemMeta();
+        voltshock_sword_charge_placeholder_meta.setDisplayName("§rVoltshock Sword Charge Placeholder");
+        voltshock_sword_charge_placeholder.setItemMeta(voltshock_sword_charge_placeholder_meta);
+        plugin.getConfig().set("items.voltshock_sword_charge_placeholder", voltshock_sword_charge_placeholder.serialize());
+
+        //---------------------------
+
+        ItemStack corrosive_substance = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta corrosive_substance_meta = corrosive_substance.getItemMeta();
+        corrosive_substance_meta.setDisplayName("§2Corrosive Substance");
+        corrosive_substance_meta.setCustomModelData(128);
+        corrosive_substance.setItemMeta(corrosive_substance_meta);
+        plugin.getConfig().set("items.corrosive_substance", corrosive_substance.serialize());
+
+        //---------------------------
+
+        ItemStack corrosive_placeholder = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta corrosive_placeholder_meta = corrosive_placeholder.getItemMeta();
+        corrosive_placeholder_meta.setDisplayName("§rCorrosive Placeholder");
+        corrosive_placeholder.setItemMeta(corrosive_placeholder_meta);
+        plugin.getConfig().set("items.corrosive_placeholder", corrosive_placeholder.serialize());
 
         plugin.saveConfig();
         plugin.reloadConfig();

@@ -58,9 +58,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "tox_nat_decr_var",
             "tox_slow_incr_var",
             "$opened_cauldron", //TODO test new mechanic to make sure it works
-            "opened_cauldron_x",
-            "opened_cauldron_y",
-            "opened_cauldron_z",
+            "opened_cauldron_x",// TODO: 4/15/2020 change this to use location serialize
+            "opened_cauldron_y",// TODO: 4/15/2020 change this to use location serialize
+            "opened_cauldron_z",// TODO: 4/15/2020 change this to use location serialize
             "$has_supernatural_powers",
             "in_descension",
             "$in_reflection",
@@ -83,15 +83,15 @@ public final class BadlandsCaves extends JavaPlugin {
             "displace_level",
             "displace_particle_id",
             "$has_displace_marker",
-            "displace_x",
-            "displace_y",
-            "displace_z",
+            "displace_x", // TODO: 4/15/2020 change this to use location serialize
+            "displace_y", // TODO: 4/15/2020 change this to use location serialize
+            "displace_z", // TODO: 4/15/2020 change this to use location serialize
             "withdraw_level",
-            "withdraw_x",
-            "withdraw_y",
-            "withdraw_z",
-            "withdraw_chunk_x",
-            "withdraw_chunk_z",
+            "withdraw_x", // TODO: 4/15/2020 change this to use location serialize
+            "withdraw_y", // TODO: 4/15/2020 change this to use location serialize
+            "withdraw_z", // TODO: 4/15/2020 change this to use location serialize
+            "withdraw_chunk_x", // TODO: 4/15/2020 change this to use location serialize
+            "withdraw_chunk_z", // TODO: 4/15/2020 change this to use location serialize
             "withdraw_timer",
             "eyes_level",
             "$using_eyes",
@@ -109,6 +109,8 @@ public final class BadlandsCaves extends JavaPlugin {
             "agility_jump_timer",
             "$has_seen_backrooms",
             "backrooms_timer",
+            "$bleeding_debuff",
+
     };
 
     //all custom items' names
@@ -229,6 +231,11 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new BackroomsManager(this), this);
             this.getServer().getPluginManager().registerEvents(new TreasureGear(), this);
             this.getServer().getPluginManager().registerEvents(new EXPBottle(), this);
+            this.getServer().getPluginManager().registerEvents(new SerratedSwords(this), this);
+            this.getServer().getPluginManager().registerEvents(new UseSerrated(this), this);
+            this.getServer().getPluginManager().registerEvents(new Voltshock(this), this);
+            this.getServer().getPluginManager().registerEvents(new UseVoltshock(this), this);
+            this.getServer().getPluginManager().registerEvents(new CorrosiveSubstance(this), this);
 
         }
 
@@ -276,7 +283,6 @@ public final class BadlandsCaves extends JavaPlugin {
             new LimitActions(this).runTaskTimer(this, 0, 20);
             new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
             new AugmentedSpider(this).runTaskTimer(this, 0, 5);
-
         }
 
         //crafting recipes
@@ -308,6 +314,16 @@ public final class BadlandsCaves extends JavaPlugin {
 
             SoulCrystalIncompleteCrafting soul_crystal = new SoulCrystalIncompleteCrafting(this);
             soul_crystal.soul_crystal_incomplete();
+
+            VoltshockCrafting voltshock = new VoltshockCrafting(this);
+            voltshock.craft_battery();
+            voltshock.craft_shocker();
+            voltshock.craft_voltshock_module();
+            voltshock.modify_sword();
+            voltshock.charge_sword();
+
+            CorrosiveCrafting corrosive = new CorrosiveCrafting(this);
+            corrosive.craftCorrosiveSubstance();
         }
     }
 

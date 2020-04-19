@@ -35,7 +35,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                     } else {
                         for (Player targets : Bukkit.getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Deaths").get(0).asDouble() + ChatColor.GOLD + ".");
+                                sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }

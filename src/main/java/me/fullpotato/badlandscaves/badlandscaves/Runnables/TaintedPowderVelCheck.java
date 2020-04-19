@@ -51,7 +51,7 @@ public class TaintedPowderVelCheck extends BukkitRunnable {
         }
 
         if (ready_to_run) {
-            BukkitTask run = new TaintedPowderRunnable(plugin, powder, player, this.getTaskId()).runTask(plugin);
+            new TaintedPowderRunnable(plugin, powder, player, this.getTaskId()).runTask(plugin);
         }
     }
 }

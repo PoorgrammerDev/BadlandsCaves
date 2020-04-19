@@ -72,18 +72,9 @@ public class TaintedPowderRunnable extends BukkitRunnable {
             if (location.distance(entity_list[a].getLocation()) <= 3) {
                 boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
                 if (entity_list[a].getType().equals(EntityType.SILVERFISH)) {
-                    int duration, amplifier, count;
-                    if (isHardmode) {
-                        duration = 50;
-                        amplifier = 0;
-                        count = 5;
-                    }
-                    else {
-                        duration = 9999;
-                        amplifier = 4;
-                        count = 50;
-                    }
-
+                    int duration = isHardmode ? 50 : 9999;
+                    int amplifier = isHardmode ? 0 : 4;
+                    int count = isHardmode ? 5 : 50;
                     LivingEntity silverfish = (LivingEntity) entity_list[a];
                     silverfish.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, amplifier));
                     world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), count,0.2,0.5,0.2);
@@ -92,27 +83,27 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                 else if (entity_list[a].getType().equals(EntityType.PLAYER)) {
                     Player player = (Player) entity_list[a];
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                        if (!player.getUniqueId().equals(thrower.getUniqueId())) {
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100, 1));
+                        if (true) { //!player.getUniqueId().equals(thrower.getUniqueId())
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20, 1));
                             double tox = player.getMetadata("Toxicity").get(0).asDouble();
                             final Random random = new Random();
                             if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
-                                final int tox_incr = random.nextInt(1) + 1;
+                                final double tox_incr = random.nextDouble() / 5;
                                 final int part_num = random.nextInt(3) + 5;
 
-                                player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
+                                if (tox_incr > 0) {
+                                    player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
+                                }
                                 world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
                             }
                         }
                     }
                 }
                 else {
-                    try {
+                    if (entity_list[a] instanceof LivingEntity) {
                         LivingEntity living = (LivingEntity) entity_list[a];
-                        living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100, 1));
+                        living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20, 1));
                         world.spawnParticle(Particle.DAMAGE_INDICATOR, living.getLocation(), 5,0.2, 0.5 ,0.2);
-                    }
-                    catch (ClassCastException ignore) {
                     }
                 }
             }

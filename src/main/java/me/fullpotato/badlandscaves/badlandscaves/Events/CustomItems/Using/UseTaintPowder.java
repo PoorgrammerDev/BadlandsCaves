@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.TaintedPowderVelCheck;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -41,10 +42,13 @@ public class UseTaintPowder implements Listener {
                     powder.setAmount(1);
                     Item drop = loc.getWorld().dropItemNaturally(loc, powder);
 
-                    item.setAmount(item.getAmount() - 1);
+
+                    if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                        item.setAmount(item.getAmount() - 1);
+                    }
                     drop.setInvulnerable(true);
                     drop.setPickupDelay(Integer.MAX_VALUE);
-                    drop.setVelocity(loc.getDirection().multiply(1.2));
+                    drop.setVelocity(loc.getDirection().multiply(1.1));
                     drop.setMetadata("time", new FixedMetadataValue(plugin, 0));
 
                     new BukkitRunnable() {
@@ -53,7 +57,7 @@ public class UseTaintPowder implements Listener {
                             double init_x_vel = drop.getVelocity().getX();
                             double init_y_vel = drop.getVelocity().getY();
                             double init_z_vel = drop.getVelocity().getZ();
-                            BukkitTask check_vel = new TaintedPowderVelCheck(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel).runTaskTimerAsynchronously(plugin, 0, 2);
+                            new TaintedPowderVelCheck(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel).runTaskTimerAsynchronously(plugin, 0, 2);
                         }
                     }.runTaskLater(plugin, 3);
                 }
