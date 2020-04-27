@@ -35,28 +35,31 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
             ToxEffects toxEffects = new ToxEffects();
             HashMap<String, Integer> toxValues = toxEffects.getToxValues(player);
 
+
             int total_walk_speed = deathValues.get("walk_speed") + thirstValues.get("walk_speed") + toxValues.get("walk_speed") + agility_speed;
             int total_mine_speed = deathValues.get("mine_speed") + thirstValues.get("mine_speed") + toxValues.get("mine_speed");
             int total_hunger = deathValues.get("hunger_lvl") + thirstValues.get("hunger_lvl") + toxValues.get("hunger_lvl");
-            int total_poison = deathValues.get("poison_lvl") + thirstValues.get("poison_lvl") + toxValues.get("poison_lvl");
+            int total_poison = thirstValues.get("poison_lvl") + toxValues.get("poison_lvl");
             boolean blindness = deathValues.get("blindness") > 0 || thirstValues.get("blindness") > 0 || toxValues.get("blindness") > 0;
 
             if (total_walk_speed > 0) {
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SPEED, 90, total_walk_speed - 1, true, false));
             }
             else if (total_walk_speed < 0) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, 90, total_walk_speed + 1, true, false));
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, 90, Math.abs(total_walk_speed) - 1, true, false));
             }
 
             if (total_mine_speed > 0) {
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.FAST_DIGGING, 90, total_mine_speed - 1, true, false));
             }
             else if (total_mine_speed < 0) {
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW_DIGGING, 90, total_mine_speed + 1, true, false));
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW_DIGGING, 90, Math.abs(total_mine_speed) - 1, true, false));
             }
 
             if (total_hunger > 0 && (!player.hasPotionEffect(PotionEffectType.HUNGER) || player.getPotionEffect(PotionEffectType.HUNGER).getDuration() <= 2)) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false));
+                if (player.getFoodLevel() > 6) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 90, total_hunger - 1, true, false));
+                }
             }
 
             if (total_poison > 0 && (!player.hasPotionEffect(PotionEffectType.POISON) || player.getPotionEffect(PotionEffectType.POISON).getDuration() <= 2)) {

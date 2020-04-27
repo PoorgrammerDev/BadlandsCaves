@@ -2,10 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.CauldronRunnable;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
@@ -156,6 +153,7 @@ public class CauldronMenu implements Listener {
                     else if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE) && event.getSlot() == 13) {
                         event.setCancelled(true);
                         if (hasIng && cdr_lvl == 3) {
+                            boolean success = false;
                             int item_1_amt = cauldron_inv.getItem(11).getAmount();
                             int item_2_amt = cauldron_inv.getItem(15).getAmount();
 
@@ -169,6 +167,7 @@ public class CauldronMenu implements Listener {
                             ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
                             //PURIFIED WATER - PREHARDMODE
                             if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
+                                success = true;
                                 cauldron_inv.setItem(22, purified_water);
                             }
 
@@ -184,17 +183,20 @@ public class CauldronMenu implements Listener {
 
                                         //ANTIDOTE
                                         if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(purge_ess.getItemMeta().getDisplayName())) {
+                                            success = true;
                                             ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
                                             cauldron_inv.setItem(22, antidote);
                                         }
 
                                         //PURIFIED WATER - HARDMODE
                                         else if (isHardmode && itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(hell_ess.getItemMeta().getDisplayName())) {
+                                            success = true;
                                             cauldron_inv.setItem(22, purified_water);
                                         }
 
                                         //MANA POTION
                                         else if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(mana_ess.getItemMeta().getDisplayName())) {
+                                            success = true;
                                             ItemStack mana_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true));
                                             cauldron_inv.setItem(22, mana_potion);
                                         }
@@ -206,11 +208,16 @@ public class CauldronMenu implements Listener {
                             }
                             //TAINTED POWDER
                             else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
+                                success = true;
                                 ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
                                 cauldron_inv.setItem(22, tainted_powder);
                             }
 
                             //add more items that use other materials here...
+
+                            if (success) {
+                                player.playSound(cauldron_block.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1, 1);
+                            }
                         }
                     }
                 }

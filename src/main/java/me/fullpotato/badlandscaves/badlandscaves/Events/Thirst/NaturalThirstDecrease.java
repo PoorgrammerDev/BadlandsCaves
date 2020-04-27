@@ -23,6 +23,8 @@ public class NaturalThirstDecrease implements Listener {
     public void decrease_thirst (PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
+        if (player.isDead()) return;
+
         if (player.getWorld().equals(Bukkit.getWorld("world_descension"))) return;
         if (player.getWorld().equals(Bukkit.getWorld("world_reflection"))) return;
         if (player.getWorld().equals(Bukkit.getWorld("world_backrooms"))) return;

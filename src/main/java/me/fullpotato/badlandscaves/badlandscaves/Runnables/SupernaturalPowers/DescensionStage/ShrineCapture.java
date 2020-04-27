@@ -59,7 +59,7 @@ public class ShrineCapture extends BukkitRunnable {
                                         //player.sendMessage(crystal.getMetadata("charge").get(0).asInt() + "");
 
                                         if (crystal.hasMetadata("charge") && crystal.getMetadata("charge").get(0).asInt() % 50 == 1) {
-                                            player.playSound(player_loc, Sound.BLOCK_PORTAL_AMBIENT, 1, 0.3f);
+                                            player.playSound(player_loc, Sound.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 1, 0.3f);
                                         }
 
                                         //done charging
@@ -70,7 +70,7 @@ public class ShrineCapture extends BukkitRunnable {
 
                                             //visual effects
                                             world.spawnParticle(Particle.EXPLOSION_HUGE, crystal_location, 5);
-                                            player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, 1, 0.3f);
+                                            player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, SoundCategory.BLOCKS, 1, 0.3f);
                                             crystal.setGlowing(true);
                                             crystal.setBeamTarget(origin);
 

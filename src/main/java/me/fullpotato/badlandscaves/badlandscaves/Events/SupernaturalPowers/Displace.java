@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Location;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
 public class Displace implements Listener {
@@ -70,6 +72,12 @@ public class Displace implements Listener {
                                 if (cancel_fall) player.setFallDistance(0);
                                 player.teleport(displace_marker);
                                 player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
+                                    }
+                                }.runTaskLaterAsynchronously(plugin, 1);
 
                                 double new_mana = mana - (double) (displace_mana_cost);
                                 player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
@@ -107,6 +115,8 @@ public class Displace implements Listener {
                         location.setZ(location.getZ() + 0.5);
 
                         player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, true));
+                        player.playSound(player.getLocation(), "custom.supernatural.displace.place_marker", SoundCategory.PLAYERS, 0.5F, 1);
+
                         player.setMetadata("displace_x", new FixedMetadataValue(plugin, location.getX()));
                         player.setMetadata("displace_y", new FixedMetadataValue(plugin, location.getY()));
                         player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));

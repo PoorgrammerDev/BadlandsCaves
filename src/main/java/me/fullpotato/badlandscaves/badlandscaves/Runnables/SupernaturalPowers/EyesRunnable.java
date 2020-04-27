@@ -3,7 +3,9 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -64,6 +66,8 @@ public class EyesRunnable extends BukkitRunnable {
         }
         else {
             player.setMetadata("using_eyes", new FixedMetadataValue(plugin, false));
+            player.stopSound("custom.supernatural.enhanced_eyes.ambience");
+            player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.5F, 1);
 
             //removing indicators
             for (int id : shulker_ids) {

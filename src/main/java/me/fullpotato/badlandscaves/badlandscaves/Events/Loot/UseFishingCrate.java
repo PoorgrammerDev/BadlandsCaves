@@ -44,9 +44,10 @@ public class UseFishingCrate implements Listener {
                     item.setAmount(item.getAmount() - 1);
 
                     final double player_luck = player.getAttribute(Attribute.GENERIC_LUCK) != null ? player.getAttribute(Attribute.GENERIC_LUCK).getValue() : 0;
+                    final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
                     final int treasure_base = plugin.getConfig().getInt("game_values.fishing_crate_treasure_base");
 
-                    final double treasure_chance = (100 * Math.pow(2, player_luck - 8)) + treasure_base;
+                    final double treasure_chance = (100.0 * Math.pow(2.0, player_luck - 8.0)) + treasure_base + (chaos / 20.0);
 
                     if (random.nextInt(100) < treasure_chance) {
 
@@ -69,7 +70,7 @@ public class UseFishingCrate implements Listener {
 
                             }
                         }
-                        player.playSound(location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.7F);
+                        player.playSound(location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1, 0.7F);
                     }
                     else {
                         final int fish = random.nextInt(8) + (int) (player_luck / 2) + 8;
@@ -100,7 +101,7 @@ public class UseFishingCrate implements Listener {
                     }
 
                     location.setY(location.getY() + 1);
-                    world.playSound(location, Sound.BLOCK_BARREL_OPEN, 1, 1);
+                    world.playSound(location, Sound.BLOCK_BARREL_OPEN, SoundCategory.BLOCKS, 1, 1);
                     player.spawnParticle(Particle.NAUTILUS, location, 50, 0.5, 0.5, 0.5);
                 }
             }

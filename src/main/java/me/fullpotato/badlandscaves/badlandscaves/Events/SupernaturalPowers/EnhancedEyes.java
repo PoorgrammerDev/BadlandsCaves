@@ -59,6 +59,19 @@ public class EnhancedEyes implements Listener {
                         int mana = player.getMetadata("Mana").get(0).asInt();
 
                         if (mana >= initial_mana_cost) {
+                            player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.5F, 1);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (player.getMetadata("using_eyes").get(0).asBoolean()) {
+                                        player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.ambience", 0.4F, 1);
+                                    }
+                                    else {
+                                        this.cancel();
+                                    }
+                                }
+                            }.runTaskTimerAsynchronously(plugin, 5, 330);
+
 
                             ArrayList<Material> important_blocks = new ArrayList<>();
                             important_blocks.add(Material.COAL_ORE);

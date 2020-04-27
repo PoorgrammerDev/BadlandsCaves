@@ -2,10 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.SerratedSwords;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
@@ -67,7 +64,7 @@ public class UseSerrated implements Listener {
                                         }
                                         else {
                                             entity.getWorld().spawnParticle(Particle.BLOCK_DUST, entity.getEyeLocation(), 10, 0.25, 0.25, 0.25, 0, Material.REDSTONE_BLOCK.createBlockData());
-                                            entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_STONE_BREAK, 2, 0.5F);
+                                            entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 2, 0.5F);
 
                                             double bleed = Math.min(Math.max(event.getDamage() * 0.15, 1), 2);
                                             entity.damage(bleed, player);

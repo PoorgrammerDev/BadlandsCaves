@@ -40,7 +40,8 @@ public class GetFishingCrate implements Listener {
 
 
             // TODO: 4/6/2020 review this
-            final double chance = 100 * (Math.pow(rod_luck / 15.0, 1.5) + (player_luck / 150.0)) + default_bound;
+            final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+            final double chance = 100 * (Math.pow(rod_luck / 15.0, 1.5) + (player_luck / 150.0)) + default_bound + (chaos / 10.0);
 
             if (chance > 0 && random.nextInt(100) < chance) {
                 final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");

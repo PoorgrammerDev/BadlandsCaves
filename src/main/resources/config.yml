@@ -2,8 +2,11 @@ game_values:
   #value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
   hardmode: FALSE
 
+  #increases when breaking mob spawners. causes loot to get better, but mobs to become stronger
+  chaos_level: 0
+
   #base percentage without luck effect or luck of the sea modifiers for getting a fishing crate
-  fishing_crate_chance: 25
+  fishing_crate_chance: 10
 
   #opening fishing crate: base percentage to get treasure w/o luck effect
   fishing_crate_treasure_base: 10
@@ -30,7 +33,6 @@ game_values:
   eyes_mana_drain: 10
   withdraw_mana_cost: 70
   possess_mana_drain: 5
-  agility_jump_mana_cost: 10
 
   #default soul drop chance (%)
   soul_drop_chance: 25

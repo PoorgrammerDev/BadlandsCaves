@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import org.bukkit.*;
 
 public class DescensionWorld {
@@ -27,5 +28,7 @@ public class DescensionWorld {
         world_descension.getBlockAt(0,250, 0).setType(Material.BARRIER);
         world_descension.getBlockAt(0,196, 0).setType(Material.BARRIER);
 
+        MakeDescensionStage makeStage = new MakeDescensionStage(plugin, world_descension);
+        makeStage.runTaskLater(plugin, 2);
     }
 }

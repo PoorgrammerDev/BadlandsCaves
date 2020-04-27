@@ -3,10 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.PossessionNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -69,7 +66,10 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             target.setMetadata("possessed", new FixedMetadataValue(plugin, false));
             player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             target.setAI(true);
-            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+
+
+            final World descension = Bukkit.getWorld("world_descension");
+            if (player.getGameMode().equals(GameMode.ADVENTURE) && !player.getWorld().equals(descension)) player.setGameMode(GameMode.SURVIVAL);
 
             for (Player online_player : Bukkit.getOnlinePlayers()) {
                 if (!online_player.equals(player)) {
@@ -108,6 +108,8 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                         if (cancel_fall) player.setFallDistance(0);
                         player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
                         player.teleport(displace_marker);
+                        player.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);
+                        player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
                         return;
                     }
                 }
@@ -118,6 +120,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                 double orig_z = player.getMetadata("possess_orig_z").get(0).asDouble();
                 Location orig_loc = new Location(orig_world, orig_x, orig_y, orig_z, current_yaw, current_pitch);
                 player.teleport(orig_loc);
+                player.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);
             }
         }
     }

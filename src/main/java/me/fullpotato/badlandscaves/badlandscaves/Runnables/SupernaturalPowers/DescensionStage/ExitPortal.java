@@ -15,22 +15,15 @@ public class ExitPortal extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean run = false;
         for (Player player : Bukkit.getOnlinePlayers()) {
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 2) {
                 int capped = player.getMetadata("descension_shrines_capped").get(0).asInt();
                 if (capped == 4) {
-                    run = true;
-                    break;
+                    ParticleShapes.particleSphere(null, Particle.SPELL_WITCH, location, 5, -1, null);
+                    return;
                 }
             }
         }
-
-        if (!run) {
-            return;
-        }
-
-        ParticleShapes.particleSphere(null, Particle.SPELL_WITCH, location, 5, -1, null);
     }
 }

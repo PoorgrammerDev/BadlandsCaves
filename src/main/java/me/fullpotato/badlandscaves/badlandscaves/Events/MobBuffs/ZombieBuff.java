@@ -32,12 +32,15 @@ public class ZombieBuff implements Listener {
         if (!isHardmode) return;
 
         //make sure zombie is not a descension "Lost Soul"
-        LivingEntity zombie = event.getEntity();
-        World world = zombie.getWorld();
+
+        World world = event.getLocation().getWorld();
+        if (world == null) return;
         if (world.equals(descension_world)) return;
         if (world.equals(reflection_world)) return;
 
+
         //giving armor
+        Zombie zombie = (Zombie) event.getEntity();
         Random random = new Random();
 
         //SWORD-------------------------------------------------------------------

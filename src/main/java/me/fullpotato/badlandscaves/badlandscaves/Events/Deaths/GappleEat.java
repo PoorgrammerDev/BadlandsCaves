@@ -2,6 +2,8 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.Deaths;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,7 +46,11 @@ public class GappleEat implements Listener {
                 }
             }
 
-            player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
+            if (death_count != 0 && decr_by > 0) {
+                player.spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 0.5, 0), 50, 1, 1, 1, 0);
+                player.playSound(player.getLocation(), "custom.reverse_deaths", SoundCategory.PLAYERS, 0.5F, 1);
+                player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
+            }
         }
     }
 

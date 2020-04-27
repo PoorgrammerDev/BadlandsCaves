@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,12 @@ public class DescensionPlayerMove implements Listener {
                 if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
                 player.setFallDistance(0);
                 resetPlayer(player, true);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.5F, 1);
+                    }
+                }.runTaskLaterAsynchronously(plugin, 1);
                 return;
             }
         }
@@ -160,7 +167,7 @@ public class DescensionPlayerMove implements Listener {
             final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
             for (ItemStack item : player.getInventory()) {
                 if (item != null) {
-                    if (tester.checkMatchIgnoreUses(item, soul_crystal, 3)) {
+                    if (tester.checkMatchIgnoreUses(item, soul_crystal, 2)) {
                         item.setAmount(0);
                         player.updateInventory();
                         return;

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
+import me.fullpotato.badlandscaves.badlandscaves.Util.PositionManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
-import org.bukkit.util.Vector;
 
 import java.util.Random;
 
@@ -104,18 +104,8 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
     public void trackerParticle (Location target) {
         Location player_loc = player.getLocation();
         player_loc.add(0,  1, 0);
-        final Location origin = player.getMainHand().equals(MainHand.RIGHT) ? getLeftSide(player_loc, 1) : getRightSide(player_loc, 1);
+        PositionManager position = new PositionManager();
+        final Location origin = player.getMainHand().equals(MainHand.RIGHT) ? position.getLeftSide(player_loc, 1) : position.getRightSide(player_loc, 1);
         ParticleShapes.particleLine(player, Particle.REDSTONE, origin, target, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 255), 0.5F), 1);
-    }
-
-    //
-    public Location getRightSide(Location location, double distance) {
-        float angle = location.getYaw() / 60;
-        return location.clone().subtract(new Vector(Math.cos(angle), 0, Math.sin(angle)).normalize().multiply(distance));
-    }
-
-    public Location getLeftSide(Location location, double distance) {
-        float angle = location.getYaw() / 60;
-        return location.clone().add(new Vector(Math.cos(angle), 0, Math.sin(angle)).normalize().multiply(distance));
     }
 }

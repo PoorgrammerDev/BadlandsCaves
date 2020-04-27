@@ -392,7 +392,8 @@ public class LoadCustomItems {
 
 
         //---------------------------
-        //CUSTOM MODEL DATA 123 USED BY ENDURANCE ICON
+        //123 USED BY ENDURANCE ICON
+        //124 USED BY SERRATED SWORDS
         //---------------------------
 
         ItemStack voltshock_battery = new ItemStack(Material.COMMAND_BLOCK);
@@ -413,15 +414,6 @@ public class LoadCustomItems {
 
         //---------------------------
 
-        ItemStack voltshock_module = new ItemStack(Material.COMMAND_BLOCK);
-        ItemMeta voltshock_module_meta = voltshock_module.getItemMeta();
-        voltshock_module_meta.setDisplayName("§3Voltshock Module");
-        voltshock_module_meta.setCustomModelData(127);
-        voltshock_module.setItemMeta(voltshock_module_meta);
-        plugin.getConfig().set("items.voltshock_module", voltshock_module.serialize());
-
-        //---------------------------
-
         ItemStack voltshock_placeholder = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta voltshock_placeholder_meta = voltshock_placeholder.getItemMeta();
         voltshock_placeholder_meta.setDisplayName("§rVoltshock Placeholder");
@@ -437,11 +429,13 @@ public class LoadCustomItems {
         plugin.getConfig().set("items.voltshock_sword_charge_placeholder", voltshock_sword_charge_placeholder.serialize());
 
         //---------------------------
+        //127 AND 128 USED BY VOLTSHOCK SWORDS
+        //---------------------------
 
         ItemStack corrosive_substance = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta corrosive_substance_meta = corrosive_substance.getItemMeta();
         corrosive_substance_meta.setDisplayName("§2Corrosive Substance");
-        corrosive_substance_meta.setCustomModelData(128);
+        corrosive_substance_meta.setCustomModelData(129);
         corrosive_substance.setItemMeta(corrosive_substance_meta);
         plugin.getConfig().set("items.corrosive_substance", corrosive_substance.serialize());
 

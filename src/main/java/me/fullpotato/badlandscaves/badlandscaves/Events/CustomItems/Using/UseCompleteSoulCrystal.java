@@ -35,8 +35,8 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         event.setCancelled(true);
 
         final World descension = Bukkit.getWorld("world_descension");
-        if (descension == null) return;
-        if (player.getWorld().equals(descension)) return;
+        final World reflection = Bukkit.getWorld("world_reflection");
+        if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
         if (player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;

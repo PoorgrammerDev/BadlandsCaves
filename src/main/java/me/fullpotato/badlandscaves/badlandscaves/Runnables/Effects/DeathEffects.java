@@ -28,12 +28,23 @@ public class DeathEffects {
 
         //100+ DEATHS---------------------------------------------
         if (deaths >= 100) {
-            poison_lvl = 10;
-            hunger_lvl = 10;
-            walk_speed = -10;
-            mine_speed = -10;
-            weakness_lvl = 10;
-            unluck_lvl = supernatural ? 99 : 10;
+            hunger_lvl = 99;
+            walk_speed = -99;
+            mine_speed = -99;
+            weakness_lvl = 99;
+            unluck_lvl = 99;
+            blindness = 1;
+
+            health = 1;
+        }
+
+        //90+ DEATHS----------------------------------------------
+        else if (deaths >= 90) {
+            hunger_lvl = supernatural ? 7 : 8;
+            walk_speed = supernatural ? -9 : -10;
+            mine_speed = supernatural ? -8 : -10;
+            weakness_lvl = supernatural ? 8 : 10;
+            unluck_lvl = supernatural ? 9 : 10;
             blindness = 1;
 
             health = 1;
@@ -41,78 +52,89 @@ public class DeathEffects {
 
         //80+ DEATHS----------------------------------------------
         else if (deaths >= 80) {
-            poison_lvl = supernatural ? 8 : 10;
-            hunger_lvl = supernatural ? 8 : 10;
-            walk_speed = supernatural ? -8 : -10;
-            mine_speed = supernatural ? -8 : -10;
-            weakness_lvl = supernatural ? 8 : 10;
-            unluck_lvl = supernatural ? 50 : 10;
+            hunger_lvl = supernatural ? 6 : 7;
+            walk_speed = supernatural ? -8 : -9;
+            mine_speed = supernatural ? -7 : -8;
+            weakness_lvl = supernatural ? 7 : 8;
+            unluck_lvl = supernatural ? 8 : 9;
             blindness = 1;
 
             health = 1;
         }
 
-        //60+ DEATHS----------------------------------------------
-        else if (deaths >= 60) {
-            poison_lvl = supernatural ? 0 : 5;
-            hunger_lvl = supernatural ? 5 : 6;
+        //70+ DEATHS----------------------------------------------
+        else if (deaths >= 70) {
+            hunger_lvl = supernatural ? 4 : 5;
             walk_speed = supernatural ? -5 : -6;
-            mine_speed = supernatural ? -4 : -5;
-            weakness_lvl = supernatural ? 4 : 5;
-            unluck_lvl = supernatural ? 25 : 6;
+            mine_speed = supernatural ? -5 : -6;
+            weakness_lvl = supernatural ? 5 : 6;
+            unluck_lvl = supernatural ? 6 : 7;
             blindness = 1;
 
-            health = supernatural ? 4 : 1;
+            health = supernatural ? 4 : 2;
+        }
+
+        //60+ DEATHS----------------------------------------------
+        else if (deaths >= 60) {
+            hunger_lvl = supernatural ? 3 : 4;
+            walk_speed = supernatural ? -4 : -5;
+            mine_speed = supernatural ? -4 : -5;
+            weakness_lvl = supernatural ? 4 : 5;
+            unluck_lvl = supernatural ? 5 : 6;
+            blindness = 1;
+
+            health = supernatural ? 8 : 6;
         }
 
         //50+ DEATHS----------------------------------------------
         else if (deaths >= 50) {
-            poison_lvl = supernatural ? 0 : 2;
-            hunger_lvl = supernatural ? 2 : 4;
+            hunger_lvl = supernatural ? 2 : 3;
             walk_speed = supernatural ? -3 : -4;
             mine_speed = supernatural ? -2 : -3;
             weakness_lvl = supernatural ? 2 : 3;
-            unluck_lvl = supernatural ? 10 : 4;
+            unluck_lvl = supernatural ? 5 : 6;
             blindness = 1;
 
-            health = supernatural ? 10 : 6;
+            health = supernatural ? 12 : 10;
+        }
+
+        //40+ DEATHS----------------------------------------------
+        else if (deaths >= 40) {
+            hunger_lvl = supernatural ? 1 : 2;
+            walk_speed = supernatural ? -2 : -3;
+            mine_speed = supernatural ? -1 : -2;
+            weakness_lvl = supernatural ? 2 : 3;
+            unluck_lvl = supernatural ? 4 : 5;
+
+            health = supernatural ? 16 : 12;
         }
 
         //30+ DEATHS----------------------------------------------
         else if (deaths >= 30) {
-            hunger_lvl = supernatural ? 1 : 2;
             walk_speed = supernatural ? -2 : -3;
-            mine_speed = supernatural ? -1 : -2;
+            mine_speed = supernatural ? 0 : -1;
             weakness_lvl = supernatural ? 1 : 2;
-            unluck_lvl = supernatural ? 10 : 3;
-            blindness = supernatural ? 0 : 1;
+            unluck_lvl = supernatural ? 2 : 3;
 
-            health = supernatural ? 13 : 10;
+            health = supernatural ? 20 : 16;
         }
 
         //20+ DEATHS----------------------------------------------
         else if (deaths >= 20) {
             walk_speed = supernatural ? -1 : -2;
-            mine_speed = supernatural ? -0 : -1;
             weakness_lvl = supernatural ? 1 : 1;
-            unluck_lvl = supernatural ? 10 : 2;
-
-            health = 16;
+            unluck_lvl = supernatural ? 1 : 2;
         }
 
         //10+ DEATHS----------------------------------------------
         else if (deaths >= 10) {
             walk_speed = supernatural ? -1 : -2;
-            unluck_lvl = supernatural ? 10 : 2;
-            weakness_lvl = supernatural ? 0 : 1;
+            unluck_lvl = supernatural ? 1 : 2;
         }
 
         //6+ DEATHS-----------------------------------------------
         else if (deaths >= 6) {
-            if (supernatural) {
-                unluck_lvl = 10;
-            }
-            else {
+            if (!supernatural) {
                 walk_speed = -1;
                 unluck_lvl = 1;
             }
@@ -121,16 +143,15 @@ public class DeathEffects {
         //5+ DEATHS-----------------------------------------------
         else if (deaths == 5) {
             if (supernatural) {
-                unluck_lvl = 10;
                 walk_speed = 1;
+                mine_speed = 1;
             }
         }
 
         //1+ DEATHS-----------------------------------------------
         else if (deaths >= 1) {
             if (supernatural) {
-                unluck_lvl = 10;
-                walk_speed = 1;
+                walk_speed = 2;
                 mine_speed = 1;
             }
             else {
@@ -144,8 +165,8 @@ public class DeathEffects {
         else if (deaths == 0) {
             if (supernatural) {
                 walk_speed = 1;
-                unluck_lvl = 10;
                 mine_speed = 1;
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 0, true, false));
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
             }
             else {
@@ -173,7 +194,6 @@ public class DeathEffects {
         }
 
         HashMap<String, Integer> output = new HashMap<>();
-        output.put("poison_lvl", poison_lvl);
         output.put("hunger_lvl", hunger_lvl);
         output.put("walk_speed", walk_speed);
         output.put("mine_speed", mine_speed);

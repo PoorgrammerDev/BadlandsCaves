@@ -1,8 +1,12 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.SoundCategory;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -38,7 +42,19 @@ public class MergedSouls extends MatchCrafting implements Listener {
         if (!isMatching(event.getInventory().getMatrix(), souls)) {
             event.getInventory().setResult(null);
         }
+    }
 
+    @EventHandler
+    public void craftSound (CraftItemEvent event) {
+        final ItemStack merged_souls = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true));
+        if (event.getRecipe().getResult().isSimilar(merged_souls)) {
+            for (HumanEntity human : event.getViewers()) {
+                if (human instanceof Player) {
+                    Player player = (Player) human;
+                    player.playSound(player.getLocation(), "custom.darkrooms_whispers", SoundCategory.BLOCKS, 0.05F, 1);
+                }
+            }
+        }
     }
 
 }

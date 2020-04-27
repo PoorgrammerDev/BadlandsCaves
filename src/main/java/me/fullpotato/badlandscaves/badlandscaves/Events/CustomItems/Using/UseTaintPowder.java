@@ -4,6 +4,8 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.TaintedPowderVelCheck;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,13 +36,12 @@ public class UseTaintPowder implements Listener {
                 if (item.isSimilar(tainted_powder)) {
                     event.setCancelled(true);
                     Player player = event.getPlayer();
-                    Location loc = player.getLocation();
-                    loc.setDirection(loc.getDirection());
-                    loc.setY(loc.getY() + 1);
+                    Location loc = player.getEyeLocation();
+                    player.playSound(loc, Sound.ENTITY_SNOWBALL_THROW, SoundCategory.PLAYERS, 0.5F, 0);
 
                     ItemStack powder = item.clone();
                     powder.setAmount(1);
-                    Item drop = loc.getWorld().dropItemNaturally(loc, powder);
+                    Item drop = loc.getWorld().dropItem(loc, powder);
 
 
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {

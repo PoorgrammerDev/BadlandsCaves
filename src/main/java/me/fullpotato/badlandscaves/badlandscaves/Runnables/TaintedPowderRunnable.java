@@ -60,7 +60,7 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                         affected_block.getState().update(true);
                         if (foundblock) {
                             world.spawnParticle(Particle.SMOKE_NORMAL, affected_block_loc, 1);
-                            thrower.playSound(affected_block_loc,Sound.ENTITY_SILVERFISH_DEATH, (float) 0.1, (float) Math.random() * 2);
+                            thrower.playSound(affected_block_loc,Sound.ENTITY_SILVERFISH_DEATH, SoundCategory.HOSTILE, (float) 0.1, (float) Math.random() * 2);
                         }
                     }
                 }
@@ -110,7 +110,7 @@ public class TaintedPowderRunnable extends BukkitRunnable {
         }
 
         assert world != null;
-        world.playSound(location, Sound.BLOCK_LAVA_EXTINGUISH, 1, (float) 1.2);
+        world.playSound(location, Sound.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1, (float) 1.2);
         world.spawnParticle(Particle.REDSTONE, location, 50, 0.5 ,0.5 ,0.5, new Particle.DustOptions(Color.fromRGB(0,127,0),3));
 
         item.remove();

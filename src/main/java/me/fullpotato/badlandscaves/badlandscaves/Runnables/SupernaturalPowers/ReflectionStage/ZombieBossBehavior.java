@@ -102,7 +102,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
             if (activated) {
                 entity.setVelocity(entity.getVelocity().multiply(-2));
-                player.playSound(location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 2, 2);
+                player.playSound(location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 2, 2);
                 player.spawnParticle(Particle.SWEEP_ATTACK, location, 1);
             }
         }
@@ -214,7 +214,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         player.spawnParticle(Particle.PORTAL, zombie_orig_loc, 20, 1, 1, 1);
         player.spawnParticle(Particle.SMOKE_NORMAL, player_loc, 20, 1, 1, 1);
 
-        player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 0.5F, 0.2F);
+        player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, SoundCategory.HOSTILE, 0.5F, 0.2F);
     }
 
     public void timeSkipPlayerAction (final Player player, final Random random) {
@@ -332,7 +332,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
                         }
 
                         player.getInventory().setHeldItemSlot(a);
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1, 1);
                         player.setSaturation(player.getSaturation() + random.nextInt(20));
                         player.setFoodLevel(player.getFoodLevel() + food_add);
                         player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
@@ -424,7 +424,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
                     block.setType(material);
                     build.undoEdit(block.getLocation(), existing_material, material, random.nextInt(8) + 2, true);
 
-                    player.playSound(block.getLocation(), Sound.BLOCK_STONE_PLACE, 1,1);
+                    player.playSound(block.getLocation(), Sound.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1,1);
                     //player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                 }
 
@@ -714,7 +714,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
                                     this.cancel();
                                 }
                                 else {
-                                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+                                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1, 1);
                                     player.spawnParticle(Particle.SWEEP_ATTACK, player.getLocation(), 20, 1, 1, 1, 0);
                                     player.damage((zombie_damage / 2), zombie);
                                     hit[0]++;
@@ -737,11 +737,11 @@ public class ZombieBossBehavior extends BukkitRunnable {
         player.setVelocity(player.getVelocity().multiply(5));
 
         //effects
-        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 2, 0.5F);
-        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 0.1F);
-        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 0.5F);
-        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 1);
-        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 1.5F);
-        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.7F, 2);
+        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, SoundCategory.PLAYERS, 2, 0.5F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.7F, 0.1F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.7F, 0.5F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.7F, 1);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.7F, 1.5F);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.7F, 2);
     }
 }

@@ -37,9 +37,9 @@ public class FishingCrateTreasureTable implements LootTable {
     @Override
     public Collection<ItemStack> populateLoot(Random random, LootContext context) {
         final double luck = context.getLuck();
-
-        final int count = Math.min(Math.max(random.nextInt(Math.max(Math.min((int) Math.floor(Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0), 10), 3)), 1), 10);
-        final int tier_upgrade = plugin.getConfig().getInt("game_values.fishing_crate_tier_upgrade");
+        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final int count = random.nextInt(Math.max(Math.min((int) (Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0 + (chaos / 25.0)), 10), 3));
+        final int tier_upgrade = plugin.getConfig().getInt("game_values.fishing_crate_tier_upgrade") + (int) (Math.pow(chaos / 35.0, 3.25));
         int tier;
         final TreasureGear treasureGear = new TreasureGear();
 
@@ -65,6 +65,14 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.TOTEM_OF_UNDYING));
             tier2.add(new ItemStack(Material.COW_SPAWN_EGG, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.PIG_SPAWN_EGG, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.SHEEP_SPAWN_EGG, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.GRASS_BLOCK, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.ACACIA_SAPLING, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.BIRCH_SAPLING, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.SPRUCE_SAPLING, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.JUNGLE_SAPLING, randomCount(random, 1, 4)));
+            tier2.add(new ItemStack(Material.DARK_OAK_SAPLING, randomCount(random, 1, 4)));
             if (heretic) {
                 tier2.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true)));
                 tier2.add(new ItemStack(Material.WITCH_SPAWN_EGG, randomCount(random, 1, 4)));

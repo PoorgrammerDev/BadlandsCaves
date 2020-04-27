@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -97,6 +98,9 @@ public class DescensionReset extends BukkitRunnable {
         int lower_lim = 50;
         int mob_rate = mob_cap / 14;
         int counter = 0;
+
+
+        ItemStack empty = new ItemStack(Material.AIR);
         for (int x = -upper_lim; x <= upper_lim; x++) {
             for (int z = -upper_lim; z <= upper_lim; z++) {
                 if (counter >= mob_cap) break;
@@ -112,14 +116,27 @@ public class DescensionReset extends BukkitRunnable {
                         zombie.setCustomName(ChatColor.GRAY + "Lost Soul");
                         zombie.setBaby(false);
                         zombie.setSilent(true);
-                        zombie.getEquipment().clear();
-                        zombie.getEquipment().getItemInMainHand().setAmount(0);
-                        zombie.getEquipment().getItemInOffHand().setAmount(0);
                         zombie.setRemoveWhenFarAway(false);
                         zombie.setInvulnerable(true);
                         zombie.setCollidable(false);
                         team.addEntry(zombie.getUniqueId().toString());
                         zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false));
+
+                        Location zombie_location = zombie.getLocation();
+                        zombie.teleport(new Location(world, 200, 255, 0));
+
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                zombie.getEquipment().setItemInMainHand(empty);
+                                zombie.getEquipment().setItemInOffHand(empty);
+                                zombie.getEquipment().setHelmet(empty);
+                                zombie.getEquipment().setChestplate(empty);
+                                zombie.getEquipment().setLeggings(empty);
+                                zombie.getEquipment().setBoots(empty);
+                                zombie.teleport(zombie_location);
+                            }
+                        }.runTaskLaterAsynchronously(plugin, 5);
 
                         counter++;
                     }

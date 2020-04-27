@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionMobsRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -86,6 +87,8 @@ public class Possession implements Listener {
                                             player.setScoreboard(board);
 
 
+
+
                                             if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
                                             for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
@@ -100,6 +103,8 @@ public class Possession implements Listener {
 
 
                                             player.teleport(target);
+                                            player.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.5F, 1);
+
 
                                             new PossessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
                                         }

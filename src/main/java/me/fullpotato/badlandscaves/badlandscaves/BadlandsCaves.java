@@ -105,8 +105,6 @@ public final class BadlandsCaves extends JavaPlugin {
             "endurance_level",
             "agility_level",
             "agility_buff_speed_lvl",
-            "agility_jump_id",
-            "agility_jump_timer",
             "$has_seen_backrooms",
             "backrooms_timer",
             "$bleeding_debuff",
@@ -146,6 +144,9 @@ public final class BadlandsCaves extends JavaPlugin {
             "soul_crystal",
             "rune",
             "charged_rune",
+            "voltshock_battery",
+            "voltshock_shocker",
+            "corrosive_substance",
     };
 
     @Override
@@ -162,7 +163,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         //worlds
         {
-            EmptyWorld empty_world = new EmptyWorld();
+            EmptyWorld empty_world = new EmptyWorld(this);
             empty_world.gen_void_world();
 
             DescensionWorld desc_world = new DescensionWorld(this);
@@ -209,7 +210,6 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new IncreaseToxInRain(this), this);
             this.getServer().getPluginManager().registerEvents(new EnduranceCancelHunger(this), this);
             this.getServer().getPluginManager().registerEvents(new Agility(this), this);
-            this.getServer().getPluginManager().registerEvents(new PreventNormalEnd(this), this);
             this.getServer().getPluginManager().registerEvents(new DescensionPlayerMove(this), this);
             this.getServer().getPluginManager().registerEvents(new SoulDrop(this), this);
             this.getServer().getPluginManager().registerEvents(new HellEssence(this), this);
@@ -235,7 +235,8 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new UseSerrated(this), this);
             this.getServer().getPluginManager().registerEvents(new Voltshock(this), this);
             this.getServer().getPluginManager().registerEvents(new UseVoltshock(this), this);
-            this.getServer().getPluginManager().registerEvents(new CorrosiveSubstance(this), this);
+            this.getServer().getPluginManager().registerEvents(new Corrosive(this), this);
+            this.getServer().getPluginManager().registerEvents(new UseCorrosive(this), this);
 
         }
 
@@ -318,12 +319,12 @@ public final class BadlandsCaves extends JavaPlugin {
             VoltshockCrafting voltshock = new VoltshockCrafting(this);
             voltshock.craft_battery();
             voltshock.craft_shocker();
-            voltshock.craft_voltshock_module();
             voltshock.modify_sword();
             voltshock.charge_sword();
 
             CorrosiveCrafting corrosive = new CorrosiveCrafting(this);
             corrosive.craftCorrosiveSubstance();
+            corrosive.craftCorrosiveSword();
         }
     }
 

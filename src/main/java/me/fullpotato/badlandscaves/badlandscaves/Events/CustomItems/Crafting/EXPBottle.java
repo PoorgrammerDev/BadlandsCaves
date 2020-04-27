@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class EXPBottle implements Listener {
                             event.setCancelled(true);
                             player.setLevel(player.getLevel() - 1);
 
-                            player.playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+                            player.playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1, 1);
                             int amount = player.getExpToLevel();
 
                             if (item.getType().equals(Material.GLASS_BOTTLE)) {

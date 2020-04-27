@@ -51,25 +51,27 @@ public class VoltshockCrafting {
         plugin.getServer().addRecipe(recipe);
     }
 
-    public void craft_voltshock_module() {
-        final ItemStack module = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_module").getValues(true));
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_module"), module);
+    public void modify_sword() {
+        final ItemStack placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_module"), placeholder);
 
         /*
         *  *|
         *  *|
-        * #*
+        * #&
         * # = battery, * = redstone, | = shocker
         * */
-        recipe.shape(" *|", " *|", "#* ");
+        recipe.shape(" *|", " *|", "#& ");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('*', Material.REDSTONE);
         recipe.setIngredient('|', Material.COMMAND_BLOCK);
+        recipe.setIngredient('&', new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD));
 
         plugin.getServer().addRecipe(recipe);
     }
 
-    public void modify_sword() {
+    /*
+    public void a() {
         final ItemStack voltshock_placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "voltshock_sword"), voltshock_placeholder);
         recipe.addIngredient(Material.COMMAND_BLOCK);
@@ -77,12 +79,13 @@ public class VoltshockCrafting {
 
         plugin.getServer().addRecipe(recipe);
     }
+     */
 
     public void charge_sword() {
         final ItemStack voltshock_sword_charge_placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_sword_charge_placeholder").getValues(true));
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "charge_voltshock_sword"), voltshock_sword_charge_placeholder);
         recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
-        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD));
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD));
 
         plugin.getServer().addRecipe(recipe);
 

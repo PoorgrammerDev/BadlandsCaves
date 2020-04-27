@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,6 @@ public class Voltshock extends MatchCrafting implements Listener {
     private Material[] swords = {
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
-            Material.DIAMOND_SWORD,
     };
 
     public Voltshock(BadlandsCaves plugin) {
@@ -30,23 +30,19 @@ public class Voltshock extends MatchCrafting implements Listener {
     }
 
     @EventHandler
-    public void module(PrepareItemCraftEvent event) {
+    public void batteryAndShock (PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack module = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_module").getValues(true));
-            if (result.isSimilar(module)) {
-                final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
-                final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
-                final ItemStack[] matrix = event.getInventory().getMatrix();
-
-
-                boolean matching = isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5);
-                if (!matching) {
+            final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
+            final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+            if (result.isSimilar(battery) || result.isSimilar(shocker)) {
+                if (event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
                     event.getInventory().setResult(null);
                 }
             }
         }
     }
+
 
     @EventHandler
     public void applyToSword(PrepareItemCraftEvent event) {
@@ -54,29 +50,32 @@ public class Voltshock extends MatchCrafting implements Listener {
             final ItemStack result = event.getRecipe().getResult();
             final ItemStack placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
             if (result.isSimilar(placeholder)) {
-                final ItemStack module = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_module").getValues(true));
                 final ItemStack[] matrix = event.getInventory().getMatrix();
-                if (isMatching(matrix, module)) {
-                    SerratedSwords serrated = new SerratedSwords(plugin);
-                    for (ItemStack item : matrix) {
-                        if (item != null && Arrays.asList(swords).contains(item.getType())) {
-                            boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item);
-                            if (sword_ready) {
-                                ItemStack modified_sword = item.clone();
-                                ItemMeta meta = modified_sword.getItemMeta();
-                                meta.setCustomModelData(128);
-                                PersistentDataContainer data = meta.getPersistentDataContainer();
-                                NamespacedKey charge_key = new NamespacedKey(plugin, "charge");
-                                data.set(charge_key, PersistentDataType.INTEGER, 0);
+                final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
+                final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+                if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
+                    if (!event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                        SerratedSwords serrated = new SerratedSwords(plugin);
+                        for (ItemStack item : matrix) {
+                            if (item != null && Arrays.asList(swords).contains(item.getType())) {
+                                boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item);
+                                if (sword_ready) {
+                                    ItemStack modified_sword = item.clone();
+                                    ItemMeta meta = modified_sword.getItemMeta();
+                                    meta.setCustomModelData(127);
+                                    PersistentDataContainer data = meta.getPersistentDataContainer();
+                                    NamespacedKey charge_key = new NamespacedKey(plugin, "charge");
+                                    data.set(charge_key, PersistentDataType.INTEGER, 0);
 
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add(shock_lore);
-                                lore.add("§70 / 50 Charge");
-                                meta.setLore(lore);
-                                modified_sword.setItemMeta(meta);
+                                    ArrayList<String> lore = new ArrayList<>();
+                                    lore.add(shock_lore);
+                                    lore.add("§70 / 50 Charge");
+                                    meta.setLore(lore);
+                                    modified_sword.setItemMeta(meta);
 
-                                event.getInventory().setResult(modified_sword);
-                                return;
+                                    event.getInventory().setResult(modified_sword);
+                                    return;
+                                }
                             }
                         }
                     }
@@ -165,5 +164,18 @@ public class Voltshock extends MatchCrafting implements Listener {
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
+    }
+
+    public void setOnCooldown(ItemStack item, boolean onCooldown) {
+        if (isVoltshock(item)) {
+            ItemMeta meta = item.getItemMeta();
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "isOnCooldown"), PersistentDataType.STRING, Boolean.toString(onCooldown));
+            meta.setCustomModelData(128); // TODO: 4/20/2020
+            item.setItemMeta(meta);
+        }
+    }
+
+    public boolean getOnCooldown(ItemStack item) {
+        return !isVoltshock(item) || Boolean.parseBoolean(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "isOnCooldown"), PersistentDataType.STRING));
     }
 }

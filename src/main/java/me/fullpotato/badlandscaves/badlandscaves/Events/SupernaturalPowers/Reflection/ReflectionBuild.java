@@ -147,7 +147,7 @@ public class ReflectionBuild implements Listener {
                     if (effect) {
                         location.add(0.5, 0.5,0.5);
                         location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 20, 0.25, 0.25,0.25, 0);
-                        location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.2F, 1);
+                        location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 0.2F, 1);
                     }
                 }
             }

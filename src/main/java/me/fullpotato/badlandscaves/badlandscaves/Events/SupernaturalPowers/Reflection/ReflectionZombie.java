@@ -9,6 +9,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -58,19 +59,25 @@ public class ReflectionZombie implements Listener {
                         public void run() {
                             final double mult = 5;
                             player.spawnParticle(Particle.EXPLOSION_NORMAL, zombie.getLocation(), 20, 0.5, 0.5, 0.5);
-                            player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, 2, 0.5F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 0.1F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 0.5F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 1);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 1.5F);
-                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.2F, 2);
+                            player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 2, 0.5F);
+                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.HOSTILE, 1.2F, 0.1F);
+                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.HOSTILE, 1.2F, 0.5F);
+                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.HOSTILE, 1.2F, 1);
+                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.HOSTILE, 1.2F, 1.5F);
+                            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.HOSTILE, 1.2F, 2);
                             zombie.setVelocity(zombie.getVelocity().multiply(mult));
                             player.setVelocity(zombie.getVelocity().multiply(-mult / 2));
                         }
                     }.runTaskLaterAsynchronously(plugin, 2);
                 }
             }
-            else if (event.getDamager() instanceof ThrownPotion && event.getDamager().getWorld().equals(world)){
+        }
+    }
+
+    @EventHandler
+    public void MeleeOnly (EntityDamageEvent event) {
+        if (event.getEntity() instanceof Zombie && event.getEntity().getWorld().equals(world)) {
+            if (!event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                 event.setCancelled(true);
             }
         }

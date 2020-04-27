@@ -32,13 +32,28 @@ public class SpawnBoss extends BukkitRunnable {
 
         Location spawn_loc = reflection_world.getSpawnLocation();
         spawn_loc.setY(reflection_world.getHighestBlockYAt(spawn_loc) + 5);
-        spawnBoss(spawn_loc);
+        Zombie boss = spawnBoss(spawn_loc);
+
+        ItemStack empty = new ItemStack(Material.AIR);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                boss.getEquipment().setItemInMainHand(empty);
+                boss.getEquipment().setItemInOffHand(empty);
+                boss.getEquipment().setHelmet(empty);
+                boss.getEquipment().setChestplate(empty);
+                boss.getEquipment().setLeggings(empty);
+                boss.getEquipment().setBoots(empty);
+            }
+        }.runTaskLaterAsynchronously(plugin, 5);
+
+
         reflection_world.setTime(18000);
 
         final Location player_loc = player.getLocation();
-        player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, 1.2F, 1);
-        player.playSound(player_loc, Sound.BLOCK_CONDUIT_ACTIVATE, 1.2F, 0.5F);
-        player.playSound(player_loc, Sound.BLOCK_BEACON_ACTIVATE, 1.2F, 0.5F);
+        player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 1.2F, 1);
+        player.playSound(player_loc, Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.HOSTILE, 1.2F, 0.5F);
+        player.playSound(player_loc, Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.HOSTILE, 1.2F, 0.5F);
     }
 
     public Zombie spawnBoss (Location spawn_loc) {
@@ -55,14 +70,6 @@ public class SpawnBoss extends BukkitRunnable {
         boss.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0, false, false));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 99999, 0, false, false));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 1, false, false));
-
-        boss.getEquipment().setItemInMainHand(null);
-        boss.getEquipment().setItemInOffHand(null);
-        boss.getEquipment().setHelmet(null);
-        boss.getEquipment().setChestplate(null);
-        boss.getEquipment().setLeggings(null);
-        boss.getEquipment().setBoots(null);
-
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR).getValue());
         boss.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue());
         boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(getHighestDamage());

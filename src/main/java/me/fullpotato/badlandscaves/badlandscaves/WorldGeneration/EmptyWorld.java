@@ -1,8 +1,15 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 
 public class EmptyWorld {
+    private BadlandsCaves plugin;
+
+    public EmptyWorld(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     public void gen_void_world() {
         WorldCreator emptyworld = new WorldCreator("world_empty");
         emptyworld.environment(World.Environment.THE_END)
@@ -18,6 +25,6 @@ public class EmptyWorld {
         world_empty.setGameRule(GameRule.MOB_GRIEFING, false);
         world_empty.setDifficulty(Difficulty.PEACEFUL);
 
-
+        PreventDragon.preventDragonSpawn(world_empty);
     }
 }

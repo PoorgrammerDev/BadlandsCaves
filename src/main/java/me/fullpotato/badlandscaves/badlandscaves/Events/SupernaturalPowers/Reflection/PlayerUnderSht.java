@@ -1,10 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Bukkit;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -29,7 +26,7 @@ public class PlayerUnderSht implements Listener {
             if (hp_before_atk > 2 && hp_after_atk < 0) {
                 event.setDamage(player.getHealth() - 1);
                 player.spawnParticle(Particle.TOTEM, player.getEyeLocation(), 1);
-                player.playSound(player.getEyeLocation(), Sound.ITEM_TOTEM_USE, 1, 1);
+                player.playSound(player.getEyeLocation(), Sound.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1, 1);
             }
         }
     }

@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +21,8 @@ public class SerratedSwords implements Listener {
     private BadlandsCaves plugin;
     private String serrated_lore = "§cSerrated";
     private Material[] swords = {
+            Material.WOODEN_SWORD,
+            Material.STONE_SWORD,
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
             Material.DIAMOND_SWORD,
@@ -53,7 +56,7 @@ public class SerratedSwords implements Listener {
                                     meta.setCustomModelData(124);
 
                                     item.setItemMeta(meta);
-                                    player.playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1, 1);
+                                    player.playSound(event.getClickedBlock().getLocation(), Sound.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 1, 1);
                                 }
                             }
                         }

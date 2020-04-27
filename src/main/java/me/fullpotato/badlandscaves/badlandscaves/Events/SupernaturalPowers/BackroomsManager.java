@@ -5,10 +5,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.FakePlayer;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,12 +53,12 @@ public class BackroomsManager implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 0, false, false));
             player.teleport(backrooms.getSpawnLocation().subtract(0, 20, 0));
 
-            player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_water_drip", 2, 1);
+            player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_water_drip", SoundCategory.AMBIENT, 2, 1);
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_ambience", 0.5F, 1);
+                    player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_ambience", SoundCategory.AMBIENT, 0.5F, 1);
                 }
             }.runTaskTimerAsynchronously(plugin, 0, 1200);
 
@@ -71,7 +68,7 @@ public class BackroomsManager implements Listener {
                 public void run() {
                     if (player.isOnline() && player.getWorld().equals(backrooms)) {
                         if (random.nextBoolean()) {
-                            player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_whispers", 0.2F, 1);
+                            player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_whispers", SoundCategory.AMBIENT, 0.2F, 1);
                         }
                     }
                     else {
@@ -88,7 +85,7 @@ public class BackroomsManager implements Listener {
                 @Override
                 public void run() {
                     if (player.isOnline() && player.getWorld().equals(backrooms)) {
-                        player.playSound(player.getLocation(), "custom.backrooms", 0.6F, 1);
+                        player.playSound(player.getLocation(), "custom.backrooms", SoundCategory.AMBIENT, 0.6F, 1);
                     }
                     else {
                         this.cancel();

@@ -38,11 +38,8 @@ public class CorrosiveCrafting {
         final ItemStack corrosive_placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_placeholder").getValues(true));
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "corrosive_sword"), corrosive_placeholder);
         recipe.addIngredient(Material.COMMAND_BLOCK);
-        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD));
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD));
 
-        // TODO: 4/19/2020
-
-
-
+        plugin.getServer().addRecipe(recipe);
     }
 }

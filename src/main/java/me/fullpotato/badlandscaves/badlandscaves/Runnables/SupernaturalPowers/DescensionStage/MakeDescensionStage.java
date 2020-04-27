@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -77,6 +78,7 @@ public class MakeDescensionStage extends BukkitRunnable {
 
         genDefaultShrines();
 
+        PreventDragon.preventDragonSpawn(world);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
     }
 
