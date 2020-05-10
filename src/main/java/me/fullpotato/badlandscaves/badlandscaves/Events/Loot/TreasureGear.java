@@ -12,9 +12,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class TreasureGear extends RandomlyEnchantedGear implements Listener {
     private String prehardmode_label = "§2Prehardmode Treasure Gear";
@@ -36,32 +34,32 @@ public class TreasureGear extends RandomlyEnchantedGear implements Listener {
         if (material.equals(Material.DIAMOND_HELMET) || material.equals(Material.DIAMOND_CHESTPLATE) || material.equals(Material.DIAMOND_LEGGINGS) || material.equals(Material.DIAMOND_BOOTS)) {
             randomlyEnchant(meta, Enchantment.PROTECTION_ENVIRONMENTAL, random, (int) (Enchantment.PROTECTION_ENVIRONMENTAL.getMaxLevel() * down), (int) (Enchantment.PROTECTION_ENVIRONMENTAL.getMaxLevel() * up));
             if (material.equals(Material.DIAMOND_HELMET)) {
-                randomlyEnchant(meta, Enchantment.WATER_WORKER, random, (int) (Enchantment.WATER_WORKER.getMaxLevel() * down), (int) (Enchantment.WATER_WORKER.getMaxLevel() * up));
-                randomlyEnchant(meta, Enchantment.OXYGEN, random, (int) (Enchantment.OXYGEN.getMaxLevel() * down), (int) (Enchantment.OXYGEN.getMaxLevel() * up));
+                if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.WATER_WORKER, random, (int) (Enchantment.WATER_WORKER.getMaxLevel() * down), (int) (Enchantment.WATER_WORKER.getMaxLevel() * up));
+                if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.OXYGEN, random, (int) (Enchantment.OXYGEN.getMaxLevel() * down), (int) (Enchantment.OXYGEN.getMaxLevel() * up));
             }
             else if (material.equals(Material.DIAMOND_CHESTPLATE)) {
-                randomlyEnchant(meta, Enchantment.THORNS, random, (int) (Enchantment.THORNS.getMaxLevel() * down), (int) (Enchantment.THORNS.getMaxLevel() * up));
+                if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.THORNS, random, (int) (Enchantment.THORNS.getMaxLevel() * down), (int) (Enchantment.THORNS.getMaxLevel() * up));
             }
             else if (material.equals(Material.DIAMOND_BOOTS)) {
-                randomlyEnchant(meta, Enchantment.DEPTH_STRIDER, random, (int) (Enchantment.DEPTH_STRIDER.getMaxLevel() * down), (int) (Enchantment.DEPTH_STRIDER.getMaxLevel() * up));
-                randomlyEnchant(meta, Enchantment.PROTECTION_FALL, random, (int) (Enchantment.PROTECTION_FALL.getMaxLevel() * down), (int) (Enchantment.PROTECTION_FALL.getMaxLevel() * up));
+                if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.DEPTH_STRIDER, random, (int) (Enchantment.DEPTH_STRIDER.getMaxLevel() * down), (int) (Enchantment.DEPTH_STRIDER.getMaxLevel() * up));
+                if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.PROTECTION_FALL, random, (int) (Enchantment.PROTECTION_FALL.getMaxLevel() * down), (int) (Enchantment.PROTECTION_FALL.getMaxLevel() * up));
             }
         }
 
         else if (material.equals(Material.DIAMOND_SWORD)) {
             randomlyEnchant(meta, Enchantment.DAMAGE_ALL, random, (int) (Enchantment.DAMAGE_ALL.getMaxLevel() * down), (int) (Enchantment.DAMAGE_ALL.getMaxLevel() * up));
-            randomlyEnchant(meta, Enchantment.FIRE_ASPECT, random, (int) (Enchantment.FIRE_ASPECT.getMaxLevel() * down), (int) (Enchantment.FIRE_ASPECT.getMaxLevel() * up));
-            randomlyEnchant(meta, Enchantment.KNOCKBACK, random, (int) (Enchantment.KNOCKBACK.getMaxLevel() * down), (int) (Enchantment.KNOCKBACK.getMaxLevel() * up));
-            randomlyEnchant(meta, Enchantment.LOOT_BONUS_MOBS, random, (int) (Enchantment.LOOT_BONUS_MOBS.getMaxLevel() * down), (int) (Enchantment.LOOT_BONUS_MOBS.getMaxLevel() * up));
-            randomlyEnchant(meta, Enchantment.SWEEPING_EDGE, random, (int) (Enchantment.SWEEPING_EDGE.getMaxLevel() * down), (int) (Enchantment.SWEEPING_EDGE.getMaxLevel() * up));
+            if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.FIRE_ASPECT, random, (int) (Enchantment.FIRE_ASPECT.getMaxLevel() * down), (int) (Enchantment.FIRE_ASPECT.getMaxLevel() * up));
+            if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.KNOCKBACK, random, (int) (Enchantment.KNOCKBACK.getMaxLevel() * down), (int) (Enchantment.KNOCKBACK.getMaxLevel() * up));
+            if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.LOOT_BONUS_MOBS, random, (int) (Enchantment.LOOT_BONUS_MOBS.getMaxLevel() * down), (int) (Enchantment.LOOT_BONUS_MOBS.getMaxLevel() * up));
+            if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.SWEEPING_EDGE, random, (int) (Enchantment.SWEEPING_EDGE.getMaxLevel() * down), (int) (Enchantment.SWEEPING_EDGE.getMaxLevel() * up));
         }
         else if (material.equals(Material.DIAMOND_SHOVEL) || material.equals(Material.DIAMOND_PICKAXE) || material.equals(Material.DIAMOND_AXE)) {
             randomlyEnchant(meta, Enchantment.DIG_SPEED, random, (int) (Enchantment.DIG_SPEED.getMaxLevel() * down), (int) (Enchantment.DIG_SPEED.getMaxLevel() * up));
-            if (random.nextBoolean()) {
-                randomlyEnchant(meta, Enchantment.LOOT_BONUS_BLOCKS, random, (int) (Enchantment.LOOT_BONUS_BLOCKS.getMaxLevel() * down), (int) (Enchantment.LOOT_BONUS_BLOCKS.getMaxLevel() * up));
-            }
-            else if (random.nextBoolean()) {
-                meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
+            if (random.nextBoolean()) randomlyEnchant(meta, Enchantment.LOOT_BONUS_BLOCKS, random, (int) (Enchantment.LOOT_BONUS_BLOCKS.getMaxLevel() * down), (int) (Enchantment.LOOT_BONUS_BLOCKS.getMaxLevel() * up));
+            else if (random.nextBoolean()) meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
+
+            if (material.equals(Material.DIAMOND_AXE) && random.nextBoolean()) {
+                randomlyEnchant(meta, Enchantment.DAMAGE_ALL, random, (int) (Enchantment.DAMAGE_ALL.getMaxLevel() * down), (int) (Enchantment.DAMAGE_ALL.getMaxLevel() * up));
             }
         }
 
@@ -79,178 +77,227 @@ public class TreasureGear extends RandomlyEnchantedGear implements Listener {
     }
 
     private String getRandomName(Random random) {
-        final String[] names = {
-                "Rex",
-                "IHas",
-                "Splendid",
-                "Asaurus Rex",
-                "Ruthless",
-                "Uber Splendid Bear",
-                "Disguised Bear",
-                "SplendidOMG",
-                "RuthlessLOL",
-                "Cold-bloodedOMG",
-                "SplendidLOL",
-                "RuthlessOMG",
-                "Cold-bloodedLMAO",
-                "Iamsplendid",
-                "Iamruthless",
-                "Iamcold-blooded",
-                "Iam",
-                "BearMilk",
-                "Cold-blooded Bear",
-                "MindOf",
-                "Gamerbear",
-                "The Splendid Gamer",
-                "The Ruthless Gamer",
-                "The Cold-blooded Gamer",
-                "DrSplendid",
-                "Popper",
-                "BigSplendidBear",
-                "ItIsYeBear",
-                "Bear Boy",
-                "Bear Girl",
-                "Bear Person",
-                "Captain Splendid",
-                "Total Bear",
-                "The Splendid Dude",
-                "The Gaming Bear",
-                "Gaming With",
-                "Mr Game Bear",
-                "Ms Game Bear",
-                "Balmy Tommy",
-                "Abs-Brunette",
-                "White Light",
-                "AyDoubleYou",
-                "Sapper Soprano",
-                "Anielastic A W",
-                "Tony Tony Too",
-                "Rover Tommy",
-                "Tapper Tony",
-                "Tommy Ami",
-                "Anielulous W",
-                "Devito Veto",
-                "Soprano Llano",
-                "Tots-DeVito",
-                "Cotton Tommy",
-                "Rover DeVito",
-                "Aniela-W",
-                "Soprano Piano",
-                "CooloWhite",
-                "Light White",
-                "White Bite",
-                "Da Real Aniela",
-                "Tommy Tsunami",
-                "Devito Incognito",
-                "Anielormous W",
-                "Tots-Tommy",
-                "Brunettedoc",
-                "Cotton DeVito",
-                "AyEnEyeEeElAy",
-                "Aniela Aniela W.",
-                "Brunetteface Aniela",
-                "Incognito Devito",
-                "Anieladonna",
-                "Ol White",
-                "Tots-Brunette",
-                "DoubleYouAitchEyeTeeEe",
-                "Soprano Soprano Soo",
-                "Brunetteman",
-                "Tony Ceremony",
-                "Inspectah Brunette",
-                "A.W. Tommy",
-                "A.W. DeVito",
-                "Tony Testimony",
-                "Soprano Nano",
-                "Big Rover",
-                "SeaOhOhKay",
-                "Cook Look",
-                "Cook Book",
-                "Pig Big",
-                "Victor Richter",
-                "Reggie Wedgie",
-                "VeeEyeSeaTeeOhAre",
-                "Papper Peppa",
-                "Candy Reggie",
-                "Abs-Intelligent",
-                "Edgy Reggie",
-                "VeeSea",
-                "Victoradonna",
-                "Tigger Kray",
-                "Tigger Reggie",
-                "Pig Dig",
-                "Ol Cook",
-                "Pig Pig Poo",
-                "Peppa Peppa Poo",
-                "Victorulous C",
-                "Cook Outlook",
-                "Victorastic V C",
-                "V.C. Kray",
-                "CooloCook",
-                "Intelligentface Victor",
-                "Intelligentdoc",
-                "V.C. Reggie",
-                "Victorormous C",
-                "Victora Victora C.",
-                "Inspectah Intelligent",
-                "Big Tigger",
-                "Tots-Kray",
-                "Kray Day",
-                "Victor Constrictor",
-                "Big Pig",
-                "Papper Pig",
-                "Victor Predictor",
-                "Candy Kray",
-                "Da Real Victor",
-                "Victor-C",
-                "Tots-Intelligent",
-                "Tots-Reggie",
-                "Intelligentman",
-                "Kevinadonna",
-                "Seven Kevin",
-                "CooloWashington",
-                "DoubleYouAyEssAitchEyeEnJeeTeeOhEn",
-                "Tots-Ben",
-                "KayDoubleYou",
-                "James Games",
-                "James Names",
-                "James James Joo",
-                "Controllingface Kevin",
-                "Kevina Kevina W.",
-                "Kevinastic K W",
-                "Charles Marls",
-                "Chapper Charles",
-                "Primrose Harris",
-                "Ben Pen",
-                "Harris Terrace",
-                "K.W. Ben",
-                "Kevin-W",
-                "Big Buster",
-                "Charles Charles Choo",
-                "Kevinormous W",
-                "Da Real Kevin",
-                "Kevinulous W",
-                "Tots-Harris",
-                "Controllingman",
-                "Abs-Controlling",
-                "Charles Arles",
-                "Controllingdoc",
-                "Inspectah Controlling",
-                "Wa$hington",
-                "Kevin Seven",
-                "Buster Harris",
-                "Kevin Heaven",
-                "Buster Ben",
-                "Ol Washington",
-                "Japper James",
-                "Tots-Controlling",
-                "Primrose Ben",
-                "K.W. Harris",
-                "KayEeVeeEyeEn",
+        HashSet<String> adjectives = new HashSet<>();
+        {
+            adjectives.add("minor");
+            adjectives.add("maniacal");
+            adjectives.add("ruthless");
+            adjectives.add("abounding");
+            adjectives.add("hilarious");
+            adjectives.add("sneaky");
+            adjectives.add("rightful");
+            adjectives.add("careless");
+            adjectives.add("outrageous");
+            adjectives.add("secret");
+            adjectives.add("hypnotic");
+            adjectives.add("picayune");
+            adjectives.add("intelligent");
+            adjectives.add("pale");
+            adjectives.add("polite");
+            adjectives.add("free");
+            adjectives.add("habitual");
+            adjectives.add("sore");
+            adjectives.add("luxuriant");
+            adjectives.add("unhappy");
+            adjectives.add("real");
+            adjectives.add("old");
+            adjectives.add("alleged");
+            adjectives.add("ready");
+            adjectives.add("tall");
+            adjectives.add("administrative");
+            adjectives.add("guiltless");
+            adjectives.add("abject");
+            adjectives.add("regular");
+            adjectives.add("sable");
+            adjectives.add("efficacious");
+            adjectives.add("absent");
+            adjectives.add("barbarous");
+            adjectives.add("giddy");
+            adjectives.add("zany");
+            adjectives.add("wild");
+            adjectives.add("unfair");
+            adjectives.add("nasty");
+            adjectives.add("descriptive");
+            adjectives.add("slippery");
+            adjectives.add("next");
+            adjectives.add("naughty");
+            adjectives.add("incompetent");
+            adjectives.add("successful");
+            adjectives.add("critical");
+            adjectives.add("tacit");
+            adjectives.add("expensive");
+            adjectives.add("paltry");
+            adjectives.add("wicked");
+            adjectives.add("wonderful");
+            adjectives.add("slimy");
+            adjectives.add("husky");
+            adjectives.add("optimal");
+            adjectives.add("abiding");
+            adjectives.add("shaky");
+            adjectives.add("far");
+            adjectives.add("coordinated");
+            adjectives.add("obvious");
+            adjectives.add("profuse");
+            adjectives.add("sleepy");
+            adjectives.add("tough");
+            adjectives.add("shrill");
+            adjectives.add("abstracted");
+            adjectives.add("pink");
+            adjectives.add("unable");
+            adjectives.add("longing");
+            adjectives.add("lyrical");
+            adjectives.add("decent");
+            adjectives.add("spiteful");
+            adjectives.add("financial");
+            adjectives.add("nervous");
+            adjectives.add("waiting");
+            adjectives.add("informal");
+            adjectives.add("didactic");
+            adjectives.add("shallow");
+            adjectives.add("soft");
+            adjectives.add("understood");
+            adjectives.add("selfish");
+            adjectives.add("learned");
+            adjectives.add("political");
+            adjectives.add("disillusioned");
+            adjectives.add("unequal");
+            adjectives.add("aback");
+            adjectives.add("muddled");
+            adjectives.add("chief");
+            adjectives.add("gigantic");
+            adjectives.add("elastic");
+            adjectives.add("pathetic");
+            adjectives.add("bustling");
+            adjectives.add("remarkable");
+            adjectives.add("ultra");
+            adjectives.add("eight");
+            adjectives.add("immediate");
+            adjectives.add("poor");
+            adjectives.add("splendid");
+        }
 
-        };
+        HashSet<String> nouns = new HashSet<>();
+        {
+            nouns.add("operation");
+            nouns.add("police");
+            nouns.add("personality");
+            nouns.add("pollution");
+            nouns.add("comparison");
+            nouns.add("affair");
+            nouns.add("teaching");
+            nouns.add("bonus");
+            nouns.add("measurement");
+            nouns.add("committee");
+            nouns.add("goal");
+            nouns.add("basket");
+            nouns.add("industry");
+            nouns.add("promotion");
+            nouns.add("examination");
+            nouns.add("reflection");
+            nouns.add("internet");
+            nouns.add("accident");
+            nouns.add("knowledge");
+            nouns.add("scene");
+            nouns.add("perspective");
+            nouns.add("bedroom");
+            nouns.add("singer");
+            nouns.add("variety");
+            nouns.add("highway");
+            nouns.add("contract");
+            nouns.add("revolution");
+            nouns.add("height");
+            nouns.add("message");
+            nouns.add("heart");
+            nouns.add("assumption");
+            nouns.add("tea");
+            nouns.add("permission");
+            nouns.add("people");
+            nouns.add("intention");
+            nouns.add("length");
+            nouns.add("energy");
+            nouns.add("significance");
+            nouns.add("town");
+            nouns.add("player");
+            nouns.add("bath");
+            nouns.add("computer");
+            nouns.add("article");
+            nouns.add("fishing");
+            nouns.add("ear");
+            nouns.add("trainer");
+            nouns.add("apartment");
+            nouns.add("analyst");
+            nouns.add("relationship");
+            nouns.add("appearance");
+            nouns.add("republic");
+            nouns.add("aspect");
+            nouns.add("quality");
+            nouns.add("anxiety");
+            nouns.add("reality");
+            nouns.add("argument");
+            nouns.add("entertainment");
+            nouns.add("woman");
+            nouns.add("river");
+            nouns.add("unit");
+            nouns.add("map");
+            nouns.add("combination");
+            nouns.add("dad");
+            nouns.add("emotion");
+            nouns.add("law");
+            nouns.add("introduction");
+            nouns.add("delivery");
+            nouns.add("passion");
+            nouns.add("assistant");
+            nouns.add("opinion");
+            nouns.add("drawer");
+            nouns.add("foundation");
+            nouns.add("lake");
+            nouns.add("satisfaction");
+            nouns.add("instance");
+            nouns.add("tradition");
+            nouns.add("percentage");
+            nouns.add("wood");
+            nouns.add("ad");
+            nouns.add("storage");
+            nouns.add("leader");
+            nouns.add("conclusion");
+            nouns.add("investment");
+            nouns.add("technology");
+            nouns.add("ambition");
+            nouns.add("mud");
+            nouns.add("user");
+            nouns.add("shirt");
+            nouns.add("hearing");
+            nouns.add("bird");
+            nouns.add("department");
+            nouns.add("sir");
+            nouns.add("payment");
+            nouns.add("ability");
+            nouns.add("equipment");
+            nouns.add("imagination");
+            nouns.add("penalty");
+        }
 
-        return names[random.nextInt(names.length)];
+        int adjective_index = random.nextInt(adjectives.size());
+        int noun_index = random.nextInt(nouns.size());
+
+        Iterator<String> adjective_iterator = adjectives.iterator();
+        Iterator<String> noun_iterator = nouns.iterator();
+
+        for (int i = 0; i < adjective_index; i++) {
+            adjective_iterator.next();
+        }
+
+        for (int i = 0; i < noun_index; i++) {
+            noun_iterator.next();
+        }
+
+        String adjective = adjective_iterator.next();
+        String noun = noun_iterator.next();
+
+        adjective = adjective.substring(0, 1).toUpperCase() + adjective.substring(1);
+        noun = noun.substring(0, 1).toUpperCase() + noun.substring(1);
+
+        return adjective + " " + noun;
     }
 
     public boolean isTreasureGear (ItemStack item) {

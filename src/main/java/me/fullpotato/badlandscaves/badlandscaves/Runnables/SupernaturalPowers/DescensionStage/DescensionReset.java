@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -80,7 +81,7 @@ public class DescensionReset extends BukkitRunnable {
             //deploy player in stage
             waiting.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0));
             Location deploy = new Location(world, 65, 127, 0, 0, 90);
-            waiting.teleport(deploy);
+            waiting.teleport(deploy, PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
     }
 
@@ -123,7 +124,7 @@ public class DescensionReset extends BukkitRunnable {
                         zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false));
 
                         Location zombie_location = zombie.getLocation();
-                        zombie.teleport(new Location(world, 200, 255, 0));
+                        zombie.teleport(new Location(world, 200, 255, 0), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
                         new BukkitRunnable() {
                             @Override
@@ -134,7 +135,7 @@ public class DescensionReset extends BukkitRunnable {
                                 zombie.getEquipment().setChestplate(empty);
                                 zombie.getEquipment().setLeggings(empty);
                                 zombie.getEquipment().setBoots(empty);
-                                zombie.teleport(zombie_location);
+                                zombie.teleport(zombie_location, PlayerTeleportEvent.TeleportCause.PLUGIN);
                             }
                         }.runTaskLaterAsynchronously(plugin, 5);
 

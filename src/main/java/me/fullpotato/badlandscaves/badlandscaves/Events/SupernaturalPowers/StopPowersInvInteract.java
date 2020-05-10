@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -102,9 +103,16 @@ public class StopPowersInvInteract implements Listener {
                 event.getDrops().remove(a);
             }
         }
-        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
 
-        int particle_task_id = player.getMetadata("displace_particle_id").get(0).asInt();
-        if (particle_task_id != 0 && particle_task_id != 0.0) Bukkit.getScheduler().cancelTask(particle_task_id);
+        String sectionname = "Scores.users." + player.getUniqueId() + ".saved_offhand_item";
+        ItemStack item = plugin.getConfig().getItemStack(sectionname);
+        if (item != null && !item.getType().isAir()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), item);
+            plugin.getConfig().set(sectionname, null);
+            plugin.saveConfig();
+        }
+
+
+        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
     }
 }

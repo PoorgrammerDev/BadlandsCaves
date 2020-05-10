@@ -42,4 +42,14 @@ public class CorrosiveCrafting {
 
         plugin.getServer().addRecipe(recipe);
     }
+
+    public void craftCorrosiveArrow() {
+        final ItemStack corrosive_arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_arrow").getValues(true));
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "corrosive_arrow"), corrosive_arrow);
+        recipe.addIngredient(Material.ARROW);
+        recipe.addIngredient(Material.COMMAND_BLOCK);
+
+        plugin.getServer().addRecipe(recipe);
+
+    }
 }

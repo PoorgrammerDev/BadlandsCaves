@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 public class Drinking implements Listener {
@@ -86,15 +87,17 @@ public class Drinking implements Listener {
                 }
                 else if (item.isSimilar(antidote)) {
                     double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
-                    double tox_decr;
-                    if (isHardmode) {
-                        tox_decr = plugin.getConfig().getInt("game_values.hardmode_values.antidote_drink_tox_decr");
-                    }
-                    else {
-                        tox_decr = plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
-                    }
-
+                    double tox_decr = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.antidote_drink_tox_decr") : plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
                     player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(current_tox - tox_decr, 0)));
+
+                    player.removePotionEffect(PotionEffectType.POISON);
+                    player.removePotionEffect(PotionEffectType.WITHER);
+                    player.removePotionEffect(PotionEffectType.BLINDNESS);
+                    player.removePotionEffect(PotionEffectType.HUNGER);
+                    player.removePotionEffect(PotionEffectType.CONFUSION);
+
+                    player.setMetadata("corrosive_debuff", new FixedMetadataValue(plugin, false));
+
                 }
                 else if (item.isSimilar(mana_potion)) {
                     final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();

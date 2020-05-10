@@ -90,4 +90,24 @@ public class VoltshockCrafting {
         plugin.getServer().addRecipe(recipe);
 
     }
+
+    public void craft_arrow() {
+        final ItemStack voltshock_arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true));
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_arrow"), voltshock_arrow);
+
+        /*
+        *   #
+        *  *
+        * &%
+        * where & is battery, % is arrow, * is redstone, and # is shocker
+        * */
+
+        recipe.shape("  #", " * ", "&% ");
+        recipe.setIngredient('#', Material.COMMAND_BLOCK);
+        recipe.setIngredient('*', Material.REDSTONE);
+        recipe.setIngredient('&', Material.COMMAND_BLOCK);
+        recipe.setIngredient('%', Material.ARROW);
+
+        plugin.getServer().addRecipe(recipe);
+    }
 }

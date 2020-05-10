@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Deaths;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
@@ -27,6 +28,13 @@ public class GappleEat implements Listener {
         boolean ench_gapple = item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE);
 
         if (gapple || ench_gapple) {
+            if (player.getWorld().equals(Bukkit.getWorld("world_reflection"))) {
+                int cooldown = 100;
+                player.setCooldown(Material.GOLDEN_APPLE, cooldown);
+                player.setCooldown(Material.ENCHANTED_GOLDEN_APPLE, cooldown);
+                return;
+            }
+
             int decr_by;
             boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
             if (gapple) {

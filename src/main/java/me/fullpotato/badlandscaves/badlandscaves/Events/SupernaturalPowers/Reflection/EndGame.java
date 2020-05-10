@@ -34,7 +34,7 @@ public class EndGame implements Listener {
         if (player.getWorld().equals(world)) {
             event.setDeathMessage(null);
             player.setMetadata("refl_respawn_inv", new FixedMetadataValue(plugin, true));
-            resetWorld(player);
+            resetWorld();
         }
     }
 
@@ -61,12 +61,13 @@ public class EndGame implements Listener {
 
             if (player != null) {
                 DeathHandler resetter = new DeathHandler(plugin);
-                resetWorld(player);
+                resetWorld();
 
                 final Player ply = player;
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        ply.setHealth(20);
                         resetter.resetPlayer(ply, false, true, false);
                         restoreInventory(ply);
                         completeSoul(ply);
@@ -76,7 +77,7 @@ public class EndGame implements Listener {
         }
     }
 
-    public void resetWorld(final Player player) {
+    public void resetWorld() {
         ClearEntities();
         removeClone();
         world.setTime(6000);
@@ -112,10 +113,10 @@ public class EndGame implements Listener {
             if (item == null) continue;
             if (usecrystal.checkMatchIgnoreUses(item, incomplete, 2)) {
                 item.setAmount(item.getAmount() - 1);
-                player.getInventory().addItem(complete);
-                return;
+                break;
             }
         }
+        player.getInventory().addItem(complete);
     }
 
     public void restoreInventory (final Player player) {

@@ -4,11 +4,10 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -53,7 +52,23 @@ public class EyesRunnable extends BukkitRunnable {
             for (Entity entity : origin.getWorld().getNearbyEntities(origin, block_range, block_range, block_range)) {
                 if (entity instanceof LivingEntity) {
                     if (origin.distanceSquared(entity.getLocation()) < dist_range) {
-                        nms.highlightEntity(entity);
+                        if (eyes_level > 1) {
+                            if (entity instanceof Player) {
+                                nms.highlightEntity(entity, ChatColor.GOLD);
+                            }
+                            else if (entity instanceof Monster) {
+                                nms.highlightEntity(entity, ChatColor.RED);
+                            }
+                            else if (entity instanceof Animals) {
+                                nms.highlightEntity(entity, ChatColor.GREEN);
+                            }
+                            else {
+                                nms.highlightEntity(entity, ChatColor.GRAY);
+                            }
+                        }
+                        else {
+                            nms.highlightEntity(entity);
+                        }
                     }
                 }
             }
@@ -61,7 +76,7 @@ public class EyesRunnable extends BukkitRunnable {
             //mana stuffs
             mana -= drain_per_tick;
             player.setMetadata("Mana", new FixedMetadataValue(plugin, mana));
-            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
             player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
         }
         else {

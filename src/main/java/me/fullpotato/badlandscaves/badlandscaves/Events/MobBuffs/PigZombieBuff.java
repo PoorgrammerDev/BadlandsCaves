@@ -1,16 +1,15 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PigZombieAngerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,9 +19,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
-public class PigZombieAngerBuff implements Listener {
+public class PigZombieBuff implements Listener {
     private BadlandsCaves plugin;
-    public PigZombieAngerBuff(BadlandsCaves bcav) {
+    public PigZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -92,5 +91,39 @@ public class PigZombieAngerBuff implements Listener {
         pigZombie.getEquipment().setArmorContents(armor);
         world.spawnParticle(Particle.FLASH, location, 10);
         pigZombie.setMetadata("buffed", new FixedMetadataValue(plugin, true));
+        pigZombie.setMetadata("undershirt", new FixedMetadataValue(plugin, false));
+    }
+
+    @EventHandler
+    public void assignPigUnderShirt (CreatureSpawnEvent event) {
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        if (!isHardmode) return;
+
+        if (event.getEntity() instanceof PigZombie) {
+            final Random random = new Random();
+            final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+            final double chance = Math.pow(1.045, chaos) - 1;
+            if (random.nextInt(100) < chance) {
+                event.getEntity().setMetadata("undershirt", new FixedMetadataValue(plugin, true));
+            }
+        }
+    }
+
+    @EventHandler
+    public void pigUnderShirt (EntityDamageEvent event) {
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        if (!isHardmode) return;
+
+        if (event.getEntity() instanceof PigZombie) {
+            PigZombie entity = (PigZombie) event.getEntity();
+            if (entity.hasMetadata("undershirt") && entity.getMetadata("undershirt").get(0).asBoolean()) {
+                if (entity.getHealth() - event.getFinalDamage() <= 0) {
+                    entity.setMetadata("undershirt", new FixedMetadataValue(plugin, false));
+                    event.setDamage(entity.getHealth() - 1);
+                    entity.getWorld().playSound(entity.getLocation(), Sound.ITEM_TOTEM_USE, SoundCategory.HOSTILE, 0.3F, 0.9F);
+                    entity.getWorld().spawnParticle(Particle.TOTEM, entity.getEyeLocation(), 10, 0.5, 0.5, 0.5, 0);
+                }
+            }
+        }
     }
 }

@@ -46,6 +46,7 @@ public class UseRune implements Listener {
         }
 
         openInputGUI(player);
+        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, SoundCategory.PLAYERS, 0.5F, 1);
     }
 
     public boolean checkRuneItem(final ItemStack input) {
@@ -120,6 +121,7 @@ public class UseRune implements Listener {
                                 current_meta.setLore(current_lore);
                                 current.setItemMeta(current_meta);
                                 offering.setAmount(offering.getAmount() - 1);
+                                player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, SoundCategory.PLAYERS, 0.5F, 1);
                             }
                             else if (souls_level < 8 && offering.isSimilar(merged_souls)) {
                                 souls_level++;
@@ -129,6 +131,7 @@ public class UseRune implements Listener {
                                 current_meta.setLore(current_lore);
                                 current.setItemMeta(current_meta);
                                 offering.setAmount(offering.getAmount() - 1);
+                                player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, SoundCategory.PLAYERS, 0.5F, 1);
                             }
                         }
                     }
@@ -136,6 +139,7 @@ public class UseRune implements Listener {
                         final ItemStack charged_rune = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.charged_rune").getValues(true));
                         player.getInventory().setItemInMainHand(charged_rune);
                         player.closeInventory();
+                        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 0.5F, 1);
                         this.cancel();
                     }
                 }
@@ -201,6 +205,7 @@ public class UseRune implements Listener {
                     player.getWorld().dropItemNaturally(player.getEyeLocation(), inventory.getItem(2));
                 }
             }
+            player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.PLAYERS, 0.5F, 1);
         }
     }
 

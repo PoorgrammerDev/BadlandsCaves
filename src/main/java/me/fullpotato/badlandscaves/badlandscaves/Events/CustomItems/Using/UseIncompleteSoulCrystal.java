@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -72,13 +73,14 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
 
         //entering
         player.setMetadata("in_reflection", new FixedMetadataValue(plugin, true));
-        player.teleport(worldspawn);
+        player.teleport(worldspawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
         //heal and full hunger
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+                player.setHealth(20);
                 player.setSaturation(20);
                 player.setFoodLevel(20);
             }

@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -48,38 +49,58 @@ public class Agility implements Listener {
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
         if (agility_level < 1.0) return;
 
-        player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.5F, 1);
-        event.setCancelled(true);
-        player.setFlying(false);
-        player.setAllowFlight(false);
+        double mana = player.getMetadata("Mana").get(0).asDouble();
+        int cost = plugin.getConfig().getInt("game_values.agility_mana_cost");
 
-        Vector velocity = player.getVelocity();
-        if (agility_level == 1) {
-            velocity.multiply(1.1).setY(0.8);
-        } else {
-            velocity.multiply(3.2).setY(1.2);
-        }
+        if (mana >= cost) {
+            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, Math.max(player.getMetadata("mana_regen_delay_timer").get(0).asInt(), 3)));
+            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - cost));
 
-        player.setVelocity(velocity);
-        jumpParticle(player);
-
-        int max = agility_level > 1 ? 9 : 5;
-        int[] running = {0};
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (player.isOnGround() || running[0] >= max) {
-                    this.cancel();
-                }
-                else {
-                    float fallDist = player.getFallDistance();
-                    if (fallDist >= 1) {
-                        player.setFallDistance(Math.max(fallDist - 1, 0));
-                        running[0]++;
-                    }
+            player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.5F, 1);
+            for (Player powered : plugin.getServer().getOnlinePlayers()) {
+                if (!powered.equals(player) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                    powered.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.3F, 1);
                 }
             }
-        }.runTaskTimerAsynchronously(plugin, 0, 0);
+
+            event.setCancelled(true);
+            player.setFlying(false);
+            player.setAllowFlight(false);
+
+            Vector velocity = player.getVelocity();
+            if (agility_level == 1) {
+                velocity.multiply(1.1).setY(0.8);
+            } else {
+                velocity.multiply(3.2).setY(1.2);
+            }
+
+            player.setVelocity(velocity);
+            jumpParticle(player);
+
+            int max = agility_level > 1 ? 9 : 5;
+            int[] running = {0};
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (player.isOnGround() || running[0] >= max) {
+                        this.cancel();
+                    }
+                    else {
+                        float fallDist = player.getFallDistance();
+                        if (fallDist >= 1) {
+                            player.setFallDistance(Math.max(fallDist - 1, 0));
+                            running[0]++;
+                        }
+                    }
+                }
+            }.runTaskTimerAsynchronously(plugin, 0, 0);
+        }
+        else {
+            player.setFlying(false);
+            player.setAllowFlight(false);
+            player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
+        }
     }
 
     public void jumpParticle (Player player) {
@@ -88,7 +109,10 @@ public class Agility implements Listener {
 
         for (int i = 0; i < 5; i++) {
             player_loc.add(opposite);
-            player.spawnParticle(Particle.CLOUD, player_loc, 5, 0.1, 0.1, 0.1);
+
+            for (Player powered : plugin.getServer().getOnlinePlayers()) {
+                if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) powered.spawnParticle(Particle.CLOUD, player_loc, 5, 0.1, 0.1, 0.1);
+            }
         }
     }
 }

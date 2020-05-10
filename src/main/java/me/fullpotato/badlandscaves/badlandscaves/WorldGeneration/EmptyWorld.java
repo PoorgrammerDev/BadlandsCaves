@@ -23,7 +23,8 @@ public class EmptyWorld {
         world_empty.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         world_empty.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world_empty.setGameRule(GameRule.MOB_GRIEFING, false);
-        world_empty.setDifficulty(Difficulty.PEACEFUL);
+        world_empty.setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
+        world_empty.setDifficulty(Difficulty.HARD);
 
         PreventDragon.preventDragonSpawn(world_empty);
     }

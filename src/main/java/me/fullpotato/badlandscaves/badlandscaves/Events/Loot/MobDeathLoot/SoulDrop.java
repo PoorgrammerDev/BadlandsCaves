@@ -40,6 +40,9 @@ public class SoulDrop implements Listener {
 
     @EventHandler
     public void dropSoul (EntityDeathEvent event) {
+        if (event.getEntity().getWorld().equals(plugin.getServer().getWorld("world_reflection"))) return;
+        if (event.getEntity().getWorld().equals(plugin.getServer().getWorld("world_chambers"))) return;
+
         if (souls.containsKey(event.getEntity().getType())) {
             final LivingEntity entity = event.getEntity();
             final Player player = entity.getKiller();

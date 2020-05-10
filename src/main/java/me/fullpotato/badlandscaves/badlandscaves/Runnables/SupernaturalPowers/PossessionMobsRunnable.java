@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -46,14 +47,14 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
 
             //cancel mana regen and keep mana bar active
-            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
             player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
 
             //make target invis to player
             nms.markTarget(target);
 
             AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INVISIBILITY, 5, 0));
-            target.teleport(player.getLocation());
+            target.teleport(player.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_drain_tick));
         }
@@ -107,7 +108,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                     if (player.getLocation().distance(displace_marker) <= warp_range) {
                         if (cancel_fall) player.setFallDistance(0);
                         player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
-                        player.teleport(displace_marker);
+                        player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
                         player.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);
                         player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
                         return;
@@ -119,7 +120,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                 double orig_y = player.getMetadata("possess_orig_y").get(0).asDouble();
                 double orig_z = player.getMetadata("possess_orig_z").get(0).asDouble();
                 Location orig_loc = new Location(orig_world, orig_x, orig_y, orig_z, current_yaw, current_pitch);
-                player.teleport(orig_loc);
+                player.teleport(orig_loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 player.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);
             }
         }

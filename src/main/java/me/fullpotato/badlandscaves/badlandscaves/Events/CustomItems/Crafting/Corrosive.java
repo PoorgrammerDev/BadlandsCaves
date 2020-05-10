@@ -56,6 +56,21 @@ public class Corrosive extends MatchCrafting implements Listener {
     }
 
     @EventHandler
+    public void craftArrow (PrepareItemCraftEvent event) {
+        if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
+            final ItemStack result = event.getRecipe().getResult();
+            final ItemStack arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_arrow").getValues(true));
+            if (result.isSimilar(arrow)) {
+                final ItemStack[] matrix = event.getInventory().getMatrix();
+                final ItemStack substance = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true));
+                if (!isMatching(matrix, substance)) {
+                    event.getInventory().setResult(null);
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void craftSword (PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
@@ -137,8 +152,6 @@ public class Corrosive extends MatchCrafting implements Listener {
             item.setItemMeta(meta);
         }
     }
-
-
 
     public ItemStack getPoisonPotion() {
         ItemStack poison_potion = new ItemStack(Material.POTION);

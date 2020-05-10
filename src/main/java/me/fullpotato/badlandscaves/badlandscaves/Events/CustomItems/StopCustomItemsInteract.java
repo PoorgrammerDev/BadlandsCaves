@@ -29,6 +29,12 @@ public class StopCustomItemsInteract implements Listener {
             "phantom_soul",
             "tiny_blaze_powder",
             "merged_souls",
+            "voltshock_battery",
+            "voltshock_shocker",
+            "corrosive_substance",
+            "chamber_magma_key",
+            "chamber_glowstone_key",
+            "chamber_soulsand_key",
     };
 
     public StopCustomItemsInteract(BadlandsCaves bcav, String[] custom_items) {

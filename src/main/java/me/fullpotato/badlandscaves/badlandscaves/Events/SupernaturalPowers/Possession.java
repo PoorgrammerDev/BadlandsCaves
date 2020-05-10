@@ -2,10 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionMobsRunnable;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.SoundCategory;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -27,12 +25,9 @@ public class Possession implements Listener {
         plugin = bcav;
     }
 
-    private Player player;
-    private LivingEntity target;
-
     @EventHandler
     public void use_possession (PlayerInteractEvent event) {
-        player = event.getPlayer();
+        Player player = event.getPlayer();
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (!has_powers) return;
 
@@ -50,20 +45,22 @@ public class Possession implements Listener {
                     }
                     else {
                         double mana = player.getMetadata("Mana").get(0).asDouble();
-                        int possession_mana_drain = plugin.getConfig().getInt("game_values.possession_mana_drain");
+                        int possession_mana_cost = plugin.getConfig().getInt("game_values.possess_mana_cost");
+                        int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
                         double pos_drain_tick = possession_mana_drain / 20.0;
-                        if (mana >= pos_drain_tick) {
+                        if (mana >= (pos_drain_tick + possession_mana_cost)) {
                             World world = player.getWorld();
                             RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);
                             if (result != null && result.getHitEntity() != null) {
                                 if (result.getHitEntity() instanceof LivingEntity) {
-                                    target = (LivingEntity) result.getHitEntity();
+                                    LivingEntity target = (LivingEntity) result.getHitEntity();
                                     if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.hasMetadata("augmented") && target.getMetadata("augmented").get(0).asBoolean())){
                                         boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
 
                                         if (!target_already_pos) {
                                             //cancel mana regen and keep mana bar active
-                                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+                                            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_cost));
+                                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
                                             player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
 
                                             //readying the player and the target
@@ -100,9 +97,14 @@ public class Possession implements Listener {
                                                 }
                                             }
 
+                                            for (Player powered : plugin.getServer().getOnlinePlayers()) {
+                                                if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                                                    powered.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.3F, 1);
+                                                    powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5,0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
+                                                }
+                                            }
 
-
-                                            player.teleport(target);
+                                            player.teleport(target, PlayerTeleportEvent.TeleportCause.PLUGIN);
                                             player.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.5F, 1);
 
 

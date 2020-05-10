@@ -34,9 +34,9 @@ public class ParticleShapes {
             final World world = location.getWorld();
             double phi = 0;
             while (phi <= Math.PI) {
-                phi += Math.PI / 10;
+                phi += Math.PI / (radius * 2);
 
-                for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 40) {
+                for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / (radius * 4)) {
                     double x = radius * Math.cos(theta) * Math.sin(phi);
                     double y = radius * Math.cos(phi) + 1.5;
                     double z = radius * Math.sin(theta) * Math.sin(phi);

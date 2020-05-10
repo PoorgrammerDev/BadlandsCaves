@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -131,7 +132,7 @@ public class ReflectionBuild implements Listener {
 
             if (location.getY() < -40) {
                 location.setY(330);
-                player.teleport(location);
+                player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
     }

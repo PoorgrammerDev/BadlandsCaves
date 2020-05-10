@@ -5,12 +5,17 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.Vol
 import me.fullpotato.badlandscaves.badlandscaves.Util.PositionManager;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
@@ -52,22 +57,8 @@ public class UseVoltshock implements Listener {
                                     int metal = metallicArmor(entity);
                                     event.setDamage(event.getDamage() * ((metal / 8.0) + 1.5));
 
-                                    int duration = 20 + (10 * (metal / 4));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 99, false, false));
-
-                                    int[] ran = {0};
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            if (entity.isDead() || ran[0] > (duration / 5)) {
-                                                this.cancel();
-                                            }
-                                            else {
-                                                entity.getWorld().spawnParticle(Particle.CRIT_MAGIC, entity.getEyeLocation(), 20, 0.5, 0.5, 0.5, 0);
-                                                ran[0]++;
-                                            }
-                                        }
-                                    }.runTaskTimer(plugin, 0, 5);
+                                    int duration = 20 + (4 * (metal));
+                                    applyShock(entity, duration);
 
                                     new BukkitRunnable() {
                                         @Override
@@ -83,6 +74,47 @@ public class UseVoltshock implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void arrowShot (ProjectileHitEvent event) {
+        if (event.getEntity() instanceof Arrow) {
+            Arrow arrow = (Arrow) event.getEntity();
+            if (arrow.hasMetadata("voltshock_arrow") && arrow.getMetadata("voltshock_arrow").get(0).asBoolean()) {
+                if (arrow.isCritical()) {
+                    if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
+                        LivingEntity entity = (LivingEntity) event.getHitEntity();
+                        int metal = metallicArmor(entity);
+
+                        arrow.setDamage((arrow.getDamage() / 2.0) + (metal / 4.0));
+                        int duration = 15 + (2 * (metal));
+                        applyShock(entity, duration);
+                    }
+                    else {
+                        arrow.getWorld().spawnParticle(Particle.CRIT_MAGIC, arrow.getLocation(), 5, 0.1, 0.1, 0.1, 0);
+                        arrow.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    public void applyShock (LivingEntity entity, int duration) {
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 99, false, false));
+
+        int[] ran = {0};
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (entity.isDead() || ran[0] > (duration / 5)) {
+                    this.cancel();
+                }
+                else {
+                    entity.getWorld().spawnParticle(Particle.CRIT_MAGIC, entity.getEyeLocation(), 20, 0.5, 0.5, 0.5, 0);
+                    ran[0]++;
+                }
+            }
+        }.runTaskTimer(plugin, 0, 5);
     }
 
     public int metallicArmor (LivingEntity entity) {

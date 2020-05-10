@@ -25,11 +25,15 @@ public class CreeperBuff implements Listener {
     @EventHandler
     public void HMcreeper (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Creeper)) return;
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        if (!isHardmode) return;
-
         final Creeper creeper = (Creeper) event.getEntity();
         final Random random = new Random();
+
+        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        creeper.setMaxFuseTicks((int) (30.0 - ((isHardmode ? 0.1 : 0.05) * chaos)));
+
+        if (!isHardmode) return;
+
         final int radius = plugin.getConfig().getInt("game_values.hardmode_values.creeper_radius");
         final int augment = plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
         creeper.setExplosionRadius(radius);

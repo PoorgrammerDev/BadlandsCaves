@@ -56,6 +56,7 @@ public class DestroySpawner implements Listener {
                 int current_chaos = plugin.getConfig().getInt("game_values.chaos_level");
                 if (current_chaos < 100) {
                     plugin.getConfig().set("game_values.chaos_level", current_chaos + 1);
+                    plugin.saveConfig();
                     plugin.getServer().broadcastMessage("§cChaos seeps into this realm...");
                 }
                 else {
@@ -196,7 +197,6 @@ public class DestroySpawner implements Listener {
                 }.runTaskLater(plugin, 1);
                 this.cancel();
                 newLoc = null;
-                return;
             }
         }.runTaskTimer(plugin, 5, 5);
     }

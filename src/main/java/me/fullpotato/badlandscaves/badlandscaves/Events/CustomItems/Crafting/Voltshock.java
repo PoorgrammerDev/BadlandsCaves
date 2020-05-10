@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Voltshock extends MatchCrafting implements Listener {
@@ -132,6 +133,23 @@ public class Voltshock extends MatchCrafting implements Listener {
                     }
                 }
                 event.getInventory().setResult(null);
+            }
+        }
+    }
+
+    @EventHandler
+    public void craftArrow (PrepareItemCraftEvent event) {
+        if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
+            final ItemStack result = event.getRecipe().getResult();
+            final ItemStack arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true));
+            if (result.isSimilar(arrow)) {
+                final ItemStack[] matrix = event.getInventory().getMatrix();
+                final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
+                final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+
+                if (!isMatching(matrix, shocker, 2) || !isMatching(matrix, battery, 6)) {
+                    event.getInventory().setResult(null);
+                }
             }
         }
     }

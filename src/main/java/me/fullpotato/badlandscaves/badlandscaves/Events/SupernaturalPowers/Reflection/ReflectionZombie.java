@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.FakePlayer;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -42,7 +44,12 @@ public class ReflectionZombie implements Listener {
     public void damageZombie (EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Zombie && event.getEntity().getWorld().equals(world)) {
             if (event.getDamager() instanceof Player && event.getDamager().getWorld().equals(world)) {
+                FakePlayer fakePlayer = new FakePlayer(world);
+                fakePlayer.damage(ZombieBossBehavior.fakePlayer, null, true);
+
                 final Zombie zombie = (Zombie) event.getEntity();
+                zombie.getWorld().playSound(zombie.getLocation(), Sound.ENTITY_PLAYER_HURT, SoundCategory.HOSTILE, 1, 1);
+
                 final Player player = (Player) event.getDamager();
                 final double damage = event.getFinalDamage();
                 final double zombie_old_health = zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
@@ -52,7 +59,6 @@ public class ReflectionZombie implements Listener {
                 }
 
                 //velocity
-
                 if (damage > 10) {
                     new BukkitRunnable() {
                         @Override

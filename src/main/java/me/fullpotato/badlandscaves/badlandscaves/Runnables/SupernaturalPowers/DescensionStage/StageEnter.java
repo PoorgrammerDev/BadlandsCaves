@@ -6,6 +6,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -26,7 +27,7 @@ public class StageEnter extends BukkitRunnable {
             if (!player.getWorld().equals(descension_world)) {
                 Location descension_spawn = new Location(descension_world, 0, 197, 0);
                 try {
-                    if (descension_spawn.isWorldLoaded()) player.teleport(descension_spawn);
+                    if (descension_spawn.isWorldLoaded()) player.teleport(descension_spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
                 catch (NullPointerException e) {
                     e.printStackTrace();

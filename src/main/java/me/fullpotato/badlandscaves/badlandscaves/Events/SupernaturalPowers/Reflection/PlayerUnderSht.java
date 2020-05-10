@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.FakePlayer;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -17,7 +19,13 @@ public class PlayerUnderSht implements Listener {
                 event.getEntity().getWorld().equals(world) &&
                 event.getDamager() instanceof Zombie &&
                 event.getDamager().getWorld().equals(world)) {
+
+            FakePlayer fakePlayer = new FakePlayer(world);
+            fakePlayer.damage(ZombieBossBehavior.fakePlayer, null, false);
+
             final Player player = (Player) event.getEntity();
+            player.setCooldown(Material.SHIELD, 20);
+
             final Zombie boss = (Zombie) event.getDamager();
 
             final double hp_before_atk = player.getHealth();

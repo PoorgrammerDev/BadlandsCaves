@@ -66,16 +66,11 @@ public class MakeDescensionStage extends BukkitRunnable {
                     currentHeight = (int) ((generator.noise(x, z, 0.5D, 0.05D, true) + 1) *5D + 60D);
                     int thickness =  random.nextInt(5) + 5;
                     for (int y = currentHeight; y >= currentHeight - thickness; y--) {
-                        Location block_loc = new Location(world, x, y, z);
-                        rand = random.nextInt(3);
-                        if (rand == 0) block_loc.getBlock().setType(Material.COAL_BLOCK);
-                        else if (rand == 1) block_loc.getBlock().setType(Material.BLACK_CONCRETE);
-                        else block_loc.getBlock().setType(Material.BLACK_WOOL);
+                        new Location(world, x, y, z).getBlock().setType(getVoidMat(random));
                     }
                 }
             }
         }
-
         genDefaultShrines();
 
         PreventDragon.preventDragonSpawn(world);
@@ -112,4 +107,12 @@ public class MakeDescensionStage extends BukkitRunnable {
         crystal.setInvulnerable(true);
         crystal.setMetadata("charge", new FixedMetadataValue(plugin, 0));
     }
+
+    public static Material getVoidMat(Random random) {
+        int rand = random.nextInt(3);
+        if (rand == 0) return Material.COAL_BLOCK;
+        else if (rand == 1) return Material.BLACK_CONCRETE;
+        else return Material.BLACK_WOOL;
+    }
+
 }

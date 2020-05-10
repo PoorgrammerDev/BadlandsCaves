@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -51,7 +52,7 @@ public class BackroomsManager implements Listener {
 
         if (special_surprise) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 0, false, false));
-            player.teleport(backrooms.getSpawnLocation().subtract(0, 20, 0));
+            player.teleport(backrooms.getSpawnLocation().subtract(0, 20, 0), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_water_drip", SoundCategory.AMBIENT, 2, 1);
 
@@ -79,7 +80,7 @@ public class BackroomsManager implements Listener {
 
         }
         else {
-            player.teleport(backrooms.getSpawnLocation());
+            player.teleport(backrooms.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             new BukkitRunnable() {
                 @Override
@@ -169,7 +170,7 @@ public class BackroomsManager implements Listener {
         inventoryManager.loadInventory(player, "backrooms", true, true);
 
         Location location = Location.deserialize(plugin.getConfig().getConfigurationSection("Scores.users." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
-        player.teleport(location);
+        player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
         plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".backrooms_saved_location", null);
     }

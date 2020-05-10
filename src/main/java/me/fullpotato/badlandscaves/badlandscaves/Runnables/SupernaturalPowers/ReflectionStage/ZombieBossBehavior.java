@@ -11,6 +11,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -55,37 +56,8 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
 
         //NOT RELATED TO ABILITY----------------------------------------------------------------------------------------
-        double zombie_health = zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         final double zombie_damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
-
-        //retreats if low health, regardless of ability cooldown
-        if (zombie_health < 0.3) {
-            if (zombie_health < 0.15) {
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 4, false, false));
-            }
-            else {
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 2, false, false));
-            }
-            final int retreating_target_timer = zombie.hasMetadata("retreating_target_timer") ? zombie.getMetadata("retreating_target_timer").get(0).asInt() : 0;
-            if (retreating_target_timer <= 0) {
-                Location retreat_location = getRetreatLocation(player, zombie, 10);
-                if (retreat_location == null) {
-                    zombie.setTarget(null);
-                }
-                else {
-                    final int lifespan = 10;
-                    Silverfish marker = summonMarker(retreat_location, lifespan);
-                    zombie.setTarget(marker);
-                    zombie.setMetadata("retreating_target_timer", new FixedMetadataValue(plugin, lifespan));
-                }
-            }
-            else {
-                zombie.setMetadata("retreating_target_timer", new FixedMetadataValue(plugin, retreating_target_timer - 1));
-            }
-        }
-        else {
-            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 1, false, false));
-        }
+        zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 1, false, false));
 
         //arrow reflection
         for (Entity entity : zombie.getNearbyEntities(1.5, 1.5, 1.5)) {
@@ -101,6 +73,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
             }
 
             if (activated) {
+
                 entity.setVelocity(entity.getVelocity().multiply(-2));
                 player.playSound(location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 2, 2);
                 player.spawnParticle(Particle.SWEEP_ATTACK, location, 1);
@@ -112,12 +85,6 @@ public class ZombieBossBehavior extends BukkitRunnable {
         displayHealth(zombie, player);
 
         //USING ABILITY-------------------------------------------------------------------------------------------------
-        /*
-        zombie can't use ability if:
-         - cooldown not ready
-         - under 15% health
-         */
-        if (zombie_health < 0.15) return;
         int cooldown = zombie.hasMetadata("teleport_cooldown") ? zombie.getMetadata("teleport_cooldown").get(0).asInt() : 0;
         if (cooldown > 0) {
             zombie.setMetadata("teleport_cooldown", new FixedMetadataValue(plugin, cooldown - 1));
@@ -127,61 +94,42 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
         final Location player_loc = player.getEyeLocation();
 
-        //over 30% health
-        if (zombie_health > 0.3) {
-            //if zombie is farther away
-            if (zombie.getLocation().distanceSquared(player_loc) > 25 && random.nextBoolean()) {
-                //warp to player
-                Location tele = random.nextBoolean() ? getLocationBehindPlayer(player) : getLocationNearPlayer(player, random, 5);
-                if (tele == null) return;
-                if (tele.distanceSquared(player_loc) > 0.25) {
-                    skipTimeBase(zombie, player, tele, random, false);
-                    timeSkipPlayerAction(player, random);
-
-                    //small hit
-                    if (random.nextBoolean()) {
-                        if (zombie.getLocation().distanceSquared(player_loc) < 4) {
-                            player.damage(zombie_damage / (random.nextDouble() + 0.1), zombie);
-                        }
-                    }
-                }
-            }
-            //if zombie is near player
-            else if (random.nextBoolean()) {
-                Location tele = getAdvanceLocation(player, zombie, 5);
-                if (tele == null) return;
-
+        //if zombie is farther away
+        if (zombie.getLocation().distanceSquared(player_loc) > 25 && random.nextBoolean()) {
+            //warp to player
+            Location tele = random.nextBoolean() ? getLocationBehindPlayer(player) : getLocationNearPlayer(player, random, 5);
+            if (tele == null) return;
+            if (tele.distanceSquared(player_loc) > 0.25) {
                 skipTimeBase(zombie, player, tele, random, false);
-                if (random.nextInt(100) < 75) {
-                    int pick_event = random.nextInt(100);
-                    if (pick_event < 30) {
-                        if (zombie.getLocation().distanceSquared(player_loc) < 4) {
-                            Donut(zombie, player, random);
-                        }
+                timeSkipPlayerAction(player, random);
+
+                //small hit
+                if (random.nextBoolean()) {
+                    if (zombie.getLocation().distanceSquared(player_loc) < 4) {
+                        player.damage(zombie_damage / (random.nextDouble() + 0.1), zombie);
                     }
-                    else {
-                        OraOraOra(zombie, player, random);
-                    }
-                }
-                else {
-                    timeSkipPlayerAction(player, random);
                 }
             }
         }
-        //under 30% health
-        else {
-            //retreat and heal
-            Location retreat = getRetreatLocation(player, zombie, 10);
+        //if zombie is near player
+        else if (random.nextBoolean()) {
+            Location tele = getAdvanceLocation(player, zombie, 5);
+            if (tele == null) return;
 
-            if (retreat != null) {
-                skipTimeBase(zombie, player, retreat, random, true);
-                zombieHeal(zombie, player, random);
-
-                if (zombie.getTarget() != null) {
-                    if (zombie.getTarget() instanceof Silverfish) {
-                        zombie.getTarget().remove();
+            skipTimeBase(zombie, player, tele, random, false);
+            if (random.nextInt(100) < 75) {
+                int pick_event = random.nextInt(100);
+                if (pick_event < 30) {
+                    if (zombie.getLocation().distanceSquared(player_loc) < 4) {
+                        Donut(zombie, player, random);
                     }
                 }
+                else {
+                    OraOraOra(zombie, player, random);
+                }
+            }
+            else {
+                timeSkipPlayerAction(player, random);
             }
         }
     }
@@ -192,7 +140,10 @@ public class ZombieBossBehavior extends BukkitRunnable {
             nms.move(zombie.getLocation(), fakePlayer, null, true);
         }
         else {
-            fakePlayer = nms.summonFakePlayer(zombie.getLocation(), player, null, null);
+            fakePlayer = nms.summonFakePlayer(zombie.getLocation(), player, null, null, true);
+            SpawnBoss spawnboss = new SpawnBoss(plugin, player);
+            nms.giveHandItem(fakePlayer, null, new ItemStack(spawnboss.getHighestDamage()));
+
             player.setMetadata("reflection_zombie" , new FixedMetadataValue(plugin, true));
         }
     }
@@ -201,7 +152,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         final Location zombie_orig_loc = zombie.getLocation();
         final Location player_loc = player.getEyeLocation();
 
-        zombie.teleport(zombie_warp);
+        zombie.teleport(zombie_warp, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
         int cooldown = running ? random.nextInt(200) : random.nextInt(100) + 100;
 
@@ -266,7 +217,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
         player_moving.setYaw(player_loc.getYaw());
         player_moving.setPitch(player_loc.getPitch());
-        player.teleport(player_moving);
+        player.teleport(player_moving, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
     public void playerEat (final Player player, final Random random) {
@@ -428,14 +379,6 @@ public class ZombieBossBehavior extends BukkitRunnable {
                     //player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                 }
 
-            }
-        }
-    }
-
-    public void zombieHeal (final Zombie zombie, final Player player, final Random random) {
-        if (zombie.getLocation().distanceSquared(player.getLocation()) > 225) {
-            if (!zombie.hasLineOfSight(player) && random.nextBoolean()) {
-                zombie.setHealth(Math.min(zombie.getHealth() + random.nextDouble(), zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
             }
         }
     }
@@ -604,10 +547,6 @@ public class ZombieBossBehavior extends BukkitRunnable {
         return null;
     }
 
-    public Location getRetreatLocation (final Player player, final Zombie zombie, final int range) {
-        return getFarthestLocation(player, zombie, range, false);
-    }
-
     public Location getAdvanceLocation (final Player player, final Zombie zombie, final int range) {
         return getFarthestLocation(player, zombie, range, true);
     }
@@ -675,28 +614,6 @@ public class ZombieBossBehavior extends BukkitRunnable {
                 health_bar.removePlayer(online);
             }
         }
-    }
-
-    public Silverfish summonMarker (Location location, int delay) {
-        location.add(0, 1, 0);
-        Silverfish marker = (Silverfish) world.spawnEntity(location, EntityType.SILVERFISH);
-        marker.setInvulnerable(true);
-        marker.setSilent(true);
-        marker.setGravity(false);
-        marker.setAI(false);
-        marker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0, false, false));
-        marker.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 5, false, false));
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!marker.isDead()) {
-                    marker.remove();
-                }
-            }
-        }.runTaskLaterAsynchronously(plugin, delay);
-
-        return marker;
     }
 
     public void OraOraOra (final Zombie zombie, final Player player, final Random random) {

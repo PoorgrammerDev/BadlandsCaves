@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -10,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -70,18 +72,22 @@ public class Displace implements Listener {
                         if (player.getLocation().distance(displace_marker) <= warp_range) {
                             if (mana >= displace_mana_cost) {
                                 if (cancel_fall) player.setFallDistance(0);
-                                player.teleport(displace_marker);
+                                player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
                                 player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
+
+                                player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
+                                for (Player powered : plugin.getServer().getOnlinePlayers()) {
+                                    if (!powered.equals(player)) {
+                                        if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                                            powered.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.3F, 1);
+                                            powered.spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 5, 0.1, 0.1, 0.1, 1);
+                                        }
                                     }
-                                }.runTaskLaterAsynchronously(plugin, 1);
+                                }
 
                                 double new_mana = mana - (double) (displace_mana_cost);
                                 player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
-                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 30));
+                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
                             }
                             else {
                                 player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));

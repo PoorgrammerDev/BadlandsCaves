@@ -5,6 +5,9 @@ game_values:
   #increases when breaking mob spawners. causes loot to get better, but mobs to become stronger
   chaos_level: 0
 
+  #chambers spawned in
+  chambers_spawned: FALSE
+
   #base percentage without luck effect or luck of the sea modifiers for getting a fishing crate
   fishing_crate_chance: 10
 
@@ -27,12 +30,15 @@ game_values:
   #how much mobs have to detect for runner to lose
   descension_max_detect: 100
 
+
   #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much per second
   displace_mana_cost: 25
   eyes_mana_cost: 50
   eyes_mana_drain: 10
   withdraw_mana_cost: 70
-  possess_mana_drain: 5
+  possess_mana_cost: 25
+  possess_mana_drain: 3
+  agility_mana_cost: 5
 
   #default soul drop chance (%)
   soul_drop_chance: 25

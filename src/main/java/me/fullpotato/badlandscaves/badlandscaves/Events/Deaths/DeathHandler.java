@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -106,7 +107,7 @@ public class DeathHandler implements Listener {
 
         boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (has_powers) {
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, 100));
+            player.setMetadata("Mana", new FixedMetadataValue(plugin, player.getMetadata("max_mana").get(0).asDouble()));
             player.setMetadata("swap_slot", new FixedMetadataValue(plugin, -1));
             player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, "__REMOVED__"));
@@ -162,8 +163,8 @@ public class DeathHandler implements Listener {
 
         if (sendToSpawn) {
             Location bed_spawn = player.getBedSpawnLocation();
-            if (bed_spawn != null) player.teleport(bed_spawn);
-            else player.teleport(world.getSpawnLocation());
+            if (bed_spawn != null) player.teleport(bed_spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            else player.teleport(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
 
     }

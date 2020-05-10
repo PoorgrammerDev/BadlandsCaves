@@ -21,9 +21,22 @@ public class SpawnBoss extends BukkitRunnable {
     private BadlandsCaves plugin;
     private Player player;
     private World reflection_world = Bukkit.getWorld("world_reflection");
+    private HashMap<Material, Integer> dmg = new HashMap<>();
     public SpawnBoss(BadlandsCaves bcav, Player ply) {
         plugin = bcav;
         player = ply;
+
+        dmg.put(Material.WOODEN_SWORD, 4);
+        dmg.put(Material.GOLDEN_SWORD, 4);
+        dmg.put(Material.STONE_SWORD, 5);
+        dmg.put(Material.IRON_SWORD, 6);
+        dmg.put(Material.DIAMOND_SWORD, 7);
+        dmg.put(Material.WOODEN_AXE, 7);
+        dmg.put(Material.GOLDEN_AXE, 7);
+        dmg.put(Material.STONE_AXE, 9);
+        dmg.put(Material.IRON_AXE, 9);
+        dmg.put(Material.DIAMOND_AXE, 9);
+        dmg.put(Material.TRIDENT, 9);
     }
 
     @Override
@@ -72,34 +85,26 @@ public class SpawnBoss extends BukkitRunnable {
         boss.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 1, false, false));
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR).getValue());
         boss.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue());
-        boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(getHighestDamage());
+        boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(dmg.get(getHighestDamage()));
 
         return boss;
     }
 
-    public int getHighestDamage() {
+    public Material getHighestDamage() {
         int highest_damage = 1;
-        HashMap<Material, Integer> dmg = new HashMap<>();
-        dmg.put(Material.WOODEN_SWORD, 4);
-        dmg.put(Material.GOLDEN_SWORD, 4);
-        dmg.put(Material.STONE_SWORD, 5);
-        dmg.put(Material.IRON_SWORD, 6);
-        dmg.put(Material.DIAMOND_SWORD, 7);
-        dmg.put(Material.WOODEN_AXE, 7);
-        dmg.put(Material.GOLDEN_AXE, 7);
-        dmg.put(Material.STONE_AXE, 9);
-        dmg.put(Material.IRON_AXE, 9);
-        dmg.put(Material.DIAMOND_AXE, 9);
+        Material highest_material = null;
 
         for (ItemStack item : player.getInventory()) {
             if (item != null) {
                 if (dmg.containsKey(item.getType())) {
-                    highest_damage = Math.max(highest_damage, dmg.get(item.getType()));
+                    if (dmg.get(item.getType()) > highest_damage) {
+                        highest_damage = dmg.get(item.getType());
+                        highest_material = item.getType();
+                    }
                 }
             }
         }
-
-        return highest_damage;
+        return highest_material;
     }
 
     public void removeEntities () {

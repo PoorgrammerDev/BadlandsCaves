@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DisplaceParticleRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionIndicatorRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.WithdrawIndicatorRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -89,9 +90,9 @@ public class SwapPowers implements Listener {
         };
 
         final BukkitTask[] power_runnables = {
-                new DisplaceParticleRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 1),
+                new DisplaceParticleRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 0),
                 null,
-                null,
+                new WithdrawIndicatorRunnable(plugin, player).runTaskTimerAsynchronously(plugin, 0, 0),
                 new PossessionIndicatorRunnable(plugin, player).runTaskTimer(plugin, 0, 0),
         };
 

@@ -429,6 +429,15 @@ public class LoadCustomItems {
         plugin.getConfig().set("items.voltshock_sword_charge_placeholder", voltshock_sword_charge_placeholder.serialize());
 
         //---------------------------
+
+        ItemStack voltshock_arrow = new ItemStack(Material.ARROW);
+        ItemMeta voltshock_arrow_meta = voltshock_arrow.getItemMeta();
+        voltshock_arrow_meta.setDisplayName("§3Voltshock Arrow");
+        voltshock_arrow_meta.setCustomModelData(131);
+        voltshock_arrow.setItemMeta(voltshock_arrow_meta);
+        plugin.getConfig().set("items.voltshock_arrow", voltshock_arrow.serialize());
+
+        //---------------------------
         //127 AND 128 USED BY VOLTSHOCK SWORDS
         //---------------------------
 
@@ -446,6 +455,46 @@ public class LoadCustomItems {
         corrosive_placeholder_meta.setDisplayName("§rCorrosive Placeholder");
         corrosive_placeholder.setItemMeta(corrosive_placeholder_meta);
         plugin.getConfig().set("items.corrosive_placeholder", corrosive_placeholder.serialize());
+
+        //---------------------------
+
+        ItemStack corrosive_arrow = new ItemStack(Material.ARROW);
+        ItemMeta corrosive_arrow_meta = corrosive_arrow.getItemMeta();
+        corrosive_arrow_meta.setDisplayName("§2Corrosive Arrow");
+        corrosive_arrow_meta.setCustomModelData(132);
+        corrosive_arrow.setItemMeta(corrosive_arrow_meta);
+        plugin.getConfig().set("items.corrosive_arrow", corrosive_arrow.serialize());
+
+        //---------------------------
+
+        ItemStack chamber_magma_key = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta chamber_magma_key_meta = chamber_magma_key.getItemMeta();
+        chamber_magma_key_meta.setDisplayName("§cMagma Key");
+        chamber_magma_key_meta.setCustomModelData(133);
+        chamber_magma_key.setItemMeta(chamber_magma_key_meta);
+        plugin.getConfig().set("items.chamber_magma_key", chamber_magma_key.serialize());
+
+        //---------------------------
+
+        ItemStack chamber_glowstone_key = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta chamber_glowstone_key_meta = chamber_glowstone_key.getItemMeta();
+        chamber_glowstone_key_meta.setDisplayName("§6Glowstone Key");
+        chamber_glowstone_key_meta.setCustomModelData(134);
+        chamber_glowstone_key.setItemMeta(chamber_glowstone_key_meta);
+        plugin.getConfig().set("items.chamber_glowstone_key", chamber_glowstone_key.serialize());
+
+        //---------------------------
+
+        ItemStack chamber_soulsand_key = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta chamber_soulsand_key_meta = chamber_soulsand_key.getItemMeta();
+        chamber_soulsand_key_meta.setDisplayName("§8Soul Sand Key");
+        chamber_soulsand_key_meta.setCustomModelData(135);
+        chamber_soulsand_key.setItemMeta(chamber_soulsand_key_meta);
+        plugin.getConfig().set("items.chamber_soulsand_key", chamber_soulsand_key.serialize());
+
+        //---------------------------
+
+
 
         plugin.saveConfig();
         plugin.reloadConfig();

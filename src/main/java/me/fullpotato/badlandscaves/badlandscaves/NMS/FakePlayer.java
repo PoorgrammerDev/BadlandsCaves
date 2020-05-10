@@ -8,7 +8,10 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 
 public class FakePlayer {
     private World world;
@@ -18,18 +21,38 @@ public class FakePlayer {
     }
 
     public Player summonFakePlayer(Location location, Player player, Player sendTo, String name) {
+        return summonFakePlayer(location, player, sendTo, name, false);
+    }
+
+    public Player summonFakePlayer(Location location, Player player, Player sendTo, String name, boolean copyArmor) {
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer world = ((CraftWorld) this.world).getHandle();
 
         EntityPlayer clone = new EntityPlayer(server, world, new GameProfile(player.getUniqueId(), name == null ? player.getName() : name), new PlayerInteractManager(world));
         clone.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 
+        PacketPlayOutEntityEquipment helmetPacket = null;
+        PacketPlayOutEntityEquipment chestplatePacket = null;
+        PacketPlayOutEntityEquipment leggingsPacket = null;
+        PacketPlayOutEntityEquipment bootsPacket = null;
+
+        if (copyArmor) {
+            EntityEquipment equipment = player.getEquipment();
+            helmetPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(equipment.getHelmet()));
+            chestplatePacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(equipment.getChestplate()));
+            leggingsPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(equipment.getLeggings()));
+            bootsPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.FEET, CraftItemStack.asNMSCopy(equipment.getBoots()));
+        }
+
+
         clone.setNoGravity(true);
         clone.setFlag(6, true);
+
 
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, clone);
         PacketPlayOutNamedEntitySpawn spawn = new PacketPlayOutNamedEntitySpawn(clone);
         PacketPlayOutScoreboardTeam team_packet = null;
+
 
         if (name != null && name.equals("§r")) {
             Scoreboard scoreboard = new Scoreboard();
@@ -41,14 +64,30 @@ public class FakePlayer {
 
         if (sendTo == null) {
             sendToAll(info, spawn, team_packet);
+            if (copyArmor) sendToAll(helmetPacket, chestplatePacket, leggingsPacket, bootsPacket);
         }
         else {
             ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(info);
             ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(spawn);
             ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(team_packet);
+
+            if (copyArmor) {
+                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(helmetPacket);
+                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(chestplatePacket);
+                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(leggingsPacket);
+                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(bootsPacket);
+            }
         }
 
         return clone.getBukkitEntity().getPlayer();
+    }
+
+    public void giveHandItem (Player player, Player sendTo, ItemStack item) {
+        EntityPlayer clone = ((CraftPlayer) player).getHandle();
+        PacketPlayOutEntityEquipment handItemPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(item));
+
+        if (sendTo == null) sendToAll(handItemPacket);
+        else ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(handItemPacket);
     }
 
     public void move (Location location, Player player, Player sendTo, boolean rotation) {
@@ -79,6 +118,14 @@ public class FakePlayer {
                 }
             }
         }
+    }
+
+    public void damage (Player player, Player sendTo, boolean damaged) {
+        EntityPlayer clone = ((CraftPlayer) player).getHandle();
+        PacketPlayOutAnimation animation = new PacketPlayOutAnimation(clone, damaged ? 1 : 0);
+
+        if (sendTo == null) sendToAll(animation);
+        else ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(animation);
     }
 
     public void remove (Player player) {

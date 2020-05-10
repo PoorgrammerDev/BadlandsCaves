@@ -1,19 +1,21 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +31,7 @@ public class UseChargedRune implements Listener {
     private final int possess_max_level = 2;
     private final int agility_max_level = 2;
     private final int endurance_max_level = 2;
-    private final int max_mana_max = 500;
+    private final int max_mana_max = 200;
 
     public UseChargedRune(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -63,6 +65,28 @@ public class UseChargedRune implements Listener {
         }
 
         openGUI(player);
+        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, SoundCategory.PLAYERS, 0.5F, 1);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 0.5F, 1);
+    }
+
+    @EventHandler
+    public void closeInventory (InventoryCloseEvent event) {
+        final Inventory inventory = event.getInventory();
+        final InventoryView view = event.getView();
+        final Player player = (Player) event.getPlayer();
+
+        if ((view.getTitle().equals(title) || view.getTitle().equals(confirm_title))) {
+            // FIXME: 4/28/2020 uh sound no work pls fix
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!player.getOpenInventory().getTitle().equals(confirm_title)) {
+                        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.PLAYERS, 0.5F, 1);
+                        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 0.5F, 1);
+                    }
+                }
+            }.runTaskLaterAsynchronously(plugin, 1);
+        }
     }
 
     public void openGUI(final Player player) {
@@ -111,7 +135,7 @@ public class UseChargedRune implements Listener {
                         icons.put(generateManaIcon(player), "max_mana");
                         icons.put(generateEnduranceIcon(player), "endurance_level");
                         icons.put(generateEyesIcon(player), "eyes_level");
-                        icons.put(generatePossessIcon(player), "agility_level");
+                        icons.put(generatePossessIcon(player), "possess_level");
 
 
                         if (icons.containsKey(current)) {
@@ -127,8 +151,16 @@ public class UseChargedRune implements Listener {
                                     player.getInventory().setItemInMainHand(null);
 
                                     String power = icons.get(clicked_inv.getItem(4));
-                                    player.setMetadata(power, new FixedMetadataValue(plugin, player.getMetadata(power).get(0).asInt() + 1));
+
+                                    if (power.equals("max_mana")) {
+                                        player.setMetadata(power, new FixedMetadataValue(plugin, player.getMetadata(power).get(0).asInt() + 10));
+                                    }
+                                    else {
+                                        player.setMetadata(power, new FixedMetadataValue(plugin, player.getMetadata(power).get(0).asInt() + 1));
+                                    }
+
                                     player.closeInventory();
+                                    player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 0.5F, 1);
                                     player.sendMessage("§7The power of the Rune flows into your body.");
                                 }
                             }
@@ -205,13 +237,13 @@ public class UseChargedRune implements Listener {
                 displace_lore.add("§7Place a marker, and teleport to it.");
                 displace_lore.add("§7--------------------");
                 displace_lore.add("§7Range: §a10 §7Blocks.");
-                displace_lore.add("§9Mana §7Cost: §a" + cost + " §9Mana§7.");
+                displace_lore.add("§3Mana §7Cost: §a" + cost + " §3Mana§7.");
             }
             else if (displace_level == 1) {
                 //displace_lore.add("§dDisplace §7Level §a2");
                 displace_lore.add("§7--------------------");
                 displace_lore.add("§7Range upgraded to §a20 §7Blocks.");
-                displace_lore.add("§7Cancels fall damage upon using §dDisplace§7.");
+                displace_lore.add("§7Resets fall damage upon using §dDisplace§7.");
             }
 
             displace_meta.setLore(displace_lore);
@@ -226,7 +258,7 @@ public class UseChargedRune implements Listener {
         if (withdraw_level >= withdraw_max_level) {
             ItemStack withdraw_cancel = new ItemStack(Material.BARRIER);
             ItemMeta withdraw_cancel_meta = withdraw_cancel.getItemMeta();
-            withdraw_cancel_meta.setDisplayName("§7Withdraw §8| §aMAX LEVEL");
+            withdraw_cancel_meta.setDisplayName("§8Withdraw §8| §aMAX LEVEL");
 
             ArrayList<String> withdraw_cancel_lore = new ArrayList<>();
             withdraw_cancel_lore.add("§cYou cannot upgrade this power anymore.");
@@ -239,7 +271,7 @@ public class UseChargedRune implements Listener {
         else {
             ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
             ItemMeta withdraw_meta = withdraw.getItemMeta();
-            withdraw_meta.setDisplayName("§7Withdraw §8| §7Upgrade to Level §a" + (withdraw_level + 1));
+            withdraw_meta.setDisplayName("§8Withdraw §8| §7Upgrade to Level §a" + (withdraw_level + 1));
 
             ArrayList<String> withdraw_lore = new ArrayList<>();
             if (withdraw_level == 0) {
@@ -248,13 +280,16 @@ public class UseChargedRune implements Listener {
                 withdraw_lore.add("§7--------------------");
                 withdraw_lore.add("§7Retreat to an alternate copy of your surroundings.");
                 withdraw_lore.add("§7--------------------");
-                withdraw_lore.add("§9Mana §7Cost: §a" + cost + " §9Mana§7.");
+                withdraw_lore.add("§3Mana §7Cost: §a" + cost + " §3Mana§7.");
             }
             else if (withdraw_level == 1) {
                 //withdraw_lore.add("§7Withdraw §8| §7Level §a2");
                 withdraw_lore.add("§7--------------------");
-                withdraw_lore.add("§7Any §dDisplace §7markers placed within the Withdraw world");
+                withdraw_lore.add("§7Any §dDisplace §7markers placed within the §8Withdraw§7 world");
                 withdraw_lore.add("§7are transferred back to the real world upon returning.");
+                withdraw_lore.add("§7--------------------");
+                withdraw_lore.add("§7You regenerate health, hunger, thirst, and toxicity");
+                withdraw_lore.add("§7passively in the §8Withdraw§7 world.");
             }
 
             withdraw_meta.setLore(withdraw_lore);
@@ -292,11 +327,23 @@ public class UseChargedRune implements Listener {
                 eyes_lore.add("§7See important blocks and entities around you through walls.");
                 eyes_lore.add("§7--------------------");
                 eyes_lore.add("§7Range: §a7 §7Blocks.");
-                eyes_lore.add("§9Mana §7Cost: §a" + cost + " §7initial, §a" + drain + " §7drained per second after.");
+                eyes_lore.add("§3Mana §7Cost: §a" + cost + " §7initial, §a" + drain + " §7drained per second after.");
             }
             else if (eyes_level == 1) {
                 eyes_lore.add("§7--------------------");
                 eyes_lore.add("§7Range increased to §a15 §7Blocks.");
+                eyes_lore.add("§7Now spots §cDangerous §7blocks.");
+                eyes_lore.add("§7--------------------");
+                eyes_lore.add("§7Blocks are now color coded:");
+                eyes_lore.add("§7Gray - Tier 1 Ores");
+                eyes_lore.add("§9Blue - Tier 2 Ores");
+                eyes_lore.add("§aGreen - Storage Containers and Spawners");
+                eyes_lore.add("§cRed - Dangerous blocks like Lava and TNT");
+                eyes_lore.add("§7--------------------");
+                eyes_lore.add("§7Entities are now color coded:");
+                eyes_lore.add("§aGreen - Passive Mobs");
+                eyes_lore.add("§cRed - Hostile Mobs");
+                eyes_lore.add("§7Gray - Other");
             }
 
 
@@ -330,17 +377,18 @@ public class UseChargedRune implements Listener {
             ArrayList<String> possess_lore = new ArrayList<>();
             if (possess_level == 0) {
                 final int drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
+                final int cost = plugin.getConfig().getInt("game_values.possess_mana_cost");
                 possess_lore.add("§7--------------------");
                 possess_lore.add("§7Take control of monsters.");
                 possess_lore.add("§7Upon ending, your body materializes");
                 possess_lore.add("§7where you were standing before.");
                 possess_lore.add("§7--------------------");
-                possess_lore.add("§9Mana §7Cost: §a" + drain + " §9Mana §7per second.");
+                possess_lore.add("§3Mana §7Cost: §a" + cost + " §7initial, §a" + drain + " §7drained per second after.");
             }
             else if (possess_level == 1) {
                 possess_lore.add("§7--------------------");
                 possess_lore.add("§7Put down a §dDisplace §7marker before Possession ends to reappear there,");
-                possess_lore.add("§7instead of at your original body's location. This costs §ano §9Mana§7.");
+                possess_lore.add("§7instead of at your original body's location. This costs §ano §3Mana§7.");
             }
 
             possess_meta.setLore(possess_lore);
@@ -367,7 +415,6 @@ public class UseChargedRune implements Listener {
             return agility_cancel;
         }
         else {
-            final int cost = plugin.getConfig().getInt("game_values.agility_jump_mana_cost");
             ItemStack agility_icon = new ItemStack(Material.FEATHER);
             ItemMeta meta = agility_icon.getItemMeta();
 
@@ -377,7 +424,7 @@ public class UseChargedRune implements Listener {
             if (agility_level == 0) {
                 lore.add("§7--------------------");
                 lore.add("§7Passive Ability: §bSpeed §a+1");
-                lore.add("§7Adds Double Jump ability. Costs §a" + cost + " §9Mana §7per use.");
+                lore.add("§7Adds Double Jump ability. Costs §a5 §3Mana§7 to use.");
             }
             else if (agility_level == 1) {
                 lore.add("§7--------------------");
@@ -449,11 +496,11 @@ public class UseChargedRune implements Listener {
         else {
             ItemStack icon = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
             ItemMeta meta = icon.getItemMeta();
-            meta.setDisplayName("§3Max Mana §8| §7Increase to §a" + (max_mana + 25));
+            meta.setDisplayName("§3Max Mana §8| §7Increase to §a" + (max_mana + 10));
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add("§7--------------------");
-            lore.add("§7Increase your §3Max Mana §7by §a25 §7points.");
+            lore.add("§7Increase your §3Max Mana §7by §a10 §7points.");
 
             meta.setLore(lore);
             icon.setItemMeta(meta);
