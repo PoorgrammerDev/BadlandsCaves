@@ -3,10 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -83,6 +80,16 @@ public class EyesRunnable extends BukkitRunnable {
             player.setMetadata("using_eyes", new FixedMetadataValue(plugin, false));
             player.stopSound("custom.supernatural.enhanced_eyes.ambience");
             player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.5F, 1);
+
+            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                if (entity instanceof Player) {
+                    Player powered = (Player) entity;
+                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                        powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.3F, 1);
+                        powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
+                    }
+                }
+            }
 
             //removing indicators
             for (int id : shulker_ids) {

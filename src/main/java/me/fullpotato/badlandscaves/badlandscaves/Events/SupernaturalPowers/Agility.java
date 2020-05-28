@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,11 +13,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class Agility implements Listener {
-    private BadlandsCaves plugin;
+public class Agility extends UsePowers implements Listener {
     public Agility (BadlandsCaves bcav) {
-        plugin = bcav;
+        super(bcav);
     }
+
     //detecting if the player is jumping
     @EventHandler
     public void firstJump(PlayerMoveEvent event) {
@@ -58,9 +60,12 @@ public class Agility implements Listener {
             player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - cost));
 
             player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.5F, 1);
-            for (Player powered : plugin.getServer().getOnlinePlayers()) {
-                if (!powered.equals(player) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
-                    powered.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.3F, 1);
+            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                if (entity instanceof Player) {
+                    Player powered = (Player) entity;
+                    if (!powered.equals(player) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                        powered.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.3F, 1);
+                    }
                 }
             }
 
@@ -99,7 +104,8 @@ public class Agility implements Listener {
         else {
             player.setFlying(false);
             player.setAllowFlight(false);
-            player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
+
+            notEnoughMana(player);
         }
     }
 

@@ -31,7 +31,7 @@ public class HallowedChambersWorld {
         world.setGameRule(GameRule.MOB_GRIEFING, false);
         world.setGameRule(GameRule.KEEP_INVENTORY, true);
         world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
-        world.setGameRule(GameRule.REDUCED_DEBUG_INFO, false); // TODO: 5/3/2020 change this to true later
+        world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
         world.setGameRule(GameRule.DO_FIRE_TICK, false);
         world.setGameRule(GameRule.DO_TILE_DROPS, false);
         world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);

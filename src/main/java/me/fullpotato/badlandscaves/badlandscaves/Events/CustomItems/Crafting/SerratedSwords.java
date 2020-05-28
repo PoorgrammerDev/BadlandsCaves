@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.TreasureGear;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -42,7 +43,9 @@ public class SerratedSwords implements Listener {
                         final ItemStack item = event.getItem();
                         if (Arrays.asList(swords).contains(item.getType())) {
                             Voltshock voltshock = new Voltshock(plugin);
-                            if (!isSerrated(item) && !voltshock.isVoltshock(item)) {
+                            Corrosive corrosive = new Corrosive(plugin);
+                            TreasureGear treasureGear = new TreasureGear();
+                            if (!isSerrated(item) && !voltshock.isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item)) {
                                 Damageable damageable_meta = (Damageable) item.getItemMeta();
                                 int max_durability = item.getType().getMaxDurability();
                                 if (damageable_meta != null && damageable_meta.getDamage() < max_durability * 0.75) {

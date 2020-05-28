@@ -332,13 +332,11 @@ public class UseChargedRune implements Listener {
             else if (eyes_level == 1) {
                 eyes_lore.add("§7--------------------");
                 eyes_lore.add("§7Range increased to §a15 §7Blocks.");
-                eyes_lore.add("§7Now spots §cDangerous §7blocks.");
                 eyes_lore.add("§7--------------------");
                 eyes_lore.add("§7Blocks are now color coded:");
                 eyes_lore.add("§7Gray - Tier 1 Ores");
                 eyes_lore.add("§9Blue - Tier 2 Ores");
                 eyes_lore.add("§aGreen - Storage Containers and Spawners");
-                eyes_lore.add("§cRed - Dangerous blocks like Lava and TNT");
                 eyes_lore.add("§7--------------------");
                 eyes_lore.add("§7Entities are now color coded:");
                 eyes_lore.add("§aGreen - Passive Mobs");

@@ -32,14 +32,6 @@ public class HM_TabComplete implements TabCompleter {
                     }
                 }
 
-                else if (args.length == 3) {
-                    if (args[2].startsWith("r")) list.add("reload");
-                    else if (args[2].startsWith("n")) list.add("noreload");
-                    else {
-                        list.add("reload");
-                        list.add("noreload");
-                    }
-                }
                 return list;
             }
         }

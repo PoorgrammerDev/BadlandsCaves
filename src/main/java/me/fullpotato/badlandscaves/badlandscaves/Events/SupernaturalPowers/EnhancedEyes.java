@@ -3,10 +3,12 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.EyesRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,10 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class EnhancedEyes implements Listener {
-    private BadlandsCaves plugin;
-    public EnhancedEyes(BadlandsCaves bcav) {
-        plugin = bcav;
+public class EnhancedEyes extends UsePowers implements Listener {
+    public EnhancedEyes(BadlandsCaves plugin) {
+        super(plugin);
     }
 
     @EventHandler
@@ -45,11 +46,13 @@ public class EnhancedEyes implements Listener {
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
 
+                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
                     final int eyes_level = player.hasMetadata("eyes_level") ? player.getMetadata("eyes_level").get(0).asInt() : 0;
                     if (eyes_level < 1) return;
 
-
                     final boolean using_eyes = player.getMetadata("using_eyes").get(0).asBoolean();
+
+                    preventDoubleClick(player);
                     if (using_eyes) {
                         player.setMetadata("using_eyes", new FixedMetadataValue(plugin, false));
                     }
@@ -91,8 +94,6 @@ public class EnhancedEyes implements Listener {
                             minerals_tier2.add(Material.GOLD_BLOCK);
                             minerals_tier2.add(Material.LAPIS_BLOCK);
                             minerals_tier2.add(Material.REDSTONE_BLOCK);
-                            minerals_tier2.add(Material.SPAWNER);
-
 
                             ArrayList<Material> storage = new ArrayList<>();
                             storage.add(Material.CHEST);
@@ -114,10 +115,7 @@ public class EnhancedEyes implements Listener {
                             storage.add(Material.YELLOW_SHULKER_BOX);
                             storage.add(Material.RED_SHULKER_BOX);
                             storage.add(Material.WHITE_SHULKER_BOX);
-
-                            ArrayList<Material> danger = new ArrayList<>();
-                            danger.add(Material.LAVA);
-                            danger.add(Material.TNT);
+                            storage.add(Material.SPAWNER);
 
                             ArrayList<Integer> ids = new ArrayList<>();
                             StringBuilder builder = new StringBuilder();
@@ -156,11 +154,6 @@ public class EnhancedEyes implements Listener {
                                                         ids.add(nms_id);
                                                         builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
                                                     }
-                                                    else if (danger.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(blockReplaceLoc, ChatColor.RED);
-                                                        ids.add(nms_id);
-                                                        builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
-                                                    }
                                                 }
                                                 else {
                                                     if (minerals_tier1.contains(blockMat) || minerals_tier2.contains(blockMat) || storage.contains(blockMat)) {
@@ -187,10 +180,13 @@ public class EnhancedEyes implements Listener {
                             player.setMetadata("using_eyes", new FixedMetadataValue(plugin, true));
 
                             ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), block_range - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
-                            for (Player powered : plugin.getServer().getOnlinePlayers()) {
-                                if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
-                                    powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.3F, 1);
-                                    powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
+                            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                                if (entity instanceof Player) {
+                                    Player powered = (Player) entity;
+                                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                        powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.3F, 1);
+                                        powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
+                                    }
                                 }
                             }
 
@@ -198,7 +194,7 @@ public class EnhancedEyes implements Listener {
                             new EyesRunnable(plugin, player, location, ids, player.hasPotionEffect(PotionEffectType.NIGHT_VISION)).runTaskTimer(plugin, 0, 0);
                         }
                         else {
-                            player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
+                            notEnoughMana(player);
                         }
                     }
                 }

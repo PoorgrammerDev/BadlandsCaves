@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.PossessionNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -75,6 +76,16 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             for (Player online_player : Bukkit.getOnlinePlayers()) {
                 if (!online_player.equals(player)) {
                     online_player.showPlayer(plugin, player);
+                }
+            }
+
+            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                if (entity instanceof Player) {
+                    Player powered = (Player) entity;
+                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                        powered.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.3F, 1);
+                        powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
+                    }
                 }
             }
 

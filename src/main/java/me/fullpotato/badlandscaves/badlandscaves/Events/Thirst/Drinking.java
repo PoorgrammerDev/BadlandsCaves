@@ -1,17 +1,23 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Material;
+import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.BackroomsManager;
+import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Random;
 
 public class Drinking implements Listener {
     private BadlandsCaves plugin;
@@ -61,29 +67,18 @@ public class Drinking implements Listener {
                 ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
                 ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
                 ItemStack mana_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true));
+                ItemStack recall_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.recall_potion").getValues(true));
 
                 //testing if purified
                 if (item.isSimilar(purified_water)) {
-                        if (potionMeta.getEnchantLevel(Enchantment.DURABILITY) < 50) {
-                            double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
-                            int thirst_threshold;
-                            double thirst_add;
-                            int buffer;
+                    double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
+                    int thirst_threshold = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.threshold_thirst_sys") : plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
+                    double thirst_add = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.purified_drink_thirst_incr") : plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
+                    int overflow = (int) (Math.max((current_thirst + thirst_add) - 100, 0));
+                    int buffer = isHardmode ? (thirst_threshold * -50) - (50 * overflow) : (thirst_threshold * -100) - (50 * overflow);
 
-                            if (isHardmode) {
-                                thirst_add = plugin.getConfig().getInt("game_values.hardmode_values.purified_drink_thirst_incr");
-                                thirst_threshold = plugin.getConfig().getInt("game_values.hardmode_values.threshold_thirst_sys");
-                                buffer = thirst_threshold * -10;
-                            }
-                            else {
-                                thirst_add = plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
-                                thirst_threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
-                                buffer = thirst_threshold * -100;
-                            }
-
-                            player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(current_thirst + thirst_add, 100)));
-                            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, buffer));
-                        }
+                    player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(current_thirst + thirst_add, 100)));
+                    player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, Math.min(player.getMetadata("thirst_sys_var").get(0).asInt(), buffer)));
                 }
                 else if (item.isSimilar(antidote)) {
                     double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
@@ -107,6 +102,41 @@ public class Drinking implements Listener {
                         int new_mana = Math.min(Mana + 100, max_mana);
                         player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
                     }
+                }
+                else if (item.isSimilar(recall_potion)) {
+                    Location location = player.getLocation();
+                    Random random = new Random();
+
+                    double[] tracker = {0.0};
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (tracker[0] > player.getHeight()) {
+                                this.cancel();
+                                Location updated = player.getLocation();
+                                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld("world").getSpawnLocation() : player.getBedSpawnLocation();
+                                warp.setYaw(updated.getYaw());
+                                warp.setPitch(updated.getPitch());
+
+                                updated.getWorld().spawnParticle(Particle.REDSTONE, updated, 100, 1, 1, 1, 1, new Particle.DustOptions(Color.YELLOW, 0.5F));
+                                updated.getWorld().playSound(updated, "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 1, 1);
+
+                                player.teleport(warp, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+                                warp.getWorld().spawnParticle(Particle.REDSTONE, warp, 100, 1, 1, 1, 1, new Particle.DustOptions(Color.YELLOW, 0.5F));
+                                warp.getWorld().playSound(warp, "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 1, 1);
+
+                                if (updated.distanceSquared(location) > 0 && random.nextInt(1000) < updated.distanceSquared(location)) {
+                                    BackroomsManager backrooms = new BackroomsManager(plugin);
+                                    backrooms.enterBackRooms(player, random);
+                                }
+                            }
+                            else {
+                                ParticleShapes.particleCircle(null, Particle.REDSTONE, location.clone().add(0, tracker[0], 0), 1, 0, new Particle.DustOptions(Color.YELLOW, 0.5F));
+                                tracker[0] += 0.1;
+                            }
+                        }
+                    }.runTaskTimer(plugin, 0, 1);
                 }
             }
         }

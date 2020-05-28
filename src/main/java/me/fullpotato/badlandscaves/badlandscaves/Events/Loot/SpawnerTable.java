@@ -50,7 +50,7 @@ public class SpawnerTable implements LootTable {
     public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, @NotNull LootContext context) {
         final double luck = context.getLuck();
         final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
-        final int count = random.nextInt(Math.max(Math.min((int) Math.floor(Math.pow((luck + 10.0) / 6.0, 1.79) + 3.0 + (chaos / 10.0)), 50), 1)) + fortune;
+        final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 5);
         final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         final boolean supernatural = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
 
@@ -61,13 +61,13 @@ public class SpawnerTable implements LootTable {
         if (hardmode) {
             //HARDMODE NONSPECIFIC-----------------------------------------------------------------------------
             generic.add(new ItemStack(Material.IRON_BLOCK, 4));
-            generic.add(new ItemStack(Material.LAPIS_BLOCK, 4));
-            generic.add(new ItemStack(Material.QUARTZ_BLOCK, 4));
-            generic.add(new ItemStack(Material.REDSTONE_BLOCK, 4));
-            generic.add(new ItemStack(Material.EMERALD_BLOCK, 4));
+            generic.add(new ItemStack(Material.REDSTONE_BLOCK, 16));
+            generic.add(new ItemStack(Material.LAPIS_BLOCK, 8));
             generic.add(new ItemStack(Material.GOLD_BLOCK, 4));
-            generic.add(new ItemStack(Material.DIAMOND_BLOCK, 4));
-            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 4));
+            generic.add(new ItemStack(Material.DIAMOND_BLOCK, 2));
+            generic.add(new ItemStack(Material.EMERALD_BLOCK, 2));
+            generic.add(new ItemStack(Material.QUARTZ_BLOCK, 8));
+            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 16));
             generic.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate_hardmode").getValues(true)));
 
             if (supernatural) {
@@ -95,23 +95,28 @@ public class SpawnerTable implements LootTable {
         }
         else {
             //PREHARDMODE NONSPECIFIC--------------------------------------------------------------------------
-            generic.add(new ItemStack(Material.IRON_INGOT, 2));
-            generic.add(new ItemStack(Material.REDSTONE, 2));
-            generic.add(new ItemStack(Material.LAPIS_LAZULI, 2));
-            generic.add(new ItemStack(Material.GOLD_INGOT, 2));
+            generic.add(new ItemStack(Material.IRON_INGOT, 4));
+            generic.add(new ItemStack(Material.REDSTONE, 16));
+            generic.add(new ItemStack(Material.LAPIS_LAZULI, 8));
+            generic.add(new ItemStack(Material.GOLD_INGOT, 4));
             generic.add(new ItemStack(Material.DIAMOND, 2));
             generic.add(new ItemStack(Material.EMERALD, 2));
-            generic.add(new ItemStack(Material.QUARTZ, 2));
-            generic.add(new ItemStack(Material.NETHER_WART, 2));
-            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 2));
+            generic.add(new ItemStack(Material.QUARTZ, 8));
+            generic.add(new ItemStack(Material.NETHER_WART, 8));
+            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 4));
             generic.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate").getValues(true)));
 
             if (supernatural) {
                 //PREHARDMODE SUPERNATURAL---------------------------------------------------------------------
-                specific.add(rune);
                 specific.add(new ItemStack(Material.LAPIS_LAZULI, 32));
+                for (EntityType type : matchSoul.keySet()) {
+                    specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + matchSoul.get(type)).getValues(true)));
+                }
+
                 if (matchSoul.containsKey(spawnerType)) {
-                    specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + matchSoul.get(spawnerType)).getValues(true)));
+                    ItemStack soul = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + matchSoul.get(spawnerType)).getValues(true));
+                    soul.setAmount(16);
+                    specific.add(soul);
                 }
 
             }
@@ -131,8 +136,8 @@ public class SpawnerTable implements LootTable {
         if (supernatural) output.add(rune);
 
         for (int i = 0; i < count; i++) {
-            if (random.nextInt(100) < 25) {
-                specific.add(specific.get(random.nextInt(specific.size())));
+            if (random.nextInt(100) < 10) {
+                output.add(specific.get(random.nextInt(specific.size())));
             }
             else {
                 output.add(generic.get(random.nextInt(generic.size())));

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.TreasureGear;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -92,7 +93,8 @@ public class Corrosive extends MatchCrafting implements Listener {
                     if (!event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
                     Voltshock voltshock = new Voltshock(plugin);
                     SerratedSwords serrated = new SerratedSwords(plugin);
-                    if (!voltshock.isVoltshock(sword) && !serrated.isSerrated(sword)) {
+                    TreasureGear treasureGear = new TreasureGear();
+                    if (!voltshock.isVoltshock(sword) && !serrated.isSerrated(sword) && !treasureGear.isTreasureGear(sword)) {
                         if (isCorrosive(sword)) {
                             ItemStack output = sword.clone();
                             setHitsLeft(output, 10);

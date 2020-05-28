@@ -21,7 +21,9 @@ public class NaturalThirstDecrease implements Listener {
 
     @EventHandler
     public void decrease_thirst (PlayerMoveEvent event) {
+        if (event.getTo() == null) return;
         Player player = event.getPlayer();
+
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
         if (player.isDead()) return;
 
@@ -52,27 +54,22 @@ public class NaturalThirstDecrease implements Listener {
                 }
             }
 
+
+            double new_thirst_sys;
             if (climb) {
-                double new_thirst_sys = current_thirst_sys + 3;
-                double rounded = Math.round(new_thirst_sys * 100.0) / 100.0;
-                player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, rounded));
+                new_thirst_sys = current_thirst_sys + 3;
             }
             else if (sprint) {
-                double new_thirst_sys = current_thirst_sys + 1.5;
-                double rounded = Math.round(new_thirst_sys * 100.0) / 100.0;
-                player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, rounded));
+                new_thirst_sys = current_thirst_sys + 1.5;
             }
             else if (sneak) {
-                double new_thirst_sys = current_thirst_sys + 0.5;
-                double rounded = Math.round(new_thirst_sys * 100.0) / 100.0;
-                player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, rounded));
+                new_thirst_sys = current_thirst_sys + 0.5;
             }
             else {
-                double new_thirst_sys = current_thirst_sys + 1;
-                double rounded = Math.round(new_thirst_sys * 100.0) / 100.0;
-                player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, rounded));
+                new_thirst_sys = current_thirst_sys + 1;
             }
-            //player.sendMessage("thirstsys level: " + player.getMetadata("thirst_sys_var").get(0).asDouble());
+            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, new_thirst_sys));
+
         }
 
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");

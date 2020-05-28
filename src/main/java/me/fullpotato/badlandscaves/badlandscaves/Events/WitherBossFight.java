@@ -66,7 +66,7 @@ public class WitherBossFight implements Listener {
                 plugin.getConfig().set("game_values.wither_fight.fight_stage", 0);
                 plugin.getConfig().set("game_values.wither_fight.portal_active", true);
                 plugin.getConfig().set("game_values.wither_fight.portal_location", spawnLocation);
-                plugin.getConfig().set("game_values.wither_fight.portal_timer", (spawnLocation.getBlockY() * 0.25) + 10);
+                plugin.getConfig().set("game_values.wither_fight.portal_timer", (spawnLocation.getBlockY() * 0.25) + 180);
 
                 plugin.saveConfig();
 
@@ -94,6 +94,7 @@ public class WitherBossFight implements Listener {
                         plugin.getConfig().set("game_values.wither_fight.portal_timer", timer - 1);
                     }
                     else {
+                        prepareStage();
                         destroyTunnel(plugin.getConfig().getLocation("game_values.wither_fight.portal_location"));
                     }
                 }
@@ -364,32 +365,36 @@ public class WitherBossFight implements Listener {
                             plugin.saveConfig();
                         }
                         else if (fight_stage == 1) {
-                            for (int z = -1; z <= 1; z++) {
-                                for (int y = 128; y <= 131; y++) {
-                                    Block wall = world.getBlockAt(-5, y, z);
-                                    if (wall.getType().equals(Material.RED_NETHER_BRICK_WALL)) {
-                                        wall.breakNaturally();
-                                    }
-                                }
-                            }
-
-
-                            for (Player player : plugin.getServer().getOnlinePlayers()) {
-                                player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, SoundCategory.BLOCKS, 1, 1);
-                                if (player.getWorld().equals(world)) {
-                                    players.add(player);
-                                }
-                            }
-
-                            destroyTunnel(plugin.getConfig().getLocation("game_values.wither_fight.portal_location"));
-                            genMazes(new Random());
-                            plugin.getConfig().set("game_values.wither_fight.fight_stage", 2);
-                            plugin.saveConfig();
+                            prepareStage();
                         }
                     }
                 }
             }
         }
+    }
+
+    public void prepareStage() {
+        for (int z = -1; z <= 1; z++) {
+            for (int y = 128; y <= 131; y++) {
+                Block wall = world.getBlockAt(-5, y, z);
+                if (wall.getType().equals(Material.RED_NETHER_BRICK_WALL)) {
+                    wall.breakNaturally();
+                }
+            }
+        }
+
+
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, SoundCategory.BLOCKS, 1, 1);
+            if (player.getWorld().equals(world)) {
+                players.add(player);
+            }
+        }
+
+        destroyTunnel(plugin.getConfig().getLocation("game_values.wither_fight.portal_location"));
+        genMazes(new Random());
+        plugin.getConfig().set("game_values.wither_fight.fight_stage", 2);
+        plugin.saveConfig();
     }
 
     public void checkIfEnded() {
@@ -857,33 +862,34 @@ public class WitherBossFight implements Listener {
                         final int lifespan = 100;
                         int[] ticks = {0};
 
+                        if (location.getWorld().equals(world)) {
+                            world.playSound(location, Sound.BLOCK_PORTAL_TRIGGER, SoundCategory.HOSTILE, 1, 1);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (ticks[0] > lifespan) {
+                                        this.cancel();
+                                    }
+                                    else {
+                                        world.spawnParticle(Particle.REDSTONE, location, 2, 0.1, 0.1, 0.1,0, new Particle.DustOptions(Color.BLACK, 2));
 
-                        world.playSound(location, Sound.BLOCK_PORTAL_TRIGGER, SoundCategory.HOSTILE, 1, 1);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (ticks[0] > lifespan) {
-                                    this.cancel();
-                                }
-                                else {
-                                    world.spawnParticle(Particle.REDSTONE, location, 2, 0.1, 0.1, 0.1,0, new Particle.DustOptions(Color.BLACK, 2));
+                                        world.spawnParticle(Particle.REDSTONE, location, 10, 2, 1, 1,0, new Particle.DustOptions(Color.RED, 1));
+                                        world.spawnParticle(Particle.REDSTONE, location, 10, 1, 2, 1,0, new Particle.DustOptions(Color.RED, 1));
+                                        world.spawnParticle(Particle.REDSTONE, location, 10, 1, 1, 2,0, new Particle.DustOptions(Color.RED, 1));
 
-                                    world.spawnParticle(Particle.REDSTONE, location, 10, 2, 1, 1,0, new Particle.DustOptions(Color.RED, 1));
-                                    world.spawnParticle(Particle.REDSTONE, location, 10, 1, 2, 1,0, new Particle.DustOptions(Color.RED, 1));
-                                    world.spawnParticle(Particle.REDSTONE, location, 10, 1, 1, 2,0, new Particle.DustOptions(Color.RED, 1));
-
-                                    for (Entity entity : world.getNearbyEntities(location, 10, 10, 10)) {
-                                        if (entity instanceof Player) {
-                                            Player player = (Player) entity;
-                                            if (player.getLocation().distanceSquared(location) > 1 && player.getLocation().distanceSquared(location) < 25) {
-                                                player.setVelocity(location.clone().subtract(player.getLocation()).toVector().multiply(0.3));
+                                        for (Entity entity : world.getNearbyEntities(location, 10, 10, 10)) {
+                                            if (entity instanceof Player) {
+                                                Player player = (Player) entity;
+                                                if (player.getWorld().equals(world) && player.getLocation().distanceSquared(location) > 1 && player.getLocation().distanceSquared(location) < 25) {
+                                                    player.setVelocity(location.clone().subtract(player.getLocation()).toVector().multiply(0.3));
+                                                }
                                             }
                                         }
+                                        ticks[0]++;
                                     }
-                                    ticks[0]++;
                                 }
-                            }
-                        }.runTaskTimer(plugin, 0, 0);
+                            }.runTaskTimer(plugin, 0, 0);
+                        }
                     }
                 }
 
@@ -1019,6 +1025,9 @@ public class WitherBossFight implements Listener {
 
                     plugin.getConfig().set("game_values.hardmode", true);
                     plugin.saveConfig();
+
+                    plugin.getServer().resetRecipes();
+                    plugin.loadCraftingRecipes();
                 }
 
 

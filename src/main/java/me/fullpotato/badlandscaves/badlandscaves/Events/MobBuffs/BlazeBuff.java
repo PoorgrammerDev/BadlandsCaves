@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class BlazeBuff implements Listener {
     private BadlandsCaves plugin;
+    private World chambers = Bukkit.getWorld("world_chambers");
     public BlazeBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -26,6 +27,8 @@ public class BlazeBuff implements Listener {
     @EventHandler
     public void HMBlaze (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Blaze)) return;
+        if (event.getEntity().getWorld().equals(chambers)) return;
+
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
 

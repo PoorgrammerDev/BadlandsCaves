@@ -2,9 +2,11 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DisplaceParticleRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionIndicatorRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.WithdrawIndicatorRunnable;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,19 +30,17 @@ public class SwapPowers implements Listener {
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (!has_powers) return;
 
+        ManaBarManager bar = new ManaBarManager(plugin);
         if (player.isSneaking()) {
             player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
+            bar.clearMessage(player);
         }
         else {
             final boolean doubleshift_window = player.hasMetadata("swap_doubleshift_window") && player.getMetadata("swap_doubleshift_window").get(0).asBoolean();
             if (doubleshift_window) {
                 player.setMetadata("swap_window", new FixedMetadataValue(plugin, true));
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
-                    }
-                }.runTaskLaterAsynchronously(plugin, 100);
+
+                bar.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
             }
             else {
                 player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, true));
@@ -75,6 +75,13 @@ public class SwapPowers implements Listener {
         int swap_slot = player.getMetadata("swap_slot").get(0).asInt();
         int incr = (event.getNewSlot() > event.getPreviousSlot() || (event.getNewSlot() == 0 && event.getPreviousSlot() == 8)) && !(event.getNewSlot() == 8 && event.getPreviousSlot() == 0) ? 1 : -1;
 
+        final String[] names = {
+                ChatColor.BOLD.toString() + ChatColor.LIGHT_PURPLE + "Displace",
+                ChatColor.BOLD.toString() + ChatColor.BLUE + "Enhanced Eyes",
+                ChatColor.BOLD.toString() + ChatColor.GRAY + "Withdraw",
+                ChatColor.BOLD.toString() + ChatColor.DARK_GREEN + "Possession",
+        };
+
         final int[] power_levels = {
                 player.getMetadata("displace_level").get(0).asInt(),
                 player.getMetadata("eyes_level").get(0).asInt(),
@@ -103,18 +110,22 @@ public class SwapPowers implements Listener {
         else if (new_swap_slot < -1) {
             new_swap_slot = power_items.length - 1;
         }
+
+        event.setCancelled(true);
+
+        ManaBarManager bar = new ManaBarManager(plugin);
             while (true) {
                 if (new_swap_slot == -1) {
-                    event.setCancelled(true);
                     ItemStack orig_item = plugin.getConfig().getItemStack("Scores.users." + player.getUniqueId() + ".saved_offhand_item");
                     player.getInventory().setItemInOffHand(orig_item);
                     plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".saved_offhand_item", null);
                     plugin.saveConfig();
                     player.setMetadata("swap_slot", new FixedMetadataValue(plugin, new_swap_slot));
+
+                    bar.clearMessage(player);
                     break;
                 }
                 else {
-                    event.setCancelled(true);
                     if (power_levels[new_swap_slot] > 0) {
                         if (!offhand_item.getType().equals(Material.KNOWLEDGE_BOOK)) {
                             plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".saved_offhand_item", offhand_item);
@@ -126,6 +137,8 @@ public class SwapPowers implements Listener {
                             BukkitTask task = power_runnables[new_swap_slot];
                         }
                         player.setMetadata("swap_slot", new FixedMetadataValue(plugin, new_swap_slot));
+
+                        bar.displayMessage(player, names[new_swap_slot], 2, true);
                         break;
                     }
 
@@ -142,7 +155,7 @@ public class SwapPowers implements Listener {
         player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
         player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 10));
         player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, 60));
-        BukkitTask decrement = new BukkitRunnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 int swap_cd_num = player.getMetadata("swap_cooldown").get(0).asInt();

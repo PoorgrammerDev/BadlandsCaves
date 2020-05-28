@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -54,6 +55,19 @@ public class PlayerJoinLeave implements Listener {
         //load config back into metadata
         loader.loadPlayer(player);
 
+        //if in wither fight, tp out
+        if (player.getWorld().equals(Bukkit.getWorld("world_chambers"))) {
+            if (plugin.getConfig().getInt("game_values.wither_fight.fight_stage") == -1) {
+                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld("world").getSpawnLocation() : player.getBedSpawnLocation();
+                warp.setYaw(player.getLocation().getYaw());
+                warp.setPitch(player.getLocation().getPitch());
+
+                player.teleport(warp, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+        }
+
+
+
         //REGARDING SUPERNATURAL POWERS----------------------------------
 
         //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
@@ -81,9 +95,10 @@ public class PlayerJoinLeave implements Listener {
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
 
-            //reset swapping
+            //reset cooldowns
             player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, false));
             player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
+            player.setMetadata("spell_cooldown", new FixedMetadataValue(plugin, false));
         }
     }
 

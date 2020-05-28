@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class SkeleBuff implements Listener {
     private BadlandsCaves plugin;
+    private World chambers = Bukkit.getWorld("world_chambers");
     public SkeleBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -26,6 +27,7 @@ public class SkeleBuff implements Listener {
     @EventHandler
     public void HMskele (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Skeleton)) return;
+        if (event.getEntity().getWorld().equals(chambers)) return;
 
         boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         final int chaos = plugin.getConfig().getInt("game_values.chaos_level");

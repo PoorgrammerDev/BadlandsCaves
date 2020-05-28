@@ -21,6 +21,12 @@ game_values:
   #if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: FALSE
 
+  #generate this many custom dungeons at world spawn. Set to 0 to disable.
+  starting_dungeons: 10
+
+  #starting dungeons spawned in
+  starting_dungeons_spawned: FALSE
+
   #time limit in seconds for players to go through the entire descension course
   descension_time_limit: 300
 
@@ -66,10 +72,10 @@ game_values:
     purified_drink_thirst_incr: 60
 
     #how many points of toxicity an antidote will decrease
-    antidote_drink_tox_decr: 40
+    antidote_drink_tox_decr: 100
 
     #1 point of mana regen costs this many tox sys vars (amt of sysvars in one thirst decrease is threshold_thirst_sys in config)
-    mana_regen_var: 1
+    mana_regen_var: 5
 
   hardmode_values:
     #all of these are carried over from pre-hardmode, but are set to different values
@@ -79,8 +85,8 @@ game_values:
     tox_drink_thirst_incr: 5
     tox_drink_tox_incr: 10
     purified_drink_thirst_incr: 40
-    antidote_drink_tox_decr: 30
-    mana_regen_var: 3
+    antidote_drink_tox_decr: 50
+    mana_regen_var: 10
 
     #in hardmode, creepers' explosions are larger. this value changes the size of the explosion.
     #for scale, a normal creeper's radius value is 3

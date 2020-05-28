@@ -4,7 +4,10 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,10 +15,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
 
 public class LoadCustomItems {
 
@@ -416,7 +417,8 @@ public class LoadCustomItems {
 
         ItemStack voltshock_placeholder = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta voltshock_placeholder_meta = voltshock_placeholder.getItemMeta();
-        voltshock_placeholder_meta.setDisplayName("§rVoltshock Placeholder");
+        voltshock_placeholder_meta.setDisplayName("§rVoltshock Sword");
+        voltshock_placeholder_meta.setCustomModelData(136);
         voltshock_placeholder.setItemMeta(voltshock_placeholder_meta);
         plugin.getConfig().set("items.voltshock_placeholder", voltshock_placeholder.serialize());
 
@@ -424,7 +426,8 @@ public class LoadCustomItems {
 
         ItemStack voltshock_sword_charge_placeholder = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta voltshock_sword_charge_placeholder_meta = voltshock_sword_charge_placeholder.getItemMeta();
-        voltshock_sword_charge_placeholder_meta.setDisplayName("§rVoltshock Sword Charge Placeholder");
+        voltshock_sword_charge_placeholder_meta.setDisplayName("§rCharge Voltshock Sword");
+        voltshock_sword_charge_placeholder_meta.setCustomModelData(137);
         voltshock_sword_charge_placeholder.setItemMeta(voltshock_sword_charge_placeholder_meta);
         plugin.getConfig().set("items.voltshock_sword_charge_placeholder", voltshock_sword_charge_placeholder.serialize());
 
@@ -452,7 +455,8 @@ public class LoadCustomItems {
 
         ItemStack corrosive_placeholder = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta corrosive_placeholder_meta = corrosive_placeholder.getItemMeta();
-        corrosive_placeholder_meta.setDisplayName("§rCorrosive Placeholder");
+        corrosive_placeholder_meta.setDisplayName("§rCorrosive Sword");
+        corrosive_placeholder_meta.setCustomModelData(138);
         corrosive_placeholder.setItemMeta(corrosive_placeholder_meta);
         plugin.getConfig().set("items.corrosive_placeholder", corrosive_placeholder.serialize());
 
@@ -494,7 +498,77 @@ public class LoadCustomItems {
 
         //---------------------------
 
+        ItemStack blessed_apple = new ItemStack(Material.GOLDEN_APPLE);
+        ItemMeta blessed_apple_meta = blessed_apple.getItemMeta();
+        blessed_apple_meta.setDisplayName("§bBlessed Apple");
+        blessed_apple_meta.setCustomModelData(139);
+        blessed_apple.setItemMeta(blessed_apple_meta);
+        plugin.getConfig().set("items.blessed_apple", blessed_apple.serialize());
 
+        //---------------------------
+
+        ItemStack enchanted_blessed_apple = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
+        ItemMeta enchanted_blessed_apple_meta = enchanted_blessed_apple.getItemMeta();
+        enchanted_blessed_apple_meta.setDisplayName("§dEnchanted Blessed Apple");
+        enchanted_blessed_apple_meta.setCustomModelData(140);
+        enchanted_blessed_apple.setItemMeta(enchanted_blessed_apple_meta);
+        plugin.getConfig().set("items.enchanted_blessed_apple", enchanted_blessed_apple.serialize());
+
+        //--------------------------
+
+        ItemStack stone_shield = new ItemStack(Material.SHIELD);
+        ItemMeta stone_shield_meta = stone_shield.getItemMeta();
+        stone_shield_meta.setDisplayName("§rStone Shield");
+        stone_shield_meta.setCustomModelData(141);
+        stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+        stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+        stone_shield_meta.addEnchant(Enchantment.DURABILITY, 4, true);
+        stone_shield.setItemMeta(stone_shield_meta);
+        plugin.getConfig().set("items.stone_shield", stone_shield.serialize());
+
+        //--------------------------
+
+        ItemStack iron_shield = new ItemStack(Material.SHIELD);
+        ItemMeta iron_shield_meta = iron_shield.getItemMeta();
+        iron_shield_meta.setDisplayName("§rIron Shield");
+        iron_shield_meta.setCustomModelData(142);
+        iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+        iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+        iron_shield_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+        iron_shield.setItemMeta(iron_shield_meta);
+        plugin.getConfig().set("items.iron_shield", iron_shield.serialize());
+
+        //--------------------------
+
+        ItemStack diamond_shield = new ItemStack(Material.SHIELD);
+        ItemMeta diamond_shield_meta = diamond_shield.getItemMeta();
+        diamond_shield_meta.setDisplayName("§rDiamond Shield");
+        diamond_shield_meta.setCustomModelData(144);
+        diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+        diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+        diamond_shield_meta.addEnchant(Enchantment.DURABILITY, 6, true);
+        diamond_shield.setItemMeta(diamond_shield_meta);
+        plugin.getConfig().set("items.diamond_shield", diamond_shield.serialize());
+
+        //--------------------------
+
+        ItemStack recall_potion = new ItemStack(Material.POTION);
+        PotionMeta recall_potion_meta = (PotionMeta) recall_potion.getItemMeta();
+        ArrayList<String> recall_potion_lore = new ArrayList<>();
+
+        recall_potion_meta.setDisplayName("§eRecall Potion");
+
+        recall_potion_lore.add("§7Brings you home.");
+        recall_potion_lore.add("§cDo not move when using!");
+        recall_potion_meta.setLore(recall_potion_lore);
+
+        recall_potion_meta.addEnchant(Enchantment.DURABILITY, 50, true);
+        recall_potion_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
+        recall_potion_meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
+        recall_potion_meta.setColor(Color.fromRGB(255, 255, 0));
+
+        recall_potion.setItemMeta(recall_potion_meta);
+        plugin.getConfig().set("items.recall_potion", recall_potion.serialize());
 
         plugin.saveConfig();
         plugin.reloadConfig();

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.TreasureGear;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -57,9 +58,11 @@ public class Voltshock extends MatchCrafting implements Listener {
                 if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
                     if (!event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
                         SerratedSwords serrated = new SerratedSwords(plugin);
+                        Corrosive corrosive = new Corrosive(plugin);
+                        TreasureGear treasureGear = new TreasureGear();
                         for (ItemStack item : matrix) {
                             if (item != null && Arrays.asList(swords).contains(item.getType())) {
-                                boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item);
+                                boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item);
                                 if (sword_ready) {
                                     ItemStack modified_sword = item.clone();
                                     ItemMeta meta = modified_sword.getItemMeta();

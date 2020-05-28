@@ -2,10 +2,12 @@ package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.MakeDescensionStage;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fish;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,11 +28,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Random;
 
-public class Withdraw implements Listener {
-    private BadlandsCaves plugin;
-
+public class Withdraw extends UsePowers implements Listener {
     public Withdraw(BadlandsCaves bcav) {
-        plugin = bcav;
+        super(bcav);
     }
 
     private World void_world = Bukkit.getWorld("world_empty");
@@ -50,6 +50,7 @@ public class Withdraw implements Listener {
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
                     if (player.getLocation().getWorld().equals(void_world)) return;
+                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
                     else {
                         int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
                         if (withdraw_level > 0) {
@@ -58,6 +59,7 @@ public class Withdraw implements Listener {
 
                             event.setCancelled(true);
                             if (mana >= withdraw_mana_cost) {
+                                preventDoubleClick(player);
                                 boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
                                 if (!in_possession) {
                                     Random random = new Random();
@@ -70,7 +72,7 @@ public class Withdraw implements Listener {
                                                     Location block_loc = block.getLocation();
                                                     block_loc.setWorld(void_world);
                                                     if (block.getType().isSolid()) {
-                                                        block.setType(MakeDescensionStage.getVoidMat(random));
+                                                        block_loc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
                                                     } else if (!block.getType().isAir()) {
                                                         block_loc.getBlock().setType(Material.AIR);
                                                     }
@@ -97,10 +99,13 @@ public class Withdraw implements Listener {
 
                                         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
-                                        for (Player powered : plugin.getServer().getOnlinePlayers()) {
-                                            if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
-                                                powered.playSound(player.getLocation(), "custom.supernatural.withdraw.enter", SoundCategory.PLAYERS, 0.3F, 1);
-                                                powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5,0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
+                                        for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                                            if (entity instanceof Player) {
+                                                Player powered = (Player) entity;
+                                                if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                    powered.playSound(player.getLocation(), "custom.supernatural.withdraw.enter", SoundCategory.PLAYERS, 0.3F, 1);
+                                                    powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
+                                                }
                                             }
                                         }
 
@@ -119,7 +124,7 @@ public class Withdraw implements Listener {
                                                 }
                                                 else {
                                                     if (withdraw_level > 1 && withdraw_timer % (70) == 0) {
-                                                        if (player.getHealth() < 20) player.setHealth(player.getHealth() + 1);
+                                                        if (player.getHealth() < 20 && player.getHealth() > 0) player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
                                                         player.setFoodLevel(player.getFoodLevel() + 1);
                                                         player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(player.getMetadata("Thirst").get(0).asDouble() + 0.5, 100)));
                                                         player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(player.getMetadata("Toxicity").get(0).asDouble() - 0.5, 0)));
@@ -139,7 +144,7 @@ public class Withdraw implements Listener {
                                 }
                             }
                             else {
-                                player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
+                                notEnoughMana(player);
                             }
                         }
                     }
@@ -190,6 +195,16 @@ public class Withdraw implements Listener {
         if (withdraw_timer != -255) {
             player.teleport(returnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
             player.playSound(player.getLocation(), "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.5F, 1);
+
+            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                if (entity instanceof Player) {
+                    Player powered = (Player) entity;
+                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                        powered.playSound(player.getLocation(), "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.3F, 1);
+                        powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
+                    }
+                }
+            }
         }
         if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
         boolean ready_to_clear = true;

@@ -85,4 +85,8 @@ public class EnhancedEyesNMS {
         CraftPlayer ply = (CraftPlayer) player;
         ply.getHandle().playerConnection.sendPacket(destroy);
     }
+
+    public void destroyTeams () {
+
+    }
 }

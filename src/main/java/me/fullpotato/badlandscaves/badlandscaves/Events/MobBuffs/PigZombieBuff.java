@@ -21,6 +21,7 @@ import java.util.Random;
 
 public class PigZombieBuff implements Listener {
     private BadlandsCaves plugin;
+    private World chambers = Bukkit.getWorld("world_chambers");
     public PigZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -29,6 +30,7 @@ public class PigZombieBuff implements Listener {
     public void HMpigzombie (PigZombieAngerEvent event) {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
+        if (event.getEntity().getWorld().equals(chambers)) return;
 
         PigZombie pigZombie = event.getEntity();
 
@@ -98,6 +100,7 @@ public class PigZombieBuff implements Listener {
     public void assignPigUnderShirt (CreatureSpawnEvent event) {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
+        if (event.getEntity().getWorld().equals(chambers)) return;
 
         if (event.getEntity() instanceof PigZombie) {
             final Random random = new Random();
@@ -113,6 +116,7 @@ public class PigZombieBuff implements Listener {
     public void pigUnderShirt (EntityDamageEvent event) {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
+        if (event.getEntity().getWorld().equals(chambers)) return;
 
         if (event.getEntity() instanceof PigZombie) {
             PigZombie entity = (PigZombie) event.getEntity();

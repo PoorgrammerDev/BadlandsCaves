@@ -330,6 +330,7 @@ public class BackroomsManager implements Listener {
             blacklisted.add(plugin.getServer().getWorld("world_empty"));
             blacklisted.add(plugin.getServer().getWorld("world_reflection"));
             blacklisted.add(plugin.getServer().getWorld("world_descension"));
+            blacklisted.add(plugin.getServer().getWorld("world_chambers"));
 
 
             if (!blacklisted.contains(from) && !blacklisted.contains(to)) {

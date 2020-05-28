@@ -44,15 +44,9 @@ public class HardmodeCommand extends Commands implements CommandExecutor {
                     plugin.saveConfig();
                     sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + value + ChatColor.GOLD + ".");
 
-                    if (args.length < 3 || args[2] == null || args[2].equalsIgnoreCase("reload")) {
-                        plugin.getServer().reload();
-                    }
-                    else if (args[2].equalsIgnoreCase("noreload")) {
-                    }
-                    else {
-                        sender.sendMessage(ChatColor.RED + "Possible Parameters: RELOAD or NORELOAD.");
-                        return true;
-                    }
+                    plugin.getServer().resetRecipes();
+                    plugin.loadCraftingRecipes();
+
                     return true;
                 }
                 else {

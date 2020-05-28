@@ -5,30 +5,33 @@ api-version: 1.13
 commands:
   thirst:
     usage: /thirst <get|set> <username> <value>
-    description: Work with Thirst
+    description: Read or write Thirst values of Players.
   toxicity:
     usage: /toxicity <get|set> <username> <value>
-    description: Work with Toxicity
+    description: Read or write Toxicity values of Players.
     aliases: tox
   deaths:
     usage: /deaths <get|set> <username> <value>
-    description: Work with Death count
+    description: Read or write Death values of Players.
     aliases: death
   hardmode:
     usage: /hardmode <get|set> <value>
-    description: Work with Hardmode value
+    description: Read or write whether or not the world is in Hardmode.
     aliases: hm
   mana:
     usage: /mana <get|set> <username> <value>
-    description: Work with Mana
+    description: Read or write Mana values of Players.
   powers:
     usage: /powers <get|set> <username> <entry> <value>
-    description: Work with Supernatural powers.
+    description: Read or write Supernatural powers of Players.
     aliases:
       - supernatural
       - magic
   customitem:
     usage: /customitem <player> [amount]
-    description: Give Custom Items
+    description: Give Custom Items to Players
     aliases:
       - givecustomitem
+  chaos:
+    usage: /chaos <get|set> <amount>
+    description: Read or write chaos value of world.

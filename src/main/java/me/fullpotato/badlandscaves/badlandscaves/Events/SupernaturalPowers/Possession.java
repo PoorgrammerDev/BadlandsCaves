@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionMobsRunnable;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -19,10 +20,9 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.RayTraceResult;
 
-public class Possession implements Listener {
-    private BadlandsCaves plugin;
+public class Possession extends UsePowers implements Listener {
     public Possession(BadlandsCaves bcav) {
-        plugin = bcav;
+        super(bcav);
     }
 
     @EventHandler
@@ -39,6 +39,8 @@ public class Possession implements Listener {
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
+                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
+
                    boolean in_possession = player.hasMetadata("in_possession") && player.getMetadata("in_possession").get(0).asBoolean();
                     if (in_possession) {
                         player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
@@ -49,6 +51,7 @@ public class Possession implements Listener {
                         int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
                         double pos_drain_tick = possession_mana_drain / 20.0;
                         if (mana >= (pos_drain_tick + possession_mana_cost)) {
+                            preventDoubleClick(player);
                             World world = player.getWorld();
                             RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);
                             if (result != null && result.getHitEntity() != null) {
@@ -97,10 +100,13 @@ public class Possession implements Listener {
                                                 }
                                             }
 
-                                            for (Player powered : plugin.getServer().getOnlinePlayers()) {
-                                                if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
-                                                    powered.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.3F, 1);
-                                                    powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5,0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
+                                            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                                                if (entity instanceof Player) {
+                                                    Player powered = (Player) entity;
+                                                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                        powered.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.3F, 1);
+                                                        powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
+                                                    }
                                                 }
                                             }
 
@@ -115,7 +121,7 @@ public class Possession implements Listener {
                             }
                         }
                         else {
-                            player.setMetadata("mana_needed_timer", new FixedMetadataValue(plugin, 5));
+                            notEnoughMana(player);
                         }
                     }
                 }

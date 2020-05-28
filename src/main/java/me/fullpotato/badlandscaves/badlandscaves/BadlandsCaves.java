@@ -10,7 +10,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
-import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.GappleEat;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.GetFishingCrate;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot.SoulDrop;
@@ -27,13 +27,14 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.NaturalThirstDecr
 import me.fullpotato.badlandscaves.badlandscaves.Events.Thirst.ToxicWaterBottling;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Toxicity.IncreaseToxInWater;
+import me.fullpotato.badlandscaves.badlandscaves.Events.VillagerTrades;
 import me.fullpotato.badlandscaves.badlandscaves.Events.WitherBossFight;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.AugmentedSpider;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.*;
-import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarRunnable;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaRegen;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
@@ -59,10 +60,7 @@ public final class BadlandsCaves extends JavaPlugin {
             "thirst_sys_var",
             "tox_nat_decr_var",
             "tox_slow_incr_var",
-            "$opened_cauldron", //TODO test new mechanic to make sure it works
-            "opened_cauldron_x",// TODO: 4/15/2020 change this to use location serialize
-            "opened_cauldron_y",// TODO: 4/15/2020 change this to use location serialize
-            "opened_cauldron_z",// TODO: 4/15/2020 change this to use location serialize
+            "$opened_cauldron",
             "$has_supernatural_powers",
             "in_descension",
             "$in_reflection",
@@ -74,25 +72,26 @@ public final class BadlandsCaves extends JavaPlugin {
             "descension_shrines_capped",
             "%Mana",
             "%max_mana",
-            "mana_needed_timer",
             "mana_regen_delay_timer",
             "mana_bar_active_timer",
+            "mana_bar_message_timer",
             "swap_slot",
             "swap_doubleshift_window",
             "swap_window",
             "swap_cooldown",
             "swap_name_timer",
+            "$spell_cooldown",
             "displace_level",
             "$has_displace_marker",
-            "displace_x", // TODO: 4/15/2020 change this to use location serialize
-            "displace_y", // TODO: 4/15/2020 change this to use location serialize
-            "displace_z", // TODO: 4/15/2020 change this to use location serialize
+            "displace_x",
+            "displace_y",
+            "displace_z",
             "withdraw_level",
-            "withdraw_x", // TODO: 4/15/2020 change this to use location serialize
-            "withdraw_y", // TODO: 4/15/2020 change this to use location serialize
-            "withdraw_z", // TODO: 4/15/2020 change this to use location serialize
-            "withdraw_chunk_x", // TODO: 4/15/2020 change this to use location serialize
-            "withdraw_chunk_z", // TODO: 4/15/2020 change this to use location serialize
+            "withdraw_x",
+            "withdraw_y",
+            "withdraw_z",
+            "withdraw_chunk_x",
+            "withdraw_chunk_z",
             "withdraw_timer",
             "eyes_level",
             "$using_eyes",
@@ -152,7 +151,13 @@ public final class BadlandsCaves extends JavaPlugin {
             "corrosive_arrow",
             "chamber_magma_key",
             "chamber_glowstone_key",
-            "chamber_soulsand_key"
+            "chamber_soulsand_key",
+            "blessed_apple",
+            "enchanted_blessed_apple",
+            "stone_shield",
+            "iron_shield",
+            "diamond_shield",
+            "recall_potion",
     };
 
     @Override
@@ -206,6 +211,9 @@ public final class BadlandsCaves extends JavaPlugin {
         chambers.gen_world();
 
         this.getServer().getWorld("world").setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
+
+        StartingDungeons dungeons = new StartingDungeons(this);
+        dungeons.genSpawnDungeons();
     }
 
     //EVENTS
@@ -214,7 +222,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new NaturalThirstDecrease(this), this);
         this.getServer().getPluginManager().registerEvents(new IncreaseToxInWater(this), this);
         this.getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
-        this.getServer().getPluginManager().registerEvents(new GappleEat(this), this);
+        this.getServer().getPluginManager().registerEvents(new BlessedAppleEat(this), this);
         this.getServer().getPluginManager().registerEvents(new CauldronMenu(this), this);
         this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this), this);
         this.getServer().getPluginManager().registerEvents(new Drinking(this), this);
@@ -273,6 +281,10 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new UseCorrosive(this), this);
         this.getServer().getPluginManager().registerEvents(new CustomBows(this), this);
         this.getServer().getPluginManager().registerEvents(new WitherBossFight(this), this);
+        this.getServer().getPluginManager().registerEvents(new BlessedApple(this), this);
+        this.getServer().getPluginManager().registerEvents(new VillagerTrades(this), this);
+        this.getServer().getPluginManager().registerEvents(new ShieldBlocking(this), this);
+        this.getServer().getPluginManager().registerEvents(new Shield(this), this);
     }
 
     //COMMANDS
@@ -297,6 +309,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
         this.getCommand("customitem").setExecutor(new CustomItemCommand(this));
         this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete(custom_items));
+
+        this.getCommand("chaos").setExecutor(new ChaosCommand(this));
+        //this.getCommand("chaos").setTabCompleter();
     }
 
     //RUNNABLES
@@ -305,7 +320,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new PlayerEffectsRunnable().runTaskTimer(this,0,0);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
         new PlayerConfigLoadSave(this, player_values).runTaskTimer(this, 5, 3600);
-        new ManaBarRunnable(this).runTaskTimer(this, 0, 5);
+        new ManaBarManager(this).runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 20);
         new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
         new DescensionReset(this).runTaskTimer(this, 0, 60);
@@ -335,8 +350,10 @@ public final class BadlandsCaves extends JavaPlugin {
         PurgeEssenceCrafting prg_ess = new PurgeEssenceCrafting(this);
         prg_ess.purge_essence_craft();
 
-        NotchAppleCrafting e_gap = new NotchAppleCrafting(this);
-        e_gap.crafting_notch_apple();
+        AppleCrafting apple = new AppleCrafting(this);
+        apple.craftNotchApple();
+        apple.craftBlessedApple();
+        apple.craftEnchantedBlessedApple();
 
         ReedsCrafting reeds = new ReedsCrafting(this);
         reeds.craft_reeds();
@@ -370,5 +387,11 @@ public final class BadlandsCaves extends JavaPlugin {
 
         QuartzConvertCrafting quartzCraft = new QuartzConvertCrafting(this);
         quartzCraft.craft();
+
+        ShieldCrafting shield = new ShieldCrafting(this);
+        shield.craftRegularShield();
+        shield.craftStoneShield();
+        shield.craftIronShield();
+        shield.craftDiamondShield();
     }
 }

@@ -16,6 +16,7 @@ public class PurgeEssence extends MatchCrafting implements Listener {
     @EventHandler
     public void purge_ess (PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+        if (plugin.getConfig().getBoolean("game_values.hardmode")) return;
 
         final ItemStack result = event.getRecipe().getResult();
         final ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));

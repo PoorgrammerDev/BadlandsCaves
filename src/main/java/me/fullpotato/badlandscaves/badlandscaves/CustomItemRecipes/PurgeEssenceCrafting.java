@@ -25,14 +25,12 @@ public class PurgeEssenceCrafting {
          *  ###
          */
         if (!isHardmode) {
-            //where # = gold ingots, @ = tiny pile of blaze powder
-            purge_ess_craft.setIngredient('#', Material.GOLD_INGOT);
-            purge_ess_craft.setIngredient('@', Material.STRUCTURE_BLOCK);
+            purge_ess_craft.setIngredient('#', Material.STRUCTURE_BLOCK); //tiny pile of blaze powder
+            purge_ess_craft.setIngredient('@', Material.GOLD_INGOT);
         }
         else {
-            //where # = tiny pile of blaze powder, @ = regular golden apple
-            purge_ess_craft.setIngredient('#', Material.STRUCTURE_BLOCK);
-            purge_ess_craft.setIngredient('@', Material.GOLDEN_APPLE);
+            purge_ess_craft.setIngredient('#', Material.BLAZE_POWDER);
+            purge_ess_craft.setIngredient('@', Material.GOLD_BLOCK);
         }
 
         plugin.getServer().addRecipe(purge_ess_craft);

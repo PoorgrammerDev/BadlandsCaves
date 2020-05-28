@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.CauldronRunnable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,28 +45,19 @@ public class CauldronMenu implements Listener {
             if (eqSlot.equals(EquipmentSlot.HAND)) {
                 assert cauldron_block != null;
                 if (cauldron_block.getType().equals(Material.CAULDRON)) {
-                    Location loc_of_cauld = cauldron_block.getLocation();
-                    Location block_under_loc = new Location(loc_of_cauld.getWorld(), loc_of_cauld.getX(), loc_of_cauld.getY() - 1, loc_of_cauld.getZ());
-                    Block block_under = block_under_loc.getBlock();
+                    Location location = cauldron_block.getLocation();
+                    Block under = new Location(location.getWorld(), location.getX(), location.getY() - 1, location.getZ()).getBlock();
                     Material holding = player.getInventory().getItemInMainHand().getType();
                     boolean otherAction = (player.isSneaking() || holding.equals(Material.WATER_BUCKET) || holding.equals(Material.POTION) || holding.equals(Material.BUCKET) || holding.equals(Material.GLASS_BOTTLE));
-                    if (block_under.getType().equals(Material.FIRE)) {
+                    if (under.getType().equals(Material.FIRE)) {
                         if (!otherAction) {
-
-                            int x = loc_of_cauld.getBlockX();
-                            int y = loc_of_cauld.getBlockY();
-                            int z = loc_of_cauld.getBlockZ();
                             boolean already_opened = false;
-
-                            for (Player check_nearby : Bukkit.getOnlinePlayers()) {
-                                if (check_nearby.getLocation().distanceSquared(loc_of_cauld) < 100) {
-                                    boolean open = check_nearby.getMetadata("opened_cauldron").get(0).asBoolean();
+                            for (Player online : Bukkit.getOnlinePlayers()) {
+                                if (online.getLocation().distanceSquared(location) < 100) {
+                                    boolean open = online.getMetadata("opened_cauldron").get(0).asBoolean();
                                     if (open) {
-                                        int test_x = check_nearby.getMetadata("opened_cauldron_x").get(0).asInt();
-                                        int test_y = check_nearby.getMetadata("opened_cauldron_y").get(0).asInt();
-                                        int test_z = check_nearby.getMetadata("opened_cauldron_z").get(0).asInt();
-
-                                        if (test_x == x && test_y == y && test_z == z) {
+                                        Location saved_cauldron_location = plugin.getConfig().getLocation("Scores.users." + online.getUniqueId() + ".opened_cauldron_location");
+                                        if (location.equals(saved_cauldron_location)) {
                                             already_opened = true;
                                             break;
                                         }
@@ -79,12 +71,11 @@ public class CauldronMenu implements Listener {
                             else {
                                 event.setCancelled(true);
                                 player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, true));
-                                player.setMetadata("opened_cauldron_x", new FixedMetadataValue(plugin, x));
-                                player.setMetadata("opened_cauldron_y", new FixedMetadataValue(plugin, y));
-                                player.setMetadata("opened_cauldron_z", new FixedMetadataValue(plugin, z));
+                                plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", location);
+                                plugin.saveConfig();
 
                                 purification_menu(player, cauldron_block, cauldron_title);
-                                BukkitTask inv_refresh = new CauldronRunnable(plugin, cauldron_inv, loc_of_cauld, block_under_loc, player).runTaskTimer(plugin, 0, 10);
+                                BukkitTask inv_refresh = new CauldronRunnable(plugin, cauldron_inv, location, under.getLocation(), player).runTaskTimer(plugin, 0, 10);
                                 refresh_id = inv_refresh.getTaskId();
                             }
                         }
@@ -232,6 +223,7 @@ public class CauldronMenu implements Listener {
         if (inv.equals(cauldron_inv)) {
             Bukkit.getScheduler().cancelTask(refresh_id);
             player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, false));
+            plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", null);
 
             if (cauldron_inv.getItem(11) != null) {
                 if (player.getInventory().firstEmpty() != -1) {

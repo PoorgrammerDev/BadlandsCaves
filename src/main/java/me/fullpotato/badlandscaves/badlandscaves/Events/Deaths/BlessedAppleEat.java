@@ -12,9 +12,9 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class GappleEat implements Listener {
+public class BlessedAppleEat implements Listener {
     private BadlandsCaves plugin;
-    public GappleEat(BadlandsCaves bcav) {
+    public BlessedAppleEat(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
@@ -24,10 +24,10 @@ public class GappleEat implements Listener {
         ItemStack item = event.getItem();
         int death_count = player.getMetadata("Deaths").get(0).asInt();
 
-        boolean gapple = item.getType().equals(Material.GOLDEN_APPLE);
-        boolean ench_gapple = item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE);
+        final ItemStack blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.blessed_apple").getValues(true));
+        final ItemStack enchanted_blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enchanted_blessed_apple").getValues(true));
 
-        if (gapple || ench_gapple) {
+        if (item.isSimilar(blessed_apple) || item.isSimilar(enchanted_blessed_apple)) {
             if (player.getWorld().equals(Bukkit.getWorld("world_reflection"))) {
                 int cooldown = 100;
                 player.setCooldown(Material.GOLDEN_APPLE, cooldown);
@@ -37,7 +37,7 @@ public class GappleEat implements Listener {
 
             int decr_by;
             boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-            if (gapple) {
+            if (item.isSimilar(blessed_apple)) {
                 if (isHardmode) {
                     decr_by = plugin.getConfig().getInt("game_values.hardmode_values.death_reverse_gapple");
                 }

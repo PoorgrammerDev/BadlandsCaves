@@ -35,26 +35,26 @@ public class IncreaseToxInWater implements Listener {
 
                 /* Order of increasing rates
                  *  Boat with wbreath
-                 *  Wbreath
                  *  Boat w/o wbreath
+                 *  Wbreath
                  *  Nothing
                  * */
                 if (!player.isDead() && player.getMetadata("Toxicity").get(0).asDouble() <= 100) {
                     if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
                         if ((player.getVehicle() instanceof Boat)) {
                             //Boat with wbreath
-                            int random_incr = (int) (Math.round(Math.random()));
+                            int random_incr = (int) ((Math.random() * 5) + 5);
                             player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, current_tox_slow + random_incr));
                         }
                         else {
                             //Wbreath no boat
-                            int random_incr = (int) ((Math.random() * 5) + 1);
+                            int random_incr = (int) ((Math.random() * 50) + 50);
                             player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, current_tox_slow + random_incr));
                         }
                     }
                     else if (player.getVehicle() instanceof Boat) {
                         //Boat w/o wbreath
-                        int random_incr = (int) ((Math.random() * 5) + 5);
+                        int random_incr = (int) ((Math.random() * 10) + 10);
                         player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, current_tox_slow + random_incr));
                     }
                     else {

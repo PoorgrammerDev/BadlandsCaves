@@ -75,21 +75,15 @@ public class DestroySpawner implements Listener {
                 world.playSound(location, Sound.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.1F, 0.5F);
 
 
-                if (!spawner.getSpawnedType().equals(EntityType.BLAZE) && !spawner.getSpawnedType().equals(EntityType.SILVERFISH) && !spawner.getSpawnedType().equals(EntityType.CAVE_SPIDER)) {
+                if (!spawner.getSpawnedType().equals(EntityType.BLAZE)) {
                     ParticleShapes.particleLine(null, Particle.FLASH, location.clone().add(0, 1, 0), location.clone().add(0, 255, 0), 0, null, 1);
                     for (Player online : plugin.getServer().getOnlinePlayers()) {
                         online.playSound(online.getLocation(), "custom.darkrooms_whispers", SoundCategory.BLOCKS, 0.5F, 0.7F);
                         online.playSound(online.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 1, 0.5F);
                     }
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            plugin.getServer().broadcastMessage("§3A new Dungeon has appeared!");
-                        }
-                    }.runTaskLaterAsynchronously(plugin, 60);
 
-                    getNewLocation(block.getLocation(), random);
-                    makeDungeon(spawner.getSpawnedType(), random);
+                    getNewLocation(block.getLocation(), random, 500);
+                    makeDungeon(spawner.getSpawnedType(), random, false);
                 }
 
                 loot(player, block.getLocation(), random, spawner.getSpawnedType());
@@ -97,21 +91,32 @@ public class DestroySpawner implements Listener {
         }
     }
 
-    public void getNewLocation(Location oldSpawnerLocation, Random random) {
+    public void getNewLocation(Location oldSpawnerLocation, Random random, int range) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 Location output = null;
+
+                WorldBorder border = oldSpawnerLocation.getWorld().getWorldBorder();
+                int[] x_bounds = {
+                        Math.max(oldSpawnerLocation.getBlockX() - range, (int) (border.getCenter().getBlockX() - (border.getSize() / 2))),
+                        Math.min(oldSpawnerLocation.getBlockX() + range, (int) (border.getCenter().getBlockX() + (border.getSize() / 2))),
+                };
+                int[] z_bounds = {
+                        Math.max(oldSpawnerLocation.getBlockZ() - range, (int) (border.getCenter().getBlockZ() - border.getSize() / 2)),
+                        Math.min(oldSpawnerLocation.getBlockZ() + range, (int) (border.getCenter().getBlockZ() + border.getSize() / 2)),
+                };
+
                 int tries = 0;
-                while ((output == null || !isViable(output)) && tries < 100) {
-                    int[] offset = new int[2];
-                    while (Math.abs(offset[0]) < 50 || Math.abs(offset[1]) < 50) {
-                        offset = random.ints(2, -500, 501).toArray();
+                while ((output == null || !isViable(output)) && tries < 1000) {
+                    int[] spread = new int[2];
+                    while (Math.abs(spread[0]) < 50 || Math.abs(spread[1]) < 50) {
+                        spread[0] = random.ints(1, x_bounds[0], x_bounds[1]).toArray()[0];
+                        spread[1] = random.ints(1, z_bounds[0], z_bounds[1]).toArray()[0];
                     }
                     int y = random.nextInt(48) + 7;
 
-                    output = oldSpawnerLocation.clone().add(offset[0], 0, offset[1]);
-                    output.setY(y);
+                    output = new Location(oldSpawnerLocation.getWorld(), spread[0], y, spread[1]);
                     tries++;
                 }
 
@@ -137,7 +142,7 @@ public class DestroySpawner implements Listener {
         return false;
     }
 
-    public void makeDungeon(EntityType type, Random random) {
+    public void makeDungeon(EntityType type, Random random, boolean silent) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -195,6 +200,7 @@ public class DestroySpawner implements Listener {
                         cloned.getBlock().setBlockData(block);
                     }
                 }.runTaskLater(plugin, 1);
+                if (!silent) plugin.getServer().broadcastMessage("§3A new Dungeon has appeared!");
                 this.cancel();
                 newLoc = null;
             }
@@ -218,5 +224,6 @@ public class DestroySpawner implements Listener {
         for (ItemStack treasure : treasure_list) {
             world.dropItemNaturally(location, treasure);
         }
+
     }
 }
