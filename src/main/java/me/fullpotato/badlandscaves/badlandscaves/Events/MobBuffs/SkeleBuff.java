@@ -4,16 +4,19 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.WitherSkeleton;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.loot.LootTables;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.Random;
 
@@ -42,9 +45,38 @@ public class SkeleBuff implements Listener {
 
         if (skeleton.getType().equals(EntityType.SKELETON)) {
             if (hardmode) {
-                final int augment = plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
-                if (random.nextInt(100) > 100) { //TODO change after testing
+                final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+                if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < augment) {
+                    skeleton.setMetadata("augmented", new FixedMetadataValue(plugin, true));
+                    skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Devil Forgemaster");
 
+                    ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+                    LeatherArmorMeta boots_meta = (LeatherArmorMeta) boots.getItemMeta();
+                    boots_meta.setColor(Color.BLACK);
+                    boots.setItemMeta(boots_meta);
+
+
+                    ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+                    LeatherArmorMeta leggings_meta = (LeatherArmorMeta) leggings.getItemMeta();
+                    leggings_meta.setColor(Color.BLACK);
+                    leggings.setItemMeta(leggings_meta);
+
+                    ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+                    LeatherArmorMeta chestplate_meta = (LeatherArmorMeta) chestplate.getItemMeta();
+                    chestplate_meta.setColor(Color.BLACK);
+                    chestplate.setItemMeta(chestplate_meta);
+
+                    ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+                    LeatherArmorMeta helmet_meta = (LeatherArmorMeta) helmet.getItemMeta();
+                    helmet_meta.setColor(Color.BLACK);
+                    helmet.setItemMeta(helmet_meta);
+
+                    ItemStack[] armor = {boots, leggings, chestplate, helmet};
+
+                    skeleton.getEquipment().setArmorContents(armor);
+                    skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0);
+                    skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
+                    skeleton.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
                 }
             }
 
@@ -67,7 +99,7 @@ public class SkeleBuff implements Listener {
             skeleton.getEquipment().setItemInMainHand(bow);
 
             if (!hardmode) return;
-            skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
+            if (!skeleton.hasMetadata("augmented") || !skeleton.getMetadata("augmented").get(0).asBoolean()) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
 
             Location one_up = location;
@@ -101,4 +133,76 @@ public class SkeleBuff implements Listener {
         }
     }
 
+    @EventHandler
+    public void forgeMasterShoot (ProjectileLaunchEvent event) {
+        if (event.getEntity() instanceof Arrow) {
+            Arrow arrow = (Arrow) event.getEntity();
+            if (arrow.getShooter() instanceof Skeleton) {
+                Skeleton skeleton = (Skeleton) arrow.getShooter();
+                if (skeleton.hasMetadata("augmented") && skeleton.getMetadata("augmented").get(0).asBoolean()) {
+                    Vector velocity = arrow.getVelocity();
+                    Location location = arrow.getLocation();
+
+                    final int clones = 10;
+                    int[] ran = {0};
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (ran[0] > clones) {
+                                this.cancel();
+                            }
+                            else {
+                                Arrow trail = (Arrow) arrow.getWorld().spawnEntity(location, EntityType.ARROW);
+                                trail.setVelocity(velocity);
+                                trail.setShooter(skeleton);
+                                trail.setDamage(arrow.getDamage());
+                                trail.setCritical(arrow.isCritical());
+                                trail.setFireTicks(arrow.getFireTicks());
+                                ran[0]++;
+                            }
+                        }
+                    }.runTaskTimer(plugin, 0, 1);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void forgeMasterHit (ProjectileHitEvent event) {
+        if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && event.getEntity() instanceof Arrow) {
+            Arrow arrow = (Arrow) event.getEntity();
+            if (arrow.getShooter() instanceof Skeleton) {
+                Skeleton skeleton = (Skeleton) arrow.getShooter();
+                if (skeleton.hasMetadata("augmented") && skeleton.getMetadata("augmented").get(0).asBoolean()) {
+                    arrow.getLocation().getWorld().spawnEntity(arrow.getLocation(), EntityType.SKELETON);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void skeletonTrigger (EntityTargetLivingEntityEvent event) {
+        if (plugin.getConfig().getBoolean("game_values.hardmode")) {
+            if (event.getEntity() instanceof Skeleton && event.getTarget() instanceof Skeleton) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void skeletonHit (EntityDamageByEntityEvent event) {
+        if (plugin.getConfig().getBoolean("game_values.hardmode")) {
+            if (event.getEntity() instanceof Skeleton) {
+                if (event.getDamager() instanceof Skeleton) {
+                    event.setCancelled(true);
+                }
+                else if (event.getDamager() instanceof Arrow) {
+                    Arrow arrow = (Arrow) event.getDamager();
+                    if (arrow.getShooter() instanceof Skeleton) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
 }

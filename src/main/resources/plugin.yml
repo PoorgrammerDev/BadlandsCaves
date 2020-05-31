@@ -35,3 +35,6 @@ commands:
   chaos:
     usage: /chaos <get|set> <amount>
     description: Read or write chaos value of world.
+  guide:
+    usage: /guide
+    description: Get guide book.

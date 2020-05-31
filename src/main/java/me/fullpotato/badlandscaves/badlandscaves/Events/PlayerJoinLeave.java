@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Withdraw;
+import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,6 +39,7 @@ public class PlayerJoinLeave implements Listener {
             ItemStack starter_bone_meal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_bone_meal").getValues(true));
             player.getInventory().addItem(starter_sapling);
             player.getInventory().addItem(starter_bone_meal);
+            player.getInventory().addItem(LoadCustomItems.getGuideBook(plugin));
 
             //default values
             loader.saveDefault(player);

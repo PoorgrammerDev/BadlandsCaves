@@ -23,8 +23,8 @@ public class TreasureGear extends RandomlyEnchantedGear implements Listener {
     public ItemStack getTreasureGear (boolean hardmode, Material material, Random random) {
         ItemStack output = new ItemStack(material);
         ItemMeta meta = output.getItemMeta();
-        final double up = hardmode ? 2.0 : 1.5;
-        final double down = hardmode ? 1.0 : 1.0 / up;
+        final double up = hardmode ? 1.5 : 1.0;
+        final double down = hardmode ? 1.0 : 0.5;
 
         meta.setDisplayName((hardmode ? "§6" : "§2") + "\"" + getRandomName(random) + "\"");
         ArrayList<String> lore = new ArrayList<>();

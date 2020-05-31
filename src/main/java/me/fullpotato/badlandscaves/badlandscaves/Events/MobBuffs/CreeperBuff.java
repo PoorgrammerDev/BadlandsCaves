@@ -35,7 +35,7 @@ public class CreeperBuff implements Listener {
         if (!isHardmode) return;
 
         final int radius = plugin.getConfig().getInt("game_values.hardmode_values.creeper_radius");
-        final int augment = plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+        final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
@@ -112,7 +112,7 @@ public class CreeperBuff implements Listener {
                                 public void run() {
                                     surrounding.ignite();
                                 }
-                            }.runTaskLaterAsynchronously(plugin, random.nextInt(20) + 10);
+                            }.runTaskLater(plugin, random.nextInt(20) + 10);
                         }
                     }
                 }

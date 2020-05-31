@@ -1,10 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves;
 
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.CustomItemTabComplete;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.HM_TabComplete;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.PowersTabComplete;
-import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.ValueCommandsTabComplete;
+import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
@@ -311,7 +308,9 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete(custom_items));
 
         this.getCommand("chaos").setExecutor(new ChaosCommand(this));
-        //this.getCommand("chaos").setTabCompleter();
+        this.getCommand("chaos").setTabCompleter(new ChaosCommandTabComplete());
+
+        this.getCommand("guide").setExecutor(new Guide(this));
     }
 
     //RUNNABLES

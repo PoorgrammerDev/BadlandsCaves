@@ -42,13 +42,14 @@ public class SpiderBuff implements Listener {
                 }
             }
             else {
-                final int augment = plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+                final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
                 final boolean augmented = random.nextInt(100) < augment;
                 if (augmented) {
                     spider.setMetadata("augmented", new FixedMetadataValue(plugin, true));
                     spider.setCustomName(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Peter the Stringweaver");
                     spider.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(12.0);
-                    spider.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(32.0);
+                    spider.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
+                    spider.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
                 }
 
                 spider.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, augmented ? 3 : random.nextInt(2)));

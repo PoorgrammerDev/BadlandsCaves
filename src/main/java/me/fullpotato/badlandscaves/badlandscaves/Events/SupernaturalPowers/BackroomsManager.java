@@ -129,7 +129,7 @@ public class BackroomsManager implements Listener {
             }
         }.runTaskTimer(plugin, 200, 200);
 
-        player.setMetadata("backrooms_timer", new FixedMetadataValue(plugin, random.nextInt(120) + 180));
+        player.setMetadata("backrooms_timer", new FixedMetadataValue(plugin, random.nextInt(60) + 60));
 
         new BukkitRunnable() {
             @Override
