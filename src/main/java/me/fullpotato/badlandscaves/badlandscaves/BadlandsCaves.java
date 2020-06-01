@@ -3,7 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CraftingGuide;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.*;

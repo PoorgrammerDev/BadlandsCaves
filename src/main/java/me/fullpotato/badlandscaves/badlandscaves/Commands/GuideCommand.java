@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Info.GuideBook;
 import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -23,7 +24,7 @@ public class GuideCommand extends Commands implements CommandExecutor {
                 Player player = (Player) commandSender;
                 int slot = player.getInventory().firstEmpty();
                 if (slot != -1) {
-                    player.getInventory().addItem(LoadCustomItems.getGuideBook(plugin));
+                    player.getInventory().addItem(GuideBook.getGuideBook(plugin));
                 }
                 else {
                     commandSender.sendMessage(ChatColor.RED + "You must have an open space in your inventory!");

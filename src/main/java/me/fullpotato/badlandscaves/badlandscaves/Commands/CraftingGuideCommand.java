@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.badlandscaves.Events.CraftingGuide;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Info.CraftingGuide;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
