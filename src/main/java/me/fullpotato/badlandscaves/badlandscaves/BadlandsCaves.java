@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CraftingGuide;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.*;
@@ -282,6 +283,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new VillagerTrades(this), this);
         this.getServer().getPluginManager().registerEvents(new ShieldBlocking(this), this);
         this.getServer().getPluginManager().registerEvents(new Shield(this), this);
+        this.getServer().getPluginManager().registerEvents(new CraftingGuide(this), this);
     }
 
     //COMMANDS
@@ -310,7 +312,10 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("chaos").setExecutor(new ChaosCommand(this));
         this.getCommand("chaos").setTabCompleter(new ChaosCommandTabComplete());
 
-        this.getCommand("guide").setExecutor(new Guide(this));
+        this.getCommand("guide").setExecutor(new GuideCommand(this));
+
+
+        this.getCommand("craftguide").setExecutor(new CraftingGuideCommand(this));
     }
 
     //RUNNABLES

@@ -38,3 +38,12 @@ commands:
   guide:
     usage: /guide
     description: Get guide book.
+  craftguide:
+    usage: /craftguide
+    description: Open Crafting Guide
+    aliases:
+      - crafthelp
+      - craftinghelp
+      - helpcraft
+      - helpcrafting
+      - craftingguide
