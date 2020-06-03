@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 
@@ -37,7 +38,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
         World world = player.getWorld();
         RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);
 
-        if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof LivingEntity && !(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither) && !(result.getHitEntity().hasMetadata("augmented") && result.getHitEntity().getMetadata("augmented").get(0).asBoolean())) {
+        if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof LivingEntity && !(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither) && !(result.getHitEntity().getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && result.getHitEntity().getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
             LivingEntity entity = (LivingEntity) result.getHitEntity();
             boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();
             if (target_already_pos) return;

@@ -1024,6 +1024,7 @@ public class WitherBossFight implements Listener {
                     }
 
                     plugin.getConfig().set("game_values.hardmode", true);
+                    plugin.getConfig().set("game_values.chaos_level", 0);
                     plugin.saveConfig();
 
                     plugin.getServer().resetRecipes();

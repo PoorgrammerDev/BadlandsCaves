@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -57,7 +58,7 @@ public class Possession extends UsePowers implements Listener {
                             if (result != null && result.getHitEntity() != null) {
                                 if (result.getHitEntity() instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) result.getHitEntity();
-                                    if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.hasMetadata("augmented") && target.getMetadata("augmented").get(0).asBoolean())){
+                                    if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)){
                                         boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
 
                                         if (!target_already_pos) {

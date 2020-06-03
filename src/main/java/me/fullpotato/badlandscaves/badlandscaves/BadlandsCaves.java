@@ -29,6 +29,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Events.VillagerTrades;
 import me.fullpotato.badlandscaves.badlandscaves.Events.WitherBossFight;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.ActionbarRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.AugmentedSpider;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.AugmentedZombie;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.AgilitySpeedRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.*;
@@ -338,6 +339,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new LimitActions(this).runTaskTimer(this, 0, 20);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
+        new AugmentedZombie(this).runTaskTimer(this, 0, 10);
 
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();

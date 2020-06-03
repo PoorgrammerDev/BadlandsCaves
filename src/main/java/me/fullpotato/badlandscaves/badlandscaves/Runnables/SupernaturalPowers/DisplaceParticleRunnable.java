@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PositionManager;
 import org.bukkit.*;
@@ -56,8 +57,10 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             Location displace_marker = new Location(world, marker_x, marker_y, marker_z);
             boolean active = false;
             if (player.getLocation().distance(displace_marker) < warp_range && mana >= mana_cost) {
-                active = true;
-                trackerParticle(displace_marker);
+                if (LineOfSight.hasLineOfSight(player, displace_marker)) {
+                    active = true;
+                    trackerParticle(displace_marker);
+                }
             }
 
             markerParticle(displace_marker, active);

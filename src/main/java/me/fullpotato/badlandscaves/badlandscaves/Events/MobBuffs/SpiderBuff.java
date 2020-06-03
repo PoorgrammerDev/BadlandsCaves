@@ -1,19 +1,19 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPoseChangeEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -45,7 +45,7 @@ public class SpiderBuff implements Listener {
                 final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
                 final boolean augmented = random.nextInt(100) < augment;
                 if (augmented) {
-                    spider.setMetadata("augmented", new FixedMetadataValue(plugin, true));
+                    spider.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
                     spider.setCustomName(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Peter the Stringweaver");
                     spider.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(12.0);
                     spider.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
@@ -70,7 +70,7 @@ public class SpiderBuff implements Listener {
                     assert world != null;
                     CaveSpider cavespider = (CaveSpider) (world.spawnEntity(location, EntityType.CAVE_SPIDER));
                     if (augmented) {
-                        cavespider.setMetadata("augmented", new FixedMetadataValue(plugin, true));
+                        cavespider.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
                     }
                 }
             }
@@ -78,7 +78,7 @@ public class SpiderBuff implements Listener {
         else if (spider instanceof CaveSpider && event.getEntityType().equals(EntityType.CAVE_SPIDER)) {
             if (!hardmode) return;
             CaveSpider cavespider = (CaveSpider) spider;
-            boolean augmented = cavespider.hasMetadata("augmented") && cavespider.getMetadata("augmented").get(0).asBoolean();
+            boolean augmented = cavespider.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && cavespider.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1;
 
             cavespider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 99999, augmented ? random.nextInt(3) + 2 : random.nextInt(2)));
             cavespider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, augmented ? random.nextInt(3) + 2 : random.nextInt(2)));
@@ -90,7 +90,17 @@ public class SpiderBuff implements Listener {
         }
     }
 
-    //@EventHandler
+    @EventHandler
+    public void augmentedSpidersHit (EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Spider) {
+            Spider spider = (Spider) event.getDamager();
+
+            if (spider.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && spider.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                Player player = (Player) event.getEntity();
+                player.setNoDamageTicks(0);
+            }
+        }
+    }
 
 
 }

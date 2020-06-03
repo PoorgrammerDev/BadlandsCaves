@@ -97,7 +97,7 @@ public class WitchBuff implements Listener {
         Location test;
         for (int i = 0; i < 100; i++) {
             test = locationFinder.getNearbyLocation(targetLocation, random, range);
-            if (test.distanceSquared(targetLocation) > lower_bound && test.distanceSquared(targetLocation) < higher_bound) {
+            if (test != null && test.distanceSquared(targetLocation) > lower_bound && test.distanceSquared(targetLocation) < higher_bound) {
                 return test;
             }
         }

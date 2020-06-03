@@ -238,6 +238,7 @@ public class UseChargedRune implements Listener {
                 displace_lore.add("§7--------------------");
                 displace_lore.add("§7Range: §a10 §7Blocks.");
                 displace_lore.add("§3Mana §7Cost: §a" + cost + " §3Mana§7.");
+                displace_lore.add("§7Requires Line of Sight.");
             }
             else if (displace_level == 1) {
                 //displace_lore.add("§dDisplace §7Level §a2");

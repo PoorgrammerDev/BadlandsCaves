@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -40,6 +41,7 @@ public class Displace extends UsePowers implements Listener {
                     event.setCancelled(true);
                     if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
 
+                    final ManaBarManager manaBar = new ManaBarManager(plugin);
                     int displace_level = player.getMetadata("displace_level").get(0).asInt();
                     int place_range, warp_range;
                     boolean cancel_fall;
@@ -68,31 +70,36 @@ public class Displace extends UsePowers implements Listener {
                         Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
 
                         if (player.getLocation().distance(displace_marker) <= warp_range) {
-                            if (mana >= displace_mana_cost) {
-                                preventDoubleClick(player);
-                                if (cancel_fall) player.setFallDistance(0);
-                                player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+                            if (LineOfSight.hasLineOfSight(player, displace_marker)) {
+                                if (mana >= displace_mana_cost) {
+                                    preventDoubleClick(player);
+                                    if (cancel_fall) player.setFallDistance(0);
+                                    player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                    player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
 
-                                player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
-                                for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                                    if (entity instanceof Player) {
-                                        Player powered = (Player) entity;
-                                        if (!powered.equals(player) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                                            if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
-                                                powered.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.3F, 1);
-                                                powered.spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 5, 0.1, 0.1, 0.1, 1);
+                                    player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
+                                    for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                                        if (entity instanceof Player) {
+                                            Player powered = (Player) entity;
+                                            if (!powered.equals(player) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                                                    powered.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.3F, 1);
+                                                    powered.spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 5, 0.1, 0.1, 0.1, 1);
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                double new_mana = mana - (double) (displace_mana_cost);
-                                player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
-                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
+                                    double new_mana = mana - (double) (displace_mana_cost);
+                                    player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                                    player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
+                                }
+                                else {
+                                    notEnoughMana(player);
+                                }
                             }
                             else {
-                                notEnoughMana(player);
+                                manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
                             }
                         }
                         else if (player.getLocation().distance(displace_marker) < 20) {
@@ -119,18 +126,24 @@ public class Displace extends UsePowers implements Listener {
 
                         Location location = lastBlock.getLocation();
 
-                        location.setX(location.getX() + 0.5);
-                        location.setY(location.getY() + 1.5);
-                        location.setZ(location.getZ() + 0.5);
+                        if (LineOfSight.hasLineOfSight(player, location)) {
 
-                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, true));
-                        player.playSound(player.getLocation(), "custom.supernatural.displace.place_marker", SoundCategory.PLAYERS, 0.5F, 1);
+                            location.setX(location.getX() + 0.5);
+                            location.setY(location.getY() + 1.5);
+                            location.setZ(location.getZ() + 0.5);
 
-                        player.setMetadata("displace_x", new FixedMetadataValue(plugin, location.getX()));
-                        player.setMetadata("displace_y", new FixedMetadataValue(plugin, location.getY()));
-                        player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));
+                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, true));
+                            player.playSound(player.getLocation(), "custom.supernatural.displace.place_marker", SoundCategory.PLAYERS, 0.5F, 1);
+
+                            player.setMetadata("displace_x", new FixedMetadataValue(plugin, location.getX()));
+                            player.setMetadata("displace_y", new FixedMetadataValue(plugin, location.getY()));
+                            player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));
+                        }
+                        else {
+                            manaBar.displayMessage(player, "§cLine of Sight required!", 2, false); // FIXME: 6/2/2020
+                        }
+                        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                     }
-                    player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                 }
             }
         }

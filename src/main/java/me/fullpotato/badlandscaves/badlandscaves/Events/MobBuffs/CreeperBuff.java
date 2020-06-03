@@ -12,6 +12,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -39,8 +40,8 @@ public class CreeperBuff implements Listener {
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
-        if (random.nextInt(100) < augment) {
-            creeper.setMetadata("augmented", new FixedMetadataValue(plugin, true));
+        if (random.nextInt(100) < 100) {
+            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
             creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);
             creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
@@ -57,14 +58,15 @@ public class CreeperBuff implements Listener {
             if (hardmode) {
                 final Creeper creeper = (Creeper) event.getEntity();
                 if (!creeper.isDead()) {
-                    final Location location = creeper.getLocation();
-                    final World world = creeper.getWorld();
-                    final Random random = new Random();
-                    final int size = creeper.getExplosionRadius();
+                    if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                        final Location location = creeper.getLocation();
+                        final World world = creeper.getWorld();
+                        final Random random = new Random();
+                        final int size = creeper.getExplosionRadius();
+                        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
 
-                    if (creeper.hasMetadata("augmented") && creeper.getMetadata("augmented").get(0).asBoolean()) {
-
-                        final int repeats = random.nextInt(10) + 5;
+                        final int repeats = random.nextInt(Math.max((chaos / 10), 2)) + 5;
+                        Bukkit.broadcastMessage(repeats + "");
                         int[] repeated = {0};
                         new BukkitRunnable() {
                             @Override
@@ -100,7 +102,7 @@ public class CreeperBuff implements Listener {
                     //augmented chain explode
                     final Creeper source = (Creeper) event.getDamager();
                     final Creeper surrounding = (Creeper) event.getEntity();
-                    if (source.hasMetadata("augmented") && source.getMetadata("augmented").get(0).asBoolean()) {
+                    if (source.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && source.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                         Random random = new Random();
                         if (random.nextBoolean()) {
                             Location top = source.getLocation().clone();
@@ -120,7 +122,7 @@ public class CreeperBuff implements Listener {
                 else if (event.getDamager() instanceof Arrow) {
                     final Arrow arrow = (Arrow) event.getDamager();
                     final Creeper creeper = (Creeper) event.getEntity();
-                    if (creeper.hasMetadata("augmented") && creeper.getMetadata("augmented").get(0).asBoolean()) {
+                    if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                         event.setCancelled(true);
                         creeper.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, arrow.getLocation(), 1, 0, 0, 0, 0);
                         arrow.setVelocity(arrow.getVelocity().multiply(2));

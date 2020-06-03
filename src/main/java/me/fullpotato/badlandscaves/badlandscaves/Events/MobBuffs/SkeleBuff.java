@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.MobBuffs;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
+import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
@@ -13,11 +15,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.loot.LootTables;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class SkeleBuff implements Listener {
@@ -47,8 +51,8 @@ public class SkeleBuff implements Listener {
             if (hardmode) {
                 final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
                 if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < augment) {
-                    skeleton.setMetadata("augmented", new FixedMetadataValue(plugin, true));
-                    skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Devil Forgemaster");
+                    skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
+                    skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Summoner");
 
                     ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                     LeatherArmorMeta boots_meta = (LeatherArmorMeta) boots.getItemMeta();
@@ -99,7 +103,7 @@ public class SkeleBuff implements Listener {
             skeleton.getEquipment().setItemInMainHand(bow);
 
             if (!hardmode) return;
-            if (!skeleton.hasMetadata("augmented") || !skeleton.getMetadata("augmented").get(0).asBoolean()) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
+            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
 
             Location one_up = location;
@@ -113,7 +117,9 @@ public class SkeleBuff implements Listener {
 
 
             //witherskeleton
-            world.spawnEntity(location, EntityType.WITHER_SKELETON);
+            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) {
+                world.spawnEntity(location, EntityType.WITHER_SKELETON);
+            }
         }
         else if (skeleton instanceof WitherSkeleton && skeleton.getType().equals(EntityType.WITHER_SKELETON)) {
             if (!hardmode) return;
@@ -134,16 +140,17 @@ public class SkeleBuff implements Listener {
     }
 
     @EventHandler
-    public void forgeMasterShoot (ProjectileLaunchEvent event) {
+    public void summonerShoot(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getEntity();
             if (arrow.getShooter() instanceof Skeleton) {
                 Skeleton skeleton = (Skeleton) arrow.getShooter();
-                if (skeleton.hasMetadata("augmented") && skeleton.getMetadata("augmented").get(0).asBoolean()) {
+                if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                     Vector velocity = arrow.getVelocity();
                     Location location = arrow.getLocation();
 
-                    final int clones = 10;
+                    final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+                    final int clones = 1 + (chaos / 10);
                     int[] ran = {0};
                     new BukkitRunnable() {
                         @Override
@@ -168,15 +175,72 @@ public class SkeleBuff implements Listener {
     }
 
     @EventHandler
-    public void forgeMasterHit (ProjectileHitEvent event) {
+    public void summonerHit(ProjectileHitEvent event) {
         if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && event.getEntity() instanceof Arrow) {
+            Player player = (Player) event.getHitEntity();
             Arrow arrow = (Arrow) event.getEntity();
             if (arrow.getShooter() instanceof Skeleton) {
                 Skeleton skeleton = (Skeleton) arrow.getShooter();
-                if (skeleton.hasMetadata("augmented") && skeleton.getMetadata("augmented").get(0).asBoolean()) {
-                    arrow.getLocation().getWorld().spawnEntity(arrow.getLocation(), EntityType.SKELETON);
+                if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                    player.setNoDamageTicks(0);
+
+
+                    final Random random = new Random();
+                    final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+
+                    if (random.nextInt(100) < Math.max(chaos, 10)) {
+                        ArrayList<Skeleton> nearbySkeles = new ArrayList<>();
+                        for (Entity entity : arrow.getNearbyEntities(20, 20, 20)) {
+                            if (entity instanceof Skeleton && !entity.equals(skeleton)) {
+                                nearbySkeles.add((Skeleton) entity);
+                            }
+                        }
+                        if (nearbySkeles.size() < Math.max(chaos / 5, 5)) {
+                            ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin);
+                            Location spawnLoc = locationFinder.getNearbyLocation(arrow.getLocation(), new Random(), 5);
+
+                            if (spawnLoc != null && spawnLoc.distanceSquared(player.getLocation()) > 2) {
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        arrow.getWorld().spawnParticle(Particle.FLASH, spawnLoc.clone().add(0, 0.5, 0), 1, 0, 0, 0, 0);
+                                        arrow.getLocation().getWorld().spawnEntity(spawnLoc, EntityType.SKELETON);
+                                    }
+                                }.runTaskLater(plugin, 20);
+                            }
+                        }
+                        else {
+                            boolean upgraded = false;
+                            for (Skeleton nearbySkele : nearbySkeles) {
+                                ItemStack bow = nearbySkele.getEquipment().getItemInMainHand();
+                                if (bow.getType().equals(Material.BOW)) {
+                                    if (random.nextBoolean()) {
+                                        ItemMeta meta = bow.getItemMeta();
+                                        int power = meta.getEnchantLevel(Enchantment.ARROW_DAMAGE);
+                                        if (power < 10) {
+                                            power++;
+                                            upgraded = true;
+                                            meta.addEnchant(Enchantment.ARROW_DAMAGE, power, true);
+                                            bow.setItemMeta(meta);
+                                            nearbySkele.getEquipment().setItemInMainHand(bow);
+
+                                            nearbySkele.getWorld().spawnParticle(Particle.BLOCK_DUST, nearbySkele.getLocation().add(0, 0.5, 0), 20, 0.5, 0.5, 0.5, 0, Material.ANVIL.createBlockData());
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (upgraded) {
+                                arrow.getWorld().playSound(arrow.getLocation(), Sound.BLOCK_ANVIL_PLACE, SoundCategory.HOSTILE, 0.5F, 1);
+                            }
+                        }
+                    }
                 }
             }
+        }
+        else if (event.getHitEntity() == null && event.getHitBlock() != null  && event.getEntity() instanceof Arrow) {
+            Arrow arrow = (Arrow) event.getEntity();
+            if (arrow.getPickupStatus().equals(AbstractArrow.PickupStatus.DISALLOWED)) arrow.remove();
         }
     }
 

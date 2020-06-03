@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -53,8 +54,9 @@ public class ZombieBuff implements Listener {
             final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
             if (random.nextInt(100) < augment) {
                 zombie.setBaby(false);
-                zombie.setMetadata("augmented", new FixedMetadataValue(plugin, true));
+                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
                 zombie.setMetadata("time_stop_cooldown", new FixedMetadataValue(plugin, 0));
+                zombie.setMetadata("wryy_cooldown", new FixedMetadataValue(plugin, 0));
                 zombie.setCustomName(ChatColor.GOLD.toString() + ChatColor.BOLD + "DIO");
 
                 ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
@@ -77,57 +79,14 @@ public class ZombieBuff implements Listener {
                 zombie.getEquipment().setArmorContents(armor);
 
                 zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0);
-                zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(100.0);
+                zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue((chaos / 4.0) + 25);
+
                 zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (zombie.isDead()) {
-                            this.cancel();
-                        }
-                        else {
-                            if (random.nextInt(100) < 5) {
-                                zombie.getWorld().playSound(zombie.getLocation(), "custom.dio.wryy", SoundCategory.HOSTILE, 1, 1);
-                            }
-
-                            int cooldown = zombie.getMetadata("time_stop_cooldown").get(0).asInt();
-                            if (cooldown <= 0) {
-                                for (Entity entity : zombie.getNearbyEntities(5, 5, 5)) {
-                                    if (entity instanceof Player) {
-                                        Player player = (Player) entity;
-                                        if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                                            Location nearby = player.getLocation();
-                                            nearby.setYaw(zombie.getLocation().getYaw());
-                                            nearby.setPitch(zombie.getLocation().getPitch());
-
-                                            zombie.teleport(nearby, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                            world.playSound(player.getLocation(), "custom.dio.za_warudo", SoundCategory.HOSTILE, 10, 1);
-                                            player.setVelocity(zombie.getVelocity().subtract(player.getVelocity()).multiply(99).setY(9));
-
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    player.damage(999999, zombie);
-                                                }
-                                            }.runTaskLater(plugin, 5);
-
-                                            zombie.setMetadata("time_stop_cooldown", new FixedMetadataValue(plugin, 20));
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                            else {
-                                zombie.setMetadata("time_stop_cooldown", new FixedMetadataValue(plugin, cooldown - 1));
-                            }
-                        }
-                    }
-                }.runTaskTimer(plugin, 0, 10);
+                zombie.setHealth(40.0);
             }
 
 
-            if (!zombie.hasMetadata("augmented") || !zombie.getMetadata("augmented").get(0).asBoolean()) {
+            if (!zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) {
                 boolean overpowered = random.nextInt(100) < chance;
 
                 //SWORD-------------------------------------------------------------------

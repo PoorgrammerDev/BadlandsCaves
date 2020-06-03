@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -26,7 +27,7 @@ public class AugmentedSpider extends BukkitRunnable {
             for (Entity entity : player.getNearbyEntities(7, 7, 7)) {
                 if (entity instanceof Spider) {
                     final Spider spider = (Spider) entity;
-                    if (spider.hasMetadata("augmented") && spider.getMetadata("augmented").get(0).asBoolean()) {
+                    if (spider.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && spider.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                         if (spider.getTarget() != null && spider.getTarget().equals(player)) {
                             final Random random = new Random();
 
