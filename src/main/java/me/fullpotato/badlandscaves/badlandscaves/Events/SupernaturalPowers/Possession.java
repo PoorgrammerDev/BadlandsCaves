@@ -58,64 +58,66 @@ public class Possession extends UsePowers implements Listener {
                             if (result != null && result.getHitEntity() != null) {
                                 if (result.getHitEntity() instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) result.getHitEntity();
-                                    if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)){
-                                        boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
+                                    if (player.hasLineOfSight(target)) {
+                                        if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)){
+                                            boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
 
-                                        if (!target_already_pos) {
-                                            //cancel mana regen and keep mana bar active
-                                            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_cost));
-                                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
-                                            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+                                            if (!target_already_pos) {
+                                                //cancel mana regen and keep mana bar active
+                                                player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_cost));
+                                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
+                                                player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
 
-                                            //readying the player and the target
-                                            target.setMetadata("possessed", new FixedMetadataValue(plugin, true));
-                                            player.setMetadata("in_possession", new FixedMetadataValue(plugin, true));
-                                            player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, player.getWorld().getName()));
-                                            player.setMetadata("possess_orig_x", new FixedMetadataValue(plugin, player.getLocation().getX()));
-                                            player.setMetadata("possess_orig_y", new FixedMetadataValue(plugin, player.getLocation().getY()));
-                                            player.setMetadata("possess_orig_z", new FixedMetadataValue(plugin, player.getLocation().getZ()));
-                                            target.setAI(false);
+                                                //readying the player and the target
+                                                target.setMetadata("possessed", new FixedMetadataValue(plugin, true));
+                                                player.setMetadata("in_possession", new FixedMetadataValue(plugin, true));
+                                                player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, player.getWorld().getName()));
+                                                player.setMetadata("possess_orig_x", new FixedMetadataValue(plugin, player.getLocation().getX()));
+                                                player.setMetadata("possess_orig_y", new FixedMetadataValue(plugin, player.getLocation().getY()));
+                                                player.setMetadata("possess_orig_z", new FixedMetadataValue(plugin, player.getLocation().getZ()));
+                                                target.setAI(false);
 
-                                            //team
-                                            ScoreboardManager manager = Bukkit.getScoreboardManager();
-                                            assert manager != null;
-                                            Scoreboard board = manager.getMainScoreboard();
-                                            Team team = board.registerNewTeam("POS_" + player.getUniqueId().toString().substring(0, 12));
-                                            team.setAllowFriendlyFire(false);
-                                            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OTHER_TEAMS);
-                                            team.addEntry(player.getUniqueId().toString());
-                                            team.addEntry(target.getUniqueId().toString());
-                                            player.setScoreboard(board);
-
-
+                                                //team
+                                                ScoreboardManager manager = Bukkit.getScoreboardManager();
+                                                assert manager != null;
+                                                Scoreboard board = manager.getMainScoreboard();
+                                                Team team = board.registerNewTeam("POS_" + player.getUniqueId().toString().substring(0, 12));
+                                                team.setAllowFriendlyFire(false);
+                                                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OTHER_TEAMS);
+                                                team.addEntry(player.getUniqueId().toString());
+                                                team.addEntry(target.getUniqueId().toString());
+                                                player.setScoreboard(board);
 
 
-                                            if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
-                                            for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
-                                                if (entity instanceof Mob) {
-                                                    final Mob mob = (Mob) entity;
-                                                    if (mob.getTarget() != null && mob.getTarget().equals(player)) {
-                                                        mob.setTarget(null);
+
+                                                if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
+
+                                                for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
+                                                    if (entity instanceof Mob) {
+                                                        final Mob mob = (Mob) entity;
+                                                        if (mob.getTarget() != null && mob.getTarget().equals(player)) {
+                                                            mob.setTarget(null);
+                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                                                if (entity instanceof Player) {
-                                                    Player powered = (Player) entity;
-                                                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                                                        powered.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.3F, 1);
-                                                        powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
+                                                for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                                                    if (entity instanceof Player) {
+                                                        Player powered = (Player) entity;
+                                                        if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                            powered.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.3F, 1);
+                                                            powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
+                                                        }
                                                     }
                                                 }
+
+                                                player.teleport(target, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                                player.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.5F, 1);
+
+
+                                                new PossessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
                                             }
-
-                                            player.teleport(target, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                            player.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.5F, 1);
-
-
-                                            new PossessionMobsRunnable(plugin, player, target, team).runTaskTimer(plugin, 0, 0);
                                         }
                                     }
                                 }

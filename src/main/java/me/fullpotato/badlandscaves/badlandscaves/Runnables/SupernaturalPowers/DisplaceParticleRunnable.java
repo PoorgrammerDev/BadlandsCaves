@@ -79,11 +79,13 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             }
 
             Location location = lastBlock.getLocation();
-            location.setX(location.getX() + 0.5);
-            location.setY(location.getY() + 0.5);
-            location.setZ(location.getZ() + 0.5);
+            if (LineOfSight.hasLineOfSight(player, location)) {
+                location.setX(location.getX() + 0.5);
+                location.setY(location.getY() + 0.5);
+                location.setZ(location.getZ() + 0.5);
 
-            scoutingParticle(location);
+                scoutingParticle(location);
+            }
         }
     }
 

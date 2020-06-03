@@ -40,20 +40,22 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
 
         if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof LivingEntity && !(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither) && !(result.getHitEntity().getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && result.getHitEntity().getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
             LivingEntity entity = (LivingEntity) result.getHitEntity();
-            boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();
-            if (target_already_pos) return;
+            if (player.hasLineOfSight(entity)) {
+                boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();
+                if (target_already_pos) return;
 
-            PossessionNMS nms = new PossessionNMS(player);
-            nms.setIndicator(entity);
+                PossessionNMS nms = new PossessionNMS(player);
+                nms.setIndicator(entity);
 
-            Location location = entity.getLocation();
-            makeParticleLine(location, location.getY() + entity.getHeight());
+                Location location = entity.getLocation();
+                makeParticleLine(location, location.getY() + entity.getHeight());
 
-            location = entity.getLocation();
-            makeParticleCircle(location, entity.getWidth() * 2);
+                location = entity.getLocation();
+                makeParticleCircle(location, entity.getWidth() * 2);
 
-            location.add(0, entity.getHeight(), 0);
-            makeParticleCircle(location, entity.getWidth() * 2);
+                location.add(0, entity.getHeight(), 0);
+                makeParticleCircle(location, entity.getWidth() * 2);
+            }
         }
     }
 

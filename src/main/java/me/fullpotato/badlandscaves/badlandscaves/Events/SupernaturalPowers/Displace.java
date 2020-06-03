@@ -140,7 +140,7 @@ public class Displace extends UsePowers implements Listener {
                             player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));
                         }
                         else {
-                            manaBar.displayMessage(player, "§cLine of Sight required!", 2, false); // FIXME: 6/2/2020
+                            manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
                         }
                         player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
                     }
