@@ -578,6 +578,25 @@ public class LoadCustomItems {
 
         //--------------------------
 
+        ItemStack titanium_fragment = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta titanium_fragment_meta = titanium_fragment.getItemMeta();
+        titanium_fragment_meta.setDisplayName("§bTitanium Fragment");
+        titanium_fragment_meta.setCustomModelData(143);
+        titanium_fragment.setItemMeta(titanium_fragment_meta);
+        plugin.getConfig().set("items.titanium_fragment", titanium_fragment.serialize());
+
+        //--------------------------
+
+        ItemStack titanium_ingot = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta titanium_ingot_meta = titanium_ingot.getItemMeta();
+        titanium_ingot_meta.setDisplayName("§bTitanium ingot");
+        titanium_ingot_meta.setCustomModelData(144);
+        titanium_ingot.setItemMeta(titanium_ingot_meta);
+        plugin.getConfig().set("items.titanium_ingot", titanium_ingot.serialize());
+
+        //--------------------------
+
+
         plugin.saveConfig();
         plugin.reloadConfig();
     }

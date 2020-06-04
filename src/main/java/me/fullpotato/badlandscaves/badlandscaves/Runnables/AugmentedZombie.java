@@ -6,7 +6,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,19 +28,19 @@ public class AugmentedZombie extends BukkitRunnable {
             for (Zombie zombie : world.getEntitiesByClass(Zombie.class)) {
                 if (zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1 && !zombie.isDead()) {
                     //WRYY----------------------
-                    int wryyCooldown = zombie.getMetadata("wryy_cooldown").get(0).asInt();
+                    byte wryyCooldown = zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE);
                     if (wryyCooldown <= 0) {
                         if (random.nextInt(100) < 5) {
                             zombie.getWorld().playSound(zombie.getLocation(), "custom.dio.wryy", SoundCategory.HOSTILE, 0.5F, 1);
-                            zombie.setMetadata("wryy_cooldown", new FixedMetadataValue(plugin, 15));
+                            zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE, (byte) 15);
                         }
                     }
                     else {
-                        zombie.setMetadata("wryy_cooldown", new FixedMetadataValue(plugin, wryyCooldown - 1));
+                        zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE, (byte) (wryyCooldown - 1));
                     }
 
                     //time stopping
-                    int timeStopCooldown = zombie.getMetadata("time_stop_cooldown").get(0).asInt();
+                    byte timeStopCooldown = zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE);
                     if (timeStopCooldown <= 0) {
                         if (zombie.getTarget() != null && zombie.getTarget() instanceof Player) {
                             Player player = (Player) zombie.getTarget();
@@ -125,13 +124,13 @@ public class AugmentedZombie extends BukkitRunnable {
                                             }
                                         }
                                     }
-                                    zombie.setMetadata("time_stop_cooldown", new FixedMetadataValue(plugin, ((-1 * (chaos / 5)) + 30)));
+                                    zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE, (byte) ((-1 * (chaos / 5)) + 30));
                                 }
                             }
                         }
                     }
                     else {
-                        zombie.setMetadata("time_stop_cooldown", new FixedMetadataValue(plugin, timeStopCooldown - 1));
+                        zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE, (byte) (timeStopCooldown - 1));
                     }
                 }
 

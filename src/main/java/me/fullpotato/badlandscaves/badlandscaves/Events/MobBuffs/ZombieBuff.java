@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -55,8 +54,8 @@ public class ZombieBuff implements Listener {
             if (random.nextInt(100) < augment) {
                 zombie.setBaby(false);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
-                zombie.setMetadata("time_stop_cooldown", new FixedMetadataValue(plugin, 0));
-                zombie.setMetadata("wryy_cooldown", new FixedMetadataValue(plugin, 0));
+                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE, (byte) 0);
+                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE, (byte) 0);
                 zombie.setCustomName(ChatColor.GOLD.toString() + ChatColor.BOLD + "DIO");
 
                 ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);

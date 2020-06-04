@@ -42,7 +42,7 @@ public class PhantomBuff implements Listener {
                 if (random.nextInt(100) < chance) {
                     ArrayList<Monster> nearbyMonsters = new ArrayList<>();
                     for (Entity entity : phantom.getNearbyEntities(20, 20, 20)) {
-                        if (entity instanceof Monster && !(entity instanceof Phantom) && entity.getVehicle() == null && entity.getLocation().distanceSquared(player.getLocation()) > 100) {
+                        if (entity instanceof Monster && !(entity instanceof Phantom) && entity.getVehicle() == null && entity.getLocation().distanceSquared(player.getLocation()) > 4) {
                             nearbyMonsters.add((Monster) entity);
                         }
                     }
@@ -52,7 +52,6 @@ public class PhantomBuff implements Listener {
                     Monster monster = nearbyMonsters.get(random.nextInt(nearbyMonsters.size()));
 
                     phantom.setTarget(monster);
-
                     event.setCancelled(true);
 
                     int[] run = {0};

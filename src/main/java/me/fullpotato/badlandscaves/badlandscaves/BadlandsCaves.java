@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.badlandscaves;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes.*;
+import me.fullpotato.badlandscaves.badlandscaves.Events.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.StopCustomItemsInteract;
@@ -36,6 +37,7 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.De
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaRegen;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
+import me.fullpotato.badlandscaves.badlandscaves.Runnables.Surface;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
@@ -285,6 +287,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ShieldBlocking(this), this);
         this.getServer().getPluginManager().registerEvents(new Shield(this), this);
         this.getServer().getPluginManager().registerEvents(new CraftingGuide(this), this);
+        this.getServer().getPluginManager().registerEvents(new TitaniumOre(this), this);
     }
 
     //COMMANDS
@@ -340,6 +343,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
+        new Surface(this).runTaskTimer(this, 0, 100);
 
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();

@@ -26,6 +26,7 @@ public class ReflectionZombie implements Listener {
         plugin = bcav;
     }
 
+    // TODO: 6/3/2020 remove?
     @EventHandler
     public void damagedZombieAvoidPlayer (EntityTargetLivingEntityEvent event) {
         if (event.getEntity() instanceof Zombie &&
