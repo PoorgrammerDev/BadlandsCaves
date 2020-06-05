@@ -19,9 +19,10 @@ import java.util.Random;
 
 public class BlazeBuff implements Listener {
     private BadlandsCaves plugin;
-    private World chambers = Bukkit.getWorld("world_chambers");
+    private World chambers;
     public BlazeBuff(BadlandsCaves bcav) {
         plugin = bcav;
+        chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
     }
 
     @EventHandler

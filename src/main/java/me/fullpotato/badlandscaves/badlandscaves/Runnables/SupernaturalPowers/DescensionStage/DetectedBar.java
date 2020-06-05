@@ -21,14 +21,14 @@ public class DetectedBar extends BukkitRunnable {
     public void run() {
         //making the bossbar
         NamespacedKey key = new NamespacedKey(plugin, "descension_detected_bar");
-        KeyedBossBar detected_bar = Bukkit.getBossBar(key);
+        KeyedBossBar detected_bar = plugin.getServer().getBossBar(key);
         if (detected_bar == null) {
             String title = ChatColor.RED + "Detection";
-            detected_bar = Bukkit.createBossBar(key, title, BarColor.RED, BarStyle.SEGMENTED_6);
+            detected_bar = plugin.getServer().createBossBar(key, title, BarColor.RED, BarStyle.SEGMENTED_6);
         }
 
-        World world = Bukkit.getWorld("world_descension");
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        World world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 2 && player.getWorld().equals(world)) {
                 if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);

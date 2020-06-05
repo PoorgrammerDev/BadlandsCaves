@@ -35,6 +35,14 @@ public class StopCustomItemsInteract implements Listener {
             "chamber_magma_key",
             "chamber_glowstone_key",
             "chamber_soulsand_key",
+            "titanium_fragment",
+            "titanium_ingot",
+            "binding",
+            "golden_cable",
+            "nether_star_fragment",
+            "starlight_circuit",
+            "starlight_battery",
+            "starlight_module",
     };
 
     public StopCustomItemsInteract(BadlandsCaves bcav, String[] custom_items) {

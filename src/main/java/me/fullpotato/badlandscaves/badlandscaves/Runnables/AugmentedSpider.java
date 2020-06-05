@@ -23,7 +23,7 @@ public class AugmentedSpider extends BukkitRunnable {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             for (Entity entity : player.getNearbyEntities(7, 7, 7)) {
                 if (entity instanceof Spider) {
                     final Spider spider = (Spider) entity;

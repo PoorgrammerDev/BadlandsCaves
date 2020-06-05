@@ -22,10 +22,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class EndGame implements Listener {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world_reflection");
+    private World world;
 
     public EndGame(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.world = plugin.getServer().getWorld(plugin.reflectionWorldName);
     }
 
     @EventHandler
@@ -83,7 +84,7 @@ public class EndGame implements Listener {
         world.setTime(6000);
 
         final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
-        KeyedBossBar health_bar = Bukkit.getBossBar(key);
+        KeyedBossBar health_bar = plugin.getServer().getBossBar(key);
         if (health_bar != null) {
             health_bar.setVisible(false);
         }
@@ -99,7 +100,7 @@ public class EndGame implements Listener {
     }
 
     public void removeClone() {
-        FakePlayer nms = new FakePlayer(world);
+        FakePlayer nms = new FakePlayer(plugin, world);
         nms.remove(ZombieBossBehavior.fakePlayer);
 
         ZombieBossBehavior.fakePlayer = null;

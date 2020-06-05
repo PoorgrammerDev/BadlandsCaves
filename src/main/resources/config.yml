@@ -8,6 +8,9 @@ game_values:
   #chambers spawned in
   chambers_spawned: FALSE
 
+  #surface layer
+  surface_layer: 128
+
   #base percentage without luck effect or luck of the sea modifiers for getting a fishing crate
   fishing_crate_chance: 10
 

@@ -24,7 +24,7 @@ public class AugmentedZombie extends BukkitRunnable {
     @Override
     public void run() {
         final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
-        for (World world : Bukkit.getWorlds()) {
+        for (World world : plugin.getServer().getWorlds()) {
             for (Zombie zombie : world.getEntitiesByClass(Zombie.class)) {
                 if (zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1 && !zombie.isDead()) {
                     //WRYY----------------------

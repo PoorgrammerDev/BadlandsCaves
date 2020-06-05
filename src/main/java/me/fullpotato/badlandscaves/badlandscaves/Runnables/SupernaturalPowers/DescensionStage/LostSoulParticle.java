@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage;
 
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -9,10 +10,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class LostSoulParticle extends BukkitRunnable {
+    private BadlandsCaves plugin;
+
+    public LostSoulParticle(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
-        World world = Bukkit.getWorld("world_descension");
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        World world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(world)) {
                 int in_descension = player.getMetadata("in_descension").get(0).asInt();
                 if (in_descension == 2) {

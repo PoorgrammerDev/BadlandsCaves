@@ -29,7 +29,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
         ItemStack item = player.getInventory().getItemInOffHand();
         ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
         if (!item.isSimilar(displace)) {
-            Bukkit.getScheduler().cancelTask(this.getTaskId());
+            plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;
         }
 

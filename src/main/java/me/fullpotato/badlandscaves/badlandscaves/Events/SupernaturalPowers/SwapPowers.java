@@ -168,7 +168,7 @@ public class SwapPowers implements Listener {
                     player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, swap_name_timer));
                 }
                 else {
-                    Bukkit.getScheduler().cancelTask(this.getTaskId());
+                    plugin.getServer().getScheduler().cancelTask(this.getTaskId());
                 }
             }
         }.runTaskTimerAsynchronously(plugin,0,0);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ShrineCapture extends BukkitRunnable {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world_descension");
+    private World world;
     private Location[] crystal_locations = {
             new Location(world, 46, 80, 46),
             new Location(world, -46, 80, 46),
@@ -24,11 +24,12 @@ public class ShrineCapture extends BukkitRunnable {
 
     public ShrineCapture(BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.descensionWorldName);
     }
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.isDead() || (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE))) continue;
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 2 && player.getWorld().equals(world)) {

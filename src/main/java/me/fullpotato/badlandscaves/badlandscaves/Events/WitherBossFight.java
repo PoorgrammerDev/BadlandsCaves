@@ -36,7 +36,7 @@ import java.util.Random;
 
 public class WitherBossFight implements Listener {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world_chambers");
+    private World world;
     private BlockFace[] adjacent = {
             BlockFace.NORTH,
             BlockFace.EAST,
@@ -48,6 +48,7 @@ public class WitherBossFight implements Listener {
 
     public WitherBossFight(BadlandsCaves plugin) {
         this.plugin = plugin;
+        world = plugin.getServer().getWorld(plugin.chambersWorldName);
     }
 
     //--------------------------------------------------
@@ -112,7 +113,7 @@ public class WitherBossFight implements Listener {
         portalLocation.setY(0);
 
         if (event.getTo() != null && event.getTo().getWorld().equals(portalLocation.getWorld()) && event.getTo().distanceSquared(portalLocation) < 49 && event.getTo().getY() < 1.5) {
-            World chambers = plugin.getServer().getWorld("world_chambers");
+            World chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
             Player player = event.getPlayer();
             spawnInStructure(null);
             PreventDragon.preventDragonSpawn(chambers);
@@ -417,7 +418,7 @@ public class WitherBossFight implements Listener {
                         if (player.getWorld().equals(world)) {
                             Location respawn = player.getBedSpawnLocation();
                             if (respawn == null) {
-                                player.teleport(Bukkit.getWorld("world").getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                player.teleport(plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                             }
                             else {
                                 player.teleport(respawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -1101,7 +1102,7 @@ public class WitherBossFight implements Listener {
 
                     Location bedSpawn = player.getBedSpawnLocation();
                     if (bedSpawn == null) {
-                        player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                        player.teleport(plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation());
                     }
                     else {
                         player.teleport(bedSpawn);

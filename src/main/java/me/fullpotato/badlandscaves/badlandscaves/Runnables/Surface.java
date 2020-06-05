@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Surface extends BukkitRunnable {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world");
+    private World world;
     private Random random = new Random();
     private final EntityType[] banditTypes = {
             EntityType.VINDICATOR,
@@ -28,6 +28,7 @@ public class Surface extends BukkitRunnable {
 
     public Surface(BadlandsCaves plugin) {
         this.plugin = plugin;
+        world = plugin.getServer().getWorld(plugin.mainWorldName);
     }
 
     @Override
@@ -38,21 +39,22 @@ public class Surface extends BukkitRunnable {
         for (Player player : world.getEntitiesByClass(Player.class)) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 Location location = player.getLocation();
-                if (location.getY() > 128) {
+                final int surfaceLayer = plugin.getConfig().getInt("game_values.surface_layer");
+                if (location.getY() > surfaceLayer) {
                     if (random.nextInt(100) < (25 + (chaos / (hardmode ? 4.0 : 8.0)))) {
                         ZombieBossBehavior finder = new ZombieBossBehavior(plugin);
                         Location spawn = finder.getNearbyLocation(location, random, 20);
                         if (spawn != null && spawn.distanceSquared(player.getLocation()) > 9) {
                             world.strikeLightningEffect(spawn);
 
-                            int mobs = hardmode ? (random.nextInt(chaos / 20) + 1) : (random.nextInt(chaos / 40) + 1);
                             if (time < 12300 || time > 23850) {
+                                int mobs = hardmode ? (random.nextInt((chaos / 20) + 1) + 1) : (random.nextInt((chaos / 40) + 1) + 1);
                                 for (int i = 0; i < mobs; i++) {
                                     if (random.nextInt(100) < 75) {
                                         world.spawnEntity(spawn, banditTypes[random.nextInt(banditTypes.length)]);
                                     }
                                     else if (random.nextInt(100) < 75) {
-                                        world.spawnEntity(spawn, banditTypes[random.nextInt(banditTypesRare.length)]);
+                                        world.spawnEntity(spawn, banditTypesRare[random.nextInt(banditTypesRare.length)]);
                                     }
                                     else {
                                         Ravager ravager = (Ravager) world.spawnEntity(spawn, EntityType.RAVAGER);
@@ -62,9 +64,15 @@ public class Surface extends BukkitRunnable {
                                 }
                             }
                             else {
-                                spawn.add(0, 30, 0);
+                                int mobs = hardmode ? (random.nextInt(chaos / 15) + 1) : (random.nextInt(chaos / 30) + 1);
                                 for (int i = 0; i < mobs; i++) {
-                                    world.spawnEntity(spawn, EntityType.PHANTOM);
+                                    if (random.nextInt(100) < 75) {
+                                        world.spawnEntity(spawn.clone().add(0, 10, 0), EntityType.PHANTOM);
+                                    }
+                                    else {
+                                        world.spawnEntity(spawn, EntityType.ZOMBIE);
+                                    }
+
                                 }
                             }
                         }

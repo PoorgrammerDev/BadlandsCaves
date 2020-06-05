@@ -26,11 +26,12 @@ import java.util.Random;
 public class ZombieBossBehavior extends BukkitRunnable {
     private BadlandsCaves plugin;
     private Zombie zombie;
-    private World world = Bukkit.getWorld("world_reflection");
+    private World world;
     public static Player fakePlayer = null;
 
     public ZombieBossBehavior(BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.reflectionWorldName);
     }
 
     @Override
@@ -135,7 +136,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
     }
 
     public void CloneMechanism (final Player player) {
-        FakePlayer nms = new FakePlayer(world);
+        FakePlayer nms = new FakePlayer(plugin, world);
         if (player.hasMetadata("reflection_zombie") && player.getMetadata("reflection_zombie").get(0).asBoolean()) {
             nms.move(zombie.getLocation(), fakePlayer, null, true);
         }
@@ -583,9 +584,9 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     public void displayHealth (final Zombie zombie, final Player player) {
         final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
-        KeyedBossBar health_bar = Bukkit.getBossBar(key);
+        KeyedBossBar health_bar = plugin.getServer().getBossBar(key);
         if (health_bar == null) {
-            health_bar = Bukkit.createBossBar(key, ChatColor.DARK_AQUA + ChatColor.stripColor(player.getDisplayName()), BarColor.BLUE, BarStyle.SEGMENTED_10);
+            health_bar = plugin.getServer().createBossBar(key, ChatColor.DARK_AQUA + ChatColor.stripColor(player.getDisplayName()), BarColor.BLUE, BarStyle.SEGMENTED_10);
         }
         else {
             health_bar.setTitle(ChatColor.DARK_AQUA + ChatColor.stripColor(player.getDisplayName()));
@@ -598,10 +599,10 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     public void healthBarVisibility () {
         final NamespacedKey key = new NamespacedKey(plugin, "reflection_world_boss_health");
-        final KeyedBossBar health_bar = Bukkit.getBossBar(key);
+        final KeyedBossBar health_bar = plugin.getServer().getBossBar(key);
         if (health_bar == null) return;
 
-        for (Player online : Bukkit.getOnlinePlayers()) {
+        for (Player online : plugin.getServer().getOnlinePlayers()) {
             if (online.getWorld().equals(world)) {
                 if (online.isDead()) {
                     health_bar.removePlayer(online);

@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables;
 
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -8,16 +9,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ActionbarRunnable extends BukkitRunnable {
+    private BadlandsCaves plugin;
+
+    public ActionbarRunnable(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 1 || in_descension == 2) continue;
 
             final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
             if (in_reflection) continue;
 
-            if (player.getWorld().equals(Bukkit.getWorld("world_backrooms"))) continue;
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;
 
             int death_count = player.getMetadata("Deaths").get(0).asInt();
             String separator = ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + " | ";

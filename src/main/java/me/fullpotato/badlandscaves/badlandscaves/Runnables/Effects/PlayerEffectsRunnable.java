@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.Effects;
 
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.badlandscaves.Util.AddPotionEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -11,9 +12,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 
 public class PlayerEffectsRunnable extends BukkitRunnable {
+    private BadlandsCaves plugin;
+
+    public PlayerEffectsRunnable(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
 
             final int in_descension = player.hasMetadata("in_descension") ? player.getMetadata("in_descension").get(0).asInt() : 0;
@@ -22,7 +29,7 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
             final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
             if (in_reflection) continue;
 
-            if (player.getWorld().equals(Bukkit.getWorld("world_backrooms"))) continue;
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;
 
             final int agility_speed = player.getMetadata("agility_buff_speed_lvl").get(0).asInt();
 

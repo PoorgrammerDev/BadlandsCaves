@@ -34,8 +34,8 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         final Player player = event.getPlayer();
         event.setCancelled(true);
 
-        final World descension = Bukkit.getWorld("world_descension");
-        final World reflection = Bukkit.getWorld("world_reflection");
+        final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
+        final World reflection = plugin.getServer().getWorld(plugin.reflectionWorldName);
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;

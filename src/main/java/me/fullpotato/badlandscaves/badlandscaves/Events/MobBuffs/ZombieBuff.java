@@ -22,10 +22,12 @@ import java.util.Random;
 
 public class ZombieBuff implements Listener {
     private BadlandsCaves plugin;
-    private World descension_world = Bukkit.getWorld("world_descension");
-    private World reflection_world = Bukkit.getWorld("world_reflection");
+    private World descension_world;
+    private World reflection_world;
     public ZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
+        descension_world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
     }
 
     @EventHandler

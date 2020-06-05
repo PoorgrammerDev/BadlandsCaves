@@ -29,11 +29,12 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Random;
 
 public class Withdraw extends UsePowers implements Listener {
+    private final World void_world;
     public Withdraw(BadlandsCaves bcav) {
         super(bcav);
+        void_world = plugin.getServer().getWorld(plugin.withdrawWorldName);
     }
 
-    private World void_world = Bukkit.getWorld("world_empty");
 
     @EventHandler
     public void use_withdraw(PlayerInteractEvent event) {
@@ -209,7 +210,7 @@ public class Withdraw extends UsePowers implements Listener {
         if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
         boolean ready_to_clear = true;
 
-        for (Player scout : Bukkit.getOnlinePlayers()) {
+        for (Player scout : plugin.getServer().getOnlinePlayers()) {
             if (!scout.equals(player) && scout.getLocation().getWorld().equals(voidLocation.getWorld()) && scout.getLocation().getChunk().equals(voidLocation.getChunk())) {
                 ready_to_clear = false;
                 break;
@@ -234,7 +235,7 @@ public class Withdraw extends UsePowers implements Listener {
 
         player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
         if (cancel) {
-            Bukkit.getScheduler().cancelTask(taskID);
+            plugin.getServer().getScheduler().cancelTask(taskID);
         }
     }
 
@@ -250,7 +251,7 @@ public class Withdraw extends UsePowers implements Listener {
                 if (other_chunk.getX() == x && other_chunk.getZ() == z) {
                     String worldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
                     if (worldname != null && !worldname.isEmpty()) {
-                        World other_world = Bukkit.getWorld(worldname);
+                        World other_world = plugin.getServer().getWorld(worldname);
                         return (world.equals(other_world));
                     }
                 }

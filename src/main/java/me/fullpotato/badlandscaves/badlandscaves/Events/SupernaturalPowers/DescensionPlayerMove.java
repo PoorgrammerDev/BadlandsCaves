@@ -21,10 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DescensionPlayerMove implements Listener {
-    private World world = Bukkit.getWorld("world_descension");
+    private World world;
     private BadlandsCaves plugin;
     public DescensionPlayerMove(BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.descensionWorldName);
     }
 
     @EventHandler

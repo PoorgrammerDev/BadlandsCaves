@@ -20,9 +20,10 @@ import java.util.Random;
 
 public class DescensionReset extends BukkitRunnable {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world_descension");
+    private World world;
     public DescensionReset(BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.descensionWorldName);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class DescensionReset extends BukkitRunnable {
 
         Player waiting = null;
         Player running = null;
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(world) && !player.isDead() && (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL))) {
                 int state = player.getMetadata("in_descension").get(0).asInt();
                 //state 1: waiting in box
@@ -154,7 +155,7 @@ public class DescensionReset extends BukkitRunnable {
 
     public Team getDescensionTeam() {
         //team
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        ScoreboardManager manager = plugin.getServer().getScoreboardManager();
         assert manager != null;
         Scoreboard board = manager.getMainScoreboard();
         String title = "DESCENSION_TEAM";

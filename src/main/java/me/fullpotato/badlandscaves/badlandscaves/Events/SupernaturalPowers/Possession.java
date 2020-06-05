@@ -78,7 +78,7 @@ public class Possession extends UsePowers implements Listener {
                                                 target.setAI(false);
 
                                                 //team
-                                                ScoreboardManager manager = Bukkit.getScoreboardManager();
+                                                ScoreboardManager manager = plugin.getServer().getScoreboardManager();
                                                 assert manager != null;
                                                 Scoreboard board = manager.getMainScoreboard();
                                                 Team team = board.registerNewTeam("POS_" + player.getUniqueId().toString().substring(0, 12));

@@ -12,11 +12,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class WithdrawIndicatorRunnable extends BukkitRunnable {
     private BadlandsCaves plugin;
     private Player player;
-    private final World empty = Bukkit.getWorld("world_empty");
+    private final World empty;
 
     public WithdrawIndicatorRunnable(BadlandsCaves plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
+        this.empty = plugin.getServer().getWorld(plugin.withdrawWorldName);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class WithdrawIndicatorRunnable extends BukkitRunnable {
 
         final ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
         if (!player.getInventory().getItemInOffHand().isSimilar(withdraw)) {
-            Bukkit.getScheduler().cancelTask(this.getTaskId());
+            plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;
         }
         if (player.getWorld().equals(empty)) return;

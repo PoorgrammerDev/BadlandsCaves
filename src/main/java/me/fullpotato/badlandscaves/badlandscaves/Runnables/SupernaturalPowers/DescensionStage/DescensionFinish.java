@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class DescensionFinish extends BukkitRunnable {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world_descension");
+    private World world;
     private Location portal_center = new Location(world, 0, 85, 0);
     private Location[] crystal_locations = {
             new Location(world, 46, 80, 46, 135, 0),
@@ -26,6 +26,7 @@ public class DescensionFinish extends BukkitRunnable {
 
     public DescensionFinish(BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.descensionWorldName);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                             playerNotValid(sender);
                         }
                     } else {
-                        for (Player targets : Bukkit.getOnlinePlayers()) {
+                        for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
                                 return true;
@@ -47,7 +47,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                         tooFewArgs(sender);
                     }
                     else {
-                        for (Player targets : Bukkit.getOnlinePlayers()) {
+                        for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 if (args.length > 2) {
                                     try {

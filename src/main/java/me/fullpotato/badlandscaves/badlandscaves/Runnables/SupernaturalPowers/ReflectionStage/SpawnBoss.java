@@ -18,13 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SpawnBoss extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
-    private World reflection_world = Bukkit.getWorld("world_reflection");
-    private HashMap<Material, Integer> dmg = new HashMap<>();
+    private final BadlandsCaves plugin;
+    private final Player player;
+    private final World reflection_world;
+    private final HashMap<Material, Integer> dmg = new HashMap<>();
     public SpawnBoss(BadlandsCaves bcav, Player ply) {
         plugin = bcav;
         player = ply;
+        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
 
         dmg.put(Material.WOODEN_SWORD, 4);
         dmg.put(Material.GOLDEN_SWORD, 4);

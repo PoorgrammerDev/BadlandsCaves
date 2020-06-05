@@ -21,9 +21,10 @@ import java.util.Random;
 
 public class PigZombieBuff implements Listener {
     private BadlandsCaves plugin;
-    private World chambers = Bukkit.getWorld("world_chambers");
+    private World chambers;
     public PigZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
+        chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
     }
 
     @EventHandler

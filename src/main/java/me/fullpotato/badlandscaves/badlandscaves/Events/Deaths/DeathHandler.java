@@ -24,9 +24,10 @@ import java.util.Objects;
 public class DeathHandler implements Listener {
 
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world");
+    private World world;
     public DeathHandler(BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.mainWorldName);
     }
 
     @EventHandler

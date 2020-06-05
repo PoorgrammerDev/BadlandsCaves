@@ -26,9 +26,10 @@ import java.util.Random;
 
 public class SkeleBuff implements Listener {
     private BadlandsCaves plugin;
-    private World chambers = Bukkit.getWorld("world_chambers");
+    private World chambers;
     public SkeleBuff(BadlandsCaves bcav) {
         plugin = bcav;
+        chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
     }
 
     @EventHandler

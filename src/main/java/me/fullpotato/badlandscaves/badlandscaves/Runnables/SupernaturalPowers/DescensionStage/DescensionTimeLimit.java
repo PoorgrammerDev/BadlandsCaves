@@ -18,7 +18,7 @@ public class DescensionTimeLimit extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 int in_descension = player.getMetadata("in_descension").get(0).asInt();
                 if (in_descension == 2) {

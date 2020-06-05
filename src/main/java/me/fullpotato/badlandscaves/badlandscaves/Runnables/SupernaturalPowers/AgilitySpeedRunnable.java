@@ -14,7 +14,7 @@ public class AgilitySpeedRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
             if (has_powers) {
                 int agility_level = player.getMetadata("agility_level").get(0).asInt();

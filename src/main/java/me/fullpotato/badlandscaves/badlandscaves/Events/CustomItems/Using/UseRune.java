@@ -196,7 +196,7 @@ public class UseRune implements Listener {
         final Player player = (Player) event.getPlayer();
 
         if (view.getTitle().equals(title) && view.getTopInventory().equals(inventory)) {
-            Bukkit.getScheduler().cancelTask(task_id);
+            plugin.getServer().getScheduler().cancelTask(task_id);
             if (inventory.getItem(2) != null) {
                 if (player.getInventory().firstEmpty() != -1) {
                     player.getInventory().addItem(inventory.getItem(2));

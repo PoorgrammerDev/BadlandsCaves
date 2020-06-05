@@ -116,7 +116,7 @@ public class TaintedPowderRunnable extends BukkitRunnable {
         item.remove();
 
         if (vel_check_ID != 0) {
-            Bukkit.getScheduler().cancelTask(vel_check_ID);
+            plugin.getServer().getScheduler().cancelTask(vel_check_ID);
         }
 
     }

@@ -69,7 +69,7 @@ public class CustomItemCommand extends Commands implements CommandExecutor {
     }
 
     public Player getPlayer(String arg) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (arg.equalsIgnoreCase(player.getDisplayName()) || arg.equalsIgnoreCase(player.getName()) || arg.equalsIgnoreCase(player.getUniqueId().toString())) {
                 return player;
             }

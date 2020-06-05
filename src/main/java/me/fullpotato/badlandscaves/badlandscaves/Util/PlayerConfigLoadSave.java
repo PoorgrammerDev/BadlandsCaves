@@ -24,7 +24,7 @@ public class PlayerConfigLoadSave extends BukkitRunnable {
 
 
     public void saveToConfig (boolean silent) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             saveToConfig(player, silent);
         }
     }
@@ -37,7 +37,7 @@ public class PlayerConfigLoadSave extends BukkitRunnable {
     }
 
     public void loadPlayers () {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             loadPlayer(player);
         }
     }

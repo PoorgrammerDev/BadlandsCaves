@@ -17,7 +17,7 @@ public class HallowedChambersWorld {
     }
 
     public void gen_world() {
-        WorldCreator worldCreator = new WorldCreator("world_chambers");
+        WorldCreator worldCreator = new WorldCreator(plugin.chambersWorldName);
         worldCreator.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());

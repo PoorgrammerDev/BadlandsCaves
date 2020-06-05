@@ -21,7 +21,7 @@ public class ToxSlowDecreaseRunnable extends BukkitRunnable {
             return;
         }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             double thirst = player.getMetadata("Thirst").get(0).asDouble();
             double tox = player.getMetadata("Toxicity").get(0).asDouble();
             if (thirst >= 80) {

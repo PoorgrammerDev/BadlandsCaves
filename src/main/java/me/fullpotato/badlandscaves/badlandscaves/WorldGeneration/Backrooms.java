@@ -4,8 +4,14 @@ import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 
 public class Backrooms {
+    private BadlandsCaves plugin;
+
+    public Backrooms(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     public void gen_backrooms() {
-        WorldCreator backrooms = new WorldCreator("world_backrooms");
+        WorldCreator backrooms = new WorldCreator(plugin.backroomsWorldName);
         backrooms.environment(World.Environment.NORMAL)
                 .type(WorldType.FLAT)
                 .generator(new BackroomsGen());

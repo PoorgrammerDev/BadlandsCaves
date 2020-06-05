@@ -589,12 +589,89 @@ public class LoadCustomItems {
 
         ItemStack titanium_ingot = new ItemStack(Material.COMMAND_BLOCK);
         ItemMeta titanium_ingot_meta = titanium_ingot.getItemMeta();
-        titanium_ingot_meta.setDisplayName("§bTitanium ingot");
+        titanium_ingot_meta.setDisplayName("§bTitanium Ingot");
         titanium_ingot_meta.setCustomModelData(144);
         titanium_ingot.setItemMeta(titanium_ingot_meta);
         plugin.getConfig().set("items.titanium_ingot", titanium_ingot.serialize());
 
         //--------------------------
+
+        ItemStack binding = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta binding_meta = binding.getItemMeta();
+        binding_meta.setDisplayName("§rBinding");
+        binding_meta.setCustomModelData(145);
+        binding.setItemMeta(binding_meta);
+        plugin.getConfig().set("items.binding", binding.serialize());
+        
+        //------------------------
+
+        ItemStack golden_cable = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta golden_cable_meta = golden_cable.getItemMeta();
+        golden_cable_meta.setDisplayName("§rGolden Cable");
+        golden_cable_meta.setCustomModelData(146);
+        golden_cable.setItemMeta(golden_cable_meta);
+        plugin.getConfig().set("items.golden_cable", golden_cable.serialize());
+
+        //------------------------
+
+        ItemStack nether_star_fragment = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta nether_star_fragment_meta = nether_star_fragment.getItemMeta();
+        nether_star_fragment_meta.setDisplayName("§eNether Star Fragment");
+        nether_star_fragment_meta.setCustomModelData(147);
+        nether_star_fragment.setItemMeta(nether_star_fragment_meta);
+        plugin.getConfig().set("items.nether_star_fragment", nether_star_fragment.serialize());
+
+        //------------------------
+
+        ItemStack starlight_circuit = new ItemStack(Material.STRUCTURE_BLOCK);
+        ItemMeta starlight_circuit_meta = starlight_circuit.getItemMeta();
+        starlight_circuit_meta.setDisplayName("§eStarlight Circuit");
+        starlight_circuit_meta.setCustomModelData(148);
+        starlight_circuit.setItemMeta(starlight_circuit_meta);
+        plugin.getConfig().set("items.starlight_circuit", starlight_circuit.serialize());
+
+        //------------------------
+
+        ItemStack starlight_battery = new ItemStack(Material.COMMAND_BLOCK);
+        ItemMeta starlight_battery_meta = starlight_battery.getItemMeta();
+        starlight_battery_meta.setDisplayName("§eStarlight Battery");
+        starlight_battery_meta.setCustomModelData(149);
+        starlight_battery.setItemMeta(starlight_battery_meta);
+        plugin.getConfig().set("items.starlight_battery", starlight_battery.serialize());
+
+        //------------------------
+
+        ItemStack starlight_module = new ItemStack(Material.STRUCTURE_BLOCK);
+        ItemMeta starlight_module_meta = starlight_module.getItemMeta();
+        starlight_module_meta.setDisplayName("§eStarlight Module");
+        starlight_module_meta.setCustomModelData(150);
+        starlight_module.setItemMeta(starlight_module_meta);
+        plugin.getConfig().set("items.starlight_module", starlight_module.serialize());
+
+        //------------------------
+
+
+
+        //------------------------
+
+
+
+        //------------------------
+
+
+
+        //------------------------
+
+
+
+        //------------------------
+
+
+
+        //------------------------
+
+
+
 
 
         plugin.saveConfig();

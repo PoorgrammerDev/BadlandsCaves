@@ -52,7 +52,7 @@ public class CauldronMenu implements Listener {
                     if (under.getType().equals(Material.FIRE)) {
                         if (!otherAction) {
                             boolean already_opened = false;
-                            for (Player online : Bukkit.getOnlinePlayers()) {
+                            for (Player online : plugin.getServer().getOnlinePlayers()) {
                                 if (online.getLocation().distanceSquared(location) < 100) {
                                     boolean open = online.getMetadata("opened_cauldron").get(0).asBoolean();
                                     if (open) {
@@ -221,7 +221,7 @@ public class CauldronMenu implements Listener {
         Inventory inv = event.getInventory();
         Player player = (Player) event.getPlayer();
         if (inv.equals(cauldron_inv)) {
-            Bukkit.getScheduler().cancelTask(refresh_id);
+            plugin.getServer().getScheduler().cancelTask(refresh_id);
             player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, false));
             plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", null);
 

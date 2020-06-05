@@ -28,7 +28,7 @@ public class BlessedAppleEat implements Listener {
         final ItemStack enchanted_blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enchanted_blessed_apple").getValues(true));
 
         if (item.isSimilar(blessed_apple) || item.isSimilar(enchanted_blessed_apple)) {
-            if (player.getWorld().equals(Bukkit.getWorld("world_reflection"))) {
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.reflectionWorldName))) {
                 int cooldown = 100;
                 player.setCooldown(Material.GOLDEN_APPLE, cooldown);
                 player.setCooldown(Material.ENCHANTED_GOLDEN_APPLE, cooldown);

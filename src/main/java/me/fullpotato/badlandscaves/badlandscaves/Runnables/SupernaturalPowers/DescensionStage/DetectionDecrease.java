@@ -14,7 +14,7 @@ public class DetectionDecrease extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             int in_descension = player.getMetadata("in_descension").get(0).asInt();
             if (in_descension == 2) {
                 double detection = player.hasMetadata("descension_detect") ? player.getMetadata("descension_detect").get(0).asDouble() : 0;

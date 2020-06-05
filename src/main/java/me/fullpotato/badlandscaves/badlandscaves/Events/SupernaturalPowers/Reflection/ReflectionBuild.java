@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 public class ReflectionBuild implements Listener {
     private BadlandsCaves plugin;
-    private final World reflection_world = Bukkit.getWorld("world_reflection");
+    private final World reflection_world;
     public ReflectionBuild (BadlandsCaves bcav) {
         plugin = bcav;
+        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
     }
 
     @EventHandler

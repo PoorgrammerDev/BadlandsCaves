@@ -114,7 +114,7 @@ public class Drinking implements Listener {
                             if (tracker[0] > player.getHeight()) {
                                 this.cancel();
                                 Location updated = player.getLocation();
-                                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld("world").getSpawnLocation() : player.getBedSpawnLocation();
+                                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation() : player.getBedSpawnLocation();
                                 warp.setYaw(updated.getYaw());
                                 warp.setPitch(updated.getPitch());
 

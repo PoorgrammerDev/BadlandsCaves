@@ -11,7 +11,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class PlayerUnderSht implements Listener {
-    private World world = Bukkit.getWorld("world_reflection");
+    private final BadlandsCaves plugin;
+    private final World world;
+
+    public PlayerUnderSht(BadlandsCaves plugin) {
+        this.plugin = plugin;
+        this.world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+    }
 
     @EventHandler
     public void activateUnderSht (EntityDamageByEntityEvent event) {
@@ -20,7 +26,7 @@ public class PlayerUnderSht implements Listener {
                 event.getDamager() instanceof Zombie &&
                 event.getDamager().getWorld().equals(world)) {
 
-            FakePlayer fakePlayer = new FakePlayer(world);
+            FakePlayer fakePlayer = new FakePlayer(plugin, world);
             fakePlayer.damage(ZombieBossBehavior.fakePlayer, null, false);
 
             final Player player = (Player) event.getEntity();

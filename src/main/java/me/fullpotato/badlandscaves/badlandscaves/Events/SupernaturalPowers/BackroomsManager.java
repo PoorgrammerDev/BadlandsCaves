@@ -22,11 +22,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BackroomsManager implements Listener {
-    private BadlandsCaves plugin;
-    private World backrooms = Bukkit.getWorld("world_backrooms");
+    private final BadlandsCaves plugin;
+    private final World backrooms;
 
     public BackroomsManager(BadlandsCaves plugin) {
         this.plugin = plugin;
+        backrooms = plugin.getServer().getWorld(plugin.backroomsWorldName);
     }
 
     public void enterBackRooms(Player player, Random random) {
@@ -180,7 +181,7 @@ public class BackroomsManager implements Listener {
         final Player fake = online.get(random.nextInt(online.size()));
 
         Location spawnLoc = getNearbyLocation(player.getLocation(), random, 10, 5);
-        FakePlayer fakePlayerManager = new FakePlayer(backrooms);
+        FakePlayer fakePlayerManager = new FakePlayer(plugin, backrooms);
         final Player cloned = fakePlayerManager.summonFakePlayer(spawnLoc, fake, player, null);
 
         new BukkitRunnable() {
@@ -209,7 +210,7 @@ public class BackroomsManager implements Listener {
 
     public void cursedModels (Player player, Random random) {
         ArrayList<Player> all_online = new ArrayList<>(plugin.getServer().getOnlinePlayers());
-        FakePlayer fakePlayerManager = new FakePlayer(backrooms);
+        FakePlayer fakePlayerManager = new FakePlayer(plugin, backrooms);
         final int clone_count = 100;
         ArrayList<Player> clones = new ArrayList<>();
 
@@ -327,10 +328,10 @@ public class BackroomsManager implements Listener {
 
             final ArrayList<World> blacklisted = new ArrayList<>();
             blacklisted.add(backrooms);
-            blacklisted.add(plugin.getServer().getWorld("world_empty"));
-            blacklisted.add(plugin.getServer().getWorld("world_reflection"));
-            blacklisted.add(plugin.getServer().getWorld("world_descension"));
-            blacklisted.add(plugin.getServer().getWorld("world_chambers"));
+            blacklisted.add(plugin.getServer().getWorld(plugin.withdrawWorldName));
+            blacklisted.add(plugin.getServer().getWorld(plugin.reflectionWorldName));
+            blacklisted.add(plugin.getServer().getWorld(plugin.descensionWorldName));
+            blacklisted.add(plugin.getServer().getWorld(plugin.chambersWorldName));
 
 
             if (!blacklisted.contains(from) && !blacklisted.contains(to)) {

@@ -24,8 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LimitActions extends BukkitRunnable implements Listener {
-    private BadlandsCaves plugin;
-    private Material[] armor = {
+    private final BadlandsCaves plugin;
+    private final Material[] armor = {
             Material.LEATHER_HELMET,
             Material.LEATHER_CHESTPLATE,
             Material.LEATHER_LEGGINGS,
@@ -48,10 +48,11 @@ public class LimitActions extends BukkitRunnable implements Listener {
             Material.DIAMOND_BOOTS,
     };
 
-    private World reflection_world = Bukkit.getWorld("world_reflection");
+    private final World reflection_world;
 
     public LimitActions(BadlandsCaves plugin) {
         this.plugin = plugin;
+        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
     }
 
     /**
@@ -143,7 +144,7 @@ public class LimitActions extends BukkitRunnable implements Listener {
      * */
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(reflection_world)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     final EntityEquipment eq = player.getEquipment();

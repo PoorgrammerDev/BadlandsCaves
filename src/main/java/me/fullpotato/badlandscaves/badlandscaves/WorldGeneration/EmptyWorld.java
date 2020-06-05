@@ -11,7 +11,7 @@ public class EmptyWorld {
     }
 
     public void gen_void_world() {
-        WorldCreator emptyworld = new WorldCreator("world_empty");
+        WorldCreator emptyworld = new WorldCreator(plugin.withdrawWorldName);
         emptyworld.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());

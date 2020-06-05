@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.NMS;
 
 import com.mojang.authlib.GameProfile;
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,9 +15,11 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 public class FakePlayer {
+    private BadlandsCaves plugin;
     private World world;
 
-    public FakePlayer(World world) {
+    public FakePlayer(BadlandsCaves plugin, World world) {
+        this.plugin = plugin;
         this.world = world;
     }
 
@@ -25,7 +28,7 @@ public class FakePlayer {
     }
 
     public Player summonFakePlayer(Location location, Player player, Player sendTo, String name, boolean copyArmor) {
-        MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
+        MinecraftServer server = ((CraftServer) plugin.getServer()).getServer();
         WorldServer world = ((CraftWorld) this.world).getHandle();
 
         EntityPlayer clone = new EntityPlayer(server, world, new GameProfile(player.getUniqueId(), name == null ? player.getName() : name), new PlayerInteractManager(world));
@@ -138,7 +141,7 @@ public class FakePlayer {
     public void sendToAll (Packet<?>... packets) {
         if (packets.length < 1) return;
 
-        for (final Player online : Bukkit.getOnlinePlayers()) {
+        for (final Player online : plugin.getServer().getOnlinePlayers()) {
             if (online.getWorld().equals(world)) {
                 final CraftPlayer ply = (CraftPlayer) online;
 

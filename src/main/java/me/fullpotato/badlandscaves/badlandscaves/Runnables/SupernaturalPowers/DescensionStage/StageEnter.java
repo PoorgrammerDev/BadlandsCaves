@@ -21,7 +21,7 @@ public class StageEnter extends BukkitRunnable {
 
     @Override
     public void run() {
-        final World descension_world = Bukkit.getWorld("world_descension");
+        final World descension_world = plugin.getServer().getWorld(plugin.descensionWorldName);
         player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
         if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
             if (!player.getWorld().equals(descension_world)) {

@@ -1,6 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters;
 
-import org.bukkit.Bukkit;
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -11,9 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomItemTabComplete implements TabCompleter {
-
-    private String[] items;
-    public CustomItemTabComplete (String[] items) {
+    private final BadlandsCaves plugin;
+    private final String[] items;
+    public CustomItemTabComplete(BadlandsCaves plugin, String[] items) {
+        this.plugin = plugin;
         this.items = items;
     }
 
@@ -24,7 +25,7 @@ public class CustomItemTabComplete implements TabCompleter {
                 List<String> list = new ArrayList<>();
 
                 if (args.length == 1) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
+                    for (Player player : plugin.getServer().getOnlinePlayers()) {
                         if (args[0].isEmpty() || player.getName().toUpperCase().startsWith(args[0].toUpperCase())) {
                             list.add(player.getName());
                         }

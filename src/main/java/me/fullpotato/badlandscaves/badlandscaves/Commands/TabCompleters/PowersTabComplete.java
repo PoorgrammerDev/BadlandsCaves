@@ -1,6 +1,6 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands.TabCompleters;
 
-import org.bukkit.Bukkit;
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PowersTabComplete implements TabCompleter {
+    private BadlandsCaves plugin;
+
+    public PowersTabComplete(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("powers")) {
@@ -26,7 +32,7 @@ public class PowersTabComplete implements TabCompleter {
                 }
 
                 else if (args.length == 2) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
+                    for (Player player : plugin.getServer().getOnlinePlayers()) {
                         if (args[1].isEmpty() || player.getName().toUpperCase().startsWith(args[1].toUpperCase())) {
                             list.add(player.getName());
                         }

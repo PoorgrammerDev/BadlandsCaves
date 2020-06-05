@@ -6,24 +6,21 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.Re
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-
 public class ReflectionZombie implements Listener {
     private BadlandsCaves plugin;
-    private World world = Bukkit.getWorld("world_reflection");
+    private World world;
     public ReflectionZombie (BadlandsCaves bcav) {
         plugin = bcav;
+        world = plugin.getServer().getWorld(plugin.reflectionWorldName);
     }
 
     // TODO: 6/3/2020 remove?
@@ -45,7 +42,7 @@ public class ReflectionZombie implements Listener {
     public void damageZombie (EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Zombie && event.getEntity().getWorld().equals(world)) {
             if (event.getDamager() instanceof Player && event.getDamager().getWorld().equals(world)) {
-                FakePlayer fakePlayer = new FakePlayer(world);
+                FakePlayer fakePlayer = new FakePlayer(plugin, world);
                 fakePlayer.damage(ZombieBossBehavior.fakePlayer, null, true);
 
                 final Zombie zombie = (Zombie) event.getEntity();

@@ -1,18 +1,21 @@
 package me.fullpotato.badlandscaves.badlandscaves.WorldGeneration;
 
-import org.bukkit.Bukkit;
+import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
-import java.util.List;
 
 public class ReflectionWorld {
+    private final BadlandsCaves plugin;
+
+    public ReflectionWorld(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
+
     public void gen_refl_world() {
-        WorldCreator reflectionworld = new WorldCreator("world_reflection");
+        WorldCreator reflectionworld = new WorldCreator(plugin.reflectionWorldName);
         reflectionworld.environment(World.Environment.NORMAL)
                 .generator(new ReflectionGen());
         World world_reflection = reflectionworld.createWorld();

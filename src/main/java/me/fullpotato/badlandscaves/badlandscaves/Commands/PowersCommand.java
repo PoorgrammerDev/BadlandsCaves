@@ -49,7 +49,7 @@ public class PowersCommand extends Commands implements CommandExecutor {
                         return true;
                     }
                     else {
-                        for (Player target : Bukkit.getOnlinePlayers()) {
+                        for (Player target : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(target.getDisplayName()) || args[1].equalsIgnoreCase(target.getName()) || args[1].equalsIgnoreCase(target.getUniqueId().toString())) {
                                 if (args.length < 3) {
                                     sender.sendMessage(ChatColor.GOLD + "Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has the following values:");
@@ -86,7 +86,7 @@ public class PowersCommand extends Commands implements CommandExecutor {
                         return true;
                     }
                     else {
-                        for (Player target : Bukkit.getOnlinePlayers()) {
+                        for (Player target : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(target.getDisplayName()) || args[1].equalsIgnoreCase(target.getName()) || args[1].equalsIgnoreCase(target.getUniqueId().toString())) {
                                 if (args.length < 3) {
                                     tooFewArgs(sender);

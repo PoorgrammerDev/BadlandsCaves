@@ -66,7 +66,6 @@ public class CreeperBuff implements Listener {
                         final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
 
                         final int repeats = random.nextInt(Math.max((chaos / 10), 2)) + 5;
-                        Bukkit.broadcastMessage(repeats + "");
                         int[] repeated = {0};
                         new BukkitRunnable() {
                             @Override

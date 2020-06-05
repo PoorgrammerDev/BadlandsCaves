@@ -33,7 +33,7 @@ public class ManaCommand extends Commands implements CommandExecutor {
                             playerNotValid(sender);
                         }
                     } else {
-                        for (Player targets : Bukkit.getOnlinePlayers()) {
+                        for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 if (args.length > 2 && args[2].equalsIgnoreCase("max")) {
                                     sender.sendMessage(ChatColor.GOLD + "The Max Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("max_mana").get(0).asDouble() + ChatColor.GOLD + ".");
@@ -52,7 +52,7 @@ public class ManaCommand extends Commands implements CommandExecutor {
                         tooFewArgs(sender);
                     }
                     else {
-                        for (Player targets : Bukkit.getOnlinePlayers()) {
+                        for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 if (args.length > 2) {
                                     try {

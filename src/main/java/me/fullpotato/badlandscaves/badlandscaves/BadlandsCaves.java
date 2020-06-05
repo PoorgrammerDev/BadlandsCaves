@@ -41,12 +41,21 @@ import me.fullpotato.badlandscaves.badlandscaves.Runnables.Surface;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PlayerConfigLoadSave;
+import me.fullpotato.badlandscaves.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.*;
-import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+
 public final class BadlandsCaves extends JavaPlugin {
+    public String mainWorldName;
+    public String descensionWorldName;
+    public String withdrawWorldName;
+    public String reflectionWorldName;
+    public String backroomsWorldName;
+    public String chambersWorldName;
 
     /**
      * PLAYER VALUE CONSTANTS
@@ -159,10 +168,20 @@ public final class BadlandsCaves extends JavaPlugin {
             "iron_shield",
             "diamond_shield",
             "recall_potion",
+            "titanium_fragment",
+            "titanium_ingot",
+            "binding",
+            "golden_cable",
+            "nether_star_fragment",
+            "starlight_circuit",
+            "starlight_battery",
+            "starlight_module",
     };
 
     @Override
     public void onEnable() {
+        loadWorldNames();
+
         loadConfig();
 
         //load players metadata
@@ -172,7 +191,7 @@ public final class BadlandsCaves extends JavaPlugin {
         //adding custom items
         LoadCustomItems.saveCustomItemsToConfig(this);
 
-        loadWorlds();
+        loadCustomWorlds();
         registerEvents();
         loadCommands();
         loadRunnables();
@@ -185,7 +204,7 @@ public final class BadlandsCaves extends JavaPlugin {
         save_player.saveToConfig(true);
         this.saveConfig();
 
-        Bukkit.getScheduler().cancelTasks(this);
+        this.getServer().getScheduler().cancelTasks(this);
     }
 
     //CONFIG
@@ -195,23 +214,23 @@ public final class BadlandsCaves extends JavaPlugin {
     }
 
     //WORLDS
-    public void loadWorlds() {
+    public void loadCustomWorlds() {
         EmptyWorld empty_world = new EmptyWorld(this);
         empty_world.gen_void_world();
 
         DescensionWorld desc_world = new DescensionWorld(this);
         desc_world.gen_descension_world();
 
-        ReflectionWorld refl_world = new ReflectionWorld();
+        ReflectionWorld refl_world = new ReflectionWorld(this);
         refl_world.gen_refl_world();
 
-        Backrooms backrooms = new Backrooms();
+        Backrooms backrooms = new Backrooms(this);
         backrooms.gen_backrooms();
 
         HallowedChambersWorld chambers = new HallowedChambersWorld(this);
         chambers.gen_world();
 
-        this.getServer().getWorld("world").setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
+        this.getServer().getWorld(mainWorldName).setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
 
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
@@ -263,7 +282,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new UseIncompleteSoulCrystal(this), this);
         this.getServer().getPluginManager().registerEvents(new ReflectionBuild(this), this);
         this.getServer().getPluginManager().registerEvents(new ReflectionZombie(this), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerUnderSht(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerUnderSht(this), this);
         this.getServer().getPluginManager().registerEvents(new EndGame(this), this);
         this.getServer().getPluginManager().registerEvents(new LimitActions(this), this);
         this.getServer().getPluginManager().registerEvents(new UseCompleteSoulCrystal(this), this);
@@ -288,30 +307,32 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Shield(this), this);
         this.getServer().getPluginManager().registerEvents(new CraftingGuide(this), this);
         this.getServer().getPluginManager().registerEvents(new TitaniumOre(this), this);
+        this.getServer().getPluginManager().registerEvents(new TitaniumBar(this), this);
+        this.getServer().getPluginManager().registerEvents(new StarlightComponents(this), this);
     }
 
     //COMMANDS
     public void loadCommands() {
         this.getCommand("thirst").setExecutor(new ThirstCommand(this));
-        this.getCommand("thirst").setTabCompleter(new ValueCommandsTabComplete());
+        this.getCommand("thirst").setTabCompleter(new ValueCommandsTabComplete(this));
 
         this.getCommand("toxicity").setExecutor(new ToxicityCommand(this));
-        this.getCommand("toxicity").setTabCompleter(new ValueCommandsTabComplete());
+        this.getCommand("toxicity").setTabCompleter(new ValueCommandsTabComplete(this));
 
         this.getCommand("deaths").setExecutor(new DeathCommand(this));
-        this.getCommand("deaths").setTabCompleter(new ValueCommandsTabComplete());
+        this.getCommand("deaths").setTabCompleter(new ValueCommandsTabComplete(this));
 
         this.getCommand("hardmode").setExecutor(new HardmodeCommand(this));
         this.getCommand("hardmode").setTabCompleter(new HM_TabComplete());
 
         this.getCommand("mana").setExecutor(new ManaCommand(this));
-        this.getCommand("mana").setTabCompleter(new ValueCommandsTabComplete());
+        this.getCommand("mana").setTabCompleter(new ValueCommandsTabComplete(this));
 
         this.getCommand("powers").setExecutor(new PowersCommand(this));
-        this.getCommand("powers").setTabCompleter(new PowersTabComplete());
+        this.getCommand("powers").setTabCompleter(new PowersTabComplete(this));
 
         this.getCommand("customitem").setExecutor(new CustomItemCommand(this));
-        this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete(custom_items));
+        this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete(this, custom_items));
 
         this.getCommand("chaos").setExecutor(new ChaosCommand(this));
         this.getCommand("chaos").setTabCompleter(new ChaosCommandTabComplete());
@@ -324,20 +345,20 @@ public final class BadlandsCaves extends JavaPlugin {
 
     //RUNNABLES
     public void loadRunnables() {
-        new ActionbarRunnable().runTaskTimer(this, 0 ,0);
-        new PlayerEffectsRunnable().runTaskTimer(this,0,0);
+        new ActionbarRunnable(this).runTaskTimer(this, 0 ,0);
+        new PlayerEffectsRunnable(this).runTaskTimer(this,0,0);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
         new PlayerConfigLoadSave(this, player_values).runTaskTimer(this, 5, 3600);
         new ManaBarManager(this).runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 20);
         new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
         new DescensionReset(this).runTaskTimer(this, 0, 60);
-        new LostSoulParticle().runTaskTimer(this, 0, 3);
+        new LostSoulParticle(this).runTaskTimer(this, 0, 3);
         new DetectedBar(this).runTaskTimer(this, 0, 3);
         new ShrineCapture(this).runTaskTimer(this, 0 ,0);
         new DescensionTimeLimit(this).runTaskTimer(this, 0, 20);
         new DetectionDecrease(this).runTaskTimer(this, 0, 20);
-        new ExitPortal().runTaskTimer(this, 0, 3);
+        new ExitPortal(this).runTaskTimer(this, 0, 3);
         new ZombieBossBehavior(this).runTaskTimer(this, 0, 0);
         new LimitActions(this).runTaskTimer(this, 0, 20);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
@@ -403,5 +424,32 @@ public final class BadlandsCaves extends JavaPlugin {
         shield.craftStoneShield();
         shield.craftIronShield();
         shield.craftDiamondShield();
+
+        TitaniumBarCrafting titaniumBar = new TitaniumBarCrafting(this);
+        titaniumBar.fragmentIntoBar();
+
+        StarlightComponentsCrafting starlightComponents = new StarlightComponentsCrafting(this);
+        starlightComponents.craftBinding();
+        starlightComponents.craftGoldCable();
+        starlightComponents.craftNetherStarFragment();
+        starlightComponents.craftStarlightCircuit();
+        starlightComponents.craftStarlightBattery();
+        starlightComponents.craftStarlightModule();
+    }
+
+    public void loadWorldNames() {
+        try {
+            File properties = new File("server.properties");
+            this.mainWorldName = ServerProperties.getSetting(properties, "level-name");
+        }
+        catch (IOException e) {
+            this.getLogger().warning("[BadlandsCaves] No default world found, defaulting to \"world\"");
+            this.mainWorldName = "world";
+        }
+        this.descensionWorldName = this.mainWorldName + "_descension";
+        this.withdrawWorldName = this.mainWorldName + "_empty";
+        this.reflectionWorldName = this.mainWorldName + "_reflection";
+        this.backroomsWorldName = this.mainWorldName + "_backrooms";
+        this.chambersWorldName = this.mainWorldName + "_chambers";
     }
 }

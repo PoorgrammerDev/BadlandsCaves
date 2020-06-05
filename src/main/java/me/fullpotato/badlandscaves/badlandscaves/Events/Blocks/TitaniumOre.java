@@ -26,12 +26,12 @@ public class TitaniumOre implements Listener {
     @EventHandler
     public void breakTitanium (BlockBreakEvent event) {
         if (event.getBlock().getType().equals(Material.DEAD_TUBE_CORAL_BLOCK)) {
-            boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-            if (hardmode) {
-                Player player = event.getPlayer();
-                ItemStack tool = player.getEquipment().getItemInMainHand();
+            Player player = event.getPlayer();
+            if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+                if (hardmode) {
+                    ItemStack tool = player.getEquipment().getItemInMainHand();
 
-                if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     if (tool.getType().equals(Material.DIAMOND_PICKAXE)) {
                         final int fortune = tool.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
                         int count = 1;
@@ -48,16 +48,14 @@ public class TitaniumOre implements Listener {
                         titanium.setAmount(count);
                         event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), titanium);
                         event.setExpToDrop(count * 16);
-                    }
-                    else {
+                    } else {
                         event.getPlayer().sendMessage("§cYou need a stronger tool.");
                         event.setCancelled(true);
                     }
+                } else {
+                    event.getPlayer().sendMessage("§cYou cannot break this block yet.");
+                    event.setCancelled(true);
                 }
-            }
-            else {
-                event.getPlayer().sendMessage("§cYou cannot break this block yet.");
-                event.setCancelled(true);
             }
         }
     }

@@ -59,9 +59,9 @@ public class PlayerJoinLeave implements Listener {
         loader.loadPlayer(player);
 
         //if in wither fight, tp out
-        if (player.getWorld().equals(Bukkit.getWorld("world_chambers"))) {
+        if (player.getWorld().equals(plugin.getServer().getWorld(plugin.chambersWorldName))) {
             if (plugin.getConfig().getInt("game_values.wither_fight.fight_stage") == -1) {
-                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld("world").getSpawnLocation() : player.getBedSpawnLocation();
+                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation() : player.getBedSpawnLocation();
                 warp.setYaw(player.getLocation().getYaw());
                 warp.setPitch(player.getLocation().getPitch());
 
@@ -76,14 +76,14 @@ public class PlayerJoinLeave implements Listener {
         //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (has_powers) {
-            if (player.getWorld().equals(Bukkit.getWorld("world_empty"))) {
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.withdrawWorldName))) {
                 String origworldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
                 if (origworldname == null) {
                     player.setHealth(0);
                 }
                 else {
                     player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
-                    final World origworld = Bukkit.getWorld(origworldname);
+                    final World origworld = plugin.getServer().getWorld(origworldname);
                     final double x = player.getMetadata("withdraw_x").get(0).asDouble();
                     final double y = player.getMetadata("withdraw_y").get(0).asDouble();
                     final double z = player.getMetadata("withdraw_z").get(0).asDouble();

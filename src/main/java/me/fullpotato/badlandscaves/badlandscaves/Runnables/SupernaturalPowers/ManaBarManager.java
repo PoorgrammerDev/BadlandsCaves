@@ -22,7 +22,7 @@ public class ManaBarManager extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
             KeyedBossBar manaBar = getManaBar(player);
             if (has_powers) {
@@ -63,7 +63,7 @@ public class ManaBarManager extends BukkitRunnable {
             else {
                 if (manaBar != null) {
                     manaBar.setVisible(false);
-                    Bukkit.removeBossBar(manaBar.getKey());
+                    plugin.getServer().removeBossBar(manaBar.getKey());
                 }
             }
         }
@@ -73,9 +73,9 @@ public class ManaBarManager extends BukkitRunnable {
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (has_powers) {
             NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
-            KeyedBossBar manaBar = Bukkit.getBossBar(key);
+            KeyedBossBar manaBar = plugin.getServer().getBossBar(key);
             if (manaBar == null) {
-                manaBar = Bukkit.createBossBar(key, title, BarColor.BLUE, BarStyle.SEGMENTED_10);
+                manaBar = plugin.getServer().createBossBar(key, title, BarColor.BLUE, BarStyle.SEGMENTED_10);
                 manaBar.addPlayer(player);
             }
             return manaBar;

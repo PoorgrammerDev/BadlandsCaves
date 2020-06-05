@@ -30,7 +30,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
 
         ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
         if (!player.getInventory().getItemInOffHand().isSimilar(possess)) {
-            Bukkit.getScheduler().cancelTask(this.getTaskId());
+            plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;
         }
         if (player.getMetadata("in_possession").get(0).asBoolean()) return;

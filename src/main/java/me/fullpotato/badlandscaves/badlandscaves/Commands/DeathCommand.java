@@ -33,7 +33,7 @@ public class DeathCommand extends Commands implements CommandExecutor {
                             playerNotValid(sender);
                         }
                     } else {
-                        for (Player targets : Bukkit.getOnlinePlayers()) {
+                        for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 sender.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Deaths").get(0).asInt() + ChatColor.GOLD + ".");
                                 return true;
@@ -47,7 +47,7 @@ public class DeathCommand extends Commands implements CommandExecutor {
                         sender.sendMessage(ChatColor.RED + "Please specify a player.");
                     }
                     else {
-                        for (Player targets : Bukkit.getOnlinePlayers()) {
+                        for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 if (args.length > 2) {
                                     try {

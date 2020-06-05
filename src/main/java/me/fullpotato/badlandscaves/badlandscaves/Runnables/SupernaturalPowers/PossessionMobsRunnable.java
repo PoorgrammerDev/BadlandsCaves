@@ -40,7 +40,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                 player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
             }
 
-            for (Player online_player : Bukkit.getOnlinePlayers()) {
+            for (Player online_player : plugin.getServer().getOnlinePlayers()) {
                 if (!online_player.equals(player)) {
                     online_player.hidePlayer(plugin, player);
                 }
@@ -60,7 +60,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_drain_tick));
         }
         else {
-            Bukkit.getScheduler().cancelTask(this.getTaskId());
+            plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             //set target and player back to normal
             team.unregister();
 
@@ -70,10 +70,10 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             target.setAI(true);
 
 
-            final World descension = Bukkit.getWorld("world_descension");
+            final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
             if (player.getGameMode().equals(GameMode.ADVENTURE) && !player.getWorld().equals(descension)) player.setGameMode(GameMode.SURVIVAL);
 
-            for (Player online_player : Bukkit.getOnlinePlayers()) {
+            for (Player online_player : plugin.getServer().getOnlinePlayers()) {
                 if (!online_player.equals(player)) {
                     online_player.showPlayer(plugin, player);
                 }
@@ -126,7 +126,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                     }
                 }
                 //WARP TO ORIG---------------
-                World orig_world = Bukkit.getWorld(player.getMetadata("possess_orig_world").get(0).asString());
+                World orig_world = plugin.getServer().getWorld(player.getMetadata("possess_orig_world").get(0).asString());
                 double orig_x = player.getMetadata("possess_orig_x").get(0).asDouble();
                 double orig_y = player.getMetadata("possess_orig_y").get(0).asDouble();
                 double orig_z = player.getMetadata("possess_orig_z").get(0).asDouble();
