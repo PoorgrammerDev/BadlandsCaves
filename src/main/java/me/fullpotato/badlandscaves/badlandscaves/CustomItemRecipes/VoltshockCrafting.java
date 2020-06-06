@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +18,7 @@ public class VoltshockCrafting {
     }
 
     public void craft_battery() {
-        final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
+        final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "battery"), battery);
         /*
         *  %
@@ -35,7 +36,7 @@ public class VoltshockCrafting {
     }
 
     public void craft_shocker() {
-        final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+        final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
         shocker.setAmount(3);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "shocker"), shocker);
         /*
@@ -52,7 +53,7 @@ public class VoltshockCrafting {
     }
 
     public void modify_sword() {
-        final ItemStack placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
+        final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_module"), placeholder);
 
         /*
@@ -70,19 +71,8 @@ public class VoltshockCrafting {
         plugin.getServer().addRecipe(recipe);
     }
 
-    /*
-    public void a() {
-        final ItemStack voltshock_placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
-        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "voltshock_sword"), voltshock_placeholder);
-        recipe.addIngredient(Material.COMMAND_BLOCK);
-        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD));
-
-        plugin.getServer().addRecipe(recipe);
-    }
-     */
-
     public void charge_sword() {
-        final ItemStack voltshock_sword_charge_placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_sword_charge_placeholder").getValues(true));
+        final ItemStack voltshock_sword_charge_placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "charge_voltshock_sword"), voltshock_sword_charge_placeholder);
         recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
         recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD));
@@ -92,7 +82,7 @@ public class VoltshockCrafting {
     }
 
     public void craft_arrow() {
-        final ItemStack voltshock_arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true));
+        final ItemStack voltshock_arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_arrow"), voltshock_arrow);
 
         /*

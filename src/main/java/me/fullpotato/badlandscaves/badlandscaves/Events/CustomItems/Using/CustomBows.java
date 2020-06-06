@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -40,8 +41,8 @@ public class CustomBows implements Listener {
                 boolean inOffHand = inventory.getItemInOffHand().getType().equals(Material.ARROW);
                 if (reg_slot != -1 || inOffHand) {
                     ItemStack arrowItem = inOffHand ? inventory.getItemInOffHand() : inventory.getItem(reg_slot);
-                    final ItemStack corrosive_arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_arrow").getValues(true));
-                    final ItemStack voltshock_arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true));
+                    final ItemStack corrosive_arrow = CustomItem.CORROSIVE_ARROW.getItem();
+                    final ItemStack voltshock_arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
 
                     if (arrowItem != null && (arrowItem.isSimilar(corrosive_arrow) || arrowItem.isSimilar(voltshock_arrow))) {
                         boolean supernatural = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
@@ -75,10 +76,10 @@ public class CustomBows implements Listener {
     public void pickupItem (PlayerPickupArrowEvent event) {
         AbstractArrow arrow = event.getArrow();
         if (arrow.hasMetadata("corrosive_arrow") && arrow.getMetadata("corrosive_arrow").get(0).asBoolean()) {
-            event.getItem().setItemStack(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_arrow").getValues(true)));
+            event.getItem().setItemStack(CustomItem.CORROSIVE_ARROW.getItem());
         }
         else if (arrow.hasMetadata("voltshock_arrow") && arrow.getMetadata("voltshock_arrow").get(0).asBoolean()) {
-            event.getItem().setItemStack(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true)));
+            event.getItem().setItemStack(CustomItem.VOLTSHOCK_ARROW.getItem());
         }
     }
 

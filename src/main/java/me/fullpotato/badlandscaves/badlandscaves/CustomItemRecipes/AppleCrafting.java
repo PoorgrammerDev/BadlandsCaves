@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
@@ -33,11 +34,9 @@ public class AppleCrafting {
     }
 
     public void craftBlessedApple() {
-        ItemStack blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.blessed_apple").getValues(true));
+        final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "blessed_apple"), blessed_apple);
-
-
         recipe.shape("###", "#@#", "###");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('@', Material.GOLDEN_APPLE);
@@ -46,7 +45,7 @@ public class AppleCrafting {
     }
 
     public void craftEnchantedBlessedApple() {
-        ItemStack enchanted_blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enchanted_blessed_apple").getValues(true));
+        final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "enchanted_blessed_apple"), enchanted_blessed_apple);
 

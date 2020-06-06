@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionMobsRunnable;
 import org.bukkit.*;
@@ -32,7 +33,7 @@ public class Possession extends UsePowers implements Listener {
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (!has_powers) return;
 
-        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
+        ItemStack possess = CustomItem.POSSESS.getItem();
         if (player.getInventory().getItemInOffHand().isSimilar(possess)) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {

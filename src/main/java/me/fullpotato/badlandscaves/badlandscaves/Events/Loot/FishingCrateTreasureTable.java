@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Loot;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -56,9 +57,9 @@ public class FishingCrateTreasureTable implements LootTable {
             tier1.add(new ItemStack(Material.BLAZE_ROD, randomCount(random, 1, 16)));
             tier1.add(new ItemStack(Material.GOLD_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.GOLDEN_APPLE, randomCount(random, 1, 16)));
-            tier1.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true)));
-            tier1.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true)));
-            tier1.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true)));
+            tier1.add(CustomItem.PURGE_ESSENCE.getItem());
+            tier1.add(CustomItem.ANTIDOTE.getItem());
+            tier1.add(CustomItem.TAINTED_POWDER.getItem());
 
             ArrayList<ItemStack> tier2 = new ArrayList<>();
             tier2.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
@@ -74,7 +75,7 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.JUNGLE_SAPLING, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.DARK_OAK_SAPLING, randomCount(random, 1, 4)));
             if (heretic) {
-                tier2.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true)));
+                tier2.add(CustomItem.MANA_POTION.getItem());
                 tier2.add(new ItemStack(Material.WITCH_SPAWN_EGG, randomCount(random, 1, 4)));
                 tier2.add(new ItemStack(Material.LAPIS_BLOCK, randomCount(random, 8, 32)));
             }
@@ -151,10 +152,10 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.DIAMOND_AXE));
             tier2.add(new ItemStack(Material.DIAMOND, randomCount(random, 1, 8)));
             tier2.add(new ItemStack(Material.BLAZE_POWDER, randomCount(random, 1, 8)));
-            tier2.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true)));
-            tier2.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true)));
+            tier2.add(CustomItem.PURIFIED_WATER.getItem());
+            tier2.add(CustomItem.ANTIDOTE.getItem());
             tier2.add(new ItemStack(Material.GOLDEN_APPLE, randomCount(random, 1, 8)));
-            tier2.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true)));
+            tier2.add(CustomItem.TAINTED_POWDER.getItem());
 
             ArrayList<ItemStack> tier3 = new ArrayList<>();
             tier3.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));

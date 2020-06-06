@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
@@ -25,7 +26,7 @@ public class WithdrawIndicatorRunnable extends BukkitRunnable {
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (!has_powers) return;
 
-        final ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+        final ItemStack withdraw = CustomItem.WITHDRAW.getItem();
         if (!player.getInventory().getItemInOffHand().isSimilar(withdraw)) {
             plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;

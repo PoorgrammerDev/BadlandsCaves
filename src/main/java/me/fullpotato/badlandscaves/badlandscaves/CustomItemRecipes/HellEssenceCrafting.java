@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
@@ -17,7 +18,7 @@ public class HellEssenceCrafting {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
         if (!isHardmode) return;
 
-        ItemStack hell_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
+        final ItemStack hell_essence = CustomItem.HELL_ESSENCE.getItem();
 
         ShapelessRecipe hell_ess_craft = new ShapelessRecipe(new NamespacedKey(plugin, "hell_essence"), hell_essence);
         hell_ess_craft.addIngredient(Material.BLAZE_POWDER);

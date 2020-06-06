@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,11 +20,11 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack bar = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.titanium_ingot").getValues(true));
+        final ItemStack bar = CustomItem.TITANIUM_INGOT.getItem();
         if (!result.isSimilar(bar)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack fragment = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.titanium_fragment").getValues(true));
+        final ItemStack fragment = CustomItem.TITANIUM_FRAGMENT.getItem();
         if (!isMatching(matrix, fragment)) {
             event.getInventory().setResult(null);
         }

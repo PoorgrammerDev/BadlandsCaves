@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Info;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,60 +25,60 @@ public class CraftingGuide implements Listener {
     private final BadlandsCaves plugin;
     private final String title = "§8Crafting Guide";
     private final String[] custom_items = {
-            "purified_water",
-            "antidote",
-            "mana_potion",
+            CustomItem.PURIFIED_WATER.toString(),
+            CustomItem.ANTIDOTE.toString(),
+            CustomItem.MANA_POTION.toString(),
 
-            "blessed_apple",
+            CustomItem.BLESSED_APPLE.toString(),
             Material.ENCHANTED_GOLDEN_APPLE.toString(),
-            "enchanted_blessed_apple",
+            CustomItem.ENCHANTED_BLESSED_APPLE.toString(),
 
             Material.RED_SAND.toString(),
             Material.SUGAR_CANE.toString(),
             Material.QUARTZ.toString(),
 
-            "fishing_crate",
-            "fishing_crate_hardmode",
+            CustomItem.FISHING_CRATE.toString(),
+            CustomItem.FISHING_CRATE_HARDMODE.toString(),
 
-            "purge_essence",
-            "hell_essence",
-            "magic_essence",
-            "tainted_powder",
+            CustomItem.PURGE_ESSENCE.toString(),
+            CustomItem.HELL_ESSENCE.toString(),
+            CustomItem.MAGIC_ESSENCE.toString(),
+            CustomItem.TAINTED_POWDER.toString(),
 
-            "tiny_blaze_powder",
+            CustomItem.TINY_BLAZE_POWDER.toString(),
 
-            "zombie_soul",
-            "creeper_soul",
-            "skeleton_soul",
-            "spider_soul",
-            "pigzombie_soul",
-            "ghast_soul",
-            "silverfish_soul",
-            "witch_soul",
-            "phantom_soul",
-            "merged_souls",
+            CustomItem.ZOMBIE_SOUL.toString(),
+            CustomItem.CREEPER_SOUL.toString(),
+            CustomItem.SKELETON_SOUL.toString(),
+            CustomItem.SPIDER_SOUL.toString(),
+            CustomItem.PIGZOMBIE_SOUL.toString(),
+            CustomItem.GHAST_SOUL.toString(),
+            CustomItem.SILVERFISH_SOUL.toString(),
+            CustomItem.WITCH_SOUL.toString(),
+            CustomItem.PHANTOM_SOUL.toString(),
+            CustomItem.MERGED_SOULS.toString(),
 
-            "soul_crystal_incomplete",
-            "soul_crystal",
+            CustomItem.SOUL_CRYSTAL_INCOMPLETE.toString(),
+            CustomItem.SOUL_CRYSTAL.toString(),
 
-            "voltshock_battery",
-            "voltshock_shocker",
-            "voltshock_placeholder",
-            "voltshock_sword_charge_placeholder",
-            "voltshock_arrow",
+            CustomItem.VOLTSHOCK_BATTERY.toString(),
+            CustomItem.VOLTSHOCK_SHOCKER.toString(),
+            CustomItem.VOLTSHOCK_PLACEHOLDER.toString(),
+            CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.toString(),
+            CustomItem.VOLTSHOCK_ARROW.toString(),
 
-            "corrosive_substance",
-            "corrosive_placeholder",
-            "corrosive_arrow",
+            CustomItem.CORROSIVE_SUBSTANCE.toString(),
+            CustomItem.CORROSIVE_PLACEHOLDER.toString(),
+            CustomItem.CORROSIVE_ARROW.toString(),
 
             Material.SHIELD.toString(),
-            "stone_shield",
-            "iron_shield",
-            "diamond_shield",
+            CustomItem.STONE_SHIELD.toString(),
+            CustomItem.IRON_SHIELD.toString(),
+            CustomItem.DIAMOND_SHIELD.toString(),
 
-            "rune",
-            "charged_rune",
-            "recall_potion",
+            CustomItem.RUNE.toString(),
+            CustomItem.CHARGED_RUNE.toString(),
+            CustomItem.RECALL_POTION.toString(),
     };
 
     private final HashMap<ItemStack, ItemStack[]> craftingRecipes = new HashMap<>();
@@ -231,12 +232,12 @@ public class CraftingGuide implements Listener {
     public void fillInventory (Inventory inventory, int start) {
         for (int i = 0; i + start < custom_items.length && i < 45; i++) {
             try {
-                ItemStack item = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + custom_items[i + start]).getValues(true));
+                ItemStack item = CustomItem.valueOf(custom_items[i + start]).getItem();
                 item.setAmount(1);
 
                 inventory.setItem(i, item);
             }
-            catch (NullPointerException e) {
+            catch (IllegalArgumentException e) {
                 ItemStack item = new ItemStack(Material.valueOf(custom_items[i + start]));
                 inventory.setItem(i, item);
             }
@@ -455,7 +456,7 @@ public class CraftingGuide implements Listener {
     }
 
     public void fillCraftingRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
-        ItemStack any_soul = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true));
+        ItemStack any_soul = CustomItem.ZOMBIE_SOUL.getItem();
         ItemMeta zombie_soul_meta = any_soul.getItemMeta();
         zombie_soul_meta.setDisplayName("§rAny Soul");
         any_soul.setItemMeta(zombie_soul_meta);
@@ -463,31 +464,31 @@ public class CraftingGuide implements Listener {
                 any_soul,
                 any_soul,
                 any_soul,
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true)),
+                CustomItem.PURGE_ESSENCE.getItem(),
                 new ItemStack(Material.GOLDEN_APPLE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true)),
+                CustomItem.PURGE_ESSENCE.getItem(),
                 any_soul,
                 any_soul,
                 any_soul,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.blessed_apple").getValues(true)), blessed_apple_recipe);
+        recipes.put(CustomItem.BLESSED_APPLE.getItem(), blessed_apple_recipe);
 
 
         ItemStack[] enchanted_blessed_apple_recipe = {
                 any_soul,
                 any_soul,
                 any_soul,
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true)),
+                CustomItem.PURGE_ESSENCE.getItem(),
                 new ItemStack(Material.ENCHANTED_GOLDEN_APPLE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true)),
+                CustomItem.PURGE_ESSENCE.getItem(),
                 any_soul,
                 any_soul,
                 any_soul,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enchanted_blessed_apple").getValues(true)), enchanted_blessed_apple_recipe);
+        recipes.put(CustomItem.ENCHANTED_BLESSED_APPLE.getItem(), enchanted_blessed_apple_recipe);
 
 
-        ItemStack tiny_blaze = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
+        ItemStack tiny_blaze = CustomItem.TINY_BLAZE_POWDER.getItem();
         tiny_blaze.setAmount(1);
         ItemStack[] purge_essence_recipe = {
                 tiny_blaze,
@@ -509,7 +510,7 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.BLAZE_POWDER),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true)), purge_essence_recipe);
+        recipes.put(CustomItem.PURGE_ESSENCE.getItem(), purge_essence_recipe);
 
 
         ItemStack[] hell_essence_recipe = {
@@ -525,7 +526,7 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.MAGMA_CREAM),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true)), hell_essence_recipe);
+        recipes.put(CustomItem.HELL_ESSENCE.getItem(), hell_essence_recipe);
 
 
         ItemStack[] magic_essence_recipe = {
@@ -533,39 +534,39 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)),
+                CustomItem.WITCH_SOUL.getItem(),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true)), magic_essence_recipe);
+        recipes.put(CustomItem.MAGIC_ESSENCE.getItem(), magic_essence_recipe);
 
         ItemStack[] tiny_blaze_powder_recipe = {
                 new ItemStack(Material.BLAZE_POWDER)
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true)), tiny_blaze_powder_recipe);
+        recipes.put(CustomItem.TINY_BLAZE_POWDER.getItem(), tiny_blaze_powder_recipe);
 
 
         ItemStack[] merged_souls_recipe = {
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.creeper_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.ghast_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.silverfish_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.phantom_soul").getValues(true)),
+                CustomItem.ZOMBIE_SOUL.getItem(),
+                CustomItem.CREEPER_SOUL.getItem(),
+                CustomItem.SPIDER_SOUL.getItem(),
+                CustomItem.SKELETON_SOUL.getItem(),
+                CustomItem.GHAST_SOUL.getItem(),
+                CustomItem.SILVERFISH_SOUL.getItem(),
+                CustomItem.PHANTOM_SOUL.getItem(),
+                CustomItem.PIGZOMBIE_SOUL.getItem(),
+                CustomItem.WITCH_SOUL.getItem(),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true)), merged_souls_recipe);
+        recipes.put(CustomItem.MERGED_SOULS.getItem(), merged_souls_recipe);
 
 
         ItemStack[] soul_crystal_incomplete_recipe = {
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true)),
+                CustomItem.MERGED_SOULS.getItem(),
                 new ItemStack(Material.DIAMOND)
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true)), soul_crystal_incomplete_recipe);
+        recipes.put(CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem(), soul_crystal_incomplete_recipe);
 
 
         ItemStack[] voltshock_battery_recipe = {
@@ -579,7 +580,7 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.IRON_INGOT),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true)), voltshock_battery_recipe);
+        recipes.put(CustomItem.VOLTSHOCK_BATTERY.getItem(), voltshock_battery_recipe);
 
 
         ItemStack[] voltshock_shocker_recipe = {
@@ -593,10 +594,10 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.IRON_BARS),
                 new ItemStack(Material.REDSTONE),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true)), voltshock_shocker_recipe);
+        recipes.put(CustomItem.VOLTSHOCK_SHOCKER.getItem(), voltshock_shocker_recipe);
 
 
-        ItemStack shock_sword = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
+        ItemStack shock_sword = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
         ItemMeta shock_sword_meta = shock_sword.getItemMeta();
         shock_sword_meta.setDisplayName("§rIron / Gold Sword");
         shock_sword.setItemMeta(shock_sword_meta);
@@ -604,37 +605,37 @@ public class CraftingGuide implements Listener {
         ItemStack[] voltshock_placeholder_recipe = {
                 null,
                 new ItemStack(Material.REDSTONE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true)),
+                CustomItem.VOLTSHOCK_SHOCKER.getItem(),
                 null,
                 new ItemStack(Material.REDSTONE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true)),
+                CustomItem.VOLTSHOCK_SHOCKER.getItem(),
+                CustomItem.VOLTSHOCK_BATTERY.getItem(),
                 shock_sword,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true)), voltshock_placeholder_recipe);
+        recipes.put(CustomItem.VOLTSHOCK_PLACEHOLDER.getItem(), voltshock_placeholder_recipe);
 
 
         ItemStack[] voltshock_sword_charge_placeholder_recipe = {
                 new ItemStack(Material.EXPERIENCE_BOTTLE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true)),
+                CustomItem.VOLTSHOCK_PLACEHOLDER.getItem(),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_sword_charge_placeholder").getValues(true)), voltshock_sword_charge_placeholder_recipe);
+        recipes.put(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem(), voltshock_sword_charge_placeholder_recipe);
 
 
         ItemStack[] voltshock_arrow_recipe = {
                 null,
                 null,
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true)),
+                CustomItem.VOLTSHOCK_SHOCKER.getItem(),
                 null,
                 new ItemStack(Material.REDSTONE),
                 null,
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true)),
+                CustomItem.VOLTSHOCK_BATTERY.getItem(),
                 new ItemStack(Material.ARROW),
                 null,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true)), voltshock_arrow_recipe);
+        recipes.put(CustomItem.VOLTSHOCK_ARROW.getItem(), voltshock_arrow_recipe);
 
-        ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
+        ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
         tainted_powder.setAmount(1);
         ItemStack poison_potion = new ItemStack(Material.POTION);
         PotionMeta poison_potion_meta = (PotionMeta) poison_potion.getItemMeta();
@@ -652,25 +653,25 @@ public class CraftingGuide implements Listener {
                 tainted_powder,
                 new ItemStack(Material.SPIDER_EYE),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true)), corrosive_substance_recipe);
+        recipes.put(CustomItem.CORROSIVE_SUBSTANCE.getItem(), corrosive_substance_recipe);
 
-        ItemStack corrosive_sword = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_placeholder").getValues(true));
+        ItemStack corrosive_sword = CustomItem.CORROSIVE_PLACEHOLDER.getItem();
         ItemMeta corrosive_sword_meta = corrosive_sword.getItemMeta();
         corrosive_sword_meta.setDisplayName("§rAny Sword");
         corrosive_sword.setItemMeta(corrosive_sword_meta);
 
         ItemStack[] corrosive_placeholder_recipe = {
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true)),
+                CustomItem.CORROSIVE_SUBSTANCE.getItem(),
                 corrosive_sword,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_placeholder").getValues(true)), corrosive_placeholder_recipe);
+        recipes.put(CustomItem.CORROSIVE_PLACEHOLDER.getItem(), corrosive_placeholder_recipe);
 
 
         ItemStack[] corrosive_arrow_recipe = {
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true)),
+                CustomItem.CORROSIVE_SUBSTANCE.getItem(),
                 new ItemStack(Material.ARROW)
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_arrow").getValues(true)), corrosive_arrow_recipe);
+        recipes.put(CustomItem.CORROSIVE_ARROW.getItem(), corrosive_arrow_recipe);
 
 
         ItemStack cobble = new ItemStack(Material.COBBLESTONE);
@@ -684,7 +685,7 @@ public class CraftingGuide implements Listener {
                 null,
                 cobble,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.stone_shield").getValues(true)), stone_shield_recipe);
+        recipes.put(CustomItem.STONE_SHIELD.getItem(), stone_shield_recipe);
 
         ItemStack iron = new ItemStack(Material.IRON_INGOT);
         ItemStack[] iron_shield_recipe = {
@@ -697,7 +698,7 @@ public class CraftingGuide implements Listener {
                 null,
                 iron,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.iron_shield").getValues(true)), iron_shield_recipe);
+        recipes.put(CustomItem.IRON_SHIELD.getItem(), iron_shield_recipe);
 
         ItemStack diamond = new ItemStack(Material.DIAMOND);
         ItemStack[] diamond_shield_recipe = {
@@ -710,7 +711,7 @@ public class CraftingGuide implements Listener {
                 null,
                 diamond,
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.diamond_shield").getValues(true)), diamond_shield_recipe);
+        recipes.put(CustomItem.DIAMOND_SHIELD.getItem(), diamond_shield_recipe);
 
         ItemStack planks = new ItemStack(Material.OAK_PLANKS);
         ItemMeta planks_meta = planks.getItemMeta();
@@ -773,30 +774,30 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.GLASS_BOTTLE),
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.GLASS_BOTTLE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true)),
+                CustomItem.HELL_ESSENCE.getItem(),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true)), purified_water_recipe);
+        recipes.put(CustomItem.PURIFIED_WATER.getItem(), purified_water_recipe);
 
 
         ItemStack[] antidote_recipe = {
                 new ItemStack(Material.GLASS_BOTTLE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true)),
+                CustomItem.PURGE_ESSENCE.getItem(),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true)), antidote_recipe);
+        recipes.put(CustomItem.ANTIDOTE.getItem(), antidote_recipe);
 
 
         ItemStack[] mana_potion_recipe = {
                 new ItemStack(Material.GLASS_BOTTLE),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true)),
+                CustomItem.MAGIC_ESSENCE.getItem(),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true)), mana_potion_recipe);
+        recipes.put(CustomItem.MANA_POTION.getItem(), mana_potion_recipe);
 
 
         ItemStack[] tainted_powder_recipe = {
                 new ItemStack(Material.BONE_MEAL),
                 new ItemStack(Material.SUGAR),
         };
-        recipes.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true)), tainted_powder_recipe);
+        recipes.put(CustomItem.TAINTED_POWDER.getItem(), tainted_powder_recipe);
 
 
     }
@@ -809,7 +810,7 @@ public class CraftingGuide implements Listener {
         fishing_crate_lore.add("§7This item can be obtained by fishing in Prehardmode.");
         fishing_crate_meta.setLore(fishing_crate_lore);
         fishing_crate_desc.setItemMeta(fishing_crate_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate").getValues(true)), fishing_crate_desc);
+        descs.put(CustomItem.FISHING_CRATE.getItem(), fishing_crate_desc);
 
 
         ItemStack fishing_crate_hardmode_desc = new ItemStack(Material.FISHING_ROD);
@@ -819,7 +820,7 @@ public class CraftingGuide implements Listener {
         fishing_crate_hardmode_lore.add("§7This item can be obtained by fishing in Hardmode.");
         fishing_crate_hardmode_meta.setLore(fishing_crate_hardmode_lore);
         fishing_crate_hardmode_desc.setItemMeta(fishing_crate_hardmode_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate_hardmode").getValues(true)), fishing_crate_hardmode_desc);
+        descs.put(CustomItem.FISHING_CRATE_HARDMODE.getItem(), fishing_crate_hardmode_desc);
 
 
         ItemStack zombie_soul_desc = new ItemStack(Material.ZOMBIE_SPAWN_EGG);
@@ -829,7 +830,7 @@ public class CraftingGuide implements Listener {
         zombie_soul_lore.add("§7This item can be obtained by killing Zombies.");
         zombie_soul_meta.setLore(zombie_soul_lore);
         zombie_soul_desc.setItemMeta(zombie_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)), zombie_soul_desc);
+        descs.put(CustomItem.ZOMBIE_SOUL.getItem(), zombie_soul_desc);
 
 
         ItemStack creeper_soul_desc = new ItemStack(Material.CREEPER_SPAWN_EGG);
@@ -839,7 +840,7 @@ public class CraftingGuide implements Listener {
         creeper_soul_lore.add("§7This item can be obtained by killing Creepers.");
         creeper_soul_meta.setLore(creeper_soul_lore);
         creeper_soul_desc.setItemMeta(creeper_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.creeper_soul").getValues(true)), creeper_soul_desc);
+        descs.put(CustomItem.CREEPER_SOUL.getItem(), creeper_soul_desc);
 
 
         ItemStack skeleton_soul_desc = new ItemStack(Material.SKELETON_SPAWN_EGG);
@@ -849,7 +850,7 @@ public class CraftingGuide implements Listener {
         skeleton_soul_lore.add("§7This item can be obtained by killing Skeletons.");
         skeleton_soul_meta.setLore(skeleton_soul_lore);
         skeleton_soul_desc.setItemMeta(skeleton_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)), skeleton_soul_desc);
+        descs.put(CustomItem.SKELETON_SOUL.getItem(), skeleton_soul_desc);
 
 
         ItemStack spider_soul_desc = new ItemStack(Material.SPIDER_SPAWN_EGG);
@@ -859,7 +860,7 @@ public class CraftingGuide implements Listener {
         spider_soul_lore.add("§7This item can be obtained by killing Spiders.");
         spider_soul_meta.setLore(spider_soul_lore);
         spider_soul_desc.setItemMeta(spider_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)), spider_soul_desc);
+        descs.put(CustomItem.SPIDER_SOUL.getItem(), spider_soul_desc);
 
 
         ItemStack pigzombie_soul_desc = new ItemStack(Material.ZOMBIE_PIGMAN_SPAWN_EGG);
@@ -869,7 +870,7 @@ public class CraftingGuide implements Listener {
         pigzombie_soul_lore.add("§7This item can be obtained by killing Zombie Pigmen.");
         pigzombie_soul_meta.setLore(pigzombie_soul_lore);
         pigzombie_soul_desc.setItemMeta(pigzombie_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true)), pigzombie_soul_desc);
+        descs.put(CustomItem.PIGZOMBIE_SOUL.getItem(), pigzombie_soul_desc);
 
 
         ItemStack ghast_soul_desc = new ItemStack(Material.GHAST_SPAWN_EGG);
@@ -879,7 +880,7 @@ public class CraftingGuide implements Listener {
         ghast_soul_lore.add("§7This item can be obtained by killing Ghasts.");
         ghast_soul_meta.setLore(ghast_soul_lore);
         ghast_soul_desc.setItemMeta(ghast_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.ghast_soul").getValues(true)), ghast_soul_desc);
+        descs.put(CustomItem.GHAST_SOUL.getItem(), ghast_soul_desc);
 
 
         ItemStack silverfish_soul_desc = new ItemStack(Material.SILVERFISH_SPAWN_EGG);
@@ -889,7 +890,7 @@ public class CraftingGuide implements Listener {
         silverfish_soul_lore.add("§7This item can be obtained by killing Silverfish.");
         silverfish_soul_meta.setLore(silverfish_soul_lore);
         silverfish_soul_desc.setItemMeta(silverfish_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.silverfish_soul").getValues(true)), silverfish_soul_desc);
+        descs.put(CustomItem.SILVERFISH_SOUL.getItem(), silverfish_soul_desc);
 
 
         ItemStack witch_soul_desc = new ItemStack(Material.WITCH_SPAWN_EGG);
@@ -899,7 +900,7 @@ public class CraftingGuide implements Listener {
         witch_soul_lore.add("§7This item can be obtained by killing Witches.");
         witch_soul_meta.setLore(witch_soul_lore);
         witch_soul_desc.setItemMeta(witch_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)), witch_soul_desc);
+        descs.put(CustomItem.WITCH_SOUL.getItem(), witch_soul_desc);
 
 
         ItemStack phantom_soul_desc = new ItemStack(Material.PHANTOM_SPAWN_EGG);
@@ -909,17 +910,17 @@ public class CraftingGuide implements Listener {
         phantom_soul_lore.add("§7This item can be obtained by killing Phantoms.");
         phantom_soul_meta.setLore(phantom_soul_lore);
         phantom_soul_desc.setItemMeta(phantom_soul_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.phantom_soul").getValues(true)), phantom_soul_desc);
+        descs.put(CustomItem.PHANTOM_SOUL.getItem(), phantom_soul_desc);
 
 
-        ItemStack soul_crystal_desc = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
+        ItemStack soul_crystal_desc = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
         ItemMeta soul_crystal_meta = soul_crystal_desc.getItemMeta();
         soul_crystal_meta.setDisplayName("§7Complete Soul Crystal");
         ArrayList<String> soul_crystal_lore = new ArrayList<>();
         soul_crystal_lore.add("§7This item is obtained by defeating yourself in the World of Reflection.");
         soul_crystal_meta.setLore(soul_crystal_lore);
         soul_crystal_desc.setItemMeta(soul_crystal_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true)), soul_crystal_desc);
+        descs.put(CustomItem.SOUL_CRYSTAL.getItem(), soul_crystal_desc);
 
 
         ItemStack rune_desc = new ItemStack(Material.SPAWNER);
@@ -929,21 +930,21 @@ public class CraftingGuide implements Listener {
         rune_lore.add("§7This item is obtained by destroying spawners.");
         rune_meta.setLore(rune_lore);
         rune_desc.setItemMeta(rune_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.rune").getValues(true)), rune_desc);
+        descs.put(CustomItem.RUNE.getItem(), rune_desc);
 
 
-        ItemStack charged_rune_desc = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.rune").getValues(true));
+        ItemStack charged_rune_desc = CustomItem.RUNE.getItem();
         ItemMeta charged_rune_meta = charged_rune_desc.getItemMeta();
         charged_rune_meta.setDisplayName("§dCharge Rune");
         ArrayList<String> charged_rune_lore = new ArrayList<>();
         charged_rune_lore.add("§7This item is obtained by charging the Rune with Merged Souls and Essences of Magic.");
         charged_rune_meta.setLore(charged_rune_lore);
         charged_rune_desc.setItemMeta(charged_rune_meta);
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.charged_rune").getValues(true)), charged_rune_desc);
+        descs.put(CustomItem.CHARGED_RUNE.getItem(), charged_rune_desc);
 
 
         ItemStack recall_potion_desc = rune_desc.clone();
-        descs.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.recall_potion").getValues(true)), recall_potion_desc);
+        descs.put(CustomItem.RECALL_POTION.getItem(), recall_potion_desc);
 
 
     }

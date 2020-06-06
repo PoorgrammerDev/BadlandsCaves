@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -20,8 +21,8 @@ public class BlessedApple extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.blessed_apple").getValues(true));
-        final ItemStack enchanted_blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enchanted_blessed_apple").getValues(true));
+        final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
+        final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
         if (!result.isSimilar(blessed_apple) && !result.isSimilar(enchanted_blessed_apple)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
@@ -30,22 +31,22 @@ public class BlessedApple extends MatchCrafting implements Listener {
             return;
         }
 
-        final ItemStack purge_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
+        final ItemStack purge_essence = CustomItem.PURGE_ESSENCE.getItem();
         if (!isMatching(matrix, purge_essence, 3) || !isMatching(matrix, purge_essence, 5)) {
             event.getInventory().setResult(null);
             return;
         }
 
         ArrayList<ItemStack> souls = new ArrayList<>();
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.creeper_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.ghast_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.silverfish_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)));
-        souls.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.phantom_soul").getValues(true)));
+        souls.add(CustomItem.ZOMBIE_SOUL.getItem());
+        souls.add(CustomItem.CREEPER_SOUL.getItem());
+        souls.add(CustomItem.SPIDER_SOUL.getItem());
+        souls.add(CustomItem.SKELETON_SOUL.getItem());
+        souls.add(CustomItem.GHAST_SOUL.getItem());
+        souls.add(CustomItem.SILVERFISH_SOUL.getItem());
+        souls.add(CustomItem.PHANTOM_SOUL.getItem());
+        souls.add(CustomItem.PIGZOMBIE_SOUL.getItem());
+        souls.add(CustomItem.WITCH_SOUL.getItem());
 
         int[] slots = {0,1,2,6,7,8};
         for (int slot : slots) {

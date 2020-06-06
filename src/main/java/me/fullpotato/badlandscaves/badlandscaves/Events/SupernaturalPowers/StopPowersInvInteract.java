@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -24,10 +25,10 @@ public class StopPowersInvInteract implements Listener {
     public StopPowersInvInteract(BadlandsCaves bcav) {
         plugin = bcav;
 
-        displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
-        withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
-        eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
-        possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
+        displace = CustomItem.DISPLACE.getItem();
+        withdraw = CustomItem.WITHDRAW.getItem();
+        eyes = CustomItem.ENHANCED_EYES.getItem();
+        possess = CustomItem.POSSESS.getItem();
     }
 
     @EventHandler

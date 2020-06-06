@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Loot;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -29,8 +30,8 @@ public class UseFishingCrate implements Listener {
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack item = event.getItem();
             if (item != null) {
-                final ItemStack fishing_crate = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate").getValues(true));
-                final ItemStack fishing_crate_hm = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate_hardmode").getValues(true));
+                final ItemStack fishing_crate = CustomItem.FISHING_CRATE.getItem();
+                final ItemStack fishing_crate_hm = CustomItem.FISHING_CRATE_HARDMODE.getItem();
 
                 if (item.isSimilar(fishing_crate) || item.isSimilar(fishing_crate_hm)) {
                     event.setCancelled(true);

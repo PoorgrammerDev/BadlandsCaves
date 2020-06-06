@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -23,20 +24,20 @@ public class MergedSouls extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack merged_souls = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true));
+        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
 
         if (!result.isSimilar(merged_souls)) return;
 
         HashMap<ItemStack, Integer> souls = new HashMap<>();
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.creeper_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.ghast_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.silverfish_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)), 1);
-        souls.put(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.phantom_soul").getValues(true)), 1);
+        souls.put(CustomItem.ZOMBIE_SOUL.getItem(), 1);
+        souls.put(CustomItem.CREEPER_SOUL.getItem(), 1);
+        souls.put(CustomItem.SPIDER_SOUL.getItem(), 1);
+        souls.put(CustomItem.SKELETON_SOUL.getItem(), 1);
+        souls.put(CustomItem.GHAST_SOUL.getItem(), 1);
+        souls.put(CustomItem.SILVERFISH_SOUL.getItem(), 1);
+        souls.put(CustomItem.PHANTOM_SOUL.getItem(), 1);
+        souls.put(CustomItem.PIGZOMBIE_SOUL.getItem(), 1);
+        souls.put(CustomItem.WITCH_SOUL.getItem(), 1);
 
 
         if (!isMatching(event.getInventory().getMatrix(), souls)) {
@@ -46,7 +47,7 @@ public class MergedSouls extends MatchCrafting implements Listener {
 
     @EventHandler
     public void craftSound (CraftItemEvent event) {
-        final ItemStack merged_souls = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true));
+        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
         if (event.getRecipe().getResult().isSimilar(merged_souls)) {
             for (HumanEntity human : event.getViewers()) {
                 if (human instanceof Player) {

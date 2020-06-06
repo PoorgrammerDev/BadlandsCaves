@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.TreasureGear;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,8 +36,8 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void batteryAndShock (PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
-            final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+            final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
+            final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
             if (result.isSimilar(battery) || result.isSimilar(shocker)) {
                 if (event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
                     event.getInventory().setResult(null);
@@ -50,11 +51,11 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void applyToSword(PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_placeholder").getValues(true));
+            final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
             if (result.isSimilar(placeholder)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
-                final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
-                final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+                final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
+                final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
                 if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
                     if (!event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
                         SerratedSwords serrated = new SerratedSwords(plugin);
@@ -93,7 +94,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void chargeSword(PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_sword_charge_placeholder").getValues(true));
+            final ItemStack placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
             if (result.isSimilar(placeholder)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 ItemStack sword = null;
@@ -144,11 +145,11 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void craftArrow (PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_arrow").getValues(true));
+            final ItemStack arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
             if (result.isSimilar(arrow)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
-                final ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true));
-                final ItemStack shocker = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true));
+                final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
+                final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
 
                 if (!isMatching(matrix, shocker, 2) || !isMatching(matrix, battery, 6)) {
                     event.getInventory().setResult(null);

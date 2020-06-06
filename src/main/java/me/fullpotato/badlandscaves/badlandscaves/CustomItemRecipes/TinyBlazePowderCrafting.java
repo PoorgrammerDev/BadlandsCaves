@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
@@ -14,7 +15,7 @@ public class TinyBlazePowderCrafting {
     }
 
     public void tiny_blaze_powder_craft () {
-        ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
+        ItemStack tiny_blz = CustomItem.TINY_BLAZE_POWDER.getItem();
 
         ShapelessRecipe blz_pd_to_small = new ShapelessRecipe(new NamespacedKey(plugin, "tiny_blaze_powder"), tiny_blz);
         blz_pd_to_small.addIngredient(Material.BLAZE_POWDER);

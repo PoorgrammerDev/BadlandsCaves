@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Loot.MobDeathLoot;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,21 +22,21 @@ public class SoulDrop implements Listener {
     public SoulDrop (BadlandsCaves bcav) {
         plugin = bcav;
 
-        souls.put(EntityType.ZOMBIE, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)));
-        souls.put(EntityType.ZOMBIE_VILLAGER, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)));
-        souls.put(EntityType.DROWNED, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)));
-        souls.put(EntityType.HUSK, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)));
-        souls.put(EntityType.CREEPER, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.creeper_soul").getValues(true)));
-        souls.put(EntityType.SKELETON, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)));
-        souls.put(EntityType.STRAY, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)));
-        souls.put(EntityType.WITHER_SKELETON, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)));
-        souls.put(EntityType.SPIDER, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)));
-        souls.put(EntityType.CAVE_SPIDER, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)));
-        souls.put(EntityType.PIG_ZOMBIE, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true)));
-        souls.put(EntityType.GHAST, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.ghast_soul").getValues(true)));
-        souls.put(EntityType.SILVERFISH, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.silverfish_soul").getValues(true)));
-        souls.put(EntityType.WITCH, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)));
-        souls.put(EntityType.PHANTOM, ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.phantom_soul").getValues(true)));
+        souls.put(EntityType.ZOMBIE, CustomItem.ZOMBIE_SOUL.getItem());
+        souls.put(EntityType.ZOMBIE_VILLAGER, CustomItem.ZOMBIE_SOUL.getItem());
+        souls.put(EntityType.DROWNED, CustomItem.ZOMBIE_SOUL.getItem());
+        souls.put(EntityType.HUSK, CustomItem.ZOMBIE_SOUL.getItem());
+        souls.put(EntityType.CREEPER, CustomItem.CREEPER_SOUL.getItem());
+        souls.put(EntityType.SKELETON, CustomItem.SKELETON_SOUL.getItem());
+        souls.put(EntityType.STRAY, CustomItem.SKELETON_SOUL.getItem());
+        souls.put(EntityType.WITHER_SKELETON, CustomItem.SKELETON_SOUL.getItem());
+        souls.put(EntityType.SPIDER, CustomItem.SPIDER_SOUL.getItem());
+        souls.put(EntityType.CAVE_SPIDER, CustomItem.SPIDER_SOUL.getItem());
+        souls.put(EntityType.PIG_ZOMBIE, CustomItem.PIGZOMBIE_SOUL.getItem());
+        souls.put(EntityType.GHAST, CustomItem.GHAST_SOUL.getItem());
+        souls.put(EntityType.SILVERFISH, CustomItem.SILVERFISH_SOUL.getItem());
+        souls.put(EntityType.WITCH, CustomItem.WITCH_SOUL.getItem());
+        souls.put(EntityType.PHANTOM, CustomItem.PHANTOM_SOUL.getItem());
     }
 
     @EventHandler

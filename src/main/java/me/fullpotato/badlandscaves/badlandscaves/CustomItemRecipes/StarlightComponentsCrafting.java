@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
@@ -13,7 +14,7 @@ public class StarlightComponentsCrafting {
     }
 
     public void craftBinding () {
-        ItemStack binding = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.binding").getValues(true));
+        ItemStack binding = CustomItem.BINDING.getItem();
         binding.setAmount(8);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "raw_binding"), binding);
@@ -26,7 +27,7 @@ public class StarlightComponentsCrafting {
     }
 
     public void craftGoldCable () {
-        ItemStack cable = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.golden_cable").getValues(true));
+        ItemStack cable = CustomItem.GOLDEN_CABLE.getItem();
         cable.setAmount(6);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "golden_cable"), cable);
@@ -38,7 +39,7 @@ public class StarlightComponentsCrafting {
     }
 
     public void craftNetherStarFragment() {
-        ItemStack fragment = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.nether_star_fragment").getValues(true));
+        ItemStack fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
         fragment.setAmount(4);
 
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "nether_star_fragment"), fragment);
@@ -48,7 +49,7 @@ public class StarlightComponentsCrafting {
     }
 
     public void craftStarlightCircuit () {
-        ItemStack circuit = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_circuit").getValues(true));
+        ItemStack circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_circuit"), circuit);
         recipe.shape("---", "#@#", "---");
@@ -61,7 +62,7 @@ public class StarlightComponentsCrafting {
     }
 
     public void craftStarlightBattery() {
-        ItemStack battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_battery").getValues(true));
+        ItemStack battery = CustomItem.STARLIGHT_BATTERY.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_battery"), battery);
         recipe.shape(" % ", "#@#", "#@#");
@@ -74,7 +75,7 @@ public class StarlightComponentsCrafting {
     }
 
     public void craftStarlightModule() {
-        ItemStack module = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_module").getValues(true));
+        ItemStack module = CustomItem.STARLIGHT_MODULE.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_module"), module);
         recipe.shape("###", "#@#", "#%#");

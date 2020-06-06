@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.CauldronRunnable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -155,7 +156,7 @@ public class CauldronMenu implements Listener {
                             reset_level.setLevel(0);
                             cauldron_block.setBlockData(reset_level);
 
-                            ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
+                            ItemStack purified_water = CustomItem.PURIFIED_WATER.getItem();
                             //PURIFIED WATER - PREHARDMODE
                             if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
                                 success = true;
@@ -165,9 +166,9 @@ public class CauldronMenu implements Listener {
                             else if (in_slots.contains(Material.COMMAND_BLOCK)) {
                                 int slot = in_slots.indexOf(Material.COMMAND_BLOCK);
 
-                                ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
-                                ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
-                                ItemStack mana_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
+                                final ItemStack purge_ess = CustomItem.PURGE_ESSENCE.getItem();
+                                final ItemStack hell_ess = CustomItem.HELL_ESSENCE.getItem();
+                                final ItemStack mana_ess = CustomItem.MAGIC_ESSENCE.getItem();
 
                                 if (itemstacks_slots.get(slot).hasItemMeta()) {
                                     if (itemstacks_slots.get(slot).getItemMeta().hasDisplayName()) {
@@ -175,7 +176,7 @@ public class CauldronMenu implements Listener {
                                         //ANTIDOTE
                                         if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(purge_ess.getItemMeta().getDisplayName())) {
                                             success = true;
-                                            ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
+                                            final ItemStack antidote = CustomItem.ANTIDOTE.getItem();
                                             cauldron_inv.setItem(22, antidote);
                                         }
 
@@ -188,7 +189,7 @@ public class CauldronMenu implements Listener {
                                         //MANA POTION
                                         else if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(mana_ess.getItemMeta().getDisplayName())) {
                                             success = true;
-                                            ItemStack mana_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true));
+                                            ItemStack mana_potion = CustomItem.MANA_POTION.getItem();
                                             cauldron_inv.setItem(22, mana_potion);
                                         }
 
@@ -200,7 +201,7 @@ public class CauldronMenu implements Listener {
                             //TAINTED POWDER
                             else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
                                 success = true;
-                                ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
+                                ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
                                 cauldron_inv.setItem(22, tainted_powder);
                             }
 

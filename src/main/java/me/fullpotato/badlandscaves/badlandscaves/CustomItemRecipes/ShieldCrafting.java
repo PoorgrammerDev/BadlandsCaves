@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,7 @@ public class ShieldCrafting {
     }
 
     public void craftStoneShield() {
-        final ItemStack shield = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.stone_shield").getValues(true));
+        final ItemStack shield = CustomItem.STONE_SHIELD.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "stone_shield"), shield);
         recipe.shape("# #", "###", " # ");
@@ -43,7 +44,7 @@ public class ShieldCrafting {
     }
 
     public void craftIronShield() {
-        final ItemStack shield = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.iron_shield").getValues(true));
+        final ItemStack shield = CustomItem.IRON_SHIELD.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iron_shield"), shield);
         recipe.shape("# #", "###", " # ");
@@ -53,7 +54,7 @@ public class ShieldCrafting {
     }
 
     public void craftDiamondShield() {
-        final ItemStack shield = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.diamond_shield").getValues(true));
+        final ItemStack shield = CustomItem.DIAMOND_SHIELD.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "diamond_shield"), shield);
         recipe.shape("# #", "###", " # ");

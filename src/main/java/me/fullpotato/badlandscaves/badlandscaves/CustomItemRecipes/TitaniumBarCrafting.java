@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +15,7 @@ public class TitaniumBarCrafting {
     }
 
     public void fragmentIntoBar() {
-        ItemStack bar = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.titanium_ingot").getValues(true));
+        ItemStack bar = CustomItem.TITANIUM_INGOT.getItem();
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "titanium_ingot"), bar);
 
         recipe.shape("##", "##");

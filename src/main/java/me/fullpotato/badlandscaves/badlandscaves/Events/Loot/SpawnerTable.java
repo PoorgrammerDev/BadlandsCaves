@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Loot;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
@@ -22,7 +23,7 @@ public class SpawnerTable implements LootTable {
     private Player player;
     private EntityType spawnerType;
     private int fortune;
-    private HashMap<EntityType, String> matchSoul = new HashMap<>();
+    private HashMap<EntityType, ItemStack> matchSoul = new HashMap<>();
 
     public SpawnerTable(BadlandsCaves plugin, Player player, EntityType spawnerType, int fortune) {
         this.plugin = plugin;
@@ -32,17 +33,17 @@ public class SpawnerTable implements LootTable {
         key = new NamespacedKey(plugin, "mob_spawner_treasure");
         this.fortune = fortune;
 
-        matchSoul.put(EntityType.ZOMBIE, "zombie_soul");
-        matchSoul.put(EntityType.CREEPER, "creeper_soul");
-        matchSoul.put(EntityType.SKELETON, "skeleton_soul");
-        matchSoul.put(EntityType.WITHER_SKELETON, "skeleton_soul");
-        matchSoul.put(EntityType.SPIDER, "spider_soul");
-        matchSoul.put(EntityType.CAVE_SPIDER, "spider_soul");
-        matchSoul.put(EntityType.SILVERFISH, "silverfish_soul");
-        matchSoul.put(EntityType.GHAST, "ghast_soul");
-        matchSoul.put(EntityType.PIG_ZOMBIE, "pigzombie_soul");
-        matchSoul.put(EntityType.PHANTOM, "phantom_soul");
-        matchSoul.put(EntityType.WITCH, "witch_soul");
+        matchSoul.put(EntityType.ZOMBIE, CustomItem.ZOMBIE_SOUL.getItem());
+        matchSoul.put(EntityType.CREEPER, CustomItem.CREEPER_SOUL.getItem());
+        matchSoul.put(EntityType.SKELETON, CustomItem.SKELETON_SOUL.getItem());
+        matchSoul.put(EntityType.WITHER_SKELETON, CustomItem.SKELETON_SOUL.getItem());
+        matchSoul.put(EntityType.SPIDER, CustomItem.SPIDER_SOUL.getItem());
+        matchSoul.put(EntityType.CAVE_SPIDER, CustomItem.SPIDER_SOUL.getItem());
+        matchSoul.put(EntityType.SILVERFISH, CustomItem.SILVERFISH_SOUL.getItem());
+        matchSoul.put(EntityType.GHAST, CustomItem.GHAST_SOUL.getItem());
+        matchSoul.put(EntityType.PIG_ZOMBIE, CustomItem.PIGZOMBIE_SOUL.getItem());
+        matchSoul.put(EntityType.PHANTOM, CustomItem.PHANTOM_SOUL.getItem());
+        matchSoul.put(EntityType.WITCH, CustomItem.WITCH_SOUL.getItem());
     }
 
 
@@ -55,7 +56,7 @@ public class SpawnerTable implements LootTable {
         final boolean supernatural = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
 
 
-        final ItemStack rune = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.rune").getValues(true));
+        final ItemStack rune = CustomItem.RUNE.getItem();
         ArrayList<ItemStack> generic = new ArrayList<>();
         ArrayList<ItemStack> specific = new ArrayList<>();
         if (hardmode) {
@@ -68,22 +69,22 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.EMERALD_BLOCK, 2));
             generic.add(new ItemStack(Material.QUARTZ_BLOCK, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 16));
-            generic.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate_hardmode").getValues(true)));
+            generic.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
 
             if (supernatural) {
                 //HARDMODE SUPERNATURAL------------------------------------------------------------------------
                 specific.add(rune);
                 specific.add(new ItemStack(Material.LAPIS_BLOCK, 32));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.zombie_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.creeper_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.skeleton_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.spider_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.silverfish_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.ghast_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.pigzombie_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.phantom_soul").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.witch_soul").getValues(true)));
+                specific.add(CustomItem.ZOMBIE_SOUL.getItem());
+                specific.add(CustomItem.CREEPER_SOUL.getItem());
+                specific.add(CustomItem.SILVERFISH_SOUL.getItem());
+                specific.add(CustomItem.SKELETON_SOUL.getItem());
+                specific.add(CustomItem.SPIDER_SOUL.getItem());
+                specific.add(CustomItem.SILVERFISH_SOUL.getItem());
+                specific.add(CustomItem.GHAST_SOUL.getItem());
+                specific.add(CustomItem.PIGZOMBIE_SOUL.getItem());
+                specific.add(CustomItem.PHANTOM_SOUL.getItem());
+                specific.add(CustomItem.WITCH_SOUL.getItem());
                 // TODO: 4/25/2020 ARTIFACTS
 
             }
@@ -104,17 +105,15 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.QUARTZ, 8));
             generic.add(new ItemStack(Material.NETHER_WART, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 4));
-            generic.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate").getValues(true)));
+            generic.add(CustomItem.FISHING_CRATE.getItem());
 
             if (supernatural) {
                 //PREHARDMODE SUPERNATURAL---------------------------------------------------------------------
                 specific.add(new ItemStack(Material.LAPIS_LAZULI, 32));
-                for (EntityType type : matchSoul.keySet()) {
-                    specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + matchSoul.get(type)).getValues(true)));
-                }
+                specific.addAll(matchSoul.values());
 
                 if (matchSoul.containsKey(spawnerType)) {
-                    ItemStack soul = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + matchSoul.get(spawnerType)).getValues(true));
+                    ItemStack soul = matchSoul.get(spawnerType);
                     soul.setAmount(16);
                     specific.add(soul);
                 }
@@ -122,9 +121,9 @@ public class SpawnerTable implements LootTable {
             }
             else {
                 //PREHARDMODE PURESOUL---------------------------------------------------------------------------
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_battery").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.voltshock_shocker").getValues(true)));
-                specific.add(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true)));
+                specific.add(CustomItem.VOLTSHOCK_BATTERY.getItem());
+                specific.add(CustomItem.VOLTSHOCK_SHOCKER.getItem());
+                specific.add(CustomItem.CORROSIVE_SUBSTANCE.getItem());
                 specific.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 32));
                 // TODO: 4/25/2020 maybe add blueprints or something? idk
 

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -28,7 +29,7 @@ public class CustomItemCommand extends Commands implements CommandExecutor {
                     if (target != null) {
                         if (args.length > 1) {
                             try {
-                                ItemStack item = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items." + args[1]).getValues(true));
+                                ItemStack item = CustomItem.valueOf(args[1].toUpperCase()).getItem();
                                 int amount = 1;
                                 if (args.length >= 3) {
                                     try {
@@ -44,7 +45,7 @@ public class CustomItemCommand extends Commands implements CommandExecutor {
                                 sender.sendMessage("§6Gave §c" + amount + "§6 [§r" + item.getItemMeta().getDisplayName() + "§6] to §c" + target.getDisplayName() + "§6.");
                                 return true;
                             }
-                            catch (NullPointerException e) {
+                            catch (IllegalArgumentException e) {
                                 sender.sendMessage(ChatColor.RED + "You must specify a valid custom item.");
                                 return true;
                             }

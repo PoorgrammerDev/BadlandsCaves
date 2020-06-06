@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Thirst;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
@@ -64,10 +65,10 @@ public class Drinking implements Listener {
             }
             //either purified or antidote
             else if (potionMeta.getBasePotionData().getType().equals(PotionType.UNCRAFTABLE)) {
-                ItemStack purified_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purified_water").getValues(true));
-                ItemStack antidote = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.antidote").getValues(true));
-                ItemStack mana_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.mana_potion").getValues(true));
-                ItemStack recall_potion = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.recall_potion").getValues(true));
+                ItemStack purified_water = CustomItem.PURIFIED_WATER.getItem();
+                ItemStack antidote = CustomItem.ANTIDOTE.getItem();
+                ItemStack mana_potion = CustomItem.MANA_POTION.getItem();
+                ItemStack recall_potion = CustomItem.RECALL_POTION.getItem();
 
                 //testing if purified
                 if (item.isSimilar(purified_water)) {

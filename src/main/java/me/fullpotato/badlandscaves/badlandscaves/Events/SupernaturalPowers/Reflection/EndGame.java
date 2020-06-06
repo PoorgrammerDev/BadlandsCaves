@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Reflection;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.FakePlayer;
@@ -108,8 +109,8 @@ public class EndGame implements Listener {
 
     public void completeSoul (final Player player) {
         UseIncompleteSoulCrystal usecrystal = new UseIncompleteSoulCrystal(plugin);
-        final ItemStack incomplete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
-        final ItemStack complete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
+        final ItemStack incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
+        final ItemStack complete = CustomItem.SOUL_CRYSTAL.getItem();
         for (ItemStack item : player.getInventory()) {
             if (item == null) continue;
             if (usecrystal.checkMatchIgnoreUses(item, incomplete, 2)) {

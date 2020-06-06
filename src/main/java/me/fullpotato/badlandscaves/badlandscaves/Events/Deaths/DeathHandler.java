@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Deaths;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -69,8 +70,8 @@ public class DeathHandler implements Listener {
         Player player = event.getPlayer();
         Inventory inventory = player.getInventory();
 
-        ItemStack starter_sapling = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_sapling").getValues(true));
-        ItemStack starter_bone_meal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_bone_meal").getValues(true));
+        ItemStack starter_sapling = CustomItem.STARTER_SAPLING.getItem();
+        ItemStack starter_bone_meal = CustomItem.STARTER_BONE_MEAL.getItem();
 
         inventory.addItem(starter_sapling);
         inventory.addItem(starter_bone_meal);

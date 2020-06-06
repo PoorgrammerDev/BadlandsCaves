@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,11 +20,11 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack golden_cable = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.golden_cable").getValues(true));
+        final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
         if (!result.isSimilar(golden_cable)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack binding = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.binding").getValues(true));
+        final ItemStack binding = CustomItem.BINDING.getItem();
         if (!isMatching(matrix, binding)) event.getInventory().setResult(null);
     }
 
@@ -32,12 +33,12 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_circuit = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_circuit").getValues(true));
+        final ItemStack starlight_circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
         if (!result.isSimilar(starlight_circuit)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack golden_cable = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.golden_cable").getValues(true));
-        final ItemStack nether_star_fragment = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.nether_star_fragment").getValues(true));
+        final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
+        final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
 
         boolean matches = true;
         final int[] slots = {0, 1, 2, 6, 7, 8};
@@ -63,12 +64,12 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_battery").getValues(true));
+        final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
         if (!result.isSimilar(starlight_battery)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.titanium_ingot").getValues(true));
-        final ItemStack nether_star_fragment = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.nether_star_fragment").getValues(true));
+        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
 
         boolean matches = true;
         final int[] titanium_slots = {3, 5, 6, 8};
@@ -97,13 +98,13 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_module = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_module").getValues(true));
+        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
         if (!result.isSimilar(starlight_module)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.titanium_ingot").getValues(true));
-        final ItemStack starlight_battery = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_battery").getValues(true));
-        final ItemStack starlight_circuit = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starlight_circuit").getValues(true));
+        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
+        final ItemStack starlight_circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
 
         boolean matches = true;
         final int[] titanium_slots = {0, 1, 2, 3, 5, 6, 8};

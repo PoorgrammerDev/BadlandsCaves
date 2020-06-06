@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.StageEnter;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
@@ -28,7 +29,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         if (event.getItem() == null) return;
 
         final ItemStack current = event.getItem();
-        final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
+        final ItemStack soul_crystal = CustomItem.SOUL_CRYSTAL.getItem();
         if (!checkMatchIgnoreUses(current, soul_crystal, 2)) return;
 
         final Player player = event.getPlayer();

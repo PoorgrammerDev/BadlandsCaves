@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ReflectionStage.SpawnBoss;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         if (event.getItem() == null) return;
 
         final ItemStack current = event.getItem();
-        final ItemStack soul_crystal_incomplete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
+        final ItemStack soul_crystal_incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
         if (!checkMatchIgnoreUses(current, soul_crystal_incomplete, 2)) return;
 
         final Player player = event.getPlayer();

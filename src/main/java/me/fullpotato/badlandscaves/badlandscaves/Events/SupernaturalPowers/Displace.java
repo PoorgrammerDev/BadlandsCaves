@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import org.bukkit.*;
@@ -30,7 +31,7 @@ public class Displace extends UsePowers implements Listener {
         if (!has_powers) return;
 
         World world = player.getWorld();
-        ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
+        ItemStack displace = CustomItem.DISPLACE.getItem();
         if (player.getInventory().getItemInOffHand().isSimilar(displace)) {
         //if (player.getInventory().getItemInOffHand().getType().equals(Material.KNOWLEDGE_BOOK)) {
             Action action = event.getAction();

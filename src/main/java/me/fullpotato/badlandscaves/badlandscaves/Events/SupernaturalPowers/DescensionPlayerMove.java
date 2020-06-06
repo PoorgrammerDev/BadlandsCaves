@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.badlandscaves.Util.InventorySerialize;
@@ -165,7 +166,7 @@ public class DescensionPlayerMove implements Listener {
 
         if (win) {
             UseIncompleteSoulCrystal tester = new UseIncompleteSoulCrystal(plugin);
-            final ItemStack soul_crystal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal").getValues(true));
+            final ItemStack soul_crystal = CustomItem.SOUL_CRYSTAL.getItem();
             for (ItemStack item : player.getInventory()) {
                 if (item != null) {
                     if (tester.checkMatchIgnoreUses(item, soul_crystal, 2)) {

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.PossessionNMS;
 import org.bukkit.*;
 import org.bukkit.entity.EnderDragon;
@@ -28,7 +29,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
         final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
         if (!has_powers) return;
 
-        ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
+        ItemStack possess = CustomItem.POSSESS.getItem();
         if (!player.getInventory().getItemInOffHand().isSimilar(possess)) {
             plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Info.GuideBook;
 import me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers.Withdraw;
 import me.fullpotato.badlandscaves.badlandscaves.Util.LoadCustomItems;
@@ -36,8 +37,8 @@ public class PlayerJoinLeave implements Listener {
         //NEW PLAYER--------------------------------
         if (!player.hasPlayedBefore()) {
 
-            ItemStack starter_sapling = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_sapling").getValues(true));
-            ItemStack starter_bone_meal = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.starter_bone_meal").getValues(true));
+            ItemStack starter_sapling = CustomItem.STARTER_SAPLING.getItem();
+            ItemStack starter_bone_meal = CustomItem.STARTER_BONE_MEAL.getItem();
             player.getInventory().addItem(starter_sapling);
             player.getInventory().addItem(starter_bone_meal);
             player.getInventory().addItem(GuideBook.getGuideBook(plugin));

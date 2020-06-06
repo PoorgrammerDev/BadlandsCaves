@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.badlandscaves.Util.PositionManager;
@@ -27,7 +28,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
     @Override
     public void run() {
         ItemStack item = player.getInventory().getItemInOffHand();
-        ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
+        ItemStack displace = CustomItem.DISPLACE.getItem();
         if (!item.isSimilar(displace)) {
             plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;

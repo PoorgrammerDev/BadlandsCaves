@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables.Toxicity;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +27,7 @@ public class ToxBottlingRunnable extends BukkitRunnable {
                 if (item.getType().equals(Material.POTION)) {
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
                     if (potionMeta.getBasePotionData().getType().equals(PotionType.WATER)) {
-                        ItemStack toxic_water = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.toxic_water").getValues(true));
+                        ItemStack toxic_water = CustomItem.TOXIC_WATER.getItem();
                         player.getInventory().setItem(a, toxic_water);
                     }
                 }

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.TaintedPowderVelCheck;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -31,7 +32,7 @@ public class UseTaintPowder implements Listener {
             ItemStack item = event.getItem();
             if (item != null) {
 
-                ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
+                ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
 
                 if (item.isSimilar(tainted_powder)) {
                     event.setCancelled(true);

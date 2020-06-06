@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Deaths;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -24,8 +25,8 @@ public class BlessedAppleEat implements Listener {
         ItemStack item = event.getItem();
         int death_count = player.getMetadata("Deaths").get(0).asInt();
 
-        final ItemStack blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.blessed_apple").getValues(true));
-        final ItemStack enchanted_blessed_apple = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enchanted_blessed_apple").getValues(true));
+        final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
+        final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
 
         if (item.isSimilar(blessed_apple) || item.isSimilar(enchanted_blessed_apple)) {
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.reflectionWorldName))) {

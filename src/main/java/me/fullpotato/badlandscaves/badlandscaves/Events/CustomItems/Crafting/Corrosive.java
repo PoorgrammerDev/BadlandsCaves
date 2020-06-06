@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Events.Loot.TreasureGear;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -41,10 +42,10 @@ public class Corrosive extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack corrosive_substance = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true));
+        final ItemStack corrosive_substance = CustomItem.CORROSIVE_SUBSTANCE.getItem();
         if (!result.isSimilar(corrosive_substance)) return;
 
-        final ItemStack tainted_powder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tainted_powder").getValues(true));
+        final ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
         final ItemStack poison_potion = getPoisonPotion();
         final ItemStack[] matrix = event.getInventory().getMatrix();
 
@@ -60,10 +61,10 @@ public class Corrosive extends MatchCrafting implements Listener {
     public void craftArrow (PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack arrow = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_arrow").getValues(true));
+            final ItemStack arrow = CustomItem.CORROSIVE_ARROW.getItem();
             if (result.isSimilar(arrow)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
-                final ItemStack substance = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true));
+                final ItemStack substance = CustomItem.CORROSIVE_SUBSTANCE.getItem();
                 if (!isMatching(matrix, substance)) {
                     event.getInventory().setResult(null);
                 }
@@ -76,11 +77,11 @@ public class Corrosive extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack placeholder = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_placeholder").getValues(true));
+        final ItemStack placeholder = CustomItem.CORROSIVE_PLACEHOLDER.getItem();
         if (!result.isSimilar(placeholder)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack corrosive_substance = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.corrosive_substance").getValues(true));
+        final ItemStack corrosive_substance = CustomItem.CORROSIVE_SUBSTANCE.getItem();
         if (isMatching(matrix, corrosive_substance)) {
                 ItemStack sword = null;
                 for (ItemStack item : matrix) {

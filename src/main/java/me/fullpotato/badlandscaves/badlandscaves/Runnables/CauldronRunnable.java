@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Runnables;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -185,9 +186,9 @@ public class CauldronRunnable extends BukkitRunnable {
                 else if (in_slots.contains(Material.COMMAND_BLOCK)) {
                     int slot = in_slots.indexOf(Material.COMMAND_BLOCK) == 0 ? 11 : 15;
 
-                    final ItemStack purge_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.purge_essence").getValues(true));
-                    final ItemStack hell_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.hell_essence").getValues(true));
-                    final ItemStack magic_ess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
+                    final ItemStack purge_ess = CustomItem.PURGE_ESSENCE.getItem();
+                    final ItemStack hell_ess = CustomItem.HELL_ESSENCE.getItem();
+                    final ItemStack magic_ess = CustomItem.MAGIC_ESSENCE.getItem();
 
                     if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(purge_ess)) {
                         green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");

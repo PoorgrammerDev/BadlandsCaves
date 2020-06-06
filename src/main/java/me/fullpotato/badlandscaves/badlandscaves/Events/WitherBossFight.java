@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import me.fullpotato.badlandscaves.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.badlandscaves.WorldGeneration.PreventDragon;
@@ -493,18 +494,21 @@ public class WitherBossFight implements Listener {
 
             Creature chosen = entities[random.nextInt(entities.length)];
 
-            String keyType = "";
+            CustomItem customItem = null;
             if (chosen instanceof PigZombie) {
-                keyType = "magma";
+                customItem = CustomItem.CHAMBER_MAGMA_KEY;
             }
             else if (chosen instanceof Blaze) {
-                keyType = "glowstone";
+                customItem = CustomItem.CHAMBER_GLOWSTONE_KEY;
             }
             else if (chosen instanceof WitherSkeleton) {
-                keyType = "soulsand";
+                customItem = CustomItem.CHAMBER_SOULSAND_KEY;
             }
-            chosen.getEquipment().setChestplate(ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.chamber_" + keyType + "_key").getValues(true)));
-            chosen.getEquipment().setChestplateDropChance(1);
+
+            if (customItem != null) {
+                chosen.getEquipment().setChestplate(customItem.getItem());
+                chosen.getEquipment().setChestplateDropChance(1);
+            }
         }
     }
 
@@ -588,19 +592,20 @@ public class WitherBossFight implements Listener {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 event.setCancelled(true);
                 Block block = event.getClickedBlock();
-                String keyType;
+
+                CustomItem keyType;
                 if (block.getType().equals(Material.RED_SHULKER_BOX)) {
-                    keyType = "magma";
+                    keyType = CustomItem.CHAMBER_MAGMA_KEY;
                 }
                 else if (block.getType().equals(Material.YELLOW_SHULKER_BOX)) {
-                    keyType = "glowstone";
+                    keyType = CustomItem.CHAMBER_GLOWSTONE_KEY;
                 }
                 else if (block.getType().equals(Material.GRAY_SHULKER_BOX)) {
-                    keyType = "soulsand";
+                    keyType = CustomItem.CHAMBER_SOULSAND_KEY;
                 }
                 else return;
 
-                final ItemStack key = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.chamber_" + keyType + "_key").getValues(true));
+                final ItemStack key = keyType.getItem();
 
                 if (item.isSimilar(key)) {
                     player.playSound(block.getLocation(), Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1, 1);
@@ -1063,7 +1068,7 @@ public class WitherBossFight implements Listener {
     }
 
     public void giveLoot () {
-        ItemStack crate = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.fishing_crate_hardmode").getValues(true));
+        ItemStack crate = CustomItem.FISHING_CRATE_HARDMODE.getItem();
         crate.setAmount(new Random().nextInt(16) + 16);
 
         for (Player player : players) {

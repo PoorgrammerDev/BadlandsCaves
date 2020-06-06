@@ -121,75 +121,15 @@ public final class BadlandsCaves extends JavaPlugin {
 
     };
 
-    //all custom items' names
-    private final String[] custom_items = {
-            "starter_sapling",
-            "starter_bone_meal",
-            "toxic_water",
-            "purified_water",
-            "fishing_crate",
-            "fishing_crate_hardmode",
-            "antidote",
-            "mana_potion",
-            "purge_essence",
-            "hell_essence",
-            "magic_essence",
-            "displace",
-            "withdraw",
-            "enhanced_eyes",
-            "possess",
-            "tiny_blaze_powder",
-            "tainted_powder",
-            "zombie_soul",
-            "creeper_soul",
-            "skeleton_soul",
-            "spider_soul",
-            "pigzombie_soul",
-            "ghast_soul",
-            "silverfish_soul",
-            "witch_soul",
-            "phantom_soul",
-            "merged_souls",
-            "soul_crystal_incomplete",
-            "soul_crystal",
-            "rune",
-            "charged_rune",
-            "voltshock_battery",
-            "voltshock_shocker",
-            "voltshock_arrow",
-            "corrosive_substance",
-            "corrosive_arrow",
-            "chamber_magma_key",
-            "chamber_glowstone_key",
-            "chamber_soulsand_key",
-            "blessed_apple",
-            "enchanted_blessed_apple",
-            "stone_shield",
-            "iron_shield",
-            "diamond_shield",
-            "recall_potion",
-            "titanium_fragment",
-            "titanium_ingot",
-            "binding",
-            "golden_cable",
-            "nether_star_fragment",
-            "starlight_circuit",
-            "starlight_battery",
-            "starlight_module",
-    };
-
     @Override
     public void onEnable() {
         loadWorldNames();
-
         loadConfig();
 
         //load players metadata
         PlayerConfigLoadSave loader = new PlayerConfigLoadSave(this, player_values);
         loader.loadPlayers();
 
-        //adding custom items
-        LoadCustomItems.saveCustomItemsToConfig(this);
 
         loadCustomWorlds();
         registerEvents();
@@ -249,7 +189,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this),this);
         this.getServer().getPluginManager().registerEvents(new CombineTinyBlaze(this), this);
         this.getServer().getPluginManager().registerEvents(new PurgeEssence(this), this);
-        this.getServer().getPluginManager().registerEvents(new StopCustomItemsInteract(this, custom_items), this);
+        this.getServer().getPluginManager().registerEvents(new StopCustomItemsInteract(this), this);
         this.getServer().getPluginManager().registerEvents(new UseTaintPowder(this), this);
         this.getServer().getPluginManager().registerEvents(new ZombieDeathLoot(this), this);
         this.getServer().getPluginManager().registerEvents(new GetFishingCrate(this), this);
@@ -332,7 +272,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("powers").setTabCompleter(new PowersTabComplete(this));
 
         this.getCommand("customitem").setExecutor(new CustomItemCommand(this));
-        this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete(this, custom_items));
+        this.getCommand("customitem").setTabCompleter(new CustomItemTabComplete(this));
 
         this.getCommand("chaos").setExecutor(new ChaosCommand(this));
         this.getCommand("chaos").setTabCompleter(new ChaosCommandTabComplete());

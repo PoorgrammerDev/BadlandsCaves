@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.Blocks;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -44,7 +45,7 @@ public class TitaniumOre implements Listener {
                         }
                         event.setDropItems(false);
 
-                        ItemStack titanium = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.titanium_fragment").getValues(true));
+                        ItemStack titanium = CustomItem.TITANIUM_FRAGMENT.getItem();
                         titanium.setAmount(count);
                         event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), titanium);
                         event.setExpToDrop(count * 16);

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +21,7 @@ public class CombineTinyBlaze extends MatchCrafting implements Listener {
 
         final Material result = event.getRecipe().getResult().getType();
         if (result.equals(Material.BLAZE_POWDER)) {
-            final ItemStack tiny_blz = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.tiny_blaze_powder").getValues(true));
+            final ItemStack tiny_blz = CustomItem.TINY_BLAZE_POWDER.getItem();
             if (!isMatching(event.getInventory().getMatrix(), tiny_blz)) {
                 event.getInventory().setResult(null);
             }

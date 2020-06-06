@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.CustomItemRecipes;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +14,7 @@ public class SoulCrystalIncompleteCrafting {
     }
 
     public void soul_crystal_incomplete() {
-        final ItemStack soul_crystal_incomplete = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.soul_crystal_incomplete").getValues(true));
+        final ItemStack soul_crystal_incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
 
         ShapelessRecipe soul_crystal_incomplete_recipe = new ShapelessRecipe(new NamespacedKey(plugin, "soul_crystal_incomplete"), soul_crystal_incomplete);
         soul_crystal_incomplete_recipe.addIngredient(Material.DIAMOND);

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,7 +52,7 @@ public class UseRune implements Listener {
 
     public boolean checkRuneItem(final ItemStack input) {
         final ItemStack current = input.clone();
-        final ItemStack rune = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.rune").getValues(true));
+        final ItemStack rune = CustomItem.RUNE.getItem();
 
         if (current.hasItemMeta()) {
             ItemMeta current_meta = current.getItemMeta();
@@ -100,8 +101,8 @@ public class UseRune implements Listener {
         player.openInventory(inventory);
 
         ItemStack current = player.getInventory().getItemInMainHand();
-        final ItemStack magic_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
-        final ItemStack merged_souls = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true));
+        final ItemStack magic_essence = CustomItem.MAGIC_ESSENCE.getItem();
+        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -136,7 +137,7 @@ public class UseRune implements Listener {
                         }
                     }
                     else {
-                        final ItemStack charged_rune = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.charged_rune").getValues(true));
+                        final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
                         player.getInventory().setItemInMainHand(charged_rune);
                         player.closeInventory();
                         player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 0.5F, 1);
@@ -157,8 +158,8 @@ public class UseRune implements Listener {
                 final Inventory target_inv = event.getView().getTopInventory();
                 final Inventory player_inv = event.getView().getBottomInventory();
                 final InventoryAction action = event.getAction();
-                final ItemStack magic_essence = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
-                final ItemStack merged_souls = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.merged_souls").getValues(true));
+                final ItemStack magic_essence = CustomItem.MAGIC_ESSENCE.getItem();
+                final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
                 final int slot = event.getSlot();
 
                 if (clicked_inv.equals(target_inv)) {

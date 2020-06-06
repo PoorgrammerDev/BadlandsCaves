@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.DisplaceParticleRunnable;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.ManaBarManager;
 import me.fullpotato.badlandscaves.badlandscaves.Runnables.SupernaturalPowers.PossessionIndicatorRunnable;
@@ -90,10 +91,10 @@ public class SwapPowers implements Listener {
         };
 
         final ItemStack[] power_items = {
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true)),
-                ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true)),
+                CustomItem.DISPLACE.getItem(),
+                CustomItem.ENHANCED_EYES.getItem(),
+                CustomItem.WITHDRAW.getItem(),
+                CustomItem.POSSESS.getItem(),
         };
 
         final BukkitTask[] power_runnables = {

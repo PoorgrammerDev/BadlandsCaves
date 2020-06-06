@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.badlandscaves.Events.CustomItems.CustomItem;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,7 +53,7 @@ public class UseChargedRune implements Listener {
         if (event.getItem() == null) return;
 
         final ItemStack current = event.getItem();
-        final ItemStack charged_rune = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.charged_rune").getValues(true));
+        final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
         if (!current.isSimilar(charged_rune)) return;
 
         final Player player = event.getPlayer();
@@ -120,7 +121,7 @@ public class UseChargedRune implements Listener {
                 final Inventory player_inv = event.getView().getBottomInventory();
                 final Player player = (Player) event.getWhoClicked();
                 final ItemStack current = event.getCurrentItem();
-                final ItemStack charged_rune = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.charged_rune").getValues(true));
+                final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
                 final int slot = event.getSlot();
 
                 if (clicked_inv.equals(target_inv)) {
@@ -225,7 +226,7 @@ public class UseChargedRune implements Listener {
             return displace_cancel;
         }
         else {
-            ItemStack displace = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.displace").getValues(true));
+            ItemStack displace = CustomItem.DISPLACE.getItem();
             ItemMeta displace_meta = displace.getItemMeta();
             displace_meta.setDisplayName("§dDisplace §8| §7Upgrade to Level §a" + (displace_level + 1));
 
@@ -270,7 +271,7 @@ public class UseChargedRune implements Listener {
             return withdraw_cancel;
         }
         else {
-            ItemStack withdraw = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.withdraw").getValues(true));
+            ItemStack withdraw = CustomItem.WITHDRAW.getItem();
             ItemMeta withdraw_meta = withdraw.getItemMeta();
             withdraw_meta.setDisplayName("§8Withdraw §8| §7Upgrade to Level §a" + (withdraw_level + 1));
 
@@ -316,7 +317,7 @@ public class UseChargedRune implements Listener {
             return eyes_cancel;
         }
         else {
-            ItemStack eyes = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.enhanced_eyes").getValues(true));
+            ItemStack eyes = CustomItem.ENHANCED_EYES.getItem();
             ItemMeta eyes_meta = eyes.getItemMeta();
             eyes_meta.setDisplayName("§9Enhanced Eyes §8| §7Upgrade to Level §a" + (eyes_level + 1));
 
@@ -369,7 +370,7 @@ public class UseChargedRune implements Listener {
             return possess_cancel;
         }
         else {
-            ItemStack possess = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.possess").getValues(true));
+            ItemStack possess = CustomItem.POSSESS.getItem();
             ItemMeta possess_meta = possess.getItemMeta();
             possess_meta.setDisplayName("§2Possession §8| §7Upgrade to Level §a" + (possess_level + 1));
 
@@ -493,7 +494,7 @@ public class UseChargedRune implements Listener {
             return max_mana_cancel;
         }
         else {
-            ItemStack icon = ItemStack.deserialize(plugin.getConfig().getConfigurationSection("items.magic_essence").getValues(true));
+            ItemStack icon = CustomItem.MAGIC_ESSENCE.getItem();
             ItemMeta meta = icon.getItemMeta();
             meta.setDisplayName("§3Max Mana §8| §7Increase to §a" + (max_mana + 10));
 
