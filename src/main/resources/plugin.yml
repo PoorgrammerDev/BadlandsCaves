@@ -1,6 +1,6 @@
 name: BadlandsCaves
 version: ${project.version}
-main: me.fullpotato.badlandscaves.badlandscaves.BadlandsCaves
+main: me.fullpotato.badlandscaves.BadlandsCaves
 api-version: 1.13
 commands:
   thirst:
