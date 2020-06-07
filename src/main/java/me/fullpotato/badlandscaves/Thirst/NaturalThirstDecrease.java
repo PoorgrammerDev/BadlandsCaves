@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Thirst;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -37,11 +38,11 @@ public class NaturalThirstDecrease implements Listener {
         boolean sprint = player.isSprinting();
         boolean sneak = player.isSneaking();
         boolean climb = moved_y && (player.getLocation().getBlock().getType().equals(Material.LADDER) || player.getLocation().getBlock().getType().equals(Material.VINE));
-        double current_thirst_sys = player.getMetadata("thirst_sys_var").get(0).asDouble();
+        double current_thirst_sys = (double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player);
 
         if (moved) {
             //endurance cancel
-            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (has_powers) {
                 int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
                 if (endurance_level > 0) {
@@ -84,7 +85,7 @@ public class NaturalThirstDecrease implements Listener {
         if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= threshold) {
             player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0));
 
-            double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
+            double current_thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
             double new_thirst = current_thirst - 0.1;
             player.setMetadata("Thirst" , new FixedMetadataValue(plugin, new_thirst));
         }

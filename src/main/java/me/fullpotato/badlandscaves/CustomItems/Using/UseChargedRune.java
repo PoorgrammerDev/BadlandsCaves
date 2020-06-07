@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,7 +61,7 @@ public class UseChargedRune implements Listener {
         event.setCancelled(true);
 
         if (event.getHand() == null || event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
-        if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
             player.sendMessage(ChatColor.RED + "This item can only be used by Heretics.");
             return;
         }
@@ -129,14 +130,14 @@ public class UseChargedRune implements Listener {
                         event.setCancelled(true);
                     }
                     else {
-                        HashMap<ItemStack, String> icons = new HashMap<>();
-                        icons.put(generateDisplaceIcon(player), "displace_level");
-                        icons.put(generateWithdrawIcon(player), "withdraw_level");
-                        icons.put(generateAgilityIcon(player), "agility_level");
-                        icons.put(generateManaIcon(player), "max_mana");
-                        icons.put(generateEnduranceIcon(player), "endurance_level");
-                        icons.put(generateEyesIcon(player), "eyes_level");
-                        icons.put(generatePossessIcon(player), "possess_level");
+                        HashMap<ItemStack, PlayerScore> icons = new HashMap<>();
+                        icons.put(generateDisplaceIcon(player), PlayerScore.DISPLACE_LEVEL);
+                        icons.put(generateWithdrawIcon(player), PlayerScore.WITHDRAW_LEVEL);
+                        icons.put(generateAgilityIcon(player), PlayerScore.AGILITY_LEVEL);
+                        icons.put(generateManaIcon(player), PlayerScore.MAX_MANA);
+                        icons.put(generateEnduranceIcon(player), PlayerScore.ENDURANCE_LEVEL);
+                        icons.put(generateEyesIcon(player), PlayerScore.EYES_LEVEL);
+                        icons.put(generatePossessIcon(player), PlayerScore.POSSESS_LEVEL);
 
 
                         if (icons.containsKey(current)) {
@@ -151,13 +152,13 @@ public class UseChargedRune implements Listener {
                                 if (player.getInventory().getItemInMainHand().isSimilar(charged_rune)) {
                                     player.getInventory().setItemInMainHand(null);
 
-                                    String power = icons.get(clicked_inv.getItem(4));
+                                    PlayerScore power = icons.get(clicked_inv.getItem(4));
 
-                                    if (power.equals("max_mana")) {
-                                        player.setMetadata(power, new FixedMetadataValue(plugin, player.getMetadata(power).get(0).asInt() + 10));
+                                    if (power.equals(PlayerScore.MAX_MANA)) {
+                                        power.setScore(plugin, player, (int) power.getScore(plugin, player) + 10);
                                     }
                                     else {
-                                        player.setMetadata(power, new FixedMetadataValue(plugin, player.getMetadata(power).get(0).asInt() + 1));
+                                        power.setScore(plugin, player, (int) power.getScore(plugin, player) + 1);
                                     }
 
                                     player.closeInventory();
@@ -211,7 +212,7 @@ public class UseChargedRune implements Listener {
 
 
     private ItemStack generateDisplaceIcon(final Player player) {
-        final int displace_level = player.getMetadata("displace_level").get(0).asInt();
+        final int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
         if (displace_level >= displace_max_level) {
             ItemStack displace_cancel = new ItemStack(Material.BARRIER);
             ItemMeta displace_cancel_meta = displace_cancel.getItemMeta();
@@ -256,7 +257,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generateWithdrawIcon(final Player player) {
-        final int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+        final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         if (withdraw_level >= withdraw_max_level) {
             ItemStack withdraw_cancel = new ItemStack(Material.BARRIER);
             ItemMeta withdraw_cancel_meta = withdraw_cancel.getItemMeta();
@@ -302,7 +303,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generateEyesIcon(final Player player) {
-        final int eyes_level = player.getMetadata("eyes_level").get(0).asInt();
+        final int eyes_level = (int) PlayerScore.EYES_LEVEL.getScore(plugin, player);
         if (eyes_level >= eyes_max_level) {
             ItemStack eyes_cancel = new ItemStack(Material.BARRIER);
             ItemMeta eyes_cancel_meta = eyes_cancel.getItemMeta();
@@ -355,7 +356,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generatePossessIcon(final Player player) {
-        final int possess_level = player.getMetadata("possess_level").get(0).asInt();
+        final int possess_level = (int) PlayerScore.POSSESS_LEVEL.getScore(plugin, player);
         if (possess_level >= possess_max_level) {
             ItemStack possess_cancel = new ItemStack(Material.BARRIER);
             ItemMeta possess_cancel_meta = possess_cancel.getItemMeta();
@@ -400,7 +401,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generateAgilityIcon(final Player player) {
-        final int agility_level = player.getMetadata("agility_level").get(0).asInt();
+        final int agility_level = (int) PlayerScore.AGILITY_LEVEL.getScore(plugin, player);
         if (agility_level >= agility_max_level) {
             ItemStack agility_cancel = new ItemStack(Material.BARRIER);
             ItemMeta agility_cancel_meta = agility_cancel.getItemMeta();
@@ -440,7 +441,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generateEnduranceIcon(final Player player) {
-        final int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
+        final int endurance_level = (int) PlayerScore.ENDURANCE_LEVEL.getScore(plugin, player);
         if (endurance_level >= endurance_max_level) {
             ItemStack endurance_cancel = new ItemStack(Material.BARRIER);
             ItemMeta endurance_cancel_meta = endurance_cancel.getItemMeta();
@@ -479,7 +480,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generateManaIcon(final Player player) {
-        final int max_mana = player.getMetadata("max_mana").get(0).asInt();
+        final int max_mana = (int) PlayerScore.MAX_MANA.getScore(plugin, player);
         if (max_mana >= max_mana_max) {
             ItemStack max_mana_cancel = new ItemStack(Material.BARRIER);
             ItemMeta cancel_meta = max_mana_cancel.getItemMeta();

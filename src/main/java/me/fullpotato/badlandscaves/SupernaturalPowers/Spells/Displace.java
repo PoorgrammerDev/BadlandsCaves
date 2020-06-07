@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarMa
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.LineOfSight;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -26,7 +27,7 @@ public class Displace extends UsePowers implements Listener {
     @EventHandler
     public void use_displace(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         World world = player.getWorld();
@@ -42,7 +43,7 @@ public class Displace extends UsePowers implements Listener {
                     if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
 
                     final ManaBarManager manaBar = new ManaBarManager(plugin);
-                    int displace_level = player.getMetadata("displace_level").get(0).asInt();
+                    int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
                     int place_range, warp_range;
                     boolean cancel_fall;
 
@@ -82,7 +83,7 @@ public class Displace extends UsePowers implements Listener {
                                         if (entity instanceof Player) {
                                             Player powered = (Player) entity;
                                             if (!powered.equals(player) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                                                if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                                                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) {
                                                     powered.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.3F, 1);
                                                     powered.spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 5, 0.1, 0.1, 0.1, 1);
                                                 }

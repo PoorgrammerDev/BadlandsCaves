@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.PossessionMobsRunnable;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,7 @@ public class Possession extends UsePowers implements Listener {
     @EventHandler
     public void use_possession (PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         ItemStack possess = CustomItem.POSSESS.getItem();
@@ -105,7 +106,7 @@ public class Possession extends UsePowers implements Listener {
                                                 for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                                                     if (entity instanceof Player) {
                                                         Player powered = (Player) entity;
-                                                        if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                        if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                                                             powered.playSound(player.getLocation(), "custom.supernatural.possession.enter", SoundCategory.PLAYERS, 0.3F, 1);
                                                             powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
                                                         }

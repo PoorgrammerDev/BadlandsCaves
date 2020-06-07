@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Toxicity;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,7 +31,7 @@ public class IncreaseToxInWater implements Listener {
 
         if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
             if (block.getType() == Material.WATER) {
-                double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                 int current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
 
                 /* Order of increasing rates
@@ -39,7 +40,7 @@ public class IncreaseToxInWater implements Listener {
                  *  Wbreath
                  *  Nothing
                  * */
-                if (!player.isDead() && player.getMetadata("Toxicity").get(0).asDouble() <= 100) {
+                if (!player.isDead() && (double) PlayerScore.TOXICITY.getScore(plugin, player) <= 100) {
                     if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
                         if ((player.getVehicle() instanceof Boat)) {
                             //Boat with wbreath
@@ -63,7 +64,7 @@ public class IncreaseToxInWater implements Listener {
                         player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + random_incr));
                     }
 
-                    current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                    current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                     current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
 
                     if (current_tox_slow >= 100) {

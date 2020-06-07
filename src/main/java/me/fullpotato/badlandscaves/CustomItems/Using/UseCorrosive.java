@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Corrosive;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
@@ -33,7 +34,7 @@ public class UseCorrosive implements Listener {
             Player player = (Player) event.getDamager();
             LivingEntity entity = (LivingEntity) event.getEntity();
 
-            if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                 if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                     Corrosive corrosive = new Corrosive(plugin);
                     ItemStack item = player.getInventory().getItemInMainHand();

@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.NMS.FakePlayer;
 import me.fullpotato.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,7 +50,7 @@ public class BackroomsManager implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 99999, 127, false, false));
 
-        boolean special_surprise = !type.equalsIgnoreCase("backrooms") && (type.equalsIgnoreCase("darkrooms") || (player.getMetadata("has_seen_backrooms").get(0).asBoolean() && player.getMetadata("has_supernatural_powers").get(0).asBoolean() && random.nextInt(100) < 25));
+        boolean special_surprise = !type.equalsIgnoreCase("backrooms") && (type.equalsIgnoreCase("darkrooms") || (player.getMetadata("has_seen_backrooms").get(0).asBoolean() && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1 && random.nextInt(100) < 25));
 
         if (special_surprise) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 0, false, false));

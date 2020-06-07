@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Deaths;
 
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
@@ -22,7 +23,7 @@ public class BlessedAppleEat implements Listener {
     public void player_eat (PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        int death_count = player.getMetadata("Deaths").get(0).asInt();
+        int death_count = (int) PlayerScore.DEATHS.getScore(plugin, player);
 
         final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
         final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();

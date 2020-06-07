@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
@@ -20,7 +21,7 @@ public class ManaBarManager extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             KeyedBossBar manaBar = getManaBar(player);
             if (has_powers) {
                 double max_mana = player.getMetadata("max_mana").get(0).asDouble();
@@ -67,7 +68,7 @@ public class ManaBarManager extends BukkitRunnable {
     }
 
     public KeyedBossBar getManaBar(Player player) {
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
             NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
             KeyedBossBar manaBar = plugin.getServer().getBossBar(key);
@@ -81,7 +82,7 @@ public class ManaBarManager extends BukkitRunnable {
     }
 
     public void displayMessage (Player player, String message, int time, boolean force) {
-        if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) return;
         if (!force && player.getMetadata("mana_bar_message_timer").get(0).asInt() > 0) return;
 
         KeyedBossBar bar = getManaBar(player);
@@ -91,7 +92,7 @@ public class ManaBarManager extends BukkitRunnable {
     }
 
     public void clearMessage (Player player) {
-        if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) return;
         if (player.getMetadata("mana_bar_message_timer").get(0).asInt() <= 0) return;
 
         player.setMetadata("mana_bar_message_timer", new FixedMetadataValue(plugin, 0));

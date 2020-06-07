@@ -32,13 +32,13 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
 
             final int agility_speed = player.getMetadata("agility_buff_speed_lvl").get(0).asInt();
 
-            DeathEffects deathEffects = new DeathEffects();
+            DeathEffects deathEffects = new DeathEffects(plugin);
             HashMap<String, Integer> deathValues = deathEffects.getDeathEffects(player);
 
-            ThirstEffects thirstEffects = new ThirstEffects();
+            ThirstEffects thirstEffects = new ThirstEffects(plugin);
             HashMap<String, Integer> thirstValues = thirstEffects.getThirstEffects(player);
 
-            ToxEffects toxEffects = new ToxEffects();
+            ToxEffects toxEffects = new ToxEffects(plugin);
             HashMap<String, Integer> toxValues = toxEffects.getToxValues(player);
 
 

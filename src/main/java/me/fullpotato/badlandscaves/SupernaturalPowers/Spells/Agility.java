@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class Agility extends UsePowers implements Listener {
         Player player = event.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
 
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
         if ((!has_powers || agility_level < 1.0) && player.getAllowFlight()) {
             player.setAllowFlight(false);
@@ -44,7 +45,7 @@ public class Agility extends UsePowers implements Listener {
         Player player = event.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
 
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         int agility_level = player.getMetadata("agility_level").get(0).asInt();
@@ -62,7 +63,7 @@ public class Agility extends UsePowers implements Listener {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!powered.equals(player) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    if (!powered.equals(player) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1 && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                         powered.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.3F, 1);
                     }
                 }
@@ -116,7 +117,7 @@ public class Agility extends UsePowers implements Listener {
             player_loc.add(opposite);
 
             for (Player powered : plugin.getServer().getOnlinePlayers()) {
-                if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) powered.spawnParticle(Particle.CLOUD, player_loc, 5, 0.1, 0.1, 0.1);
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) powered.spawnParticle(Particle.CLOUD, player_loc, 5, 0.1, 0.1, 0.1);
             }
         }
     }

@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +39,7 @@ public class Drinking implements Listener {
 
             //toxic water
             if (potionMeta.getBasePotionData().getType().equals(PotionType.WATER)) {
-                double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
+                double current_thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
                 double thirst_add;
 
                 if (isHardmode) {
@@ -50,7 +51,7 @@ public class Drinking implements Listener {
 
                 player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(current_thirst + thirst_add, 100)));
 
-                double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                 double tox_add;
 
                 if (isHardmode) {
@@ -71,7 +72,7 @@ public class Drinking implements Listener {
 
                 //testing if purified
                 if (item.isSimilar(purified_water)) {
-                    double current_thirst = player.getMetadata("Thirst").get(0).asDouble();
+                    double current_thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
                     int thirst_threshold = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.threshold_thirst_sys") : plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
                     double thirst_add = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.purified_drink_thirst_incr") : plugin.getConfig().getInt("game_values.pre_hardmode_values.purified_drink_thirst_incr");
                     int overflow = (int) (Math.max((current_thirst + thirst_add) - 100, 0));
@@ -81,7 +82,7 @@ public class Drinking implements Listener {
                     player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, Math.min(player.getMetadata("thirst_sys_var").get(0).asInt(), buffer)));
                 }
                 else if (item.isSimilar(antidote)) {
-                    double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+                    double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                     double tox_decr = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.antidote_drink_tox_decr") : plugin.getConfig().getInt("game_values.pre_hardmode_values.antidote_drink_tox_decr");
                     player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(current_tox - tox_decr, 0)));
 
@@ -95,7 +96,7 @@ public class Drinking implements Listener {
 
                 }
                 else if (item.isSimilar(mana_potion)) {
-                    final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+                    final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
                     if (has_powers) {
                         int Mana = player.getMetadata("Mana").get(0).asInt();
                         int max_mana = player.getMetadata("max_mana").get(0).asInt();

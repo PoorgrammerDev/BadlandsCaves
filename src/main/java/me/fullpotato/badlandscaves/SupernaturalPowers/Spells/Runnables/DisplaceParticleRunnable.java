@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.PositionManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -34,7 +35,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             return;
         }
 
-        int displace_level = player.getMetadata("displace_level").get(0).asInt();
+        int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
         int place_range, warp_range;
 
         if (displace_level == 1) {

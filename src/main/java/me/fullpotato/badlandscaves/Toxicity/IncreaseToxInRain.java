@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Toxicity;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -51,7 +52,7 @@ public class IncreaseToxInRain implements Listener {
 
 
         //overflowing tox_slow to tox
-        double current_tox = player.getMetadata("Toxicity").get(0).asDouble();
+        double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
         int current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
         if (current_tox_slow >= 100) {
             player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0));

@@ -3,8 +3,10 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -123,7 +125,7 @@ public class Voltshock extends MatchCrafting implements Listener {
             final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
             final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
             if (result.isSimilar(battery) || result.isSimilar(shocker)) {
-                if (event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) == 1) {
                     event.getInventory().setResult(null);
                 }
             }
@@ -141,7 +143,7 @@ public class Voltshock extends MatchCrafting implements Listener {
                 final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
                 final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
                 if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
-                    if (!event.getViewers().get(0).getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
                         SerratedSwords serrated = new SerratedSwords(plugin);
                         Corrosive corrosive = new Corrosive(plugin);
                         TreasureGear treasureGear = new TreasureGear();

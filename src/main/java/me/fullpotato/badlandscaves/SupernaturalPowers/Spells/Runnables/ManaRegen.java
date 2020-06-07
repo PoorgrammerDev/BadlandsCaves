@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,14 +15,14 @@ public class ManaRegen extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (!has_powers) return;
 
             double Mana = player.getMetadata("Mana").get(0).asDouble();
             int max_mana = player.getMetadata("max_mana").get(0).asInt();
             if (Mana >= max_mana) return;
 
-            int thirst = player.getMetadata("Thirst").get(0).asInt();
+            int thirst = (int) PlayerScore.THIRST.getScore(plugin, player);
             if (thirst < 30) return;
 
             int mana_regen_delay_timer = player.getMetadata("mana_regen_delay_timer").get(0).asInt();

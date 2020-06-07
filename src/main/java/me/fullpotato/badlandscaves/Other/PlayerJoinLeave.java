@@ -4,7 +4,8 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Withdraw;
-import me.fullpotato.badlandscaves.Util.PlayerConfigLoadSave;
+import me.fullpotato.badlandscaves.Util.InitializePlayer;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -20,10 +21,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PlayerJoinLeave implements Listener {
 
     private BadlandsCaves plugin;
-    private String[] values;
-    public PlayerJoinLeave(BadlandsCaves bcav, String[] ply_vals) {
+    public PlayerJoinLeave(BadlandsCaves bcav) {
         plugin = bcav;
-        values = ply_vals;
     }
 
     @EventHandler
@@ -31,7 +30,6 @@ public class PlayerJoinLeave implements Listener {
         //give items
         Player player = event.getPlayer();
 
-        PlayerConfigLoadSave loader = new PlayerConfigLoadSave(plugin, values);
         //NEW PLAYER--------------------------------
         if (!player.hasPlayedBefore()) {
 
@@ -41,8 +39,8 @@ public class PlayerJoinLeave implements Listener {
             player.getInventory().addItem(starter_bone_meal);
             player.getInventory().addItem(GuideBook.getGuideBook(plugin));
 
-            //default values
-            loader.saveDefault(player);
+            InitializePlayer data = new InitializePlayer(plugin);
+            data.initializePlayer(player);
 
             new BukkitRunnable() {
                 @Override
@@ -54,8 +52,6 @@ public class PlayerJoinLeave implements Listener {
         }
 
         //EVERYONE---------------------------------------
-        //load config back into metadata
-        loader.loadPlayer(player);
 
         //if in wither fight, tp out
         if (player.getWorld().equals(plugin.getServer().getWorld(plugin.chambersWorldName))) {
@@ -73,7 +69,7 @@ public class PlayerJoinLeave implements Listener {
         //REGARDING SUPERNATURAL POWERS----------------------------------
 
         //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.withdrawWorldName))) {
                 String origworldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
@@ -83,9 +79,9 @@ public class PlayerJoinLeave implements Listener {
                 else {
                     player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
                     final World origworld = plugin.getServer().getWorld(origworldname);
-                    final double x = player.getMetadata("withdraw_x").get(0).asDouble();
-                    final double y = player.getMetadata("withdraw_y").get(0).asDouble();
-                    final double z = player.getMetadata("withdraw_z").get(0).asDouble();
+                    final double x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+                    final double y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+                    final double z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
 
                     final Location location = new Location(origworld, x, y, z);
                     Withdraw sendback = new Withdraw(plugin);
@@ -107,7 +103,5 @@ public class PlayerJoinLeave implements Listener {
     @EventHandler
     public void player_leave (PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        PlayerConfigLoadSave save_player = new PlayerConfigLoadSave(plugin, values);
-        save_player.saveToConfig(player, false);
     }
 }

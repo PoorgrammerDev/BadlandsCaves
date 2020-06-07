@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.WithdrawI
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.DisplaceParticleRunnable;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class SwapPowers implements Listener {
     @EventHandler
     public void doubleShift (PlayerToggleSneakEvent event) {
         final Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         ManaBarManager bar = new ManaBarManager(plugin);
@@ -58,7 +59,7 @@ public class SwapPowers implements Listener {
     @EventHandler
     public void swap_to_powers (PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         boolean sneaking = player.isSneaking();
@@ -83,10 +84,10 @@ public class SwapPowers implements Listener {
         };
 
         final int[] power_levels = {
-                player.getMetadata("displace_level").get(0).asInt(),
-                player.getMetadata("eyes_level").get(0).asInt(),
-                player.getMetadata("withdraw_level").get(0).asInt(),
-                player.getMetadata("possess_level").get(0).asInt(),
+                (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player),
+                (int) PlayerScore.EYES_LEVEL.getScore(plugin, player),
+                (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player),
+                (int) PlayerScore.POSSESS_LEVEL.getScore(plugin, player),
         };
 
         final ItemStack[] power_items = {

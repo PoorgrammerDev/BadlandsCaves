@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -36,7 +37,7 @@ public class Withdraw extends UsePowers implements Listener {
     @EventHandler
     public void use_withdraw(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         final ItemStack withdraw = CustomItem.WITHDRAW.getItem();
@@ -50,7 +51,7 @@ public class Withdraw extends UsePowers implements Listener {
                     if (player.getLocation().getWorld().equals(void_world)) return;
                     if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
                     else {
-                        int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+                        int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
                             double mana = player.getMetadata("Mana").get(0).asDouble();
                             int withdraw_mana_cost = plugin.getConfig().getInt("game_values.withdraw_mana_cost");
@@ -100,7 +101,7 @@ public class Withdraw extends UsePowers implements Listener {
                                         for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                                             if (entity instanceof Player) {
                                                 Player powered = (Player) entity;
-                                                if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                                                     powered.playSound(player.getLocation(), "custom.supernatural.withdraw.enter", SoundCategory.PLAYERS, 0.3F, 1);
                                                     powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
                                                 }
@@ -116,7 +117,7 @@ public class Withdraw extends UsePowers implements Listener {
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
-                                                final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
+                                                final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
                                                 if (withdraw_timer <= 0) {
                                                     getOuttaHere(player, location, voidloc, true, this.getTaskId());
                                                 }
@@ -124,8 +125,8 @@ public class Withdraw extends UsePowers implements Listener {
                                                     if (withdraw_level > 1 && withdraw_timer % (70) == 0) {
                                                         if (player.getHealth() < 20 && player.getHealth() > 0) player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
                                                         player.setFoodLevel(player.getFoodLevel() + 1);
-                                                        player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(player.getMetadata("Thirst").get(0).asDouble() + 0.5, 100)));
-                                                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(player.getMetadata("Toxicity").get(0).asDouble() - 0.5, 0)));
+                                                        player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min((double) PlayerScore.THIRST.getScore(plugin, player) + 0.5, 100)));
+                                                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0)));
                                                     }
                                                     player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
                                                     player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
@@ -155,7 +156,7 @@ public class Withdraw extends UsePowers implements Listener {
     @EventHandler
     public void keep_in_chunk (PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         Location location = player.getLocation();
@@ -165,11 +166,11 @@ public class Withdraw extends UsePowers implements Listener {
         assert world != null;
         if (!world.equals(void_world)) return;
 
-        double void_x = player.getMetadata("withdraw_x").get(0).asDouble();
-        double void_y = player.getMetadata("withdraw_y").get(0).asDouble();
-        double void_z = player.getMetadata("withdraw_z").get(0).asDouble();
-        int chunk_x = player.getMetadata("withdraw_chunk_x").get(0).asInt();
-        int chunk_z = player.getMetadata("withdraw_chunk_z").get(0).asInt();
+        double void_x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+        double void_y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+        double void_z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+        int chunk_x = (int) PlayerScore.WITHDRAW_CHUNK_X.getScore(plugin, player);
+        int chunk_z = (int) PlayerScore.WITHDRAW_CHUNK_Z.getScore(plugin, player);
 
         if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
             Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
@@ -182,8 +183,8 @@ public class Withdraw extends UsePowers implements Listener {
     }
 
     public void getOuttaHere (Player player, Location returnLocation, Location voidLocation, boolean cancel, int taskID) {
-        final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
-        final int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+        final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
+        final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         if (withdraw_level == 1) {
             player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
         }
@@ -197,7 +198,7 @@ public class Withdraw extends UsePowers implements Listener {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                         powered.playSound(player.getLocation(), "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.3F, 1);
                         powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
                     }

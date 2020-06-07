@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,7 +28,7 @@ public class DeathCommand extends Commands implements CommandExecutor {
                     if (args.length < 2) {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
-                            player.sendMessage(ChatColor.GOLD + "Your Deaths count is " + ChatColor.RED + player.getMetadata("Deaths").get(0).asInt() + ChatColor.GOLD + ".");
+                            player.sendMessage(ChatColor.GOLD + "Your Deaths count is " + ChatColor.RED + PlayerScore.DEATHS.getScore(plugin, player) + ChatColor.GOLD + ".");
                         } else {
                             playerNotValid(sender);
                         }

@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.StageEnter;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -39,7 +40,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
-        if (player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) return;
 
         //deplete use
         depleteUse(current, 2);

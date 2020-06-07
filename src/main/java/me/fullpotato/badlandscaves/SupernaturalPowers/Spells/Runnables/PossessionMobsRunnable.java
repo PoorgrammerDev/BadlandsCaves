@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.NMS.PossessionNMS;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -29,8 +30,8 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        final boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
-        double mana = player.getMetadata("Mana").get(0).asDouble();
+        final boolean in_possession = (byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1;
+        double mana = (double) PlayerScore.MANA.getScore(plugin, player);
         final int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
         final double possession_mana_drain_tick = possession_mana_drain / 20.0;
         PossessionNMS nms = new PossessionNMS(player);
@@ -82,7 +83,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                         powered.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.3F, 1);
                         powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
                     }
@@ -90,18 +91,18 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             }
 
             //teleport player back to orig location
-            if (player.hasMetadata("possess_orig_world") && !player.getMetadata("possess_orig_world").get(0).asString().equalsIgnoreCase("__REMOVED__")) {
-                int possess_level = player.getMetadata("possess_level").get(0).asInt();
+            if (player.hasMetadata("possess_orig_world") && !((String) PlayerScore.POSSESS_ORIG_WORLD.getScore(plugin, player)).equalsIgnoreCase("__REMOVED__")) {
+                int possess_level = (int) PlayerScore.POSSESS_LEVEL.getScore(plugin, player);
                 float current_yaw = player.getLocation().getYaw();
                 float current_pitch = player.getLocation().getPitch();
 
                 //LEVEL 2: WARP TO DISPLACE------------ (no mana cost)
-                boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asBoolean();
+                boolean has_displace_marker = (byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1;
                 if (possess_level > 1 && has_displace_marker) {
-                    int displace_level = player.getMetadata("displace_level").get(0).asInt();
-                    double disp_x = player.getMetadata("displace_x").get(0).asDouble();
-                    double disp_y = player.getMetadata("displace_y").get(0).asDouble();
-                    double disp_z = player.getMetadata("displace_z").get(0).asDouble();
+                    int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
+                    double disp_x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
+                    double disp_y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);
+                    double disp_z = (double) PlayerScore.DISPLACE_Z.getScore(plugin, player);
                     Location displace_marker = new Location(player.getWorld(), disp_x, disp_y, disp_z, current_yaw, current_pitch);
 
                     int warp_range;
@@ -126,10 +127,10 @@ public class PossessionMobsRunnable extends BukkitRunnable {
                     }
                 }
                 //WARP TO ORIG---------------
-                World orig_world = plugin.getServer().getWorld(player.getMetadata("possess_orig_world").get(0).asString());
-                double orig_x = player.getMetadata("possess_orig_x").get(0).asDouble();
-                double orig_y = player.getMetadata("possess_orig_y").get(0).asDouble();
-                double orig_z = player.getMetadata("possess_orig_z").get(0).asDouble();
+                World orig_world = plugin.getServer().getWorld((String) PlayerScore.POSSESS_ORIG_WORLD.getScore(plugin, player));
+                double orig_x = (double) PlayerScore.POSSESS_ORIG_X.getScore(plugin, player);
+                double orig_y = (double) PlayerScore.POSSESS_ORIG_Y.getScore(plugin, player);
+                double orig_z = (double) PlayerScore.POSSESS_ORIG_Z.getScore(plugin, player);
                 Location orig_loc = new Location(orig_world, orig_x, orig_y, orig_z, current_yaw, current_pitch);
                 player.teleport(orig_loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 player.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);

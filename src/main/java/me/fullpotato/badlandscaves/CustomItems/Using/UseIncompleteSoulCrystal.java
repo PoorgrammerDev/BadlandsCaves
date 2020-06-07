@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.SpawnBoss;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -46,13 +47,13 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
         final World reflection = plugin.getServer().getWorld(plugin.reflectionWorldName);
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
-        if (player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) return;
 
         //removes a use
         depleteUse(current, 2);
 
         //adds a death
-        player.setMetadata("Deaths", new FixedMetadataValue(plugin, player.getMetadata("Deaths").get(0).asInt() + 1));
+        player.setMetadata("Deaths", new FixedMetadataValue(plugin, (int) PlayerScore.DEATHS.getScore(plugin, player) + 1));
 
 
         //save inventory, then disenchant all items

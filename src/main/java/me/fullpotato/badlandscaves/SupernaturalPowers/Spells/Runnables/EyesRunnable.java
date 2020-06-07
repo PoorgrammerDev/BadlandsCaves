@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -31,7 +32,7 @@ public class EyesRunnable extends BukkitRunnable {
     @Override
     public void run() {
         EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
-        final int eyes_level = player.hasMetadata("eyes_level") ? player.getMetadata("eyes_level").get(0).asInt() : 0;
+        final int eyes_level = player.hasMetadata("eyes_level") ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
         final double dist_range = Math.pow(block_range - 1, 2);
@@ -84,7 +85,7 @@ public class EyesRunnable extends BukkitRunnable {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                         powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.3F, 1);
                         powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
                     }

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Other;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -25,15 +26,15 @@ public class ActionbarRunnable extends BukkitRunnable {
 
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;
 
-            int death_count = player.getMetadata("Deaths").get(0).asInt();
+            int death_count = (int) PlayerScore.DEATHS.getScore(plugin, player);
             String separator = ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + " | ";
             String actionbarmsg = (ChatColor.GOLD + ChatColor.BOLD.toString() + "Deaths: " + ChatColor.RED + ChatColor.BOLD.toString() + death_count + separator);
 
-            double thirst_count = player.getMetadata("Thirst").get(0).asDouble();
-            double tox_count = player.getMetadata("Toxicity").get(0).asDouble();
+            double thirst_count = (double) PlayerScore.THIRST.getScore(plugin, player);
+            double tox_count = (double) PlayerScore.TOXICITY.getScore(plugin, player);
 
             if (thirst_count >= 10) {
-                int thirst_count_int = player.getMetadata("Thirst").get(0).asInt();
+                int thirst_count_int = (int) PlayerScore.THIRST.getScore(plugin, player);
                 actionbarmsg += ChatColor.BLUE + ChatColor.BOLD.toString() + "Thirst: " + ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + thirst_count_int + ChatColor.BOLD.toString() + "%" + separator;
             }
             else {
@@ -43,7 +44,7 @@ public class ActionbarRunnable extends BukkitRunnable {
 
 
             if (tox_count >= 10) {
-                int tox_count_int = player.getMetadata("Toxicity").get(0).asInt();
+                int tox_count_int = (int) PlayerScore.TOXICITY.getScore(plugin, player);
                 actionbarmsg += ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "Toxicity: " + ChatColor.GREEN + ChatColor.BOLD.toString() + tox_count_int + ChatColor.BOLD.toString() + "%";
             }
             else {

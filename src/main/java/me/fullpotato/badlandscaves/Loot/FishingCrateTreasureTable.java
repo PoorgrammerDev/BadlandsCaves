@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -42,7 +43,7 @@ public class FishingCrateTreasureTable implements LootTable {
 
 
         if (hardmode) {
-            final boolean heretic = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            final boolean heretic = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         //HARDMODE-------------------------------------
             ArrayList<ItemStack> tier1 = new ArrayList<>();
             tier1.add(new ItemStack(Material.IRON_BLOCK, randomCount(random, 1, 8)));

@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.Effects;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -9,10 +11,15 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 
 public class DeathEffects {
+    private BadlandsCaves plugin;
+
+    public DeathEffects(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     public HashMap<String, Integer> getDeathEffects(Player player) {
-        final int deaths = player.getMetadata("Deaths").get(0).asInt();
-        final boolean supernatural = (player.hasMetadata("has_supernatural_powers") && player.getMetadata("has_supernatural_powers").get(0).asBoolean());
-        int poison_lvl = 0;
+        final int deaths = (int) PlayerScore.DEATHS.getScore(plugin, player);
+        final boolean supernatural = (player.hasMetadata("has_supernatural_powers") && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1);
         int hunger_lvl = 0;
         int walk_speed = 0;
         int mine_speed = 0;

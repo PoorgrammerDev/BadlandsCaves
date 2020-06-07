@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -41,7 +42,7 @@ public class CustomBows implements Listener {
                     final ItemStack voltshock_arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
 
                     if (arrowItem != null && (arrowItem.isSimilar(corrosive_arrow) || arrowItem.isSimilar(voltshock_arrow))) {
-                        boolean supernatural = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+                        boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
                         if (!supernatural) {
                             if (arrowItem.isSimilar(corrosive_arrow)) {
                                 arrow.setMetadata("corrosive_arrow", new FixedMetadataValue(plugin, true));
