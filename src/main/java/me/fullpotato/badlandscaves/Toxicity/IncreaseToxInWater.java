@@ -26,13 +26,13 @@ public class IncreaseToxInWater implements Listener {
         Player player = event.getPlayer();
         Block block = player.getLocation().getBlock();
 
-        final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+        final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;
 
         if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
             if (block.getType() == Material.WATER) {
                 double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
-                int current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
+                int current_tox_slow = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
 
                 /* Order of increasing rates
                  *  Boat with wbreath
@@ -45,31 +45,31 @@ public class IncreaseToxInWater implements Listener {
                         if ((player.getVehicle() instanceof Boat)) {
                             //Boat with wbreath
                             int random_incr = (int) ((Math.random() * 5) + 5);
-                            player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, current_tox_slow + random_incr));
+                            PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, current_tox_slow + random_incr);
                         }
                         else {
                             //Wbreath no boat
                             int random_incr = (int) ((Math.random() * 50) + 50);
-                            player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, current_tox_slow + random_incr));
+                            PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, current_tox_slow + random_incr);
                         }
                     }
                     else if (player.getVehicle() instanceof Boat) {
                         //Boat w/o wbreath
                         int random_incr = (int) ((Math.random() * 10) + 10);
-                        player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, current_tox_slow + random_incr));
+                        PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, current_tox_slow + random_incr);
                     }
                     else {
                         //Nothing
                         int random_incr = (int) (Math.random() * 100);
-                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + random_incr));
+                        PlayerScore.TOXICITY.setScore(plugin, player, current_tox + random_incr);
                     }
 
                     current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
-                    current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
+                    current_tox_slow = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
 
                     if (current_tox_slow >= 100) {
-                        player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0));
-                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + 0.1));
+                        PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0);
+                        PlayerScore.TOXICITY.setScore(plugin, player, current_tox + 0.1);
                     }
                 }
             }

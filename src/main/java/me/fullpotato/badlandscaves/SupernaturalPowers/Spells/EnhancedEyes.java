@@ -48,26 +48,26 @@ public class EnhancedEyes extends UsePowers implements Listener {
                     event.setCancelled(true);
 
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
-                    final int eyes_level = player.hasMetadata("eyes_level") ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
+                    final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
                     if (eyes_level < 1) return;
 
                     final boolean using_eyes = (byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1;
 
                     preventDoubleClick(player);
                     if (using_eyes) {
-                        player.setMetadata("using_eyes", new FixedMetadataValue(plugin, false));
+                        PlayerScore.USING_EYES.setScore(plugin, player, 0);
                     }
                     else {
                         final int initial_mana_cost = plugin.getConfig().getInt("game_values.eyes_mana_cost");
                         final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
-                        int mana = player.getMetadata("Mana").get(0).asInt();
+                        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
 
                         if (mana >= initial_mana_cost) {
                             player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.5F, 1);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (player.getMetadata("using_eyes").get(0).asBoolean()) {
+                                    if (((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1)) {
                                         player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.ambience", 0.4F, 1);
                                     }
                                     else {
@@ -175,10 +175,10 @@ public class EnhancedEyes extends UsePowers implements Listener {
                             plugin.saveConfig();
 
                             mana -= (initial_mana_cost - (constant_mana_drain / 20.0));
-                            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana));
-                            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
-                            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
-                            player.setMetadata("using_eyes", new FixedMetadataValue(plugin, true));
+                            PlayerScore.MANA.setScore(plugin, player, mana);
+                            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+                            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+                            PlayerScore.USING_EYES.setScore(plugin, player, 1);
 
                             ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), block_range - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
                             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
@@ -210,7 +210,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        final boolean using_eyes = player.getMetadata("using_eyes").get(0).asBoolean();
+        final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);
         if (!using_eyes) return;
 
         String string_map = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".eyes_map");

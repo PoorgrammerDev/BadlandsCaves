@@ -93,7 +93,7 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                                 final int part_num = random.nextInt(3) + 5;
 
                                 if (tox_incr > 0) {
-                                    player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
+                                    PlayerScore.TOXICITY.setScore(plugin, player, tox + tox_incr);
                                 }
                                 world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
                             }

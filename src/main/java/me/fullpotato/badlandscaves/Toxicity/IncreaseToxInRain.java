@@ -45,18 +45,18 @@ public class IncreaseToxInRain implements Listener {
             }
         }
 
-        int toxic_sys_var = player.getMetadata("tox_slow_incr_var").get(0).asInt();
+        int toxic_sys_var = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
         Random random = new Random();
         int rand = random.nextInt(100);
-        player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, toxic_sys_var + rand));
+        PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, toxic_sys_var + rand);
 
 
         //overflowing tox_slow to tox
         double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
-        int current_tox_slow = player.getMetadata("tox_slow_incr_var").get(0).asInt();
+        int current_tox_slow = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
         if (current_tox_slow >= 100) {
-            player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0));
-            player.setMetadata("Toxicity", new FixedMetadataValue(plugin, current_tox + 0.1));
+            PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0);
+            PlayerScore.TOXICITY.setScore(plugin, player, current_tox + 0.1);
         }
 
 

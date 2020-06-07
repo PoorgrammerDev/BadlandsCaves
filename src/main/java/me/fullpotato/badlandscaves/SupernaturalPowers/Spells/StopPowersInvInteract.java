@@ -113,6 +113,6 @@ public class StopPowersInvInteract implements Listener {
         }
 
 
-        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+        PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
     }
 }

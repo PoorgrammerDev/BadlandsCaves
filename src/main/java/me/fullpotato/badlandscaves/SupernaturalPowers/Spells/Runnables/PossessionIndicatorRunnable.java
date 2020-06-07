@@ -35,7 +35,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
             plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;
         }
-        if (player.getMetadata("in_possession").get(0).asBoolean()) return;
+        if (((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1)) return;
 
         World world = player.getWorld();
         RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);

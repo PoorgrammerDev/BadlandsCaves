@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.NMS.FakePlayer;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -136,7 +137,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     public void CloneMechanism (final Player player) {
         FakePlayer nms = new FakePlayer(plugin, world);
-        if (player.hasMetadata("reflection_zombie") && player.getMetadata("reflection_zombie").get(0).asBoolean()) {
+        if ((PlayerScore.REFLECTION_ZOMBIE.hasScore(plugin, player)) && (byte) PlayerScore.REFLECTION_ZOMBIE.getScore(plugin, player) == 1) {
             nms.move(zombie.getLocation(), fakePlayer, null, true);
         }
         else {
@@ -144,7 +145,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
             SpawnBoss spawnboss = new SpawnBoss(plugin, player);
             nms.giveHandItem(fakePlayer, null, new ItemStack(spawnboss.getHighestDamage()));
 
-            player.setMetadata("reflection_zombie" , new FixedMetadataValue(plugin, true));
+            PlayerScore.REFLECTION_ZOMBIE.setScore(plugin, player, 1);
         }
     }
 

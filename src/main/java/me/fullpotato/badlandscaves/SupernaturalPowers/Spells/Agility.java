@@ -25,7 +25,7 @@ public class Agility extends UsePowers implements Listener {
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
 
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
-        int agility_level = player.getMetadata("agility_level").get(0).asInt();
+        int agility_level = (int) PlayerScore.AGILITY_LEVEL.getScore(plugin, player);
         if ((!has_powers || agility_level < 1.0) && player.getAllowFlight()) {
             player.setAllowFlight(false);
         }
@@ -48,16 +48,16 @@ public class Agility extends UsePowers implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        int agility_level = player.getMetadata("agility_level").get(0).asInt();
+        int agility_level = (int) PlayerScore.AGILITY_LEVEL.getScore(plugin, player);
         if (agility_level < 1.0) return;
 
-        double mana = player.getMetadata("Mana").get(0).asDouble();
+        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
         int cost = plugin.getConfig().getInt("game_values.agility_mana_cost");
 
         if (mana >= cost) {
-            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, Math.max(player.getMetadata("mana_regen_delay_timer").get(0).asInt(), 3)));
-            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - cost));
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 3));
+            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+            PlayerScore.MANA.setScore(plugin, player, mana - cost);
 
             player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.5F, 1);
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {

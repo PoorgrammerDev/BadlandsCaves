@@ -108,7 +108,7 @@ public class UseCorrosive implements Listener {
 
                     if (entity instanceof Player) {
                         Player target = (Player) entity;
-                        target.setMetadata("Toxicity", new FixedMetadataValue(plugin, target.getMetadata("Toxicity").get(0).asDouble() + (random.nextDouble() / 2)));
+                        PlayerScore.TOXICITY.setScore(plugin, target, ((double) PlayerScore.TOXICITY.getScore(plugin, target)) + (random.nextDouble() / 2));
                     }
 
                     times_ran[0]++;

@@ -27,7 +27,7 @@ public class EnduranceCancelHunger implements Listener {
         ItemStack item = event.getItem();
         if (item != null) return;
 
-        int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
+        int endurance_level = (int) PlayerScore.ENDURANCE_LEVEL.getScore(plugin, player);
         if (endurance_level < 1) return;
 
         Random random = new Random();

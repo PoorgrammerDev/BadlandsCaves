@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -36,7 +37,7 @@ public class DescensionReset extends BukkitRunnable {
         Player running = null;
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(world) && !player.isDead() && (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL))) {
-                int state = player.getMetadata("in_descension").get(0).asInt();
+                int state = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
                 //state 1: waiting in box
                 if (state == 1) {
                     waiting = player;
@@ -49,7 +50,7 @@ public class DescensionReset extends BukkitRunnable {
         }
 
         if (waiting != null && running == null) {
-            waiting.setMetadata("in_descension", new FixedMetadataValue(plugin, 2));
+            PlayerScore.IN_DESCENSION.setScore(plugin, waiting, 2);
 
             //removes entities
             List<Entity> entities = world.getEntities();
@@ -77,7 +78,7 @@ public class DescensionReset extends BukkitRunnable {
 
             //setting timer
             int time_limit = plugin.getConfig().getInt("game_values.descension_time_limit");
-            waiting.setMetadata("descension_timer", new FixedMetadataValue(plugin, time_limit));
+            PlayerScore.DESCENSION_TIMER.setScore(plugin, waiting, time_limit);
 
             //deploy player in stage
             waiting.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0));

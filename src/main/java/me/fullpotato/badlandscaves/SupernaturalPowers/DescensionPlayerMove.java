@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -41,19 +42,19 @@ public class DescensionPlayerMove implements Listener {
             if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
             player.setFallDistance(0);
             resetPlayer(player);
-            player.setMetadata("in_descension", new FixedMetadataValue(plugin, 3));
+            PlayerScore.IN_DESCENSION.setScore(plugin, player, 3);
             return;
         }
 
         if (!player.getGameMode().equals(GameMode.ADVENTURE) && !player.getGameMode().equals(GameMode.SURVIVAL)) return;
 
-        int in_descension = player.getMetadata("in_descension").get(0).asInt();
+        int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
         if (in_descension != 2) return;
 
         //leaving descension stage (winning)
         Location center_loc = new Location(world, 0, 85, 0);
         if (player_location.distanceSquared(center_loc) < 25) {
-            int towers_capped = player.getMetadata("descension_shrines_capped").get(0).asInt();
+            int towers_capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));
             if (towers_capped == 4) {
                 player.sendMessage(ChatColor.GRAY + "The strange sensation follows you back to reality.");
                 if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
@@ -91,10 +92,10 @@ public class DescensionPlayerMove implements Listener {
             if (!player.getWorld().equals(zombie.getWorld())) continue;
 
             if (player.hasLineOfSight(zombie)) {
-                boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
+                boolean in_possession = ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
                 if (!in_possession) {
                     Location entity_location = zombie.getLocation();
-                    detection = player.getMetadata("descension_detect").get(0).asDouble();
+                    detection = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
 
                     int multiplier = 1;
                     if (player_location.distance(entity_location) < 0.5) multiplier = 8;
@@ -111,13 +112,13 @@ public class DescensionPlayerMove implements Listener {
                         detection += 0.1 * multiplier;
                     }
 
-                    player.setMetadata("descension_detect", new FixedMetadataValue(plugin, detection));
-                    player.setMetadata("descension_detect_cooldown", new FixedMetadataValue(plugin, 30));
+                    PlayerScore.DESCENSION_DETECT.setScore(plugin, player, detection);
+                    PlayerScore.DESCENSION_DETECT_COOLDOWN.setScore(plugin, player, 30);
                 }
             }
         }
 
-        detection = player.getMetadata("descension_detect").get(0).asDouble();
+        detection = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
         int detect_max = plugin.getConfig().getInt("game_values.descension_max_detect");
         if (detection >= detect_max) {
             playerDetected(player);
@@ -133,8 +134,8 @@ public class DescensionPlayerMove implements Listener {
                 !(event.getTarget() instanceof Player)) return;
 
         Player player = (Player) event.getTarget();
-        int in_descension = player.getMetadata("in_descension").get(0).asInt();
-        double detected = player.getMetadata("descension_detect").get(0).asDouble();
+        int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
+        double detected = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
 
         if (in_descension == 2 && detected < 100) {
             event.setTarget(null);

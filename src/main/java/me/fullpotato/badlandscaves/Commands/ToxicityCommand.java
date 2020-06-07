@@ -35,7 +35,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                     } else {
                         for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
+                                sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + (PlayerScore.TOXICITY.getScore(plugin, targets)) + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }
@@ -52,7 +52,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                                 if (args.length > 2) {
                                     try {
                                         double change = Double.parseDouble(args[2]);
-                                        targets.setMetadata("Toxicity", new FixedMetadataValue(plugin, change));
+                                        PlayerScore.TOXICITY.setScore(plugin, targets, change);
                                         sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
                                         return true;
                                     }

@@ -94,20 +94,41 @@ public enum PlayerScore {
 
     public void setScore(BadlandsCaves plugin, Player player, Object score) {
         PersistentDataContainer container = player.getPersistentDataContainer();
-        if (this.getType().getPrimitiveType().equals(Double.class) && this.getDefaultScore() instanceof Double) {
+        if (this.getType().getPrimitiveType().equals(Double.class) && score instanceof Double) {
             container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.DOUBLE, (Double) score);
         }
-        else if (this.getType().getPrimitiveType().equals(Byte.class) && this.getDefaultScore() instanceof Byte) {
+        else if (this.getType().getPrimitiveType().equals(Byte.class) && score instanceof Byte) {
             container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.BYTE, (Byte) score);
         }
-        else if (this.getType().getPrimitiveType().equals(Integer.class) && this.getDefaultScore() instanceof Integer) {
+        else if (this.getType().getPrimitiveType().equals(Integer.class) && score instanceof Integer) {
             container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.INTEGER, (Integer) score);
         }
-        else if (this.getType().getPrimitiveType().equals(Short.class) && this.getDefaultScore() instanceof Short) {
+        else if (this.getType().getPrimitiveType().equals(Short.class) && score instanceof Short) {
             container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.SHORT, (Short) score);
         }
-        else if (this.getType().getPrimitiveType().equals(String.class) && this.getDefaultScore() instanceof String) {
+        else if (this.getType().getPrimitiveType().equals(String.class) && score instanceof String) {
             container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.STRING, (String) score);
         }
+    }
+
+    public boolean hasScore(BadlandsCaves plugin, Player player) {
+        PersistentDataContainer container = player.getPersistentDataContainer();
+
+        if (this.getType().getPrimitiveType().equals(Double.class) && this.getDefaultScore() instanceof Double) {
+            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.DOUBLE);
+        }
+        else if (this.getType().getPrimitiveType().equals(Byte.class) && this.getDefaultScore() instanceof Byte) {
+            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.BYTE);
+        }
+        else if (this.getType().getPrimitiveType().equals(Integer.class) && this.getDefaultScore() instanceof Integer) {
+            container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.INTEGER);
+        }
+        else if (this.getType().getPrimitiveType().equals(Short.class) && this.getDefaultScore() instanceof Short) {
+            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.SHORT);
+        }
+        else if (this.getType().getPrimitiveType().equals(String.class) && this.getDefaultScore() instanceof String) {
+            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.STRING);
+        }
+        return false;
     }
 }

@@ -23,9 +23,9 @@ public class ExitPortal extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            int in_descension = player.getMetadata("in_descension").get(0).asInt();
+            int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2) {
-                int capped = player.getMetadata("descension_shrines_capped").get(0).asInt();
+                int capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));
                 if (capped == 4) {
                     ParticleShapes.particleSphere(null, Particle.SPELL_WITCH, location, 5, -1, null);
                     return;

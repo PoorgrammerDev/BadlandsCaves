@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -19,12 +20,12 @@ public class DescensionTimeLimit extends BukkitRunnable {
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                int in_descension = player.getMetadata("in_descension").get(0).asInt();
+                int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
                 if (in_descension == 2) {
-                    int descension_timer = player.getMetadata("descension_timer").get(0).asInt();
+                    int descension_timer = (int) PlayerScore.DESCENSION_TIMER.getScore(plugin, player);
                     if (descension_timer > 0) {
                         descension_timer--;
-                        player.setMetadata("descension_timer", new FixedMetadataValue(plugin, descension_timer));
+                        PlayerScore.DESCENSION_TIMER.setScore(plugin, player, descension_timer);
                         sendActionBarMsg(player, descension_timer);
                     }
                     else {

@@ -19,7 +19,7 @@ public class DeathEffects {
 
     public HashMap<String, Integer> getDeathEffects(Player player) {
         final int deaths = (int) PlayerScore.DEATHS.getScore(plugin, player);
-        final boolean supernatural = (player.hasMetadata("has_supernatural_powers") && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1);
+        final boolean supernatural = ((PlayerScore.HAS_SUPERNATURAL_POWERS.hasScore(plugin, player)) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1);
         int hunger_lvl = 0;
         int walk_speed = 0;
         int mine_speed = 0;

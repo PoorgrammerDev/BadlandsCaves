@@ -40,7 +40,7 @@ public class Displace extends UsePowers implements Listener {
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
-                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
+                    if (((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1)) return;
 
                     final ManaBarManager manaBar = new ManaBarManager(plugin);
                     int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
@@ -58,14 +58,14 @@ public class Displace extends UsePowers implements Listener {
                         cancel_fall = true;
                     }
 
-                    boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asBoolean();
+                    boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
                     if (has_displace_marker) {
-                        double mana = player.getMetadata("Mana").get(0).asDouble();
+                        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
                         int displace_mana_cost = plugin.getConfig().getInt("game_values.displace_mana_cost");
 
-                        double x = player.getMetadata("displace_x").get(0).asDouble();
-                        double y = player.getMetadata("displace_y").get(0).asDouble();
-                        double z = player.getMetadata("displace_z").get(0).asDouble();
+                        double x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
+                        double y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);
+                        double z = (double) PlayerScore.DISPLACE_Z.getScore(plugin, player);
                         float current_yaw = player.getLocation().getYaw();
                         float current_pitch = player.getLocation().getPitch();
                         Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
@@ -76,7 +76,7 @@ public class Displace extends UsePowers implements Listener {
                                     preventDoubleClick(player);
                                     if (cancel_fall) player.setFallDistance(0);
                                     player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                    player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+                                    PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
 
                                     player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
                                     for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
@@ -92,8 +92,8 @@ public class Displace extends UsePowers implements Listener {
                                     }
 
                                     double new_mana = mana - (double) (displace_mana_cost);
-                                    player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
-                                    player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
+                                    PlayerScore.MANA.setScore(plugin, player, new_mana);
+                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
                                 }
                                 else {
                                     notEnoughMana(player);
@@ -106,7 +106,7 @@ public class Displace extends UsePowers implements Listener {
                         else if (player.getLocation().distance(displace_marker) < 20) {
                         }
                         else {
-                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+                            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
                         }
                     }
                     else {
@@ -131,17 +131,17 @@ public class Displace extends UsePowers implements Listener {
                             location.setY(location.getY() + 0.5);
                             location.setZ(location.getZ() + 0.5);
 
-                            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, true));
+                            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 1);
                             player.playSound(player.getLocation(), "custom.supernatural.displace.place_marker", SoundCategory.PLAYERS, 0.5F, 1);
 
-                            player.setMetadata("displace_x", new FixedMetadataValue(plugin, location.getX()));
-                            player.setMetadata("displace_y", new FixedMetadataValue(plugin, location.getY()));
-                            player.setMetadata("displace_z", new FixedMetadataValue(plugin, location.getZ()));
+                            PlayerScore.DISPLACE_X.setScore(plugin, player, location.getX());
+                            PlayerScore.DISPLACE_Y.setScore(plugin, player, location.getY());
+                            PlayerScore.DISPLACE_Z.setScore(plugin, player, location.getZ());
                         }
                         else {
                             manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
                         }
-                        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+                        PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                     }
                 }
             }

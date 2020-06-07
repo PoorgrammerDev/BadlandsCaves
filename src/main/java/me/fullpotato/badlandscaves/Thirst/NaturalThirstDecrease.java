@@ -44,7 +44,7 @@ public class NaturalThirstDecrease implements Listener {
             //endurance cancel
             final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (has_powers) {
-                int endurance_level = player.getMetadata("endurance_level").get(0).asInt();
+                int endurance_level = (int) PlayerScore.ENDURANCE_LEVEL.getScore(plugin, player);
                 if (endurance_level > 0) {
                     Random random = new Random();
                     int endurance_rand_cancel = random.nextInt(100);
@@ -68,7 +68,7 @@ public class NaturalThirstDecrease implements Listener {
             else {
                 new_thirst_sys = current_thirst_sys + 1;
             }
-            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, new_thirst_sys));
+            PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, new_thirst_sys);
 
         }
 
@@ -82,12 +82,12 @@ public class NaturalThirstDecrease implements Listener {
             threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
         }
 
-        if (player.getMetadata("thirst_sys_var").get(0).asDouble() >= threshold) {
-            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0));
+        if ((double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player) >= threshold) {
+            PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, 0);
 
             double current_thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
             double new_thirst = current_thirst - 0.1;
-            player.setMetadata("Thirst" , new FixedMetadataValue(plugin, new_thirst));
+            PlayerScore.THIRST.setScore(plugin, player, new_thirst);
         }
     }
 

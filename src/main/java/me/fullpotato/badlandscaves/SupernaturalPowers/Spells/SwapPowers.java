@@ -33,22 +33,22 @@ public class SwapPowers implements Listener {
 
         ManaBarManager bar = new ManaBarManager(plugin);
         if (player.isSneaking()) {
-            player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
+            PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
             bar.clearMessage(player);
         }
         else {
-            final boolean doubleshift_window = player.hasMetadata("swap_doubleshift_window") && player.getMetadata("swap_doubleshift_window").get(0).asBoolean();
+            final boolean doubleshift_window = (PlayerScore.SWAP_DOUBLESHIFT_WINDOW.hasScore(plugin, player)) && ((byte) PlayerScore.SWAP_DOUBLESHIFT_WINDOW.getScore(plugin, player) == 1);
             if (doubleshift_window) {
-                player.setMetadata("swap_window", new FixedMetadataValue(plugin, true));
+                PlayerScore.SWAP_WINDOW.setScore(plugin, player, 1);
 
                 bar.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
             }
             else {
-                player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, true));
+                PlayerScore.SWAP_DOUBLESHIFT_WINDOW.setScore(plugin, player, 1);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, false));
+                        PlayerScore.SWAP_DOUBLESHIFT_WINDOW.setScore(plugin, player, 0);
                     }
                 }.runTaskLaterAsynchronously(plugin, 20);
             }
@@ -65,15 +65,15 @@ public class SwapPowers implements Listener {
         boolean sneaking = player.isSneaking();
         if (!sneaking) return;
 
-        final boolean in_window = player.hasMetadata("swap_window") && player.getMetadata("swap_window").get(0).asBoolean();
+        final boolean in_window = (PlayerScore.SWAP_WINDOW.hasScore(plugin, player)) && ((byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 1);
         if (!in_window) return;
 
 
-        int swap_cd_num = player.getMetadata("swap_cooldown").get(0).asInt();
+        int swap_cd_num = ((int) PlayerScore.SWAP_COOLDOWN.getScore(plugin, player));
         if (swap_cd_num > 0) return;
 
         ItemStack offhand_item = player.getInventory().getItemInOffHand();
-        int swap_slot = player.getMetadata("swap_slot").get(0).asInt();
+        int swap_slot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
         int incr = (event.getNewSlot() > event.getPreviousSlot() || (event.getNewSlot() == 0 && event.getPreviousSlot() == 8)) && !(event.getNewSlot() == 8 && event.getPreviousSlot() == 0) ? 1 : -1;
 
         final String[] names = {
@@ -121,7 +121,7 @@ public class SwapPowers implements Listener {
                     player.getInventory().setItemInOffHand(orig_item);
                     plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".saved_offhand_item", null);
                     plugin.saveConfig();
-                    player.setMetadata("swap_slot", new FixedMetadataValue(plugin, new_swap_slot));
+                    PlayerScore.SWAP_SLOT.setScore(plugin, player, new_swap_slot);
 
                     bar.clearMessage(player);
                     break;
@@ -137,7 +137,7 @@ public class SwapPowers implements Listener {
                         if (power_runnables[new_swap_slot] != null) {
                             BukkitTask task = power_runnables[new_swap_slot];
                         }
-                        player.setMetadata("swap_slot", new FixedMetadataValue(plugin, new_swap_slot));
+                        PlayerScore.SWAP_SLOT.setScore(plugin, player, new_swap_slot);
 
                         bar.displayMessage(player, names[new_swap_slot], 2, true);
                         break;
@@ -153,20 +153,20 @@ public class SwapPowers implements Listener {
                 }
             }
 
-        player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
-        player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, 10));
-        player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, 60));
+        PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+        PlayerScore.SWAP_COOLDOWN.setScore(plugin, player, 10);
+        PlayerScore.SWAP_NAME_TIMER.setScore(plugin, player, 60);
         new BukkitRunnable() {
             @Override
             public void run() {
-                int swap_cd_num = player.getMetadata("swap_cooldown").get(0).asInt();
-                int swap_name_timer = player.getMetadata("swap_name_timer").get(0).asInt();
+                int swap_cd_num = ((int) PlayerScore.SWAP_COOLDOWN.getScore(plugin, player));
+                int swap_name_timer = ((int) PlayerScore.SWAP_NAME_TIMER.getScore(plugin, player));
                 if (swap_cd_num > 0 || swap_name_timer > 0) {
                     swap_cd_num = swap_cd_num > 0 ? swap_cd_num - 1 : swap_cd_num;
-                    player.setMetadata("swap_cooldown", new FixedMetadataValue(plugin, swap_cd_num));
+                    PlayerScore.SWAP_COOLDOWN.setScore(plugin, player, swap_cd_num);
 
                     swap_name_timer = swap_name_timer > 0 ? swap_name_timer - 1 : swap_name_timer;
-                    player.setMetadata("swap_name_timer", new FixedMetadataValue(plugin, swap_name_timer));
+                    PlayerScore.SWAP_NAME_TIMER.setScore(plugin, player, swap_name_timer);
                 }
                 else {
                     plugin.getServer().getScheduler().cancelTask(this.getTaskId());

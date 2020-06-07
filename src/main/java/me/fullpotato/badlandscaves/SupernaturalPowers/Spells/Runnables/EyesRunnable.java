@@ -32,13 +32,13 @@ public class EyesRunnable extends BukkitRunnable {
     @Override
     public void run() {
         EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
-        final int eyes_level = player.hasMetadata("eyes_level") ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
+        final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
         final double dist_range = Math.pow(block_range - 1, 2);
-        final boolean using_eyes = player.getMetadata("using_eyes").get(0).asBoolean();
+        final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);
         double drain_per_tick = constant_mana_drain / 20.0;
-        int mana = player.getMetadata("Mana").get(0).asInt();
+        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
 
         if (using_eyes && mana >= drain_per_tick) {
             //night vision
@@ -73,12 +73,12 @@ public class EyesRunnable extends BukkitRunnable {
 
             //mana stuffs
             mana -= drain_per_tick;
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana));
-            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
-            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+            PlayerScore.MANA.setScore(plugin, player, mana);
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         }
         else {
-            player.setMetadata("using_eyes", new FixedMetadataValue(plugin, false));
+            PlayerScore.USING_EYES.setScore(plugin, player, 0);
             player.stopSound("custom.supernatural.enhanced_eyes.ambience");
             player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.5F, 1);
 

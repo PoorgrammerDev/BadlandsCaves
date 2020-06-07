@@ -47,15 +47,15 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             warp_range = 30;
         }
 
-        boolean has_displace_marker = player.getMetadata("has_displace_marker").get(0).asBoolean();
+        boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
         if (has_displace_marker) {
             //yes marker
             World world = player.getWorld();
-            final double mana = player.getMetadata("Mana").get(0).asDouble();
+            final double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
             final int mana_cost = plugin.getConfig().getInt("game_values.displace_mana_cost");
-            double marker_x = player.getMetadata("displace_x").get(0).asDouble();
-            double marker_y = player.getMetadata("displace_y").get(0).asDouble();
-            double marker_z = player.getMetadata("displace_z").get(0).asDouble();
+            double marker_x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
+            double marker_y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);
+            double marker_z = (double) PlayerScore.DISPLACE_Z.getScore(plugin, player);
             Location displace_marker = new Location(world, marker_x, marker_y, marker_z);
             boolean active = false;
             if (player.getLocation().distance(displace_marker) < warp_range && mana >= mana_cost) {

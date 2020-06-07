@@ -101,48 +101,48 @@ public class DeathHandler implements Listener {
         int death_count = (int) PlayerScore.DEATHS.getScore(plugin, player);
 
         //resetting thirst/tox values on death
-        player.setMetadata("Thirst", new FixedMetadataValue(plugin, 100.0));
-        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, 0.0));
-        player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, 0.0));
-        player.setMetadata("tox_nat_decr_var", new FixedMetadataValue(plugin, 0.0));
-        player.setMetadata("tox_slow_incr_var", new FixedMetadataValue(plugin, 0.0));
+        PlayerScore.THIRST.setScore(plugin, player, 100.0);
+        PlayerScore.TOXICITY.setScore(plugin, player, 0.0);
+        PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, 0.0);
+        PlayerScore.TOX_NAT_DECR_VAR.setScore(plugin, player, 0.0);
+        PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0.0);
 
         boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, (int) PlayerScore.MAX_MANA.getScore(plugin, player)));
-            player.setMetadata("swap_slot", new FixedMetadataValue(plugin, -1));
-            player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
-            player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, "__REMOVED__"));
+            PlayerScore.MANA.setScore(plugin, player, PlayerScore.MAX_MANA.getScore(plugin, player));
+            PlayerScore.SWAP_SLOT.setScore(plugin, player, -1);
+            PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
+            PlayerScore.POSSESS_ORIG_WORLD.setScore(plugin, player, "__REMOVED__");
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
-            player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, -255));
+            PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, -255);
         }
 
         final int in_descension = (int) PlayerScore.IN_DESCENSION.getScore(plugin, player);
-        final boolean in_reflection = player.hasMetadata("in_reflection") && (byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1;
+        final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && (byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1;
         if (in_descension >= 1 && in_descension <= 3) {
             if (in_descension == 2) {
-                int towers_capped = player.hasMetadata("descension_shrines_capped") ? (int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player) : 0;
+                int towers_capped = (PlayerScore.DESCENSION_SHRINES_CAPPED.hasScore(plugin, player)) ? (int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player) : 0;
                 boolean supernatural = towers_capped == 4;
                 int displace = towers_capped == 4 ? 1 : 0;
 
                 //resetting values
-                player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, supernatural));
-                player.setMetadata("displace_level", new FixedMetadataValue(plugin, displace));
+                PlayerScore.HAS_SUPERNATURAL_POWERS.setScore(plugin, player, supernatural);
+                PlayerScore.DISPLACE_LEVEL.setScore(plugin, player, displace);
 
-                player.setMetadata("descension_detect", new FixedMetadataValue(plugin, 0));
-                player.setMetadata("agility_level", new FixedMetadataValue(plugin, 0));
-                player.setMetadata("possess_level", new FixedMetadataValue(plugin, 0));
-                player.setMetadata("descension_shrines_capped", new FixedMetadataValue(plugin, 0));
-                player.setMetadata("max_mana", new FixedMetadataValue(plugin, 100));
+                PlayerScore.DESCENSION_DETECT.setScore(plugin, player, 0);
+                PlayerScore.AGILITY_LEVEL.setScore(plugin, player, 0);
+                PlayerScore.POSSESS_LEVEL.setScore(plugin, player, 0);
+                PlayerScore.DESCENSION_SHRINES_CAPPED.setScore(plugin, player, 0);
+                PlayerScore.MAX_MANA.setScore(plugin, player, 100);
 
             }
 
-            player.setMetadata("in_descension", new FixedMetadataValue(plugin, 0));
+            PlayerScore.IN_DESCENSION.setScore(plugin, player, 0);
         }
         else if (in_reflection) {
-            player.setMetadata("in_reflection", new FixedMetadataValue(plugin, false));
-            player.setMetadata("reflection_zombie", new FixedMetadataValue(plugin, false));
+            PlayerScore.IN_REFLECTION.setScore(plugin, player, 0);
+            PlayerScore.REFLECTION_ZOMBIE.setScore(plugin, player, 0);
         }
 
         //simulate death
@@ -159,7 +159,7 @@ public class DeathHandler implements Listener {
 
         if (addDeath) {
             if (in_descension != 1 && in_descension != 2 && !in_reflection) {
-                player.setMetadata("Deaths", new FixedMetadataValue(plugin, death_count + 1));
+                PlayerScore.DEATHS.setScore(plugin, player, death_count + 1);
             }
         }
 

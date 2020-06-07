@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Effects;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -11,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 
 public class PlayerEffectsRunnable extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public PlayerEffectsRunnable(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -22,15 +23,15 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
 
-            final int in_descension = player.hasMetadata("in_descension") ? player.getMetadata("in_descension").get(0).asInt() : 0;
+            final int in_descension = (PlayerScore.IN_DESCENSION.hasScore(plugin, player)) ? ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player)) : 0;
             if (in_descension == 1 || in_descension == 2) continue;
 
-            final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+            final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
             if (in_reflection) continue;
 
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;
 
-            final int agility_speed = player.getMetadata("agility_buff_speed_lvl").get(0).asInt();
+            final int agility_speed = ((int) PlayerScore.AGILITY_BUFF_SPEED_LVL.getScore(plugin, player));
 
             DeathEffects deathEffects = new DeathEffects(plugin);
             HashMap<String, Integer> deathValues = deathEffects.getDeathEffects(player);

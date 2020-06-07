@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +27,7 @@ public class ManaCommand extends Commands implements CommandExecutor {
                     if (args.length < 2) {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
-                            player.sendMessage(ChatColor.GOLD + "Your Mana count is " + ChatColor.RED + player.getMetadata("Mana").get(0).asDouble() + ChatColor.GOLD + ".");
+                            player.sendMessage(ChatColor.GOLD + "Your Mana count is " + ChatColor.RED + ((double) PlayerScore.MANA.getScore(plugin, player)) + ChatColor.GOLD + ".");
                         }
                         else {
                             playerNotValid(sender);
@@ -35,10 +36,10 @@ public class ManaCommand extends Commands implements CommandExecutor {
                         for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
                                 if (args.length > 2 && args[2].equalsIgnoreCase("max")) {
-                                    sender.sendMessage(ChatColor.GOLD + "The Max Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("max_mana").get(0).asDouble() + ChatColor.GOLD + ".");
+                                    sender.sendMessage(ChatColor.GOLD + "The Max Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + (PlayerScore.MAX_MANA.getScore(plugin, targets)) + ChatColor.GOLD + ".");
                                 }
                                 else {
-                                    sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Mana").get(0).asDouble() + ChatColor.GOLD + ".");
+                                    sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + (PlayerScore.MANA.getScore(plugin, targets)) + ChatColor.GOLD + ".");
                                 }
                                 return true;
                             }
@@ -57,11 +58,11 @@ public class ManaCommand extends Commands implements CommandExecutor {
                                     try {
                                         double change = Double.parseDouble(args[2]);
                                         if (args.length > 3 && args[3].equalsIgnoreCase("max")) {
-                                            targets.setMetadata("max_mana", new FixedMetadataValue(plugin, change));
+                                            PlayerScore.MAX_MANA.setScore(plugin, targets, change);
                                             sender.sendMessage(ChatColor.GOLD + "The Max Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
                                         }
                                         else {
-                                            targets.setMetadata("Mana", new FixedMetadataValue(plugin, change));
+                                            PlayerScore.MANA.setScore(plugin, targets, change);
                                             sender.sendMessage(ChatColor.GOLD + "The Mana count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
                                         }
                                         return true;

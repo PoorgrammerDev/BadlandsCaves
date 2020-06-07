@@ -58,7 +58,7 @@ public class BlessedAppleEat implements Listener {
             if (death_count != 0 && decr_by > 0) {
                 player.spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 0.5, 0), 50, 1, 1, 1, 0);
                 player.playSound(player.getLocation(), "custom.reverse_deaths", SoundCategory.PLAYERS, 0.5F, 1);
-                player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
+                PlayerScore.DEATHS.setScore(plugin, player, remove_deaths(death_count, decr_by));
             }
         }
     }

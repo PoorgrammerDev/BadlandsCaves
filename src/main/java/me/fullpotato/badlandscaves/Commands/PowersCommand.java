@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,19 +55,19 @@ public class PowersCommand extends Commands implements CommandExecutor {
                                     sender.sendMessage(ChatColor.GOLD + "Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has the following values:");
                                     for (String str : powers.keySet()) {
                                         if (str.equals("supernatural")) {
-                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(str)).get(0).asBoolean() + ChatColor.GOLD + ".");
+                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + ((byte) PlayerScore.valueOf(str).getScore(plugin, target) == 1) + ChatColor.GOLD + ".");
                                         }
                                         else {
-                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(str)).get(0).asInt() + ChatColor.GOLD + ".");
+                                            sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + str + ChatColor.GOLD + " is " + ChatColor.RED + (PlayerScore.valueOf(str).getScore(plugin, target)) + ChatColor.GOLD + ".");
                                         }
                                     }
                                 }
                                 else if (powers.containsKey(args[2])) {
                                     if (args[2].equals("supernatural")) {
-                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(args[2])).get(0).asBoolean() + ChatColor.GOLD + ".");
+                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + ((byte) PlayerScore.valueOf(args[2]).getScore(plugin, target) == 1) + ChatColor.GOLD + ".");
                                     }
                                     else {
-                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + target.getMetadata(powers.get(args[2])).get(0).asInt() + ChatColor.GOLD + ".");
+                                        sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + ((int) PlayerScore.valueOf(args[2]).getScore(plugin, target)) + ChatColor.GOLD + ".");
                                     }
                                 }
                                 else {
@@ -106,7 +107,7 @@ public class PowersCommand extends Commands implements CommandExecutor {
                                                 boolean input_value;
                                                 input_value = Boolean.parseBoolean(args[3]);
 
-                                                target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
+                                                PlayerScore.HAS_SUPERNATURAL_POWERS.setScore(plugin, target, input_value);
                                                 sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
                                             }
                                             else {
@@ -125,7 +126,7 @@ public class PowersCommand extends Commands implements CommandExecutor {
                                             }
 
                                             if (input_value >= 0 && input_value <= powers_max_levels.get(args[2])) {
-                                                target.setMetadata(powers.get(args[2]), new FixedMetadataValue(plugin, input_value));
+                                                PlayerScore.valueOf(args[2]).setScore(plugin, target, input_value);
                                                 sender.sendMessage(ChatColor.GOLD + "The value of " + ChatColor.RED + args[2] + ChatColor.GOLD + " for Player " + ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + input_value + ChatColor.GOLD + ".");
                                             }
                                             else {

@@ -38,7 +38,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
         if (in_possession && mana > possession_mana_drain_tick) {
             if (target.isDead() || player.isDead()) {
-                player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
+                PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
             }
 
             for (Player online_player : plugin.getServer().getOnlinePlayers()) {
@@ -49,8 +49,8 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
 
             //cancel mana regen and keep mana bar active
-            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
-            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
             //make target invis to player
             nms.markTarget(target);
@@ -58,7 +58,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INVISIBILITY, 5, 0));
             target.teleport(player.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_drain_tick));
+            PlayerScore.MANA.setScore(plugin, player, mana - possession_mana_drain_tick);
         }
         else {
             plugin.getServer().getScheduler().cancelTask(this.getTaskId());
@@ -67,7 +67,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
             nms.unmarkTarget(target);
             target.setMetadata("possessed", new FixedMetadataValue(plugin, false));
-            player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
+            PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
             target.setAI(true);
 
 
@@ -91,7 +91,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             }
 
             //teleport player back to orig location
-            if (player.hasMetadata("possess_orig_world") && !((String) PlayerScore.POSSESS_ORIG_WORLD.getScore(plugin, player)).equalsIgnoreCase("__REMOVED__")) {
+            if ((PlayerScore.POSSESS_ORIG_WORLD.hasScore(plugin, player)) && !((String) PlayerScore.POSSESS_ORIG_WORLD.getScore(plugin, player)).equalsIgnoreCase("__REMOVED__")) {
                 int possess_level = (int) PlayerScore.POSSESS_LEVEL.getScore(plugin, player);
                 float current_yaw = player.getLocation().getYaw();
                 float current_pitch = player.getLocation().getPitch();
@@ -119,7 +119,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
                     if (player.getLocation().distance(displace_marker) <= warp_range) {
                         if (cancel_fall) player.setFallDistance(0);
-                        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+                        PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
                         player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
                         player.playSound(player.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);
                         player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);

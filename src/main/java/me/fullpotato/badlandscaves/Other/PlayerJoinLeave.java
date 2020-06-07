@@ -77,7 +77,7 @@ public class PlayerJoinLeave implements Listener {
                     player.setHealth(0);
                 }
                 else {
-                    player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
+                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, 0);
                     final World origworld = plugin.getServer().getWorld(origworldname);
                     final double x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
                     final double y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
@@ -90,13 +90,14 @@ public class PlayerJoinLeave implements Listener {
             }
 
             //reset agility jump timer
+            // FIXME: 6/7/2020 idk man
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
 
             //reset cooldowns
-            player.setMetadata("swap_doubleshift_window", new FixedMetadataValue(plugin, false));
-            player.setMetadata("swap_window", new FixedMetadataValue(plugin, false));
-            player.setMetadata("spell_cooldown", new FixedMetadataValue(plugin, false));
+            PlayerScore.SWAP_DOUBLESHIFT_WINDOW.setScore(plugin, player, 0);
+            PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
+            PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 0);
         }
     }
 

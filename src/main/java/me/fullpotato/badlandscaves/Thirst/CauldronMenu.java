@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Thirst;
 
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
@@ -53,7 +54,7 @@ public class CauldronMenu implements Listener {
                             boolean already_opened = false;
                             for (Player online : plugin.getServer().getOnlinePlayers()) {
                                 if (online.getLocation().distanceSquared(location) < 100) {
-                                    boolean open = online.getMetadata("opened_cauldron").get(0).asBoolean();
+                                    boolean open = ((byte) PlayerScore.OPENED_CAULDRON.getScore(plugin, online) == 1);
                                     if (open) {
                                         Location saved_cauldron_location = plugin.getConfig().getLocation("Scores.users." + online.getUniqueId() + ".opened_cauldron_location");
                                         if (location.equals(saved_cauldron_location)) {
@@ -69,7 +70,7 @@ public class CauldronMenu implements Listener {
                             }
                             else {
                                 event.setCancelled(true);
-                                player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, true));
+                                PlayerScore.OPENED_CAULDRON.setScore(plugin, player, 1);
                                 plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", location);
                                 plugin.saveConfig();
 
@@ -221,7 +222,7 @@ public class CauldronMenu implements Listener {
         Player player = (Player) event.getPlayer();
         if (inv.equals(cauldron_inv)) {
             plugin.getServer().getScheduler().cancelTask(refresh_id);
-            player.setMetadata("opened_cauldron", new FixedMetadataValue(plugin, false));
+            PlayerScore.OPENED_CAULDRON.setScore(plugin, player, 0);
             plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", null);
 
             if (cauldron_inv.getItem(11) != null) {

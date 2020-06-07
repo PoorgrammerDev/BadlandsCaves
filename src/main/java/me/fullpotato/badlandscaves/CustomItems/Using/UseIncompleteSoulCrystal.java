@@ -41,7 +41,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         final Player player = event.getPlayer();
         event.setCancelled(true);
 
-        final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+        final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;
 
         final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
@@ -53,7 +53,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         depleteUse(current, 2);
 
         //adds a death
-        player.setMetadata("Deaths", new FixedMetadataValue(plugin, (int) PlayerScore.DEATHS.getScore(plugin, player) + 1));
+        PlayerScore.DEATHS.setScore(plugin, player, (int) PlayerScore.DEATHS.getScore(plugin, player) + 1);
 
 
         //save inventory, then disenchant all items
@@ -70,7 +70,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         }
 
         //entering
-        player.setMetadata("in_reflection", new FixedMetadataValue(plugin, true));
+        PlayerScore.IN_REFLECTION.setScore(plugin, player, 1);
         player.teleport(worldspawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
         //heal and full hunger

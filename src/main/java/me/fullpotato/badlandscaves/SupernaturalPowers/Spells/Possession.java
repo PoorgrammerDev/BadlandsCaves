@@ -41,14 +41,14 @@ public class Possession extends UsePowers implements Listener {
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
-                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
+                    if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
 
-                   boolean in_possession = player.hasMetadata("in_possession") && player.getMetadata("in_possession").get(0).asBoolean();
+                   boolean in_possession = (PlayerScore.IN_POSSESSION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
                     if (in_possession) {
-                        player.setMetadata("in_possession", new FixedMetadataValue(plugin, false));
+                        PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
                     }
                     else {
-                        double mana = player.getMetadata("Mana").get(0).asDouble();
+                        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
                         int possession_mana_cost = plugin.getConfig().getInt("game_values.possess_mana_cost");
                         int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
                         double pos_drain_tick = possession_mana_drain / 20.0;
@@ -65,17 +65,17 @@ public class Possession extends UsePowers implements Listener {
 
                                             if (!target_already_pos) {
                                                 //cancel mana regen and keep mana bar active
-                                                player.setMetadata("Mana", new FixedMetadataValue(plugin, mana - possession_mana_cost));
-                                                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
-                                                player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+                                                PlayerScore.MANA.setScore(plugin, player, mana - possession_mana_cost);
+                                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+                                                PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
                                                 //readying the player and the target
                                                 target.setMetadata("possessed", new FixedMetadataValue(plugin, true));
-                                                player.setMetadata("in_possession", new FixedMetadataValue(plugin, true));
-                                                player.setMetadata("possess_orig_world", new FixedMetadataValue(plugin, player.getWorld().getName()));
-                                                player.setMetadata("possess_orig_x", new FixedMetadataValue(plugin, player.getLocation().getX()));
-                                                player.setMetadata("possess_orig_y", new FixedMetadataValue(plugin, player.getLocation().getY()));
-                                                player.setMetadata("possess_orig_z", new FixedMetadataValue(plugin, player.getLocation().getZ()));
+                                                PlayerScore.IN_POSSESSION.setScore(plugin, player, 1);
+                                                PlayerScore.POSSESS_ORIG_WORLD.setScore(plugin, player, player.getWorld().getName());
+                                                PlayerScore.POSSESS_ORIG_X.setScore(plugin, player, player.getLocation().getX());
+                                                PlayerScore.POSSESS_ORIG_Y.setScore(plugin, player, player.getLocation().getY());
+                                                PlayerScore.POSSESS_ORIG_Z.setScore(plugin, player, player.getLocation().getZ());
                                                 target.setAI(false);
 
                                                 //team
@@ -137,7 +137,7 @@ public class Possession extends UsePowers implements Listener {
     public void prevent_damage (EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
-            boolean in_possession = player.hasMetadata("in_possession") && player.getMetadata("in_possession").get(0).asBoolean();
+            boolean in_possession = (PlayerScore.IN_POSSESSION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
 
             if (in_possession) {
                 event.setCancelled(true);
@@ -149,7 +149,7 @@ public class Possession extends UsePowers implements Listener {
     public void target_possesed (EntityTargetLivingEntityEvent event) {
         if (event.getTarget() instanceof Player) {
             Player player = (Player) event.getTarget();
-            boolean in_possession = player.hasMetadata("in_possession") && player.getMetadata("in_possession").get(0).asBoolean();
+            boolean in_possession = (PlayerScore.IN_POSSESSION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
 
             if (in_possession) {
                 event.setTarget(null);

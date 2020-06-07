@@ -18,10 +18,10 @@ public class ActionbarRunnable extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            int in_descension = player.getMetadata("in_descension").get(0).asInt();
+            int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 1 || in_descension == 2) continue;
 
-            final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+            final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
             if (in_reflection) continue;
 
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;

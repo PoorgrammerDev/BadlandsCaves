@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,7 +22,7 @@ public class StageEnter extends BukkitRunnable {
     @Override
     public void run() {
         final World descension_world = plugin.getServer().getWorld(plugin.descensionWorldName);
-        player.setMetadata("in_descension", new FixedMetadataValue(plugin, 1));
+        PlayerScore.IN_DESCENSION.setScore(plugin, player, 1);
         if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
             if (!player.getWorld().equals(descension_world)) {
                 Location descension_spawn = new Location(descension_world, 0, 197, 0);

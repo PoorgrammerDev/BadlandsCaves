@@ -49,17 +49,17 @@ public class Withdraw extends UsePowers implements Listener {
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
                     if (player.getLocation().getWorld().equals(void_world)) return;
-                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
+                    if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
                     else {
                         int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
-                            double mana = player.getMetadata("Mana").get(0).asDouble();
+                            double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
                             int withdraw_mana_cost = plugin.getConfig().getInt("game_values.withdraw_mana_cost");
 
                             event.setCancelled(true);
                             if (mana >= withdraw_mana_cost) {
                                 preventDoubleClick(player);
-                                boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
+                                boolean in_possession = ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
                                 if (!in_possession) {
                                     Random random = new Random();
                                     if (checkOtherPlayers(player)) {
@@ -88,13 +88,13 @@ public class Withdraw extends UsePowers implements Listener {
 
                                         Chunk voidchunk = voidloc.getChunk();
 
-                                        player.setMetadata("withdraw_x", new FixedMetadataValue(plugin, voidloc.getX()));
-                                        player.setMetadata("withdraw_y", new FixedMetadataValue(plugin, voidloc.getY()));
-                                        player.setMetadata("withdraw_z", new FixedMetadataValue(plugin, voidloc.getZ()));
-                                        player.setMetadata("withdraw_chunk_x", new FixedMetadataValue(plugin, voidchunk.getX()));
-                                        player.setMetadata("withdraw_chunk_z", new FixedMetadataValue(plugin, voidchunk.getZ()));
+                                        PlayerScore.WITHDRAW_X.setScore(plugin, player, voidloc.getX());
+                                        PlayerScore.WITHDRAW_Y.setScore(plugin, player, voidloc.getY());
+                                        PlayerScore.WITHDRAW_Z.setScore(plugin, player, voidloc.getZ());
+                                        PlayerScore.WITHDRAW_CHUNK_X.setScore(plugin, player, voidchunk.getX());
+                                        PlayerScore.WITHDRAW_CHUNK_Z.setScore(plugin, player, voidchunk.getZ());
 
-                                        player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, random.nextInt(200) + 500));
+                                        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, random.nextInt(200) + 500);
 
                                         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
@@ -125,20 +125,20 @@ public class Withdraw extends UsePowers implements Listener {
                                                     if (withdraw_level > 1 && withdraw_timer % (70) == 0) {
                                                         if (player.getHealth() < 20 && player.getHealth() > 0) player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
                                                         player.setFoodLevel(player.getFoodLevel() + 1);
-                                                        player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min((double) PlayerScore.THIRST.getScore(plugin, player) + 0.5, 100)));
-                                                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0)));
+                                                        PlayerScore.THIRST.setScore(plugin, player, Math.min((double) PlayerScore.THIRST.getScore(plugin, player) + 0.5, 100));
+                                                        PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0));
                                                     }
                                                     player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
-                                                    player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
+                                                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, withdraw_timer - 1);
                                                     AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0));
 
-                                                    player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
+                                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
                                                 }
                                             }
                                         }.runTaskTimer(plugin, 0, 0);
 
                                         double new_mana = mana - (double) (withdraw_mana_cost);
-                                        player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                                        PlayerScore.MANA.setScore(plugin, player, new_mana);
                                     }
                                 }
                             }
@@ -147,7 +147,7 @@ public class Withdraw extends UsePowers implements Listener {
                             }
                         }
                     }
-                    player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+                    PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                 }
             }
         }
@@ -186,7 +186,7 @@ public class Withdraw extends UsePowers implements Listener {
         final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         if (withdraw_level == 1) {
-            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
         }
 
 
@@ -231,7 +231,7 @@ public class Withdraw extends UsePowers implements Listener {
             PreventDragon.preventDragonSpawn(void_world);
         }
 
-        player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
+        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, 0);
         if (cancel) {
             plugin.getServer().getScheduler().cancelTask(taskID);
         }
