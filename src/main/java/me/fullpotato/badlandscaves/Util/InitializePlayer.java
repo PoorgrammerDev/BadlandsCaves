@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Util;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -15,10 +16,9 @@ public class InitializePlayer {
         this.plugin = plugin;
     }
 
-    public boolean initializePlayer(Player player) {
+    public void initializePlayer(Player player) {
         for (PlayerScore score : PlayerScore.values()) {
             score.setScore(plugin, player, score.getDefaultScore());
         }
-        return true;
     }
 }

@@ -1,9 +1,9 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.EyesRunnable;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyesNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.EyesRunnable;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -18,7 +18,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 

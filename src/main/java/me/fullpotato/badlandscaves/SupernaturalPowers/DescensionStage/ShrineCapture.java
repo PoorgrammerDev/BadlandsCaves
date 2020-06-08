@@ -13,19 +13,23 @@ import org.bukkit.scoreboard.Team;
 import java.util.ArrayList;
 
 public class ShrineCapture extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World world;
-    private Location[] crystal_locations = {
-            new Location(world, 46, 80, 46),
-            new Location(world, -46, 80, 46),
-            new Location(world, -46, 80, -46),
-            new Location(world, 46, 80, -46),
-    };
-    private Location origin = new Location(world, 0, 80, 0);
+    private final BadlandsCaves plugin;
+    private final World world;
+    private final Location[] crystal_locations;
+    private final Location origin;
 
     public ShrineCapture(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.descensionWorldName);
+
+        this.crystal_locations = new Location[]{
+                new Location(world, 46, 80, 46),
+                new Location(world, -46, 80, 46),
+                new Location(world, -46, 80, -46),
+                new Location(world, 46, 80, -46),
+        };
+
+        origin = new Location(world, 0, 80, 0);
     }
 
     @Override
@@ -49,7 +53,6 @@ public class ShrineCapture extends BukkitRunnable {
                                 boolean charged = crystal.hasMetadata("charged") && crystal.getMetadata("charged").get(0).asBoolean();
                                 if (!charged) {
                                     int capped = (PlayerScore.DESCENSION_SHRINES_CAPPED.hasScore(plugin, player)) ? ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player)) : 0;
-
                                     if (capped >= a) {
                                         Location crystal_location = crystal.getLocation();
 

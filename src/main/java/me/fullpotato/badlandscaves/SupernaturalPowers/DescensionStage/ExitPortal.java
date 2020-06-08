@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -9,13 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ExitPortal extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private final World world;
+    private final BadlandsCaves plugin;
     private final Location location;
 
     public ExitPortal(BadlandsCaves plugin) {
         this.plugin = plugin;
-        world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        World world = plugin.getServer().getWorld(plugin.descensionWorldName);
         location = new Location(world, 0.5, 82, 0.5);
     }
 

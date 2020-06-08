@@ -3,7 +3,10 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +19,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -155,7 +157,7 @@ public class UseChargedRune implements Listener {
                                     PlayerScore power = icons.get(clicked_inv.getItem(4));
 
                                     if (power.equals(PlayerScore.MAX_MANA)) {
-                                        power.setScore(plugin, player, (int) power.getScore(plugin, player) + 10);
+                                        power.setScore(plugin, player, (double) power.getScore(plugin, player) + 10);
                                     }
                                     else {
                                         power.setScore(plugin, player, (int) power.getScore(plugin, player) + 1);
@@ -480,7 +482,7 @@ public class UseChargedRune implements Listener {
     }
 
     private ItemStack generateManaIcon(final Player player) {
-        final int max_mana = (int) PlayerScore.MAX_MANA.getScore(plugin, player);
+        final int max_mana = (int) ((double) PlayerScore.MAX_MANA.getScore(plugin, player));
         if (max_mana >= max_mana_max) {
             ItemStack max_mana_cancel = new ItemStack(Material.BARRIER);
             ItemMeta cancel_meta = max_mana_cancel.getItemMeta();

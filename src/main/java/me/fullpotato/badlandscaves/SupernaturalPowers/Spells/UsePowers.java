@@ -1,11 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class UsePowers {

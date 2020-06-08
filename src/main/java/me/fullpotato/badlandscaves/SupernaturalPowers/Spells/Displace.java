@@ -1,11 +1,14 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.LineOfSight;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,7 +19,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.BlockIterator;
 
 public class Displace extends UsePowers implements Listener {

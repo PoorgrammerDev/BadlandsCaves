@@ -4,7 +4,6 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ForceFixDescensionValues extends BukkitRunnable {

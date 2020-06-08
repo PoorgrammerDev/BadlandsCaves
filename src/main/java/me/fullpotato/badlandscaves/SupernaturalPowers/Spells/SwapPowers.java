@@ -1,11 +1,11 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.PossessionIndicatorRunnable;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.WithdrawIndicatorRunnable;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.DisplaceParticleRunnable;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.PossessionIndicatorRunnable;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.WithdrawIndicatorRunnable;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 

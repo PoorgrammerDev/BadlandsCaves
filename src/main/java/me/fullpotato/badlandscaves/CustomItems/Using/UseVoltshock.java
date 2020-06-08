@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -76,7 +77,7 @@ public class UseVoltshock implements Listener {
     public void arrowShot (ProjectileHitEvent event) {
         if (event.getEntity() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getEntity();
-            if (arrow.hasMetadata("voltshock_arrow") && arrow.getMetadata("voltshock_arrow").get(0).asBoolean()) {
+            if (arrow.getPersistentDataContainer().has(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE) && arrow.getPersistentDataContainer().get(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE) == (byte) 1) {
                 if (arrow.isCritical()) {
                     if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event.getHitEntity();

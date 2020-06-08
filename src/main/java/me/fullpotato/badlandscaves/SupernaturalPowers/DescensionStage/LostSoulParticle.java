@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

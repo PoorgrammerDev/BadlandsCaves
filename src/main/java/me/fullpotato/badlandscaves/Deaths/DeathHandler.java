@@ -127,7 +127,7 @@ public class DeathHandler implements Listener {
                 int displace = towers_capped == 4 ? 1 : 0;
 
                 //resetting values
-                PlayerScore.HAS_SUPERNATURAL_POWERS.setScore(plugin, player, supernatural);
+                PlayerScore.HAS_SUPERNATURAL_POWERS.setScore(plugin, player, supernatural ? 1 : 0);
                 PlayerScore.DISPLACE_LEVEL.setScore(plugin, player, displace);
 
                 PlayerScore.DESCENSION_DETECT.setScore(plugin, player, 0);

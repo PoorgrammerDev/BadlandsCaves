@@ -7,11 +7,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class ThirstCommand extends Commands implements CommandExecutor {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public ThirstCommand (BadlandsCaves bcav) {
         plugin = bcav;
     }

@@ -7,68 +7,61 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public enum PlayerScore {
-    DEATHS,
+    DEATHS(PersistentDataType.INTEGER),
     THIRST(PersistentDataType.DOUBLE, 100),
-    TOXICITY,
-    THIRST_SYS_VAR,
-    TOX_NAT_DECR_VAR,
-    TOX_SLOW_INCR_VAR,
+    TOXICITY(PersistentDataType.DOUBLE),
+    THIRST_SYS_VAR(PersistentDataType.DOUBLE),
+    TOX_NAT_DECR_VAR(PersistentDataType.DOUBLE),
+    TOX_SLOW_INCR_VAR(PersistentDataType.INTEGER),
     OPENED_CAULDRON(PersistentDataType.BYTE),
     HAS_SUPERNATURAL_POWERS(PersistentDataType.BYTE),
-    IN_DESCENSION,
+    IN_DESCENSION(PersistentDataType.INTEGER),
     IN_REFLECTION(PersistentDataType.BYTE),
-    REFLECTION_ZOMBIE,
+    REFLECTION_ZOMBIE(PersistentDataType.BYTE),
     REFL_RESPAWN_INV(PersistentDataType.BYTE),
-    DESCENSION_DETECT,
-    DESCENSION_DETECT_COOLDOWN,
-    DESCENSION_TIMER,
-    DESCENSION_SHRINES_CAPPED,
+    DESCENSION_DETECT(PersistentDataType.DOUBLE),
+    DESCENSION_DETECT_COOLDOWN(PersistentDataType.DOUBLE),
+    DESCENSION_TIMER(PersistentDataType.INTEGER),
+    DESCENSION_SHRINES_CAPPED(PersistentDataType.INTEGER),
     MANA(PersistentDataType.DOUBLE, 100),
     MAX_MANA(PersistentDataType.DOUBLE, 100),
-    MANA_REGEN_DELAY_TIMER,
-    MANA_BAR_ACTIVE_TIMER,
-    MANA_BAR_MESSAGE_TIMER,
-    SWAP_SLOT,
-    SWAP_DOUBLESHIFT_WINDOW,
-    SWAP_WINDOW,
-    SWAP_COOLDOWN,
-    SWAP_NAME_TIMER,
+    MANA_REGEN_DELAY_TIMER(PersistentDataType.INTEGER),
+    MANA_BAR_ACTIVE_TIMER(PersistentDataType.INTEGER),
+    MANA_BAR_MESSAGE_TIMER(PersistentDataType.INTEGER),
+    SWAP_SLOT(PersistentDataType.INTEGER),
+    SWAP_DOUBLESHIFT_WINDOW(PersistentDataType.BYTE),
+    SWAP_WINDOW(PersistentDataType.BYTE),
+    SWAP_COOLDOWN(PersistentDataType.INTEGER),
+    SWAP_NAME_TIMER(PersistentDataType.INTEGER),
     SPELL_COOLDOWN(PersistentDataType.BYTE),
-    DISPLACE_LEVEL,
+    DISPLACE_LEVEL(PersistentDataType.INTEGER),
     HAS_DISPLACE_MARKER(PersistentDataType.BYTE),
-    DISPLACE_X,
-    DISPLACE_Y,
-    DISPLACE_Z,
-    WITHDRAW_LEVEL,
-    WITHDRAW_X,
-    WITHDRAW_Y,
-    WITHDRAW_Z,
-    WITHDRAW_CHUNK_X,
-    WITHDRAW_CHUNK_Z,
-    WITHDRAW_TIMER,
-    EYES_LEVEL,
+    DISPLACE_X(PersistentDataType.DOUBLE),
+    DISPLACE_Y(PersistentDataType.DOUBLE),
+    DISPLACE_Z(PersistentDataType.DOUBLE),
+    WITHDRAW_LEVEL(PersistentDataType.INTEGER),
+    WITHDRAW_X(PersistentDataType.DOUBLE),
+    WITHDRAW_Y(PersistentDataType.DOUBLE),
+    WITHDRAW_Z(PersistentDataType.DOUBLE),
+    WITHDRAW_CHUNK_X(PersistentDataType.INTEGER),
+    WITHDRAW_CHUNK_Z(PersistentDataType.INTEGER),
+    WITHDRAW_TIMER(PersistentDataType.INTEGER),
+    EYES_LEVEL(PersistentDataType.INTEGER),
     USING_EYES(PersistentDataType.BYTE),
-    POSSESS_LEVEL,
+    POSSESS_LEVEL(PersistentDataType.INTEGER),
     IN_POSSESSION(PersistentDataType.BYTE),
-    POSSESSED_ENTITY,
-    POSSESS_ORIG_WORLD,
-    POSSESS_ORIG_X,
-    POSSESS_ORIG_Y,
-    POSSESS_ORIG_Z,
-    ENDURANCE_LEVEL,
-    AGILITY_LEVEL,
-    AGILITY_BUFF_SPEED_LVL,
+    POSSESS_ORIG_WORLD(PersistentDataType.STRING),
+    POSSESS_ORIG_X(PersistentDataType.DOUBLE),
+    POSSESS_ORIG_Y(PersistentDataType.DOUBLE),
+    POSSESS_ORIG_Z(PersistentDataType.DOUBLE),
+    ENDURANCE_LEVEL(PersistentDataType.INTEGER),
+    AGILITY_LEVEL(PersistentDataType.INTEGER),
+    AGILITY_BUFF_SPEED_LVL(PersistentDataType.INTEGER),
     HAS_SEEN_BACKROOMS(PersistentDataType.BYTE),
-    BACKROOMS_TIMER,
-    BLEEDING_DEBUFF(PersistentDataType.BYTE);
+    BACKROOMS_TIMER(PersistentDataType.INTEGER);
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;
-
-    PlayerScore() {
-        type = PersistentDataType.DOUBLE;
-        defaultScore = 0;
-    }
 
     PlayerScore(PersistentDataType<?, ?> type) {
         this.type = type;
@@ -94,41 +87,51 @@ public enum PlayerScore {
 
     public void setScore(BadlandsCaves plugin, Player player, Object score) {
         PersistentDataContainer container = player.getPersistentDataContainer();
-        if (this.getType().getPrimitiveType().equals(Double.class) && score instanceof Double) {
-            container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.DOUBLE, (Double) score);
+
+        if (this.getType().getPrimitiveType().equals(Double.class)) {
+            try {
+                container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.DOUBLE, Double.parseDouble(String.valueOf(score)));
+                return;
+            }
+            catch (NumberFormatException ignored) {
+            }
         }
-        else if (this.getType().getPrimitiveType().equals(Byte.class) && score instanceof Byte) {
-            container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.BYTE, (Byte) score);
+        if (this.getType().getPrimitiveType().equals(Byte.class)) {
+            try {
+                container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.BYTE, Byte.parseByte(String.valueOf(score)));
+                return;
+            }
+            catch (NumberFormatException ignored) {
+            }
         }
-        else if (this.getType().getPrimitiveType().equals(Integer.class) && score instanceof Integer) {
-            container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.INTEGER, (Integer) score);
+
+        if (this.getType().getPrimitiveType().equals(Integer.class)) {
+            try {
+                container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.INTEGER, Integer.parseInt(String.valueOf(score)));
+                return;
+            }
+            catch (NumberFormatException ignored) {
+            }
         }
-        else if (this.getType().getPrimitiveType().equals(Short.class) && score instanceof Short) {
-            container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.SHORT, (Short) score);
+        if (this.getType().getPrimitiveType().equals(Short.class)) {
+            try {
+                container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.SHORT, Short.parseShort(String.valueOf(score)));
+                return;
+            }
+            catch (NumberFormatException ignored) {
+            }
         }
-        else if (this.getType().getPrimitiveType().equals(String.class) && score instanceof String) {
-            container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.STRING, (String) score);
+        if (this.getType().getPrimitiveType().equals(String.class)) {
+            container.set(new NamespacedKey(plugin, this.name()), PersistentDataType.STRING, String.valueOf(score));
         }
     }
 
     public boolean hasScore(BadlandsCaves plugin, Player player) {
         PersistentDataContainer container = player.getPersistentDataContainer();
-
-        if (this.getType().getPrimitiveType().equals(Double.class) && this.getDefaultScore() instanceof Double) {
-            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.DOUBLE);
-        }
-        else if (this.getType().getPrimitiveType().equals(Byte.class) && this.getDefaultScore() instanceof Byte) {
-            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.BYTE);
-        }
-        else if (this.getType().getPrimitiveType().equals(Integer.class) && this.getDefaultScore() instanceof Integer) {
-            container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.INTEGER);
-        }
-        else if (this.getType().getPrimitiveType().equals(Short.class) && this.getDefaultScore() instanceof Short) {
-            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.SHORT);
-        }
-        else if (this.getType().getPrimitiveType().equals(String.class) && this.getDefaultScore() instanceof String) {
-            return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.STRING);
-        }
-        return false;
+        return container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.DOUBLE) ||
+                container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.BYTE) ||
+                container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.INTEGER) ||
+                container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.SHORT) ||
+                container.has(new NamespacedKey(plugin, this.name()), PersistentDataType.STRING);
     }
 }

@@ -34,7 +34,7 @@ public class ActionbarRunnable extends BukkitRunnable {
             double tox_count = (double) PlayerScore.TOXICITY.getScore(plugin, player);
 
             if (thirst_count >= 10) {
-                int thirst_count_int = (int) PlayerScore.THIRST.getScore(plugin, player);
+                int thirst_count_int = (int) ((double) PlayerScore.THIRST.getScore(plugin, player));
                 actionbarmsg += ChatColor.BLUE + ChatColor.BOLD.toString() + "Thirst: " + ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + thirst_count_int + ChatColor.BOLD.toString() + "%" + separator;
             }
             else {
@@ -44,7 +44,7 @@ public class ActionbarRunnable extends BukkitRunnable {
 
 
             if (tox_count >= 10) {
-                int tox_count_int = (int) PlayerScore.TOXICITY.getScore(plugin, player);
+                int tox_count_int = (int) ((double) PlayerScore.TOXICITY.getScore(plugin, player));
                 actionbarmsg += ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "Toxicity: " + ChatColor.GREEN + ChatColor.BOLD.toString() + tox_count_int + ChatColor.BOLD.toString() + "%";
             }
             else {

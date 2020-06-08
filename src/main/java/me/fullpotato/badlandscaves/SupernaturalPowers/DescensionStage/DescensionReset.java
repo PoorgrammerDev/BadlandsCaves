@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,8 +19,8 @@ import java.util.List;
 import java.util.Random;
 
 public class DescensionReset extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World world;
+    private final BadlandsCaves plugin;
+    private final World world;
     public DescensionReset(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.descensionWorldName);
@@ -137,9 +136,9 @@ public class DescensionReset extends BukkitRunnable {
                                 zombie.getEquipment().setChestplate(empty);
                                 zombie.getEquipment().setLeggings(empty);
                                 zombie.getEquipment().setBoots(empty);
-                                zombie.teleport(zombie_location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                zombie.teleport(zombie_location.clone(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                             }
-                        }.runTaskLaterAsynchronously(plugin, 5);
+                        }.runTaskLater(plugin, 5);
 
                         counter++;
                     }

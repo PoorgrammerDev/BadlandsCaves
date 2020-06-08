@@ -85,7 +85,7 @@ public abstract class MatchCrafting {
     }
 
     public boolean isMatching (ItemStack[] matrix, ItemStack matches, int slot) {
-        return (matrix[slot].isSimilar(matches));
+        return (matrix != null && matches != null && matrix.length > slot && matrix[slot] != null && matrix[slot].isSimilar(matches));
     }
 
 }

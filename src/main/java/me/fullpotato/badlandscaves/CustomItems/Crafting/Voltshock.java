@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -71,7 +72,7 @@ public class Voltshock extends MatchCrafting implements Listener {
 
     public void modify_sword() {
         final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_module"), placeholder);
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_sword"), placeholder);
 
         /*
          *  *|
@@ -139,33 +140,39 @@ public class Voltshock extends MatchCrafting implements Listener {
             final ItemStack result = event.getRecipe().getResult();
             final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
             if (result.isSimilar(placeholder)) {
+                Bukkit.broadcastMessage("makesowrd");
                 final ItemStack[] matrix = event.getInventory().getMatrix();
-                final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
-                final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
-                if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
-                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
-                        SerratedSwords serrated = new SerratedSwords(plugin);
-                        Corrosive corrosive = new Corrosive(plugin);
-                        TreasureGear treasureGear = new TreasureGear();
-                        for (ItemStack item : matrix) {
-                            if (item != null && Arrays.asList(swords).contains(item.getType())) {
-                                boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item);
-                                if (sword_ready) {
-                                    ItemStack modified_sword = item.clone();
-                                    ItemMeta meta = modified_sword.getItemMeta();
-                                    meta.setCustomModelData(127);
-                                    PersistentDataContainer data = meta.getPersistentDataContainer();
-                                    NamespacedKey charge_key = new NamespacedKey(plugin, "charge");
-                                    data.set(charge_key, PersistentDataType.INTEGER, 0);
+                if (matrix != null && matrix.length == 9) {
+                    final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
+                    final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
 
-                                    ArrayList<String> lore = new ArrayList<>();
-                                    lore.add(shock_lore);
-                                    lore.add("§70 / 50 Charge");
-                                    meta.setLore(lore);
-                                    modified_sword.setItemMeta(meta);
+                    if (battery != null && shocker != null) {
+                        if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
+                            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
+                                SerratedSwords serrated = new SerratedSwords(plugin);
+                                Corrosive corrosive = new Corrosive(plugin);
+                                TreasureGear treasureGear = new TreasureGear();
+                                for (ItemStack item : matrix) {
+                                    if (item != null && Arrays.asList(swords).contains(item.getType())) {
+                                        boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item);
+                                        if (sword_ready) {
+                                            ItemStack modified_sword = item.clone();
+                                            ItemMeta meta = modified_sword.getItemMeta();
+                                            meta.setCustomModelData(127);
+                                            PersistentDataContainer data = meta.getPersistentDataContainer();
+                                            NamespacedKey charge_key = new NamespacedKey(plugin, "charge");
+                                            data.set(charge_key, PersistentDataType.INTEGER, 0);
 
-                                    event.getInventory().setResult(modified_sword);
-                                    return;
+                                            ArrayList<String> lore = new ArrayList<>();
+                                            lore.add(shock_lore);
+                                            lore.add("§70 / 50 Charge");
+                                            meta.setLore(lore);
+                                            modified_sword.setItemMeta(meta);
+
+                                            event.getInventory().setResult(modified_sword);
+                                            return;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -182,6 +189,7 @@ public class Voltshock extends MatchCrafting implements Listener {
             final ItemStack result = event.getRecipe().getResult();
             final ItemStack placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
             if (result.isSimilar(placeholder)) {
+                Bukkit.broadcastMessage("chargesword");
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 ItemStack sword = null;
                 ItemStack exp_bottle = null;

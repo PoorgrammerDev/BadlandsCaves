@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -41,7 +42,7 @@ public class UseSerrated implements Listener {
                             Random random = new Random();
                             boolean critical = event.getDamage() > player_dmg;
 
-                            boolean already_bleeding = entity.hasMetadata("bleeding_debuff") && entity.getMetadata("bleeding_debuff").get(0).asBoolean();
+                            boolean already_bleeding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) == (byte) 1;
                             if (!already_bleeding && ((critical && random.nextInt(100) < 80)) || (!critical && random.nextInt(100) < 40)) {
                                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                                     Damageable meta = (Damageable) item.getItemMeta();
@@ -50,15 +51,15 @@ public class UseSerrated implements Listener {
                                 }
 
 
-                                entity.setMetadata("bleeding_debuff", new FixedMetadataValue(plugin, true));
+                                entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE, (byte) 1);
                                 int max_times = random.nextInt(5) + 5;
                                 int[] times_ran = {0};
 
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        if (entity.isDead() || times_ran[0] > max_times || !entity.getMetadata("bleeding_debuff").get(0).asBoolean()) {
-                                            entity.setMetadata("bleeding_debuff", new FixedMetadataValue(plugin, false));
+                                        if (entity.isDead() || times_ran[0] > max_times || entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) == (byte) 0) {
+                                            entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE, (byte) 0);
                                             this.cancel();
                                         }
                                         else {

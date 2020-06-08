@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -79,7 +80,7 @@ public class Drinking implements Listener {
                     int buffer = isHardmode ? (thirst_threshold * -50) - (50 * overflow) : (thirst_threshold * -100) - (50 * overflow);
 
                     PlayerScore.THIRST.setScore(plugin, player, Math.min(current_thirst + thirst_add, 100));
-                    PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, Math.min((int) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player), buffer));
+                    PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, Math.min((int) ((double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player)), buffer));
                 }
                 else if (item.isSimilar(antidote)) {
                     double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
@@ -92,7 +93,7 @@ public class Drinking implements Listener {
                     player.removePotionEffect(PotionEffectType.HUNGER);
                     player.removePotionEffect(PotionEffectType.CONFUSION);
 
-                    player.setMetadata("corrosive_debuff", new FixedMetadataValue(plugin, false));
+                    player.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 0);
 
                 }
                 else if (item.isSimilar(mana_potion)) {

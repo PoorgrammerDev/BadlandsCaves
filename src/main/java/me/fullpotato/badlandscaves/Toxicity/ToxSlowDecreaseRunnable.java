@@ -3,7 +3,6 @@ package me.fullpotato.badlandscaves.Toxicity;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ToxSlowDecreaseRunnable extends BukkitRunnable {

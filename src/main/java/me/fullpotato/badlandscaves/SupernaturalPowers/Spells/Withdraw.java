@@ -1,8 +1,8 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
-import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
@@ -19,7 +19,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
