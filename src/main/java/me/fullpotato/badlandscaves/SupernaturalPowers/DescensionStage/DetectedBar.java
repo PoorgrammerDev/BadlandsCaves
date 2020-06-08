@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -28,10 +29,10 @@ public class DetectedBar extends BukkitRunnable {
 
         World world = plugin.getServer().getWorld(plugin.descensionWorldName);
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            int in_descension = player.getMetadata("in_descension").get(0).asInt();
+            int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2 && player.getWorld().equals(world)) {
                 if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);
-                double detect = player.getMetadata("descension_detect").get(0).asDouble();
+                double detect = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
                 double detect_max = plugin.getConfig().getDouble("game_values.descension_max_detect");
                 double detect_percentage = Math.min(Math.max(detect / detect_max, 0.0), 1.0);
 

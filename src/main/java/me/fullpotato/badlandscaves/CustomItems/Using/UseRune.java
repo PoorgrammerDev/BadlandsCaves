@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +41,7 @@ public class UseRune implements Listener {
         event.setCancelled(true);
 
         if (event.getHand() == null || event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
-        if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
             player.sendMessage(ChatColor.RED + "This item can only be used by Heretics.");
             return;
         }

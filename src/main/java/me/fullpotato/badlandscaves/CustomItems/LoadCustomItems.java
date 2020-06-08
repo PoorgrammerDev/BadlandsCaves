@@ -454,16 +454,6 @@ public class LoadCustomItems {
         }
 
         else if (item.equals(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER)) {
-            ItemStack voltshock_placeholder = new ItemStack(Material.COMMAND_BLOCK);
-            ItemMeta voltshock_placeholder_meta = voltshock_placeholder.getItemMeta();
-            voltshock_placeholder_meta.setDisplayName("§rVoltshock Sword");
-            voltshock_placeholder_meta.setCustomModelData(136);
-            voltshock_placeholder.setItemMeta(voltshock_placeholder_meta);
-
-            return voltshock_placeholder;
-        }
-
-        else if (item.equals(CustomItem.VOLTSHOCK_ARROW)){
             ItemStack voltshock_sword_charge_placeholder = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta voltshock_sword_charge_placeholder_meta = voltshock_sword_charge_placeholder.getItemMeta();
             voltshock_sword_charge_placeholder_meta.setDisplayName("§rCharge Voltshock Sword");
@@ -471,6 +461,16 @@ public class LoadCustomItems {
             voltshock_sword_charge_placeholder.setItemMeta(voltshock_sword_charge_placeholder_meta);
 
             return voltshock_sword_charge_placeholder;
+        }
+
+        else if (item.equals(CustomItem.VOLTSHOCK_ARROW)){
+            ItemStack voltshock_arrow = new ItemStack(Material.ARROW);
+            ItemMeta voltshock_arrow_meta = voltshock_arrow.getItemMeta();
+            voltshock_arrow_meta.setDisplayName("§3Voltshock Arrow");
+            voltshock_arrow_meta.setCustomModelData(131);
+            voltshock_arrow.setItemMeta(voltshock_arrow_meta);
+
+            return voltshock_arrow;
         }
 
         else if (item.equals(CustomItem.CORROSIVE_SUBSTANCE)){

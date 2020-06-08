@@ -1,9 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
-import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,7 +19,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -36,7 +36,7 @@ public class Withdraw extends UsePowers implements Listener {
     @EventHandler
     public void use_withdraw(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         final ItemStack withdraw = CustomItem.WITHDRAW.getItem();
@@ -48,17 +48,17 @@ public class Withdraw extends UsePowers implements Listener {
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
                     if (player.getLocation().getWorld().equals(void_world)) return;
-                    if (player.getMetadata("spell_cooldown").get(0).asBoolean()) return;
+                    if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
                     else {
-                        int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+                        int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
-                            double mana = player.getMetadata("Mana").get(0).asDouble();
+                            double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
                             int withdraw_mana_cost = plugin.getConfig().getInt("game_values.withdraw_mana_cost");
 
                             event.setCancelled(true);
                             if (mana >= withdraw_mana_cost) {
                                 preventDoubleClick(player);
-                                boolean in_possession = player.getMetadata("in_possession").get(0).asBoolean();
+                                boolean in_possession = ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
                                 if (!in_possession) {
                                     Random random = new Random();
                                     if (checkOtherPlayers(player)) {
@@ -80,27 +80,27 @@ public class Withdraw extends UsePowers implements Listener {
                                         PreventDragon.preventDragonSpawn(void_world);
 
                                         Location location = player.getLocation();
-                                        plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
+                                        plugin.getConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
 
                                         Location voidloc = player.getLocation();
                                         voidloc.setWorld(void_world);
 
                                         Chunk voidchunk = voidloc.getChunk();
 
-                                        player.setMetadata("withdraw_x", new FixedMetadataValue(plugin, voidloc.getX()));
-                                        player.setMetadata("withdraw_y", new FixedMetadataValue(plugin, voidloc.getY()));
-                                        player.setMetadata("withdraw_z", new FixedMetadataValue(plugin, voidloc.getZ()));
-                                        player.setMetadata("withdraw_chunk_x", new FixedMetadataValue(plugin, voidchunk.getX()));
-                                        player.setMetadata("withdraw_chunk_z", new FixedMetadataValue(plugin, voidchunk.getZ()));
+                                        PlayerScore.WITHDRAW_X.setScore(plugin, player, voidloc.getX());
+                                        PlayerScore.WITHDRAW_Y.setScore(plugin, player, voidloc.getY());
+                                        PlayerScore.WITHDRAW_Z.setScore(plugin, player, voidloc.getZ());
+                                        PlayerScore.WITHDRAW_CHUNK_X.setScore(plugin, player, voidchunk.getX());
+                                        PlayerScore.WITHDRAW_CHUNK_Z.setScore(plugin, player, voidchunk.getZ());
 
-                                        player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, random.nextInt(200) + 500));
+                                        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, random.nextInt(200) + 500);
 
                                         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
                                         for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                                             if (entity instanceof Player) {
                                                 Player powered = (Player) entity;
-                                                if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                                if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                                                     powered.playSound(player.getLocation(), "custom.supernatural.withdraw.enter", SoundCategory.PLAYERS, 0.3F, 1);
                                                     powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
                                                 }
@@ -116,7 +116,7 @@ public class Withdraw extends UsePowers implements Listener {
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
-                                                final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
+                                                final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
                                                 if (withdraw_timer <= 0) {
                                                     getOuttaHere(player, location, voidloc, true, this.getTaskId());
                                                 }
@@ -124,20 +124,20 @@ public class Withdraw extends UsePowers implements Listener {
                                                     if (withdraw_level > 1 && withdraw_timer % (70) == 0) {
                                                         if (player.getHealth() < 20 && player.getHealth() > 0) player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
                                                         player.setFoodLevel(player.getFoodLevel() + 1);
-                                                        player.setMetadata("Thirst", new FixedMetadataValue(plugin, Math.min(player.getMetadata("Thirst").get(0).asDouble() + 0.5, 100)));
-                                                        player.setMetadata("Toxicity", new FixedMetadataValue(plugin, Math.max(player.getMetadata("Toxicity").get(0).asDouble() - 0.5, 0)));
+                                                        PlayerScore.THIRST.setScore(plugin, player, Math.min((double) PlayerScore.THIRST.getScore(plugin, player) + 0.5, 100));
+                                                        PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0));
                                                     }
                                                     player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
-                                                    player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, withdraw_timer - 1));
+                                                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, withdraw_timer - 1);
                                                     AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0));
 
-                                                    player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
+                                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
                                                 }
                                             }
                                         }.runTaskTimer(plugin, 0, 0);
 
                                         double new_mana = mana - (double) (withdraw_mana_cost);
-                                        player.setMetadata("Mana", new FixedMetadataValue(plugin, new_mana));
+                                        PlayerScore.MANA.setScore(plugin, player, new_mana);
                                     }
                                 }
                             }
@@ -146,7 +146,7 @@ public class Withdraw extends UsePowers implements Listener {
                             }
                         }
                     }
-                    player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+                    PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                 }
             }
         }
@@ -155,7 +155,7 @@ public class Withdraw extends UsePowers implements Listener {
     @EventHandler
     public void keep_in_chunk (PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         Location location = player.getLocation();
@@ -165,11 +165,11 @@ public class Withdraw extends UsePowers implements Listener {
         assert world != null;
         if (!world.equals(void_world)) return;
 
-        double void_x = player.getMetadata("withdraw_x").get(0).asDouble();
-        double void_y = player.getMetadata("withdraw_y").get(0).asDouble();
-        double void_z = player.getMetadata("withdraw_z").get(0).asDouble();
-        int chunk_x = player.getMetadata("withdraw_chunk_x").get(0).asInt();
-        int chunk_z = player.getMetadata("withdraw_chunk_z").get(0).asInt();
+        double void_x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+        double void_y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+        double void_z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+        int chunk_x = (int) PlayerScore.WITHDRAW_CHUNK_X.getScore(plugin, player);
+        int chunk_z = (int) PlayerScore.WITHDRAW_CHUNK_Z.getScore(plugin, player);
 
         if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
             Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
@@ -182,10 +182,10 @@ public class Withdraw extends UsePowers implements Listener {
     }
 
     public void getOuttaHere (Player player, Location returnLocation, Location voidLocation, boolean cancel, int taskID) {
-        final int withdraw_timer = player.getMetadata("withdraw_timer").get(0).asInt();
-        final int withdraw_level = player.getMetadata("withdraw_level").get(0).asInt();
+        final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
+        final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         if (withdraw_level == 1) {
-            player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
         }
 
 
@@ -197,7 +197,7 @@ public class Withdraw extends UsePowers implements Listener {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                         powered.playSound(player.getLocation(), "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.3F, 1);
                         powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
                     }
@@ -230,7 +230,7 @@ public class Withdraw extends UsePowers implements Listener {
             PreventDragon.preventDragonSpawn(void_world);
         }
 
-        player.setMetadata("withdraw_timer", new FixedMetadataValue(plugin, 0));
+        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, 0);
         if (cancel) {
             plugin.getServer().getScheduler().cancelTask(taskID);
         }
@@ -246,7 +246,7 @@ public class Withdraw extends UsePowers implements Listener {
             if (other.getWorld().equals(void_world)) {
                 Chunk other_chunk = other.getLocation().getChunk();
                 if (other_chunk.getX() == x && other_chunk.getZ() == z) {
-                    String worldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
+                    String worldname = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                     if (worldname != null && !worldname.isEmpty()) {
                         World other_world = plugin.getServer().getWorld(worldname);
                         return (world.equals(other_world));

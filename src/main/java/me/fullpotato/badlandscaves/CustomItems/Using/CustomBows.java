@@ -2,16 +2,20 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.SpectralArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -41,15 +45,15 @@ public class CustomBows implements Listener {
                     final ItemStack voltshock_arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
 
                     if (arrowItem != null && (arrowItem.isSimilar(corrosive_arrow) || arrowItem.isSimilar(voltshock_arrow))) {
-                        boolean supernatural = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+                        boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
                         if (!supernatural) {
                             if (arrowItem.isSimilar(corrosive_arrow)) {
-                                arrow.setMetadata("corrosive_arrow", new FixedMetadataValue(plugin, true));
+                                arrow.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE, (byte) 1);
                                 enforceAllowPickup(arrow);
 
                                 if (event.getForce() >= 1) particleTrail(arrow, Color.fromRGB(0, 255, 0));
                             } else if (arrowItem.isSimilar(voltshock_arrow)) {
-                                arrow.setMetadata("voltshock_arrow", new FixedMetadataValue(plugin, true));
+                                arrow.getPersistentDataContainer().set(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE, (byte) 1);
                                 enforceAllowPickup(arrow);
 
                                 if (event.getForce() >= 1) {
@@ -71,10 +75,10 @@ public class CustomBows implements Listener {
     @EventHandler
     public void pickupItem (PlayerPickupArrowEvent event) {
         AbstractArrow arrow = event.getArrow();
-        if (arrow.hasMetadata("corrosive_arrow") && arrow.getMetadata("corrosive_arrow").get(0).asBoolean()) {
+        if (arrow.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE) && arrow.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE) == (byte) 1) {
             event.getItem().setItemStack(CustomItem.CORROSIVE_ARROW.getItem());
         }
-        else if (arrow.hasMetadata("voltshock_arrow") && arrow.getMetadata("voltshock_arrow").get(0).asBoolean()) {
+        else if (arrow.getPersistentDataContainer().has(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE) && arrow.getPersistentDataContainer().get(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE) == (byte) 1) {
             event.getItem().setItemStack(CustomItem.VOLTSHOCK_ARROW.getItem());
         }
     }

@@ -1,12 +1,12 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class ToxicityCommand extends Commands implements CommandExecutor {
 
@@ -26,7 +26,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                     if (args.length < 2) {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
-                            player.sendMessage(ChatColor.GOLD + "Your Toxicity count is " + ChatColor.RED + player.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
+                            player.sendMessage(ChatColor.GOLD + "Your Toxicity count is " + ChatColor.RED + PlayerScore.TOXICITY.getScore(plugin, player) + ChatColor.GOLD + ".");
                         }
                         else {
                             playerNotValid(sender);
@@ -34,7 +34,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                     } else {
                         for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Toxicity").get(0).asDouble() + ChatColor.GOLD + ".");
+                                sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + (PlayerScore.TOXICITY.getScore(plugin, targets)) + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }
@@ -51,7 +51,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                                 if (args.length > 2) {
                                     try {
                                         double change = Double.parseDouble(args[2]);
-                                        targets.setMetadata("Toxicity", new FixedMetadataValue(plugin, change));
+                                        PlayerScore.TOXICITY.setScore(plugin, targets, change);
                                         sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
                                         return true;
                                     }

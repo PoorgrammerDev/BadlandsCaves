@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Corrosive;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
@@ -16,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -33,7 +36,7 @@ public class UseCorrosive implements Listener {
             Player player = (Player) event.getDamager();
             LivingEntity entity = (LivingEntity) event.getEntity();
 
-            if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                 if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                     Corrosive corrosive = new Corrosive(plugin);
                     ItemStack item = player.getInventory().getItemInMainHand();
@@ -44,7 +47,7 @@ public class UseCorrosive implements Listener {
                                 Random random = new Random();
                                 boolean critical = event.getDamage() > player_dmg;
 
-                                boolean already_corroding = entity.hasMetadata("corrosive_debuff") && entity.getMetadata("corrosive_debuff").get(0).asBoolean();
+                                boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
 
                                 if (!already_corroding && ((critical && random.nextInt(100) < 80) || (!critical && random.nextInt(100) < 40))) {
                                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
@@ -70,12 +73,12 @@ public class UseCorrosive implements Listener {
     public void arrowShot (ProjectileHitEvent event) {
         if (event.getEntity() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getEntity();
-            if (arrow.hasMetadata("corrosive_arrow") && arrow.getMetadata("corrosive_arrow").get(0).asBoolean()) {
+            if (arrow.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE) && arrow.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE) == (byte) 1) {
                 if (arrow.isCritical()) {
                     if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event.getHitEntity();
                         Random random = new Random();
-                        boolean already_corroding = entity.hasMetadata("corrosive_debuff") && entity.getMetadata("corrosive_debuff").get(0).asBoolean();
+                        boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
                         if (!already_corroding) applyCorrosion(entity, random, random.nextInt(3) + 2);
                     }
                     else {
@@ -88,14 +91,15 @@ public class UseCorrosive implements Listener {
     }
 
     public void applyCorrosion (LivingEntity entity, Random random, int max_times) {
-        entity.setMetadata("corrosive_debuff", new FixedMetadataValue(plugin, true));
+        entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 1);
         int[] times_ran = {0};
 
+        PersistentDataContainer dataContainer = entity.getPersistentDataContainer();
         new BukkitRunnable(){
             @Override
             public void run() {
-                if (entity.isDead() || times_ran[0] > max_times || !entity.getMetadata("corrosive_debuff").get(0).asBoolean()) {
-                    entity.setMetadata("corrosive_debuff", new FixedMetadataValue(plugin, false));
+                if (entity.isDead() || times_ran[0] > max_times || dataContainer.get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 0) {
+                    dataContainer.set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 0);
                     this.cancel();
                 }
                 else {
@@ -107,7 +111,7 @@ public class UseCorrosive implements Listener {
 
                     if (entity instanceof Player) {
                         Player target = (Player) entity;
-                        target.setMetadata("Toxicity", new FixedMetadataValue(plugin, target.getMetadata("Toxicity").get(0).asDouble() + (random.nextDouble() / 2)));
+                        PlayerScore.TOXICITY.setScore(plugin, target, ((double) PlayerScore.TOXICITY.getScore(plugin, target)) + (random.nextDouble() / 2));
                     }
 
                     times_ran[0]++;

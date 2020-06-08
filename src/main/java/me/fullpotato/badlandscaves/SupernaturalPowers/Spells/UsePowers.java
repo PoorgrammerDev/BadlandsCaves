@@ -1,10 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class UsePowers {
@@ -20,11 +20,11 @@ public abstract class UsePowers {
     }
 
     public void preventDoubleClick (Player player) {
-        player.setMetadata("spell_cooldown", new FixedMetadataValue(plugin, true));
+        PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 1);
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.setMetadata("spell_cooldown", new FixedMetadataValue(plugin, false));
+                PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 0);
             }
         }.runTaskLaterAsynchronously(plugin, 2);
     }

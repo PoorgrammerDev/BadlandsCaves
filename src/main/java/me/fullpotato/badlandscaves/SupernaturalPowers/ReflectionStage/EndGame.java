@@ -6,7 +6,10 @@ import me.fullpotato.badlandscaves.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.NMS.FakePlayer;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
-import org.bukkit.*;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.GameMode;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,7 +20,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class EndGame implements Listener {
@@ -34,7 +36,7 @@ public class EndGame implements Listener {
         final Player player = event.getEntity();
         if (player.getWorld().equals(world)) {
             event.setDeathMessage(null);
-            player.setMetadata("refl_respawn_inv", new FixedMetadataValue(plugin, true));
+            PlayerScore.REFL_RESPAWN_INV.setScore(plugin, player, 1);
             resetWorld();
         }
     }
@@ -42,9 +44,9 @@ public class EndGame implements Listener {
     @EventHandler
     public void playerRespawnAfterLosing (PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
-        if (player.getMetadata("refl_respawn_inv").get(0).asBoolean()) {
+        if (((byte) PlayerScore.REFL_RESPAWN_INV.getScore(plugin, player) == 1)) {
             restoreInventory(player);
-            player.setMetadata("refl_respawn_inv", new FixedMetadataValue(plugin,  false));
+            PlayerScore.REFL_RESPAWN_INV.setScore(plugin, player, (byte) 0);
         }
     }
 

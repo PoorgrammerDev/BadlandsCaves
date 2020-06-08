@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class LostSoulParticle extends BukkitRunnable {
         World world = plugin.getServer().getWorld(plugin.descensionWorldName);
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(world)) {
-                int in_descension = player.getMetadata("in_descension").get(0).asInt();
+                int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
                 if (in_descension == 2) {
                     List<Entity> entities = player.getNearbyEntities(20, 20, 20);
                     for (Entity entity : entities) {

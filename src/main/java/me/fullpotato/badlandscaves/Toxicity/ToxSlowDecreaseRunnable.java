@@ -1,14 +1,13 @@
 package me.fullpotato.badlandscaves.Toxicity;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ToxSlowDecreaseRunnable extends BukkitRunnable {
 
-    private BadlandsCaves plugin;
-    private Player player;
+    private final BadlandsCaves plugin;
     public ToxSlowDecreaseRunnable(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -16,16 +15,19 @@ public class ToxSlowDecreaseRunnable extends BukkitRunnable {
     @Override
     public void run() {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        if (isHardmode) {
-            return;
-        }
+        if (isHardmode) return;
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            double thirst = player.getMetadata("Thirst").get(0).asDouble();
-            double tox = player.getMetadata("Toxicity").get(0).asDouble();
+            double thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
+            double tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
             if (thirst >= 80) {
                 if (tox > 0.1) {
-                    player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox - 0.1));
+                    PlayerScore.TOXICITY.setScore(plugin, player, tox - 0.1);
+                }
+            }
+            else if (thirst >= 50) {
+                if (tox > 0.01) {
+                    PlayerScore.TOXICITY.setScore(plugin, player, tox - 0.01);
                 }
             }
         }

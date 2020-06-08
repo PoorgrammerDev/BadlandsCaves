@@ -1,10 +1,10 @@
 package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -85,14 +85,14 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                         if (true) { //!player.getUniqueId().equals(thrower.getUniqueId())
                             player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20, 1));
-                            double tox = player.getMetadata("Toxicity").get(0).asDouble();
+                            double tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                             final Random random = new Random();
                             if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
                                 final double tox_incr = random.nextDouble() / 5;
                                 final int part_num = random.nextInt(3) + 5;
 
                                 if (tox_incr > 0) {
-                                    player.setMetadata("Toxicity", new FixedMetadataValue(plugin, tox + tox_incr));
+                                    PlayerScore.TOXICITY.setScore(plugin, player, tox + tox_incr);
                                 }
                                 world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
                             }

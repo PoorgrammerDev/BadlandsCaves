@@ -1,7 +1,8 @@
 package me.fullpotato.badlandscaves.Deaths;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
@@ -10,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class BlessedAppleEat implements Listener {
     private BadlandsCaves plugin;
@@ -22,7 +22,7 @@ public class BlessedAppleEat implements Listener {
     public void player_eat (PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        int death_count = player.getMetadata("Deaths").get(0).asInt();
+        int death_count = (int) PlayerScore.DEATHS.getScore(plugin, player);
 
         final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
         final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
@@ -57,7 +57,7 @@ public class BlessedAppleEat implements Listener {
             if (death_count != 0 && decr_by > 0) {
                 player.spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 0.5, 0), 50, 1, 1, 1, 0);
                 player.playSound(player.getLocation(), "custom.reverse_deaths", SoundCategory.PLAYERS, 0.5F, 1);
-                player.setMetadata("Deaths", new FixedMetadataValue(plugin, remove_deaths(death_count, decr_by)));
+                PlayerScore.DEATHS.setScore(plugin, player, remove_deaths(death_count, decr_by));
             }
         }
     }

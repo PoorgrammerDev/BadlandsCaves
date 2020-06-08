@@ -5,7 +5,11 @@ import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.NMS.FakePlayer;
 import me.fullpotato.badlandscaves.NMS.LineOfSight;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
-import org.bukkit.*;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +17,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,7 +38,7 @@ public class BackroomsManager implements Listener {
     }
 
     public void enterBackRooms (Player player, Random random, String type) {
-        plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
+        plugin.getConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
 
         InventorySerialize serialize = new InventorySerialize(plugin);
         serialize.saveInventory(player, "backrooms");
@@ -49,7 +52,7 @@ public class BackroomsManager implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 99999, 127, false, false));
 
-        boolean special_surprise = !type.equalsIgnoreCase("backrooms") && (type.equalsIgnoreCase("darkrooms") || (player.getMetadata("has_seen_backrooms").get(0).asBoolean() && player.getMetadata("has_supernatural_powers").get(0).asBoolean() && random.nextInt(100) < 25));
+        boolean special_surprise = !type.equalsIgnoreCase("backrooms") && (type.equalsIgnoreCase("darkrooms") || (((byte) PlayerScore.HAS_SEEN_BACKROOMS.getScore(plugin, player) == 1) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1 && random.nextInt(100) < 25));
 
         if (special_surprise) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 0, false, false));
@@ -96,7 +99,7 @@ public class BackroomsManager implements Listener {
             }.runTaskTimerAsynchronously(plugin, 0, 185);
         }
 
-        player.setMetadata("has_seen_backrooms", new FixedMetadataValue(plugin, true));
+        PlayerScore.HAS_SEEN_BACKROOMS.setScore(plugin, player, 1);
 
         new BukkitRunnable() {
             @Override
@@ -130,15 +133,15 @@ public class BackroomsManager implements Listener {
             }
         }.runTaskTimer(plugin, 200, 200);
 
-        player.setMetadata("backrooms_timer", new FixedMetadataValue(plugin, random.nextInt(60) + 60));
+        PlayerScore.BACKROOMS_TIMER.setScore(plugin, player, random.nextInt(60) + 60);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (player.isOnline() && player.getWorld().equals(backrooms)) {
-                    int timer = player.getMetadata("backrooms_timer").get(0).asInt();
+                    int timer = (int) PlayerScore.BACKROOMS_TIMER.getScore(plugin, player);
                     if (timer > 0) {
-                        player.setMetadata("backrooms_timer", new FixedMetadataValue(plugin, timer - 1));
+                        PlayerScore.BACKROOMS_TIMER.setScore(plugin, player, timer - 1);
                     }
                     else {
                         leaveBackRooms(player);
@@ -158,7 +161,7 @@ public class BackroomsManager implements Listener {
         player.stopSound("custom.darkrooms_whispers");
         player.stopSound("custom.backrooms");
 
-        player.setMetadata("backrooms_timer", new FixedMetadataValue(plugin, 0));
+        PlayerScore.BACKROOMS_TIMER.setScore(plugin, player, 0);
 
         player.removePotionEffect(PotionEffectType.NIGHT_VISION);
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -170,10 +173,10 @@ public class BackroomsManager implements Listener {
         InventorySerialize inventoryManager = new InventorySerialize(plugin);
         inventoryManager.loadInventory(player, "backrooms", true, true);
 
-        Location location = Location.deserialize(plugin.getConfig().getConfigurationSection("Scores.users." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
+        Location location = Location.deserialize(plugin.getConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
         player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-        plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".backrooms_saved_location", null);
+        plugin.getConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", null);
     }
 
     public void summonTarget(Player player, Random random) {
@@ -364,7 +367,7 @@ public class BackroomsManager implements Listener {
         final Player player = event.getPlayer();
         if (player.getWorld().equals(backrooms)) {
             boolean darkrooms = player.getLocation().getY() < 55;
-            int backrooms_timer = player.getMetadata("backrooms_timer").get(0).asInt();
+            int backrooms_timer = (int) PlayerScore.BACKROOMS_TIMER.getScore(plugin, player);
             leaveBackRooms(player);
             if (backrooms_timer > 0) {
                 new BukkitRunnable() {
@@ -376,7 +379,7 @@ public class BackroomsManager implements Listener {
                         else {
                             enterBackRooms(player, new Random(), "backrooms");
                         }
-                        player.setMetadata("backrooms_timer", new FixedMetadataValue(plugin, backrooms_timer));
+                        PlayerScore.BACKROOMS_TIMER.setScore(plugin, player, backrooms_timer);
                     }
                 }.runTaskLater(plugin, 2);
             }

@@ -3,9 +3,9 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,13 +31,13 @@ public class EyesRunnable extends BukkitRunnable {
     @Override
     public void run() {
         EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
-        final int eyes_level = player.hasMetadata("eyes_level") ? player.getMetadata("eyes_level").get(0).asInt() : 0;
+        final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
         final double dist_range = Math.pow(block_range - 1, 2);
-        final boolean using_eyes = player.getMetadata("using_eyes").get(0).asBoolean();
+        final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);
         double drain_per_tick = constant_mana_drain / 20.0;
-        int mana = player.getMetadata("Mana").get(0).asInt();
+        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
 
         if (using_eyes && mana >= drain_per_tick) {
             //night vision
@@ -72,19 +72,19 @@ public class EyesRunnable extends BukkitRunnable {
 
             //mana stuffs
             mana -= drain_per_tick;
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, mana));
-            player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, 15));
-            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+            PlayerScore.MANA.setScore(plugin, player, mana);
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         }
         else {
-            player.setMetadata("using_eyes", new FixedMetadataValue(plugin, false));
+            PlayerScore.USING_EYES.setScore(plugin, player, 0);
             player.stopSound("custom.supernatural.enhanced_eyes.ambience");
             player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.5F, 1);
 
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!(powered.equals(player)) && powered.getMetadata("has_supernatural_powers").get(0).asBoolean() && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
                         powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.end", SoundCategory.PLAYERS, 0.3F, 1);
                         powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
                     }

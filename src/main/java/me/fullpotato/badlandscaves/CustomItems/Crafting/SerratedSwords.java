@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -38,7 +39,7 @@ public class SerratedSwords implements Listener {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (event.getClickedBlock() != null && event.getClickedBlock().getType().equals(Material.STONECUTTER)) {
                 final Player player = event.getPlayer();
-                if (!player.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                     if (event.getItem() != null) {
                         final ItemStack item = event.getItem();
                         if (Arrays.asList(swords).contains(item.getType())) {

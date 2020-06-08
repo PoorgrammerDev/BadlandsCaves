@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.PossessionNMS;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.LivingEntity;
@@ -26,7 +27,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         ItemStack possess = CustomItem.POSSESS.getItem();
@@ -34,7 +35,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
             plugin.getServer().getScheduler().cancelTask(this.getTaskId());
             return;
         }
-        if (player.getMetadata("in_possession").get(0).asBoolean()) return;
+        if (((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1)) return;
 
         World world = player.getWorld();
         RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);

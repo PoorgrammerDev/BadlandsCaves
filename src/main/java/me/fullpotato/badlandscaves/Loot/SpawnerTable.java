@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
@@ -53,7 +54,7 @@ public class SpawnerTable implements LootTable {
         final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
         final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 5);
         final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        final boolean supernatural = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
 
 
         final ItemStack rune = CustomItem.RUNE.getItem();

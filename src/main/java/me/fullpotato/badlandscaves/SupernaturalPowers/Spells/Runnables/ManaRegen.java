@@ -1,8 +1,8 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ManaRegen extends BukkitRunnable {
@@ -14,27 +14,27 @@ public class ManaRegen extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+            final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (!has_powers) return;
 
-            double Mana = player.getMetadata("Mana").get(0).asDouble();
-            int max_mana = player.getMetadata("max_mana").get(0).asInt();
+            double Mana = ((double) PlayerScore.MANA.getScore(plugin, player));
+            double max_mana = ((double) PlayerScore.MAX_MANA.getScore(plugin, player));
             if (Mana >= max_mana) return;
 
-            int thirst = player.getMetadata("Thirst").get(0).asInt();
+            double thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
             if (thirst < 30) return;
 
-            int mana_regen_delay_timer = player.getMetadata("mana_regen_delay_timer").get(0).asInt();
+            int mana_regen_delay_timer = ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player));
             if (mana_regen_delay_timer > 0) {
                 mana_regen_delay_timer--;
-                player.setMetadata("mana_regen_delay_timer", new FixedMetadataValue(plugin, mana_regen_delay_timer));
+                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, mana_regen_delay_timer);
                 return;
             }
 
             boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
             double mana_regen_var = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("game_values.pre_hardmode_values.mana_regen_var");
-            double thirst_sys_var = player.getMetadata("thirst_sys_var").get(0).asDouble();
-            int in_descension = player.getMetadata("in_descension").get(0).asInt();
+            double thirst_sys_var = (double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player);
+            int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
 
             if (thirst > 70) {
                 Mana++;
@@ -51,9 +51,9 @@ public class ManaRegen extends BukkitRunnable {
             if (in_descension != 2) thirst_sys_var += mana_regen_var;
 
 
-            player.setMetadata("Mana", new FixedMetadataValue(plugin, Mana));
-            player.setMetadata("thirst_sys_var", new FixedMetadataValue(plugin, thirst_sys_var));
-            player.setMetadata("mana_bar_active_timer", new FixedMetadataValue(plugin, 60));
+            PlayerScore.MANA.setScore(plugin, player, Mana);
+            PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, thirst_sys_var);
+            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         }
     }
 }

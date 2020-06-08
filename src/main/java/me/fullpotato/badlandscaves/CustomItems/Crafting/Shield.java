@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
@@ -21,6 +22,7 @@ public class Shield implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("deprecation")
     public void craftRegularShield () {
         plugin.getServer().removeRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "shield"));
 
@@ -78,7 +80,7 @@ public class Shield implements Listener {
         if (result.isSimilar(stoneShield) || result.isSimilar(ironShield) || result.isSimilar(diamondShield)) {
             for (HumanEntity humanEntity : event.getViewers()) {
                 Player player = (Player) humanEntity;
-                if (player.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
                     event.getInventory().setResult(null);
                     return;
                 }

@@ -1,16 +1,16 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class ThirstCommand extends Commands implements CommandExecutor {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public ThirstCommand (BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -26,7 +26,7 @@ public class ThirstCommand extends Commands implements CommandExecutor {
                     if (args.length < 2) {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
-                            player.sendMessage(ChatColor.GOLD + "Your Thirst count is " + ChatColor.RED + player.getMetadata("Thirst").get(0).asDouble() + ChatColor.GOLD + ".");
+                            player.sendMessage(ChatColor.GOLD + "Your Thirst count is " + ChatColor.RED + PlayerScore.THIRST.getScore(plugin, player) + ChatColor.GOLD + ".");
                         }
                         else {
                             playerNotValid(sender);
@@ -34,7 +34,7 @@ public class ThirstCommand extends Commands implements CommandExecutor {
                     } else {
                         for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                sender.sendMessage(ChatColor.GOLD + "The Thirst count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + targets.getMetadata("Thirst").get(0).asDouble() + ChatColor.GOLD + ".");
+                                sender.sendMessage(ChatColor.GOLD + "The Thirst count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + (PlayerScore.THIRST.getScore(plugin, targets)) + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }
@@ -51,7 +51,7 @@ public class ThirstCommand extends Commands implements CommandExecutor {
                                 if (args.length > 2) {
                                     try {
                                         double change = Double.parseDouble(args[2]);
-                                        targets.setMetadata("Thirst", new FixedMetadataValue(plugin, change));
+                                        PlayerScore.THIRST.setScore(plugin, targets, change);
                                         sender.sendMessage(ChatColor.GOLD + "The Thirst count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
                                         return true;
                                     }

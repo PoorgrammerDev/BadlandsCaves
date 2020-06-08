@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -12,26 +13,30 @@ import org.bukkit.scoreboard.Team;
 import java.util.ArrayList;
 
 public class ShrineCapture extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World world;
-    private Location[] crystal_locations = {
-            new Location(world, 46, 80, 46),
-            new Location(world, -46, 80, 46),
-            new Location(world, -46, 80, -46),
-            new Location(world, 46, 80, -46),
-    };
-    private Location origin = new Location(world, 0, 80, 0);
+    private final BadlandsCaves plugin;
+    private final World world;
+    private final Location[] crystal_locations;
+    private final Location origin;
 
     public ShrineCapture(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.descensionWorldName);
+
+        this.crystal_locations = new Location[]{
+                new Location(world, 46, 80, 46),
+                new Location(world, -46, 80, 46),
+                new Location(world, -46, 80, -46),
+                new Location(world, 46, 80, -46),
+        };
+
+        origin = new Location(world, 0, 80, 0);
     }
 
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.isDead() || (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE))) continue;
-            int in_descension = player.getMetadata("in_descension").get(0).asInt();
+            int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2 && player.getWorld().equals(world)) {
                 Location player_loc = player.getLocation();
                 for (int a = 0; a < crystal_locations.length; a++) {
@@ -47,8 +52,7 @@ public class ShrineCapture extends BukkitRunnable {
                             if (crystal.getLocation().distanceSquared(crystal_locations[a]) < 16) {
                                 boolean charged = crystal.hasMetadata("charged") && crystal.getMetadata("charged").get(0).asBoolean();
                                 if (!charged) {
-                                    int capped = player.hasMetadata("descension_shrines_capped") ? player.getMetadata("descension_shrines_capped").get(0).asInt() : 0;
-
+                                    int capped = (PlayerScore.DESCENSION_SHRINES_CAPPED.hasScore(plugin, player)) ? ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player)) : 0;
                                     if (capped >= a) {
                                         Location crystal_location = crystal.getLocation();
 
@@ -57,7 +61,6 @@ public class ShrineCapture extends BukkitRunnable {
 
                                         int charge = crystal.hasMetadata("charge") ? crystal.getMetadata("charge").get(0).asInt() + 1 : 1;
                                         crystal.setMetadata("charge", new FixedMetadataValue(plugin, charge));
-                                        //player.sendMessage(crystal.getMetadata("charge").get(0).asInt() + "");
 
                                         if (crystal.hasMetadata("charge") && crystal.getMetadata("charge").get(0).asInt() % 50 == 1) {
                                             player.playSound(player_loc, Sound.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 1, 0.3f);
@@ -76,7 +79,7 @@ public class ShrineCapture extends BukkitRunnable {
                                             crystal.setBeamTarget(origin);
 
                                             //gives more time
-                                            player.setMetadata("descension_timer", new FixedMetadataValue(plugin, player.getMetadata("descension_timer").get(0).asInt() + 60));
+                                            PlayerScore.DESCENSION_TIMER.setScore(plugin, player, (int) PlayerScore.DESCENSION_TIMER.getScore(plugin, player) + 60);
 
                                             //spawns more mobs
                                             int normal_mob_cap = plugin.getConfig().getInt("game_values.descension_mob_limit");
@@ -85,20 +88,20 @@ public class ShrineCapture extends BukkitRunnable {
                                             descReset.spawnMobs(desc_team, normal_mob_cap / 4);
 
                                             //metadata changes
-                                            player.setMetadata("descension_shrines_capped", new FixedMetadataValue(plugin, a + 1));
+                                            PlayerScore.DESCENSION_SHRINES_CAPPED.setScore(plugin, player, a + 1);
                                             switch (a) {
                                                 case 0:
-                                                    player.setMetadata("has_supernatural_powers", new FixedMetadataValue(plugin, true));
-                                                    player.setMetadata("agility_level", new FixedMetadataValue(plugin, 1));
-                                                    player.setMetadata("displace_level", new FixedMetadataValue(plugin, 1));
+                                                    PlayerScore.HAS_SUPERNATURAL_POWERS.setScore(plugin, player, 1);
+                                                    PlayerScore.AGILITY_LEVEL.setScore(plugin, player, 1);
+                                                    PlayerScore.DISPLACE_LEVEL.setScore(plugin, player, 1);
                                                     break;
                                                 case 1:
-                                                    player.setMetadata("agility_level", new FixedMetadataValue(plugin, 2));
-                                                    player.setMetadata("possess_level", new FixedMetadataValue(plugin, 1));
+                                                    PlayerScore.AGILITY_LEVEL.setScore(plugin, player, 2);
+                                                    PlayerScore.POSSESS_LEVEL.setScore(plugin, player, 1);
                                                     break;
                                                 case 2:
-                                                    player.setMetadata("displace_level", new FixedMetadataValue(plugin, 2));
-                                                    player.setMetadata("possess_level", new FixedMetadataValue(plugin, 2));
+                                                    PlayerScore.DISPLACE_LEVEL.setScore(plugin, player, 2);
+                                                    PlayerScore.POSSESS_LEVEL.setScore(plugin, player, 2);
                                                     break;
                                                 case 3:
                                                     new DescensionFinish(plugin).runTask(plugin);

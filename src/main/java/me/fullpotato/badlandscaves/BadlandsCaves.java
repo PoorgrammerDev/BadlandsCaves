@@ -33,7 +33,6 @@ import me.fullpotato.badlandscaves.Thirst.ToxicWaterBottling;
 import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInWater;
 import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
-import me.fullpotato.badlandscaves.Util.PlayerConfigLoadSave;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
@@ -50,80 +49,10 @@ public final class BadlandsCaves extends JavaPlugin {
     public String backroomsWorldName;
     public String chambersWorldName;
 
-    /**
-     * PLAYER VALUE CONSTANTS
-     * Prefixes:
-     * $ - boolean type
-     * % - default value 100
-     */
-    private final String[] player_values = {
-            "Deaths",
-            "%Thirst",
-            "Toxicity",
-            "thirst_sys_var",
-            "tox_nat_decr_var",
-            "tox_slow_incr_var",
-            "$opened_cauldron",
-            "$has_supernatural_powers",
-            "in_descension",
-            "$in_reflection",
-            "reflection_zombie",
-            "$refl_respawn_inv",
-            "descension_detect",
-            "descension_detect_cooldown",
-            "descension_timer",
-            "descension_shrines_capped",
-            "%Mana",
-            "%max_mana",
-            "mana_regen_delay_timer",
-            "mana_bar_active_timer",
-            "mana_bar_message_timer",
-            "swap_slot",
-            "swap_doubleshift_window",
-            "swap_window",
-            "swap_cooldown",
-            "swap_name_timer",
-            "$spell_cooldown",
-            "displace_level",
-            "$has_displace_marker",
-            "displace_x",
-            "displace_y",
-            "displace_z",
-            "withdraw_level",
-            "withdraw_x",
-            "withdraw_y",
-            "withdraw_z",
-            "withdraw_chunk_x",
-            "withdraw_chunk_z",
-            "withdraw_timer",
-            "eyes_level",
-            "$using_eyes",
-            "possess_level",
-            "$in_possession",
-            "possessed_entity",
-            "possess_orig_world",
-            "possess_orig_x",
-            "possess_orig_y",
-            "possess_orig_z",
-            "endurance_level",
-            "agility_level",
-            "agility_buff_speed_lvl",
-            "$has_seen_backrooms",
-            "backrooms_timer",
-            "$bleeding_debuff",
-
-    };
-
     @Override
     public void onEnable() {
         loadWorldNames();
         loadConfig();
-
-        //load players metadata
-        PlayerConfigLoadSave loader = new PlayerConfigLoadSave(this, player_values);
-        loader.loadPlayers();
-
-
         loadCustomWorlds();
         registerEvents();
         loadCommands();
@@ -133,10 +62,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        PlayerConfigLoadSave save_player = new PlayerConfigLoadSave(this, player_values);
-        save_player.saveToConfig(true);
         this.saveConfig();
-
         this.getServer().getScheduler().cancelTasks(this);
     }
 
@@ -171,7 +97,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
     //EVENTS
     public void registerEvents() {
-        this.getServer().getPluginManager().registerEvents(new PlayerJoinLeave(this, player_values), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerJoinLeave(this), this);
         this.getServer().getPluginManager().registerEvents(new NaturalThirstDecrease(this), this);
         this.getServer().getPluginManager().registerEvents(new IncreaseToxInWater(this), this);
         this.getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
@@ -281,7 +207,6 @@ public final class BadlandsCaves extends JavaPlugin {
         new ActionbarRunnable(this).runTaskTimer(this, 0 ,0);
         new PlayerEffectsRunnable(this).runTaskTimer(this,0,0);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
-        new PlayerConfigLoadSave(this, player_values).runTaskTimer(this, 5, 3600);
         new ManaBarManager(this).runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 20);
         new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);

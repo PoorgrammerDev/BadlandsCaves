@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.SpawnBoss;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -16,7 +17,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,19 +40,19 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         final Player player = event.getPlayer();
         event.setCancelled(true);
 
-        final boolean in_reflection = player.hasMetadata("in_reflection") && player.getMetadata("in_reflection").get(0).asBoolean();
+        final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;
 
         final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
         final World reflection = plugin.getServer().getWorld(plugin.reflectionWorldName);
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
-        if (player.getMetadata("has_supernatural_powers").get(0).asBoolean()) return;
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) return;
 
         //removes a use
         depleteUse(current, 2);
 
         //adds a death
-        player.setMetadata("Deaths", new FixedMetadataValue(plugin, player.getMetadata("Deaths").get(0).asInt() + 1));
+        PlayerScore.DEATHS.setScore(plugin, player, (int) PlayerScore.DEATHS.getScore(plugin, player) + 1);
 
 
         //save inventory, then disenchant all items
@@ -69,7 +69,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         }
 
         //entering
-        player.setMetadata("in_reflection", new FixedMetadataValue(plugin, true));
+        PlayerScore.IN_REFLECTION.setScore(plugin, player, 1);
         player.teleport(worldspawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
         //heal and full hunger

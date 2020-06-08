@@ -1,12 +1,20 @@
 package me.fullpotato.badlandscaves.Effects;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 public class ToxEffects {
+    private BadlandsCaves plugin;
+
+    public ToxEffects(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     public HashMap<String, Integer> getToxValues(Player player) {
-        double toxicity = player.getMetadata("Toxicity").get(0).asDouble();
+        double toxicity = (double) PlayerScore.TOXICITY.getScore(plugin, player);
         int poison_lvl = 0;
         int hunger_lvl = 0;
         int walk_speed = 0;

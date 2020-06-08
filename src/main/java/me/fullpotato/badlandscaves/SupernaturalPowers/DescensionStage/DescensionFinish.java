@@ -8,19 +8,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
 public class DescensionFinish extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World world;
-    private Location portal_center = new Location(world, 0, 85, 0);
-    private Location[] crystal_locations = {
-            new Location(world, 46, 80, 46, 135, 0),
-            new Location(world, -46, 80, 46, -135, 0),
-            new Location(world, -46, 80, -46, -45, 0),
-            new Location(world, 46, 80, -46, 45, 0),
-    };
+    private final World world;
+    private final Location[] crystal_locations;
 
-    public DescensionFinish(BadlandsCaves bcav) {
-        plugin = bcav;
+    public DescensionFinish(BadlandsCaves plugin) {
         world = plugin.getServer().getWorld(plugin.descensionWorldName);
+
+        crystal_locations = new Location[]{
+                new Location(world, 46, 80, 46, 135, 0),
+                new Location(world, -46, 80, 46, -135, 0),
+                new Location(world, -46, 80, -46, -45, 0),
+                new Location(world, 46, 80, -46, 45, 0),
+        };
     }
 
     @Override

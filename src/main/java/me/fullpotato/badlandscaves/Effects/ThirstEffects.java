@@ -1,12 +1,20 @@
 package me.fullpotato.badlandscaves.Effects;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 public class ThirstEffects {
+    private BadlandsCaves plugin;
+
+    public ThirstEffects(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+
     public HashMap<String, Integer> getThirstEffects(Player player) {
-        final double thirst = player.getMetadata("Thirst").get(0).asDouble();
+        final double thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
         int poison_lvl = 0;
         int hunger_lvl = 0;
         int walk_speed = 0;

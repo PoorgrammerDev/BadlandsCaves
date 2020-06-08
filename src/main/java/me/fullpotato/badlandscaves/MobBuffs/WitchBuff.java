@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
@@ -76,7 +77,7 @@ public class WitchBuff implements Listener {
                                 witch.teleport(findLocation(target.getLocation(), random, 9, 100, 8), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
                                 for (Player powered : plugin.getServer().getOnlinePlayers()) {
-                                    if (powered.getMetadata("has_supernatural_powers").get(0).asBoolean()) {
+                                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) {
                                         powered.playSound(witch.getLocation(), "custom.supernatural.displace.warp", SoundCategory.HOSTILE, 0.3F, 1);
                                         powered.spawnParticle(Particle.SPELL_WITCH, witch.getLocation(), 5, 0.1, 0.1, 0.1, 1);
                                     }

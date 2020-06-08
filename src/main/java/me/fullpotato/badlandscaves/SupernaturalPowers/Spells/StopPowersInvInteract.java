@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class StopPowersInvInteract implements Listener {
     @EventHandler
     public void stop_click (InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         ItemStack item = event.getCurrentItem();
@@ -51,7 +51,7 @@ public class StopPowersInvInteract implements Listener {
     @EventHandler
     public void stop_swap (PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         ItemStack item = event.getOffHandItem();
@@ -74,7 +74,7 @@ public class StopPowersInvInteract implements Listener {
     @EventHandler
     public void stop_drop (PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         ItemStack item = event.getItemDrop().getItemStack();
@@ -90,7 +90,7 @@ public class StopPowersInvInteract implements Listener {
     @EventHandler
     public void death_clear (PlayerDeathEvent event) {
         Player player = event.getEntity();
-        final boolean has_powers = player.getMetadata("has_supernatural_powers").get(0).asBoolean();
+        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         List<ItemStack> items = event.getDrops();
@@ -103,7 +103,7 @@ public class StopPowersInvInteract implements Listener {
             }
         }
 
-        String sectionname = "Scores.users." + player.getUniqueId() + ".saved_offhand_item";
+        String sectionname = "player_info." + player.getUniqueId() + ".saved_offhand_item";
         ItemStack item = plugin.getConfig().getItemStack(sectionname);
         if (item != null && !item.getType().isAir()) {
             player.getWorld().dropItemNaturally(player.getLocation(), item);
@@ -112,6 +112,6 @@ public class StopPowersInvInteract implements Listener {
         }
 
 
-        player.setMetadata("has_displace_marker", new FixedMetadataValue(plugin, false));
+        PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
     }
 }
