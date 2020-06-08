@@ -49,13 +49,6 @@ public final class BadlandsCaves extends JavaPlugin {
     public String backroomsWorldName;
     public String chambersWorldName;
 
-    /**
-     * PLAYER VALUE CONSTANTS
-     * Prefixes:
-     * $ - boolean type
-     * % - default value 100
-     */
-
     @Override
     public void onEnable() {
         loadWorldNames();

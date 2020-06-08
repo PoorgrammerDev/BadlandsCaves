@@ -104,7 +104,6 @@ public class DeathHandler implements Listener {
         PlayerScore.THIRST.setScore(plugin, player, 100.0);
         PlayerScore.TOXICITY.setScore(plugin, player, 0.0);
         PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, 0.0);
-        PlayerScore.TOX_NAT_DECR_VAR.setScore(plugin, player, 0.0);
         PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0.0);
 
         boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;

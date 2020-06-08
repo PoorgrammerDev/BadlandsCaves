@@ -55,7 +55,7 @@ public class CauldronMenu implements Listener {
                                 if (online.getLocation().distanceSquared(location) < 100) {
                                     boolean open = ((byte) PlayerScore.OPENED_CAULDRON.getScore(plugin, online) == 1);
                                     if (open) {
-                                        Location saved_cauldron_location = plugin.getConfig().getLocation("Scores.users." + online.getUniqueId() + ".opened_cauldron_location");
+                                        Location saved_cauldron_location = plugin.getConfig().getLocation("player_info." + online.getUniqueId() + ".opened_cauldron_location");
                                         if (location.equals(saved_cauldron_location)) {
                                             already_opened = true;
                                             break;
@@ -70,7 +70,7 @@ public class CauldronMenu implements Listener {
                             else {
                                 event.setCancelled(true);
                                 PlayerScore.OPENED_CAULDRON.setScore(plugin, player, 1);
-                                plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", location);
+                                plugin.getConfig().set("player_info." + player.getUniqueId() + ".opened_cauldron_location", location);
                                 plugin.saveConfig();
 
                                 purification_menu(player, cauldron_block, cauldron_title);
@@ -222,7 +222,7 @@ public class CauldronMenu implements Listener {
         if (inv.equals(cauldron_inv)) {
             plugin.getServer().getScheduler().cancelTask(refresh_id);
             PlayerScore.OPENED_CAULDRON.setScore(plugin, player, 0);
-            plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".opened_cauldron_location", null);
+            plugin.getConfig().set("player_info." + player.getUniqueId() + ".opened_cauldron_location", null);
 
             if (cauldron_inv.getItem(11) != null) {
                 if (player.getInventory().firstEmpty() != -1) {

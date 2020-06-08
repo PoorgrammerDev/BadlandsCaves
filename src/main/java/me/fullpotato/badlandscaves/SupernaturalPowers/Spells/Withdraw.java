@@ -80,7 +80,7 @@ public class Withdraw extends UsePowers implements Listener {
                                         PreventDragon.preventDragonSpawn(void_world);
 
                                         Location location = player.getLocation();
-                                        plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
+                                        plugin.getConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
 
                                         Location voidloc = player.getLocation();
                                         voidloc.setWorld(void_world);
@@ -246,7 +246,7 @@ public class Withdraw extends UsePowers implements Listener {
             if (other.getWorld().equals(void_world)) {
                 Chunk other_chunk = other.getLocation().getChunk();
                 if (other_chunk.getX() == x && other_chunk.getZ() == z) {
-                    String worldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
+                    String worldname = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                     if (worldname != null && !worldname.isEmpty()) {
                         World other_world = plugin.getServer().getWorld(worldname);
                         return (world.equals(other_world));

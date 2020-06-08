@@ -94,6 +94,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                             minerals_tier2.add(Material.GOLD_BLOCK);
                             minerals_tier2.add(Material.LAPIS_BLOCK);
                             minerals_tier2.add(Material.REDSTONE_BLOCK);
+                            minerals_tier2.add(Material.DEAD_TUBE_CORAL_BLOCK);
 
                             ArrayList<Material> storage = new ArrayList<>();
                             storage.add(Material.CHEST);
@@ -170,7 +171,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                             }
 
                             String eyes_map = builder.toString();
-                            plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".eyes_map", eyes_map);
+                            plugin.getConfig().set("player_info." + player.getUniqueId() + ".eyes_map", eyes_map);
                             plugin.saveConfig();
 
                             mana -= (initial_mana_cost - (constant_mana_drain / 20.0));
@@ -212,7 +213,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
         final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);
         if (!using_eyes) return;
 
-        String string_map = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".eyes_map");
+        String string_map = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".eyes_map");
 
         assert string_map != null;
         HashMap<Location, Integer> blocks_maps = stringToMap(player, string_map);

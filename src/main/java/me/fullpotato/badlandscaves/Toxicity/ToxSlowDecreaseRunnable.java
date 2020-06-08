@@ -15,9 +15,7 @@ public class ToxSlowDecreaseRunnable extends BukkitRunnable {
     @Override
     public void run() {
         boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        if (isHardmode) {
-            return;
-        }
+        if (isHardmode) return;
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             double thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
@@ -25,6 +23,11 @@ public class ToxSlowDecreaseRunnable extends BukkitRunnable {
             if (thirst >= 80) {
                 if (tox > 0.1) {
                     PlayerScore.TOXICITY.setScore(plugin, player, tox - 0.1);
+                }
+            }
+            else if (thirst >= 50) {
+                if (tox > 0.01) {
+                    PlayerScore.TOXICITY.setScore(plugin, player, tox - 0.01);
                 }
             }
         }

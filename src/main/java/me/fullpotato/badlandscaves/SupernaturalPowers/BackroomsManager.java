@@ -38,7 +38,7 @@ public class BackroomsManager implements Listener {
     }
 
     public void enterBackRooms (Player player, Random random, String type) {
-        plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
+        plugin.getConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
 
         InventorySerialize serialize = new InventorySerialize(plugin);
         serialize.saveInventory(player, "backrooms");
@@ -173,10 +173,10 @@ public class BackroomsManager implements Listener {
         InventorySerialize inventoryManager = new InventorySerialize(plugin);
         inventoryManager.loadInventory(player, "backrooms", true, true);
 
-        Location location = Location.deserialize(plugin.getConfig().getConfigurationSection("Scores.users." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
+        Location location = Location.deserialize(plugin.getConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
         player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
-        plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".backrooms_saved_location", null);
+        plugin.getConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", null);
     }
 
     public void summonTarget(Player player, Random random) {

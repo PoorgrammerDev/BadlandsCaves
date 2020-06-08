@@ -7,11 +7,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public enum PlayerScore {
+    INITIALIZED(PersistentDataType.BYTE),
     DEATHS(PersistentDataType.INTEGER),
     THIRST(PersistentDataType.DOUBLE, 100),
     TOXICITY(PersistentDataType.DOUBLE),
     THIRST_SYS_VAR(PersistentDataType.DOUBLE),
-    TOX_NAT_DECR_VAR(PersistentDataType.DOUBLE),
     TOX_SLOW_INCR_VAR(PersistentDataType.INTEGER),
     OPENED_CAULDRON(PersistentDataType.BYTE),
     HAS_SUPERNATURAL_POWERS(PersistentDataType.BYTE),
@@ -50,7 +50,7 @@ public enum PlayerScore {
     USING_EYES(PersistentDataType.BYTE),
     POSSESS_LEVEL(PersistentDataType.INTEGER),
     IN_POSSESSION(PersistentDataType.BYTE),
-    POSSESS_ORIG_WORLD(PersistentDataType.STRING),
+    POSSESS_ORIG_WORLD(PersistentDataType.STRING, ""),
     POSSESS_ORIG_X(PersistentDataType.DOUBLE),
     POSSESS_ORIG_Y(PersistentDataType.DOUBLE),
     POSSESS_ORIG_Z(PersistentDataType.DOUBLE),

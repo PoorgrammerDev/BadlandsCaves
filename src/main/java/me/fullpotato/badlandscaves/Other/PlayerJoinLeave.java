@@ -31,24 +31,27 @@ public class PlayerJoinLeave implements Listener {
         Player player = event.getPlayer();
 
         //NEW PLAYER--------------------------------
-        if (!player.hasPlayedBefore()) {
-
-            ItemStack starter_sapling = CustomItem.STARTER_SAPLING.getItem();
-            ItemStack starter_bone_meal = CustomItem.STARTER_BONE_MEAL.getItem();
-            player.getInventory().addItem(starter_sapling);
-            player.getInventory().addItem(starter_bone_meal);
-            player.getInventory().addItem(GuideBook.getGuideBook(plugin));
-
+        if (!player.hasPlayedBefore() || (!(PlayerScore.INITIALIZED.hasScore(plugin, player))) || (byte) PlayerScore.INITIALIZED.getScore(plugin, player) == (byte) 0) {
             InitializePlayer data = new InitializePlayer(plugin);
             data.initializePlayer(player);
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.setHealth(40.0);
-                    player.setSaturation(20.0F);
-                }
-            }.runTaskLaterAsynchronously(plugin, 5);
+            if (!player.hasPlayedBefore()) {
+                ItemStack starter_sapling = CustomItem.STARTER_SAPLING.getItem();
+                ItemStack starter_bone_meal = CustomItem.STARTER_BONE_MEAL.getItem();
+                player.getInventory().addItem(starter_sapling);
+                player.getInventory().addItem(starter_bone_meal);
+                player.getInventory().addItem(GuideBook.getGuideBook(plugin));
+
+
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setHealth(40.0);
+                        player.setSaturation(20.0F);
+                    }
+                }.runTaskLaterAsynchronously(plugin, 5);
+            }
         }
 
         //EVERYONE---------------------------------------
@@ -72,7 +75,7 @@ public class PlayerJoinLeave implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.withdrawWorldName))) {
-                String origworldname = plugin.getConfig().getString("Scores.users." + player.getUniqueId() + ".withdraw_orig_world");
+                String origworldname = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                 if (origworldname == null) {
                     player.setHealth(0);
                 }

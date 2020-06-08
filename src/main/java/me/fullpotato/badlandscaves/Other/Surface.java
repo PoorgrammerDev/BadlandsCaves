@@ -62,7 +62,7 @@ public class Surface extends BukkitRunnable {
                                 }
                             }
                             else {
-                                int mobs = hardmode ? (random.nextInt(chaos / 15) + 1) : (random.nextInt(chaos / 30) + 1);
+                                int mobs = hardmode ? (random.nextInt((chaos / 15) + 1) + 1) : (random.nextInt((chaos / 30) + 1) + 1);
                                 for (int i = 0; i < mobs; i++) {
                                     if (random.nextInt(100) < 75) {
                                         world.spawnEntity(spawn.clone().add(0, 10, 0), EntityType.PHANTOM);

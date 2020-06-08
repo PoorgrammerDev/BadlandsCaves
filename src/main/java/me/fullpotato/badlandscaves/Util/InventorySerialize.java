@@ -22,7 +22,7 @@ public class InventorySerialize {
         for (int a = 0; a < inventory.getSize(); a++) {
             final ItemStack item = inventory.getItem(a);
             if (item != null) {
-                plugin.getConfig().set("Scores.users." + player.getUniqueId() + ".saved_inventories." + inventoryName + "." + a, item.serialize());
+                plugin.getConfig().set("player_info." + player.getUniqueId() + ".saved_inventories." + inventoryName + "." + a, item.serialize());
                 plugin.saveConfig();
             }
         }
@@ -37,7 +37,7 @@ public class InventorySerialize {
      * @param clearConfig If true, remove the saved inventory in the config after giving it to the player.
      */
     public void loadInventory (final Player player, final String inventoryName, final boolean clearCurrent, final boolean clearConfig) {
-        final String base_key = "Scores.users." + player.getUniqueId() + ".saved_inventories." + inventoryName;
+        final String base_key = "player_info." + player.getUniqueId() + ".saved_inventories." + inventoryName;
         final ConfigurationSection inv_section = plugin.getConfig().getConfigurationSection(base_key);
         if (inv_section != null) {
             if (clearCurrent) {

@@ -20,5 +20,7 @@ public class InitializePlayer {
         for (PlayerScore score : PlayerScore.values()) {
             score.setScore(plugin, player, score.getDefaultScore());
         }
+
+        PlayerScore.INITIALIZED.setScore(plugin, player, (byte) 1);
     }
 }
