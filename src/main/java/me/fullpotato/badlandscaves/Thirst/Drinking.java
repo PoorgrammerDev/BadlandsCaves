@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Drinking implements Listener {
@@ -106,8 +107,20 @@ public class Drinking implements Listener {
                 }
                 else if (item.isSimilar(recall_potion)) {
                     Location location = player.getLocation();
-                    Random random = new Random();
+                    ArrayList<World> blacklisted = new ArrayList<>();
+                    blacklisted.add(plugin.getServer().getWorld(plugin.reflectionWorldName));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.backroomsWorldName));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.descensionWorldName));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.chambersWorldName));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.withdrawWorldName));
 
+                    if (location.getWorld() != null && blacklisted.contains(location.getWorld())) {
+                        player.sendMessage("§cYou cannot drink that right now.");
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    Random random = new Random();
                     double[] tracker = {0.0};
                     new BukkitRunnable() {
                         @Override
