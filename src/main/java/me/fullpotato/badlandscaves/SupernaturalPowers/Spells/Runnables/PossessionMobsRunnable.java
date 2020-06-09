@@ -16,10 +16,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
 public class PossessionMobsRunnable extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
-    private LivingEntity target;
-    private Team team;
+    private final BadlandsCaves plugin;
+    private final Player player;
+    private final LivingEntity target;
+    private final Team team;
 
     public PossessionMobsRunnable(BadlandsCaves bcav, Player ply, LivingEntity trg, Team tm) {
         plugin = bcav;
@@ -32,7 +32,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
     public void run() {
         final boolean in_possession = (byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1;
         double mana = (double) PlayerScore.MANA.getScore(plugin, player);
-        final int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
+        final int possession_mana_drain = plugin.getConfig().getInt("options.spell_costs.possess_mana_drain");
         final double possession_mana_drain_tick = possession_mana_drain / 20.0;
         PossessionNMS nms = new PossessionNMS(player);
 

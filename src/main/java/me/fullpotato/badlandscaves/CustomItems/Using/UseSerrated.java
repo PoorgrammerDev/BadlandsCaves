@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems.Using;
 
-import me.fullpotato.badlandscaves.CustomItems.Crafting.SerratedSwords;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.SerratedSwords;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -14,14 +14,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
 public class UseSerrated implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public UseSerrated(BadlandsCaves plugin) {
         this.plugin = plugin;

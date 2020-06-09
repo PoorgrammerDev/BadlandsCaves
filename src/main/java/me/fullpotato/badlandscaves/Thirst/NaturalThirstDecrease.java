@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.Random;
 
 public class NaturalThirstDecrease implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public NaturalThirstDecrease(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -71,14 +71,14 @@ public class NaturalThirstDecrease implements Listener {
 
         }
 
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         int threshold;
 
         if (isHardmode) {
-            threshold = plugin.getConfig().getInt("game_values.hardmode_values.threshold_thirst_sys");
+            threshold = plugin.getConfig().getInt("options.hardmode_values.threshold_thirst_sys");
         }
         else {
-            threshold = plugin.getConfig().getInt("game_values.pre_hardmode_values.threshold_thirst_sys");
+            threshold = plugin.getConfig().getInt("options.pre_hardmode_values.threshold_thirst_sys");
         }
 
         if ((double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player) >= threshold) {

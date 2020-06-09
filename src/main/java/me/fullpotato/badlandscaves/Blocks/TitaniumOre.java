@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Blocks;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,14 +9,16 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 
 public class TitaniumOre implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public TitaniumOre(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -27,7 +29,7 @@ public class TitaniumOre implements Listener {
         if (event.getBlock().getType().equals(Material.DEAD_TUBE_CORAL_BLOCK)) {
             Player player = event.getPlayer();
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+                boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
                 if (hardmode) {
                     ItemStack tool = player.getEquipment().getItemInMainHand();
 

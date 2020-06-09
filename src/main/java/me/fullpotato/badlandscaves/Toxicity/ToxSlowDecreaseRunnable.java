@@ -14,7 +14,7 @@ public class ToxSlowDecreaseRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (isHardmode) return;
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {

@@ -1,7 +1,10 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.EntityType;
@@ -18,7 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Random;
 
 public class SpiderBuff implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public SpiderBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -26,11 +29,11 @@ public class SpiderBuff implements Listener {
     @EventHandler
     public void HMspider (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Spider)) return;
-        boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
 
         final Spider spider = (Spider) event.getEntity();
         final Random random = new Random();
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 
         if (event.getEntityType().equals(EntityType.SPIDER)) {
@@ -40,7 +43,7 @@ public class SpiderBuff implements Listener {
                 }
             }
             else {
-                final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+                final int augment = (chaos / 5) + plugin.getConfig().getInt("options.hardmode_values.augmented_spawn_chance");
                 final boolean augmented = random.nextInt(100) < augment;
                 if (augmented) {
                     spider.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);

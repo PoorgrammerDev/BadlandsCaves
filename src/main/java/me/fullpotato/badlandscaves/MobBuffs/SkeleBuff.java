@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SkeleBuff implements Listener {
-    private BadlandsCaves plugin;
-    private World chambers;
+    private final BadlandsCaves plugin;
+    private final World chambers;
     public SkeleBuff(BadlandsCaves bcav) {
         plugin = bcav;
         chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
@@ -34,8 +34,8 @@ public class SkeleBuff implements Listener {
         if (!(event.getEntity() instanceof Skeleton)) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
-        boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 
         Skeleton skeleton = (Skeleton) event.getEntity();
@@ -47,7 +47,7 @@ public class SkeleBuff implements Listener {
 
         if (skeleton.getType().equals(EntityType.SKELETON)) {
             if (hardmode) {
-                final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+                final int augment = (chaos / 5) + plugin.getConfig().getInt("options.hardmode_values.augmented_spawn_chance");
                 if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < augment) {
                     skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
                     skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Summoner");
@@ -147,7 +147,7 @@ public class SkeleBuff implements Listener {
                     Vector velocity = arrow.getVelocity();
                     Location location = arrow.getLocation();
 
-                    final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+                    final int chaos = plugin.getConfig().getInt("system.chaos_level");
                     final int clones = 1 + (chaos / 10);
                     int[] ran = {0};
                     new BukkitRunnable() {
@@ -184,7 +184,7 @@ public class SkeleBuff implements Listener {
 
 
                     final Random random = new Random();
-                    final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+                    final int chaos = plugin.getConfig().getInt("system.chaos_level");
 
                     if (random.nextInt(100) < Math.max(chaos, 10)) {
                         ArrayList<Skeleton> nearbySkeles = new ArrayList<>();
@@ -244,7 +244,7 @@ public class SkeleBuff implements Listener {
 
     @EventHandler
     public void skeletonTrigger (EntityTargetLivingEntityEvent event) {
-        if (plugin.getConfig().getBoolean("game_values.hardmode")) {
+        if (plugin.getConfig().getBoolean("system.hardmode")) {
             if (event.getEntity() instanceof Skeleton && event.getTarget() instanceof Skeleton) {
                 event.setCancelled(true);
             }
@@ -253,7 +253,7 @@ public class SkeleBuff implements Listener {
 
     @EventHandler
     public void skeletonHit (EntityDamageByEntityEvent event) {
-        if (plugin.getConfig().getBoolean("game_values.hardmode")) {
+        if (plugin.getConfig().getBoolean("system.hardmode")) {
             if (event.getEntity() instanceof Skeleton) {
                 if (event.getDamager() instanceof Skeleton) {
                     event.setCancelled(true);

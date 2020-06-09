@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Random;
 
 public class SilverfishBuff implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public SilverfishBuff(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -20,7 +20,7 @@ public class SilverfishBuff implements Listener {
     @EventHandler
     public void HMsilverfish (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Silverfish)) return;
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!isHardmode) return;
 
         Silverfish silverfish = (Silverfish) event.getEntity();
@@ -29,7 +29,7 @@ public class SilverfishBuff implements Listener {
         silverfish.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, random.nextInt(3) + 1, true, true));
         silverfish.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, random.nextInt(3) + 1, true, true));
 
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
         if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
             if (random.nextInt(100) < chance) {

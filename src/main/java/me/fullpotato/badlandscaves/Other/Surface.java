@@ -5,15 +5,18 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBoss
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Ravager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
 public class Surface extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World world;
-    private Random random = new Random();
+    private final BadlandsCaves plugin;
+    private final World world;
+    private final Random random = new Random();
     private final EntityType[] banditTypes = {
             EntityType.VINDICATOR,
             EntityType.WITCH,
@@ -31,13 +34,13 @@ public class Surface extends BukkitRunnable {
 
     @Override
     public void run() {
-        final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         long time = world.getTime();
         for (Player player : world.getEntitiesByClass(Player.class)) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 Location location = player.getLocation();
-                final int surfaceLayer = plugin.getConfig().getInt("game_values.surface_layer");
+                final int surfaceLayer = plugin.getConfig().getInt("options.surface_layer");
                 if (location.getY() > surfaceLayer) {
                     if (random.nextInt(100) < (25 + (chaos / (hardmode ? 4.0 : 8.0)))) {
                         ZombieBossBehavior finder = new ZombieBossBehavior(plugin);

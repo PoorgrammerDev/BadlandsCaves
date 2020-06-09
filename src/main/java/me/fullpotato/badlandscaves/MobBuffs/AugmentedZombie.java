@@ -3,7 +3,10 @@ package me.fullpotato.badlandscaves.MobBuffs;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -12,8 +15,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class AugmentedZombie extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Random random;
+    private final BadlandsCaves plugin;
+    private final Random random;
 
     public AugmentedZombie(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -23,7 +26,7 @@ public class AugmentedZombie extends BukkitRunnable {
 
     @Override
     public void run() {
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         for (World world : plugin.getServer().getWorlds()) {
             for (Zombie zombie : world.getEntitiesByClass(Zombie.class)) {
                 if (zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1 && !zombie.isDead()) {

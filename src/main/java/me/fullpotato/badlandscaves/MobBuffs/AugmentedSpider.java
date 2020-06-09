@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class AugmentedSpider extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public AugmentedSpider(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -20,7 +20,7 @@ public class AugmentedSpider extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!isHardmode) return;
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {

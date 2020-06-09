@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Loot;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,12 +19,12 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class SpawnerTable implements LootTable {
-    private BadlandsCaves plugin;
-    private NamespacedKey key;
-    private Player player;
-    private EntityType spawnerType;
-    private int fortune;
-    private HashMap<EntityType, ItemStack> matchSoul = new HashMap<>();
+    private final BadlandsCaves plugin;
+    private final NamespacedKey key;
+    private final Player player;
+    private final EntityType spawnerType;
+    private final int fortune;
+    private final HashMap<EntityType, ItemStack> matchSoul = new HashMap<>();
 
     public SpawnerTable(BadlandsCaves plugin, Player player, EntityType spawnerType, int fortune) {
         this.plugin = plugin;
@@ -51,9 +51,9 @@ public class SpawnerTable implements LootTable {
     @Override
     public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, @NotNull LootContext context) {
         final double luck = context.getLuck();
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 5);
-        final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
 
 
@@ -71,6 +71,7 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.QUARTZ_BLOCK, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 16));
             generic.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
+            generic.add(CustomItem.RECALL_POTION.getItem());
 
             if (supernatural) {
                 //HARDMODE SUPERNATURAL------------------------------------------------------------------------
@@ -86,12 +87,11 @@ public class SpawnerTable implements LootTable {
                 specific.add(CustomItem.PIGZOMBIE_SOUL.getItem());
                 specific.add(CustomItem.PHANTOM_SOUL.getItem());
                 specific.add(CustomItem.WITCH_SOUL.getItem());
-                // TODO: 4/25/2020 ARTIFACTS
 
             }
             else {
                 //HARDMODE PURESOUL------------------------------------------------------------------------------
-                // TODO: 4/6/2020 AUGMENTS
+                specific.add(CustomItem.TITANIUM_FRAGMENT.getItem());
 
             }
         }
@@ -107,6 +107,7 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.NETHER_WART, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 4));
             generic.add(CustomItem.FISHING_CRATE.getItem());
+            generic.add(CustomItem.RECALL_POTION.getItem());
 
             if (supernatural) {
                 //PREHARDMODE SUPERNATURAL---------------------------------------------------------------------
@@ -126,8 +127,6 @@ public class SpawnerTable implements LootTable {
                 specific.add(CustomItem.VOLTSHOCK_SHOCKER.getItem());
                 specific.add(CustomItem.CORROSIVE_SUBSTANCE.getItem());
                 specific.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 32));
-                // TODO: 4/25/2020 maybe add blueprints or something? idk
-
             }
         }
 

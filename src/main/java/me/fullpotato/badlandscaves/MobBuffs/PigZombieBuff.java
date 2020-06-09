@@ -13,15 +13,15 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PigZombieAngerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
 public class PigZombieBuff implements Listener {
-    private BadlandsCaves plugin;
-    private World chambers;
+    private final BadlandsCaves plugin;
+    private final World chambers;
     public PigZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
         chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
@@ -29,13 +29,14 @@ public class PigZombieBuff implements Listener {
 
     @EventHandler
     public void HMpigzombie (PigZombieAngerEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!isHardmode) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
         PigZombie pigZombie = event.getEntity();
 
-        if (pigZombie.hasMetadata("buffed")) return;
+        final NamespacedKey key = new NamespacedKey(plugin, "buffed");
+        if (pigZombie.getPersistentDataContainer().has(key, PersistentDataType.BYTE)) return;
 
         Location location = pigZombie.getLocation();
         World world = location.getWorld();
@@ -93,37 +94,39 @@ public class PigZombieBuff implements Listener {
 
         pigZombie.getEquipment().setArmorContents(armor);
         world.spawnParticle(Particle.FLASH, location, 10);
-        pigZombie.setMetadata("buffed", new FixedMetadataValue(plugin, true));
-        pigZombie.setMetadata("undershirt", new FixedMetadataValue(plugin, false));
+        pigZombie.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        pigZombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "undershirt"), PersistentDataType.BYTE, (byte) 0);
+
     }
 
     @EventHandler
     public void assignPigUnderShirt (CreatureSpawnEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!isHardmode) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
         if (event.getEntity() instanceof PigZombie) {
             final Random random = new Random();
-            final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+            final int chaos = plugin.getConfig().getInt("system.chaos_level");
             final double chance = Math.pow(1.045, chaos) - 1;
             if (random.nextInt(100) < chance) {
-                event.getEntity().setMetadata("undershirt", new FixedMetadataValue(plugin, true));
+                event.getEntity().getPersistentDataContainer().set(new NamespacedKey(plugin, "undershirt"), PersistentDataType.BYTE, (byte) 1);
             }
         }
     }
 
     @EventHandler
     public void pigUnderShirt (EntityDamageEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!isHardmode) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
         if (event.getEntity() instanceof PigZombie) {
             PigZombie entity = (PigZombie) event.getEntity();
-            if (entity.hasMetadata("undershirt") && entity.getMetadata("undershirt").get(0).asBoolean()) {
+            NamespacedKey key = new NamespacedKey(plugin, "undershirt");
+            if (entity.getPersistentDataContainer().has(key, PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(key, PersistentDataType.BYTE) == (byte) 1) {
                 if (entity.getHealth() - event.getFinalDamage() <= 0) {
-                    entity.setMetadata("undershirt", new FixedMetadataValue(plugin, false));
+                    entity.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 0);
                     event.setDamage(entity.getHealth() - 1);
                     entity.getWorld().playSound(entity.getLocation(), Sound.ITEM_TOTEM_USE, SoundCategory.HOSTILE, 0.3F, 0.9F);
                     entity.getWorld().spawnParticle(Particle.TOTEM, entity.getEyeLocation(), 10, 0.5, 0.5, 0.5, 0);

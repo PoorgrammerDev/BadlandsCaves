@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
-import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -22,7 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class WitchBuff implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public WitchBuff(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -30,7 +30,7 @@ public class WitchBuff implements Listener {
 
     @EventHandler
     public void witchStatBuff (CreatureSpawnEvent event) {
-        boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Witch) {
@@ -41,7 +41,7 @@ public class WitchBuff implements Listener {
 
     @EventHandler
     public void witchTargetKeepDistance (EntityTargetLivingEntityEvent event) {
-        boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Witch) {
@@ -51,7 +51,7 @@ public class WitchBuff implements Listener {
             if (witch.hasMetadata("runnable") && witch.getMetadata("runnable").get(0).asBoolean()) return;
 
             final Random random = new Random();
-            final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+            final int chaos = plugin.getConfig().getInt("system.chaos_level");
             final double chance = Math.pow(1.045, chaos) - 1;
 
 

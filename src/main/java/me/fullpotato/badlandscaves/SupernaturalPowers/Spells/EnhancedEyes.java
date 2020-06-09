@@ -57,8 +57,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
                         PlayerScore.USING_EYES.setScore(plugin, player, 0);
                     }
                     else {
-                        final int initial_mana_cost = plugin.getConfig().getInt("game_values.eyes_mana_cost");
-                        final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
+                        final int initial_mana_cost = plugin.getConfig().getInt("options.spell_costs.eyes_mana_cost");
+                        final int constant_mana_drain = plugin.getConfig().getInt("options.spell_costs.eyes_mana_drain");
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
 
                         if (mana >= initial_mana_cost) {

@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Loot.MobDeathLoot;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Random;
 
 public class SoulDrop implements Listener {
-    private BadlandsCaves plugin;
-    private HashMap<EntityType, ItemStack> souls = new HashMap<>();
+    private final BadlandsCaves plugin;
+    private final HashMap<EntityType, ItemStack> souls = new HashMap<>();
 
     public SoulDrop (BadlandsCaves bcav) {
         plugin = bcav;
@@ -51,7 +51,7 @@ public class SoulDrop implements Listener {
             //can drop soul if player killed
             if (player != null) {
                 List<ItemStack> drops = event.getDrops();
-                final int soul_chance = plugin.getConfig().getInt("game_values.soul_drop_chance");
+                final int soul_chance = plugin.getConfig().getInt("options.soul_drop_chance");
                 final ItemStack soul = souls.get(entity.getType());
                 if (random.nextInt(100) <= soul_chance) {
                     drops.add(soul);

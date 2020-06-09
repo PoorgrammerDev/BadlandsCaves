@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DescensionPlayerMove implements Listener {
-    private World world;
-    private BadlandsCaves plugin;
+    private final World world;
+    private final BadlandsCaves plugin;
     public DescensionPlayerMove(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.descensionWorldName);
@@ -118,7 +118,7 @@ public class DescensionPlayerMove implements Listener {
         }
 
         detection = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
-        int detect_max = plugin.getConfig().getInt("game_values.descension_max_detect");
+        int detect_max = plugin.getConfig().getInt("options.descension_max_detect");
         if (detection >= detect_max) {
             playerDetected(player);
         }

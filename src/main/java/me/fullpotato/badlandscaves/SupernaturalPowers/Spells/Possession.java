@@ -49,8 +49,8 @@ public class Possession extends UsePowers implements Listener {
                     }
                     else {
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-                        int possession_mana_cost = plugin.getConfig().getInt("game_values.possess_mana_cost");
-                        int possession_mana_drain = plugin.getConfig().getInt("game_values.possess_mana_drain");
+                        int possession_mana_cost = plugin.getConfig().getInt("options.spell_costs.possess_mana_cost");
+                        int possession_mana_drain = plugin.getConfig().getInt("options.spell_costs.possess_mana_drain");
                         double pos_drain_tick = possession_mana_drain / 20.0;
                         if (mana >= (pos_drain_tick + possession_mana_cost)) {
                             preventDoubleClick(player);

@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class GhastBuff implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public GhastBuff(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -20,7 +20,7 @@ public class GhastBuff implements Listener {
 
     @EventHandler
     public void fireballExplode (ProjectileHitEvent event) {
-        boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Fireball) {
@@ -28,7 +28,7 @@ public class GhastBuff implements Listener {
             if (fireball.getShooter() instanceof Ghast) {
                 final Ghast ghast = (Ghast) fireball.getShooter();
                 final Random random = new Random();
-                final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+                final int chaos = plugin.getConfig().getInt("system.chaos_level");
                 final double chance = Math.pow(1.045, chaos) - 1;
                 Location location = fireball.getLocation();
 

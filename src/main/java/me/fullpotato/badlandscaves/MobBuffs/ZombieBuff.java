@@ -4,7 +4,8 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -18,9 +19,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class ZombieBuff implements Listener {
-    private BadlandsCaves plugin;
-    private World descension_world;
-    private World reflection_world;
+    private final BadlandsCaves plugin;
+    private final World descension_world;
+    private final World reflection_world;
     public ZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
         descension_world = plugin.getServer().getWorld(plugin.descensionWorldName);
@@ -44,12 +45,12 @@ public class ZombieBuff implements Listener {
         Random random = new Random();
 
 
-        final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
         if (hardmode) {
 
-            final int augment = (chaos / 5) + plugin.getConfig().getInt("game_values.hardmode_values.augmented_spawn_chance");
+            final int augment = (chaos / 5) + plugin.getConfig().getInt("options.hardmode_values.augmented_spawn_chance");
             if (random.nextInt(100) < augment) {
                 zombie.setBaby(false);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);

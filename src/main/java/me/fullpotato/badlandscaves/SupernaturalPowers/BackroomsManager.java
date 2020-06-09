@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,11 +34,18 @@ public class BackroomsManager implements Listener {
         backrooms = plugin.getServer().getWorld(plugin.backroomsWorldName);
     }
 
-    public void enterBackRooms(Player player, Random random) {
-        enterBackRooms(player, random, "");
+    public enum BackroomsType {
+        BACKROOMS,
+        DARKROOMS
     }
 
-    public void enterBackRooms (Player player, Random random, String type) {
+    public void enterBackRooms(Player player, Random random) {
+        enterBackRooms(player, random, null);
+    }
+
+    public void enterBackRooms (Player player, Random random, @Nullable BackroomsType type) {
+        if (player.getWorld().equals(backrooms)) return;
+
         plugin.getConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
 
         InventorySerialize serialize = new InventorySerialize(plugin);
@@ -52,7 +60,7 @@ public class BackroomsManager implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 99999, 127, false, false));
 
-        boolean special_surprise = !type.equalsIgnoreCase("backrooms") && (type.equalsIgnoreCase("darkrooms") || (((byte) PlayerScore.HAS_SEEN_BACKROOMS.getScore(plugin, player) == 1) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1 && random.nextInt(100) < 25));
+        boolean special_surprise = ((type != null && !type.equals(BackroomsType.BACKROOMS) && (type.equals(BackroomsType.DARKROOMS))) || (((byte) PlayerScore.HAS_SEEN_BACKROOMS.getScore(plugin, player) == 1) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1 && random.nextInt(100) < 25));
 
         if (special_surprise) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 0, false, false));
@@ -63,7 +71,12 @@ public class BackroomsManager implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_ambience", SoundCategory.AMBIENT, 0.5F, 1);
+                    if (player.isOnline() && player.getWorld().equals(backrooms)) {
+                        player.playSound(getNearbyLocation(player.getLocation(), random, 5, 1), "custom.darkrooms_ambience", SoundCategory.AMBIENT, 0.5F, 1);
+                    }
+                    else {
+                        this.cancel();
+                    }
                 }
             }.runTaskTimerAsynchronously(plugin, 0, 1200);
 
@@ -156,6 +169,8 @@ public class BackroomsManager implements Listener {
     }
 
     public void leaveBackRooms (Player player) {
+        if (!player.getWorld().equals(backrooms)) return;
+
         player.stopSound("custom.darkrooms_ambience");
         player.stopSound("custom.darkrooms_water_drip");
         player.stopSound("custom.darkrooms_whispers");
@@ -374,10 +389,10 @@ public class BackroomsManager implements Listener {
                     @Override
                     public void run() {
                         if (darkrooms) {
-                            enterBackRooms(player, new Random(), "darkrooms");
+                            enterBackRooms(player, new Random(), BackroomsType.DARKROOMS);
                         }
                         else {
-                            enterBackRooms(player, new Random(), "backrooms");
+                            enterBackRooms(player, new Random(), BackroomsType.BACKROOMS);
                         }
                         PlayerScore.BACKROOMS_TIMER.setScore(plugin, player, backrooms_timer);
                     }

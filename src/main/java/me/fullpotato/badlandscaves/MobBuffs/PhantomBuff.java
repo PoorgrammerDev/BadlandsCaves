@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PhantomBuff implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public PhantomBuff(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -29,14 +29,14 @@ public class PhantomBuff implements Listener {
             Phantom phantom = (Phantom) event.getEntity();
             if (!phantom.getPassengers().isEmpty()) return;
 
-            boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+            boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
             if (!hardmode) return;
 
             if (event.getTarget() instanceof Player) {
                 Player player = (Player) event.getTarget();
                 final Random random = new Random();
 
-                final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+                final int chaos = plugin.getConfig().getInt("system.chaos_level");
                 final double chance = Math.pow(1.045, chaos) - 1;
                 if (random.nextInt(100) < chance) {
                     ArrayList<Monster> nearbyMonsters = new ArrayList<>();

@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class DestroySpawner implements Listener {
-    private BadlandsCaves plugin;
-    private HashMap<Material, Material> matMap = new HashMap<>();
+    private final BadlandsCaves plugin;
+    private final HashMap<Material, Material> matMap = new HashMap<>();
     private static Location newLoc;
 
 
@@ -52,9 +52,9 @@ public class DestroySpawner implements Listener {
 
 
             if (pickaxes.contains(player.getInventory().getItemInMainHand().getType())) {
-                int current_chaos = plugin.getConfig().getInt("game_values.chaos_level");
+                int current_chaos = plugin.getConfig().getInt("system.chaos_level");
                 if (current_chaos < 100) {
-                    plugin.getConfig().set("game_values.chaos_level", current_chaos + 1);
+                    plugin.getConfig().set("system.chaos_level", current_chaos + 1);
                     plugin.saveConfig();
                     plugin.getServer().broadcastMessage("§cChaos seeps into this realm...");
                 }
@@ -94,8 +94,7 @@ public class DestroySpawner implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                Location output = null;
-
+                //calculating world border
                 WorldBorder border = oldSpawnerLocation.getWorld().getWorldBorder();
                 int[] x_bounds = {
                         Math.max(oldSpawnerLocation.getBlockX() - range, (int) (border.getCenter().getBlockX() - (border.getSize() / 2))),
@@ -106,22 +105,22 @@ public class DestroySpawner implements Listener {
                         Math.min(oldSpawnerLocation.getBlockZ() + range, (int) (border.getCenter().getBlockZ() + border.getSize() / 2)),
                 };
 
-                int tries = 0;
-                while ((output == null || !isViable(output)) && tries < 1000) {
-                    int[] spread = new int[2];
-                    while (Math.abs(spread[0]) < 50 || Math.abs(spread[1]) < 50) {
-                        spread[0] = random.ints(1, x_bounds[0], x_bounds[1]).toArray()[0];
-                        spread[1] = random.ints(1, z_bounds[0], z_bounds[1]).toArray()[0];
-                    }
-                    int y = random.nextInt(48) + 7;
-
-                    output = new Location(oldSpawnerLocation.getWorld(), spread[0], y, spread[1]);
-                    tries++;
+                //getting location
+                int[] spread = new int[2];
+                while (Math.abs(spread[0]) < 50 || Math.abs(spread[1]) < 50) {
+                    spread[0] = random.ints(1, x_bounds[0], x_bounds[1]).toArray()[0];
+                    spread[1] = random.ints(1, z_bounds[0], z_bounds[1]).toArray()[0];
                 }
+                int y = random.nextInt(48) + 7;
+                Location output = new Location(oldSpawnerLocation.getWorld(), spread[0], y, spread[1]);
 
-                newLoc = output;
+                //test if viable
+                if (isViable(output)) {
+                    newLoc = output;
+                    this.cancel();
+                }
             }
-        }.runTaskAsynchronously(plugin);
+        }.runTaskTimerAsynchronously(plugin, 0, 30);
     }
 
     public boolean isViable (Location location) {
@@ -146,7 +145,8 @@ public class DestroySpawner implements Listener {
             @Override
             public void run() {
                 if (newLoc == null) return;
-                final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+
+                final int chaos = plugin.getConfig().getInt("system.chaos_level");
                 for (int x = -4; x <= 4; x++) {
                     for (int z = -4; z <= 4; z++) {
                         for (int y = -1; y <= 4; y++) {
@@ -200,10 +200,12 @@ public class DestroySpawner implements Listener {
                     }
                 }.runTaskLater(plugin, 1);
                 if (!silent) plugin.getServer().broadcastMessage("§3A new Dungeon has appeared!");
+                plugin.getConfig().set("system.starting_dungeons_spawned", plugin.getConfig().getInt("system.starting_dungeons_spawned") + 1);
                 this.cancel();
+
                 newLoc = null;
             }
-        }.runTaskTimer(plugin, 5, 5);
+        }.runTaskTimer(plugin, 5, 120);
     }
 
     public void loot (Player player, Location location, Random random, EntityType spawnerType) {

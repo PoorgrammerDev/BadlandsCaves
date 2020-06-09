@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Loot;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,11 +19,10 @@ import java.util.Random;
 
 public class FishingCrateTreasureTable implements LootTable {
 
-    private BadlandsCaves plugin;
-    private Player player;
-    private boolean hardmode;
-    private NamespacedKey key;
-    private ArrayList<ItemStack> items = new ArrayList<>();
+    private final BadlandsCaves plugin;
+    private final Player player;
+    private final boolean hardmode;
+    private final NamespacedKey key;
 
     public FishingCrateTreasureTable(BadlandsCaves plugin, Player player, boolean hardmode) {
         this.plugin = plugin;
@@ -35,9 +34,9 @@ public class FishingCrateTreasureTable implements LootTable {
     @Override
     public Collection<ItemStack> populateLoot(Random random, LootContext context) {
         final double luck = context.getLuck();
-        final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+        final int chaos = plugin.getConfig().getInt("system.chaos_level");
         final int count = random.nextInt(Math.max(Math.min((int) (Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0 + (chaos / 25.0)), 10), 3));
-        final int tier_upgrade = plugin.getConfig().getInt("game_values.fishing_crate_tier_upgrade") + (int) (Math.pow(chaos / 35.0, 3.25));
+        final int tier_upgrade = plugin.getConfig().getInt("options.fishing_crate_tier_upgrade") + (int) (Math.pow(chaos / 35.0, 3.25));
         int tier;
         final TreasureGear treasureGear = new TreasureGear();
 
@@ -57,6 +56,7 @@ public class FishingCrateTreasureTable implements LootTable {
             tier1.add(CustomItem.PURGE_ESSENCE.getItem());
             tier1.add(CustomItem.ANTIDOTE.getItem());
             tier1.add(CustomItem.TAINTED_POWDER.getItem());
+            tier1.add(CustomItem.RECALL_POTION.getItem());
 
             ArrayList<ItemStack> tier2 = new ArrayList<>();
             tier2.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
@@ -90,32 +90,14 @@ public class FishingCrateTreasureTable implements LootTable {
             tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_SHOVEL, random));
             tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_PICKAXE, random));
             tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_AXE, random));
-            if (heretic) {
-                tier3.add(new ItemStack(Material.DIRT));
-                //TODO voidmatter
+            if (!heretic) {
+                tier3.add(CustomItem.TITANIUM_FRAGMENT.getItem());
             }
-            else {
-                tier3.add(new ItemStack(Material.STONE));
-                //TODO adamantium
-            }
-
-
-            ArrayList<ItemStack> tier4 = new ArrayList<>();
-            if (heretic) {
-                tier4.add(new ItemStack(Material.DIRT));
-                //TODO artifacts
-            }
-            else {
-                tier4.add(new ItemStack(Material.STONE));
-                //TODO augments
-            }
-
 
             ArrayList<ArrayList<ItemStack>> items = new ArrayList<>();
             items.add(tier1);
             items.add(tier2);
             items.add(tier3);
-            items.add(tier4);
 
             ArrayList<ItemStack> output = new ArrayList<>();
             for (int i = 0; i < count; i++) {
@@ -153,6 +135,7 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(CustomItem.ANTIDOTE.getItem());
             tier2.add(new ItemStack(Material.GOLDEN_APPLE, randomCount(random, 1, 8)));
             tier2.add(CustomItem.TAINTED_POWDER.getItem());
+            tier2.add(CustomItem.RECALL_POTION.getItem());
 
             ArrayList<ItemStack> tier3 = new ArrayList<>();
             tier3.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));

@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class HardmodeCommand extends Commands implements CommandExecutor {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public HardmodeCommand (BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -18,7 +18,7 @@ public class HardmodeCommand extends Commands implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("hardmode")) {
             if (sender.isOp()) {
                 if (args.length == 0 || args[0].equalsIgnoreCase("get")) {
-                    boolean isHM = plugin.getConfig().getBoolean("game_values.hardmode");
+                    boolean isHM = plugin.getConfig().getBoolean("system.hardmode");
                     sender.sendMessage(ChatColor.GOLD + "Hardmode is currently set to " + ChatColor.RED + isHM + ChatColor.GOLD + ".");
                     return true;
                 }
@@ -39,7 +39,7 @@ public class HardmodeCommand extends Commands implements CommandExecutor {
                         return true;
                     }
 
-                    plugin.getConfig().set("game_values.hardmode", value);
+                    plugin.getConfig().set("system.hardmode", value);
                     plugin.saveConfig();
                     sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + value + ChatColor.GOLD + ".");
 

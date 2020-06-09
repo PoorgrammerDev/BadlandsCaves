@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class DescensionTimeLimit extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public DescensionTimeLimit(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -37,7 +37,7 @@ public class DescensionTimeLimit extends BukkitRunnable {
 
     public void sendActionBarMsg (Player player, int timer_value) {
         int max_bars = 20;
-        int starting_time = plugin.getConfig().getInt("game_values.descension_time_limit");
+        int starting_time = plugin.getConfig().getInt("options.descension_time_limit");
         int dividing_num = starting_time / max_bars;
         int bar_value = Math.min(Math.max((int) Math.ceil(1.0 * timer_value / dividing_num), 0), max_bars);
         double bar_perc = 100.0 * timer_value / starting_time;

@@ -14,10 +14,10 @@ import java.util.Random;
 
 public class TaintedPowderRunnable extends BukkitRunnable {
 
-    private BadlandsCaves plugin;
-    private Item item;
-    private Player thrower;
-    private int vel_check_ID;
+    private final BadlandsCaves plugin;
+    private final Item item;
+    private final Player thrower;
+    private final int vel_check_ID;
     public TaintedPowderRunnable(BadlandsCaves bcav, Item itm, Player ply, int id) {
         plugin = bcav;
         item = itm;
@@ -70,7 +70,7 @@ public class TaintedPowderRunnable extends BukkitRunnable {
         Entity[] entity_list = location.getChunk().getEntities();
         for (int a = 0; a < entity_list.length; a++) {
             if (location.distance(entity_list[a].getLocation()) <= 3) {
-                boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+                boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
                 if (entity_list[a].getType().equals(EntityType.SILVERFISH)) {
                     int duration = isHardmode ? 50 : 9999;
                     int amplifier = isHardmode ? 0 : 4;

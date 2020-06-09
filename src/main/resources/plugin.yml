@@ -47,3 +47,10 @@ commands:
       - helpcraft
       - helpcrafting
       - craftingguide
+  backrooms:
+    usage: /backrooms <get|enter|leave> [player] [type]
+    description: Read if player is in Backrooms, force them to enter, or force to leave.
+    aliases:
+      - backroom
+      - darkrooms
+      - darkroom

@@ -4,7 +4,6 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -24,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Voltshock extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
-    private String shock_lore = "§3Voltshock";
-    private Material[] swords = {
+    private final BadlandsCaves plugin;
+    private final String shock_lore = "§3Voltshock";
+    private final Material[] swords = {
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
     };
@@ -140,7 +139,6 @@ public class Voltshock extends MatchCrafting implements Listener {
             final ItemStack result = event.getRecipe().getResult();
             final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
             if (result.isSimilar(placeholder)) {
-                Bukkit.broadcastMessage("makesowrd");
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 if (matrix != null && matrix.length == 9) {
                     final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
@@ -189,7 +187,6 @@ public class Voltshock extends MatchCrafting implements Listener {
             final ItemStack result = event.getRecipe().getResult();
             final ItemStack placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
             if (result.isSimilar(placeholder)) {
-                Bukkit.broadcastMessage("chargesword");
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 ItemStack sword = null;
                 ItemStack exp_bottle = null;

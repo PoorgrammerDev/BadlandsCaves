@@ -18,11 +18,11 @@ import java.util.ArrayList;
 
 public class CauldronRunnable extends BukkitRunnable {
 
-    private BadlandsCaves plugin;
-    private Inventory inventory;
-    private Location location;
-    private Location location_under;
-    private Player player;
+    private final BadlandsCaves plugin;
+    private final Inventory inventory;
+    private final Location location;
+    private final Location location_under;
+    private final Player player;
 
     public CauldronRunnable(BadlandsCaves bcav, Inventory inv, Location loc, Location bl_under, Player ply) {
         plugin = bcav;
@@ -169,6 +169,9 @@ public class CauldronRunnable extends BukkitRunnable {
     }
 
     public void processReadyIndicator (int cauldron_level, ArrayList<Material> in_slots) {
+        boolean emptyOutput = (inventory.getItem(22) == null || inventory.getItem(22).getType().equals(Material.AIR) || inventory.getItem(22).getType().equals(Material.GRAY_STAINED_GLASS_PANE));
+
+        //READY INDICATOR----------------------------
         if ((cauldron_level == 3) && (inventory.getItem(11) != null && inventory.getItem(15) != null)) {
             boolean is_ready = false;
             ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
@@ -177,8 +180,9 @@ public class CauldronRunnable extends BukkitRunnable {
             ArrayList<String> green_lore = new ArrayList<String>();
 
             if (in_slots.contains(Material.GLASS_BOTTLE)) {
-                final boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-                if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
+                final boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+
+                if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER) && emptyOutput) {
                     green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
                     green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
                     is_ready = true;
@@ -190,18 +194,18 @@ public class CauldronRunnable extends BukkitRunnable {
                     final ItemStack hell_ess = CustomItem.HELL_ESSENCE.getItem();
                     final ItemStack magic_ess = CustomItem.MAGIC_ESSENCE.getItem();
 
-                    if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(purge_ess)) {
+                    if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(purge_ess) && emptyOutput) {
                         green_meta.setDisplayName(ChatColor.GREEN + "Antidote Ready");
                         green_lore.add(ChatColor.DARK_GREEN + "Click to create antidote.");
                         is_ready = true;
                     }
 
-                    else if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(hell_ess)) {
+                    else if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(hell_ess) && emptyOutput) {
                         green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");
                         green_lore.add(ChatColor.DARK_GREEN + "Click to purify water.");
                         is_ready = true;
                     }
-                    else if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(magic_ess)) {
+                    else if (inventory.getItem(slot) != null && inventory.getItem(slot).isSimilar(magic_ess) && emptyOutput) {
                         green_meta.setDisplayName(ChatColor.GREEN + "Mana Potion Ready");
                         green_lore.add(ChatColor.DARK_GREEN + "Click to create a Mana Potion.");
                         is_ready = true;
@@ -210,45 +214,57 @@ public class CauldronRunnable extends BukkitRunnable {
                 }
             }
             else if (in_slots.contains(Material.SUGAR) && (in_slots.contains(Material.BONE_MEAL))) {
-                green_meta.setDisplayName(ChatColor.GREEN + "Tainting Ready");
-                green_lore.add(ChatColor.DARK_GREEN + "Click to taint the powder.");
-                is_ready = true;
+                ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
+                boolean outputMatches = (inventory.getItem(22) != null && inventory.getItem(22).isSimilar(tainted_powder) && inventory.getItem(22).getAmount() + tainted_powder.getAmount() <= 64);
+                if (emptyOutput || outputMatches) {
+                    green_meta.setDisplayName(ChatColor.GREEN + "Tainting Ready");
+                    green_lore.add(ChatColor.DARK_GREEN + "Click to taint the powder.");
+                    is_ready = true;
+                }
             }
 
             if (is_ready) {
                 green_meta.setLore(green_lore);
                 green.setItemMeta(green_meta);
                 inventory.setItem(13, green);
+                return;
             }
+        }
+
+        //ERROR INDICATOR-------------------------
+        ItemStack red = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+        ItemMeta red_meta = red.getItemMeta();
+        assert red_meta != null;
+        red_meta.setDisplayName(ChatColor.RED + "Not Ready");
+        ArrayList<String> red_lore = new ArrayList<>();
+        if (cauldron_level < 3) {
+            red_lore.add(ChatColor.DARK_RED + "Requires full tank of water.");
         }
         else {
-            ItemStack red = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
-            ItemMeta red_meta = red.getItemMeta();
-            assert red_meta != null;
-            red_meta.setDisplayName(ChatColor.RED + "Not Ready");
-            ArrayList<String> red_lore = new ArrayList<String>();
-            if (cauldron_level < 3) {
-                red_lore.add(ChatColor.DARK_RED + "Requires full tank of water.");
+            ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
+            if (inventory.getItem(11) == null && inventory.getItem(15) == null) {
+                red_lore.add(ChatColor.DARK_RED + "Input items in slots to use cauldron.");
+            }
+
+            else if (!in_slots.contains(Material.GLASS_BOTTLE) && !in_slots.contains(Material.SUGAR)) {
+                red_lore.add(ChatColor.DARK_RED + "Requires correct primary ingredient.");
+            }
+
+            else if (!in_slots.contains(Material.BLAZE_POWDER) && !in_slots.contains(Material.COMMAND_BLOCK)) {
+                red_lore.add(ChatColor.DARK_RED + "Requires correct secondary ingredient.");
+            }
+            else if (!emptyOutput || (inventory.getItem(22) != null && inventory.getItem(22).isSimilar(tainted_powder) && inventory.getItem(22).getAmount() + tainted_powder.getAmount() <= 64)) {
+                red_lore.add(ChatColor.DARK_RED + "Output slot is full.");
             }
             else {
-                if (inventory.getItem(11) == null && inventory.getItem(15) == null) {
-                    red_lore.add(ChatColor.DARK_RED + "Input items in slots to use cauldron.");
-                }
-
-                else if (!in_slots.contains(Material.GLASS_BOTTLE) && !in_slots.contains(Material.SUGAR)) {
-                    red_lore.add(ChatColor.DARK_RED + "Requires correct primary ingredient.");
-                }
-
-                else if (!in_slots.contains(Material.BLAZE_POWDER) && !in_slots.contains(Material.COMMAND_BLOCK)) {
-                    red_lore.add(ChatColor.DARK_RED + "Requires correct secondary ingredient.");
-                }
+                red_lore.add(ChatColor.DARK_RED + "An unexpected error has occurred.");
             }
-
-            red_meta.setLore(red_lore);
-            red.setItemMeta(red_meta);
-
-            inventory.setItem(13, red);
         }
+
+        red_meta.setLore(red_lore);
+        red.setItemMeta(red_meta);
+
+        inventory.setItem(13, red);
     }
 
     public void regenWater (int cauldron_level) {

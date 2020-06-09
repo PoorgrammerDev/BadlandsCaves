@@ -1,87 +1,75 @@
-game_values:
-  #value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
-  hardmode: FALSE
-
-  #increases when breaking mob spawners. causes loot to get better, but mobs to become stronger
-  chaos_level: 0
-
-  #chambers spawned in
-  chambers_spawned: FALSE
-
-  #surface layer
+options:
+  # surface layer
   surface_layer: 128
 
-  #base percentage without luck effect or luck of the sea modifiers for getting a fishing crate
+  # base percentage without luck effect or luck of the sea modifiers for getting a fishing crate
   fishing_crate_chance: 10
 
-  #opening fishing crate: base percentage to get treasure w/o luck effect
+  # opening fishing crate: base percentage to get treasure w/o luck effect
   fishing_crate_treasure_base: 10
 
-  #every time you open a crate, there's {x}% to upgrade a tier of loot, and {100 - x}% to not.
-  #Everytime it's upgraded, it goes back through this again until it either fails, or gets to max tier.
+  # every time you open a crate, there's {x}% to upgrade a tier of loot, and {100 - x}% to not.
+  # Everytime it's upgraded, it goes back through this again until it either fails, or gets to max tier.
   fishing_crate_tier_upgrade: 50
 
-  #if this is enabled, every time a player dies and respawns, they get a new starter kit
-  give_new_starter_on_spawn: FALSE
+  # if this is enabled, every time a player dies and respawns, they get a new starter kit
+  give_new_starter_on_spawn: false
 
-  #generate this many custom dungeons at world spawn. Set to 0 to disable.
+  # generate this many custom dungeons at world spawn. Set to 0 to disable.
   starting_dungeons: 10
 
-  #starting dungeons spawned in
-  starting_dungeons_spawned: FALSE
-
-  #time limit in seconds for players to go through the entire descension course
+  # time limit in seconds for players to go through the entire descension course
   descension_time_limit: 300
 
-  #max mobs spawn in descension stage (note: it's not always this number. it may be less, but not more)
+  # max mobs spawn in descension stage (note: it's not always this number. it may be less, but not more)
   descension_mob_limit: 100
 
-  #how much mobs have to detect for runner to lose
+  # how much mobs have to detect for runner to lose
   descension_max_detect: 100
 
+  # these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much per second
+  spell_costs:
+    displace_mana_cost: 25
+    eyes_mana_cost: 50
+    eyes_mana_drain: 10
+    withdraw_mana_cost: 70
+    possess_mana_cost: 25
+    possess_mana_drain: 3
+    agility_mana_cost: 5
 
-  #these are the mana costs for spells. the ones with "drain" in them don't cost that much to use, but rather drain that much per second
-  displace_mana_cost: 25
-  eyes_mana_cost: 50
-  eyes_mana_drain: 10
-  withdraw_mana_cost: 70
-  possess_mana_cost: 25
-  possess_mana_drain: 3
-  agility_mana_cost: 5
-
-  #default soul drop chance (%)
+  # default soul drop chance (%)
   soul_drop_chance: 25
 
-  #these values change from prehardmode to hardmode
+  # these values change from prehardmode to hardmode
   pre_hardmode_values:
-    #how many deaths a golden apple will reverse
+    # how many deaths a golden apple will reverse
     death_reverse_gapple: 1
 
-    #how many deaths an enchanted golden apple will reverse
+    # how many deaths an enchanted golden apple will reverse
     death_reverse_ench_gapple: 10
 
-    #how many points the thirst system variable must reach until it increases 0.1 thirst
-    #decreasing this value will cause thirst to fall faster
-    #increasing this value will cause thirst to fall slower
+    # how many points the thirst system variable must reach until it increases 0.1 thirst
+    # decreasing this value will cause thirst to fall faster
+    # increasing this value will cause thirst to fall slower
     threshold_thirst_sys: 50
 
-    #how many points of thirst drinking a toxic water will increase
+    # how many points of thirst drinking a toxic water will increase
     tox_drink_thirst_incr: 10
 
-    #how many tox points drinking a toxic water will increase
+    # how many tox points drinking a toxic water will increase
     tox_drink_tox_incr: 5
 
-    #how many thirst points drinking a purified water will increase
+    # how many thirst points drinking a purified water will increase
     purified_drink_thirst_incr: 60
 
-    #how many points of toxicity an antidote will decrease
+    # how many points of toxicity an antidote will decrease
     antidote_drink_tox_decr: 100
 
-    #1 point of mana regen costs this many tox sys vars (amt of sysvars in one thirst decrease is threshold_thirst_sys in config)
+    # 1 point of mana regen costs this many tox sys vars (amt of sysvars in one thirst decrease is threshold_thirst_sys in config)
     mana_regen_var: 5
 
   hardmode_values:
-    #all of these are carried over from pre-hardmode, but are set to different values
+    # all of these are carried over from pre-hardmode, but are set to different values
     death_reverse_gapple: 0
     death_reverse_ench_gapple: 2
     threshold_thirst_sys: 30
@@ -91,10 +79,26 @@ game_values:
     antidote_drink_tox_decr: 50
     mana_regen_var: 10
 
-    #in hardmode, creepers' explosions are larger. this value changes the size of the explosion.
-    #for scale, a normal creeper's radius value is 3
+    # in hardmode, creepers' explosions are larger. this value changes the size of the explosion.
+    # for scale, a normal creeper's radius value is 3
     creeper_radius: 7
 
-    #in hardmode, mini-boss versions of mobs can spawn instead of regular version of common enemies
-    #this is the percent chance that happens
+    # in hardmode, mini-boss versions of mobs can spawn instead of regular version of common enemies
+    # this is the percent chance that happens
     augmented_spawn_chance: 5
+
+system:
+  # value for if the world is currently in hardmode. always starts at false, and becomes true after killing the first boss
+  hardmode: false
+
+  # increases when breaking mob spawners. causes loot to get better, but mobs to become stronger
+  chaos_level: 0
+
+  # chambers spawned in
+  chambers_spawned: false
+
+  # how many starting dungeons have spawned
+  starting_dungeons_spawned: 0
+
+  # starting dungeons spawned in
+  starting_dungeons_finished_spawning: false

@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Loot;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 
 public class GetFishingCrate implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public GetFishingCrate(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -27,7 +27,7 @@ public class GetFishingCrate implements Listener {
             final Player player = event.getPlayer();
             Item item = (Item) event.getCaught();
             final Random random = new Random();
-            final int default_bound = plugin.getConfig().getInt("game_values.fishing_crate_chance");
+            final int default_bound = plugin.getConfig().getInt("options.fishing_crate_chance");
             final double player_luck = player.getAttribute(Attribute.GENERIC_LUCK).getValue();
 
             int rod_luck = 0;
@@ -40,11 +40,11 @@ public class GetFishingCrate implements Listener {
 
 
             // TODO: 4/6/2020 review this
-            final int chaos = plugin.getConfig().getInt("game_values.chaos_level");
+            final int chaos = plugin.getConfig().getInt("system.chaos_level");
             final double chance = 100 * (Math.pow(rod_luck / 15.0, 1.5) + (player_luck / 150.0)) + default_bound + (chaos / 10.0);
 
             if (chance > 0 && random.nextInt(100) < chance) {
-                final boolean hardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+                final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
                 final ItemStack crate = hardmode ? CustomItem.FISHING_CRATE_HARDMODE.getItem() : CustomItem.FISHING_CRATE.getItem();
                 item.setItemStack(crate);
             }

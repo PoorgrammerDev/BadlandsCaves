@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BlessedAppleEat implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public BlessedAppleEat(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -36,21 +36,21 @@ public class BlessedAppleEat implements Listener {
             }
 
             int decr_by;
-            boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+            boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
             if (item.isSimilar(blessed_apple)) {
                 if (isHardmode) {
-                    decr_by = plugin.getConfig().getInt("game_values.hardmode_values.death_reverse_gapple");
+                    decr_by = plugin.getConfig().getInt("options.hardmode_values.death_reverse_gapple");
                 }
                 else {
-                    decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_gapple");
+                    decr_by = plugin.getConfig().getInt("options.pre_hardmode_values.death_reverse_gapple");
                 }
             }
             else {
                 if (isHardmode) {
-                    decr_by = plugin.getConfig().getInt("game_values.hardmode_values.death_reverse_ench_gapple");
+                    decr_by = plugin.getConfig().getInt("options.hardmode_values.death_reverse_ench_gapple");
                 }
                 else {
-                    decr_by = plugin.getConfig().getInt("game_values.pre_hardmode_values.death_reverse_ench_gapple");
+                    decr_by = plugin.getConfig().getInt("options.pre_hardmode_values.death_reverse_ench_gapple");
                 }
             }
 

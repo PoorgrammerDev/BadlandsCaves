@@ -23,12 +23,12 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 
 public class CauldronMenu implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public CauldronMenu(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
-    private String cauldron_title = ChatColor.DARK_GRAY + "Cauldron";
+    private final String cauldron_title = ChatColor.DARK_GRAY + "Cauldron";
     private Inventory cauldron_inv;
     private int refresh_id;
     private Block cauldron_block;
@@ -92,7 +92,7 @@ public class CauldronMenu implements Listener {
         Inventory clicked_inv = event.getClickedInventory();
         Inventory target_inv = event.getView().getTopInventory();
         boolean isCauldron = event.getView().getTitle().equalsIgnoreCase(cauldron_title);
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
 
         if (clicked_inv != null) {
             if (isCauldron && clicked_inv.equals(target_inv)) {
@@ -100,6 +100,11 @@ public class CauldronMenu implements Listener {
                 Player player = (Player) event.getWhoClicked();
                 ClickType click = event.getClick();
                 ItemStack item = event.getCurrentItem();
+
+                if (cauldron_block == null) {
+                    event.setCancelled(true);
+                    return;
+                }
 
                 int cdr_lvl = ((Levelled) (cauldron_block.getBlockData())).getLevel();
 
@@ -143,20 +148,12 @@ public class CauldronMenu implements Listener {
                     else if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE) && event.getSlot() == 13) {
                         event.setCancelled(true);
                         if (hasIng && cdr_lvl == 3) {
+                            boolean emptyOutput = (cauldron_inv.getItem(22) == null || cauldron_inv.getItem(22).getType().equals(Material.AIR) || cauldron_inv.getItem(22).getType().equals(Material.GRAY_STAINED_GLASS_PANE));
                             boolean success = false;
-                            int item_1_amt = cauldron_inv.getItem(11).getAmount();
-                            int item_2_amt = cauldron_inv.getItem(15).getAmount();
-
-                            cauldron_inv.getItem(11).setAmount(item_1_amt - 1);
-                            cauldron_inv.getItem(15).setAmount(item_2_amt - 1);
-
-                            Levelled reset_level = ((Levelled) cauldron_block.getBlockData());
-                            reset_level.setLevel(0);
-                            cauldron_block.setBlockData(reset_level);
 
                             ItemStack purified_water = CustomItem.PURIFIED_WATER.getItem();
                             //PURIFIED WATER - PREHARDMODE
-                            if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER)) {
+                            if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER) && emptyOutput) {
                                 success = true;
                                 cauldron_inv.setItem(22, purified_water);
                             }
@@ -172,20 +169,20 @@ public class CauldronMenu implements Listener {
                                     if (itemstacks_slots.get(slot).getItemMeta().hasDisplayName()) {
 
                                         //ANTIDOTE
-                                        if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(purge_ess.getItemMeta().getDisplayName())) {
+                                        if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(purge_ess.getItemMeta().getDisplayName()) && emptyOutput) {
                                             success = true;
                                             final ItemStack antidote = CustomItem.ANTIDOTE.getItem();
                                             cauldron_inv.setItem(22, antidote);
                                         }
 
                                         //PURIFIED WATER - HARDMODE
-                                        else if (isHardmode && itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(hell_ess.getItemMeta().getDisplayName())) {
+                                        else if (isHardmode && itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(hell_ess.getItemMeta().getDisplayName()) && emptyOutput) {
                                             success = true;
                                             cauldron_inv.setItem(22, purified_water);
                                         }
 
                                         //MANA POTION
-                                        else if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(mana_ess.getItemMeta().getDisplayName())) {
+                                        else if (itemstacks_slots.get(slot).getItemMeta().getDisplayName().equalsIgnoreCase(mana_ess.getItemMeta().getDisplayName()) && emptyOutput) {
                                             success = true;
                                             ItemStack mana_potion = CustomItem.MANA_POTION.getItem();
                                             cauldron_inv.setItem(22, mana_potion);
@@ -198,15 +195,37 @@ public class CauldronMenu implements Listener {
                             }
                             //TAINTED POWDER
                             else if (in_slots.contains(Material.SUGAR) && in_slots.contains(Material.BONE_MEAL)) {
-                                success = true;
                                 ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
-                                cauldron_inv.setItem(22, tainted_powder);
+                                boolean outputMatches = (cauldron_inv.getItem(22) != null && cauldron_inv.getItem(22).isSimilar(tainted_powder));
+
+                                if (emptyOutput) {
+                                    success = true;
+                                    cauldron_inv.setItem(22, tainted_powder);
+                                }
+                                else if (outputMatches) {
+                                    int newAmount = tainted_powder.getAmount() + cauldron_inv.getItem(22).getAmount();
+                                    if (newAmount <= 64) {
+                                        success = true;
+                                        tainted_powder.setAmount(newAmount);
+                                        cauldron_inv.setItem(22, tainted_powder);
+                                    }
+                                }
                             }
 
                             //add more items that use other materials here...
 
                             if (success) {
                                 player.playSound(cauldron_block.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1, 1);
+
+                                Levelled reset_level = ((Levelled) cauldron_block.getBlockData());
+                                reset_level.setLevel(0);
+                                cauldron_block.setBlockData(reset_level);
+
+                                int item_1_amt = cauldron_inv.getItem(11).getAmount();
+                                int item_2_amt = cauldron_inv.getItem(15).getAmount();
+
+                                cauldron_inv.getItem(11).setAmount(item_1_amt - 1);
+                                cauldron_inv.getItem(15).setAmount(item_2_amt - 1);
                             }
                         }
                     }

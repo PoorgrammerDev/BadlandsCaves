@@ -2,10 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,11 +10,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UseTaintPowder implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public UseTaintPowder(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -49,7 +46,7 @@ public class UseTaintPowder implements Listener {
                     drop.setInvulnerable(true);
                     drop.setPickupDelay(Integer.MAX_VALUE);
                     drop.setVelocity(loc.getDirection().multiply(1.1));
-                    drop.setMetadata("time", new FixedMetadataValue(plugin, 0));
+                    drop.getPersistentDataContainer().set(new NamespacedKey(plugin, "time"), PersistentDataType.SHORT, (short) 0);
 
                     new BukkitRunnable() {
                         @Override

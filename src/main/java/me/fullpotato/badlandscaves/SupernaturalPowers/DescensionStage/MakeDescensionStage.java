@@ -2,21 +2,18 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import java.util.Random;
 
 public class MakeDescensionStage extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World world;
+    private final BadlandsCaves plugin;
+    private final World world;
     public MakeDescensionStage(BadlandsCaves bcav, World wrld) {
         plugin = bcav;
         world = wrld;
@@ -105,7 +102,7 @@ public class MakeDescensionStage extends BukkitRunnable {
         EnderCrystal crystal = (EnderCrystal) world.spawnEntity(top_origin, EntityType.ENDER_CRYSTAL);
         crystal.setShowingBottom(false);
         crystal.setInvulnerable(true);
-        crystal.setMetadata("charge", new FixedMetadataValue(plugin, 0));
+        crystal.getPersistentDataContainer().set(new NamespacedKey(plugin, "descension_crystal_charge"), PersistentDataType.SHORT, (short) 0);
     }
 
     public static Material getVoidMat(Random random) {

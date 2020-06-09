@@ -2,6 +2,9 @@ package me.fullpotato.badlandscaves.Commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Collection;
 
 public abstract class Commands {
     public void getOrSet (CommandSender sender) {
@@ -23,5 +26,14 @@ public abstract class Commands {
 
     public void valueNotValid (CommandSender sender) {
         sender.sendMessage(ChatColor.RED + "You must provide a valid entry!");
+    }
+
+    public Player getPlayer(String str, Collection<? extends Player> players) {
+        for (Player player : players) {
+            if (str.equalsIgnoreCase(player.getDisplayName()) || str.equalsIgnoreCase(player.getName()) || str.equalsIgnoreCase(player.getUniqueId().toString())) {
+                return player;
+            }
+        }
+        return null;
     }
 }

@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Deaths;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
@@ -24,8 +24,8 @@ import java.util.Objects;
 
 public class DeathHandler implements Listener {
 
-    private BadlandsCaves plugin;
-    private World world;
+    private final BadlandsCaves plugin;
+    private final World world;
     public DeathHandler(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.mainWorldName);
@@ -63,7 +63,7 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void give_starter_on_spawn (PlayerRespawnEvent event) {
-        boolean active = plugin.getConfig().getBoolean("game_values.give_new_starter_on_spawn");
+        boolean active = plugin.getConfig().getBoolean("options.give_new_starter_on_spawn");
 
         if (!active) return;
 

@@ -11,13 +11,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 public class HellEssence extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public HellEssence(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     public void craft_hell_essence () {
-        boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
+        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
         if (!isHardmode) return;
 
         final ItemStack hell_essence = CustomItem.HELL_ESSENCE.getItem();

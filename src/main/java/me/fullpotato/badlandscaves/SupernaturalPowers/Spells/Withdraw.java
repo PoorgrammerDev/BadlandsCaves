@@ -53,7 +53,7 @@ public class Withdraw extends UsePowers implements Listener {
                         int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
                             double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-                            int withdraw_mana_cost = plugin.getConfig().getInt("game_values.withdraw_mana_cost");
+                            int withdraw_mana_cost = plugin.getConfig().getInt("options.spell_costs.withdraw_mana_cost");
 
                             event.setCancelled(true);
                             if (mana >= withdraw_mana_cost) {

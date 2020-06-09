@@ -198,8 +198,10 @@ public final class BadlandsCaves extends JavaPlugin {
 
         this.getCommand("guide").setExecutor(new GuideCommand(this));
 
-
         this.getCommand("craftguide").setExecutor(new CraftingGuideCommand(this));
+
+        this.getCommand("backrooms").setExecutor(new BackroomsCommand(this));
+        this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
     }
 
     //RUNNABLES

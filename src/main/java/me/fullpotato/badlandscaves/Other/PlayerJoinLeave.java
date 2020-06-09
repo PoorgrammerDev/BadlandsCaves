@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerJoinLeave implements Listener {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public PlayerJoinLeave(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -58,7 +58,7 @@ public class PlayerJoinLeave implements Listener {
 
         //if in wither fight, tp out
         if (player.getWorld().equals(plugin.getServer().getWorld(plugin.chambersWorldName))) {
-            if (plugin.getConfig().getInt("game_values.wither_fight.fight_stage") == -1) {
+            if (plugin.getConfig().getInt("options.wither_fight.fight_stage") == -1) {
                 Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation() : player.getBedSpawnLocation();
                 warp.setYaw(player.getLocation().getYaw());
                 warp.setPitch(player.getLocation().getPitch());

@@ -13,11 +13,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 
 public class EyesRunnable extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
-    private Location origin;
-    private ArrayList<Integer> shulker_ids;
-    private boolean hasNightVision;
+    private final BadlandsCaves plugin;
+    private final Player player;
+    private final Location origin;
+    private final ArrayList<Integer> shulker_ids;
+    private final boolean hasNightVision;
 
     public EyesRunnable (BadlandsCaves bcav, Player ply, Location og, ArrayList<Integer> ids, boolean hasNightVision) {
         plugin = bcav;
@@ -32,7 +32,7 @@ public class EyesRunnable extends BukkitRunnable {
     public void run() {
         EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
-        final int constant_mana_drain = plugin.getConfig().getInt("game_values.eyes_mana_drain");
+        final int constant_mana_drain = plugin.getConfig().getInt("options.spell_costs.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
         final double dist_range = Math.pow(block_range - 1, 2);
         final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);

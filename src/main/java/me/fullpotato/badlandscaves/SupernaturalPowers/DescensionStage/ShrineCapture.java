@@ -6,7 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
@@ -50,7 +50,8 @@ public class ShrineCapture extends BukkitRunnable {
 
                         for (EnderCrystal crystal : crystals) {
                             if (crystal.getLocation().distanceSquared(crystal_locations[a]) < 16) {
-                                boolean charged = crystal.hasMetadata("charged") && crystal.getMetadata("charged").get(0).asBoolean();
+                                NamespacedKey chargedKey = new NamespacedKey(plugin, "descension_crystal_charged");
+                                boolean charged = crystal.getPersistentDataContainer().has(chargedKey, PersistentDataType.BYTE) && crystal.getPersistentDataContainer().get(chargedKey, PersistentDataType.BYTE) == (byte) 1;
                                 if (!charged) {
                                     int capped = (PlayerScore.DESCENSION_SHRINES_CAPPED.hasScore(plugin, player)) ? ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player)) : 0;
                                     if (capped >= a) {
@@ -59,18 +60,19 @@ public class ShrineCapture extends BukkitRunnable {
                                         player_loc.subtract(0, 0.2, 0);
                                         crystal.setBeamTarget(player_loc);
 
-                                        int charge = crystal.hasMetadata("charge") ? crystal.getMetadata("charge").get(0).asInt() + 1 : 1;
-                                        crystal.setMetadata("charge", new FixedMetadataValue(plugin, charge));
+                                        NamespacedKey chargeKey = new NamespacedKey(plugin, "descension_crystal_charge");
+                                        short charge = crystal.getPersistentDataContainer().has(chargeKey, PersistentDataType.SHORT) ? (short) (crystal.getPersistentDataContainer().get(chargeKey, PersistentDataType.SHORT) + 1) : 1;
+                                        crystal.getPersistentDataContainer().set(chargeKey, PersistentDataType.SHORT, charge);
 
-                                        if (crystal.hasMetadata("charge") && crystal.getMetadata("charge").get(0).asInt() % 50 == 1) {
+                                        if (charge % 50 == 1) {
                                             player.playSound(player_loc, Sound.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 1, 0.3f);
                                         }
 
                                         //done charging
 
-                                        if (crystal.getMetadata("charge").get(0).asInt() >= 400) {
+                                        if (charge >= 400) {
                                             //crystal
-                                            crystal.setMetadata("charged", new FixedMetadataValue(plugin, true));
+                                            crystal.getPersistentDataContainer().set(chargedKey, PersistentDataType.BYTE, (byte) 1);
 
                                             //visual effects
                                             world.spawnParticle(Particle.EXPLOSION_HUGE, crystal_location, 5);
@@ -82,7 +84,7 @@ public class ShrineCapture extends BukkitRunnable {
                                             PlayerScore.DESCENSION_TIMER.setScore(plugin, player, (int) PlayerScore.DESCENSION_TIMER.getScore(plugin, player) + 60);
 
                                             //spawns more mobs
-                                            int normal_mob_cap = plugin.getConfig().getInt("game_values.descension_mob_limit");
+                                            int normal_mob_cap = plugin.getConfig().getInt("options.descension_mob_limit");
                                             DescensionReset descReset = new DescensionReset(plugin);
                                             Team desc_team = descReset.getDescensionTeam();
                                             descReset.spawnMobs(desc_team, normal_mob_cap / 4);

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ManaRegen extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public ManaRegen(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -31,8 +31,8 @@ public class ManaRegen extends BukkitRunnable {
                 return;
             }
 
-            boolean isHardmode = plugin.getConfig().getBoolean("game_values.hardmode");
-            double mana_regen_var = isHardmode ? plugin.getConfig().getInt("game_values.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("game_values.pre_hardmode_values.mana_regen_var");
+            boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+            double mana_regen_var = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("options.pre_hardmode_values.mana_regen_var");
             double thirst_sys_var = (double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player);
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
 
