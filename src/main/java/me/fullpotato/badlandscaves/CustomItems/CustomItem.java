@@ -9,6 +9,7 @@ public enum CustomItem {
     PURIFIED_WATER(false),
     FISHING_CRATE(false),
     FISHING_CRATE_HARDMODE(false),
+    FOREVER_FISH(false),
     ANTIDOTE(false),
     MANA_POTION(false),
     PURGE_ESSENCE(true),
@@ -58,8 +59,19 @@ public enum CustomItem {
     NETHER_STAR_FRAGMENT(true),
     STARLIGHT_CIRCUIT(true),
     STARLIGHT_BATTERY(true),
-    STARLIGHT_MODULE(true);
-
+    STARLIGHT_MODULE(true),
+    STARLIGHT_HELMET(false),
+    STARLIGHT_CHESTPLATE(false),
+    STARLIGHT_LEGGINGS(false),
+    STARLIGHT_BOOTS(false),
+    ENERGIUM(true),
+    ENERGY_CORE(true),
+    STARLIGHT_CHARGE_PLACEHOLDER(true),
+    VOIDMATTER(false),
+    VOIDMATTER_HELMET(true),
+    VOIDMATTER_CHESTPLATE(true),
+    VOIDMATTER_LEGGINGS(true),
+    VOIDMATTER_BOOTS(true);
 
     private final boolean preventUse;
 

@@ -2,8 +2,10 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -13,7 +15,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 public class StarlightComponents extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public StarlightComponents(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -92,6 +94,19 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
+    public void craftEnergium() {
+        ItemStack energium = CustomItem.ENERGIUM.getItem();
+        energium.setAmount(4);
+
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "energium"), energium);
+        recipe.shape("#@", "@#");
+
+        recipe.setIngredient('#', Material.REDSTONE);
+        recipe.setIngredient('@', Material.DIAMOND);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
     @EventHandler
     public void craftCable (PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
@@ -99,6 +114,14 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         final ItemStack result = event.getRecipe().getResult();
         final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
         if (!result.isSimilar(golden_cable)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack binding = CustomItem.BINDING.getItem();
@@ -112,6 +135,14 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         final ItemStack result = event.getRecipe().getResult();
         final ItemStack starlight_circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
         if (!result.isSimilar(starlight_circuit)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
@@ -143,6 +174,14 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         final ItemStack result = event.getRecipe().getResult();
         final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
         if (!result.isSimilar(starlight_battery)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
@@ -178,6 +217,14 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
         if (!result.isSimilar(starlight_module)) return;
 
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
+
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
         final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
@@ -204,6 +251,23 @@ public class StarlightComponents extends MatchCrafting implements Listener {
 
         if (!matches) {
             event.getInventory().setResult(null);
+        }
+    }
+
+    @EventHandler
+    public void preventHereticCraft (PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack binding = CustomItem.BINDING.getItem();
+        final ItemStack energium = CustomItem.ENERGIUM.getItem();
+        if (!result.isSimilar(binding) && !result.isSimilar(energium)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+            }
         }
     }
 }

@@ -94,10 +94,14 @@ public class FishingCrateTreasureTable implements LootTable {
                 tier3.add(CustomItem.TITANIUM_FRAGMENT.getItem());
             }
 
+            ArrayList<ItemStack> tier4 = new ArrayList<>();
+            tier4.add(CustomItem.FOREVER_FISH.getItem());
+
             ArrayList<ArrayList<ItemStack>> items = new ArrayList<>();
             items.add(tier1);
             items.add(tier2);
             items.add(tier3);
+            items.add(tier4);
 
             ArrayList<ItemStack> output = new ArrayList<>();
             for (int i = 0; i < count; i++) {

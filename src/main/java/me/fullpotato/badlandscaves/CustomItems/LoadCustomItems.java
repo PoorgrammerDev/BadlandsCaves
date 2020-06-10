@@ -1,16 +1,22 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
@@ -18,6 +24,53 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class LoadCustomItems {
+    private final BadlandsCaves plugin = JavaPlugin.getPlugin(BadlandsCaves.class);
+
+    private static final String[] uuid_names = {
+            "2018ae4d-9bf8-47b9-8c1f-3107007afeab",
+            "a552bcbf-413c-493d-a2c2-cbcbd0f008cb",
+            "f3eadd40-8340-4263-ae9e-0227caa026a8",
+            "be191adc-6e88-44eb-98a8-42a383a40025",
+            "64bea4b3-5954-4126-bf3e-16f52a3ceec2",
+            "df61c558-00a9-4d37-ac7b-2dc1019372aa",
+            "af488f76-7285-4654-9602-1d2f5458e859",
+            "80c07619-854b-491d-853a-d977bef56aef",
+            "8ce28112-3ae0-4463-9040-704098144f56",
+            "d9d3e533-d221-45a2-9472-30a8b61eae16",
+            "dd867378-1e59-452a-baa5-d0afcc9e7daf",
+            "683fc3b5-39aa-4fa5-8d3c-864bd3fd2f10",
+            "f6cfed15-13f7-4bc2-92ef-9cf61120d639",
+            "91464f55-dda0-469c-b3ae-83a5219a1d3c",
+            "f1dd258b-30ac-45a5-b3df-f9354c37f0ea",
+            "58d14695-8f06-4aea-a3ca-80a7c779a844",
+            "18d43596-3a73-4721-8af2-2e3fbab23de3",
+            "21ef0e4b-1368-4e0a-b666-35330c86e696",
+            "043267a0-1318-4b45-a5df-0d11ee81316a",
+            "024506c6-4fd2-40c0-897b-60007b8af856",
+            "bfcabfa7-0489-4cfa-99de-285a38944844",
+            "c3413cb5-7be7-4db2-be71-987083ef0dd6",
+            "a76e8e2e-ce10-454f-bdc8-958a034bd111",
+            "f89fb0e9-20c6-4dae-92ed-2bd0d89bb09f",
+            "8006c980-a7a8-4e35-a2be-3d788313ccc2",
+            "540644ec-e5a7-40fe-8ad4-fb19ef76d710",
+            "ee070dcc-335c-4d34-9e69-33c6dd9feb7c",
+            "60fe4d87-4c13-4e41-ba3a-c64157a86296",
+            "4886b1aa-cb5f-435e-acc6-bfcf622ca990",
+            "b8e8caa9-da29-4f8c-b506-e1dba9300ba9",
+            "2a91a5cc-1db3-4b5b-8d73-5f2f51751ebd",
+            "d62766f8-2642-4db1-89e4-8ce666b2a23e",
+            "6e016348-03e1-4335-a0dd-b3da1decde5c",
+            "58dd69e9-2967-4925-8b73-12bcc946972f",
+            "77151592-b786-4024-b245-d14f023a0ec4",
+            "1e5339e9-7496-434a-9cad-bb6fabf1dc7a",
+            "81e69806-43c7-4354-9275-27f3629e5c98",
+            "de3fca18-8c87-43ad-9f4b-1c46a7acc30d",
+            "1c12b8a1-118c-4647-a71d-86756cf148a3",
+            "fb139a0c-6507-48f4-88ed-07044d3abd94",
+            "ac155a09-9905-42a9-a240-58221f07cbb2",
+            "f332ed08-1974-4dd3-9a0f-d7a6c1edbf06",
+    };
+
     public ItemStack getItem(CustomItem item) {
         if (item.equals(CustomItem.STARTER_SAPLING)){
             ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING);
@@ -558,8 +611,8 @@ public class LoadCustomItems {
             ItemMeta stone_shield_meta = stone_shield.getItemMeta();
             stone_shield_meta.setDisplayName("§rStone Shield");
             stone_shield_meta.setCustomModelData(141);
-            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[0]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[1]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             stone_shield_meta.addEnchant(Enchantment.DURABILITY, 4, true);
             stone_shield.setItemMeta(stone_shield_meta);
 
@@ -571,8 +624,8 @@ public class LoadCustomItems {
             ItemMeta iron_shield_meta = iron_shield.getItemMeta();
             iron_shield_meta.setDisplayName("§rIron Shield");
             iron_shield_meta.setCustomModelData(142);
-            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[2]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[3]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             iron_shield_meta.addEnchant(Enchantment.DURABILITY, 5, true);
             iron_shield.setItemMeta(iron_shield_meta);
 
@@ -584,8 +637,8 @@ public class LoadCustomItems {
             ItemMeta diamond_shield_meta = diamond_shield.getItemMeta();
             diamond_shield_meta.setDisplayName("§rDiamond Shield");
             diamond_shield_meta.setCustomModelData(144);
-            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[4]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[5]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             diamond_shield_meta.addEnchant(Enchantment.DURABILITY, 6, true);
             diamond_shield.setItemMeta(diamond_shield_meta);
 
@@ -691,6 +744,258 @@ public class LoadCustomItems {
             starlight_module.setItemMeta(starlight_module_meta);
 
             return starlight_module;
+        }
+        else if (item.equals(CustomItem.FOREVER_FISH)) {
+            ItemStack forever_fish = new ItemStack(Material.COOKED_COD);
+            ItemMeta forever_fish_meta = forever_fish.getItemMeta();
+            forever_fish_meta.setDisplayName("§6Forever Fish");
+            forever_fish_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            forever_fish_meta.addEnchant(Enchantment.DURABILITY, 1, true);
+
+            ArrayList<String> forever_fish_lore = new ArrayList<>();
+            forever_fish_lore.add("§7Give a man a fish, feed him for a day.");
+            forever_fish_lore.add("§7Give him a Forever Fish, feed him for a lifetime.");
+            forever_fish_meta.setLore(forever_fish_lore);
+
+            forever_fish.setItemMeta(forever_fish_meta);
+
+            return forever_fish;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_HELMET)) {
+            ItemStack starlight_helmet = new ItemStack(Material.DIAMOND_HELMET);
+            ItemMeta starlight_helmet_meta = starlight_helmet.getItemMeta();
+            starlight_helmet_meta.setDisplayName("§bStarlight Helmet");
+
+            ArrayList<String> starlight_helmet_lore = new ArrayList<>();
+            starlight_helmet_lore.add("§7Charge: 0 / 5000");
+            starlight_helmet_meta.setLore(starlight_helmet_lore);
+
+            starlight_helmet_meta.setCustomModelData(151);
+            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
+            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+            starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+            starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+
+            Damageable damageable = (Damageable) starlight_helmet_meta;
+            damageable.setDamage(starlight_helmet.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            starlight_helmet.setItemMeta((ItemMeta) repairable);
+            return starlight_helmet;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_CHESTPLATE)) {
+            ItemStack starlight_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+            ItemMeta starlight_chestplate_meta = starlight_chestplate.getItemMeta();
+            starlight_chestplate_meta.setDisplayName("§bStarlight Chestplate");
+
+            ArrayList<String> starlight_chestplate_lore = new ArrayList<>();
+            starlight_chestplate_lore.add("§7Charge: 0 / 5000");
+            starlight_chestplate_meta.setLore(starlight_chestplate_lore);
+
+            starlight_chestplate_meta.setCustomModelData(152);
+            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
+            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
+            starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
+            starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+
+            Damageable damageable = (Damageable) starlight_chestplate_meta;
+            damageable.setDamage(starlight_chestplate.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            starlight_chestplate.setItemMeta((ItemMeta) repairable);
+            return starlight_chestplate;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_LEGGINGS)) {
+            ItemStack starlight_leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+            ItemMeta starlight_leggings_meta = starlight_leggings.getItemMeta();
+            starlight_leggings_meta.setDisplayName("§bStarlight Leggings");
+
+            ArrayList<String> starlight_leggings_lore = new ArrayList<>();
+            starlight_leggings_lore.add("§7Charge: 0 / 5000");
+            starlight_leggings_meta.setLore(starlight_leggings_lore);
+
+            starlight_leggings_meta.setCustomModelData(153);
+            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
+            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+            starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+            starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+
+            Damageable damageable = (Damageable) starlight_leggings_meta;
+            damageable.setDamage(starlight_leggings.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            starlight_leggings.setItemMeta((ItemMeta) repairable);
+            return starlight_leggings;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_BOOTS)) {
+            ItemStack starlight_boots = new ItemStack(Material.DIAMOND_BOOTS);
+            ItemMeta starlight_boots_meta = starlight_boots.getItemMeta();
+            starlight_boots_meta.setDisplayName("§bStarlight Boots");
+
+            ArrayList<String> starlight_boots_lore = new ArrayList<>();
+            starlight_boots_lore.add("§7Charge: 0 / 5000");
+            starlight_boots_meta.setLore(starlight_boots_lore);
+
+            starlight_boots_meta.setCustomModelData(154);
+            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
+            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+            starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+            starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+
+            Damageable damageable = (Damageable) starlight_boots_meta;
+            damageable.setDamage(starlight_boots.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            starlight_boots.setItemMeta((ItemMeta) repairable);
+            return starlight_boots;
+        }
+        else if (item.equals(CustomItem.ENERGIUM)) {
+            ItemStack energium = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta energium_meta = energium.getItemMeta();
+            energium_meta.setDisplayName("§cEnergium");
+            energium_meta.setCustomModelData(155);
+            energium.setItemMeta(energium_meta);
+
+            return energium;
+        }
+        else if (item.equals(CustomItem.ENERGY_CORE)) {
+            ItemStack energy_core = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta energy_core_meta = energy_core.getItemMeta();
+            energy_core_meta.setCustomModelData(156);
+            energy_core_meta.setDisplayName("§bEnergy Core");
+
+            ArrayList<String> energy_core_lore = new ArrayList<>();
+            energy_core_lore.add("§7Charge: 0");
+            energy_core_meta.setLore(energy_core_lore);
+
+            energy_core_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "energy_core_charge"), PersistentDataType.INTEGER, 0);
+            energy_core_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_energy_core"), PersistentDataType.BYTE, (byte) 1);
+            energy_core.setItemMeta(energy_core_meta);
+
+            return energy_core;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER)) {
+            ItemStack charge_placeholder = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta charge_placeholder_meta = charge_placeholder.getItemMeta();
+            charge_placeholder_meta.setCustomModelData(157);
+            charge_placeholder_meta.setDisplayName("§rCharge Starlight Armor");
+
+            charge_placeholder.setItemMeta(charge_placeholder_meta);
+
+            return charge_placeholder;
+        }
+        else if (item.equals(CustomItem.VOIDMATTER)) {
+            ItemStack voidmatter = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta voidmatter_meta = voidmatter.getItemMeta();
+            voidmatter_meta.setDisplayName("§8Voidmatter");
+            voidmatter_meta.setCustomModelData(158);
+            voidmatter.setItemMeta(voidmatter_meta);
+
+            return voidmatter;
+        }
+        else if (item.equals(CustomItem.VOIDMATTER_HELMET)) {
+            ItemStack voidmatter_helmet = new ItemStack(Material.DIAMOND_HELMET);
+            ItemMeta voidmatter_helmet_meta = voidmatter_helmet.getItemMeta();
+            voidmatter_helmet_meta.setDisplayName("§8Voidmatter Helmet");
+
+            ArrayList<String> voidmatter_helmet_lore = new ArrayList<>();
+            voidmatter_helmet_lore.add("§7Set Effect: 2x Mana Regeneration");
+            voidmatter_helmet_meta.setLore(voidmatter_helmet_lore);
+
+            voidmatter_helmet_meta.setCustomModelData(159);
+            voidmatter_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
+            voidmatter_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_helmet_meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) voidmatter_helmet_meta;
+            repairable.setRepairCost(999999);
+
+            voidmatter_helmet.setItemMeta((ItemMeta) repairable);
+            return voidmatter_helmet;
+        }
+        else if (item.equals(CustomItem.VOIDMATTER_CHESTPLATE)) {
+            ItemStack voidmatter_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+            ItemMeta voidmatter_chestplate_meta = voidmatter_chestplate.getItemMeta();
+            voidmatter_chestplate_meta.setDisplayName("§8Voidmatter Chestplate");
+
+            ArrayList<String> voidmatter_chesplate_lore = new ArrayList<>();
+            voidmatter_chesplate_lore.add("§7Set Effect: 2x Mana Regeneration");
+            voidmatter_chestplate_meta.setLore(voidmatter_chesplate_lore);
+
+            voidmatter_chestplate_meta.setCustomModelData(160);
+            voidmatter_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
+            voidmatter_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_chestplate_meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) voidmatter_chestplate_meta;
+            repairable.setRepairCost(999999);
+
+            voidmatter_chestplate.setItemMeta((ItemMeta) repairable);
+            return voidmatter_chestplate;
+        }
+        else if (item.equals(CustomItem.VOIDMATTER_LEGGINGS)) {
+            ItemStack voidmatter_leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+            ItemMeta voidmatter_leggings_meta = voidmatter_leggings.getItemMeta();
+            voidmatter_leggings_meta.setDisplayName("§8Voidmatter Leggings");
+
+            ArrayList<String> voidmatter_leggings_lore = new ArrayList<>();
+            voidmatter_leggings_lore.add("§7Set Effect: 2x Mana Regeneration");
+            voidmatter_leggings_meta.setLore(voidmatter_leggings_lore);
+
+            voidmatter_leggings_meta.setCustomModelData(161);
+            voidmatter_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
+            voidmatter_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_leggings_meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) voidmatter_leggings_meta;
+            repairable.setRepairCost(999999);
+
+            voidmatter_leggings.setItemMeta((ItemMeta) repairable);
+            return voidmatter_leggings;
+        }
+        else if (item.equals(CustomItem.VOIDMATTER_BOOTS)) {
+            ItemStack voidmatter_boots = new ItemStack(Material.DIAMOND_BOOTS);
+            ItemMeta voidmatter_boots_meta = voidmatter_boots.getItemMeta();
+            voidmatter_boots_meta.setDisplayName("§8Voidmatter Boots");
+
+            ArrayList<String> voidmatter_boots_lore = new ArrayList<>();
+            voidmatter_boots_lore.add("§7Set Effect: 2x Mana Regeneration");
+            voidmatter_boots_meta.setLore(voidmatter_boots_lore);
+
+            voidmatter_boots_meta.setCustomModelData(162);
+            voidmatter_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
+            voidmatter_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_boots_meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) voidmatter_boots_meta;
+            repairable.setRepairCost(999999);
+
+            voidmatter_boots.setItemMeta((ItemMeta) repairable);
+            return voidmatter_boots;
         }
 
         return null;

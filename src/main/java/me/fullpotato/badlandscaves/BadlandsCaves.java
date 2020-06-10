@@ -5,6 +5,8 @@ import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
+import me.fullpotato.badlandscaves.CustomItems.Using.Armor.StarlightArmorMechanics;
+import me.fullpotato.badlandscaves.CustomItems.Using.Armor.StarlightArmorRunnable;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
@@ -36,6 +38,7 @@ import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -97,77 +100,89 @@ public final class BadlandsCaves extends JavaPlugin {
 
     //EVENTS
     public void registerEvents() {
-        this.getServer().getPluginManager().registerEvents(new PlayerJoinLeave(this), this);
-        this.getServer().getPluginManager().registerEvents(new NaturalThirstDecrease(this), this);
-        this.getServer().getPluginManager().registerEvents(new IncreaseToxInWater(this), this);
-        this.getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
-        this.getServer().getPluginManager().registerEvents(new BlessedAppleEat(this), this);
-        this.getServer().getPluginManager().registerEvents(new CauldronMenu(this), this);
-        this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this), this);
-        this.getServer().getPluginManager().registerEvents(new Drinking(this), this);
-        this.getServer().getPluginManager().registerEvents(new ToxicWaterBottling(this),this);
-        this.getServer().getPluginManager().registerEvents(new BlazePowder(this), this);
-        this.getServer().getPluginManager().registerEvents(new PurgeEssence(this), this);
-        this.getServer().getPluginManager().registerEvents(new StopCustomItemsInteract(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseTaintPowder(this), this);
-        this.getServer().getPluginManager().registerEvents(new ZombieDeathLoot(this), this);
-        this.getServer().getPluginManager().registerEvents(new GetFishingCrate(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseFishingCrate(this), this);
-        this.getServer().getPluginManager().registerEvents(new SkeleBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new ZombieBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new CreeperBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new SpiderBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new PigZombieBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new SilverfishBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new BlazeBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new GhastBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new PhantomBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new WitchBuff(this), this);
-        this.getServer().getPluginManager().registerEvents(new SwapPowers(this), this);
-        this.getServer().getPluginManager().registerEvents(new Displace(this), this);
-        this.getServer().getPluginManager().registerEvents(new StopPowersInvInteract(this), this);
-        this.getServer().getPluginManager().registerEvents(new Withdraw(this), this);
-        this.getServer().getPluginManager().registerEvents(new EnhancedEyes(this), this);
-        this.getServer().getPluginManager().registerEvents(new Possession(this), this);
-        this.getServer().getPluginManager().registerEvents(new IncreaseToxInRain(this), this);
-        this.getServer().getPluginManager().registerEvents(new EnduranceCancelHunger(this), this);
-        this.getServer().getPluginManager().registerEvents(new Agility(this), this);
-        this.getServer().getPluginManager().registerEvents(new DescensionPlayerMove(this), this);
-        this.getServer().getPluginManager().registerEvents(new SoulDrop(this), this);
-        this.getServer().getPluginManager().registerEvents(new HellEssence(this), this);
-        this.getServer().getPluginManager().registerEvents(new MagicEssence(this), this);
-        this.getServer().getPluginManager().registerEvents(new MergedSouls(this), this);
-        this.getServer().getPluginManager().registerEvents(new SoulCrystalIncomplete(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseIncompleteSoulCrystal(this), this);
-        this.getServer().getPluginManager().registerEvents(new ReflectionBuild(this), this);
-        this.getServer().getPluginManager().registerEvents(new ReflectionZombie(this), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerUnderSht(this), this);
-        this.getServer().getPluginManager().registerEvents(new EndGame(this), this);
-        this.getServer().getPluginManager().registerEvents(new LimitActions(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseCompleteSoulCrystal(this), this);
-        this.getServer().getPluginManager().registerEvents(new MushroomStew(this), this);
-        this.getServer().getPluginManager().registerEvents(new DestroySpawner(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseRune(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseChargedRune(this), this);
-        this.getServer().getPluginManager().registerEvents(new BackroomsManager(this), this);
-        this.getServer().getPluginManager().registerEvents(new TreasureGear(), this);
-        this.getServer().getPluginManager().registerEvents(new EXPBottle(), this);
-        this.getServer().getPluginManager().registerEvents(new SerratedSwords(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseSerrated(this), this);
-        this.getServer().getPluginManager().registerEvents(new Voltshock(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseVoltshock(this), this);
-        this.getServer().getPluginManager().registerEvents(new Corrosive(this), this);
-        this.getServer().getPluginManager().registerEvents(new UseCorrosive(this), this);
-        this.getServer().getPluginManager().registerEvents(new CustomBows(this), this);
-        this.getServer().getPluginManager().registerEvents(new WitherBossFight(this), this);
-        this.getServer().getPluginManager().registerEvents(new Apples(this), this);
-        this.getServer().getPluginManager().registerEvents(new NoMending(this), this);
-        this.getServer().getPluginManager().registerEvents(new ShieldBlocking(this), this);
-        this.getServer().getPluginManager().registerEvents(new Shield(this), this);
-        this.getServer().getPluginManager().registerEvents(new CraftingGuide(this), this);
-        this.getServer().getPluginManager().registerEvents(new TitaniumOre(this), this);
-        this.getServer().getPluginManager().registerEvents(new TitaniumBar(this), this);
-        this.getServer().getPluginManager().registerEvents(new StarlightComponents(this), this);
+        final Listener[] events = {
+                new PlayerJoinLeave(this),
+                new NaturalThirstDecrease(this),
+                new IncreaseToxInWater(this),
+                new DeathHandler(this),
+                new BlessedAppleEat(this),
+                new CauldronMenu(this),
+                new ToxicWaterBottling(this),
+                new Drinking(this),
+                new ToxicWaterBottling(this),
+                new BlazePowder(this),
+                new PurgeEssence(this),
+                new StopCustomItemsInteract(this),
+                new UseTaintPowder(this),
+                new ZombieDeathLoot(this),
+                new GetFishingCrate(this),
+                new UseFishingCrate(this),
+                new SkeleBuff(this),
+                new ZombieBuff(this),
+                new CreeperBuff(this),
+                new SpiderBuff(this),
+                new PigZombieBuff(this),
+                new SilverfishBuff(this),
+                new BlazeBuff(this),
+                new GhastBuff(this),
+                new PhantomBuff(this),
+                new WitchBuff(this),
+                new SwapPowers(this),
+                new Displace(this),
+                new StopPowersInvInteract(this),
+                new Withdraw(this),
+                new EnhancedEyes(this),
+                new Possession(this),
+                new IncreaseToxInRain(this),
+                new EnduranceCancelHunger(this),
+                new Agility(this),
+                new DescensionPlayerMove(this),
+                new SoulDrop(this),
+                new HellEssence(this),
+                new MagicEssence(this),
+                new MergedSouls(this),
+                new SoulCrystalIncomplete(this),
+                new UseIncompleteSoulCrystal(this),
+                new ReflectionBuild(this),
+                new ReflectionZombie(this),
+                new PlayerUnderSht(this),
+                new EndGame(this),
+                new LimitActions(this),
+                new UseCompleteSoulCrystal(this),
+                new MushroomStew(this),
+                new DestroySpawner(this),
+                new UseRune(this),
+                new UseChargedRune(this),
+                new BackroomsManager(this),
+                new TreasureGear(),
+                new EXPBottle(),
+                new SerratedSwords(this),
+                new UseSerrated(this),
+                new Voltshock(this),
+                new UseVoltshock(this),
+                new Corrosive(this),
+                new UseCorrosive(this),
+                new CustomBows(this),
+                new WitherBossFight(this),
+                new Apples(this),
+                new NoMending(this),
+                new ShieldBlocking(this),
+                new Shield(this),
+                new CraftingGuide(this),
+                new TitaniumOre(this),
+                new TitaniumBar(this),
+                new StarlightComponents(this),
+                new UseForeverFish(),
+                new StarlightArmor(this),
+                new StarlightArmorMechanics(this),
+                new EnergyCore(this),
+                new VoidmatterArmor(this),
+        };
+
+        for (Listener event : events) {
+            this.getServer().getPluginManager().registerEvents(event, this);
+        }
+
     }
 
     //COMMANDS
@@ -225,6 +240,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
         new Surface(this).runTaskTimer(this, 0, 100);
+        new StarlightArmorRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
 
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();
@@ -295,6 +311,23 @@ public final class BadlandsCaves extends JavaPlugin {
         starlightComponents.craftStarlightCircuit();
         starlightComponents.craftStarlightBattery();
         starlightComponents.craftStarlightModule();
+        starlightComponents.craftEnergium();
+
+        StarlightArmor starlightArmor = new StarlightArmor(this);
+        starlightArmor.helmetRecipe();
+        starlightArmor.chestplateRecipe();
+        starlightArmor.leggingsRecipe();
+        starlightArmor.bootsRecipe();
+        starlightArmor.chargeArmorRecipes();
+
+        EnergyCore energyCore = new EnergyCore(this);
+        energyCore.energyCoreRecipe();
+
+        VoidmatterArmor voidmatterArmor = new VoidmatterArmor(this);
+        voidmatterArmor.helmetRecipe();
+        voidmatterArmor.chestplateRecipe();
+        voidmatterArmor.leggingsRecipe();
+        voidmatterArmor.bootsRecipe();
     }
 
     public void loadWorldNames() {

@@ -10,7 +10,7 @@ options:
 
   # every time you open a crate, there's {x}% to upgrade a tier of loot, and {100 - x}% to not.
   # Everytime it's upgraded, it goes back through this again until it either fails, or gets to max tier.
-  fishing_crate_tier_upgrade: 50
+  fishing_crate_tier_upgrade: 25
 
   # if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: false

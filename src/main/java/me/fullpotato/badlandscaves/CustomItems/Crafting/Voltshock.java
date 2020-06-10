@@ -214,7 +214,7 @@ public class Voltshock extends MatchCrafting implements Listener {
                             } catch (NumberFormatException ignored) {
                             }
 
-                            int added_charge = exp_stored / 10;
+                            int added_charge = exp_stored / 20;
                             if (added_charge > 0) {
                                 final int new_charge = Math.min(50, current_charge + added_charge);
 

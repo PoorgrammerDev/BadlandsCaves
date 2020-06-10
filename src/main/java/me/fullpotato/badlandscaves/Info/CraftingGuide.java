@@ -38,6 +38,7 @@ public class CraftingGuide implements Listener {
 
             CustomItem.FISHING_CRATE.toString(),
             CustomItem.FISHING_CRATE_HARDMODE.toString(),
+            CustomItem.FOREVER_FISH.toString(),
 
             CustomItem.PURGE_ESSENCE.toString(),
             CustomItem.HELL_ESSENCE.toString(),
@@ -78,6 +79,15 @@ public class CraftingGuide implements Listener {
             CustomItem.RUNE.toString(),
             CustomItem.CHARGED_RUNE.toString(),
             CustomItem.RECALL_POTION.toString(),
+
+            CustomItem.TITANIUM_FRAGMENT.toString(),
+            CustomItem.TITANIUM_INGOT.toString(),
+            CustomItem.BINDING.toString(),
+            CustomItem.GOLDEN_CABLE.toString(),
+            CustomItem.NETHER_STAR_FRAGMENT.toString(),
+            CustomItem.STARLIGHT_CIRCUIT.toString(),
+            CustomItem.STARLIGHT_BATTERY.toString(),
+            CustomItem.STARLIGHT_MODULE.toString(),
     };
 
     private final HashMap<ItemStack, ItemStack[]> craftingRecipes = new HashMap<>();
@@ -133,21 +143,21 @@ public class CraftingGuide implements Listener {
                     ItemStack item = inventory.getItem(slot);
                     if (item != null) {
                         for (ItemStack key : craftingRecipes.keySet()) {
-                            if (key.isSimilar(item)) {
+                            if (item.isSimilar(key)) {
                                 craftingGUI(inventory, item, false);
                                 return;
                             }
                         }
 
                         for (ItemStack key : cauldronRecipes.keySet()) {
-                            if (key.isSimilar(item)) {
+                            if (item.isSimilar(key)) {
                                 cauldronGUI(inventory, item, false);
                                 return;
                             }
                         }
 
                         for (ItemStack key : otherDescription.keySet()) {
-                            if (key.isSimilar(item)) {
+                            if (item.isSimilar(key)) {
                                 otherGUI(inventory, item);
                                 return;
                             }
@@ -229,6 +239,8 @@ public class CraftingGuide implements Listener {
     }
 
     public void fillInventory (Inventory inventory, int start) {
+        clearItems(inventory);
+
         for (int i = 0; i + start < custom_items.length && i < 45; i++) {
             try {
                 ItemStack item = CustomItem.valueOf(custom_items[i + start]).getItem();
@@ -237,9 +249,19 @@ public class CraftingGuide implements Listener {
                 inventory.setItem(i, item);
             }
             catch (IllegalArgumentException e) {
-                ItemStack item = new ItemStack(Material.valueOf(custom_items[i + start]));
-                inventory.setItem(i, item);
+                try {
+                    ItemStack item = new ItemStack(Material.valueOf(custom_items[i + start]));
+                    inventory.setItem(i, item);
+                }
+                catch (IllegalArgumentException ignored) {
+                }
             }
+        }
+    }
+
+    public void clearItems(Inventory inventory) {
+        for (int i = 0; i < 45; i++) {
+            inventory.setItem(i, null);
         }
     }
 
@@ -766,6 +788,80 @@ public class CraftingGuide implements Listener {
         };
         recipes.put(new ItemStack(Material.QUARTZ), quartz_recipe);
 
+        ItemStack[] titanium_ingot_recipe = {
+                CustomItem.TITANIUM_FRAGMENT.getItem(),
+                CustomItem.TITANIUM_FRAGMENT.getItem(),
+                null,
+                CustomItem.TITANIUM_FRAGMENT.getItem(),
+                CustomItem.TITANIUM_FRAGMENT.getItem(),
+        };
+        recipes.put(CustomItem.TITANIUM_INGOT.getItem(), titanium_ingot_recipe);
+
+        ItemStack[] binding_recipe = {
+                new ItemStack(Material.RED_SAND),
+                new ItemStack(Material.GRAVEL),
+                null,
+                new ItemStack(Material.GRAVEL),
+                new ItemStack(Material.RED_SAND),
+        };
+        recipes.put(CustomItem.BINDING.getItem(), binding_recipe);
+
+        ItemStack[] golden_cable_recipe = {
+            CustomItem.BINDING.getItem(),
+                CustomItem.BINDING.getItem(),
+                CustomItem.BINDING.getItem(),
+                new ItemStack(Material.GOLD_INGOT),
+                new ItemStack(Material.GOLD_INGOT),
+                new ItemStack(Material.GOLD_INGOT),
+                CustomItem.BINDING.getItem(),
+                CustomItem.BINDING.getItem(),
+                CustomItem.BINDING.getItem(),
+        };
+        recipes.put(CustomItem.GOLDEN_CABLE.getItem(), golden_cable_recipe);
+
+        ItemStack[] nether_star_fragment_recipe = {
+            new ItemStack(Material.NETHER_STAR)
+        };
+        recipes.put(CustomItem.NETHER_STAR_FRAGMENT.getItem(), nether_star_fragment_recipe);
+
+        ItemStack[] starlight_circuit_recipe = {
+                CustomItem.GOLDEN_CABLE.getItem(),
+                CustomItem.GOLDEN_CABLE.getItem(),
+                CustomItem.GOLDEN_CABLE.getItem(),
+                new ItemStack(Material.REDSTONE),
+                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
+                new ItemStack(Material.REDSTONE),
+                CustomItem.GOLDEN_CABLE.getItem(),
+                CustomItem.GOLDEN_CABLE.getItem(),
+                CustomItem.GOLDEN_CABLE.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_CIRCUIT.getItem(), starlight_circuit_recipe);
+
+        ItemStack[] starlight_battery_recipe = {
+                null,
+                new ItemStack(Material.COMPARATOR),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_BATTERY.getItem(), starlight_battery_recipe);
+
+        ItemStack[] starlight_module_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_CIRCUIT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_BATTERY.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_MODULE.getItem(), starlight_module_recipe);
     }
 
     public void fillCauldronRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
@@ -945,6 +1041,25 @@ public class CraftingGuide implements Listener {
         ItemStack recall_potion_desc = rune_desc.clone();
         descs.put(CustomItem.RECALL_POTION.getItem(), recall_potion_desc);
 
+
+        ItemStack titanium_fragment_desc = new ItemStack(Material.DEAD_TUBE_CORAL_BLOCK);
+        ItemMeta titanium_fragment_meta = titanium_fragment_desc.getItemMeta();
+        titanium_fragment_meta.setDisplayName("§bMine Titanium Ore");
+        ArrayList<String> titanium_fragment_lore = new ArrayList<>();
+        titanium_fragment_lore.add("§7This item is obtained by mining Titanium Ore,");
+        titanium_fragment_lore.add("§7which generates right above The Void.");
+        titanium_fragment_meta.setLore(titanium_fragment_lore);
+        titanium_fragment_desc.setItemMeta(titanium_fragment_meta);
+        descs.put(CustomItem.TITANIUM_FRAGMENT.getItem(), titanium_fragment_desc);
+
+
+        ItemStack forever_fish_desc = CustomItem.FISHING_CRATE_HARDMODE.getItem();
+        ItemMeta forever_fish_meta = forever_fish_desc.getItemMeta();
+        ArrayList<String> forever_fish_lore = new ArrayList<>();
+        forever_fish_lore.add("§7This item is Tier 4 Hardmode Fishing Crate loot.");
+        forever_fish_meta.setLore(forever_fish_lore);
+        forever_fish_desc.setItemMeta(forever_fish_meta);
+        descs.put(CustomItem.FOREVER_FISH.getItem(), forever_fish_desc);
 
     }
 }
