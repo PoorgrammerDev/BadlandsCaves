@@ -11,10 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
@@ -686,6 +683,16 @@ public class LoadCustomItems {
             return titanium_ingot;
         }
 
+        else if (item.equals(CustomItem.TITANIUM_ROD)) {
+            ItemStack titanium_rod = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta titanium_rod_meta = titanium_rod.getItemMeta();
+            titanium_rod_meta.setDisplayName("§bTitanium Rod");
+            titanium_rod_meta.setCustomModelData(166);
+            titanium_rod.setItemMeta(titanium_rod_meta);
+
+            return titanium_rod;
+        }
+
         else if (item.equals(CustomItem.BINDING)){
             ItemStack binding = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta binding_meta = binding.getItemMeta();
@@ -745,6 +752,17 @@ public class LoadCustomItems {
 
             return starlight_module;
         }
+
+        else if (item.equals(CustomItem.PHOTON_EMITTER)) {
+            ItemStack photon_emitter = new ItemStack(Material.STRUCTURE_BLOCK);
+            ItemMeta photon_emitter_meta = photon_emitter.getItemMeta();
+            photon_emitter_meta.setDisplayName("§ePhoton Emitter");
+            photon_emitter_meta.setCustomModelData(167);
+            photon_emitter.setItemMeta(photon_emitter_meta);
+
+            return photon_emitter;
+        }
+
         else if (item.equals(CustomItem.FOREVER_FISH)) {
             ItemStack forever_fish = new ItemStack(Material.COOKED_COD);
             ItemMeta forever_fish_meta = forever_fish.getItemMeta();
@@ -764,21 +782,21 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.STARLIGHT_HELMET)) {
             ItemStack starlight_helmet = new ItemStack(Material.DIAMOND_HELMET);
             ItemMeta starlight_helmet_meta = starlight_helmet.getItemMeta();
-            starlight_helmet_meta.setDisplayName("§bStarlight Helmet");
+            starlight_helmet_meta.setDisplayName("§eStarlight Helmet");
 
             ArrayList<String> starlight_helmet_lore = new ArrayList<>();
-            starlight_helmet_lore.add("§7Charge: 0 / 5000");
+            starlight_helmet_lore.add("§7Charge: 0 / 1000");
             starlight_helmet_meta.setLore(starlight_helmet_lore);
 
             starlight_helmet_meta.setCustomModelData(151);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
-            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-            starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+            starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_helmet_meta;
             damageable.setDamage(starlight_helmet.getType().getMaxDurability() - 1);
@@ -792,21 +810,21 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.STARLIGHT_CHESTPLATE)) {
             ItemStack starlight_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
             ItemMeta starlight_chestplate_meta = starlight_chestplate.getItemMeta();
-            starlight_chestplate_meta.setDisplayName("§bStarlight Chestplate");
+            starlight_chestplate_meta.setDisplayName("§eStarlight Chestplate");
 
             ArrayList<String> starlight_chestplate_lore = new ArrayList<>();
-            starlight_chestplate_lore.add("§7Charge: 0 / 5000");
+            starlight_chestplate_lore.add("§7Charge: 0 / 1000");
             starlight_chestplate_meta.setLore(starlight_chestplate_lore);
 
             starlight_chestplate_meta.setCustomModelData(152);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
-            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-            starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+            starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_chestplate_meta;
             damageable.setDamage(starlight_chestplate.getType().getMaxDurability() - 1);
@@ -820,21 +838,21 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.STARLIGHT_LEGGINGS)) {
             ItemStack starlight_leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
             ItemMeta starlight_leggings_meta = starlight_leggings.getItemMeta();
-            starlight_leggings_meta.setDisplayName("§bStarlight Leggings");
+            starlight_leggings_meta.setDisplayName("§eStarlight Leggings");
 
             ArrayList<String> starlight_leggings_lore = new ArrayList<>();
-            starlight_leggings_lore.add("§7Charge: 0 / 5000");
+            starlight_leggings_lore.add("§7Charge: 0 / 1000");
             starlight_leggings_meta.setLore(starlight_leggings_lore);
 
             starlight_leggings_meta.setCustomModelData(153);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
-            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-            starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+            starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_leggings_meta;
             damageable.setDamage(starlight_leggings.getType().getMaxDurability() - 1);
@@ -848,21 +866,21 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.STARLIGHT_BOOTS)) {
             ItemStack starlight_boots = new ItemStack(Material.DIAMOND_BOOTS);
             ItemMeta starlight_boots_meta = starlight_boots.getItemMeta();
-            starlight_boots_meta.setDisplayName("§bStarlight Boots");
+            starlight_boots_meta.setDisplayName("§eStarlight Boots");
 
             ArrayList<String> starlight_boots_lore = new ArrayList<>();
-            starlight_boots_lore.add("§7Charge: 0 / 5000");
+            starlight_boots_lore.add("§7Charge: 0 / 1000");
             starlight_boots_meta.setLore(starlight_boots_lore);
 
             starlight_boots_meta.setCustomModelData(154);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
-            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 5000);
+            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-            starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+            starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_boots_meta;
             damageable.setDamage(starlight_boots.getType().getMaxDurability() - 1);
@@ -872,6 +890,96 @@ public class LoadCustomItems {
 
             starlight_boots.setItemMeta((ItemMeta) repairable);
             return starlight_boots;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_SABER)) {
+            ItemStack saber = new ItemStack(Material.DIAMOND_SWORD);
+            ItemMeta saber_meta = saber.getItemMeta();
+            saber_meta.setDisplayName("§eStarlight Saber");
+            saber_meta.setCustomModelData(163);
+
+            ArrayList<String> saber_lore = new ArrayList<>();
+            saber_lore.add("§7Charge: 0 / 2000");
+            saber_meta.setLore(saber_lore);
+
+            saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_saber"), PersistentDataType.BYTE, (byte) 1);
+            saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+
+            saber_meta.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
+            saber_meta.addEnchant(Enchantment.DURABILITY, 3, true);
+
+            Damageable damageable = (Damageable) saber_meta;
+            damageable.setDamage(saber.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            saber.setItemMeta((ItemMeta) repairable);
+            return saber;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_BLASTER)) {
+            ItemStack blaster = new ItemStack(Material.CROSSBOW);
+            CrossbowMeta blaster_meta = (CrossbowMeta) blaster.getItemMeta();
+            blaster_meta.setDisplayName("§eStarlight Blaster");
+            blaster_meta.setCustomModelData(164);
+
+            ArrayList<String> blaster_lore = new ArrayList<>();
+            blaster_lore.add("§7Charge: 0 / 2000");
+            blaster_meta.setLore(blaster_lore);
+
+            blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_blaster"), PersistentDataType.BYTE, (byte) 1);
+            blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+
+            blaster_meta.addEnchant(Enchantment.DURABILITY, 1, true);
+            blaster_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+            ItemStack empty = new ItemStack(Material.ARROW);
+            ItemMeta emptyMeta = empty.getItemMeta();
+            emptyMeta.setDisplayName("§r");
+            empty.setItemMeta(emptyMeta);
+
+            blaster_meta.addChargedProjectile(empty);
+
+            Damageable damageable = (Damageable) blaster_meta;
+            damageable.setDamage(blaster.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            blaster.setItemMeta((ItemMeta) repairable);
+            return blaster;
+        }
+        else if (item.equals(CustomItem.STARLIGHT_PAXEL)) {
+            ItemStack paxel_pick = new ItemStack(Material.DIAMOND_PICKAXE);
+            ItemMeta paxel_meta = paxel_pick.getItemMeta();
+            paxel_meta.setDisplayName("§eStarlight Paxel");
+            paxel_meta.setCustomModelData(165);
+
+            ArrayList<String> paxel_lore = new ArrayList<>();
+            paxel_lore.add("§7Charge: 0 / 2000");
+            paxel_meta.setLore(paxel_lore);
+
+            paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_paxel"), PersistentDataType.BYTE, (byte) 1);
+            paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+
+            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuid_names[14]), "Starlight Paxel No Damage", -999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuid_names[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+            paxel_meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+            paxel_meta.addEnchant(Enchantment.DIG_SPEED, 7, true);
+            paxel_meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 5, true);
+            paxel_meta.addEnchant(Enchantment.DURABILITY, 5, true);
+
+            Damageable damageable = (Damageable) paxel_meta;
+            damageable.setDamage(paxel_pick.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            paxel_pick.setItemMeta(paxel_meta);
+            return paxel_pick;
         }
         else if (item.equals(CustomItem.ENERGIUM)) {
             ItemStack energium = new ItemStack(Material.COMMAND_BLOCK);

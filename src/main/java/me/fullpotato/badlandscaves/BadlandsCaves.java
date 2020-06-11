@@ -4,10 +4,12 @@ import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.*;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.*;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
-import me.fullpotato.badlandscaves.CustomItems.Using.Armor.StarlightArmorMechanics;
-import me.fullpotato.badlandscaves.CustomItems.Using.Armor.StarlightArmorRunnable;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.ChargeRunnable;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightBlasterMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
@@ -174,9 +176,11 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightComponents(this),
                 new UseForeverFish(),
                 new StarlightArmor(this),
-                new StarlightArmorMechanics(this),
                 new EnergyCore(this),
                 new VoidmatterArmor(this),
+                new StarlightTools(this),
+                new StarlightCharge(this),
+                new StarlightBlasterMechanism(this),
         };
 
         for (Listener event : events) {
@@ -225,7 +229,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new PlayerEffectsRunnable(this).runTaskTimer(this,0,0);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
         new ManaBarManager(this).runTaskTimer(this, 0, 5);
-        new ManaRegen(this).runTaskTimer(this, 0, 20);
+        new ManaRegen(this).runTaskTimer(this, 0, 0);
         new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
         new DescensionReset(this).runTaskTimer(this, 0, 60);
         new LostSoulParticle(this).runTaskTimer(this, 0, 3);
@@ -240,12 +244,12 @@ public final class BadlandsCaves extends JavaPlugin {
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
         new Surface(this).runTaskTimer(this, 0, 100);
-        new StarlightArmorRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
+        new ChargeRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
+        new StarlightPaxelMechanism(this).runTaskTimerAsynchronously(this, 0, 0);
 
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();
         witherFight.portalDestroyTimer();
-
     }
 
     //RECIPES
@@ -303,6 +307,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         TitaniumBar titaniumBar = new TitaniumBar(this);
         titaniumBar.fragmentIntoBar();
+        titaniumBar.craftTitaniumRod();
 
         StarlightComponents starlightComponents = new StarlightComponents(this);
         starlightComponents.craftBinding();
@@ -312,13 +317,20 @@ public final class BadlandsCaves extends JavaPlugin {
         starlightComponents.craftStarlightBattery();
         starlightComponents.craftStarlightModule();
         starlightComponents.craftEnergium();
+        starlightComponents.craftPhotonEmitter();
+
+        StarlightCharge starlightCharge = new StarlightCharge(this);
+        starlightCharge.chargeRecipe();
 
         StarlightArmor starlightArmor = new StarlightArmor(this);
         starlightArmor.helmetRecipe();
         starlightArmor.chestplateRecipe();
         starlightArmor.leggingsRecipe();
         starlightArmor.bootsRecipe();
-        starlightArmor.chargeArmorRecipes();
+
+        StarlightTools starlightTools = new StarlightTools(this);
+        starlightTools.saberRecipe();
+        starlightTools.blasterRecipe();
 
         EnergyCore energyCore = new EnergyCore(this);
         energyCore.energyCoreRecipe();

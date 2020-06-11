@@ -28,7 +28,7 @@ public enum PlayerScore {
     MANA_REGEN_DELAY_TIMER(PersistentDataType.INTEGER),
     MANA_BAR_ACTIVE_TIMER(PersistentDataType.INTEGER),
     MANA_BAR_MESSAGE_TIMER(PersistentDataType.INTEGER),
-    SWAP_SLOT(PersistentDataType.INTEGER),
+    SWAP_SLOT(PersistentDataType.INTEGER, -1),
     SWAP_DOUBLESHIFT_WINDOW(PersistentDataType.BYTE),
     SWAP_WINDOW(PersistentDataType.BYTE),
     SWAP_COOLDOWN(PersistentDataType.INTEGER),

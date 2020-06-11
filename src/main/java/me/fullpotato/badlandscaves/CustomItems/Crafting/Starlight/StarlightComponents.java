@@ -1,6 +1,7 @@
-package me.fullpotato.badlandscaves.CustomItems.Crafting;
+package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
@@ -103,6 +104,19 @@ public class StarlightComponents extends MatchCrafting implements Listener {
 
         recipe.setIngredient('#', Material.REDSTONE);
         recipe.setIngredient('@', Material.DIAMOND);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
+    public void craftPhotonEmitter() {
+        ItemStack photonEmitter = CustomItem.PHOTON_EMITTER.getItem();
+
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "photon_emitter"), photonEmitter);
+        recipe.shape("#-#", "#@#", "#*#");
+        recipe.setIngredient('#', Material.COMMAND_BLOCK);
+        recipe.setIngredient('-', Material.ENDER_PEARL);
+        recipe.setIngredient('@', Material.COMMAND_BLOCK);
+        recipe.setIngredient('*', Material.STRUCTURE_BLOCK);
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -244,6 +258,47 @@ public class StarlightComponents extends MatchCrafting implements Listener {
             }
             if (matches) {
                 if (!isMatching(matrix, starlight_battery, 7)) {
+                    matches = false;
+                }
+            }
+        }
+
+        if (!matches) {
+            event.getInventory().setResult(null);
+        }
+    }
+
+    @EventHandler
+    public void craftPhotonEmitter (PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack photonEmitter = CustomItem.PHOTON_EMITTER.getItem();
+        if (!result.isSimilar(photonEmitter)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
+
+        final ItemStack[] matrix = event.getInventory().getMatrix();
+        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
+        final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
+
+        boolean matches = true;
+        if (!isMatching(matrix, starlight_module) || !isMatching(matrix, nether_star_fragment, 4)) {
+            matches = false;
+        }
+
+        if (matches) {
+            final int[] titaniumSlots = {0, 2, 3, 5, 6, 8};
+
+            for (int slot : titaniumSlots) {
+                if (!matrix[slot].isSimilar(titanium_ingot)) {
                     matches = false;
                 }
             }

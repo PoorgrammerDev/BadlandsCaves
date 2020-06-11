@@ -35,7 +35,7 @@ public class ManaRegen extends BukkitRunnable {
             }
 
             boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
-            double mana_regen_var = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("options.pre_hardmode_values.mana_regen_var");
+            double thirst_penalty = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("options.pre_hardmode_values.mana_regen_var");
             double thirst_sys_var = (double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player);
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
 
@@ -56,24 +56,28 @@ public class ManaRegen extends BukkitRunnable {
                 }
             }
 
-            double mana_regen;
+            double mana_regen_per_second;
 
             if (thirst > 70) {
-                mana_regen = 1;
+                mana_regen_per_second = 1;
             }
             else if (thirst > 50) {
-                mana_regen = 0.5;
-                mana_regen_var *= 0.5;
+                mana_regen_per_second = 0.5;
+                thirst_penalty *= 0.5;
             }
             else {
-                mana_regen = 0.25;
-                mana_regen_var *= 0.25;
+                mana_regen_per_second = 0.25;
+                thirst_penalty *= 0.25;
             }
 
-            if (in_descension != 2) thirst_sys_var += mana_regen_var;
-            if (fullSetVoidmatter) mana_regen *= 2;
+            if (fullSetVoidmatter) mana_regen_per_second *= 2;
+            mana_regen_per_second /= 20.0;
+            thirst_penalty /= 20.0;
 
-            PlayerScore.MANA.setScore(plugin, player, Math.min(Mana + mana_regen, max_mana));
+
+            if (in_descension != 2) thirst_sys_var += thirst_penalty;
+
+            PlayerScore.MANA.setScore(plugin, player, Math.min(Mana + mana_regen_per_second, max_mana));
             PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, thirst_sys_var);
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         }

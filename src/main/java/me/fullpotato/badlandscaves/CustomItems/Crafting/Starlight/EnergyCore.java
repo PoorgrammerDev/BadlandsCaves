@@ -1,6 +1,7 @@
-package me.fullpotato.badlandscaves.CustomItems.Crafting;
+package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;

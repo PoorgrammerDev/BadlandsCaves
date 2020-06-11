@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class TitaniumBar extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public TitaniumBar(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -22,6 +22,17 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "titanium_ingot"), bar);
 
         recipe.shape("##", "##");
+        recipe.setIngredient('#', Material.COMMAND_BLOCK);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
+    public void craftTitaniumRod() {
+        final ItemStack rod = CustomItem.TITANIUM_ROD.getItem();
+        rod.setAmount(4);
+
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "titanium_rod"), rod);
+        recipe.shape("#", "#");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
 
         plugin.getServer().addRecipe(recipe);
@@ -38,6 +49,21 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack fragment = CustomItem.TITANIUM_FRAGMENT.getItem();
         if (!isMatching(matrix, fragment)) {
+            event.getInventory().setResult(null);
+        }
+    }
+
+    @EventHandler
+    public void craftRod (PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack rod = CustomItem.TITANIUM_ROD.getItem();
+        if (!result.isSimilar(rod)) return;
+
+        final ItemStack[] matrix = event.getInventory().getMatrix();
+        final ItemStack bar = CustomItem.TITANIUM_INGOT.getItem();
+        if (!isMatching(matrix, bar)) {
             event.getInventory().setResult(null);
         }
     }

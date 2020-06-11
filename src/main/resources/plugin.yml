@@ -1,4 +1,5 @@
 name: BadlandsCaves
+author: FullPotato
 version: ${project.version}
 main: me.fullpotato.badlandscaves.BadlandsCaves
 api-version: 1.13
