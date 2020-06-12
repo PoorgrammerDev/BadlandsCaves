@@ -1019,16 +1019,34 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOIDMATTER)) {
             ItemStack voidmatter = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta voidmatter_meta = voidmatter.getItemMeta();
-            voidmatter_meta.setDisplayName("§8Voidmatter");
+            voidmatter_meta.setDisplayName("§5Voidmatter");
             voidmatter_meta.setCustomModelData(158);
             voidmatter.setItemMeta(voidmatter_meta);
 
             return voidmatter;
         }
+        else if (item.equals(CustomItem.VOIDMATTER_STICK)) {
+            ItemStack voidmatter_stick = new ItemStack(Material.STRUCTURE_BLOCK);
+            ItemMeta meta = voidmatter_stick.getItemMeta();
+            meta.setDisplayName("§5Void Stick");
+            meta.setCustomModelData(173);
+            voidmatter_stick.setItemMeta(meta);
+
+            return voidmatter_stick;
+        }
+        else if (item.equals(CustomItem.VOIDMATTER_STRING)) {
+            ItemStack string = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta meta = string.getItemMeta();
+            meta.setDisplayName("§5Void String");
+            meta.setCustomModelData(174);
+            string.setItemMeta(meta);
+
+            return string;
+        }
         else if (item.equals(CustomItem.VOIDMATTER_HELMET)) {
             ItemStack voidmatter_helmet = new ItemStack(Material.DIAMOND_HELMET);
             ItemMeta voidmatter_helmet_meta = voidmatter_helmet.getItemMeta();
-            voidmatter_helmet_meta.setDisplayName("§8Voidmatter Helmet");
+            voidmatter_helmet_meta.setDisplayName("§5Void Mask");
 
             ArrayList<String> voidmatter_helmet_lore = new ArrayList<>();
             voidmatter_helmet_lore.add("§7Set Effect: 2x Mana Regeneration");
@@ -1048,7 +1066,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOIDMATTER_CHESTPLATE)) {
             ItemStack voidmatter_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
             ItemMeta voidmatter_chestplate_meta = voidmatter_chestplate.getItemMeta();
-            voidmatter_chestplate_meta.setDisplayName("§8Voidmatter Chestplate");
+            voidmatter_chestplate_meta.setDisplayName("§5Void Tunic");
 
             ArrayList<String> voidmatter_chesplate_lore = new ArrayList<>();
             voidmatter_chesplate_lore.add("§7Set Effect: 2x Mana Regeneration");
@@ -1068,7 +1086,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOIDMATTER_LEGGINGS)) {
             ItemStack voidmatter_leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
             ItemMeta voidmatter_leggings_meta = voidmatter_leggings.getItemMeta();
-            voidmatter_leggings_meta.setDisplayName("§8Voidmatter Leggings");
+            voidmatter_leggings_meta.setDisplayName("§5Void Slacks");
 
             ArrayList<String> voidmatter_leggings_lore = new ArrayList<>();
             voidmatter_leggings_lore.add("§7Set Effect: 2x Mana Regeneration");
@@ -1088,7 +1106,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOIDMATTER_BOOTS)) {
             ItemStack voidmatter_boots = new ItemStack(Material.DIAMOND_BOOTS);
             ItemMeta voidmatter_boots_meta = voidmatter_boots.getItemMeta();
-            voidmatter_boots_meta.setDisplayName("§8Voidmatter Boots");
+            voidmatter_boots_meta.setDisplayName("§5Void Boots");
 
             ArrayList<String> voidmatter_boots_lore = new ArrayList<>();
             voidmatter_boots_lore.add("§7Set Effect: 2x Mana Regeneration");
@@ -1105,6 +1123,94 @@ public class LoadCustomItems {
             voidmatter_boots.setItemMeta((ItemMeta) repairable);
             return voidmatter_boots;
         }
+        else if (item.equals(CustomItem.VOIDMATTER_BLADE)) {
+            ItemStack blade = new ItemStack(Material.DIAMOND_SWORD);
+            ItemMeta meta = blade.getItemMeta();
+
+            meta.setDisplayName("§5Void Blade");
+            meta.setCustomModelData(168);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_blade"), PersistentDataType.BYTE, (byte) 1);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+            meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) meta;
+            repairable.setRepairCost(999999);
+
+            blade.setItemMeta((ItemMeta) repairable);
+            return blade;
+        }
+
+        else if (item.equals(CustomItem.VOIDMATTER_BOW)) {
+            ItemStack bow = new ItemStack(Material.BOW);
+            ItemMeta meta = bow.getItemMeta();
+
+            meta.setDisplayName("§5Void Bow");
+            meta.setCustomModelData(169);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_bow"), PersistentDataType.BYTE, (byte) 1);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
+            meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) meta;
+            repairable.setRepairCost(999999);
+
+            bow.setItemMeta((ItemMeta) repairable);
+            return bow;
+        }
+
+        else if (item.equals(CustomItem.VOIDMATTER_PICKAXE)) {
+            ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
+            ItemMeta meta = pickaxe.getItemMeta();
+
+            meta.setDisplayName("§5Void Pickaxe");
+            meta.setCustomModelData(170);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_pickaxe"), PersistentDataType.BYTE, (byte) 1);
+            meta.addEnchant(Enchantment.DIG_SPEED, 5, true);
+            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 3, true);
+            meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) meta;
+            repairable.setRepairCost(999999);
+
+            pickaxe.setItemMeta((ItemMeta) repairable);
+            return pickaxe;
+        }
+
+        else if (item.equals(CustomItem.VOIDMATTER_SHOVEL)) {
+            ItemStack shovel = new ItemStack(Material.DIAMOND_SHOVEL);
+            ItemMeta meta = shovel.getItemMeta();
+
+            meta.setDisplayName("§5Void Shovel");
+            meta.setCustomModelData(171);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_shovel"), PersistentDataType.BYTE, (byte) 1);
+            meta.addEnchant(Enchantment.DIG_SPEED, 5, true);
+            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 3, true);
+            meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) meta;
+            repairable.setRepairCost(999999);
+
+            shovel.setItemMeta((ItemMeta) repairable);
+            return shovel;
+        }
+
+        else if (item.equals(CustomItem.VOIDMATTER_AXE)) {
+            ItemStack axe = new ItemStack(Material.DIAMOND_AXE);
+            ItemMeta meta = axe.getItemMeta();
+
+            meta.setDisplayName("§5Void Axe");
+            meta.setCustomModelData(172);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_axe"), PersistentDataType.BYTE, (byte) 1);
+            meta.addEnchant(Enchantment.DIG_SPEED, 5, true);
+            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 3, true);
+            meta.addEnchant(Enchantment.DURABILITY, 10, true);
+
+            Repairable repairable = (Repairable) meta;
+            repairable.setRepairCost(999999);
+
+            axe.setItemMeta((ItemMeta) repairable);
+            return axe;
+        }
+
 
         return null;
     }

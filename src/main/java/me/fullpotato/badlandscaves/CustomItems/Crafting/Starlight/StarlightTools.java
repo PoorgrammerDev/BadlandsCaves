@@ -46,6 +46,18 @@ public class StarlightTools extends MatchCrafting implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
+    public void paxelRecipe() {
+        final ItemStack paxel = CustomItem.STARLIGHT_PAXEL.getItem();
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_paxel"), paxel);
+        recipe.shape("#@#", "#| ", " | ");
+
+        recipe.setIngredient('#', Material.COMMAND_BLOCK);
+        recipe.setIngredient('@', Material.STRUCTURE_BLOCK);
+        recipe.setIngredient('|', Material.COMMAND_BLOCK);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
     @EventHandler
     public void craftSaber(PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
@@ -93,6 +105,32 @@ public class StarlightTools extends MatchCrafting implements Listener {
         final ItemStack photon_emitter = CustomItem.PHOTON_EMITTER.getItem();
 
         if (!isMatching(matrix, photon_emitter) || !isMatching(matrix, titanium_ingot)) {
+            event.getInventory().setResult(null);
+        }
+    }
+
+    @EventHandler
+    public void craftPaxel(PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack paxel = CustomItem.STARLIGHT_PAXEL.getItem();
+        if (!result.isSimilar(paxel)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
+
+        final ItemStack[] matrix = event.getInventory().getMatrix();
+        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack titanium_rod = CustomItem.TITANIUM_ROD.getItem();
+        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
+
+        if (!isMatching(matrix, starlight_module) || !isMatching(matrix, titanium_ingot, 0) || !isMatching(matrix, titanium_ingot, 2) || !isMatching(matrix, titanium_ingot, 3) || !isMatching(matrix, titanium_rod, 4) || !isMatching(matrix, titanium_rod, 7)) {
             event.getInventory().setResult(null);
         }
     }

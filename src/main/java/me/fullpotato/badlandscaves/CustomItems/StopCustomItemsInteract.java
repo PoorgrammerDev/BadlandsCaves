@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -24,6 +25,11 @@ public class StopCustomItemsInteract implements Listener {
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack item = event.getItem();
             if (item != null) {
+                if (item.getType().equals(Material.KNOWLEDGE_BOOK)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 for (CustomItem customItem : CustomItem.values()) {
                     if (item.isSimilar(customItem.getItem()) && customItem.getPreventUse()) {
                         event.setCancelled(true);

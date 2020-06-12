@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems.Using;
 
-import me.fullpotato.badlandscaves.CustomItems.Crafting.Voltshock;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voltshock;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class UseVoltshock implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public UseVoltshock(BadlandsCaves plugin) {
         this.plugin = plugin;

@@ -73,6 +73,8 @@ public enum CustomItem {
     ENERGY_CORE(true),
     STARLIGHT_CHARGE_PLACEHOLDER(true),
     VOIDMATTER(true),
+    VOIDMATTER_STICK(true),
+    VOIDMATTER_STRING(true),
     VOIDMATTER_HELMET(false),
     VOIDMATTER_CHESTPLATE(false),
     VOIDMATTER_LEGGINGS(false),

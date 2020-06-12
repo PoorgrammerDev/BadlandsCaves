@@ -20,7 +20,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class CustomBows implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public CustomBows(BadlandsCaves plugin) {
         this.plugin = plugin;

@@ -82,12 +82,40 @@ public class CraftingGuide implements Listener {
 
             CustomItem.TITANIUM_FRAGMENT.toString(),
             CustomItem.TITANIUM_INGOT.toString(),
+            CustomItem.TITANIUM_ROD.toString(),
+
             CustomItem.BINDING.toString(),
             CustomItem.GOLDEN_CABLE.toString(),
             CustomItem.NETHER_STAR_FRAGMENT.toString(),
             CustomItem.STARLIGHT_CIRCUIT.toString(),
             CustomItem.STARLIGHT_BATTERY.toString(),
             CustomItem.STARLIGHT_MODULE.toString(),
+            CustomItem.PHOTON_EMITTER.toString(),
+
+            CustomItem.STARLIGHT_HELMET.toString(),
+            CustomItem.STARLIGHT_CHESTPLATE.toString(),
+            CustomItem.STARLIGHT_LEGGINGS.toString(),
+            CustomItem.STARLIGHT_BOOTS.toString(),
+            CustomItem.STARLIGHT_SABER.toString(),
+            CustomItem.STARLIGHT_BLASTER.toString(),
+            CustomItem.STARLIGHT_PAXEL.toString(),
+
+            CustomItem.ENERGIUM.toString(),
+            CustomItem.ENERGY_CORE.toString(),
+            CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.toString(),
+
+            CustomItem.VOIDMATTER.toString(),
+            CustomItem.VOIDMATTER_STICK.toString(),
+            CustomItem.VOIDMATTER_STRING.toString(),
+            CustomItem.VOIDMATTER_HELMET.toString(),
+            CustomItem.VOIDMATTER_CHESTPLATE.toString(),
+            CustomItem.VOIDMATTER_LEGGINGS.toString(),
+            CustomItem.VOIDMATTER_BOOTS.toString(),
+            CustomItem.VOIDMATTER_BLADE.toString(),
+            CustomItem.VOIDMATTER_BOW.toString(),
+            CustomItem.VOIDMATTER_PICKAXE.toString(),
+            CustomItem.VOIDMATTER_SHOVEL.toString(),
+            CustomItem.VOIDMATTER_AXE.toString(),
     };
 
     private final HashMap<ItemStack, ItemStack[]> craftingRecipes = new HashMap<>();
@@ -862,6 +890,265 @@ public class CraftingGuide implements Listener {
                 CustomItem.TITANIUM_INGOT.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_MODULE.getItem(), starlight_module_recipe);
+
+        ItemStack[] titanium_rod_recipe = {
+                CustomItem.TITANIUM_ROD.getItem(),
+                null,
+                null,
+                CustomItem.TITANIUM_ROD.getItem(),
+        };
+        recipes.put(CustomItem.TITANIUM_ROD.getItem(), titanium_rod_recipe);
+
+
+        ItemStack[] photon_emitter_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                new ItemStack(Material.ENDER_PEARL),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.PHOTON_EMITTER.getItem(), photon_emitter_recipe);
+
+
+        ItemStack[] energium_recipe = {
+                new ItemStack(Material.REDSTONE),
+                new ItemStack(Material.DIAMOND),
+                new ItemStack(Material.REDSTONE),
+                new ItemStack(Material.DIAMOND),
+        };
+        recipes.put(CustomItem.ENERGIUM.getItem(), energium_recipe);
+
+        ItemStack[] energy_core_recipe = {
+               CustomItem.ENERGIUM.getItem(),
+                new ItemStack(Material.EXPERIENCE_BOTTLE),
+        };
+        recipes.put(CustomItem.ENERGY_CORE.getItem(), energy_core_recipe);
+
+
+        ItemStack[] starlight_helmet_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_HELMET.getItem(), starlight_helmet_recipe);
+
+
+        ItemStack[] starlight_chestplate_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_CHESTPLATE.getItem(), starlight_chestplate_recipe);
+
+
+        ItemStack[] starlight_leggings_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_LEGGINGS.getItem(), starlight_leggings_recipe);
+
+
+        ItemStack[] starlight_boots_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_BOOTS.getItem(), starlight_boots_recipe);
+
+
+        ItemStack[] starlight_saber_recipe = {
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                CustomItem.PHOTON_EMITTER.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                null,
+                null,
+                CustomItem.TITANIUM_ROD.getItem(),
+                null,
+        };
+        recipes.put(CustomItem.STARLIGHT_SABER.getItem(), starlight_saber_recipe);
+
+
+        ItemStack[] starlight_blaster_recipe = {
+                new ItemStack(Material.REDSTONE),
+                new ItemStack(Material.REDSTONE),
+                CustomItem.PHOTON_EMITTER.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                new ItemStack(Material.COMPARATOR),
+                null,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_BLASTER.getItem(), starlight_blaster_recipe);
+
+
+        ItemStack[] starlight_paxel_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.PHOTON_EMITTER.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_ROD.getItem(),
+                null,
+                null,
+                CustomItem.TITANIUM_ROD.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_PAXEL.getItem(), starlight_paxel_recipe);
+
+        ItemStack starlight_icon = CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem();
+        ItemMeta starlight_icon_meta = starlight_icon.getItemMeta();
+        starlight_icon_meta.setDisplayName("§eAny Starlight Armor / Tool");
+        starlight_icon.setItemMeta(starlight_icon_meta);
+
+        ItemStack[] starlight_charge_placeholder_recipe = {
+                CustomItem.ENERGY_CORE.getItem(),
+                starlight_icon,
+        };
+        recipes.put(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem(), starlight_charge_placeholder_recipe);
+
+        ItemStack[] voidmatter_stick_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_STICK.getItem(), voidmatter_stick_recipe);
+
+        ItemStack[] voidmatter_string_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_STRING.getItem(), voidmatter_string_recipe);
+
+        ItemStack[] voidmatter_helmet_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_HELMET.getItem(), voidmatter_helmet_recipe);
+
+        ItemStack[] voidmatter_chestplate_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_CHESTPLATE.getItem(), voidmatter_chestplate_recipe);
+
+        ItemStack[] voidmatter_leggings_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_LEGGINGS.getItem(), voidmatter_leggings_recipe);
+
+        ItemStack[] voidmatter_boots_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_BOOTS.getItem(), voidmatter_boots_recipe);
+
+        ItemStack[] voidmatter_blade_recipe = {
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_BLADE.getItem(), voidmatter_blade_recipe);
+
+        ItemStack[] voidmatter_bow_recipe = {
+                CustomItem.VOIDMATTER_STRING.getItem(),
+                CustomItem.VOIDMATTER_STICK.getItem(),
+                null,
+                CustomItem.VOIDMATTER_STRING.getItem(),
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+                null,
+                CustomItem.VOIDMATTER_STRING.getItem(),
+                CustomItem.VOIDMATTER_STICK.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_BOW.getItem(), voidmatter_bow_recipe);
+
+        ItemStack[] voidmatter_pickaxe_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_PICKAXE.getItem(), voidmatter_pickaxe_recipe);
+
+        ItemStack[] voidmatter_shovel_recipe = {
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_SHOVEL.getItem(), voidmatter_shovel_recipe);
+
+        ItemStack[] voidmatter_axe_recipe = {
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                null,
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.VOIDMATTER_STICK.getItem(),
+                null,
+                null,
+                CustomItem.VOIDMATTER_STICK.getItem(),
+        };
+        recipes.put(CustomItem.VOIDMATTER_AXE.getItem(), voidmatter_axe_recipe);
     }
 
     public void fillCauldronRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
@@ -1060,6 +1347,15 @@ public class CraftingGuide implements Listener {
         forever_fish_meta.setLore(forever_fish_lore);
         forever_fish_desc.setItemMeta(forever_fish_meta);
         descs.put(CustomItem.FOREVER_FISH.getItem(), forever_fish_desc);
+
+        ItemStack voidmatter_desc = new ItemStack(Material.ENDER_PEARL);
+        ItemMeta voidmatter_meta = voidmatter_desc.getItemMeta();
+        voidmatter_meta.setDisplayName("§eExtraterrestrial Loot");
+        ArrayList<String> voidmatter_lore = new ArrayList<>();
+        voidmatter_lore.add("§7This item is obtained by raiding other planets.");
+        voidmatter_meta.setLore(voidmatter_lore);
+        voidmatter_desc.setItemMeta(voidmatter_meta);
+        descs.put(CustomItem.VOIDMATTER.getItem(), voidmatter_desc);
 
     }
 }

@@ -70,24 +70,22 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
         else {
             //no marker
             BlockIterator iter = new BlockIterator(player, place_range);
-            Block lastLastBlock = null;
+            Location lastLastBlockLoc = null;
             Block lastBlock = iter.next();
+            Location lastBlockLocation = lastBlock.getLocation().add(0.5, 0.5, 0.5);
 
             while (iter.hasNext()) {
-                lastLastBlock = lastBlock;
+                lastLastBlockLoc = lastBlockLocation;
+                lastBlockLocation = lastBlock.getLocation().add(0.5, 0.5, 0.5);
                 lastBlock = iter.next();
-                if (lastBlock.getType().isSolid() || !LineOfSight.hasLineOfSight(player, lastBlock.getLocation()) || !lastBlock.getLocation().getWorld().getWorldBorder().isInside(lastBlock.getLocation())) {
+                if (lastBlock.getType().isSolid() || !LineOfSight.hasLineOfSight(player, lastBlockLocation) || !lastBlockLocation.getWorld().getWorldBorder().isInside(lastBlockLocation)) {
                     break;
                 }
             }
 
-            assert lastLastBlock != null;
-            Location location = lastLastBlock.getLocation();
+            assert lastLastBlockLoc != null;
+            Location location = lastLastBlockLoc.clone();
             if (LineOfSight.hasLineOfSight(player, location)) {
-                location.setX(location.getX() + 0.5);
-                //location.setY(location.getY() + 0.5);
-                location.setZ(location.getZ() + 0.5);
-
                 scoutingParticle(location);
             }
         }

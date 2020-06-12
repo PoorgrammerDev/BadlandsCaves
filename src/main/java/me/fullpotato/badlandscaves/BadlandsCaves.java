@@ -98,6 +98,10 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
+
+        PlanetTestWorld planettest = new PlanetTestWorld(this);
+        planettest.generate();
+
     }
 
     //EVENTS
@@ -177,7 +181,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new UseForeverFish(),
                 new StarlightArmor(this),
                 new EnergyCore(this),
-                new VoidmatterArmor(this),
+                new Voidmatter(this),
                 new StarlightTools(this),
                 new StarlightCharge(this),
                 new StarlightBlasterMechanism(this),
@@ -331,15 +335,23 @@ public final class BadlandsCaves extends JavaPlugin {
         StarlightTools starlightTools = new StarlightTools(this);
         starlightTools.saberRecipe();
         starlightTools.blasterRecipe();
+        starlightTools.paxelRecipe();
 
         EnergyCore energyCore = new EnergyCore(this);
         energyCore.energyCoreRecipe();
 
-        VoidmatterArmor voidmatterArmor = new VoidmatterArmor(this);
-        voidmatterArmor.helmetRecipe();
-        voidmatterArmor.chestplateRecipe();
-        voidmatterArmor.leggingsRecipe();
-        voidmatterArmor.bootsRecipe();
+        Voidmatter voidmatter = new Voidmatter(this);
+        voidmatter.stickRecipe();
+        voidmatter.stringRecipe();
+        voidmatter.helmetRecipe();
+        voidmatter.chestplateRecipe();
+        voidmatter.leggingsRecipe();
+        voidmatter.bootsRecipe();
+        voidmatter.bladeRecipe();
+        voidmatter.bowRecipe();
+        voidmatter.pickaxeRecipe();
+        voidmatter.shovelRecipe();
+        voidmatter.axeRecipe();
     }
 
     public void loadWorldNames() {

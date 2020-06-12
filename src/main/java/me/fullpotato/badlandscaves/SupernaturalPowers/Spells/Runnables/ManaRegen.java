@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.CustomItems.Crafting.VoidmatterArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
@@ -44,7 +44,7 @@ public class ManaRegen extends BukkitRunnable {
                 EntityEquipment equipment = player.getEquipment();
                 if (equipment != null) {
                     final ItemStack[] armorPieces = equipment.getArmorContents();
-                    final VoidmatterArmor voidmatterArmor = new VoidmatterArmor(plugin);
+                    final Voidmatter voidmatterArmor = new Voidmatter(plugin);
                     fullSetVoidmatter = true;
 
                     for (ItemStack armor : armorPieces) {
