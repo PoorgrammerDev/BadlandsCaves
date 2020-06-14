@@ -13,6 +13,8 @@ import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMec
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
+import me.fullpotato.badlandscaves.Extraterrestrial.GravityFallDamage;
+import me.fullpotato.badlandscaves.Extraterrestrial.GravityRunnable;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.Loot.GetFishingCrate;
@@ -40,6 +42,7 @@ import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,6 +56,7 @@ public final class BadlandsCaves extends JavaPlugin {
     public String reflectionWorldName;
     public String backroomsWorldName;
     public String chambersWorldName;
+    public String planetPrefixName;
 
     @Override
     public void onEnable() {
@@ -99,8 +103,7 @@ public final class BadlandsCaves extends JavaPlugin {
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
 
-        PlanetTestWorld planettest = new PlanetTestWorld(this);
-        planettest.generate();
+        //PlanetTestWorld planettest = new PlanetTestWorld(this);
 
     }
 
@@ -185,6 +188,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightTools(this),
                 new StarlightCharge(this),
                 new StarlightBlasterMechanism(this),
+                new GravityFallDamage(this),
         };
 
         for (Listener event : events) {
@@ -254,6 +258,8 @@ public final class BadlandsCaves extends JavaPlugin {
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();
         witherFight.portalDestroyTimer();
+
+        planetGravities();
     }
 
     //RECIPES
@@ -368,5 +374,14 @@ public final class BadlandsCaves extends JavaPlugin {
         this.reflectionWorldName = this.mainWorldName + "_reflection";
         this.backroomsWorldName = this.mainWorldName + "_backrooms";
         this.chambersWorldName = this.mainWorldName + "_chambers";
+        this.planetPrefixName = this.mainWorldName + "_planet_";
+    }
+
+    public void planetGravities () {
+        for (World world : this.getServer().getWorlds()) {
+            if (world.getName().startsWith(this.planetPrefixName)) {
+                new GravityRunnable(this, world).runTaskTimerAsynchronously(this, 0, 0);
+            }
+        }
     }
 }
