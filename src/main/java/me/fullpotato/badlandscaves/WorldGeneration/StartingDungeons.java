@@ -45,7 +45,7 @@ public class StartingDungeons {
                     else {
                         if (ran[0] <= dungeons_spawned) {
                             dungeonGenerator.getNewLocation(world.getSpawnLocation(), random, 1000);
-                            dungeonGenerator.makeDungeon(mobTypes[random.nextInt(mobTypes.length)], random, true);
+                            dungeonGenerator.makeDungeon(mobTypes[random.nextInt(mobTypes.length)], random, true, true);
                             ran[0]++;
                         }
                     }

@@ -1,10 +1,11 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.StructureCopier;
 import org.bukkit.*;
 
 public class HallowedChambersWorld {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public HallowedChambersWorld(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -33,5 +34,7 @@ public class HallowedChambersWorld {
         world.setDifficulty(Difficulty.HARD);
 
         PreventDragon.preventDragonSpawn(world);
+
+        StructureCopier.copyStructures(plugin.getServer().getWorld(plugin.mainWorldName), world, "chambers");
     }
 }

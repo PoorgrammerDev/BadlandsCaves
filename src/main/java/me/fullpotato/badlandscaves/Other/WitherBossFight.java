@@ -3,15 +3,15 @@ package me.fullpotato.badlandscaves.Other;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
+import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
+import me.fullpotato.badlandscaves.Util.StructureTrack;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.ShulkerBox;
-import org.bukkit.block.Structure;
-import org.bukkit.block.structure.UsageMode;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -28,11 +28,9 @@ import org.bukkit.loot.LootTables;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class WitherBossFight implements Listener {
@@ -127,94 +125,64 @@ public class WitherBossFight implements Listener {
 
     }
 
-    public void spawnInStructure (HashMap<Location, String> structure_blocks) {
-        boolean initialSpawn = structure_blocks == null;
+    public void spawnInStructure (StructureTrack[] structures) {
+        boolean initialSpawn = structures == null || structures.length <= 0;
         if (initialSpawn && plugin.getConfig().getBoolean("system.chambers_spawned")) return;
 
         if (initialSpawn) {
-            structure_blocks = new HashMap<>();
-            structure_blocks.put(new Location(world, 17, 120, -18), "badlandscaves:chambers_entrance_lobby -32 -5 1");
-            structure_blocks.put(new Location(world, -15, 113, -19), "badlandscaves:chambers_intersection -31 1 2");
-            structure_blocks.put(new Location(world, -22, 133, 22), "badlandscaves:chambers_magma_hallway -5 -6 -7");
-            structure_blocks.put(new Location(world, -8, 126, 21), "badlandscaves:chambers_magma_maze -32 1 1");
-            structure_blocks.put(new Location(world, -46, 134, 16), "badlandscaves:chambers_glowstone_maze -31 -7 -31");
-            structure_blocks.put(new Location(world, -28, 133, -22), "badlandscaves:chambers_soulsand_hallway 1 -6 1");
-            structure_blocks.put(new Location(world, -41, 134, -21), "badlandscaves:chambers_soulsand_maze 1 -7 -31");
-            structure_blocks.put(new Location(world, -25, 160, 0), "badlandscaves:chambers_keyholder_platform -2 -32 -2");
-            structure_blocks.put(new Location(world, -5, 159, 1), "badlandscaves:chambers_start_barrier 0 -31 -2");
-            structure_blocks.put(new Location(world, -22, 113, -3), "badlandscaves:chambers_tunnel_1 -5 -31 1");
-            structure_blocks.put(new Location(world, -22, 81, -3), "badlandscaves:chambers_tunnel_2 -5 -31 1");
-            structure_blocks.put(new Location(world, -22, 49, -3), "badlandscaves:chambers_tunnel_3 -5 -31 1");
-            structure_blocks.put(new Location(world, -22, 17, -3), "badlandscaves:chambers_tunnel_4 -5 -17 1");
-            structure_blocks.put(new Location(world, 250, 246, -50), "badlandscaves:chambers_boss_stage_1a 0 -32 0");
-            structure_blocks.put(new Location(world, 250, 246, -18), "badlandscaves:chambers_boss_stage_2a 0 -32 0");
-            structure_blocks.put(new Location(world, 250, 246, 14), "badlandscaves:chambers_boss_stage_3a 0 -32 0");
-            structure_blocks.put(new Location(world, 250, 246, 46), "badlandscaves:chambers_boss_stage_4a 0 -32 0");
-            structure_blocks.put(new Location(world, 282, 246, -50), "badlandscaves:chambers_boss_stage_5a 0 -32 0");
-            structure_blocks.put(new Location(world, 282, 246, -18), "badlandscaves:chambers_boss_stage_6a 0 -32 0");
-            structure_blocks.put(new Location(world, 282, 246, 14), "badlandscaves:chambers_boss_stage_7a 0 -32 0");
-            structure_blocks.put(new Location(world, 282, 246, 46), "badlandscaves:chambers_boss_stage_8a 0 -32 0");
-            structure_blocks.put(new Location(world, 314, 246, -50), "badlandscaves:chambers_boss_stage_9a 0 -32 0");
-            structure_blocks.put(new Location(world, 314, 246, -18), "badlandscaves:chambers_boss_stage_10a 0 -32 0");
-            structure_blocks.put(new Location(world, 314, 246, 14), "badlandscaves:chambers_boss_stage_11a 0 -32 0");
-            structure_blocks.put(new Location(world, 314, 246, 46), "badlandscaves:chambers_boss_stage_12a 0 -32 0");
-            structure_blocks.put(new Location(world, 346, 246, -50), "badlandscaves:chambers_boss_stage_13a 0 -32 0");
-            structure_blocks.put(new Location(world, 346, 246, -18), "badlandscaves:chambers_boss_stage_14a 0 -32 0");
-            structure_blocks.put(new Location(world, 346, 246, 14), "badlandscaves:chambers_boss_stage_15a 0 -32 0");
-            structure_blocks.put(new Location(world, 346, 246, 46), "badlandscaves:chambers_boss_stage_16a 0 -32 0");
-            structure_blocks.put(new Location(world, 250, 181, -50), "badlandscaves:chambers_boss_stage_1b 0 1 0");
-            structure_blocks.put(new Location(world, 250, 181, -18), "badlandscaves:chambers_boss_stage_2b 0 1 0");
-            structure_blocks.put(new Location(world, 250, 181, 14), "badlandscaves:chambers_boss_stage_3b 0 1 0");
-            structure_blocks.put(new Location(world, 250, 181, 46), "badlandscaves:chambers_boss_stage_4b 0 1 0");
-            structure_blocks.put(new Location(world, 282, 181, -50), "badlandscaves:chambers_boss_stage_5b 0 1 0");
-            structure_blocks.put(new Location(world, 282, 181, -18), "badlandscaves:chambers_boss_stage_6b 0 1 0");
-            structure_blocks.put(new Location(world, 282, 181, 14), "badlandscaves:chambers_boss_stage_7b 0 1 0");
-            structure_blocks.put(new Location(world, 282, 181, 46), "badlandscaves:chambers_boss_stage_8b 0 1 0");
-            structure_blocks.put(new Location(world, 314, 181, -50), "badlandscaves:chambers_boss_stage_9b 0 1 0");
-            structure_blocks.put(new Location(world, 314, 181, -18), "badlandscaves:chambers_boss_stage_10b 0 1 0");
-            structure_blocks.put(new Location(world, 314, 181, 14), "badlandscaves:chambers_boss_stage_11b 0 1 0");
-            structure_blocks.put(new Location(world, 314, 181, 46), "badlandscaves:chambers_boss_stage_12b 0 1 0");
-            structure_blocks.put(new Location(world, 346, 181, -50), "badlandscaves:chambers_boss_stage_13b 0 1 0");
-            structure_blocks.put(new Location(world, 346, 181, -18), "badlandscaves:chambers_boss_stage_14b 0 1 0");
-            structure_blocks.put(new Location(world, 346, 181, 14), "badlandscaves:chambers_boss_stage_15b 0 1 0");
-            structure_blocks.put(new Location(world, 346, 181, 46), "badlandscaves:chambers_boss_stage_16b 0 1 0");
-            structure_blocks.put(new Location(world, 303, 254, 3), "badlandscaves:chambers_wither_boss_stage_entry_tunnel -5 -8 -5");
+            structures = new StructureTrack[]{
+                    new StructureTrack(plugin, new Location(world, 17, 120, -18),0, 0, 0, -32, -5, 1, "badlandscaves:chambers_entrance_lobby", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -15, 113, -19),0, 0, 0, -31, 1, 2, "badlandscaves:chambers_intersection", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -22, 133, 22),0, 0, 0, -5, -6, -7, "badlandscaves:chambers_magma_hallway", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -8, 126, 21),0, 0, 0, -32, 1, 1, "badlandscaves:chambers_magma_maze", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -46, 134, 16),0, 0, 0, -31, -7, -31, "badlandscaves:chambers_glowstone_maze", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -28, 133, -22),0, 0, 0, 1, -6, 1, "badlandscaves:chambers_soulsand_hallway", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -41, 134, -21),0, 0, 0, 1, -7, -31, "badlandscaves:chambers_soulsand_maze", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -25, 160, 0),0, 0, 0, -2, -32, -2, "badlandscaves:chambers_keyholder_platform", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -5, 159, 1),0, 0, 0, 0, -31, -2, "badlandscaves:chambers_start_barrier", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -22, 113, -3),0, 0, 0, -5, -31, 1, "badlandscaves:chambers_tunnel_1", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -22, 81, -3),0, 0, 0, -5, -31, 1, "badlandscaves:chambers_tunnel_2", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -22, 49, -3),0, 0, 0, -5, -31, 1, "badlandscaves:chambers_tunnel_3", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, -22, 17, -3),0, 0, 0, -5, -17, 1, "badlandscaves:chambers_tunnel_4", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 246, -50),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_1a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 246, -18),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_2a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 246, 14),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_3a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 246, 46),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_4a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 246, -50),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_5a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 246, -18),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_6a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 246, 14),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_7a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 246, 46),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_8a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 246, -50),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_9a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 246, -18),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_10a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 246, 14),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_11a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 246, 46),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_12a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 246, -50),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_13a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 246, -18),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_14a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 246, 14),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_15a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 246, 46),0, 0, 0, 0, -32, 0, "badlandscaves:chambers_boss_stage_16a", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 181, -50),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_1b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 181, -18),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_2b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 181, 14),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_3b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 250, 181, 46),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_4b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 181, -50),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_5b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 181, -18),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_6b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 181, 14),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_7b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 282, 181, 46),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_8b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 181, -50),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_9b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 181, -18),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_10b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 181, 14),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_11b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 314, 181, 46),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_12b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 181, -50),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_13b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 181, -18),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_14b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 181, 14),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_15b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 346, 181, 46),0, 0, 0, 0, 1, 0, "badlandscaves:chambers_boss_stage_16b", BlockFace.UP),
+                    new StructureTrack(plugin, new Location(world, 303, 254, 3),0, 0, 0, -5, -8, -5, "badlandscaves:chambers_wither_boss_stage_entry_tunnel", BlockFace.UP),
+            };
         }
 
-        for (Location location : structure_blocks.keySet()) {
-            Block block = location.getBlock();
-            block.setType(Material.STRUCTURE_BLOCK);
 
-            String[] data = structure_blocks.get(location).split(" ");
-            int x_offset, y_offset, z_offset;
-            try {
-                x_offset = Integer.parseInt(data[1]);
-                y_offset = Integer.parseInt(data[2]);
-                z_offset = Integer.parseInt(data[3]);
-            }
-            catch (NumberFormatException e) {
-                return;
-            }
-
-            Structure structure_block = (Structure) block.getState();
-            structure_block.setUsageMode(UsageMode.LOAD);
-            structure_block.setStructureName(data[0]);
-            structure_block.setRelativePosition(new BlockVector(x_offset, y_offset, z_offset));
-            structure_block.update();
-
-            Location over = location.clone().add(0, 1, 0);
-            over.getBlock().setType(Material.REDSTONE_BLOCK);
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (over.getBlock().getType().equals(Material.REDSTONE_BLOCK)) {
-                        over.getBlock().setType(Material.AIR);
-                    }
-                    location.getBlock().setType(Material.AIR);
-                }
-            }.runTaskLater(plugin, 5);
-        }
+        MultiStructureLoader multiStructureLoader = new MultiStructureLoader(structures);
+        multiStructureLoader.loadAll();
 
         Random random = new Random();
         for (int x = -27; x <= -23; x++) {
@@ -244,14 +212,14 @@ public class WitherBossFight implements Listener {
     }
 
     public void regenMazesAndKeyHolders () {
-        HashMap<Location, String> structure_blocks = new HashMap<>();
-        structure_blocks.put(new Location(world, -8, 126, 21), "badlandscaves:chambers_magma_maze -32 1 1");
-        structure_blocks.put(new Location(world, -46, 134, 16), "badlandscaves:chambers_glowstone_maze -31 -7 -31");
-        structure_blocks.put(new Location(world, -41, 134, -21), "badlandscaves:chambers_soulsand_maze 1 -7 -31");
-        structure_blocks.put(new Location(world, -25, 160, 0), "badlandscaves:chambers_keyholder_platform -2 -32 -2");
-        structure_blocks.put(new Location(world, -5, 159, 1), "badlandscaves:chambers_start_barrier 0 -31 -2");
-
-        spawnInStructure(structure_blocks);
+        StructureTrack[] structures = {
+                new StructureTrack(plugin, new Location(world, -8, 126, 21), 0, 0, 0, -32, 1, 1, "badlandscaves:chambers_magma_maze", BlockFace.UP),
+                new StructureTrack(plugin, new Location(world, -46, 134, 16), 0, 0, 0, -31, -7, -31, "badlandscaves:chambers_glowstone_maze", BlockFace.UP),
+                new StructureTrack(plugin, new Location(world, -41, 134, -21), 0, 0, 0, 1, -7, -31, "badlandscaves:chambers_soulsand_maze", BlockFace.UP),
+                new StructureTrack(plugin, new Location(world, -25, 160, 0), 0, 0, 0, -2, -32, -2, "badlandscaves:chambers_keyholder_platform", BlockFace.UP),
+                new StructureTrack(plugin, new Location(world, -5, 159, 1), 0, 0, 0, 0, -31, -2, "badlandscaves:chambers_start_barrier", BlockFace.UP),
+        };
+        spawnInStructure(structures);
     }
 
     public void removeWitherSpawningBlocks (Location location) {

@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.StructureCopier;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -73,6 +74,7 @@ public class PlanetTestWorld {
 
         gravity(random, world);
 
+        StructureCopier.copyStructures(plugin.getServer().getWorld(plugin.mainWorldName), world, "planet_structures");
         return world;
     }
     public void gravity (Random random, World world) {

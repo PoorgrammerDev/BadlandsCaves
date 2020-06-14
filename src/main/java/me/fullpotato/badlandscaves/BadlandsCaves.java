@@ -104,6 +104,7 @@ public final class BadlandsCaves extends JavaPlugin {
         dungeons.genSpawnDungeons();
 
         //PlanetTestWorld planettest = new PlanetTestWorld(this);
+        //planettest.generate();
 
     }
 

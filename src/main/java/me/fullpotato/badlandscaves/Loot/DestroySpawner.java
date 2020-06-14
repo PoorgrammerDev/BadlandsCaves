@@ -2,13 +2,12 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
+import me.fullpotato.badlandscaves.Util.StructureTrack;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.Structure;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.structure.UsageMode;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -82,7 +81,7 @@ public class DestroySpawner implements Listener {
                     }
 
                     getNewLocation(block.getLocation(), random, 500);
-                    makeDungeon(spawner.getSpawnedType(), random, false);
+                    makeDungeon(spawner.getSpawnedType(), random, false, false);
                 }
 
                 loot(player, block.getLocation(), random, spawner.getSpawnedType());
@@ -140,7 +139,7 @@ public class DestroySpawner implements Listener {
         return false;
     }
 
-    public void makeDungeon(EntityType type, Random random, boolean silent) {
+    public void makeDungeon(EntityType type, Random random, boolean silent, boolean starting) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -157,18 +156,8 @@ public class DestroySpawner implements Listener {
                 }
 
                 Location cloned = newLoc.clone();
-                cloned.subtract(4, 2 ,4);
-                BlockData block = cloned.getBlock().getBlockData();
-                cloned.getBlock().setType(Material.STRUCTURE_BLOCK);
-                Structure structure = (Structure) cloned.getBlock().getState();
-                structure.setUsageMode(UsageMode.LOAD);
-                structure.setStructureName("badlandscaves:dungeon");
-                structure.setIntegrity((float) (1 - (0.003 * chaos)));
-                structure.update();
-                cloned.add(0, 1, 0);
-                BlockData over = cloned.getBlock().getBlockData();
-                cloned.getBlock().setType(Material.REDSTONE_BLOCK);
-
+                StructureTrack track = new StructureTrack(plugin, cloned, -4, -1, -4, 0, 0, 0, 1 - (0.003 * chaos), "badlandscaves:dungeon", BlockFace.DOWN);
+                track.load();
 
                 newLoc.getBlock().setType(Material.SPAWNER);
                 CreatureSpawner spawner = (CreatureSpawner) newLoc.getBlock().getState();
@@ -191,16 +180,8 @@ public class DestroySpawner implements Listener {
                     }
                 }
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        cloned.getBlock().setBlockData(over);
-                        cloned.subtract(0, 1, 0);
-                        cloned.getBlock().setBlockData(block);
-                    }
-                }.runTaskLater(plugin, 1);
                 if (!silent) plugin.getServer().broadcastMessage("§3A new Dungeon has appeared!");
-                plugin.getConfig().set("system.starting_dungeons_spawned", plugin.getConfig().getInt("system.starting_dungeons_spawned") + 1);
+                if (starting) plugin.getConfig().set("system.starting_dungeons_spawned", plugin.getConfig().getInt("system.starting_dungeons_spawned") + 1);
                 this.cancel();
 
                 newLoc = null;
