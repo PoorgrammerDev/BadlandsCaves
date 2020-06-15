@@ -22,7 +22,7 @@ public class GuideBook {
         String version = plugin.getDescription().getVersion();
         meta.addPage("\n" + "§0\n" + "§0\n" + "§6§lBadlandsCaves§0\n" + "§8§lby FullPotato§0\n" + "§0\n" + "§0\n" + "§0\n" + "§8ver. " + version);
 
-        TextComponent quickLinks = new TextComponent("§lExternal  Links\n");
+        TextComponent quickLinks = new TextComponent("§lExternal Links\n");
         TextComponent craftGuideLink = new TextComponent("§9Crafting Guide");
         TextComponent[] craftHover = new TextComponent[1];
         craftHover[0] = new TextComponent("Click to go to the Crafting Guide.");

@@ -57,6 +57,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 public final class BadlandsCaves extends JavaPlugin {
     public String mainWorldName;
@@ -119,6 +120,8 @@ public final class BadlandsCaves extends JavaPlugin {
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
 
+        PlanetTestWorld planet = new PlanetTestWorld(this);
+        planet.generate(UUID.randomUUID().toString());
     }
 
     //EVENTS
@@ -244,6 +247,8 @@ public final class BadlandsCaves extends JavaPlugin {
 
         this.getCommand("backrooms").setExecutor(new BackroomsCommand(this));
         this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
+
+        this.getCommand("world").setExecutor(new WorldCommand(this));
     }
 
     //RUNNABLES

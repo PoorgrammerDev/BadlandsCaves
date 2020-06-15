@@ -55,3 +55,8 @@ commands:
       - backroom
       - darkrooms
       - darkroom
+  world:
+    usage: /world <world>
+    description: Teleport between worlds.
+    alises:
+      - worldtp
