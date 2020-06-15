@@ -15,7 +15,7 @@ public class HallowedChambersWorld {
         worldCreator.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());
-        World world = worldCreator.createWorld();
+        World world = plugin.getServer().createWorld(worldCreator);
         world.setSpawnLocation(0, 128, 0);
         world.setGameRule(GameRule.DO_INSOMNIA, false);
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);

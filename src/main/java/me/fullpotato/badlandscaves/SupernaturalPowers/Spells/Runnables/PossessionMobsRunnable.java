@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.NMS.PossessionNMS;
+import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -34,7 +34,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
         double mana = (double) PlayerScore.MANA.getScore(plugin, player);
         final int possession_mana_drain = plugin.getConfig().getInt("options.spell_costs.possess_mana_drain");
         final double possession_mana_drain_tick = possession_mana_drain / 20.0;
-        PossessionNMS nms = new PossessionNMS(player);
+        PossessionNMS nms = plugin.possessionNMS;
 
         if (in_possession && mana > possession_mana_drain_tick) {
             if (target.isDead() || player.isDead()) {
@@ -53,7 +53,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
             //make target invis to player
-            nms.markTarget(target);
+            nms.markTarget(player, target);
 
             AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INVISIBILITY, 5, 0));
             target.teleport(player.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -65,7 +65,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             //set target and player back to normal
             team.unregister();
 
-            nms.unmarkTarget(target);
+            nms.unmarkTarget(player, target);
             target.setMetadata("possessed", new FixedMetadataValue(plugin, false));
             PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
             target.setAI(true);

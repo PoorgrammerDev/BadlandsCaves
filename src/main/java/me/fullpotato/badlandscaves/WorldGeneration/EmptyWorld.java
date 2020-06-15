@@ -4,7 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 
 public class EmptyWorld {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public EmptyWorld(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -15,7 +15,7 @@ public class EmptyWorld {
         emptyworld.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());
-        World world_empty = emptyworld.createWorld();
+        World world_empty = plugin.getServer().createWorld(emptyworld);
         world_empty.setGameRule(GameRule.DO_INSOMNIA, false);
         world_empty.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world_empty.setGameRule(GameRule.FALL_DAMAGE, false);

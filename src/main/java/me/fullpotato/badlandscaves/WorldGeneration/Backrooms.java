@@ -4,7 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 
 public class Backrooms {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public Backrooms(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -15,7 +15,7 @@ public class Backrooms {
         backrooms.environment(World.Environment.NORMAL)
                 .type(WorldType.FLAT)
                 .generator(new BackroomsGen());
-        World world_backrooms = backrooms.createWorld();
+        World world_backrooms = plugin.getServer().createWorld(backrooms);
         world_backrooms.setSpawnLocation(3, 64, 3);
         world_backrooms.setGameRule(GameRule.DO_INSOMNIA, false);
         world_backrooms.setGameRule(GameRule.DO_MOB_SPAWNING, false);

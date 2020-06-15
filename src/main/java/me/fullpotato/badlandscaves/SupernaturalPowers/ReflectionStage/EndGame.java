@@ -4,7 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
-import me.fullpotato.badlandscaves.NMS.FakePlayer;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
@@ -23,8 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class EndGame implements Listener {
-    private BadlandsCaves plugin;
-    private World world;
+    private final BadlandsCaves plugin;
+    private final World world;
 
     public EndGame(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -102,7 +102,7 @@ public class EndGame implements Listener {
     }
 
     public void removeClone() {
-        FakePlayer nms = new FakePlayer(plugin, world);
+        FakePlayerNMS nms = plugin.fakePlayerNMS;
         nms.remove(ZombieBossBehavior.fakePlayer);
 
         ZombieBossBehavior.fakePlayer = null;

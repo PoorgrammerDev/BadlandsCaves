@@ -1,33 +1,26 @@
-package me.fullpotato.badlandscaves.NMS;
+package me.fullpotato.badlandscaves.NMS.Possession;
 
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityMetadata;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 
-public class PossessionNMS {
-    private Player player;
+public class Possession_1_15_R1 implements PossessionNMS {
 
-    public PossessionNMS(Player player) {
-        this.player = player;
+    public void markTarget (Player player, LivingEntity entity) {
+        setMark(player, entity, true, true);
     }
 
-    public void markTarget (LivingEntity entity) {
-        setMark(entity, true, true);
+    public void unmarkTarget (Player player, LivingEntity entity) {
+        setMark(player, entity, false, true);
     }
 
-    public void unmarkTarget (LivingEntity entity) {
-        setMark(entity, false, true);
+    public void setIndicator(Player player, LivingEntity entity) {
+        setMark(player, entity, true, false);
     }
 
-    public void setIndicator(LivingEntity entity) {
-        setMark(entity, true, false);
-    }
-
-    public void setMark(LivingEntity ent, boolean marked, boolean invis) {
+    public void setMark(Player player, LivingEntity ent, boolean marked, boolean invis) {
         net.minecraft.server.v1_15_R1.Entity entity = ((CraftEntity) ent).getHandle();
         CraftPlayer ply = (CraftPlayer) player;
 

@@ -81,6 +81,10 @@ public class StructureTrack {
         this.redstoneBlockRelative = redstoneBlockRelative;
     }
 
+    public String getStructureName() {
+        return this.structureName;
+    }
+
     public boolean load () {
         if (origin != null) {
             load(this.origin);

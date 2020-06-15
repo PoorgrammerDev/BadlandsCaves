@@ -2,8 +2,8 @@ package me.fullpotato.badlandscaves.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
-import me.fullpotato.badlandscaves.NMS.FakePlayer;
-import me.fullpotato.badlandscaves.NMS.LineOfSight;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
@@ -199,7 +199,7 @@ public class BackroomsManager implements Listener {
         final Player fake = online.get(random.nextInt(online.size()));
 
         Location spawnLoc = getNearbyLocation(player.getLocation(), random, 10, 5);
-        FakePlayer fakePlayerManager = new FakePlayer(plugin, backrooms);
+        FakePlayerNMS fakePlayerManager = plugin.fakePlayerNMS;
         final Player cloned = fakePlayerManager.summonFakePlayer(spawnLoc, fake, player, null);
 
         new BukkitRunnable() {
@@ -228,7 +228,7 @@ public class BackroomsManager implements Listener {
 
     public void cursedModels (Player player, Random random) {
         ArrayList<Player> all_online = new ArrayList<>(plugin.getServer().getOnlinePlayers());
-        FakePlayer fakePlayerManager = new FakePlayer(plugin, backrooms);
+        FakePlayerNMS fakePlayerManager = plugin.fakePlayerNMS;
         final int clone_count = 100;
         ArrayList<Player> clones = new ArrayList<>();
 
@@ -313,11 +313,12 @@ public class BackroomsManager implements Listener {
         Location location;
         boolean isSpacedOut;
         int tries = 0;
+        LineOfSightNMS nms = plugin.lineOfSightNMS;
         do {
             location = getNearbyLocation(player.getLocation(), random, 30, 10);
             tries++;
             isSpacedOut = isSpacedOut(location, clones);
-        } while (LineOfSight.hasLineOfSight(player, location) && tries < 100 && !isSpacedOut);
+        } while (nms.hasLineOfSight(player, location) && tries < 100 && !isSpacedOut);
 
         return location;
     }

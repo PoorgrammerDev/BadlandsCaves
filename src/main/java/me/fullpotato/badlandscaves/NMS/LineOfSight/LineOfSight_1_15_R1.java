@@ -1,12 +1,14 @@
-package me.fullpotato.badlandscaves.NMS;
+package me.fullpotato.badlandscaves.NMS.LineOfSight;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_15_R1.EntityPig;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.entity.Player;
 
-public class LineOfSight {
-    public static boolean hasLineOfSight (Player player, Location location) {
+public class LineOfSight_1_15_R1 implements LineOfSightNMS {
+    public boolean hasLineOfSight (Player player, Location location) {
         WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
 
         EntityPig pig = new EntityPig(EntityTypes.PIG, world);

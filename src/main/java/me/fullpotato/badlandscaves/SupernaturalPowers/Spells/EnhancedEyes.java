@@ -2,7 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import me.fullpotato.badlandscaves.NMS.EnhancedEyesNMS;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.EyesRunnable;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
@@ -120,7 +120,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
 
                             ArrayList<Integer> ids = new ArrayList<>();
                             StringBuilder builder = new StringBuilder();
-                            EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
+                            EnhancedEyesNMS nms = plugin.enhancedEyesNMS;
                             Location location = player.getLocation();
                             final double x = location.getX();
                             final double y = location.getY();
@@ -141,24 +141,24 @@ public class EnhancedEyes extends UsePowers implements Listener {
                                             if (blockMat.isSolid() || (block.isLiquid() && ((Levelled) block.getBlockData()).getLevel() == 0)) {
                                                 if (eyes_level > 1) {
                                                     if (minerals_tier1.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(blockReplaceLoc, ChatColor.GRAY);
+                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc, ChatColor.GRAY);
                                                         ids.add(nms_id);
                                                         builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
                                                     }
                                                     else if (minerals_tier2.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(blockReplaceLoc, ChatColor.BLUE);
+                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc, ChatColor.BLUE);
                                                         ids.add(nms_id);
                                                         builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
                                                     }
                                                     else if (storage.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(blockReplaceLoc, ChatColor.GREEN);
+                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc, ChatColor.GREEN);
                                                         ids.add(nms_id);
                                                         builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
                                                     }
                                                 }
                                                 else {
                                                     if (minerals_tier1.contains(blockMat) || minerals_tier2.contains(blockMat) || storage.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(blockReplaceLoc);
+                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc);
                                                         ids.add(nms_id);
                                                         builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
                                                     }
@@ -220,8 +220,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
 
         Location block_location = event.getBlock().getLocation();
         if (blocks_maps.containsKey(block_location)) {
-            EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
-            nms.removeIndicator(blocks_maps.get(block_location));
+            EnhancedEyesNMS nms = plugin.enhancedEyesNMS;
+            nms.removeIndicator(player, blocks_maps.get(block_location));
         }
 
     }

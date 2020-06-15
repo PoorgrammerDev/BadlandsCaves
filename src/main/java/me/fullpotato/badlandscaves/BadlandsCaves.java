@@ -15,6 +15,7 @@ import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.Extraterrestrial.GravityFallDamage;
 import me.fullpotato.badlandscaves.Extraterrestrial.GravityRunnable;
+import me.fullpotato.badlandscaves.Extraterrestrial.SpawnInhabitants;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.Loot.GetFishingCrate;
@@ -23,6 +24,14 @@ import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Loot.UseFishingCrate;
 import me.fullpotato.badlandscaves.MobBuffs.*;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
+import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_15_R1;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionPlayerMove;
@@ -58,8 +67,15 @@ public final class BadlandsCaves extends JavaPlugin {
     public String chambersWorldName;
     public String planetPrefixName;
 
+    //NMS
+    public EnhancedEyesNMS enhancedEyesNMS;
+    public FakePlayerNMS fakePlayerNMS;
+    public LineOfSightNMS lineOfSightNMS;
+    public PossessionNMS possessionNMS;
+
     @Override
     public void onEnable() {
+        getServerVersion();
         loadWorldNames();
         loadConfig();
         loadCustomWorlds();
@@ -102,9 +118,6 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
-
-        //PlanetTestWorld planettest = new PlanetTestWorld(this);
-        //planettest.generate();
 
     }
 
@@ -190,6 +203,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightCharge(this),
                 new StarlightBlasterMechanism(this),
                 new GravityFallDamage(this),
+                new SpawnInhabitants(this),
         };
 
         for (Listener event : events) {
@@ -383,6 +397,23 @@ public final class BadlandsCaves extends JavaPlugin {
             if (world.getName().startsWith(this.planetPrefixName)) {
                 new GravityRunnable(this, world).runTaskTimerAsynchronously(this, 0, 0);
             }
+        }
+    }
+
+    public void getServerVersion() {
+        String version = this.getServer().getClass().getPackage().getName();
+        version = version.substring(version.lastIndexOf('.') + 2);
+
+        switch (version) {
+            case "1_15_R1":
+                enhancedEyesNMS = new EnhancedEyes_1_15_R1();
+                fakePlayerNMS = new FakePlayer_1_15_R1(this);
+                lineOfSightNMS = new LineOfSight_1_15_R1();
+                possessionNMS = new Possession_1_15_R1();
+                break;
+            default:
+                this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
+                this.getServer().getPluginManager().disablePlugin(this);
         }
     }
 }

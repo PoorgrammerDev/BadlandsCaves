@@ -2,7 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import me.fullpotato.badlandscaves.NMS.LineOfSight;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.PositionManager;
@@ -47,6 +47,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             warp_range = 30;
         }
 
+        LineOfSightNMS nms = plugin.lineOfSightNMS;
         boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
         if (has_displace_marker) {
             //yes marker
@@ -59,7 +60,8 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             Location displace_marker = new Location(world, marker_x, marker_y, marker_z);
             boolean active = false;
             if (player.getLocation().distance(displace_marker) < warp_range && mana >= mana_cost) {
-                if (LineOfSight.hasLineOfSight(player, displace_marker)) {
+
+                if (nms.hasLineOfSight(player, displace_marker)) {
                     active = true;
                     trackerParticle(displace_marker);
                 }
@@ -78,14 +80,14 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
                 lastLastBlockLoc = lastBlockLocation;
                 lastBlockLocation = lastBlock.getLocation().add(0.5, 0.5, 0.5);
                 lastBlock = iter.next();
-                if (lastBlock.getType().isSolid() || !LineOfSight.hasLineOfSight(player, lastBlockLocation) || !lastBlockLocation.getWorld().getWorldBorder().isInside(lastBlockLocation)) {
+                if (lastBlock.getType().isSolid() || !nms.hasLineOfSight(player, lastBlockLocation) || !lastBlockLocation.getWorld().getWorldBorder().isInside(lastBlockLocation)) {
                     break;
                 }
             }
 
             assert lastLastBlockLoc != null;
             Location location = lastLastBlockLoc.clone();
-            if (LineOfSight.hasLineOfSight(player, location)) {
+            if (nms.hasLineOfSight(player, location)) {
                 scoutingParticle(location);
             }
         }

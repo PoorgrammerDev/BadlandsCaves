@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.NMS.FakePlayer;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -24,9 +24,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class ZombieBossBehavior extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     private Zombie zombie;
-    private World world;
+    private final World world;
     public static Player fakePlayer = null;
 
     public ZombieBossBehavior(BadlandsCaves bcav) {
@@ -136,7 +136,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
     }
 
     public void CloneMechanism (final Player player) {
-        FakePlayer nms = new FakePlayer(plugin, world);
+        FakePlayerNMS nms = plugin.fakePlayerNMS;
         if ((PlayerScore.REFLECTION_ZOMBIE.hasScore(plugin, player)) && (byte) PlayerScore.REFLECTION_ZOMBIE.getScore(plugin, player) == 1) {
             nms.move(zombie.getLocation(), fakePlayer, null, true);
         }
@@ -421,9 +421,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
             if (test_above.getBlock().isPassable()) {
                 Location test_below = test_location.clone();
                 test_below.subtract(0, 1, 0);
-                if (hasBlockBelow(test_below, 20)) {
-                    return true;
-                }
+                return hasBlockBelow(test_below, 20);
             }
         }
         return false;

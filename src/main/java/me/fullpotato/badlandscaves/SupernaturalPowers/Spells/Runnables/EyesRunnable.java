@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.NMS.EnhancedEyesNMS;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -30,7 +30,7 @@ public class EyesRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        EnhancedEyesNMS nms = new EnhancedEyesNMS(player);
+        EnhancedEyesNMS nms = plugin.enhancedEyesNMS;
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final int constant_mana_drain = plugin.getConfig().getInt("options.spell_costs.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
@@ -51,20 +51,20 @@ public class EyesRunnable extends BukkitRunnable {
                     if (origin.distanceSquared(entity.getLocation()) < dist_range) {
                         if (eyes_level > 1) {
                             if (entity instanceof Player) {
-                                nms.highlightEntity(entity, ChatColor.GOLD);
+                                nms.highlightEntity(player, entity, ChatColor.GOLD);
                             }
                             else if (entity instanceof Monster) {
-                                nms.highlightEntity(entity, ChatColor.RED);
+                                nms.highlightEntity(player, entity, ChatColor.RED);
                             }
                             else if (entity instanceof Animals) {
-                                nms.highlightEntity(entity, ChatColor.GREEN);
+                                nms.highlightEntity(player, entity, ChatColor.GREEN);
                             }
                             else {
-                                nms.highlightEntity(entity, ChatColor.GRAY);
+                                nms.highlightEntity(player, entity, ChatColor.GRAY);
                             }
                         }
                         else {
-                            nms.highlightEntity(entity);
+                            nms.highlightEntity(player, entity);
                         }
                     }
                 }
@@ -93,7 +93,7 @@ public class EyesRunnable extends BukkitRunnable {
 
             //removing indicators
             for (int id : shulker_ids) {
-                nms.removeIndicator(id);
+                nms.removeIndicator(player, id);
             }
 
             if (!hasNightVision) {

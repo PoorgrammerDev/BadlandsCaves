@@ -1,10 +1,9 @@
-package me.fullpotato.badlandscaves.NMS;
+package me.fullpotato.badlandscaves.NMS.FakePlayer;
 
 import com.mojang.authlib.GameProfile;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
@@ -13,13 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
-public class FakePlayer {
-    private BadlandsCaves plugin;
-    private World world;
+public class FakePlayer_1_15_R1 implements FakePlayerNMS{
+    private final BadlandsCaves plugin;
 
-    public FakePlayer(BadlandsCaves plugin, World world) {
+    public FakePlayer_1_15_R1(BadlandsCaves plugin) {
         this.plugin = plugin;
-        this.world = world;
     }
 
     public Player summonFakePlayer(Location location, Player player, Player sendTo, String name) {
@@ -28,7 +25,7 @@ public class FakePlayer {
 
     public Player summonFakePlayer(Location location, Player player, Player sendTo, String name, boolean copyArmor) {
         MinecraftServer server = ((CraftServer) plugin.getServer()).getServer();
-        WorldServer world = ((CraftWorld) this.world).getHandle();
+        WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
 
         EntityPlayer clone = new EntityPlayer(server, world, new GameProfile(player.getUniqueId(), name == null ? player.getName() : name), new PlayerInteractManager(world));
         clone.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
@@ -141,12 +138,10 @@ public class FakePlayer {
         if (packets.length < 1) return;
 
         for (final Player online : plugin.getServer().getOnlinePlayers()) {
-            if (online.getWorld().equals(world)) {
-                final CraftPlayer ply = (CraftPlayer) online;
+            final CraftPlayer ply = (CraftPlayer) online;
 
-                for (Packet<?> packet : packets) {
-                    ply.getHandle().playerConnection.sendPacket(packet);
-                }
+            for (Packet<?> packet : packets) {
+                ply.getHandle().playerConnection.sendPacket(packet);
             }
         }
     }

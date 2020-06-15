@@ -5,7 +5,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescen
 import org.bukkit.*;
 
 public class DescensionWorld {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public DescensionWorld(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -15,7 +15,7 @@ public class DescensionWorld {
         descension.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());
-        World world_descension = descension.createWorld();
+        World world_descension = plugin.getServer().createWorld(descension);
         world_descension.setSpawnLocation(0, 197, 0);
         world_descension.setGameRule(GameRule.DO_INSOMNIA, false);
         world_descension.setGameRule(GameRule.DO_MOB_SPAWNING, false);

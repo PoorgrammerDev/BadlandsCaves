@@ -1,15 +1,15 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureCopier;
-import org.bukkit.GameRule;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
-import org.bukkit.WorldCreator;
+import me.fullpotato.badlandscaves.Util.StructureTrack;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
+import org.bukkit.block.BlockFace;
 
+import javax.annotation.Nullable;
 import java.util.Random;
-import java.util.UUID;
 
 public class PlanetTestWorld {
     private final BadlandsCaves plugin;
@@ -43,18 +43,43 @@ public class PlanetTestWorld {
             Biome.ICE_SPIKES,
     };
 
-    public World generate() {
-        return generate(biomes[random.nextInt(biomes.length)]);
+    public enum Habitation {
+        INHABITED,
+        UNINHABITED,
+        REINHABITED
     }
 
-    public World generate(Biome biome) {
-        WorldCreator creator = new WorldCreator(plugin.planetPrefixName + UUID.randomUUID());
+    public enum PlanetStructure {
+        MANABAR,
+        LAB,
+        LAB_ABANDONED,
+        LAB_DESTROYED,
+        JAIL,
+        JAIL_ABANDONED,
+        SHRINE,
+        SHRINE_DESTROYED,
+        CURSED_HOUSE,
+        TENT,
+        HOUSE,
+        HOUSE_ABANDONED,
+        HOUSE_DESTROYED,
+        BUNKER,
+        BUNKER_AB,
+    }
 
+    public World generate(String name) {
+        return generate(name, biomes[random.nextInt(biomes.length)]);
+    }
+
+    public World generate(String name, Biome biome) {
+        WorldCreator creator = new WorldCreator(plugin.planetPrefixName + name);
+
+        World.Environment environment = getEnvironment();
+        creator.environment(environment);
         creator.generator(new PlanetsGeneration(biome));
-        World world = creator.createWorld();
+        World world = plugin.getServer().createWorld(creator);
         world.setSpawnLocation(0, 127, 0);
         world.setGameRule(GameRule.DO_INSOMNIA, false);
-        world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world.setGameRule(GameRule.FALL_DAMAGE, true);
         world.setGameRule(GameRule.DISABLE_RAIDS, true);
         world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
@@ -72,12 +97,15 @@ public class PlanetTestWorld {
         border.setWarningDistance(0);
         border.setSize(1000);
 
-        gravity(random, world);
+        if (environment.equals(World.Environment.THE_END)) PreventDragon.preventDragonSpawn(world);
+        gravity(world);
+        habitation(world);
 
         StructureCopier.copyStructures(plugin.getServer().getWorld(plugin.mainWorldName), world, "planet_structures");
         return world;
     }
-    public void gravity (Random random, World world) {
+
+    public void gravity (World world) {
         int rand = random.nextInt(3);
 
         double gravityModifier;
@@ -96,5 +124,122 @@ public class PlanetTestWorld {
 
         plugin.getConfig().set("system.planet_stats." + world.getName() + ".gravity", gravityModifier);
         plugin.saveConfig();
+    }
+
+    public World.Environment getEnvironment() {
+        if (random.nextBoolean()) {
+            return World.Environment.NORMAL;
+        }
+        else {
+            if (random.nextBoolean()) {
+                return World.Environment.NETHER;
+            }
+            else {
+                return World.Environment.THE_END;
+            }
+        }
+    }
+
+    public void habitation(World world) {
+        int rand = random.nextInt(3);
+        Habitation habitation;
+        if (rand == 0) {
+            habitation = Habitation.INHABITED;
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, true);
+        }
+        else if (rand == 1) {
+            habitation = Habitation.UNINHABITED;
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        }
+        else {
+            habitation = Habitation.REINHABITED;
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, true);
+        }
+
+        plugin.getConfig().set("system.planet_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
+        plugin.saveConfig();
+    }
+
+    public void generateStructure (World world, @Nullable Location origin) {
+        if (world.getName().startsWith(plugin.planetPrefixName)) {
+            if (origin == null) {
+                int y_start = 200;
+
+                origin = new Location(world, 0, y_start, 0);
+
+                for (int y = y_start; y > 0; y--) {
+                    Location iterate = origin.clone();
+                    iterate.setY(y);
+
+                    if (!iterate.getBlock().isPassable()) {
+                        origin.setY(y);
+                        break;
+                    }
+                }
+            }
+
+            // TODO: 6/14/2020 somehow factor world in or something?
+        }
+    }
+
+    public void loadStructure(@Nullable PlanetStructure queried, Location origin) {
+        //center ground level world origin ~(0, 60, 0)
+
+        if (queried == null) {
+            queried = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
+        }
+
+        //multistructures
+        if (queried.equals(PlanetStructure.BUNKER)) {
+            final StructureTrack[] bunker = {
+                    new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "bunker_tophouse", BlockFace.DOWN),
+                    new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "bunker_intertube", BlockFace.DOWN),
+                    new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "bunker_foyer", BlockFace.DOWN),
+                    new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "bunker_bedroom", BlockFace.DOWN),
+                    new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "bunker_dine", BlockFace.DOWN),
+                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "bunker_farm", BlockFace.UP),
+            };
+
+            MultiStructureLoader loader = new MultiStructureLoader(bunker);
+            loader.loadAll(origin);
+        }
+        else if (queried.equals(PlanetStructure.BUNKER_AB)) {
+            final StructureTrack[] bunker_ab = {
+                    new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "bunker_tophouse_ab", BlockFace.DOWN),
+                    new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "bunker_intertube_ab", BlockFace.DOWN),
+                    new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "bunker_foyer_ab", BlockFace.DOWN),
+                    new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "bunker_bedroom_ab", BlockFace.DOWN),
+                    new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "bunker_dine_ab", BlockFace.DOWN),
+                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "bunker_farm_ab", BlockFace.UP),
+            };
+
+            MultiStructureLoader loader = new MultiStructureLoader(bunker_ab);
+            loader.loadAll(origin);
+        }
+        else {
+            final StructureTrack[] structures = {
+                    new StructureTrack(plugin, 11, 0, 10, -21, 0, -19, PlanetStructure.MANABAR.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, PlanetStructure.LAB.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, PlanetStructure.LAB_ABANDONED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, PlanetStructure.LAB_DESTROYED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, PlanetStructure.JAIL.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, PlanetStructure.JAIL_ABANDONED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, PlanetStructure.SHRINE.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, PlanetStructure.SHRINE_DESTROYED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 10, -1, -11, -19, 0, 1, PlanetStructure.CURSED_HOUSE.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, PlanetStructure.TENT.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, PlanetStructure.HOUSE.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, PlanetStructure.HOUSE_ABANDONED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, PlanetStructure.HOUSE_DESTROYED.name().toLowerCase(), BlockFace.UP),
+
+            };
+
+            for (StructureTrack structure : structures) {
+                if (queried.name().equalsIgnoreCase(structure.getStructureName())) {
+                    structure.load(origin);
+                    return;
+                }
+            }
+        }
     }
 }

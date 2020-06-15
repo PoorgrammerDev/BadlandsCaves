@@ -18,7 +18,7 @@ public class ReflectionWorld {
         WorldCreator reflectionworld = new WorldCreator(plugin.reflectionWorldName);
         reflectionworld.environment(World.Environment.NORMAL)
                 .generator(new ReflectionGen());
-        World world_reflection = reflectionworld.createWorld();
+        World world_reflection = plugin.getServer().createWorld(reflectionworld);
         world_reflection.setDifficulty(Difficulty.HARD);
         //gamerules
         world_reflection.setGameRule(GameRule.DO_INSOMNIA, false);

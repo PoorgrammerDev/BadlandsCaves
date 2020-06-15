@@ -2,7 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import me.fullpotato.badlandscaves.NMS.PossessionNMS;
+import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.EnderDragon;
@@ -17,8 +17,8 @@ import org.bukkit.util.RayTraceResult;
 import java.util.Random;
 
 public class PossessionIndicatorRunnable extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
+    private final BadlandsCaves plugin;
+    private final Player player;
 
     public PossessionIndicatorRunnable(BadlandsCaves bcav, Player ply) {
         plugin = bcav;
@@ -46,8 +46,8 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
                 boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();
                 if (target_already_pos) return;
 
-                PossessionNMS nms = new PossessionNMS(player);
-                nms.setIndicator(entity);
+                PossessionNMS nms = plugin.possessionNMS;
+                nms.setIndicator(player, entity);
 
                 Location location = entity.getLocation();
                 makeParticleLine(location, location.getY() + entity.getHeight());

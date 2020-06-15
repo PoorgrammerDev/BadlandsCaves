@@ -1,9 +1,7 @@
-package me.fullpotato.badlandscaves.NMS;
+package me.fullpotato.badlandscaves.NMS.EnhancedEyes;
 
 import net.minecraft.server.v1_15_R1.*;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
@@ -12,18 +10,13 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class EnhancedEyesNMS {
-    private Player player;
-    public EnhancedEyesNMS(Player player) {
-        this.player = player;
+public class EnhancedEyes_1_15_R1 implements EnhancedEyesNMS {
+
+    public int spawnIndicator (Player player, Location location) {
+        return spawnIndicator(player, location, null);
     }
 
-    public int spawnIndicator (Location location) {
-        return spawnIndicator(location, null);
-    }
-
-
-    public int spawnIndicator(Location location, ChatColor color) {
+    public int spawnIndicator(Player player, Location location, ChatColor color) {
         World world = ((CraftWorld)(location.getWorld())).getHandle();
         EntityShulker shulker = new EntityShulker(EntityTypes.SHULKER, world);
         CraftPlayer ply = (CraftPlayer) player;
@@ -55,11 +48,11 @@ public class EnhancedEyesNMS {
         return shulker.getId();
     }
 
-    public void highlightEntity (org.bukkit.entity.Entity entity) {
-        highlightEntity(entity, null);
+    public void highlightEntity (Player player, org.bukkit.entity.Entity entity) {
+        highlightEntity(player, entity, null);
     }
 
-    public void highlightEntity(org.bukkit.entity.Entity ent, ChatColor color) {
+    public void highlightEntity(Player player, org.bukkit.entity.Entity ent, ChatColor color) {
         Entity entity = ((CraftEntity) ent).getHandle();
         CraftPlayer ply = (CraftPlayer) player;
         entity.setFlag(6, true);
@@ -79,14 +72,10 @@ public class EnhancedEyesNMS {
         ply.getHandle().playerConnection.sendPacket(data);
     }
 
-    public void removeIndicator (int id) {
+    public void removeIndicator (Player player, int id) {
         PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(id);
 
         CraftPlayer ply = (CraftPlayer) player;
         ply.getHandle().playerConnection.sendPacket(destroy);
-    }
-
-    public void destroyTeams () {
-
     }
 }

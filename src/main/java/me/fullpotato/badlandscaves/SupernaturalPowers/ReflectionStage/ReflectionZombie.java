@@ -1,8 +1,11 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.NMS.FakePlayer;
-import org.bukkit.*;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -15,8 +18,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ReflectionZombie implements Listener {
-    private BadlandsCaves plugin;
-    private World world;
+    private final BadlandsCaves plugin;
+    private final World world;
     public ReflectionZombie (BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.reflectionWorldName);
@@ -41,8 +44,8 @@ public class ReflectionZombie implements Listener {
     public void damageZombie (EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Zombie && event.getEntity().getWorld().equals(world)) {
             if (event.getDamager() instanceof Player && event.getDamager().getWorld().equals(world)) {
-                FakePlayer fakePlayer = new FakePlayer(plugin, world);
-                fakePlayer.damage(ZombieBossBehavior.fakePlayer, null, true);
+                FakePlayerNMS nms = plugin.fakePlayerNMS;
+                nms.damage(ZombieBossBehavior.fakePlayer, null, true);
 
                 final Zombie zombie = (Zombie) event.getEntity();
                 zombie.getWorld().playSound(zombie.getLocation(), Sound.ENTITY_PLAYER_HURT, SoundCategory.HOSTILE, 1, 1);
