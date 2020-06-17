@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
+
 public class FakePlayer_1_15_R1 implements FakePlayerNMS{
     private final BadlandsCaves plugin;
 
@@ -19,11 +21,11 @@ public class FakePlayer_1_15_R1 implements FakePlayerNMS{
         this.plugin = plugin;
     }
 
-    public Player summonFakePlayer(Location location, Player player, Player sendTo, String name) {
+    public Player summonFakePlayer(Location location, Player player, @Nullable Player sendTo, @Nullable String name) {
         return summonFakePlayer(location, player, sendTo, name, false);
     }
 
-    public Player summonFakePlayer(Location location, Player player, Player sendTo, String name, boolean copyArmor) {
+    public Player summonFakePlayer(Location location, Player player, @Nullable Player sendTo, @Nullable String name, boolean copyArmor) {
         MinecraftServer server = ((CraftServer) plugin.getServer()).getServer();
         WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
 

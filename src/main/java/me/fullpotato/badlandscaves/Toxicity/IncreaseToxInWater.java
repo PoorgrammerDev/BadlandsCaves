@@ -1,9 +1,11 @@
 package me.fullpotato.badlandscaves.Toxicity;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Extraterrestrial.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Player;
@@ -13,7 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
 public class IncreaseToxInWater implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public IncreaseToxInWater(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -24,6 +26,10 @@ public class IncreaseToxInWater implements Listener {
     public void incr_tox_in_water (PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Block block = player.getLocation().getBlock();
+
+        World world = player.getWorld();
+        EnvironmentalHazards planets = new EnvironmentalHazards(plugin);
+        if (planets.isPlanet(world) && !planets.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
 
         final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;

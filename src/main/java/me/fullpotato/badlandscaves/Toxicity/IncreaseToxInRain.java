@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Toxicity;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Extraterrestrial.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -24,6 +25,9 @@ public class IncreaseToxInRain implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
         if (!world.hasStorm()) return;
+
+        EnvironmentalHazards planets = new EnvironmentalHazards(plugin);
+        if (planets.isPlanet(world) && !planets.hasHazard(world, EnvironmentalHazards.Hazard.ACID_RAIN)) return;
 
         Location location = player.getLocation();
         double temp = world.getTemperature(location.getBlockX(), location.getBlockY(), location.getBlockZ());

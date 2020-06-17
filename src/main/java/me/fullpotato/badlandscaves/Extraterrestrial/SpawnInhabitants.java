@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Extraterrestrial;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.WorldGeneration.PlanetTestWorld;
+import me.fullpotato.badlandscaves.WorldGeneration.PlanetWorlds;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -45,12 +45,12 @@ public class SpawnInhabitants implements Listener {
                 }
 
                 if (entity instanceof Monster) {
-                    PlanetTestWorld.Habitation habitationType = null;
+                    PlanetWorlds.Habitation habitationType = null;
 
                     String savedHabitatType = plugin.getConfig().getString("system.planet_stats." + world.getName() + ".habitation");
                     if (savedHabitatType != null) {
                         try {
-                            habitationType = PlanetTestWorld.Habitation.valueOf(savedHabitatType.toUpperCase());
+                            habitationType = PlanetWorlds.Habitation.valueOf(savedHabitatType.toUpperCase());
                         } catch (IllegalArgumentException e) {
                             return;
                         }
@@ -59,7 +59,7 @@ public class SpawnInhabitants implements Listener {
                     if (habitationType != null) {
                         final Random random = new Random();
                         final Location location = event.getLocation();
-                        if (habitationType.equals(PlanetTestWorld.Habitation.INHABITED)) {
+                        if (habitationType.equals(PlanetWorlds.Habitation.INHABITED)) {
                             event.setCancelled(true);
                             entity.remove();
 

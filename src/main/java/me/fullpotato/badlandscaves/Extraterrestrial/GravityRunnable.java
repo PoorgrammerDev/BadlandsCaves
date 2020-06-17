@@ -38,6 +38,9 @@ public class GravityRunnable extends BukkitRunnable {
                 if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
                     continue;
                 }
+                if (player.hasMetadata("bewilder_velocity_cancel") && player.getMetadata("bewilder_velocity_cancel").get(0).asBoolean()) {
+                    continue;
+                }
             }
 
 
@@ -72,6 +75,16 @@ public class GravityRunnable extends BukkitRunnable {
             velocityMap.put(entity, currentVelocity.clone());
             onGroundMap.put(entity, entity.isOnGround());
             positionMap.put(entity, entity.getLocation());
+
+
+            //high grav slow move
+            if (gravity > 1.0) {
+                Vector vector = entity.getVelocity();
+                vector.multiply(gravity / 7.5);
+                vector.setY(entity.getVelocity().getY());
+
+                entity.setVelocity(vector);
+            }
         }
     }
 }

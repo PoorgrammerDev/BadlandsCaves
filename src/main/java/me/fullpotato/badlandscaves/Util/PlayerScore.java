@@ -58,7 +58,8 @@ public enum PlayerScore {
     AGILITY_LEVEL(PersistentDataType.INTEGER),
     AGILITY_BUFF_SPEED_LVL(PersistentDataType.INTEGER),
     HAS_SEEN_BACKROOMS(PersistentDataType.BYTE),
-    BACKROOMS_TIMER(PersistentDataType.INTEGER);
+    BACKROOMS_TIMER(PersistentDataType.INTEGER),
+    TEMPERATURE(PersistentDataType.INTEGER, 100);
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

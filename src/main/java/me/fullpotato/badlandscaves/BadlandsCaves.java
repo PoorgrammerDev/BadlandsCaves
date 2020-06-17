@@ -15,6 +15,7 @@ import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.Extraterrestrial.GravityFallDamage;
 import me.fullpotato.badlandscaves.Extraterrestrial.GravityRunnable;
+import me.fullpotato.badlandscaves.Extraterrestrial.Hazards.*;
 import me.fullpotato.badlandscaves.Extraterrestrial.SpawnInhabitants;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
@@ -120,8 +121,9 @@ public final class BadlandsCaves extends JavaPlugin {
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
 
-        PlanetTestWorld planet = new PlanetTestWorld(this);
+        PlanetWorlds planet = new PlanetWorlds(this);
         planet.generate(UUID.randomUUID().toString());
+
     }
 
     //EVENTS
@@ -207,6 +209,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightBlasterMechanism(this),
                 new GravityFallDamage(this),
                 new SpawnInhabitants(this),
+                new NoOxygen(this),
+                new NoFood(this),
+                new Freezing(this),
         };
 
         for (Listener event : events) {
@@ -274,6 +279,14 @@ public final class BadlandsCaves extends JavaPlugin {
         new Surface(this).runTaskTimer(this, 0, 100);
         new ChargeRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
         new StarlightPaxelMechanism(this).runTaskTimerAsynchronously(this, 0, 0);
+        new SlowBreakRunnable(this).runTaskTimer(this, 0, 20);
+        new MeteorShowerRunnable(this).runTaskTimer(this, 0, 20);
+        new BewildermentRunnable(this).runTaskTimer(this, 0, 100);
+        new NoOxygen(this).runTaskTimer(this, 0, 0);
+        new LavaFloorRunnable(this).runTaskTimer(this, 0, 20);
+        new NoFloorRunnable(this).runTaskTimer(this, 0, 10);
+        new ParanoiaRunnable(this).runTaskTimer(this, 0, 20);
+        new Freezing(this).runTaskTimer(this, 0, 5);
 
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();

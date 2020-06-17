@@ -195,7 +195,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     public void warpPlayer (final Player player, final Random random) {
         final Location player_loc = player.getEyeLocation();
-        BlockIterator iterate = new BlockIterator(world, player_loc.toVector(), player.getVelocity(), 0, random.nextInt(3) + 2);
+        BlockIterator iterate = new BlockIterator(player.getWorld(), player_loc.toVector(), player.getVelocity(), 0, random.nextInt(3) + 2);
 
         Block block = iterate.next();
         while (iterate.hasNext()) {
@@ -209,7 +209,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         if (!locationViable(player_moving)) {
             int tries = 0;
             do {
-                Location test = getNearbyLocation(player_moving, random, 5);
+                Location test = getNearbyLocation(player_moving, random, 7);
                 player_moving = test != null ? test : player_moving;
                 tries++;
             } while (!locationViable(player_moving) && tries < 100);

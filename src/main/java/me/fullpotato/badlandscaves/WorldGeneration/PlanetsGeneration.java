@@ -1,5 +1,7 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -10,13 +12,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class PlanetsGeneration extends ChunkGenerator {
+    private final BadlandsCaves plugin;
     private final Biome biome;
     private final double scaleRand;
     private final int raiseFactor;
     private final double frequency;
     private final double amplitude;
 
-    public PlanetsGeneration(Biome biome) {
+    public PlanetsGeneration(BadlandsCaves plugin, Biome biome) {
+        this.plugin = plugin;
         Random random = new Random();
         this.biome = biome;
         scaleRand = (random.nextDouble() / 5.0);
@@ -55,6 +59,12 @@ public class PlanetsGeneration extends ChunkGenerator {
                         Material subsurface = Material.DIRT;
                         Material under = Material.STONE;
 
+                        if (world.getEnvironment().equals(World.Environment.THE_END) && plugin.getConfig().getBoolean("system.planet_stats." + world.getName() + ".shadow_realm")) {
+                            surface = MakeDescensionStage.getVoidMat(random);
+                            subsurface = MakeDescensionStage.getVoidMat(random);
+                            under = MakeDescensionStage.getVoidMat(random);
+                        }
+
                         if (this.biome.equals(Biome.DESERT)) {
                             surface = Material.SAND;
                             subsurface = Material.SANDSTONE;
@@ -86,6 +96,8 @@ public class PlanetsGeneration extends ChunkGenerator {
                     }
                 }
             }
+
+
         return chunk;
     }
 }
