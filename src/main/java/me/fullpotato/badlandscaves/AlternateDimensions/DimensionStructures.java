@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.Extraterrestrial;
+package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 
-public class ETStructures {
+public class DimensionStructures {
     public enum PlanetStructure {
         MANABAR(15),
         LAB(15),
@@ -46,12 +46,12 @@ public class ETStructures {
     private final BadlandsCaves plugin;
     private final Random random = new Random();
 
-    public ETStructures(BadlandsCaves plugin) {
+    public DimensionStructures(BadlandsCaves plugin) {
         this.plugin = plugin;
     }
 
     public void generateStructure (World world, @Nullable Location origin, @Nullable PlanetStructure structure) {
-        if (world.getName().startsWith(plugin.planetPrefixName)) {
+        if (world.getName().startsWith(plugin.dimensionPrefixName)) {
             if (origin == null || origin.getWorld() == null || !origin.getWorld().equals(world)) {
                 int y_start = 200;
 

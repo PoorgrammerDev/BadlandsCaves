@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.Extraterrestrial;
+package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.entity.Entity;
@@ -17,8 +17,8 @@ public class GravityFallDamage implements Listener {
     public void fallDamage (EntityDamageEvent event) {
         if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
             Entity entity = event.getEntity();
-            if (entity.getWorld().getName().startsWith(plugin.planetPrefixName)) {
-                double gravity = plugin.getConfig().getDouble("system.planet_stats." + entity.getWorld().getName() + ".gravity");
+            if (entity.getWorld().getName().startsWith(plugin.dimensionPrefixName)) {
+                double gravity = plugin.getConfig().getDouble("system.dim_stats." + entity.getWorld().getName() + ".gravity");
 
                 double damage = event.getDamage() * gravity;
                 if (damage < 1) {

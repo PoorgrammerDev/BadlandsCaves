@@ -1,5 +1,10 @@
 package me.fullpotato.badlandscaves;
 
+import me.fullpotato.badlandscaves.AlternateDimensions.GravityFallDamage;
+import me.fullpotato.badlandscaves.AlternateDimensions.GravityRunnable;
+import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
+import me.fullpotato.badlandscaves.AlternateDimensions.PreventWorldGenLag;
+import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
@@ -13,10 +18,6 @@ import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMec
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
-import me.fullpotato.badlandscaves.Extraterrestrial.GravityFallDamage;
-import me.fullpotato.badlandscaves.Extraterrestrial.GravityRunnable;
-import me.fullpotato.badlandscaves.Extraterrestrial.Hazards.*;
-import me.fullpotato.badlandscaves.Extraterrestrial.SpawnInhabitants;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.Loot.GetFishingCrate;
@@ -58,7 +59,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 public final class BadlandsCaves extends JavaPlugin {
     public String mainWorldName;
@@ -67,7 +67,7 @@ public final class BadlandsCaves extends JavaPlugin {
     public String reflectionWorldName;
     public String backroomsWorldName;
     public String chambersWorldName;
-    public String planetPrefixName;
+    public String dimensionPrefixName;
 
     //NMS
     public EnhancedEyesNMS enhancedEyesNMS;
@@ -121,8 +121,8 @@ public final class BadlandsCaves extends JavaPlugin {
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
 
-        PlanetWorlds planet = new PlanetWorlds(this);
-        planet.generate(UUID.randomUUID().toString());
+        DimensionsWorlds planet = new DimensionsWorlds(this);
+        //planet.generate(UUID.randomUUID().toString());
 
     }
 
@@ -212,6 +212,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NoOxygen(this),
                 new NoFood(this),
                 new Freezing(this),
+                new PreventWorldGenLag(this),
+                new UseDimensionalAnchor(this),
         };
 
         for (Listener event : events) {
@@ -407,12 +409,12 @@ public final class BadlandsCaves extends JavaPlugin {
         this.reflectionWorldName = this.mainWorldName + "_reflection";
         this.backroomsWorldName = this.mainWorldName + "_backrooms";
         this.chambersWorldName = this.mainWorldName + "_chambers";
-        this.planetPrefixName = this.mainWorldName + "_planet_";
+        this.dimensionPrefixName = this.mainWorldName + "_dim_";
     }
 
     public void planetGravities () {
         for (World world : this.getServer().getWorlds()) {
-            if (world.getName().startsWith(this.planetPrefixName)) {
+            if (world.getName().startsWith(this.dimensionPrefixName)) {
                 new GravityRunnable(this, world).runTaskTimerAsynchronously(this, 0, 0);
             }
         }

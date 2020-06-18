@@ -1,6 +1,5 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
-import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -9,25 +8,36 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class PlanetsGeneration extends ChunkGenerator {
-    private final BadlandsCaves plugin;
+public class DimensionsGen extends ChunkGenerator {
     private final Biome biome;
     private final double scaleRand;
     private final int raiseFactor;
     private final double frequency;
     private final double amplitude;
+    private final SpecialGen specialGen;
 
-    public PlanetsGeneration(BadlandsCaves plugin, Biome biome) {
-        this.plugin = plugin;
-        Random random = new Random();
+    public enum SpecialGen {
+        SHADOW_REALM,
+    }
+
+    public DimensionsGen(Biome biome, @Nullable SpecialGen specialGen) {
         this.biome = biome;
+        this.specialGen = specialGen;
+
+        Random random = new Random();
         scaleRand = (random.nextDouble() / 5.0);
         raiseFactor = random.nextInt(5) + 2;
         frequency = random.nextDouble() / 50;
         amplitude = random.nextDouble() / 50;
 
+    }
+
+    @Override
+    public boolean shouldGenerateCaves() {
+        return true;
     }
 
     @Override
@@ -59,13 +69,13 @@ public class PlanetsGeneration extends ChunkGenerator {
                         Material subsurface = Material.DIRT;
                         Material under = Material.STONE;
 
-                        if (world.getEnvironment().equals(World.Environment.THE_END) && plugin.getConfig().getBoolean("system.planet_stats." + world.getName() + ".shadow_realm")) {
+                        if (world.getEnvironment().equals(World.Environment.THE_END) && specialGen != null && specialGen.equals(SpecialGen.SHADOW_REALM)) {
                             surface = MakeDescensionStage.getVoidMat(random);
                             subsurface = MakeDescensionStage.getVoidMat(random);
                             under = MakeDescensionStage.getVoidMat(random);
                         }
 
-                        if (this.biome.equals(Biome.DESERT)) {
+                        else if (this.biome.equals(Biome.DESERT)) {
                             surface = Material.SAND;
                             subsurface = Material.SANDSTONE;
                         }

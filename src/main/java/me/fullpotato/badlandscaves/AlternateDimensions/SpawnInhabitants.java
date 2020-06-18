@@ -1,7 +1,7 @@
-package me.fullpotato.badlandscaves.Extraterrestrial;
+package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.WorldGeneration.PlanetWorlds;
+import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -33,7 +33,7 @@ public class SpawnInhabitants implements Listener {
     public void mobSpawn(CreatureSpawnEvent event) {
         LivingEntity entity = event.getEntity();
         World world = entity.getWorld();
-        if (world.getName().startsWith(plugin.planetPrefixName)) {
+        if (world.getName().startsWith(plugin.dimensionPrefixName)) {
 
             if (plugin.getConfig().getBoolean("system.hardmode")) {
                 if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
@@ -45,12 +45,12 @@ public class SpawnInhabitants implements Listener {
                 }
 
                 if (entity instanceof Monster) {
-                    PlanetWorlds.Habitation habitationType = null;
+                    DimensionsWorlds.Habitation habitationType = null;
 
-                    String savedHabitatType = plugin.getConfig().getString("system.planet_stats." + world.getName() + ".habitation");
+                    String savedHabitatType = plugin.getConfig().getString("system.dim_stats." + world.getName() + ".habitation");
                     if (savedHabitatType != null) {
                         try {
-                            habitationType = PlanetWorlds.Habitation.valueOf(savedHabitatType.toUpperCase());
+                            habitationType = DimensionsWorlds.Habitation.valueOf(savedHabitatType.toUpperCase());
                         } catch (IllegalArgumentException e) {
                             return;
                         }
@@ -59,7 +59,7 @@ public class SpawnInhabitants implements Listener {
                     if (habitationType != null) {
                         final Random random = new Random();
                         final Location location = event.getLocation();
-                        if (habitationType.equals(PlanetWorlds.Habitation.INHABITED)) {
+                        if (habitationType.equals(DimensionsWorlds.Habitation.INHABITED)) {
                             event.setCancelled(true);
                             entity.remove();
 

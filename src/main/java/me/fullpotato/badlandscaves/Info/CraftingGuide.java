@@ -1350,9 +1350,9 @@ public class CraftingGuide implements Listener {
 
         ItemStack voidmatter_desc = new ItemStack(Material.ENDER_PEARL);
         ItemMeta voidmatter_meta = voidmatter_desc.getItemMeta();
-        voidmatter_meta.setDisplayName("§eExtraterrestrial Loot");
+        voidmatter_meta.setDisplayName("§eExtradimensional Loot");
         ArrayList<String> voidmatter_lore = new ArrayList<>();
-        voidmatter_lore.add("§7This item is obtained by raiding other planets.");
+        voidmatter_lore.add("§7This item is obtained by raiding other dimensions.");
         voidmatter_meta.setLore(voidmatter_lore);
         voidmatter_desc.setItemMeta(voidmatter_meta);
         descs.put(CustomItem.VOIDMATTER.getItem(), voidmatter_desc);

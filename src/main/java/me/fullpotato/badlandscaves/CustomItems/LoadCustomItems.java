@@ -1210,6 +1210,22 @@ public class LoadCustomItems {
             axe.setItemMeta((ItemMeta) repairable);
             return axe;
         }
+        else if (item.equals(CustomItem.DIMENSIONAL_ANCHOR)) {
+            ItemStack map = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = map.getItemMeta();
+            meta.setDisplayName("§9Dimensional Anchor");
+            meta.setCustomModelData(175);
+
+            String uuid = UUID.randomUUID().toString();
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add("§7" + uuid);
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING, uuid);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_dim_anchor"), PersistentDataType.BYTE, (byte) 1);
+            map.setItemMeta(meta);
+            return map;
+        }
 
 
         return null;

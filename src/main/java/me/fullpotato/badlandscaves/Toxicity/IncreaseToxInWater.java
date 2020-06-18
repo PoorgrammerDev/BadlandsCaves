@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Toxicity;
 
+import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.Extraterrestrial.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -28,8 +28,8 @@ public class IncreaseToxInWater implements Listener {
         Block block = player.getLocation().getBlock();
 
         World world = player.getWorld();
-        EnvironmentalHazards planets = new EnvironmentalHazards(plugin);
-        if (planets.isPlanet(world) && !planets.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
+        EnvironmentalHazards dims = new EnvironmentalHazards(plugin);
+        if (dims.isDimension(world) && !dims.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
 
         final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;

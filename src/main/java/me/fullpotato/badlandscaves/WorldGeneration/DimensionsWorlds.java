@@ -1,8 +1,8 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
+import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
+import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.Extraterrestrial.ETStructures;
-import me.fullpotato.badlandscaves.Extraterrestrial.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.Util.StructureCopier;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -14,12 +14,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlanetWorlds {
+public class DimensionsWorlds {
 
     private final BadlandsCaves plugin;
     private final Random random = new Random();
 
-    public PlanetWorlds(BadlandsCaves plugin) {
+    public DimensionsWorlds(BadlandsCaves plugin) {
         this.plugin = plugin;
     }
 
@@ -58,11 +58,20 @@ public class PlanetWorlds {
     }
 
     public World generate(String name, Biome biome) {
-        WorldCreator creator = new WorldCreator(plugin.planetPrefixName + name);
+        WorldCreator creator = new WorldCreator(plugin.dimensionPrefixName + name);
 
-        World.Environment environment = World.Environment.THE_END; // TODO: 6/16/2020 change this back
+        World.Environment environment = getEnvironment();
         creator.environment(environment);
-        creator.generator(new PlanetsGeneration(plugin, biome));
+
+        boolean shadowrealm = environment.equals(World.Environment.THE_END) && random.nextInt(100) < 25;
+
+        if (shadowrealm) {
+            creator.generator(new DimensionsGen(Biome.THE_VOID, DimensionsGen.SpecialGen.SHADOW_REALM));
+        }
+        else {
+            creator.generator(new DimensionsGen(biome, null));
+        }
+
         World world = plugin.getServer().createWorld(creator);
         world.setSpawnLocation(0, 127, 0);
         world.setGameRule(GameRule.DO_INSOMNIA, false);
@@ -81,11 +90,7 @@ public class PlanetWorlds {
         border.setWarningDistance(0);
         border.setSize(1000);
 
-        if (environment.equals(World.Environment.THE_END)) {
-            PreventDragon.preventDragonSpawn(world);
-            plugin.getConfig().set("system.planet_stats." + world.getName() + ".shadow_realm", random.nextInt(100) < 25); // TODO: 6/16/2020 change this back
-            plugin.saveConfig();
-        }
+        if (environment.equals(World.Environment.THE_END)) PreventDragon.preventDragonSpawn(world);
 
         genGravity(world);
         genHabitation(world);
@@ -96,7 +101,7 @@ public class PlanetWorlds {
 
         StructureCopier.copyStructures(plugin.getServer().getWorld(plugin.mainWorldName), world, "planet_structures");
 
-        ETStructures structures = new ETStructures(plugin);
+        DimensionStructures structures = new DimensionStructures(plugin);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -155,7 +160,7 @@ public class PlanetWorlds {
         for (int i = 0; i < amount; i++) {
             EnvironmentalHazards.Hazard hazard;
             do {
-                if (!priority.isEmpty() && random.nextInt(100) < 75) {
+                if (!priority.isEmpty() && random.nextInt(100) < 60) {
                     hazard = priority.get(random.nextInt(priority.size()));
                 } else {
                     hazard = list.get(random.nextInt(list.size()));
@@ -182,7 +187,7 @@ public class PlanetWorlds {
             gravityModifier = random.doubles(1, 0.1, 0.9).toArray()[0];
         }
 
-        plugin.getConfig().set("system.planet_stats." + world.getName() + ".gravity", gravityModifier);
+        plugin.getConfig().set("system.dim_stats." + world.getName() + ".gravity", gravityModifier);
         plugin.saveConfig();
     }
 
@@ -217,7 +222,7 @@ public class PlanetWorlds {
         }
         world.setGameRule(GameRule.DO_MOB_SPAWNING, mobspawn);
 
-        plugin.getConfig().set("system.planet_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
+        plugin.getConfig().set("system.dim_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
         plugin.saveConfig();
     }
 

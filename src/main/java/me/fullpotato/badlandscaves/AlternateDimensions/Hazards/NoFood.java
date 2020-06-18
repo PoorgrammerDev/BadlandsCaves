@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.Extraterrestrial.Hazards;
+package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
@@ -12,18 +12,18 @@ import org.bukkit.inventory.ItemStack;
 
 public class NoFood implements Listener {
     private final BadlandsCaves plugin;
-    private final EnvironmentalHazards planets;
+    private final EnvironmentalHazards dims;
 
     public NoFood(BadlandsCaves plugin) {
         this.plugin = plugin;
-        this.planets = new EnvironmentalHazards(plugin);
+        this.dims = new EnvironmentalHazards(plugin);
     }
 
     @EventHandler
     public void eat(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        if (planets.isPlanet(world) && planets.hasHazard(world, EnvironmentalHazards.Hazard.NO_FOOD)) {
+        if (dims.isDimension(world) && dims.hasHazard(world, EnvironmentalHazards.Hazard.NO_FOOD)) {
             ItemStack item = event.getItem();
             if (!item.getType().equals(Material.POTION)) {
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.5F, 1);

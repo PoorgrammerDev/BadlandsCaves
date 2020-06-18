@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.Extraterrestrial.Hazards;
+package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
@@ -14,13 +14,13 @@ import java.util.Random;
 
 public class MeteorShowerRunnable extends BukkitRunnable{
     private final BadlandsCaves plugin;
-    private final EnvironmentalHazards planets;
+    private final EnvironmentalHazards dims;
     private final ZombieBossBehavior locationFinder;
     private final Random random = new Random();
 
     public MeteorShowerRunnable(BadlandsCaves plugin) {
         this.plugin = plugin;
-        this.planets = new EnvironmentalHazards(plugin);
+        this.dims = new EnvironmentalHazards(plugin);
         this.locationFinder = new ZombieBossBehavior(plugin);
     }
 
@@ -30,7 +30,7 @@ public class MeteorShowerRunnable extends BukkitRunnable{
         final int chaos = plugin.getConfig().getInt("system.chaos_level");
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             World world = player.getWorld();
-            if (planets.isPlanet(world) && planets.hasHazard(world, EnvironmentalHazards.Hazard.METEOR_SHOWERS)) {
+            if (dims.isDimension(world) && dims.hasHazard(world, EnvironmentalHazards.Hazard.METEOR_SHOWERS)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     for (int i = 0; i < (chaos / 10) + 1; i++) {
                         if (random.nextInt(100) < Math.max(chaos / 1.25, 25)) {

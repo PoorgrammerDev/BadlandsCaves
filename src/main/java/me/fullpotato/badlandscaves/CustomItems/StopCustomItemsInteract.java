@@ -33,6 +33,7 @@ public class StopCustomItemsInteract implements Listener {
                 for (CustomItem customItem : CustomItem.values()) {
                     if (item.isSimilar(customItem.getItem()) && customItem.getPreventUse()) {
                         event.setCancelled(true);
+                        return;
                     }
                 }
             }
@@ -48,6 +49,7 @@ public class StopCustomItemsInteract implements Listener {
                 for (CustomItem customItem : CustomItem.values()) {
                     if (item.isSimilar(customItem.getItem()) || treasureGear.isTreasureGear(item)) {
                         event.setResult(null);
+                        return;
                     }
                 }
             }

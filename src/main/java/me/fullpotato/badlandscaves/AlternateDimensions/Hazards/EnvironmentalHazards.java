@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.Extraterrestrial.Hazards;
+package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.GameRule;
@@ -33,10 +33,10 @@ public class EnvironmentalHazards {
     public void addHazard(World world, @Nullable Hazard hazard) {
         if (hazard == null) hazard = Hazard.values()[random.nextInt(Hazard.values().length)];
 
-        List<String> hazards = plugin.getConfig().getStringList("system.planet_stats." + world.getName() + ".hazards");
+        List<String> hazards = plugin.getConfig().getStringList("system.dim_stats." + world.getName() + ".hazards");
         hazards.add(hazard.name());
 
-        plugin.getConfig().set("system.planet_stats." + world.getName() + ".hazards", hazards);
+        plugin.getConfig().set("system.dim_stats." + world.getName() + ".hazards", hazards);
         plugin.saveConfig();
 
         if (hazard.equals(Hazard.ACID_RAIN)) {
@@ -46,13 +46,13 @@ public class EnvironmentalHazards {
         }
     }
 
-    public boolean isPlanet (World world) {
-        return (world.getName().startsWith(plugin.planetPrefixName));
+    public boolean isDimension(World world) {
+        return (world.getName().startsWith(plugin.dimensionPrefixName));
     }
 
     public boolean hasHazard(World world, Hazard hazard) throws IllegalArgumentException {
-        if (isPlanet(world)) {
-            List<String> hazards = plugin.getConfig().getStringList("system.planet_stats." + world.getName() + ".hazards");
+        if (isDimension(world)) {
+            List<String> hazards = plugin.getConfig().getStringList("system.dim_stats." + world.getName() + ".hazards");
             return !hazards.isEmpty() && hazards.contains(hazard.name());
         }
         throw new IllegalArgumentException("World is not a planet.");

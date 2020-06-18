@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.Extraterrestrial.Hazards;
+package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
@@ -31,7 +31,7 @@ public class ParanoiaRunnable extends BukkitRunnable {
 
         for (Player player : players) {
             World world = player.getWorld();
-            if (hazards.isPlanet(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.PARANOIA)) {
+            if (hazards.isDimension(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.PARANOIA)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false, false));
                     if (random.nextInt(100) < 25) {

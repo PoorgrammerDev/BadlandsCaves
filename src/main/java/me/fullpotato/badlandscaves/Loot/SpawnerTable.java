@@ -72,6 +72,7 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 16));
             generic.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
             generic.add(CustomItem.RECALL_POTION.getItem());
+            generic.add(CustomItem.DIMENSIONAL_ANCHOR.getItem());
 
             if (supernatural) {
                 //HARDMODE SUPERNATURAL------------------------------------------------------------------------
@@ -92,7 +93,6 @@ public class SpawnerTable implements LootTable {
             else {
                 //HARDMODE PURESOUL------------------------------------------------------------------------------
                 specific.add(CustomItem.TITANIUM_FRAGMENT.getItem());
-
             }
         }
         else {
@@ -134,13 +134,27 @@ public class SpawnerTable implements LootTable {
         ArrayList<ItemStack> output = new ArrayList<>();
         if (supernatural) output.add(rune);
 
+        final int threshold = 20;
+        int failed = 0;
         for (int i = 0; i < count; i++) {
+            if (failed > threshold) break;
+
+            ItemStack item;
             if (random.nextInt(100) < 10) {
-                output.add(specific.get(random.nextInt(specific.size())));
+                item = specific.get(random.nextInt(specific.size()));
             }
             else {
-                output.add(generic.get(random.nextInt(generic.size())));
+                item = generic.get(random.nextInt(generic.size()));
             }
+
+            if (output.contains(item)) {
+                i--;
+                failed++;
+            }
+            else {
+                output.add(item);
+            }
+
         }
         return output;
     }
