@@ -1,14 +1,21 @@
 package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Loot.DimensionStructureTable;
 import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Structure;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootContext;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -135,12 +142,14 @@ public class DimensionStructures {
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker);
-            loader.loadAll(origin);
+            loader.loadAll(origin, true);
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker_farm", BlockFace.UP).load(origin);
+                    for (StructureTrack track : bunker) {
+                        fillBarrels(track, origin);
+                    }
                 }
             }.runTaskLater(plugin, 5);
         }
@@ -155,7 +164,16 @@ public class DimensionStructures {
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker_ab);
-            loader.loadAll(origin);
+            loader.loadAll(origin, true);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (StructureTrack track : bunker_ab) {
+                        fillBarrels(track, origin);
+                    }
+                }
+            }.runTaskLater(plugin, 5);
         }
         //single structures
         else {
@@ -178,10 +196,66 @@ public class DimensionStructures {
 
             for (StructureTrack structure : structures) {
                 if (queried.name().equalsIgnoreCase(structure.getStructureName().split(":")[1])) {
-                    structure.load(origin);
+                    structure.load(origin, true);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            fillBarrels(structure, origin);
+                        }
+                    }.runTaskLater(plugin, 5);
                     return;
                 }
             }
+        }
+    }
+
+    public void fillBarrels(StructureTrack track, Location origin) {
+        final Location clone = origin.clone();
+        clone.add(track.getBlockXOffset(), track.getBlockYOffset(), track.getBlockZOffset());
+
+        Block block = clone.getBlock();
+
+        if (block.getType().equals(Material.STRUCTURE_BLOCK)) {
+            if (block.getState() instanceof Structure) {
+                Structure state = (Structure) block.getState();
+
+                BlockVector size = state.getStructureSize();
+                BlockVector offset = state.getRelativePosition();
+
+                Location negative = block.getLocation().add(offset.getBlockX(), offset.getBlockY(), offset.getBlockZ());
+                Location positive = negative.clone().add(size.getBlockX(), size.getBlockY(), size.getBlockZ());
+
+                for (int x = negative.getBlockX(); x < positive.getBlockX(); x++) {
+                    for (int y = negative.getBlockY(); y < positive.getBlockY(); y++) {
+                        for (int z = negative.getBlockZ(); z < positive.getBlockZ(); z++) {
+                            Location iter = new Location(negative.getWorld(), x, y, z);
+
+                            if (iter.getBlock().getType().equals(Material.BARREL)) {
+                                Block barrel = iter.getBlock();
+                                if (barrel.getState() instanceof Barrel) {
+                                    Barrel barrelState = (Barrel) barrel.getState();
+                                    Inventory inventory = barrelState.getInventory();
+
+                                    DimensionStructureTable loot = new DimensionStructureTable(plugin);
+                                    LootContext.Builder builder = new LootContext.Builder(block.getLocation());
+
+                                    for (ItemStack item : loot.populateLoot(random, builder.build())) {
+                                        int slot;
+                                        do {
+                                            slot = random.nextInt(inventory.getSize());
+                                        } while (inventory.getItem(slot) != null);
+
+                                        inventory.setItem(slot, item);
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            block.setType(Material.AIR);
         }
     }
 }

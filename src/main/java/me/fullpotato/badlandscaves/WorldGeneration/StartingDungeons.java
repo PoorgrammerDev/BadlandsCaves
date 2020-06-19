@@ -4,20 +4,12 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
 public class StartingDungeons {
     private final BadlandsCaves plugin;
-    private final EntityType[] mobTypes = {
-        EntityType.ZOMBIE,
-        EntityType.SKELETON,
-        EntityType.SPIDER,
-        EntityType.WITCH,
-        EntityType.CREEPER,
-    };
 
 
     public StartingDungeons(BadlandsCaves plugin) {
@@ -45,7 +37,7 @@ public class StartingDungeons {
                     else {
                         if (ran[0] <= dungeons_spawned) {
                             dungeonGenerator.getNewLocation(world.getSpawnLocation(), random, 1000);
-                            dungeonGenerator.makeDungeon(mobTypes[random.nextInt(mobTypes.length)], random, true, true);
+                            dungeonGenerator.makeDungeon(null, random, true, true);
                             ran[0]++;
                         }
                     }

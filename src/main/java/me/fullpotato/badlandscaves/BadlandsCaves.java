@@ -120,10 +120,6 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
-
-        DimensionsWorlds planet = new DimensionsWorlds(this);
-        //planet.generate(UUID.randomUUID().toString());
-
     }
 
     //EVENTS

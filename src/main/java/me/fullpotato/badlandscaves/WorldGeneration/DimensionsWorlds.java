@@ -4,11 +4,13 @@ import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.StructureCopier;
-import org.bukkit.GameRule;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
-import org.bukkit.WorldCreator;
+import me.fullpotato.badlandscaves.Util.StructureTrack;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Campfire;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -73,7 +75,8 @@ public class DimensionsWorlds {
         }
 
         World world = plugin.getServer().createWorld(creator);
-        world.setSpawnLocation(0, 127, 0);
+        assert world != null;
+        world.setTime(random.nextLong());
         world.setGameRule(GameRule.DO_INSOMNIA, false);
         world.setGameRule(GameRule.FALL_DAMAGE, true);
         world.setGameRule(GameRule.DISABLE_RAIDS, true);
@@ -82,7 +85,6 @@ public class DimensionsWorlds {
         world.setGameRule(GameRule.DO_FIRE_TICK, false);
         world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
         world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
-        world.setGameRule(GameRule.SPAWN_RADIUS, 0);
         world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
 
         WorldBorder border = world.getWorldBorder();
@@ -96,10 +98,11 @@ public class DimensionsWorlds {
         genHabitation(world);
 
         final int chaos = plugin.getConfig().getInt("system.chaos_level");
-        final int amount = chaos > 0 ? 1 + random.nextInt((chaos / 15)) : 1;
+        final int amount = chaos / 15 > 0 ? 1 + random.nextInt((chaos / 15)) : 1;
         addHazards(world, environment, biome, amount);
 
         StructureCopier.copyStructures(plugin.getServer().getWorld(plugin.mainWorldName), world, "planet_structures");
+        genSpawnCage(world);
 
         DimensionStructures structures = new DimensionStructures(plugin);
         new BukkitRunnable() {
@@ -110,6 +113,24 @@ public class DimensionsWorlds {
         }.runTaskLater(plugin, 5);
 
         return world;
+    }
+
+    public void genSpawnCage (World world) {
+        Location location = new Location(world, random.nextInt(200) - 100, random.nextInt(100) + 20, random.nextInt(200) - 100);
+        world.setSpawnLocation(location);
+
+        StructureTrack track = new StructureTrack(plugin, location, -4, -1, -4, 0, 0, 0, "badlandscaves:dungeon", BlockFace.DOWN);
+        track.load();
+
+        Block campfire = location.getBlock();
+        campfire.setType(Material.CAMPFIRE);
+
+        if (campfire.getState() instanceof Campfire) {
+            Campfire state = (Campfire) campfire.getState();
+
+            state.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_return_portal"), PersistentDataType.BYTE, (byte) 1);
+            state.update(true);
+        }
     }
 
     public void addHazards (World world, World.Environment environment, Biome biome, int amount) {

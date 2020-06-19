@@ -9,6 +9,12 @@ public class MultiStructureLoader {
         this.structures = structures;
     }
 
+    public void loadAll(Location origin, boolean keepStructureBlocks) {
+        for (StructureTrack structure : structures) {
+            structure.load(origin, keepStructureBlocks);
+        }
+    }
+
     public void loadAll(Location origin) {
         for (StructureTrack structure : structures) {
             structure.load(origin);

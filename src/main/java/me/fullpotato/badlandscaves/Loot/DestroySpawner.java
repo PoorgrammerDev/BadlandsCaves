@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,6 +28,13 @@ public class DestroySpawner implements Listener {
     private final BadlandsCaves plugin;
     private final HashMap<Material, Material> matMap = new HashMap<>();
     private static Location newLoc;
+    private final EntityType[] mobTypes = {
+            EntityType.ZOMBIE,
+            EntityType.SKELETON,
+            EntityType.SPIDER,
+            EntityType.WITCH,
+            EntityType.CREEPER,
+    };
 
 
     public DestroySpawner(BadlandsCaves plugin) {
@@ -51,15 +59,7 @@ public class DestroySpawner implements Listener {
 
 
             if (pickaxes.contains(player.getInventory().getItemInMainHand().getType())) {
-                int current_chaos = plugin.getConfig().getInt("system.chaos_level");
-                if (current_chaos < 100) {
-                    plugin.getConfig().set("system.chaos_level", current_chaos + 1);
-                    plugin.saveConfig();
-                    plugin.getServer().broadcastMessage("§cChaos seeps into this realm...");
-                }
-                else {
-                    plugin.getServer().broadcastMessage("§cThe world has reached its breaking point.");
-                }
+                incrementChaos(false);
 
 
                 Random random = new Random();
@@ -86,6 +86,21 @@ public class DestroySpawner implements Listener {
 
                 loot(player, block.getLocation(), random, spawner.getSpawnedType());
             }
+            else {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    public void incrementChaos(boolean silent) {
+        int current_chaos = plugin.getConfig().getInt("system.chaos_level");
+        if (current_chaos < 100) {
+            plugin.getConfig().set("system.chaos_level", current_chaos + 1);
+            plugin.saveConfig();
+            if (!silent) plugin.getServer().broadcastMessage("§cChaos seeps into this realm...");
+        }
+        else if (!silent) {
+            plugin.getServer().broadcastMessage("§cChaos has consumed the world...");
         }
     }
 
@@ -139,7 +154,10 @@ public class DestroySpawner implements Listener {
         return false;
     }
 
-    public void makeDungeon(EntityType type, Random random, boolean silent, boolean starting) {
+    public void makeDungeon(@Nullable EntityType type, Random random, boolean silent, boolean starting) {
+        if (type == null) type = mobTypes[random.nextInt(mobTypes.length)];
+        final EntityType finalType = type;
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -161,7 +179,7 @@ public class DestroySpawner implements Listener {
 
                 newLoc.getBlock().setType(Material.SPAWNER);
                 CreatureSpawner spawner = (CreatureSpawner) newLoc.getBlock().getState();
-                spawner.setSpawnedType(type);
+                spawner.setSpawnedType(finalType);
                 spawner.setMinSpawnDelay(200 - chaos);
                 spawner.setMaxSpawnDelay(800 - (5 * chaos));
                 spawner.setMaxNearbyEntities((int) (6 + (0.1 * chaos)));

@@ -81,19 +81,17 @@ public class StructureTrack {
         this.redstoneBlockRelative = redstoneBlockRelative;
     }
 
-    public String getStructureName() {
-        return this.structureName;
-    }
-
-    public boolean load () {
+    public void load () {
         if (origin != null) {
             load(this.origin);
-            return true;
         }
-        return false;
     }
 
     public void load(Location origin) {
+        load(origin, false);
+    }
+
+    public void load(Location origin, boolean keepStructureBlock) {
         Location clone = origin.clone().add(blockXOffset, blockYOffset, blockZOffset);
         Block block = clone.getBlock();
         BlockData savedPreStrucData = block.getBlockData();
@@ -114,10 +112,51 @@ public class StructureTrack {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (block.getType().equals(Material.STRUCTURE_BLOCK)) block.setBlockData(savedPreStrucData);
+                if (!keepStructureBlock && block.getType().equals(Material.STRUCTURE_BLOCK)) block.setBlockData(savedPreStrucData);
                 if (relative.getType().equals(Material.REDSTONE_BLOCK)) relative.setBlockData(savedPreRSData);
             }
         }.runTaskLater(plugin, 1);
 
     }
+
+    public String getStructureName() {
+        return this.structureName;
+    }
+
+    public Location getOrigin() {
+        return this.origin;
+    }
+
+    public int getBlockXOffset() {
+        return this.blockXOffset;
+    }
+
+    public int getBlockYOffset() {
+        return this.blockYOffset;
+    }
+    public int getBlockZOffset() {
+        return this.blockZOffset;
+    }
+
+    public int getSettingXOffset() {
+        return this.settingXOffset;
+    }
+
+    public int getSettingYOffset() {
+        return this.settingYOffset;
+    }
+
+    public int getSettingZOffset() {
+        return this.settingZOffset;
+    }
+
+    public double getIntegrity() {
+        return this.integrity;
+    }
+
+    public BlockFace getRedstoneBlockRelative() {
+        return this.redstoneBlockRelative;
+    }
+
+
 }
