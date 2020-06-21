@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -282,7 +283,14 @@ public class UseDimensionalAnchor implements Listener {
                                     top.breakNaturally(empty);
                                     bottom.breakNaturally(empty);
 
+                                    String worldName = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
                                     player.closeInventory();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            player.getWorld().dropItemNaturally(location, getSpecificAnchor(worldName));
+                                        }
+                                    }.runTaskLater(plugin, 5);
                                 }
                     }
                 }

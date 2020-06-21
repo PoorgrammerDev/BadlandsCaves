@@ -143,7 +143,11 @@ public class ZombieBossBehavior extends BukkitRunnable {
         else {
             fakePlayer = nms.summonFakePlayer(zombie.getLocation(), player, null, null, true);
             SpawnBoss spawnboss = new SpawnBoss(plugin, player);
-            nms.giveHandItem(fakePlayer, null, new ItemStack(spawnboss.getHighestDamage()));
+
+            Material highestDamage = spawnboss.getHighestDamage();
+            if (highestDamage != null) {
+                nms.giveHandItem(fakePlayer, null, new ItemStack(highestDamage));
+            }
 
             PlayerScore.REFLECTION_ZOMBIE.setScore(plugin, player, 1);
         }

@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHaza
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.StructureCopier;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
+import me.fullpotato.badlandscaves.Util.UnloadedWorld;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -60,6 +61,18 @@ public class DimensionsWorlds {
     }
 
     public World generate(String name, Biome biome) {
+        UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.dimensionPrefixName + name);
+        World alreadyExisting = plugin.getServer().getWorld(plugin.dimensionPrefixName + name);
+        if (plugin.getServer().getWorlds().contains(alreadyExisting)) {
+            return alreadyExisting;
+        }
+        else if (unloadedWorld.exists()) {
+            unloadedWorld.load(plugin);
+            alreadyExisting = plugin.getServer().getWorld(plugin.dimensionPrefixName + name);
+            return alreadyExisting;
+        }
+
+
         WorldCreator creator = new WorldCreator(plugin.dimensionPrefixName + name);
 
         World.Environment environment = getEnvironment();

@@ -39,7 +39,7 @@ public class CreeperBuff implements Listener {
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
-        if (random.nextInt(100) < 100) {
+        if (random.nextInt(100) < augment) {
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
             creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);

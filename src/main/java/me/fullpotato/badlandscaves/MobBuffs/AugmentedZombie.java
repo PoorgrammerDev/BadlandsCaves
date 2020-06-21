@@ -60,7 +60,7 @@ public class AugmentedZombie extends BukkitRunnable {
                                         zombie.teleport(playerLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
                                         world.playSound(player.getLocation(), "custom.dio.za_warudo", SoundCategory.HOSTILE, 10, 1);
 
-                                        double damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() * 10;
+                                        double damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() * 4;
                                         player.setVelocity(zombie.getVelocity().subtract(player.getVelocity()).multiply(damage));
                                         player.damage(damage, zombie);
                                         healZombie(zombie, damage / ((chaos / -50.0) + 5));

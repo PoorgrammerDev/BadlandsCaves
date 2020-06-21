@@ -84,7 +84,9 @@ public class SpawnBoss extends BukkitRunnable {
         boss.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 1, false, false));
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR).getValue());
         boss.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue());
-        boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(dmg.get(getHighestDamage()));
+        if (getHighestDamage() != null) {
+            boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(dmg.get(getHighestDamage()));
+        }
 
         return boss;
     }
