@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Loot.DimensionStructureTable;
 import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
+import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,29 +25,35 @@ import java.util.Random;
 
 public class DimensionStructures {
     public enum PlanetStructure {
-        MANABAR(15),
-        LAB(15),
-        LAB_ABANDONED(15),
-        LAB_DESTROYED(0),
-        JAIL(7),
-        JAIL_ABANDONED(7),
-        SHRINE(7),
-        SHRINE_DESTROYED(7),
-        CURSED_HOUSE(15),
-        TENT(7),
-        HOUSE(9),
-        HOUSE_ABANDONED(10),
-        HOUSE_DESTROYED(10),
-        BUNKER(16),
-        BUNKER_AB(16);
+        MANABAR(15, true),
+        LAB(15, true),
+        LAB_ABANDONED(15, false),
+        LAB_DESTROYED(0, false),
+        JAIL(7, true),
+        JAIL_ABANDONED(7, false),
+        SHRINE(7, true),
+        SHRINE_DESTROYED(7, false),
+        CURSED_HOUSE(15, false),
+        TENT(7, true),
+        HOUSE(9, true),
+        HOUSE_ABANDONED(10, false),
+        HOUSE_DESTROYED(10, false),
+        BUNKER(16, true),
+        BUNKER_AB(16, false);
 
         private final int clearRadius;
-        PlanetStructure(int clearRadius) {
+        private final boolean inhabited;
+        PlanetStructure(int clearRadius, boolean inhabited) {
             this.clearRadius = clearRadius;
+            this.inhabited = inhabited;
         }
 
         public int getClearRadius() {
             return this.clearRadius;
+        }
+
+        public boolean getInhabited() {
+            return inhabited;
         }
     }
     
@@ -57,7 +64,7 @@ public class DimensionStructures {
         this.plugin = plugin;
     }
 
-    public void generateStructure (World world, @Nullable Location origin, @Nullable PlanetStructure structure) {
+    public void generateStructure (World world, DimensionsWorlds.Habitation habitation, @Nullable Location origin, @Nullable PlanetStructure structure) {
         if (world.getName().startsWith(plugin.dimensionPrefixName)) {
             if (origin == null || origin.getWorld() == null || !origin.getWorld().equals(world)) {
                 int y_start = 200;
@@ -76,10 +83,17 @@ public class DimensionStructures {
                 }
             }
 
-            if (structure == null) structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
+            if (structure == null) {
+                structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
+                if (habitation.equals(DimensionsWorlds.Habitation.INHABITED)) {
+                    while (!structure.getInhabited()) {
+                        structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
+                    }
+                }
+            }
 
             clearArea(origin, structure.getClearRadius());
-            loadStructure(structure, origin);
+            loadStructure(structure, origin, habitation);
         }
     }
 
@@ -127,7 +141,7 @@ public class DimensionStructures {
         return Material.STONE;
     }
 
-    public void loadStructure(@NotNull PlanetStructure queried, Location origin) {
+    public void loadStructure(@NotNull PlanetStructure queried, Location origin, DimensionsWorlds.Habitation habitation) {
         //center ground level world origin ~(0, 60, 0)
 
         //multistructures
@@ -148,7 +162,7 @@ public class DimensionStructures {
                 @Override
                 public void run() {
                     for (StructureTrack track : bunker) {
-                        fillBarrels(track, origin);
+                        fillBarrels(track, origin, habitation);
                     }
                 }
             }.runTaskLater(plugin, 5);
@@ -170,7 +184,7 @@ public class DimensionStructures {
                 @Override
                 public void run() {
                     for (StructureTrack track : bunker_ab) {
-                        fillBarrels(track, origin);
+                        fillBarrels(track, origin, habitation);
                     }
                 }
             }.runTaskLater(plugin, 5);
@@ -201,7 +215,7 @@ public class DimensionStructures {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            fillBarrels(structure, origin);
+                            fillBarrels(structure, origin, habitation);
                         }
                     }.runTaskLater(plugin, 5);
                     return;
@@ -210,7 +224,7 @@ public class DimensionStructures {
         }
     }
 
-    public void fillBarrels(StructureTrack track, Location origin) {
+    public void fillBarrels(StructureTrack track, Location origin, DimensionsWorlds.Habitation habitation) {
         final Location clone = origin.clone();
         clone.add(track.getBlockXOffset(), track.getBlockYOffset(), track.getBlockZOffset());
 
@@ -237,7 +251,7 @@ public class DimensionStructures {
                                     Barrel barrelState = (Barrel) barrel.getState();
                                     Inventory inventory = barrelState.getInventory();
 
-                                    DimensionStructureTable loot = new DimensionStructureTable(plugin);
+                                    DimensionStructureTable loot = new DimensionStructureTable(plugin, habitation);
                                     LootContext.Builder builder = new LootContext.Builder(block.getLocation());
 
                                     for (ItemStack item : loot.populateLoot(random, builder.build())) {

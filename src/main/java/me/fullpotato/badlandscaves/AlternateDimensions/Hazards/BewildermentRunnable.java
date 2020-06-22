@@ -41,7 +41,7 @@ public class BewildermentRunnable extends BukkitRunnable {
                             public void run() {
                                 player.setMetadata("bewilder_velocity_cancel", new FixedMetadataValue(plugin, false));
                             }
-                        }.runTaskLaterAsynchronously(plugin, 20);
+                        }.runTaskLaterAsynchronously(plugin, 2);
                     }
                 }
             }

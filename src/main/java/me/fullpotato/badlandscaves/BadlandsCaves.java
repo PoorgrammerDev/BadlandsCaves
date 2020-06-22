@@ -289,8 +289,6 @@ public final class BadlandsCaves extends JavaPlugin {
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();
         witherFight.portalDestroyTimer();
-
-        planetGravities();
     }
 
     //RECIPES
@@ -406,14 +404,6 @@ public final class BadlandsCaves extends JavaPlugin {
         this.backroomsWorldName = this.mainWorldName + "_backrooms";
         this.chambersWorldName = this.mainWorldName + "_chambers";
         this.dimensionPrefixName = this.mainWorldName + "_dim_";
-    }
-
-    public void planetGravities () {
-        for (World world : this.getServer().getWorlds()) {
-            if (world.getName().startsWith(this.dimensionPrefixName)) {
-                new GravityRunnable(this, world).runTaskTimerAsynchronously(this, 0, 0);
-            }
-        }
     }
 
     public void getServerVersion() {

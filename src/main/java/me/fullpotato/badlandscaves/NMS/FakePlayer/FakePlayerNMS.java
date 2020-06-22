@@ -1,6 +1,5 @@
 package me.fullpotato.badlandscaves.NMS.FakePlayer;
 
-import net.minecraft.server.v1_15_R1.Packet;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,5 +11,5 @@ public interface FakePlayerNMS {
     void move (Location location, Player player, Player sendTo, boolean rotation);
     void damage (Player player, Player sendTo, boolean damaged);
     void remove (Player player);
-    void sendToAll (Packet<?>... packets);
+    void sendToAll (Object... packets);
 }

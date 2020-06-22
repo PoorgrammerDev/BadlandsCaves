@@ -136,14 +136,17 @@ public class FakePlayer_1_15_R1 implements FakePlayerNMS{
         }
     }
 
-    public void sendToAll (Packet<?>... packets) {
+    public void sendToAll (Object... packets) {
         if (packets.length < 1) return;
 
         for (final Player online : plugin.getServer().getOnlinePlayers()) {
             final CraftPlayer ply = (CraftPlayer) online;
 
-            for (Packet<?> packet : packets) {
-                ply.getHandle().playerConnection.sendPacket(packet);
+            for (Object obj : packets) {
+                if (obj instanceof Packet) {
+                    Packet<?> packet = (Packet<?>) obj;
+                    ply.getHandle().playerConnection.sendPacket(packet);
+                }
             }
         }
     }

@@ -17,15 +17,9 @@ public class DimensionsGen extends ChunkGenerator {
     private final int raiseFactor;
     private final double frequency;
     private final double amplitude;
-    private final SpecialGen specialGen;
 
-    public enum SpecialGen {
-        SHADOW_REALM,
-    }
-
-    public DimensionsGen(Biome biome, @Nullable SpecialGen specialGen) {
+    public DimensionsGen(Biome biome) {
         this.biome = biome;
-        this.specialGen = specialGen;
 
         Random random = new Random();
         scaleRand = (random.nextDouble() / 5.0);
@@ -69,13 +63,7 @@ public class DimensionsGen extends ChunkGenerator {
                         Material subsurface = Material.DIRT;
                         Material under = Material.STONE;
 
-                        if (world.getEnvironment().equals(World.Environment.THE_END) && specialGen != null && specialGen.equals(SpecialGen.SHADOW_REALM)) {
-                            surface = MakeDescensionStage.getVoidMat(random);
-                            subsurface = MakeDescensionStage.getVoidMat(random);
-                            under = MakeDescensionStage.getVoidMat(random);
-                        }
-
-                        else if (this.biome.equals(Biome.DESERT)) {
+                        if (this.biome.equals(Biome.DESERT)) {
                             surface = Material.SAND;
                             subsurface = Material.SANDSTONE;
                         }
