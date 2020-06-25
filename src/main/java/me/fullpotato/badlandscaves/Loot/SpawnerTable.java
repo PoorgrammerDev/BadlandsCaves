@@ -42,7 +42,7 @@ public class SpawnerTable implements LootTable {
         matchSoul.put(EntityType.CAVE_SPIDER, CustomItem.SPIDER_SOUL.getItem());
         matchSoul.put(EntityType.SILVERFISH, CustomItem.SILVERFISH_SOUL.getItem());
         matchSoul.put(EntityType.GHAST, CustomItem.GHAST_SOUL.getItem());
-        matchSoul.put(EntityType.PIG_ZOMBIE, CustomItem.PIGZOMBIE_SOUL.getItem());
+        matchSoul.put(EntityType.ZOMBIFIED_PIGLIN, CustomItem.PIGZOMBIE_SOUL.getItem());
         matchSoul.put(EntityType.PHANTOM, CustomItem.PHANTOM_SOUL.getItem());
         matchSoul.put(EntityType.WITCH, CustomItem.WITCH_SOUL.getItem());
     }

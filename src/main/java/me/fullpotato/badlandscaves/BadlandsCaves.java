@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves;
 
 import me.fullpotato.badlandscaves.AlternateDimensions.GravityFallDamage;
-import me.fullpotato.badlandscaves.AlternateDimensions.GravityRunnable;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
 import me.fullpotato.badlandscaves.AlternateDimensions.PreventWorldGenLag;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
@@ -27,13 +26,13 @@ import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Loot.UseFishingCrate;
 import me.fullpotato.badlandscaves.MobBuffs.*;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
-import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
-import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
-import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
-import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_15_R1;
+import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R1;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionPlayerMove;
@@ -53,7 +52,6 @@ import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
-import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -411,11 +409,11 @@ public final class BadlandsCaves extends JavaPlugin {
         version = version.substring(version.lastIndexOf('.') + 2);
 
         switch (version) {
-            case "1_15_R1":
-                enhancedEyesNMS = new EnhancedEyes_1_15_R1();
-                fakePlayerNMS = new FakePlayer_1_15_R1(this);
-                lineOfSightNMS = new LineOfSight_1_15_R1();
-                possessionNMS = new Possession_1_15_R1();
+            case "1_16_R1":
+                enhancedEyesNMS = new EnhancedEyes_1_16_R1();
+                fakePlayerNMS = new FakePlayer_1_16_R1(this);
+                lineOfSightNMS = new LineOfSight_1_16_R1();
+                possessionNMS = new Possession_1_16_R1();
                 break;
             default:
                 this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");

@@ -1,23 +1,26 @@
 package me.fullpotato.badlandscaves.NMS.FakePlayer;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.datafixers.util.Pair;
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FakePlayer_1_15_R1 implements FakePlayerNMS{
+public class FakePlayer_1_16_R1 implements FakePlayerNMS{
     private final BadlandsCaves plugin;
 
-    public FakePlayer_1_15_R1(BadlandsCaves plugin) {
+    public FakePlayer_1_16_R1(BadlandsCaves plugin) {
         this.plugin = plugin;
     }
 
@@ -32,17 +35,17 @@ public class FakePlayer_1_15_R1 implements FakePlayerNMS{
         EntityPlayer clone = new EntityPlayer(server, world, new GameProfile(player.getUniqueId(), name == null ? player.getName() : name), new PlayerInteractManager(world));
         clone.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 
-        PacketPlayOutEntityEquipment helmetPacket = null;
-        PacketPlayOutEntityEquipment chestplatePacket = null;
-        PacketPlayOutEntityEquipment leggingsPacket = null;
-        PacketPlayOutEntityEquipment bootsPacket = null;
-
+        PacketPlayOutEntityEquipment equipmentPacket = null;
         if (copyArmor) {
             EntityEquipment equipment = player.getEquipment();
-            helmetPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(equipment.getHelmet()));
-            chestplatePacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(equipment.getChestplate()));
-            leggingsPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(equipment.getLeggings()));
-            bootsPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.FEET, CraftItemStack.asNMSCopy(equipment.getBoots()));
+
+            List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R1.ItemStack>> list = new ArrayList<>();
+            list.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(equipment.getHelmet())));
+            list.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(equipment.getChestplate())));
+            list.add(new Pair<>(EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(equipment.getLeggings())));
+            list.add(new Pair<>(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(equipment.getBoots())));
+
+            equipmentPacket = new PacketPlayOutEntityEquipment(clone.getId(), list);
         }
 
 
@@ -65,7 +68,7 @@ public class FakePlayer_1_15_R1 implements FakePlayerNMS{
 
         if (sendTo == null) {
             sendToAll(info, spawn, team_packet);
-            if (copyArmor) sendToAll(helmetPacket, chestplatePacket, leggingsPacket, bootsPacket);
+            if (copyArmor) sendToAll(equipmentPacket);
         }
         else {
             ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(info);
@@ -73,10 +76,7 @@ public class FakePlayer_1_15_R1 implements FakePlayerNMS{
             ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(team_packet);
 
             if (copyArmor) {
-                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(helmetPacket);
-                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(chestplatePacket);
-                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(leggingsPacket);
-                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(bootsPacket);
+                ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(equipmentPacket);
             }
         }
 
@@ -85,7 +85,11 @@ public class FakePlayer_1_15_R1 implements FakePlayerNMS{
 
     public void giveHandItem (Player player, Player sendTo, ItemStack item) {
         EntityPlayer clone = ((CraftPlayer) player).getHandle();
-        PacketPlayOutEntityEquipment handItemPacket = new PacketPlayOutEntityEquipment(clone.getId(), EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(item));
+
+        List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R1.ItemStack>> list = new ArrayList<>();
+        list.add(new Pair<>(EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(item)));
+
+        PacketPlayOutEntityEquipment handItemPacket = new PacketPlayOutEntityEquipment(clone.getId(), list);
 
         if (sendTo == null) sendToAll(handItemPacket);
         else ((CraftPlayer) sendTo).getHandle().playerConnection.sendPacket(handItemPacket);

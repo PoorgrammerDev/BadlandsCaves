@@ -31,7 +31,7 @@ public class ZombieBuff implements Listener {
     @EventHandler
     public void HM_zombie (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Zombie)) return;
-        if (event.getEntityType().equals(EntityType.PIG_ZOMBIE)) return;
+        if (event.getEntityType().equals(EntityType.ZOMBIFIED_PIGLIN)) return;
 
         //make sure zombie is not a descension "Lost Soul"
         World world = event.getLocation().getWorld();

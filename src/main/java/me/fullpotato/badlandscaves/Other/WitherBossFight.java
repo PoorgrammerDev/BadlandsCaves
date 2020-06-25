@@ -410,7 +410,7 @@ public class WitherBossFight implements Listener {
         Location magma_lower = new Location(world,-39, 128, 23);
         Location magma_upper = new Location(world, -11, 128, 51);
         genMaze(new Location(world, -25, 128, 23), magma_lower, magma_upper, random);
-        spawnMazeMobs(EntityType.PIG_ZOMBIE, magma_lower, magma_upper, random, 20);
+        spawnMazeMobs(EntityType.ZOMBIFIED_PIGLIN, magma_lower, magma_upper, random, 20);
 
         //glowstone maze
         Location glowstone_lower = new Location(world, -76, 128, -14);

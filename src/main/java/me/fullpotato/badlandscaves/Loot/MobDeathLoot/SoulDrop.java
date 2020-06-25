@@ -31,7 +31,7 @@ public class SoulDrop implements Listener {
         souls.put(EntityType.WITHER_SKELETON, CustomItem.SKELETON_SOUL.getItem());
         souls.put(EntityType.SPIDER, CustomItem.SPIDER_SOUL.getItem());
         souls.put(EntityType.CAVE_SPIDER, CustomItem.SPIDER_SOUL.getItem());
-        souls.put(EntityType.PIG_ZOMBIE, CustomItem.PIGZOMBIE_SOUL.getItem());
+        souls.put(EntityType.ZOMBIFIED_PIGLIN, CustomItem.PIGZOMBIE_SOUL.getItem());
         souls.put(EntityType.GHAST, CustomItem.GHAST_SOUL.getItem());
         souls.put(EntityType.SILVERFISH, CustomItem.SILVERFISH_SOUL.getItem());
         souls.put(EntityType.WITCH, CustomItem.WITCH_SOUL.getItem());

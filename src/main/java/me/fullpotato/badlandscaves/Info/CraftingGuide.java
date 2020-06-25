@@ -1245,11 +1245,11 @@ public class CraftingGuide implements Listener {
         descs.put(CustomItem.SPIDER_SOUL.getItem(), spider_soul_desc);
 
 
-        ItemStack pigzombie_soul_desc = new ItemStack(Material.ZOMBIE_PIGMAN_SPAWN_EGG);
+        ItemStack pigzombie_soul_desc = new ItemStack(Material.ZOMBIFIED_PIGLIN_SPAWN_EGG);
         ItemMeta pigzombie_soul_meta = pigzombie_soul_desc.getItemMeta();
-        pigzombie_soul_meta.setDisplayName("§dZombie Pigman Drops");
+        pigzombie_soul_meta.setDisplayName("§dZombified Piglin Drops");
         ArrayList<String> pigzombie_soul_lore = new ArrayList<>();
-        pigzombie_soul_lore.add("§7This item can be obtained by killing Zombie Pigmen.");
+        pigzombie_soul_lore.add("§7This item can be obtained by killing Zombified Piglins.");
         pigzombie_soul_meta.setLore(pigzombie_soul_lore);
         pigzombie_soul_desc.setItemMeta(pigzombie_soul_meta);
         descs.put(CustomItem.PIGZOMBIE_SOUL.getItem(), pigzombie_soul_desc);
