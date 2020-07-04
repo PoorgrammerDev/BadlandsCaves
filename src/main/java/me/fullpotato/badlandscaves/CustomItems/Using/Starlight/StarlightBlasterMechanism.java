@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharg
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.Util.TargetEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -17,11 +18,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public class StarlightBlasterMechanism implements Listener {
+public class StarlightBlasterMechanism extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
     private final StarlightCharge chargeManager;
     private final StarlightTools toolManager;
@@ -59,52 +63,17 @@ public class StarlightBlasterMechanism implements Listener {
 
                 Player player = event.getPlayer();
                 int charge = chargeManager.getCharge(item);
+                short cooldown = getCooldown(item);
                 event.setCancelled(true);
                 boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
-                if (hardmode && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0) {
-                    final int range = 50;
+                if (hardmode && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0 && cooldown <= 0) {
                     int travelled = 0;
 
-                    World world = player.getWorld();
                     Location location = player.getEyeLocation();
-                    Collection<Entity> entityList = world.getNearbyEntities(location, 0.2, 0.2, 0.2);
+                    TargetEntity targetEntity = new TargetEntity();
+                    LivingEntity target = targetEntity.findTargetLivingEntity(location, 50, 0.2, player);
 
-                    BlockIterator iterator = new BlockIterator(location);
-                    while (travelled < range && iterator.hasNext()) {
-                        Block block = iterator.next();
-                        if (block.isPassable()) {
-                            location = block.getLocation().add(0.5, 0.5, 0.5);
-                            entityList = world.getNearbyEntities(location, 0.2, 0.2, 0.2);
-                            entityList.removeIf(entity -> {
-                                if (entity instanceof Player) {
-                                    Player target = (Player) entity;
-                                    return target.getGameMode().equals(GameMode.SPECTATOR) || target.equals(player);
-                                }
-                                return false;
-                            });
-
-                            if (entityList.isEmpty()) {
-                                travelled++;
-                            }
-                            else break;
-                        }
-                        else break;
-                    }
-
-                    ParticleShapes.particleLine(null, Particle.REDSTONE, player.getEyeLocation(), location, 0, new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), 1);
-
-                    double shortestDistance = Double.MAX_VALUE;
-                    LivingEntity target = null;
-                    for (Entity entity : entityList) {
-                        if (entity instanceof LivingEntity) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            double distance = livingEntity.getLocation().distanceSquared(location);
-                            if (distance < shortestDistance) {
-                                shortestDistance = distance;
-                                target = livingEntity;
-                            }
-                        }
-                    }
+                    ParticleShapes.particleLine(null, Particle.REDSTONE, player.getEyeLocation(), targetEntity.getTargetLocation(), 0, new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), 1);
 
                     final int damage = 20;
                     if (target != null) {
@@ -115,9 +84,61 @@ public class StarlightBlasterMechanism implements Listener {
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                         chargeManager.setCharge(item, charge - ((travelled / 2) + (target != null ? damage / 2 : 0)));
                     }
+
+                    setCooldown(item, (short) 20);
                 }
             }
         }
+    }
+
+    @Override
+    public void run() {
+        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        if (hardmode) {
+            for (Player player : plugin.getServer().getOnlinePlayers()) {
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                    for (ItemStack item : player.getInventory()) {
+                        if (item != null) {
+                            if (toolManager.isStarlightBlaster(item)) {
+                                short cooldown = getCooldown(item);
+                                if (cooldown > 0) {
+                                    if (cooldown == 1) {
+                                        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, .5F, 1.2F);
+                                    }
+                                    cooldown--;
+                                    setCooldown(item, cooldown);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void setCooldown(@NotNull ItemStack item, short time) {
+        if (toolManager.isStarlightBlaster(item)) {
+            if (item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "blaster_cooldown"), PersistentDataType.SHORT, time);
+                    item.setItemMeta(meta);
+                }
+            }
+        }
+    }
+
+    public short getCooldown(@NotNull ItemStack item) {
+        if (toolManager.isStarlightBlaster(item)) {
+            if (item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    Short cooldown = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "blaster_cooldown"), PersistentDataType.SHORT);
+                    if (cooldown != null) return cooldown;
+                }
+            }
+        }
+        return -1;
     }
 
 }

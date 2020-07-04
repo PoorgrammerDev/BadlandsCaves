@@ -30,7 +30,7 @@ public class EnhancedEyes_1_16_R1 implements EnhancedEyesNMS {
 
         if (color != null) {
             Scoreboard scoreboard = new Scoreboard();
-            ScoreboardTeam team = new ScoreboardTeam(scoreboard, UUID.randomUUID().toString().substring(0, 15));
+            ScoreboardTeam team = new ScoreboardTeam(scoreboard, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15));
             team.setNameTagVisibility(ScoreboardTeamBase.EnumNameTagVisibility.NEVER);
             team.setColor((EnumChatFormat.valueOf(color.name())));
             scoreboard.addPlayerToTeam(shulker.getName(), team);
@@ -59,7 +59,7 @@ public class EnhancedEyes_1_16_R1 implements EnhancedEyesNMS {
 
         if (color != null) {
             Scoreboard scoreboard = new Scoreboard();
-            ScoreboardTeam team = new ScoreboardTeam(scoreboard, UUID.randomUUID().toString().substring(0, 15));
+            ScoreboardTeam team = new ScoreboardTeam(scoreboard, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15));
             team.setColor((EnumChatFormat.valueOf(color.name())));
             scoreboard.addPlayerToTeam(entity.getName(), team);
 

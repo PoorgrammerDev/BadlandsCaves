@@ -33,7 +33,8 @@ public class TitaniumOre implements Listener {
                 if (hardmode) {
                     ItemStack tool = player.getEquipment().getItemInMainHand();
 
-                    if (tool.getType().equals(Material.DIAMOND_PICKAXE)) {
+                    if (tool.getType().equals(Material.DIAMOND_PICKAXE) ||
+                            tool.getType().equals(Material.NETHERITE_PICKAXE)) {
                         final int fortune = tool.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
                         int count = 1;
 

@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.Util.TargetEntity;
 import org.bukkit.*;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.LivingEntity;
@@ -37,26 +38,27 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
         }
         if (((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1)) return;
 
-        World world = player.getWorld();
-        RayTraceResult result = world.rayTraceEntities(player.getEyeLocation().add(0.5,0.5,0.5),player.getLocation().getDirection(),10);
+        TargetEntity targetEntity = new TargetEntity();
+        LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, player);
 
-        if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof LivingEntity && !(result.getHitEntity() instanceof Player) && !(result.getHitEntity() instanceof EnderDragon) && !(result.getHitEntity() instanceof Wither) && !(result.getHitEntity().getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && result.getHitEntity().getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
-            LivingEntity entity = (LivingEntity) result.getHitEntity();
-            if (player.hasLineOfSight(entity)) {
-                boolean target_already_pos = entity.hasMetadata("possessed") && entity.getMetadata("possessed").get(0).asBoolean();
+        if (target != null && !(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) &&
+                !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) &&
+                        target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
+            if (player.hasLineOfSight(target)) {
+                boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
                 if (target_already_pos) return;
 
                 PossessionNMS nms = plugin.possessionNMS;
-                nms.setIndicator(player, entity);
+                nms.setIndicator(player, target);
 
-                Location location = entity.getLocation();
-                makeParticleLine(location, location.getY() + entity.getHeight());
+                Location location = target.getLocation();
+                makeParticleLine(location, location.getY() + target.getHeight());
 
-                location = entity.getLocation();
-                makeParticleCircle(location, entity.getWidth() * 2);
+                location = target.getLocation();
+                makeParticleCircle(location, target.getWidth() * 2);
 
-                location.add(0, entity.getHeight(), 0);
-                makeParticleCircle(location, entity.getWidth() * 2);
+                location.add(0, target.getHeight(), 0);
+                makeParticleCircle(location, target.getWidth() * 2);
             }
         }
     }

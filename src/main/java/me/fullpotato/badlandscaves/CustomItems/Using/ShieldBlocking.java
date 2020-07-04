@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
@@ -51,6 +52,13 @@ public class ShieldBlocking implements Listener {
                             else if (meta.getDisplayName().equals(diamondShield.getItemMeta().getDisplayName()) && damage / 7.0 > 0) {
                                 modifier = 7;
                                 ignored = (damage / modifier < 1 || random.nextInt(100) < 25);
+                            }
+                            else {
+                                StarlightTools starlightTools = new StarlightTools(plugin);
+                                if (starlightTools.isStarlightShield(playersShield)) {
+                                    modifier = 10;
+                                    ignored = (damage / modifier < 1 || random.nextInt(100) < 75);
+                                }
                             }
                         }
                     }

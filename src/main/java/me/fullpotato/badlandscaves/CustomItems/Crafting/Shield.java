@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
@@ -28,7 +29,7 @@ public class Shield implements Listener {
 
         ItemStack shield = new ItemStack(Material.SHIELD);
         ItemMeta meta = shield.getItemMeta();
-        meta.setDisplayName("§rWooden Shield");
+        meta.setDisplayName(ChatColor.WHITE + "Wooden Shield");
         shield.setItemMeta(meta);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "wooden_shield"), shield);

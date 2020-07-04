@@ -67,6 +67,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                                 @Override
                                 public void run() {
                                     if (((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1)) {
+                                        player.stopSound("custom.supernatural.enhanced_eyes.ambience");
                                         player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.ambience", 0.4F, 1);
                                     }
                                     else {
@@ -86,6 +87,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
                             minerals_tier2.add(Material.DIAMOND_ORE);
                             minerals_tier2.add(Material.EMERALD_ORE);
                             minerals_tier2.add(Material.GOLD_ORE);
+                            minerals_tier2.add(Material.NETHER_GOLD_ORE);
+                            minerals_tier2.add(Material.GILDED_BLACKSTONE);
                             minerals_tier2.add(Material.LAPIS_ORE);
                             minerals_tier2.add(Material.REDSTONE_ORE);
                             minerals_tier2.add(Material.NETHER_QUARTZ_ORE);
@@ -95,6 +98,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                             minerals_tier2.add(Material.LAPIS_BLOCK);
                             minerals_tier2.add(Material.REDSTONE_BLOCK);
                             minerals_tier2.add(Material.DEAD_TUBE_CORAL_BLOCK);
+                            minerals_tier2.add(Material.ANCIENT_DEBRIS);
 
                             ArrayList<Material> storage = new ArrayList<>();
                             storage.add(Material.CHEST);
@@ -176,7 +180,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
 
                             mana -= (initial_mana_cost - (constant_mana_drain / 20.0));
                             PlayerScore.MANA.setScore(plugin, player, mana);
-                            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+                            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
                             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                             PlayerScore.USING_EYES.setScore(plugin, player, 1);
 

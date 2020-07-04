@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -35,16 +36,20 @@ public class ChargeRunnable extends BukkitRunnable {
                             ItemMeta meta = item.getItemMeta();
                             if (meta != null) {
                                 int charge = chargeManager.getCharge(item);
-                                if (charge > 0) {
+                                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0) {
                                     if (!meta.hasEnchants()) {
+                                        // TODO: 7/3/2020 change this to use persistent data to store enchantments, then load them from that
                                         if (armorManager.isStarlightArmor(item)) {
                                             Short platingObject = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT);
                                             short plating = platingObject != null ? platingObject : 0;
-                                            meta.addEnchant(Enchantment.DURABILITY, 5, true);
+                                            meta.addEnchant(Enchantment.DURABILITY, 7, true);
                                             meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5 + (2 * plating), true);
                                         }
                                         else if (toolManager.isStarlightSaber(item)) {
                                             meta.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
+                                            meta.addEnchant(Enchantment.DURABILITY, 5, true);
+                                        }
+                                        else if (toolManager.isStarlightShield(item)) {
                                             meta.addEnchant(Enchantment.DURABILITY, 5, true);
                                         }
                                         else if (toolManager.isStarlightBlaster(item)) {

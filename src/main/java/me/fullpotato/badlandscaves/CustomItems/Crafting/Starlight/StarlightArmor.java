@@ -89,7 +89,7 @@ public class StarlightArmor extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack titanium_ingot = CustomItem.REINFORCED_TITANIUM.getItem();
         final ItemStack module = CustomItem.STARLIGHT_MODULE.getItem();
         if (!isMatching(matrix, titanium_ingot) || !isMatching(matrix, module)) {
             event.getInventory().setResult(null);

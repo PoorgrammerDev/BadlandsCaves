@@ -95,7 +95,7 @@ public class Displace extends UsePowers implements Listener {
 
                                     double new_mana = mana - (double) (displace_mana_cost);
                                     PlayerScore.MANA.setScore(plugin, player, new_mana);
-                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
                                 }
                                 else {
                                     notEnoughMana(player);

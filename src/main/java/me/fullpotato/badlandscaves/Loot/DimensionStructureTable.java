@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.Loot;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
@@ -97,7 +98,7 @@ public class DimensionStructureTable implements LootTable {
 
         ItemStack treasureGearVoucher = new ItemStack(Material.PAPER);
         ItemMeta voucherMeta = treasureGearVoucher.getItemMeta();
-        voucherMeta.setDisplayName("§rTreasure Gear Voucher");
+        voucherMeta.setDisplayName(ChatColor.WHITE + "Treasure Gear Voucher");
         treasureGearVoucher.setItemMeta(voucherMeta);
         items.add(treasureGearVoucher);
 

@@ -274,7 +274,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.TINY_BLAZE_POWDER)){
             ItemStack tiny_blaze_powder = new ItemStack(Material.STRUCTURE_BLOCK, 9);
             ItemMeta tiny_blaze_powder_meta = tiny_blaze_powder.getItemMeta();
-            tiny_blaze_powder_meta.setDisplayName("§rTiny Pile of Blaze Powder");
+            tiny_blaze_powder_meta.setDisplayName(ChatColor.WHITE + "Tiny Pile of Blaze Powder");
             tiny_blaze_powder_meta.setCustomModelData(100);
             tiny_blaze_powder.setItemMeta(tiny_blaze_powder_meta);
 
@@ -299,7 +299,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.ZOMBIE_SOUL)){
             ItemStack zombie_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta zombie_soul_meta = zombie_soul.getItemMeta();
-            zombie_soul_meta.setDisplayName("§rSoul of Decay");
+            zombie_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Decay");
             zombie_soul_meta.setCustomModelData(109);
             zombie_soul.setItemMeta(zombie_soul_meta);
 
@@ -309,7 +309,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.CREEPER_SOUL)){
             ItemStack creeper_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta creeper_soul_meta = creeper_soul.getItemMeta();
-            creeper_soul_meta.setDisplayName("§rSoul of Destruction");
+            creeper_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Destruction");
             creeper_soul_meta.setCustomModelData(110);
             creeper_soul.setItemMeta(creeper_soul_meta);
 
@@ -319,7 +319,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.SKELETON_SOUL)){
             ItemStack skeleton_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta skeleton_soul_meta = skeleton_soul.getItemMeta();
-            skeleton_soul_meta.setDisplayName("§rSoul of War");
+            skeleton_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of War");
             skeleton_soul_meta.setCustomModelData(111);
             skeleton_soul.setItemMeta(skeleton_soul_meta);
 
@@ -329,7 +329,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.SPIDER_SOUL)){
             ItemStack spider_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta spider_soul_meta = spider_soul.getItemMeta();
-            spider_soul_meta.setDisplayName("§rSoul of Arachnid");
+            spider_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Arachnid");
             spider_soul_meta.setCustomModelData(112);
             spider_soul.setItemMeta(spider_soul_meta);
 
@@ -339,7 +339,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.PIGZOMBIE_SOUL)){
             ItemStack pigzombie_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta pigzombie_soul_meta = pigzombie_soul.getItemMeta();
-            pigzombie_soul_meta.setDisplayName("§rSoul of Hellish Decay");
+            pigzombie_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Hellish Decay");
             pigzombie_soul_meta.setCustomModelData(113);
             pigzombie_soul.setItemMeta(pigzombie_soul_meta);
 
@@ -349,7 +349,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.GHAST_SOUL)){
             ItemStack ghast_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta ghast_soul_meta = ghast_soul.getItemMeta();
-            ghast_soul_meta.setDisplayName("§rSoul of Suffering");
+            ghast_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Suffering");
             ghast_soul_meta.setCustomModelData(114);
             ghast_soul.setItemMeta(ghast_soul_meta);
 
@@ -359,7 +359,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.SILVERFISH_SOUL)){
             ItemStack silverfish_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta silverfish_soul_meta = silverfish_soul.getItemMeta();
-            silverfish_soul_meta.setDisplayName("§rSoul of Parasite");
+            silverfish_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Parasite");
             silverfish_soul_meta.setCustomModelData(115);
             silverfish_soul.setItemMeta(silverfish_soul_meta);
 
@@ -369,7 +369,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.WITCH_SOUL)){
             ItemStack witch_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta witch_soul_meta = witch_soul.getItemMeta();
-            witch_soul_meta.setDisplayName("§rSoul of Supernatural");
+            witch_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Supernatural");
             witch_soul_meta.setCustomModelData(116);
             witch_soul.setItemMeta(witch_soul_meta);
 
@@ -379,7 +379,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.PHANTOM_SOUL)){
             ItemStack phantom_soul = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta phantom_soul_meta = phantom_soul.getItemMeta();
-            phantom_soul_meta.setDisplayName("§rSoul of Insomnia");
+            phantom_soul_meta.setDisplayName(ChatColor.WHITE + "Soul of Insomnia");
             phantom_soul_meta.setCustomModelData(117);
             phantom_soul.setItemMeta(phantom_soul_meta);
 
@@ -426,7 +426,7 @@ public class LoadCustomItems {
             soul_crystal_meta.setDisplayName("§b§k%§r§d§lSoul Crystal§r§b§k%");
 
             soul_crystal_lore.add("§9§lRight Click§r§7 to use.");
-            soul_crystal_lore.add("§7Can be used as a sacrifice to §kenter Descension§r§7.");
+            soul_crystal_lore.add("§7Can be used as a sacrifice to enter Descension§r§7.");
             soul_crystal_lore.add("§7Uses Left: 10");
             soul_crystal_meta.setLore(soul_crystal_lore);
 
@@ -476,7 +476,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOLTSHOCK_BATTERY)){
             ItemStack voltshock_battery = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta voltshock_batter_meta = voltshock_battery.getItemMeta();
-            voltshock_batter_meta.setDisplayName("§rBattery");
+            voltshock_batter_meta.setDisplayName(ChatColor.WHITE + "Battery");
             voltshock_batter_meta.setCustomModelData(125);
             voltshock_battery.setItemMeta(voltshock_batter_meta);
 
@@ -486,7 +486,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOLTSHOCK_SHOCKER)){
             ItemStack voltshock_shocker = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta voltshock_shocker_meta = voltshock_shocker.getItemMeta();
-            voltshock_shocker_meta.setDisplayName("§rShocker");
+            voltshock_shocker_meta.setDisplayName(ChatColor.WHITE + "Shocker");
             voltshock_shocker_meta.setCustomModelData(126);
             voltshock_shocker.setItemMeta(voltshock_shocker_meta);
 
@@ -496,7 +496,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOLTSHOCK_PLACEHOLDER)) {
             ItemStack voltshock_placeholder = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta voltshock_placeholder_meta = voltshock_placeholder.getItemMeta();
-            voltshock_placeholder_meta.setDisplayName("§rVoltshock Sword");
+            voltshock_placeholder_meta.setDisplayName(ChatColor.WHITE + "Voltshock Sword");
             voltshock_placeholder_meta.setCustomModelData(136);
             voltshock_placeholder.setItemMeta(voltshock_placeholder_meta);
 
@@ -506,7 +506,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER)) {
             ItemStack voltshock_sword_charge_placeholder = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta voltshock_sword_charge_placeholder_meta = voltshock_sword_charge_placeholder.getItemMeta();
-            voltshock_sword_charge_placeholder_meta.setDisplayName("§rCharge Voltshock Sword");
+            voltshock_sword_charge_placeholder_meta.setDisplayName(ChatColor.WHITE + "Charge Voltshock Sword");
             voltshock_sword_charge_placeholder_meta.setCustomModelData(137);
             voltshock_sword_charge_placeholder.setItemMeta(voltshock_sword_charge_placeholder_meta);
 
@@ -536,7 +536,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.CORROSIVE_PLACEHOLDER)) {
             ItemStack corrosive_placeholder = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta corrosive_placeholder_meta = corrosive_placeholder.getItemMeta();
-            corrosive_placeholder_meta.setDisplayName("§rCorrosive Sword");
+            corrosive_placeholder_meta.setDisplayName(ChatColor.WHITE + "Corrosive Sword");
             corrosive_placeholder_meta.setCustomModelData(138);
             corrosive_placeholder.setItemMeta(corrosive_placeholder_meta);
 
@@ -606,7 +606,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.STONE_SHIELD)){
             ItemStack stone_shield = new ItemStack(Material.SHIELD);
             ItemMeta stone_shield_meta = stone_shield.getItemMeta();
-            stone_shield_meta.setDisplayName("§rStone Shield");
+            stone_shield_meta.setDisplayName(ChatColor.WHITE + "Stone Shield");
             stone_shield_meta.setCustomModelData(141);
             stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[0]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
             stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[1]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
@@ -619,7 +619,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.IRON_SHIELD)){
             ItemStack iron_shield = new ItemStack(Material.SHIELD);
             ItemMeta iron_shield_meta = iron_shield.getItemMeta();
-            iron_shield_meta.setDisplayName("§rIron Shield");
+            iron_shield_meta.setDisplayName(ChatColor.WHITE + "Iron Shield");
             iron_shield_meta.setCustomModelData(142);
             iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[2]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
             iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[3]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
@@ -632,7 +632,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.DIAMOND_SHIELD)){
             ItemStack diamond_shield = new ItemStack(Material.SHIELD);
             ItemMeta diamond_shield_meta = diamond_shield.getItemMeta();
-            diamond_shield_meta.setDisplayName("§rDiamond Shield");
+            diamond_shield_meta.setDisplayName(ChatColor.WHITE + "Diamond Shield");
             diamond_shield_meta.setCustomModelData(144);
             diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[4]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
             diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[5]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
@@ -673,7 +673,7 @@ public class LoadCustomItems {
             return titanium_fragment;
         }
 
-        else if (item.equals(CustomItem.TITANIUM_INGOT)){
+        else if (item.equals(CustomItem.TITANIUM_INGOT)) {
             ItemStack titanium_ingot = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta titanium_ingot_meta = titanium_ingot.getItemMeta();
             titanium_ingot_meta.setDisplayName("§bTitanium Ingot");
@@ -681,6 +681,16 @@ public class LoadCustomItems {
             titanium_ingot.setItemMeta(titanium_ingot_meta);
 
             return titanium_ingot;
+        }
+
+        else if (item.equals(CustomItem.REINFORCED_TITANIUM)) {
+            ItemStack reinforced_titanium = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta meta = reinforced_titanium.getItemMeta();
+            meta.setDisplayName("§eReinforced Titanium Ingot");
+            meta.setCustomModelData(176);
+            reinforced_titanium.setItemMeta(meta);
+
+            return reinforced_titanium;
         }
 
         else if (item.equals(CustomItem.TITANIUM_ROD)) {
@@ -696,7 +706,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.BINDING)){
             ItemStack binding = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta binding_meta = binding.getItemMeta();
-            binding_meta.setDisplayName("§rBinding");
+            binding_meta.setDisplayName(ChatColor.WHITE + "Binding");
             binding_meta.setCustomModelData(145);
             binding.setItemMeta(binding_meta);
 
@@ -706,7 +716,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.GOLDEN_CABLE)){
             ItemStack golden_cable = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta golden_cable_meta = golden_cable.getItemMeta();
-            golden_cable_meta.setDisplayName("§rGolden Cable");
+            golden_cable_meta.setDisplayName(ChatColor.WHITE + "Golden Cable");
             golden_cable_meta.setCustomModelData(146);
             golden_cable.setItemMeta(golden_cable_meta);
 
@@ -780,7 +790,7 @@ public class LoadCustomItems {
             return forever_fish;
         }
         else if (item.equals(CustomItem.STARLIGHT_HELMET)) {
-            ItemStack starlight_helmet = new ItemStack(Material.DIAMOND_HELMET);
+            ItemStack starlight_helmet = new ItemStack(Material.NETHERITE_HELMET);
             ItemMeta starlight_helmet_meta = starlight_helmet.getItemMeta();
             starlight_helmet_meta.setDisplayName("§eStarlight Helmet");
 
@@ -795,7 +805,7 @@ public class LoadCustomItems {
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
-            starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_helmet_meta;
@@ -808,7 +818,7 @@ public class LoadCustomItems {
             return starlight_helmet;
         }
         else if (item.equals(CustomItem.STARLIGHT_CHESTPLATE)) {
-            ItemStack starlight_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+            ItemStack starlight_chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
             ItemMeta starlight_chestplate_meta = starlight_chestplate.getItemMeta();
             starlight_chestplate_meta.setDisplayName("§eStarlight Chestplate");
 
@@ -823,7 +833,7 @@ public class LoadCustomItems {
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
-            starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_chestplate_meta;
@@ -836,7 +846,7 @@ public class LoadCustomItems {
             return starlight_chestplate;
         }
         else if (item.equals(CustomItem.STARLIGHT_LEGGINGS)) {
-            ItemStack starlight_leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+            ItemStack starlight_leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
             ItemMeta starlight_leggings_meta = starlight_leggings.getItemMeta();
             starlight_leggings_meta.setDisplayName("§eStarlight Leggings");
 
@@ -851,7 +861,7 @@ public class LoadCustomItems {
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
-            starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_leggings_meta;
@@ -864,7 +874,7 @@ public class LoadCustomItems {
             return starlight_leggings;
         }
         else if (item.equals(CustomItem.STARLIGHT_BOOTS)) {
-            ItemStack starlight_boots = new ItemStack(Material.DIAMOND_BOOTS);
+            ItemStack starlight_boots = new ItemStack(Material.NETHERITE_BOOTS);
             ItemMeta starlight_boots_meta = starlight_boots.getItemMeta();
             starlight_boots_meta.setDisplayName("§eStarlight Boots");
 
@@ -879,7 +889,7 @@ public class LoadCustomItems {
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
-            starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 3, true);
 
             Damageable damageable = (Damageable) starlight_boots_meta;
@@ -892,7 +902,7 @@ public class LoadCustomItems {
             return starlight_boots;
         }
         else if (item.equals(CustomItem.STARLIGHT_SABER)) {
-            ItemStack saber = new ItemStack(Material.DIAMOND_SWORD);
+            ItemStack saber = new ItemStack(Material.NETHERITE_SWORD);
             ItemMeta saber_meta = saber.getItemMeta();
             saber_meta.setDisplayName("§eStarlight Saber");
             saber_meta.setCustomModelData(163);
@@ -917,6 +927,31 @@ public class LoadCustomItems {
             saber.setItemMeta((ItemMeta) repairable);
             return saber;
         }
+        else if (item.equals(CustomItem.STARLIGHT_SHIELD)) {
+            ItemStack shield = new ItemStack(Material.SHIELD);
+            ItemMeta meta = shield.getItemMeta();
+            meta.setDisplayName(ChatColor.YELLOW + "Starlight Shield");
+            meta.setCustomModelData(177);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add("§7Charge: 0 / 2000");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_shield"), PersistentDataType.BYTE, (byte) 1);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+
+            meta.addEnchant(Enchantment.DURABILITY, 5, true);
+
+            Damageable damageable = (Damageable) meta;
+            damageable.setDamage(shield.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            shield.setItemMeta((ItemMeta) repairable);
+            return shield;
+        }
         else if (item.equals(CustomItem.STARLIGHT_BLASTER)) {
             ItemStack blaster = new ItemStack(Material.CROSSBOW);
             CrossbowMeta blaster_meta = (CrossbowMeta) blaster.getItemMeta();
@@ -930,13 +965,14 @@ public class LoadCustomItems {
             blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_blaster"), PersistentDataType.BYTE, (byte) 1);
             blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+            blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "blaster_cooldown"), PersistentDataType.SHORT, (short) 0);
 
             blaster_meta.addEnchant(Enchantment.DURABILITY, 1, true);
             blaster_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
             ItemStack empty = new ItemStack(Material.ARROW);
             ItemMeta emptyMeta = empty.getItemMeta();
-            emptyMeta.setDisplayName("§r");
+            emptyMeta.setDisplayName(ChatColor.WHITE + "");
             empty.setItemMeta(emptyMeta);
 
             blaster_meta.addChargedProjectile(empty);
@@ -951,7 +987,7 @@ public class LoadCustomItems {
             return blaster;
         }
         else if (item.equals(CustomItem.STARLIGHT_PAXEL)) {
-            ItemStack paxel_pick = new ItemStack(Material.DIAMOND_PICKAXE);
+            ItemStack paxel_pick = new ItemStack(Material.NETHERITE_PICKAXE);
             ItemMeta paxel_meta = paxel_pick.getItemMeta();
             paxel_meta.setDisplayName("§eStarlight Paxel");
             paxel_meta.setCustomModelData(165);
@@ -1010,7 +1046,7 @@ public class LoadCustomItems {
             ItemStack charge_placeholder = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta charge_placeholder_meta = charge_placeholder.getItemMeta();
             charge_placeholder_meta.setCustomModelData(157);
-            charge_placeholder_meta.setDisplayName("§rCharge Starlight Armor");
+            charge_placeholder_meta.setDisplayName(ChatColor.WHITE + "Charge Starlight Armor");
 
             charge_placeholder.setItemMeta(charge_placeholder_meta);
 
@@ -1044,7 +1080,7 @@ public class LoadCustomItems {
             return string;
         }
         else if (item.equals(CustomItem.VOIDMATTER_HELMET)) {
-            ItemStack voidmatter_helmet = new ItemStack(Material.DIAMOND_HELMET);
+            ItemStack voidmatter_helmet = new ItemStack(Material.NETHERITE_HELMET);
             ItemMeta voidmatter_helmet_meta = voidmatter_helmet.getItemMeta();
             voidmatter_helmet_meta.setDisplayName("§5Void Mask");
 
@@ -1054,7 +1090,7 @@ public class LoadCustomItems {
 
             voidmatter_helmet_meta.setCustomModelData(159);
             voidmatter_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
-            voidmatter_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
             voidmatter_helmet_meta.addEnchant(Enchantment.DURABILITY, 10, true);
 
             Repairable repairable = (Repairable) voidmatter_helmet_meta;
@@ -1064,7 +1100,7 @@ public class LoadCustomItems {
             return voidmatter_helmet;
         }
         else if (item.equals(CustomItem.VOIDMATTER_CHESTPLATE)) {
-            ItemStack voidmatter_chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+            ItemStack voidmatter_chestplate = new ItemStack(Material.NETHERITE_CHESTPLATE);
             ItemMeta voidmatter_chestplate_meta = voidmatter_chestplate.getItemMeta();
             voidmatter_chestplate_meta.setDisplayName("§5Void Tunic");
 
@@ -1074,7 +1110,7 @@ public class LoadCustomItems {
 
             voidmatter_chestplate_meta.setCustomModelData(160);
             voidmatter_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
-            voidmatter_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
             voidmatter_chestplate_meta.addEnchant(Enchantment.DURABILITY, 10, true);
 
             Repairable repairable = (Repairable) voidmatter_chestplate_meta;
@@ -1084,7 +1120,7 @@ public class LoadCustomItems {
             return voidmatter_chestplate;
         }
         else if (item.equals(CustomItem.VOIDMATTER_LEGGINGS)) {
-            ItemStack voidmatter_leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+            ItemStack voidmatter_leggings = new ItemStack(Material.NETHERITE_LEGGINGS);
             ItemMeta voidmatter_leggings_meta = voidmatter_leggings.getItemMeta();
             voidmatter_leggings_meta.setDisplayName("§5Void Slacks");
 
@@ -1094,7 +1130,7 @@ public class LoadCustomItems {
 
             voidmatter_leggings_meta.setCustomModelData(161);
             voidmatter_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
-            voidmatter_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
             voidmatter_leggings_meta.addEnchant(Enchantment.DURABILITY, 10, true);
 
             Repairable repairable = (Repairable) voidmatter_leggings_meta;
@@ -1104,7 +1140,7 @@ public class LoadCustomItems {
             return voidmatter_leggings;
         }
         else if (item.equals(CustomItem.VOIDMATTER_BOOTS)) {
-            ItemStack voidmatter_boots = new ItemStack(Material.DIAMOND_BOOTS);
+            ItemStack voidmatter_boots = new ItemStack(Material.NETHERITE_BOOTS);
             ItemMeta voidmatter_boots_meta = voidmatter_boots.getItemMeta();
             voidmatter_boots_meta.setDisplayName("§5Void Boots");
 
@@ -1114,7 +1150,7 @@ public class LoadCustomItems {
 
             voidmatter_boots_meta.setCustomModelData(162);
             voidmatter_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_armor"), PersistentDataType.BYTE, (byte) 1);
-            voidmatter_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+            voidmatter_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
             voidmatter_boots_meta.addEnchant(Enchantment.DURABILITY, 10, true);
 
             Repairable repairable = (Repairable) voidmatter_boots_meta;
@@ -1124,7 +1160,7 @@ public class LoadCustomItems {
             return voidmatter_boots;
         }
         else if (item.equals(CustomItem.VOIDMATTER_BLADE)) {
-            ItemStack blade = new ItemStack(Material.DIAMOND_SWORD);
+            ItemStack blade = new ItemStack(Material.NETHERITE_SWORD);
             ItemMeta meta = blade.getItemMeta();
 
             meta.setDisplayName("§5Void Blade");
@@ -1149,6 +1185,7 @@ public class LoadCustomItems {
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_voidmatter_bow"), PersistentDataType.BYTE, (byte) 1);
             meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
             meta.addEnchant(Enchantment.DURABILITY, 10, true);
+            meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 
             Repairable repairable = (Repairable) meta;
             repairable.setRepairCost(999999);
@@ -1158,7 +1195,7 @@ public class LoadCustomItems {
         }
 
         else if (item.equals(CustomItem.VOIDMATTER_PICKAXE)) {
-            ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
+            ItemStack pickaxe = new ItemStack(Material.NETHERITE_PICKAXE);
             ItemMeta meta = pickaxe.getItemMeta();
 
             meta.setDisplayName("§5Void Pickaxe");
@@ -1176,7 +1213,7 @@ public class LoadCustomItems {
         }
 
         else if (item.equals(CustomItem.VOIDMATTER_SHOVEL)) {
-            ItemStack shovel = new ItemStack(Material.DIAMOND_SHOVEL);
+            ItemStack shovel = new ItemStack(Material.NETHERITE_SHOVEL);
             ItemMeta meta = shovel.getItemMeta();
 
             meta.setDisplayName("§5Void Shovel");
@@ -1194,7 +1231,7 @@ public class LoadCustomItems {
         }
 
         else if (item.equals(CustomItem.VOIDMATTER_AXE)) {
-            ItemStack axe = new ItemStack(Material.DIAMOND_AXE);
+            ItemStack axe = new ItemStack(Material.NETHERITE_AXE);
             ItemMeta meta = axe.getItemMeta();
 
             meta.setDisplayName("§5Void Axe");

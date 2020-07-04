@@ -27,6 +27,18 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
+    public void reinforceBarRecipe() {
+        ItemStack bar = CustomItem.REINFORCED_TITANIUM.getItem();
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "reinforced_titanium"), bar);
+
+        recipe.shape("###", "*@*", "###");
+        recipe.setIngredient('#', Material.GOLD_NUGGET);
+        recipe.setIngredient('*', Material.NETHERITE_SCRAP);
+        recipe.setIngredient('@', Material.COMMAND_BLOCK);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
     public void craftTitaniumRod() {
         final ItemStack rod = CustomItem.TITANIUM_ROD.getItem();
         rod.setAmount(4);
@@ -48,6 +60,21 @@ public class TitaniumBar extends MatchCrafting implements Listener {
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack fragment = CustomItem.TITANIUM_FRAGMENT.getItem();
+        if (!isMatching(matrix, fragment)) {
+            event.getInventory().setResult(null);
+        }
+    }
+
+    @EventHandler
+    public void reinforceBar (PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack bar = CustomItem.REINFORCED_TITANIUM.getItem();
+        if (!result.isSimilar(bar)) return;
+
+        final ItemStack[] matrix = event.getInventory().getMatrix();
+        final ItemStack fragment = CustomItem.TITANIUM_INGOT.getItem();
         if (!isMatching(matrix, fragment)) {
             event.getInventory().setResult(null);
         }

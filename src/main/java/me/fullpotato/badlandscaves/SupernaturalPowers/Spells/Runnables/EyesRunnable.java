@@ -73,7 +73,7 @@ public class EyesRunnable extends BukkitRunnable {
             //mana stuffs
             mana -= drain_per_tick;
             PlayerScore.MANA.setScore(plugin, player, mana);
-            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         }
         else {

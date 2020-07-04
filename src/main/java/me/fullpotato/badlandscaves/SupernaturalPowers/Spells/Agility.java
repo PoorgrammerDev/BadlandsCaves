@@ -54,7 +54,7 @@ public class Agility extends UsePowers implements Listener {
         int cost = plugin.getConfig().getInt("options.spell_costs.agility_mana_cost");
 
         if (mana >= cost) {
-            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 3));
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 60));
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
             PlayerScore.MANA.setScore(plugin, player, mana - cost);
 

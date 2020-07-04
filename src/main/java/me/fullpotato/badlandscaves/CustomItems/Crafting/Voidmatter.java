@@ -15,6 +15,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -188,7 +189,11 @@ public class Voidmatter extends MatchCrafting implements Listener {
         }
     }
 
-    public boolean isVoidmatterArmor (ItemStack item) {
+    public boolean isVoidmatter (@NotNull ItemStack item) {
+        return isVoidmatterArmor(item) || isVoidmatterTool(item);
+    }
+
+    public boolean isVoidmatterArmor (@NotNull ItemStack item) {
         ArrayList<Material> armorTypes = new ArrayList<>();
         armorTypes.add(CustomItem.VOIDMATTER_HELMET.getItem().getType());
         armorTypes.add(CustomItem.VOIDMATTER_CHESTPLATE.getItem().getType());
@@ -204,6 +209,96 @@ public class Voidmatter extends MatchCrafting implements Listener {
                     Byte isArmor = container.get(key, PersistentDataType.BYTE);
                     if (isArmor != null) {
                         return isArmor == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isVoidmatterTool (@NotNull ItemStack item) {
+        return isVoidmatterPickaxe(item) || isVoidmatterBlade(item) ||
+                isVoidmatterShovel(item) || isVoidmatterAxe(item) || isVoidmatterBow(item);
+    }
+
+    public boolean isVoidmatterPickaxe (@NotNull ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_PICKAXE.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_pickaxe");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isPick = container.get(key, PersistentDataType.BYTE);
+                    if (isPick != null) {
+                        return isPick == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isVoidmatterBlade (@NotNull ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_BLADE.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_blade");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isBlade = container.get(key, PersistentDataType.BYTE);
+                    if (isBlade != null) {
+                        return isBlade == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isVoidmatterShovel (@NotNull ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_SHOVEL.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_shovel");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isShov = container.get(key, PersistentDataType.BYTE);
+                    if (isShov != null) {
+                        return isShov == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isVoidmatterAxe (@NotNull ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_AXE.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_axe");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isAxe = container.get(key, PersistentDataType.BYTE);
+                    if (isAxe != null) {
+                        return isAxe == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isVoidmatterBow (@NotNull ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_BOW.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_bow");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isBow = container.get(key, PersistentDataType.BYTE);
+                    if (isBow != null) {
+                        return isBow == (byte) 1;
                     }
                 }
             }

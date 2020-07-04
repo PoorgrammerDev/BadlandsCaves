@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Info;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -507,7 +508,7 @@ public class CraftingGuide implements Listener {
     public void fillCraftingRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
         ItemStack any_soul = CustomItem.ZOMBIE_SOUL.getItem();
         ItemMeta zombie_soul_meta = any_soul.getItemMeta();
-        zombie_soul_meta.setDisplayName("§rAny Soul");
+        zombie_soul_meta.setDisplayName(ChatColor.WHITE + "Any Soul");
         any_soul.setItemMeta(zombie_soul_meta);
         ItemStack[] blessed_apple_recipe = {
                 any_soul,
@@ -648,7 +649,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack shock_sword = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
         ItemMeta shock_sword_meta = shock_sword.getItemMeta();
-        shock_sword_meta.setDisplayName("§rIron / Gold Sword");
+        shock_sword_meta.setDisplayName(ChatColor.WHITE + "Iron / Gold Sword");
         shock_sword.setItemMeta(shock_sword_meta);
 
         ItemStack[] voltshock_placeholder_recipe = {
@@ -706,7 +707,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack corrosive_sword = CustomItem.CORROSIVE_PLACEHOLDER.getItem();
         ItemMeta corrosive_sword_meta = corrosive_sword.getItemMeta();
-        corrosive_sword_meta.setDisplayName("§rAny Sword");
+        corrosive_sword_meta.setDisplayName(ChatColor.WHITE + "Any Sword");
         corrosive_sword.setItemMeta(corrosive_sword_meta);
 
         ItemStack[] corrosive_placeholder_recipe = {
@@ -764,7 +765,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack planks = new ItemStack(Material.OAK_PLANKS);
         ItemMeta planks_meta = planks.getItemMeta();
-        planks_meta.setDisplayName("§rAny Wooden Planks");
+        planks_meta.setDisplayName(ChatColor.WHITE + "Any Wooden Planks");
         planks.setItemMeta(planks_meta);
 
         ItemStack[] shield_recipe = {
@@ -930,61 +931,61 @@ public class CraftingGuide implements Listener {
 
 
         ItemStack[] starlight_helmet_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_HELMET.getItem(), starlight_helmet_recipe);
 
 
         ItemStack[] starlight_chestplate_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_CHESTPLATE.getItem(), starlight_chestplate_recipe);
 
 
         ItemStack[] starlight_leggings_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_LEGGINGS.getItem(), starlight_leggings_recipe);
 
 
         ItemStack[] starlight_boots_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_BOOTS.getItem(), starlight_boots_recipe);
 
 
         ItemStack[] starlight_saber_recipe = {
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
                 CustomItem.PHOTON_EMITTER.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 null,
                 null,
                 CustomItem.TITANIUM_ROD.getItem(),
@@ -997,21 +998,21 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.REDSTONE),
                 CustomItem.PHOTON_EMITTER.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 new ItemStack(Material.COMPARATOR),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_BLASTER.getItem(), starlight_blaster_recipe);
 
 
         ItemStack[] starlight_paxel_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.PHOTON_EMITTER.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.TITANIUM_ROD.getItem(),
                 null,
                 null,

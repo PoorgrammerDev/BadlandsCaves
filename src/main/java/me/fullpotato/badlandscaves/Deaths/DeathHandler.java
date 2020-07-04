@@ -47,16 +47,6 @@ public class DeathHandler implements Listener {
             event.setDeathMessage(player.getDisplayName() + " died of dehydration");
         }
 
-        //silent death in descension
-        int in_descension = (int) PlayerScore.IN_DESCENSION.getScore(plugin, player);
-        if (in_descension == 2) {
-            event.setDeathMessage(null);
-            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-            InventorySerialize invser = new InventorySerialize(plugin);
-            invser.loadInventory(player, "descension_inv", true, true);
-            return;
-        }
-
         resetPlayer(player, false, false, true);
 
     }
@@ -136,8 +126,9 @@ public class DeathHandler implements Listener {
                 PlayerScore.MAX_MANA.setScore(plugin, player, 100);
 
             }
-
             PlayerScore.IN_DESCENSION.setScore(plugin, player, 0);
+
+            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
         }
         else if (in_reflection) {
             PlayerScore.IN_REFLECTION.setScore(plugin, player, 0);

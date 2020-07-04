@@ -14,6 +14,7 @@ import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.ChargeRunnable;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightBlasterMechanism;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
@@ -273,8 +274,9 @@ public final class BadlandsCaves extends JavaPlugin {
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
         new Surface(this).runTaskTimer(this, 0, 100);
-        new ChargeRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
+        new ChargeRunnable(this).runTaskTimer(this, 0, 0);
         new StarlightPaxelMechanism(this).runTaskTimerAsynchronously(this, 0, 0);
+        new StarlightBlasterMechanism(this).runTaskTimer(this, 0, 0);
         new SlowBreakRunnable(this).runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this).runTaskTimer(this, 0, 20);
         new BewildermentRunnable(this).runTaskTimer(this, 0, 100);
@@ -283,6 +285,8 @@ public final class BadlandsCaves extends JavaPlugin {
         new NoFloorRunnable(this).runTaskTimer(this, 0, 10);
         new ParanoiaRunnable(this).runTaskTimer(this, 0, 20);
         new Freezing(this).runTaskTimer(this, 0, 5);
+        new PreventNonPoweredUsage(this).runTaskTimerAsynchronously(this, 0, 0);
+
 
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();
@@ -345,6 +349,7 @@ public final class BadlandsCaves extends JavaPlugin {
         TitaniumBar titaniumBar = new TitaniumBar(this);
         titaniumBar.fragmentIntoBar();
         titaniumBar.craftTitaniumRod();
+        titaniumBar.reinforceBarRecipe();
 
         StarlightComponents starlightComponents = new StarlightComponents(this);
         starlightComponents.craftBinding();
@@ -367,6 +372,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StarlightTools starlightTools = new StarlightTools(this);
         starlightTools.saberRecipe();
+        starlightTools.shieldRecipe();
         starlightTools.blasterRecipe();
         starlightTools.paxelRecipe();
 
@@ -408,16 +414,14 @@ public final class BadlandsCaves extends JavaPlugin {
         String version = this.getServer().getClass().getPackage().getName();
         version = version.substring(version.lastIndexOf('.') + 2);
 
-        switch (version) {
-            case "1_16_R1":
-                enhancedEyesNMS = new EnhancedEyes_1_16_R1();
-                fakePlayerNMS = new FakePlayer_1_16_R1(this);
-                lineOfSightNMS = new LineOfSight_1_16_R1();
-                possessionNMS = new Possession_1_16_R1();
-                break;
-            default:
-                this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
-                this.getServer().getPluginManager().disablePlugin(this);
+        if ("1_16_R1".equals(version)) {
+            enhancedEyesNMS = new EnhancedEyes_1_16_R1();
+            fakePlayerNMS = new FakePlayer_1_16_R1(this);
+            lineOfSightNMS = new LineOfSight_1_16_R1();
+            possessionNMS = new Possession_1_16_R1();
+        } else {
+            this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
+            this.getServer().getPluginManager().disablePlugin(this);
         }
     }
 }

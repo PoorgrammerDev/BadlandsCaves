@@ -131,7 +131,7 @@ public class Withdraw extends UsePowers implements Listener {
                                                     PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, withdraw_timer - 1);
                                                     AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 30, 0));
 
-                                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 15);
+                                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
                                                 }
                                             }
                                         }.runTaskTimer(plugin, 0, 0);

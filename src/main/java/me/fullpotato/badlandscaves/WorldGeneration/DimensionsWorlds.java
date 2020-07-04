@@ -4,7 +4,6 @@ import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.GravityRunnable;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.Util.StructureCopier;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
 import me.fullpotato.badlandscaves.Util.UnloadedWorld;
 import org.bukkit.*;
@@ -149,7 +148,6 @@ public class DimensionsWorlds {
         final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
         addHazards(world, habitation, environment, biome, amount);
 
-        StructureCopier.copyStructures(plugin.getServer().getWorld(plugin.mainWorldName), world, "planet_structures");
         genSpawnCage(world);
 
         DimensionStructures structures = new DimensionStructures(plugin);
