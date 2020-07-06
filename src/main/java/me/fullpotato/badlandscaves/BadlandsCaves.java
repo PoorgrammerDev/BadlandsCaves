@@ -209,6 +209,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new Freezing(this),
                 new PreventWorldGenLag(this),
                 new UseDimensionalAnchor(this),
+                new PiglinBuff(this),
+                new HoglinBuff(this),
         };
 
         for (Listener event : events) {

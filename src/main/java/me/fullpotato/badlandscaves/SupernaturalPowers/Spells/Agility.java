@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class Agility extends UsePowers implements Listener {
         if ((!has_powers || agility_level < 1.0) && player.getAllowFlight()) {
             player.setAllowFlight(false);
         }
-        else if (player.isOnGround()) {
+        else if (((LivingEntity) player).isOnGround()) {
             player.setAllowFlight(false);
             new BukkitRunnable() {
                 @Override
@@ -87,7 +88,7 @@ public class Agility extends UsePowers implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (player.isOnGround() || running[0] >= max) {
+                    if (((LivingEntity) player).isOnGround() || running[0] >= max) {
                         this.cancel();
                     }
                     else {

@@ -806,7 +806,7 @@ public class LoadCustomItems {
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-            starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 3, true);
+            starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
             Damageable damageable = (Damageable) starlight_helmet_meta;
             damageable.setDamage(starlight_helmet.getType().getMaxDurability() - 1);
@@ -834,7 +834,7 @@ public class LoadCustomItems {
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-            starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 3, true);
+            starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
             Damageable damageable = (Damageable) starlight_chestplate_meta;
             damageable.setDamage(starlight_chestplate.getType().getMaxDurability() - 1);
@@ -862,7 +862,7 @@ public class LoadCustomItems {
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-            starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 3, true);
+            starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
             Damageable damageable = (Damageable) starlight_leggings_meta;
             damageable.setDamage(starlight_leggings.getType().getMaxDurability() - 1);
@@ -890,7 +890,7 @@ public class LoadCustomItems {
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-            starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 3, true);
+            starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
             Damageable damageable = (Damageable) starlight_boots_meta;
             damageable.setDamage(starlight_boots.getType().getMaxDurability() - 1);
@@ -916,7 +916,7 @@ public class LoadCustomItems {
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
 
             saber_meta.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
-            saber_meta.addEnchant(Enchantment.DURABILITY, 3, true);
+            saber_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
             Damageable damageable = (Damageable) saber_meta;
             damageable.setDamage(saber.getType().getMaxDurability() - 1);

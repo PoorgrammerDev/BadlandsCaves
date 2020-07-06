@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.GameMode;
 import org.bukkit.World;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,7 +23,7 @@ public class LavaFloorRunnable extends BukkitRunnable {
             World world = player.getWorld();
             if (dims.isDimension(world) && dims.hasHazard(world, EnvironmentalHazards.Hazard.LAVA_FLOOR)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                    if (!player.isSneaking() && player.isOnGround() && !player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
+                    if (!player.isSneaking() && ((LivingEntity) player).isOnGround() && !player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
                         player.setFireTicks(20);
                     }
                 }

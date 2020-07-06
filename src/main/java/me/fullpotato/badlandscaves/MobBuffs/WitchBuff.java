@@ -132,7 +132,8 @@ public class WitchBuff implements Listener {
                 else {
                     if (vindicator.getLocation().distanceSquared(target.getLocation()) > 25) {
                         ZombieBossBehavior teleporter = new ZombieBossBehavior(plugin);
-                        vindicator.teleport(teleporter.getNearbyLocation(target.getLocation(), new Random(), 2), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        Location nearbyLocation = teleporter.getNearbyLocation(target.getLocation(), new Random(), 2);
+                        if (nearbyLocation != null) vindicator.teleport(nearbyLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
                     }
                 }
                 timeElapsed[0]++;

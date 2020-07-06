@@ -48,18 +48,10 @@ public class CustomBows implements Listener {
                         boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
                         if (!supernatural) {
                             if (arrowItem.isSimilar(corrosive_arrow)) {
-                                arrow.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE, (byte) 1);
-                                enforceAllowPickup(arrow);
-
-                                if (event.getForce() >= 1) particleTrail(arrow, Color.fromRGB(0, 255, 0));
-                            } else if (arrowItem.isSimilar(voltshock_arrow)) {
-                                arrow.getPersistentDataContainer().set(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE, (byte) 1);
-                                enforceAllowPickup(arrow);
-
-                                if (event.getForce() >= 1) {
-                                    arrow.setVelocity(arrow.getVelocity().multiply(2));
-                                    particleTrail(arrow, Color.AQUA);
-                                }
+                                makeCorrosive(arrow, event.getForce() >= 1);
+                            }
+                            else if (arrowItem.isSimilar(voltshock_arrow)) {
+                                makeVoltshock(arrow, event.getForce() >= 1);
                             }
                         }
 
@@ -110,5 +102,21 @@ public class CustomBows implements Listener {
                 }
             }
         }.runTaskTimerAsynchronously(plugin, 0, 5);
+    }
+
+    public void makeCorrosive (Arrow arrow, boolean fullForce) {
+        arrow.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE, (byte) 1);
+        enforceAllowPickup(arrow);
+        if (fullForce) particleTrail(arrow, Color.fromRGB(0, 255, 0));
+    }
+
+    public void makeVoltshock (Arrow arrow, boolean fullForce) {
+        arrow.getPersistentDataContainer().set(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE, (byte) 1);
+        enforceAllowPickup(arrow);
+
+        if (fullForce) {
+            arrow.setVelocity(arrow.getVelocity().multiply(2));
+            particleTrail(arrow, Color.AQUA);
+        }
     }
 }

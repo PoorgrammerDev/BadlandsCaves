@@ -6,6 +6,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -34,7 +35,7 @@ public class BewildermentRunnable extends BukkitRunnable {
                     locationFinder.warpPlayer(player, random);
                     player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, SoundCategory.HOSTILE, 0.5F, 0.2F);
 
-                    if (player.isOnGround()) {
+                    if (((LivingEntity) player).isOnGround()) {
                         player.setMetadata("bewilder_velocity_cancel", new FixedMetadataValue(plugin, true));
                         new BukkitRunnable() {
                             @Override

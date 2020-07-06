@@ -42,8 +42,8 @@ public class ChargeRunnable extends BukkitRunnable {
                                         if (armorManager.isStarlightArmor(item)) {
                                             Short platingObject = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT);
                                             short plating = platingObject != null ? platingObject : 0;
-                                            meta.addEnchant(Enchantment.DURABILITY, 7, true);
-                                            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5 + (2 * plating), true);
+                                            meta.addEnchant(Enchantment.DURABILITY, 5, true);
+                                            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7 + (2 * plating), true);
                                         }
                                         else if (toolManager.isStarlightSaber(item)) {
                                             meta.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
