@@ -43,6 +43,8 @@ public class Possession extends UsePowers implements Listener {
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
+                    if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+                    if (attemptSilence(player)) return;
 
                     boolean in_possession = (PlayerScore.IN_POSSESSION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
                     if (in_possession) {

@@ -2,16 +2,14 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Blocks.SilencerBlock;
-import me.fullpotato.badlandscaves.CustomItems.Crafting.Silencer;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.SoundCategory;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
 public class Displace extends UsePowers implements Listener {
@@ -44,12 +43,8 @@ public class Displace extends UsePowers implements Listener {
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
                     if (((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1)) return;
-
-                    SilencerBlock silencerBlock = new SilencerBlock(plugin);
-                    if (silencerBlock.getNearbySilencer()) {
-                        // TODO: 7/8/2020
-                    }
-
+                    if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+                    if (attemptSilence(player)) return;
 
                     final ManaBarManager manaBar = new ManaBarManager(plugin);
                     int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);

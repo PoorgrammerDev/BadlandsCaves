@@ -33,14 +33,18 @@ public class SwapPowers implements Listener {
         ManaBarManager bar = new ManaBarManager(plugin);
         if (player.isSneaking()) {
             PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
-            bar.clearMessage(player);
+            if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
+                bar.clearMessage(player);
+            }
         }
         else {
             final boolean doubleshift_window = (PlayerScore.SWAP_DOUBLESHIFT_WINDOW.hasScore(plugin, player)) && ((byte) PlayerScore.SWAP_DOUBLESHIFT_WINDOW.getScore(plugin, player) == 1);
             if (doubleshift_window) {
                 PlayerScore.SWAP_WINDOW.setScore(plugin, player, 1);
 
-                bar.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
+                if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
+                    bar.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
+                }
             }
             else {
                 PlayerScore.SWAP_DOUBLESHIFT_WINDOW.setScore(plugin, player, 1);
@@ -122,7 +126,9 @@ public class SwapPowers implements Listener {
                     plugin.saveSystemConfig();
                     PlayerScore.SWAP_SLOT.setScore(plugin, player, new_swap_slot);
 
-                    bar.clearMessage(player);
+                    if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
+                        bar.clearMessage(player);
+                    }
                     break;
                 }
                 else {
@@ -138,7 +144,9 @@ public class SwapPowers implements Listener {
                         }
                         PlayerScore.SWAP_SLOT.setScore(plugin, player, new_swap_slot);
 
-                        bar.displayMessage(player, names[new_swap_slot], 2, true);
+                        if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
+                            bar.displayMessage(player, names[new_swap_slot], 2, true);
+                        }
                         break;
                     }
 

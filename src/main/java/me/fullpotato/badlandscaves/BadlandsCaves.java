@@ -348,6 +348,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new ParanoiaRunnable(this).runTaskTimer(this, 0, 20);
         new Freezing(this).runTaskTimer(this, 0, 5);
         new PreventNonPoweredUsage(this).runTaskTimerAsynchronously(this, 0, 0);
+        new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
 
 
         WitherBossFight witherFight = new WitherBossFight(this);

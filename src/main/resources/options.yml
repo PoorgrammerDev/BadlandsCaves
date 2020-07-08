@@ -109,3 +109,9 @@ hardmode_values:
   # In Hardmode, mini-boss versions of enemies, called Augmented Mobs, can spawn in place of regular mobs.
   # This is the base percent chance that happens. [Not factoring in Chaos]
   augmented_spawn_chance: 5
+
+  #In Hardmode, Silencers are blocks that prevent Heretics from using their powers. This is their radius of effect.
+  silencer_range: 25
+
+  #Everytime a Silencer cancels a Heretic's powers from being used, it uses up this much energy.
+  silencer_cost: 10

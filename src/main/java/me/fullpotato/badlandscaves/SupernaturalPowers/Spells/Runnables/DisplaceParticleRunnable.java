@@ -35,6 +35,8 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             return;
         }
 
+        if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+
         int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
         int place_range, warp_range;
 

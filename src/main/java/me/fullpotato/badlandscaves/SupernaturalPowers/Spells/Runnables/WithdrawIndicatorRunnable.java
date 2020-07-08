@@ -30,6 +30,7 @@ public class WithdrawIndicatorRunnable extends BukkitRunnable {
             return;
         }
         if (player.getWorld().equals(empty)) return;
+        if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
 
 
         Location location = player.getEyeLocation();

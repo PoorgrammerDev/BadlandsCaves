@@ -36,6 +36,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
             return;
         }
         if (((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1)) return;
+        if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
 
         TargetEntity targetEntity = new TargetEntity();
         LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, player);

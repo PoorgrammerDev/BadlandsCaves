@@ -44,12 +44,18 @@ public class Agility extends UsePowers implements Listener {
     public void multiJump(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
+        event.setCancelled(true);
+        player.setFlying(false);
+        player.setAllowFlight(false);
 
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
         int agility_level = (int) PlayerScore.AGILITY_LEVEL.getScore(plugin, player);
         if (agility_level < 1.0) return;
+
+        if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+        if (attemptSilence(player)) return;
 
         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
         int cost = plugin.getOptionsConfig().getInt("spell_costs.agility_mana_cost");
@@ -68,10 +74,6 @@ public class Agility extends UsePowers implements Listener {
                     }
                 }
             }
-
-            event.setCancelled(true);
-            player.setFlying(false);
-            player.setAllowFlight(false);
 
             Vector velocity = player.getVelocity();
             if (agility_level == 1) {

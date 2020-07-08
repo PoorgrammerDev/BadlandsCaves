@@ -47,6 +47,9 @@ public class EnhancedEyes extends UsePowers implements Listener {
                     event.setCancelled(true);
 
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
+                    if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+                    if (attemptSilence(player)) return;
+
                     final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
                     if (eyes_level < 1) return;
 

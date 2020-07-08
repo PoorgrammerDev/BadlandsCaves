@@ -49,6 +49,9 @@ public class Withdraw extends UsePowers implements Listener {
                     event.setCancelled(true);
                     if (player.getLocation().getWorld().equals(void_world)) return;
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
+                    if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+                    if (attemptSilence(player)) return;
+
                     else {
                         int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
