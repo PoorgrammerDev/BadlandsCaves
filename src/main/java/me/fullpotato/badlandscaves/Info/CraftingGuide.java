@@ -446,7 +446,7 @@ public class CraftingGuide implements Listener {
     public ItemStack getEmptyItem(Material material) {
         ItemStack empty = new ItemStack(material);
         ItemMeta meta = empty.getItemMeta();
-        meta.setDisplayName("§r");
+        meta.setDisplayName(ChatColor.RESET.toString());
         empty.setItemMeta(meta);
 
         return empty;

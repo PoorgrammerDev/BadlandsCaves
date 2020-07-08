@@ -58,7 +58,7 @@ public class PlayerJoinLeave implements Listener {
 
         //if in wither fight, tp out
         if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getChambersWorldName()))) {
-            if (plugin.getOptionsConfig().getInt("wither_fight.fight_stage") == -1) {
+            if (plugin.getSystemConfig().getInt("wither_fight.fight_stage") == -1) {
                 Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation() : player.getBedSpawnLocation();
                 warp.setYaw(player.getLocation().getYaw());
                 warp.setPitch(player.getLocation().getPitch());

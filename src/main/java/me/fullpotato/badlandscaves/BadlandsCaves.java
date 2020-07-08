@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.GravityFallDamage;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
+import me.fullpotato.badlandscaves.Blocks.SilencerBlock;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
@@ -269,6 +270,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new PiglinBuff(this),
                 new HoglinBuff(this),
                 new Silencer(this),
+                new SilencerBlock(this),
         };
 
         for (Listener event : events) {
