@@ -22,12 +22,12 @@ public class InventorySerialize {
         for (int a = 0; a < inventory.getSize(); a++) {
             final ItemStack item = inventory.getItem(a);
             if (item != null) {
-                plugin.getConfig().set("player_info." + player.getUniqueId() + ".saved_inventories." + inventoryName + "." + a, item.serialize());
-                plugin.saveConfig();
+                plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_inventories." + inventoryName + "." + a, item.serialize());
+                plugin.saveSystemConfig();
             }
         }
-        plugin.saveConfig();
-        plugin.reloadConfig();
+        plugin.saveSystemConfig();
+        plugin.reloadSystemConfig();
     }
 
     /** Takes the saved inventory in the player's config and gives it to the player.
@@ -38,13 +38,13 @@ public class InventorySerialize {
      */
     public void loadInventory (final Player player, final String inventoryName, final boolean clearCurrent, final boolean clearConfig) {
         final String base_key = "player_info." + player.getUniqueId() + ".saved_inventories." + inventoryName;
-        final ConfigurationSection inv_section = plugin.getConfig().getConfigurationSection(base_key);
+        final ConfigurationSection inv_section = plugin.getSystemConfig().getConfigurationSection(base_key);
         if (inv_section != null) {
             if (clearCurrent) {
                 player.getInventory().clear();
             }
             for (int a = 0; a <= 40; a++) {
-                final ConfigurationSection item_section = plugin.getConfig().getConfigurationSection(base_key + "." + a);
+                final ConfigurationSection item_section = plugin.getSystemConfig().getConfigurationSection(base_key + "." + a);
                 if (item_section != null) {
                     final ItemStack item = ItemStack.deserialize(item_section.getValues(true));
                     if (clearCurrent) {
@@ -57,8 +57,8 @@ public class InventorySerialize {
             }
 
             if (clearConfig) {
-                plugin.getConfig().set(base_key, null);
-                plugin.saveConfig();
+                plugin.getSystemConfig().set(base_key, null);
+                plugin.saveSystemConfig();
             }
         }
     }

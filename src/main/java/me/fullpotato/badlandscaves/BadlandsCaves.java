@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves;
 
+import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.GravityFallDamage;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
@@ -52,14 +53,25 @@ import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public final class BadlandsCaves extends JavaPlugin {
+
+    //CONFIG FILES
+    private FileConfiguration optionsConfig;
+    private File optionsFile;
+
+    private FileConfiguration systemConfig;
+    private File systemFile;
 
     //WORLD NAMES
     private String mainWorldName;
@@ -79,8 +91,9 @@ public final class BadlandsCaves extends JavaPlugin {
     @Override
     public void onEnable() {
         getServerVersion();
+        createOptionsConfig();
+        createSystemConfig();
         loadWorldNames();
-        loadConfig();
         loadCustomWorlds();
         registerEvents();
         loadCommands();
@@ -90,14 +103,57 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.saveConfig();
+        this.saveSystemConfig();
         this.getServer().getScheduler().cancelTasks(this);
     }
 
     //CONFIG
-    public void loadConfig() {
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
+    private void createOptionsConfig() {
+        optionsFile = new File(getDataFolder(), "options.yml");
+        if (!optionsFile.exists()) {
+            optionsFile.getParentFile().mkdirs();
+            saveResource("options.yml", false);
+        }
+
+        optionsConfig = new YamlConfiguration();
+        try {
+            optionsConfig.load(optionsFile);
+        }
+        catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createSystemConfig() {
+        systemFile = new File(getDataFolder(), "system.yml");
+        if (!systemFile.exists()) {
+            systemFile.getParentFile().mkdirs();
+            saveResource("system.yml", false);
+        }
+
+        systemConfig = new YamlConfiguration();
+        try {
+            systemConfig.load(systemFile);
+        }
+        catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveSystemConfig() {
+        try {
+            this.getSystemConfig().save(this.systemFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadSystemConfig () {
+        this.systemConfig = YamlConfiguration.loadConfiguration(this.systemFile);
+        InputStream defConfigStream = this.getResource("system.yml");
+        if (defConfigStream != null) {
+            this.systemConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
+        }
     }
 
     //WORLDS
@@ -434,7 +490,7 @@ public final class BadlandsCaves extends JavaPlugin {
         }
     }
 
-
+    //GETTERS----------------------------------------------------------------
     public String getMainWorldName() {
         return mainWorldName;
     }
@@ -477,5 +533,13 @@ public final class BadlandsCaves extends JavaPlugin {
 
     public PossessionNMS getPossessionNMS() {
         return possessionNMS;
+    }
+
+    public FileConfiguration getOptionsConfig() {
+        return optionsConfig;
+    }
+
+    public FileConfiguration getSystemConfig() {
+        return systemConfig;
     }
 }

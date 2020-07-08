@@ -31,7 +31,7 @@ public class StarlightPaxelMechanism extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (hardmode) {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 EntityEquipment equipment = player.getEquipment();

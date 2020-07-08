@@ -57,18 +57,18 @@ public class WitherBossFight implements Listener {
         if (event.getEntity() instanceof Wither) {
             if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.BUILD_WITHER)) {
                 event.setCancelled(true);
-                if (plugin.getConfig().getBoolean("options.wither_fight.portal_active")) return;
-                if (plugin.getConfig().getInt("options.wither_fight.fight_stage") != -1) return;
+                if (plugin.getOptionsConfig().getBoolean("wither_fight.portal_active")) return;
+                if (plugin.getOptionsConfig().getInt("wither_fight.fight_stage") != -1) return;
 
                 Location spawnLocation = event.getLocation();
                 if (spawnLocation.getWorld() == null || !spawnLocation.getWorld().getEnvironment().equals(World.Environment.NORMAL)) return;
 
-                plugin.getConfig().set("options.wither_fight.fight_stage", 0);
-                plugin.getConfig().set("options.wither_fight.portal_active", true);
-                plugin.getConfig().set("options.wither_fight.portal_location", spawnLocation);
-                plugin.getConfig().set("options.wither_fight.portal_timer", (spawnLocation.getBlockY() * 0.25) + 180);
+                plugin.getSystemConfig().set("wither_fight.fight_stage", 0);
+                plugin.getSystemConfig().set("wither_fight.portal_active", true);
+                plugin.getSystemConfig().set("wither_fight.portal_location", spawnLocation);
+                plugin.getSystemConfig().set("wither_fight.portal_timer", (spawnLocation.getBlockY() * 0.25) + 180);
 
-                plugin.saveConfig();
+                plugin.saveSystemConfig();
 
                 Random random = new Random();
                 spawnTunnel(spawnLocation, random);
@@ -88,14 +88,14 @@ public class WitherBossFight implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (plugin.getConfig().getBoolean("options.wither_fight.portal_active")) {
-                    int timer = plugin.getConfig().getInt("options.wither_fight.portal_timer");
+                if (plugin.getOptionsConfig().getBoolean("wither_fight.portal_active")) {
+                    int timer = plugin.getOptionsConfig().getInt("wither_fight.portal_timer");
                     if (timer > 0) {
-                        plugin.getConfig().set("options.wither_fight.portal_timer", timer - 1);
+                        plugin.getSystemConfig().set("wither_fight.portal_timer", timer - 1);
                     }
                     else {
                         prepareStage();
-                        destroyTunnel(plugin.getConfig().getLocation("options.wither_fight.portal_location"));
+                        destroyTunnel(plugin.getSystemConfig().getLocation("wither_fight.portal_location"));
                     }
                 }
             }
@@ -104,8 +104,8 @@ public class WitherBossFight implements Listener {
 
     @EventHandler
     public void enterWorld (PlayerMoveEvent event) {
-        if (!plugin.getConfig().getBoolean("options.wither_fight.portal_active")) return;
-        Location portalLocation = plugin.getConfig().getLocation("options.wither_fight.portal_location");
+        if (!plugin.getOptionsConfig().getBoolean("wither_fight.portal_active")) return;
+        Location portalLocation = plugin.getSystemConfig().getLocation("wither_fight.portal_location");
         if (portalLocation == null) return;
         portalLocation = portalLocation.clone();
 
@@ -199,13 +199,13 @@ public class WitherBossFight implements Listener {
     }
 
     public void destroyTunnel (Location location) {
-        if (!(plugin.getConfig().getBoolean("options.wither_fight.portal_active"))) return;
+        if (!(plugin.getOptionsConfig().getBoolean("wither_fight.portal_active"))) return;
 
         Location clone = location.clone();
-        plugin.getConfig().set("options.wither_fight.portal_active", false);
-        plugin.getConfig().set("options.wither_fight.portal_location", null);
-        plugin.getConfig().set("options.wither_fight.portal_timer", 0);
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("wither_fight.portal_active", false);
+        plugin.getSystemConfig().set("wither_fight.portal_location", null);
+        plugin.getSystemConfig().set("wither_fight.portal_timer", 0);
+        plugin.saveSystemConfig();
 
 
         plugin.getServer().broadcastMessage("§3The portal has closed!");
@@ -239,15 +239,15 @@ public class WitherBossFight implements Listener {
             if (block != null && block.getWorld().equals(world)) {
                 if (block.getType().equals(Material.RED_NETHER_BRICK_WALL)) {
                     if (event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
-                        int fight_stage = plugin.getConfig().getInt("options.wither_fight.fight_stage");
+                        int fight_stage = plugin.getOptionsConfig().getInt("wither_fight.fight_stage");
                         if (fight_stage == 0) {
                             for (Player player : plugin.getServer().getOnlinePlayers()) {
                                 if (player.getWorld().equals(world)) {
                                     player.sendMessage("§cTo proceed, click the barrier again. This will close off the portal in the Overworld.");
                                 }
                             }
-                            plugin.getConfig().set("options.wither_fight.fight_stage", 1);
-                            plugin.saveConfig();
+                            plugin.getSystemConfig().set("wither_fight.fight_stage", 1);
+                            plugin.saveSystemConfig();
                         }
                         else if (fight_stage == 1) {
                             prepareStage();
@@ -276,9 +276,9 @@ public class WitherBossFight implements Listener {
             }
         }
 
-        destroyTunnel(plugin.getConfig().getLocation("options.wither_fight.portal_location"));
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
-        final boolean waive = plugin.getConfig().getBoolean("options.waive_hardmode_chambers_keys");
+        destroyTunnel(plugin.getSystemConfig().getLocation("wither_fight.portal_location"));
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
+        final boolean waive = plugin.getOptionsConfig().getBoolean("waive_hardmode_chambers_keys");
 
         if (hardmode && waive) {
             genMazes(new Random(), false);
@@ -286,18 +286,18 @@ public class WitherBossFight implements Listener {
         }
         else {
             genMazes(new Random(), true);
-            plugin.getConfig().set("options.wither_fight.fight_stage", 2);
+            plugin.getSystemConfig().set("wither_fight.fight_stage", 2);
         }
 
-        plugin.saveConfig();
+        plugin.saveSystemConfig();
     }
 
     public void checkIfEnded() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (plugin.getConfig().getInt("options.wither_fight.fight_stage") == -1) return;
-                if (plugin.getConfig().getBoolean("options.wither_fight.portal_active")) return;
+                if (plugin.getOptionsConfig().getInt("wither_fight.fight_stage") == -1) return;
+                if (plugin.getOptionsConfig().getBoolean("wither_fight.portal_active")) return;
 
 
                 int active = 0;
@@ -321,8 +321,8 @@ public class WitherBossFight implements Listener {
                     }
                     players.clear();
 
-                    plugin.getConfig().set("options.wither_fight.fight_stage", -1);
-                    plugin.saveConfig();
+                    plugin.getSystemConfig().set("wither_fight.fight_stage", -1);
+                    plugin.saveSystemConfig();
                 }
             }
         }.runTaskTimer(plugin, 0, 5);
@@ -569,8 +569,8 @@ public class WitherBossFight implements Listener {
     }
 
     public void advanceToBoss () {
-        plugin.getConfig().set("options.wither_fight.fight_stage", 3);
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("wither_fight.fight_stage", 3);
+        plugin.saveSystemConfig();
         for (int x = -26; x <= -24; x++) {
             for (int z = -1; z <= 1; z++) {
                 world.getBlockAt(x, 127, z).breakNaturally();
@@ -616,8 +616,8 @@ public class WitherBossFight implements Listener {
                 return;
             }
         }
-        plugin.getConfig().set("options.wither_fight.fight_stage", 4);
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("wither_fight.fight_stage", 4);
+        plugin.saveSystemConfig();
 
 
         int[] time = {5};
@@ -918,7 +918,7 @@ public class WitherBossFight implements Listener {
         if (event.getEntity() instanceof Wither) {
             Wither wither = (Wither) event.getEntity();
             if (wither.getWorld().equals(world)) {
-                boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+                boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
                 clearEntities(false);
                 plugin.getServer().broadcastMessage("§dThe Wither has been slain!");
 
@@ -931,9 +931,9 @@ public class WitherBossFight implements Listener {
                         player.playSound(player.getLocation(), "custom.darkrooms_whispers", SoundCategory.MASTER, 0.5F, 0.5F);
                     });
 
-                    plugin.getConfig().set("system.hardmode", true);
-                    plugin.getConfig().set("system.chaos_level", 0);
-                    plugin.saveConfig();
+                    plugin.getSystemConfig().set("hardmode", true);
+                    plugin.getSystemConfig().set("chaos_level", 0);
+                    plugin.saveSystemConfig();
 
                     plugin.getServer().resetRecipes();
                     plugin.loadCraftingRecipes();
@@ -944,8 +944,8 @@ public class WitherBossFight implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        plugin.getConfig().set("options.wither_fight.fight_stage", 5);
-                        plugin.saveConfig();
+                        plugin.getSystemConfig().set("wither_fight.fight_stage", 5);
+                        plugin.saveSystemConfig();
                         exitPortalParticles();
                         giveLoot();
                     }
@@ -988,7 +988,7 @@ public class WitherBossFight implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (plugin.getConfig().getInt("options.wither_fight.fight_stage") == 5) {
+                if (plugin.getOptionsConfig().getInt("wither_fight.fight_stage") == 5) {
                     ParticleShapes.particleSphere(null, Particle.REDSTONE, centerStage, 9, 0, new Particle.DustOptions(Color.ORANGE, 1));
                 }
                 else {
@@ -1002,7 +1002,7 @@ public class WitherBossFight implements Listener {
     public void exitPortalMechanism (PlayerMoveEvent event) {
         Location centerStage = new Location(world, 300.5, 206, 0.5);
         if (event.getTo() != null && event.getTo().getWorld() != null && event.getTo().getWorld().equals(world)) {
-            if (plugin.getConfig().getInt("options.wither_fight.fight_stage") == 5) {
+            if (plugin.getOptionsConfig().getInt("wither_fight.fight_stage") == 5) {
                 if (event.getTo().distanceSquared(centerStage) < 81) {
                     Player player = event.getPlayer();
                     if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);

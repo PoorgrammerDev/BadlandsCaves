@@ -57,8 +57,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
                         PlayerScore.USING_EYES.setScore(plugin, player, 0);
                     }
                     else {
-                        final int initial_mana_cost = plugin.getConfig().getInt("options.spell_costs.eyes_mana_cost");
-                        final int constant_mana_drain = plugin.getConfig().getInt("options.spell_costs.eyes_mana_drain");
+                        final int initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
+                        final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
 
                         if (mana >= initial_mana_cost) {
@@ -175,8 +175,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
                             }
 
                             String eyes_map = builder.toString();
-                            plugin.getConfig().set("player_info." + player.getUniqueId() + ".eyes_map", eyes_map);
-                            plugin.saveConfig();
+                            plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".eyes_map", eyes_map);
+                            plugin.saveSystemConfig();
 
                             mana -= (initial_mana_cost - (constant_mana_drain / 20.0));
                             PlayerScore.MANA.setScore(plugin, player, mana);
@@ -217,7 +217,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
         final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);
         if (!using_eyes) return;
 
-        String string_map = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".eyes_map");
+        String string_map = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".eyes_map");
 
         assert string_map != null;
         HashMap<Location, Integer> blocks_maps = stringToMap(player, string_map);

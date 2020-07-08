@@ -55,7 +55,7 @@ public class CauldronMenu implements Listener {
                                 if (online.getLocation().distanceSquared(location) < 100) {
                                     boolean open = ((byte) PlayerScore.OPENED_CAULDRON.getScore(plugin, online) == 1);
                                     if (open) {
-                                        Location saved_cauldron_location = plugin.getConfig().getLocation("player_info." + online.getUniqueId() + ".opened_cauldron_location");
+                                        Location saved_cauldron_location = plugin.getSystemConfig().getLocation("player_info." + online.getUniqueId() + ".opened_cauldron_location");
                                         if (location.equals(saved_cauldron_location)) {
                                             already_opened = true;
                                             break;
@@ -70,8 +70,8 @@ public class CauldronMenu implements Listener {
                             else {
                                 event.setCancelled(true);
                                 PlayerScore.OPENED_CAULDRON.setScore(plugin, player, 1);
-                                plugin.getConfig().set("player_info." + player.getUniqueId() + ".opened_cauldron_location", location);
-                                plugin.saveConfig();
+                                plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".opened_cauldron_location", location);
+                                plugin.saveSystemConfig();
 
                                 purification_menu(player, cauldron_block, cauldron_title);
                                 BukkitTask inv_refresh = new CauldronRunnable(plugin, cauldron_inv, location, under.getLocation(), player).runTaskTimer(plugin, 0, 10);
@@ -92,7 +92,7 @@ public class CauldronMenu implements Listener {
         Inventory clicked_inv = event.getClickedInventory();
         Inventory target_inv = event.getView().getTopInventory();
         boolean isCauldron = event.getView().getTitle().equalsIgnoreCase(cauldron_title);
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
 
         if (clicked_inv != null) {
             if (isCauldron && clicked_inv.equals(target_inv)) {
@@ -241,7 +241,7 @@ public class CauldronMenu implements Listener {
         if (inv.equals(cauldron_inv)) {
             plugin.getServer().getScheduler().cancelTask(refresh_id);
             PlayerScore.OPENED_CAULDRON.setScore(plugin, player, 0);
-            plugin.getConfig().set("player_info." + player.getUniqueId() + ".opened_cauldron_location", null);
+            plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".opened_cauldron_location", null);
 
             if (cauldron_inv.getItem(11) != null) {
                 if (player.getInventory().firstEmpty() != -1) {

@@ -70,7 +70,7 @@ public class TaintedPowderRunnable extends BukkitRunnable {
         Entity[] entity_list = location.getChunk().getEntities();
         for (int a = 0; a < entity_list.length; a++) {
             if (location.distance(entity_list[a].getLocation()) <= 3) {
-                boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+                boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
                 if (entity_list[a].getType().equals(EntityType.SILVERFISH)) {
                     int duration = isHardmode ? 50 : 9999;
                     int amplifier = isHardmode ? 0 : 4;

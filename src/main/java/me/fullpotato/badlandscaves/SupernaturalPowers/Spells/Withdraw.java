@@ -53,7 +53,7 @@ public class Withdraw extends UsePowers implements Listener {
                         int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
                             double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-                            int withdraw_mana_cost = plugin.getConfig().getInt("options.spell_costs.withdraw_mana_cost");
+                            int withdraw_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.withdraw_mana_cost");
 
                             event.setCancelled(true);
                             if (mana >= withdraw_mana_cost) {
@@ -80,7 +80,7 @@ public class Withdraw extends UsePowers implements Listener {
                                         PreventDragon.preventDragonSpawn(void_world);
 
                                         Location location = player.getLocation();
-                                        plugin.getConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
+                                        plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", location.getWorld().getName());
 
                                         Location voidloc = player.getLocation();
                                         voidloc.setWorld(void_world);
@@ -246,7 +246,7 @@ public class Withdraw extends UsePowers implements Listener {
             if (other.getWorld().equals(void_world)) {
                 Chunk other_chunk = other.getLocation().getChunk();
                 if (other_chunk.getX() == x && other_chunk.getZ() == z) {
-                    String worldname = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
+                    String worldname = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                     if (worldname != null && !worldname.isEmpty()) {
                         World other_world = plugin.getServer().getWorld(worldname);
                         return (world.equals(other_world));

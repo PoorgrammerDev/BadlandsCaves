@@ -35,8 +35,8 @@ public class ManaRegen extends BukkitRunnable {
                 return;
             }
 
-            boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
-            double thirst_penalty = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.mana_regen_var") : plugin.getConfig().getInt("options.pre_hardmode_values.mana_regen_var");
+            boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
+            double thirst_penalty = isHardmode ? plugin.getOptionsConfig().getInt("hardmode_values.mana_regen_var") : plugin.getOptionsConfig().getInt("pre_hardmode_values.mana_regen_var");
             double thirst_sys_var = (double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player);
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
 

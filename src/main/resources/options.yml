@@ -1,0 +1,111 @@
+#BadlandsCaves Options
+
+# Y Coordinate where Caves end and Surface begins
+surface_layer: 128
+
+# Fishing up Fishing Crate Chance (%) [W/O Luck Effect / Enchantment]
+fishing_crate_chance: 10
+
+# Opening Crate Treasure Chance (%) [W/O Luck Effect]
+fishing_crate_treasure_base: 10
+
+# Fishing Crate Treasure Tier Upgrade Chance (%)
+# Higher #, higher chance of higher tier loot.
+fishing_crate_tier_upgrade: 25
+
+# Hallowed Chambers in Hardmode doesn't require searching for keys.
+waive_hardmode_chambers_keys: false
+
+# Give new Starter Kit (Sapling, Bone Meal) on every Player Respawn
+give_new_starter_on_spawn: false
+
+# Number of Starting Dungeons to generate at Game Start.
+# This is added on top of vanilla dungeons.
+# Set to 0 to disable Starting Dungeons.
+starting_dungeons: 10
+
+# Time Limit for Descension World
+# (Does not take into account extra time each Shrine gives)
+descension_time_limit: 300
+
+# Maximum Lost Souls in Descension at one time
+descension_mob_limit: 100
+
+# How many Detection Points Lost Souls have to detect before player loses.
+descension_max_detect: 100
+
+# Heretic Spell Mana Costs
+# "Drain" indicates cost per second, instead of single-cost.
+spell_costs:
+  displace_mana_cost: 25
+  eyes_mana_cost: 50
+  eyes_mana_drain: 10
+  withdraw_mana_cost: 70
+  possess_mana_cost: 25
+  possess_mana_drain: 3
+  agility_mana_cost: 5
+
+# Default Soul Drop Chance (%)
+soul_drop_chance: 25
+
+pre_hardmode_values:
+  # How many Deaths a Blessed Apple will reverse in Pre-hardmode
+  death_reverse_gapple: 1
+
+  # How many Deaths a Enchanted Blessed Apple will reverse in Pre-hardmode
+  death_reverse_ench_gapple: 10
+
+  # Inversely controls how quickly Thirst depletes in Pre-hardmode
+  # Decreasing this value will cause Thirst to fall faster
+  # Increasing this value will cause Thirst to fall slower
+  threshold_thirst_sys: 50
+
+  # How much Thirst Toxic Water replenishes in Pre-hardmode
+  tox_drink_thirst_incr: 10
+
+  # How much Toxicity Toxic Water increases in Pre-hardmode
+  tox_drink_tox_incr: 5
+
+  # How Much Thirst Purified Water replenishes in Pre-hardmode
+  purified_drink_thirst_incr: 60
+
+  # How Much Toxicity Antidote decreases in Pre-hardmode
+  antidote_drink_tox_decr: 100
+
+  # Controls how much Mana Regeneration will deplete Thirst in Pre-hardmode
+  mana_regen_var: 5
+
+hardmode_values:
+  # How many Deaths a Blessed Apple will reverse in Hardmode
+  death_reverse_gapple: 0
+
+  # How many Deaths a Enchanted Blessed Apple will reverse in Hardmode
+  death_reverse_ench_gapple: 2
+
+  # Inversely controls how quickly Thirst depletes in Hardmode
+  # Decreasing this value will cause Thirst to fall faster
+  # Increasing this value will cause Thirst to fall slower
+  threshold_thirst_sys: 30
+
+  # How much Thirst Toxic Water replenishes in Hardmode
+  tox_drink_thirst_incr: 5
+
+  # How much Toxicity Toxic Water increases in Hardmode
+  tox_drink_tox_incr: 10
+
+  # How Much Thirst Purified Water replenishes in Hardmode
+  purified_drink_thirst_incr: 40
+
+  # How Much Toxicity Antidote decreases in Hardmode
+  antidote_drink_tox_decr: 50
+
+  # Controls how much Mana Regeneration will deplete Thirst in Hardmode
+  mana_regen_var: 10
+
+  # Controls the size of Creeper Explosions in Hardmode.
+  # For scale, a vanilla creeper explosion size is 3. (as of 1.16.1)
+  creeper_radius: 7
+
+  # In Hardmode, mini-boss versions of enemies, called Augmented Mobs, can spawn in place of regular mobs.
+  # This is the base percent chance that happens. [Not factoring in Chaos]
+  augmented_spawn_chance: 5

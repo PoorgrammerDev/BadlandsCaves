@@ -35,7 +35,7 @@ public class SpawnInhabitants implements Listener {
         World world = entity.getWorld();
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
 
-            if (plugin.getConfig().getBoolean("system.hardmode")) {
+            if (plugin.getSystemConfig().getBoolean("hardmode")) {
                 if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                     if (entity instanceof CaveSpider || entity instanceof WitherSkeleton) {
                         event.setCancelled(true);
@@ -47,7 +47,7 @@ public class SpawnInhabitants implements Listener {
                 if (entity instanceof Monster) {
                     DimensionsWorlds.Habitation habitationType = null;
 
-                    String savedHabitatType = plugin.getConfig().getString("system.dim_stats." + world.getName() + ".habitation");
+                    String savedHabitatType = plugin.getSystemConfig().getString("dim_stats." + world.getName() + ".habitation");
                     if (savedHabitatType != null) {
                         try {
                             habitationType = DimensionsWorlds.Habitation.valueOf(savedHabitatType.toUpperCase());

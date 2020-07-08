@@ -19,7 +19,7 @@ public class ChaosCommand extends Commands implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("chaos")) {
             if (sender.isOp()) {
                 if (args.length == 0 || args[0].equalsIgnoreCase("get")) {
-                    int chaos = plugin.getConfig().getInt("system.chaos_level");
+                    int chaos = plugin.getSystemConfig().getInt("chaos_level");
                     sender.sendMessage(ChatColor.GOLD + "The Chaos level is " + ChatColor.RED + chaos + ChatColor.GOLD + ".");
                     return true;
                 }
@@ -35,8 +35,8 @@ public class ChaosCommand extends Commands implements CommandExecutor {
                                 sender.sendMessage(ChatColor.RED + "Chaos value must stay between 0 and 100.");
                             }
                             else {
-                                plugin.getConfig().set("system.chaos_level", chaos);
-                                plugin.saveConfig();
+                                plugin.getSystemConfig().set("chaos_level", chaos);
+                                plugin.saveSystemConfig();
 
                                 sender.sendMessage(ChatColor.GOLD + "The Chaos level has been set to " + ChatColor.RED + chaos + ChatColor.GOLD + ".");
                             }

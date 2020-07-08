@@ -122,7 +122,7 @@ public class DescensionPlayerMove implements Listener {
         }
 
         detection = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
-        int detect_max = plugin.getConfig().getInt("options.descension_max_detect");
+        int detect_max = plugin.getOptionsConfig().getInt("descension_max_detect");
         if (detection >= detect_max) {
             playerLost(player);
 

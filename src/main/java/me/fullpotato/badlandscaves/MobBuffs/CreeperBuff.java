@@ -28,14 +28,14 @@ public class CreeperBuff implements Listener {
         final Creeper creeper = (Creeper) event.getEntity();
         final Random random = new Random();
 
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         creeper.setMaxFuseTicks((int) (30.0 - ((isHardmode ? 0.1 : 0.05) * chaos)));
 
         if (!isHardmode) return;
 
-        final int radius = plugin.getConfig().getInt("options.hardmode_values.creeper_radius");
-        final int augment = (chaos / 5) + plugin.getConfig().getInt("options.hardmode_values.augmented_spawn_chance");
+        final int radius = plugin.getOptionsConfig().getInt("hardmode_values.creeper_radius");
+        final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
@@ -53,7 +53,7 @@ public class CreeperBuff implements Listener {
     @EventHandler
     public void augmentedExplode (EntityExplodeEvent event) {
         if (event.getEntity() instanceof Creeper) {
-            final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+            final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
             if (hardmode) {
                 final Creeper creeper = (Creeper) event.getEntity();
                 if (!creeper.isDead()) {
@@ -62,7 +62,7 @@ public class CreeperBuff implements Listener {
                         final World world = creeper.getWorld();
                         final Random random = new Random();
                         final int size = creeper.getExplosionRadius();
-                        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+                        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
 
                         final int repeats = random.nextInt(Math.max((chaos / 10), 2)) + 5;
                         int[] repeated = {0};
@@ -90,7 +90,7 @@ public class CreeperBuff implements Listener {
 
     @EventHandler
     public void intraCreeperBehavior (EntityDamageByEntityEvent event) {
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (hardmode) {
             if (event.getEntity() instanceof Creeper) {
                 if (event.getDamager() instanceof Creeper) {

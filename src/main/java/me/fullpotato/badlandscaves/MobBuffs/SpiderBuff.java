@@ -29,11 +29,11 @@ public class SpiderBuff implements Listener {
     @EventHandler
     public void HMspider (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Spider)) return;
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
 
         final Spider spider = (Spider) event.getEntity();
         final Random random = new Random();
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 
         if (event.getEntityType().equals(EntityType.SPIDER)) {
@@ -43,7 +43,7 @@ public class SpiderBuff implements Listener {
                 }
             }
             else {
-                final int augment = (chaos / 5) + plugin.getConfig().getInt("options.hardmode_values.augmented_spawn_chance");
+                final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
                 final boolean augmented = random.nextInt(100) < augment;
                 if (augmented) {
                     spider.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);

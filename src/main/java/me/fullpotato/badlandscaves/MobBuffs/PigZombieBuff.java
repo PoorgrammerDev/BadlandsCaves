@@ -29,7 +29,7 @@ public class PigZombieBuff implements Listener {
 
     @EventHandler
     public void HMpigzombie (PigZombieAngerEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
@@ -101,13 +101,13 @@ public class PigZombieBuff implements Listener {
 
     @EventHandler
     public void assignPigUnderShirt (CreatureSpawnEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
         if (event.getEntity() instanceof PigZombie) {
             final Random random = new Random();
-            final int chaos = plugin.getConfig().getInt("system.chaos_level");
+            final int chaos = plugin.getSystemConfig().getInt("chaos_level");
             final double chance = Math.pow(1.045, chaos) - 1;
             if (random.nextInt(100) < chance) {
                 event.getEntity().getPersistentDataContainer().set(new NamespacedKey(plugin, "undershirt"), PersistentDataType.BYTE, (byte) 1);
@@ -117,7 +117,7 @@ public class PigZombieBuff implements Listener {
 
     @EventHandler
     public void pigUnderShirt (EntityDamageEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 

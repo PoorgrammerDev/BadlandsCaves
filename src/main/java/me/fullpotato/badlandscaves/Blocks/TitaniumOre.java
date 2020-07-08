@@ -29,7 +29,7 @@ public class TitaniumOre implements Listener {
         if (event.getBlock().getType().equals(Material.DEAD_TUBE_CORAL_BLOCK)) {
             Player player = event.getPlayer();
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+                boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
                 if (hardmode) {
                     ItemStack tool = player.getEquipment().getItemInMainHand();
 

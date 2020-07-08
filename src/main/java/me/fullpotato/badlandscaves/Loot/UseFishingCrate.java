@@ -45,8 +45,8 @@ public class UseFishingCrate implements Listener {
                     item.setAmount(item.getAmount() - 1);
 
                     final double player_luck = player.getAttribute(Attribute.GENERIC_LUCK) != null ? player.getAttribute(Attribute.GENERIC_LUCK).getValue() : 0;
-                    final int chaos = plugin.getConfig().getInt("system.chaos_level");
-                    final int treasure_base = plugin.getConfig().getInt("options.fishing_crate_treasure_base");
+                    final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+                    final int treasure_base = plugin.getOptionsConfig().getInt("fishing_crate_treasure_base");
 
                     final double treasure_chance = (100.0 * Math.pow(2.0, player_luck - 8.0)) + treasure_base + (chaos / 20.0);
 

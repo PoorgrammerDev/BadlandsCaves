@@ -24,12 +24,12 @@ public class HoglinBuff implements Listener {
     private void hoglinBuff (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Hoglin)) return;
 
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         final Hoglin hoglin = (Hoglin) event.getEntity();
         final Random random = new Random();
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 
         if (random.nextInt(100) < chance) {
@@ -46,7 +46,7 @@ public class HoglinBuff implements Listener {
 
     @EventHandler
     public void preventPigHogDmg (EntityDamageByEntityEvent event) {
-        if (plugin.getConfig().getBoolean("system.hardmode")) {
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
             if (event.getEntity() instanceof Hoglin) {
                 Hoglin hoglin = (Hoglin) event.getEntity();
                 if (!hoglin.isAbleToBeHunted()) {
@@ -66,7 +66,7 @@ public class HoglinBuff implements Listener {
 
     @EventHandler
     public void preventPigHogTarget (EntityTargetLivingEntityEvent event) {
-        if (plugin.getConfig().getBoolean("system.hardmode")) {
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
             if (event.getTarget() instanceof Hoglin) {
                 Hoglin hoglin = (Hoglin) event.getTarget();
                 if (!hoglin.isAbleToBeHunted()) {

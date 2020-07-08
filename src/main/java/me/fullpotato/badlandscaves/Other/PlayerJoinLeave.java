@@ -58,7 +58,7 @@ public class PlayerJoinLeave implements Listener {
 
         //if in wither fight, tp out
         if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getChambersWorldName()))) {
-            if (plugin.getConfig().getInt("options.wither_fight.fight_stage") == -1) {
+            if (plugin.getOptionsConfig().getInt("wither_fight.fight_stage") == -1) {
                 Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation() : player.getBedSpawnLocation();
                 warp.setYaw(player.getLocation().getYaw());
                 warp.setPitch(player.getLocation().getPitch());
@@ -75,7 +75,7 @@ public class PlayerJoinLeave implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getWithdrawWorldName()))) {
-                String origworldname = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
+                String origworldname = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                 if (origworldname == null) {
                     player.setHealth(0);
                 }

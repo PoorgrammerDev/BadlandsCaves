@@ -62,7 +62,7 @@ public class Displace extends UsePowers implements Listener {
                     boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
                     if (has_displace_marker) {
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-                        int displace_mana_cost = plugin.getConfig().getInt("options.spell_costs.displace_mana_cost");
+                        int displace_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
 
                         double x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
                         double y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);

@@ -34,9 +34,9 @@ public class FishingCrateTreasureTable implements LootTable {
     @Override
     public Collection<ItemStack> populateLoot(Random random, LootContext context) {
         final double luck = context.getLuck();
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int count = random.nextInt(Math.max(Math.min((int) (Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0 + (chaos / 25.0)), 10), 3));
-        final int tier_upgrade = plugin.getConfig().getInt("options.fishing_crate_tier_upgrade") + (int) (Math.pow(chaos / 35.0, 3.25));
+        final int tier_upgrade = plugin.getOptionsConfig().getInt("fishing_crate_tier_upgrade") + (int) (Math.pow(chaos / 35.0, 3.25));
         int tier;
         final TreasureGear treasureGear = new TreasureGear();
 

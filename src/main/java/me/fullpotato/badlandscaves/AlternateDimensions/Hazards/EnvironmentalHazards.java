@@ -33,11 +33,11 @@ public class EnvironmentalHazards {
     public void addHazard(World world, @Nullable Hazard hazard) {
         if (hazard == null) hazard = Hazard.values()[random.nextInt(Hazard.values().length)];
 
-        List<String> hazards = plugin.getConfig().getStringList("system.dim_stats." + world.getName() + ".hazards");
+        List<String> hazards = plugin.getSystemConfig().getStringList("dim_stats." + world.getName() + ".hazards");
         hazards.add(hazard.name());
 
-        plugin.getConfig().set("system.dim_stats." + world.getName() + ".hazards", hazards);
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".hazards", hazards);
+        plugin.saveSystemConfig();
 
         if (hazard.equals(Hazard.ACID_RAIN)) {
             world.setStorm(true);
@@ -52,7 +52,7 @@ public class EnvironmentalHazards {
 
     public boolean hasHazard(World world, Hazard hazard) throws IllegalArgumentException {
         if (isDimension(world)) {
-            List<String> hazards = plugin.getConfig().getStringList("system.dim_stats." + world.getName() + ".hazards");
+            List<String> hazards = plugin.getSystemConfig().getStringList("dim_stats." + world.getName() + ".hazards");
             return !hazards.isEmpty() && hazards.contains(hazard.name());
         }
         throw new IllegalArgumentException("World is not a planet.");

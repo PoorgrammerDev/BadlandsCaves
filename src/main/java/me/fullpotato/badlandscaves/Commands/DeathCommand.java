@@ -52,7 +52,6 @@ public class DeathCommand extends Commands implements CommandExecutor {
                                     try {
                                         int change = Integer.parseInt(args[2]);
                                         PlayerScore.DEATHS.setScore(plugin, targets, change);
-                                        plugin.saveConfig();
                                         sender.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
                                         return true;
                                     } catch (NumberFormatException e) {

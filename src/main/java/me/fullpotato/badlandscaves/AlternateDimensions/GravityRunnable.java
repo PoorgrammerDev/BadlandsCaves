@@ -23,7 +23,7 @@ public class GravityRunnable extends BukkitRunnable {
     public GravityRunnable(BadlandsCaves plugin, World world) {
         this.plugin = plugin;
         this.world = world;
-        this.gravity = plugin.getConfig().getDouble("system.dim_stats." + world.getName() + ".gravity");
+        this.gravity = plugin.getSystemConfig().getDouble("dim_stats." + world.getName() + ".gravity");
     }
 
     @Override

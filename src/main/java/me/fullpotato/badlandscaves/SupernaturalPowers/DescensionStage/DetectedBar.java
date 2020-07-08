@@ -33,7 +33,7 @@ public class DetectedBar extends BukkitRunnable {
             if (in_descension == 2 && player.getWorld().equals(world)) {
                 if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);
                 double detect = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
-                double detect_max = plugin.getConfig().getDouble("options.descension_max_detect");
+                double detect_max = plugin.getOptionsConfig().getDouble("descension_max_detect");
                 double detect_percentage = Math.min(Math.max(detect / detect_max, 0.0), 1.0);
 
                 detected_bar.setProgress(detect_percentage);

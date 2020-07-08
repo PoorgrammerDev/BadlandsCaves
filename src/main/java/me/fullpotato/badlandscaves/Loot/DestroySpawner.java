@@ -93,10 +93,10 @@ public class DestroySpawner implements Listener {
     }
 
     public void incrementChaos(boolean silent) {
-        int current_chaos = plugin.getConfig().getInt("system.chaos_level");
+        int current_chaos = plugin.getSystemConfig().getInt("chaos_level");
         if (current_chaos < 100) {
-            plugin.getConfig().set("system.chaos_level", current_chaos + 1);
-            plugin.saveConfig();
+            plugin.getSystemConfig().set("chaos_level", current_chaos + 1);
+            plugin.saveSystemConfig();
             if (!silent) plugin.getServer().broadcastMessage("§cChaos seeps into this realm...");
         }
         else if (!silent) {
@@ -163,7 +163,7 @@ public class DestroySpawner implements Listener {
             public void run() {
                 if (newLoc == null) return;
 
-                final int chaos = plugin.getConfig().getInt("system.chaos_level");
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                 for (int x = -4; x <= 4; x++) {
                     for (int z = -4; z <= 4; z++) {
                         for (int y = -1; y <= 4; y++) {
@@ -199,7 +199,10 @@ public class DestroySpawner implements Listener {
                 }
 
                 if (!silent) plugin.getServer().broadcastMessage("§3A new Dungeon has appeared!");
-                if (starting) plugin.getConfig().set("system.starting_dungeons_spawned", plugin.getConfig().getInt("system.starting_dungeons_spawned") + 1);
+                if (starting) {
+                    plugin.getSystemConfig().set("starting_dungeons_spawned", plugin.getSystemConfig().getInt("starting_dungeons_spawned") + 1);
+                    plugin.saveSystemConfig();
+                }
                 this.cancel();
 
                 newLoc = null;

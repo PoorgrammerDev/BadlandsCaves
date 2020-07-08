@@ -52,7 +52,7 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void give_starter_on_spawn (PlayerRespawnEvent event) {
-        boolean active = plugin.getConfig().getBoolean("options.give_new_starter_on_spawn");
+        boolean active = plugin.getOptionsConfig().getBoolean("give_new_starter_on_spawn");
 
         if (!active) return;
 

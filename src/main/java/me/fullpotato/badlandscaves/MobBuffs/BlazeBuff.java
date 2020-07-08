@@ -31,7 +31,7 @@ public class BlazeBuff implements Listener {
         if (!(event.getEntity() instanceof Blaze)) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
 
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
 
         Blaze blaze = (Blaze) event.getEntity();
@@ -40,7 +40,7 @@ public class BlazeBuff implements Listener {
 
     @EventHandler
     public void fireballExplode (ProjectileHitEvent event) {
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
 
         if (event.getEntity() instanceof SmallFireball) {
@@ -49,7 +49,7 @@ public class BlazeBuff implements Listener {
                 Blaze blaze = (Blaze) fireball.getShooter();
                 if (blaze.getTarget() instanceof Player) {
                     final Random random = new Random();
-                    final int chaos = plugin.getConfig().getInt("system.chaos_level");
+                    final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                     final double chance = Math.pow(1.045, chaos) - 1;
                     if (random.nextInt(100) >= chance) return;
 

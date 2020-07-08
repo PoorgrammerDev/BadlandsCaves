@@ -36,21 +36,21 @@ public class BlessedAppleEat implements Listener {
             }
 
             int decr_by;
-            boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+            boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
             if (item.isSimilar(blessed_apple)) {
                 if (isHardmode) {
-                    decr_by = plugin.getConfig().getInt("options.hardmode_values.death_reverse_gapple");
+                    decr_by = plugin.getOptionsConfig().getInt("hardmode_values.death_reverse_gapple");
                 }
                 else {
-                    decr_by = plugin.getConfig().getInt("options.pre_hardmode_values.death_reverse_gapple");
+                    decr_by = plugin.getOptionsConfig().getInt("pre_hardmode_values.death_reverse_gapple");
                 }
             }
             else {
                 if (isHardmode) {
-                    decr_by = plugin.getConfig().getInt("options.hardmode_values.death_reverse_ench_gapple");
+                    decr_by = plugin.getOptionsConfig().getInt("hardmode_values.death_reverse_ench_gapple");
                 }
                 else {
-                    decr_by = plugin.getConfig().getInt("options.pre_hardmode_values.death_reverse_ench_gapple");
+                    decr_by = plugin.getOptionsConfig().getInt("pre_hardmode_values.death_reverse_ench_gapple");
                 }
             }
 

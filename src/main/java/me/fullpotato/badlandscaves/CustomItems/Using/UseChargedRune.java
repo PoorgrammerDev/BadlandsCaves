@@ -235,7 +235,7 @@ public class UseChargedRune implements Listener {
 
             ArrayList<String> displace_lore = new ArrayList<>();
             if (displace_level == 0) {
-                final int cost = plugin.getConfig().getInt("options.spell_costs.displace_mana_cost");
+                final int cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
                 //displace_lore.add("§dDisplace §7Level §a1");
                 displace_lore.add("§7--------------------");
                 displace_lore.add("§7Place a marker, and teleport to it.");
@@ -280,7 +280,7 @@ public class UseChargedRune implements Listener {
 
             ArrayList<String> withdraw_lore = new ArrayList<>();
             if (withdraw_level == 0) {
-                final int cost = plugin.getConfig().getInt("options.spell_costs.withdraw_mana_cost");
+                final int cost = plugin.getOptionsConfig().getInt("spell_costs.withdraw_mana_cost");
                 //withdraw_lore.add("§7Withdraw §8| §7Level §a1");
                 withdraw_lore.add("§7--------------------");
                 withdraw_lore.add("§7Retreat to an alternate copy of your surroundings.");
@@ -326,8 +326,8 @@ public class UseChargedRune implements Listener {
 
             ArrayList<String> eyes_lore = new ArrayList<>();
             if (eyes_level == 0) {
-                final int cost = plugin.getConfig().getInt("options.spell_costs.eyes_mana_cost");
-                final int drain = plugin.getConfig().getInt("options.spell_costs.eyes_mana_drain");
+                final int cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
+                final int drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
                 eyes_lore.add("§7--------------------");
                 eyes_lore.add("§7See important blocks and entities around you through walls.");
                 eyes_lore.add("§7--------------------");
@@ -379,8 +379,8 @@ public class UseChargedRune implements Listener {
 
             ArrayList<String> possess_lore = new ArrayList<>();
             if (possess_level == 0) {
-                final int drain = plugin.getConfig().getInt("options.spell_costs.possess_mana_drain");
-                final int cost = plugin.getConfig().getInt("options.spell_costs.possess_mana_cost");
+                final int drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain");
+                final int cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost");
                 possess_lore.add("§7--------------------");
                 possess_lore.add("§7Take control of monsters.");
                 possess_lore.add("§7Upon ending, your body materializes");

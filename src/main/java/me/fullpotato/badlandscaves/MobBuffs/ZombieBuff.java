@@ -45,12 +45,12 @@ public class ZombieBuff implements Listener {
         Random random = new Random();
 
 
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
         if (hardmode) {
 
-            final int augment = (chaos / 5) + plugin.getConfig().getInt("options.hardmode_values.augmented_spawn_chance");
+            final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
             if (random.nextInt(100) < augment) {
                 zombie.setBaby(false);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);

@@ -53,7 +53,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             //yes marker
             World world = player.getWorld();
             final double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-            final int mana_cost = plugin.getConfig().getInt("options.spell_costs.displace_mana_cost");
+            final int mana_cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
             double marker_x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
             double marker_y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);
             double marker_z = (double) PlayerScore.DISPLACE_Z.getScore(plugin, player);

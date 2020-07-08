@@ -20,7 +20,7 @@ public class GhastBuff implements Listener {
 
     @EventHandler
     public void fireballExplode (ProjectileHitEvent event) {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Fireball) {
@@ -28,7 +28,7 @@ public class GhastBuff implements Listener {
             if (fireball.getShooter() instanceof Ghast) {
                 final Ghast ghast = (Ghast) fireball.getShooter();
                 final Random random = new Random();
-                final int chaos = plugin.getConfig().getInt("system.chaos_level");
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                 final double chance = Math.pow(1.045, chaos) - 1;
                 Location location = fireball.getLocation();
 

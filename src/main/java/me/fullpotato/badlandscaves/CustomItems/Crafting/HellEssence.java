@@ -17,7 +17,7 @@ public class HellEssence extends MatchCrafting implements Listener {
     }
 
     public void craft_hell_essence () {
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
 
         final ItemStack hell_essence = CustomItem.HELL_ESSENCE.getItem();

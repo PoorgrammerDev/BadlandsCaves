@@ -34,13 +34,13 @@ public class Surface extends BukkitRunnable {
 
     @Override
     public void run() {
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         long time = world.getTime();
         for (Player player : world.getEntitiesByClass(Player.class)) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 Location location = player.getLocation();
-                final int surfaceLayer = plugin.getConfig().getInt("options.surface_layer");
+                final int surfaceLayer = plugin.getOptionsConfig().getInt("surface_layer");
                 if (location.getY() > surfaceLayer) {
                     if (random.nextInt(100) < (25 + (chaos / (hardmode ? 4.0 : 8.0)))) {
                         ZombieBossBehavior finder = new ZombieBossBehavior(plugin);

@@ -104,11 +104,11 @@ public class StopPowersInvInteract implements Listener {
         }
 
         String sectionname = "player_info." + player.getUniqueId() + ".saved_offhand_item";
-        ItemStack item = plugin.getConfig().getItemStack(sectionname);
+        ItemStack item = plugin.getSystemConfig().getItemStack(sectionname);
         if (item != null && !item.getType().isAir()) {
             player.getWorld().dropItemNaturally(player.getLocation(), item);
-            plugin.getConfig().set(sectionname, null);
-            plugin.saveConfig();
+            plugin.getSystemConfig().set(sectionname, null);
+            plugin.saveSystemConfig();
         }
 
 

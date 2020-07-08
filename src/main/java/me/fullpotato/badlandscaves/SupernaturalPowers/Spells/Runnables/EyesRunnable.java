@@ -32,7 +32,7 @@ public class EyesRunnable extends BukkitRunnable {
     public void run() {
         EnhancedEyesNMS nms = plugin.getEnhancedEyesNMS();
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
-        final int constant_mana_drain = plugin.getConfig().getInt("options.spell_costs.eyes_mana_drain");
+        final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
         final double dist_range = Math.pow(block_range - 1, 2);
         final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);

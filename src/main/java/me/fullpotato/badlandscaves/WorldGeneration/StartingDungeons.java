@@ -17,8 +17,8 @@ public class StartingDungeons {
     }
 
     public void genSpawnDungeons () {
-        if (plugin.getConfig().getBoolean("system.starting_dungeons_finished_spawning")) return;
-        final int starting_dungeons = plugin.getConfig().getInt("options.starting_dungeons");
+        if (plugin.getSystemConfig().getBoolean("starting_dungeons_finished_spawning")) return;
+        final int starting_dungeons = plugin.getOptionsConfig().getInt("starting_dungeons");
 
         if (starting_dungeons > 0) {
             Random random = new Random();
@@ -29,7 +29,7 @@ public class StartingDungeons {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    final int dungeons_spawned = plugin.getConfig().getInt("system.starting_dungeons_spawned");
+                    final int dungeons_spawned = plugin.getSystemConfig().getInt("starting_dungeons_spawned");
                     if (dungeons_spawned >= starting_dungeons) {
                         plugin.getServer().broadcastMessage(ChatColor.DARK_AQUA + "Starting Dungeons have been spawned.");
                         this.cancel();
@@ -45,7 +45,7 @@ public class StartingDungeons {
             }.runTaskTimer(plugin, 0, 200);
         }
 
-        plugin.getConfig().set("system.starting_dungeons_finished_spawning", true);
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("starting_dungeons_finished_spawning", true);
+        plugin.saveSystemConfig();
     }
 }

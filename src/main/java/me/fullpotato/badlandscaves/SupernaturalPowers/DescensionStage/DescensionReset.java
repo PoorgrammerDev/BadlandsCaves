@@ -76,7 +76,7 @@ public class DescensionReset extends BukkitRunnable {
             spawnMobs(team);
 
             //setting timer
-            int time_limit = plugin.getConfig().getInt("options.descension_time_limit");
+            int time_limit = plugin.getOptionsConfig().getInt("descension_time_limit");
             PlayerScore.DESCENSION_TIMER.setScore(plugin, waiting, time_limit);
 
             //deploy player in stage
@@ -88,7 +88,7 @@ public class DescensionReset extends BukkitRunnable {
 
     //default spawnmobs
     public void spawnMobs(Team team) {
-        int mob_cap = plugin.getConfig().getInt("options.descension_mob_limit");
+        int mob_cap = plugin.getOptionsConfig().getInt("descension_mob_limit");
         spawnMobs(team, mob_cap);
     }
 

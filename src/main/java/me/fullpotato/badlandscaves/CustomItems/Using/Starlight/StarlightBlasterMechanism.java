@@ -65,7 +65,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                 int charge = chargeManager.getCharge(item);
                 short cooldown = getCooldown(item);
                 event.setCancelled(true);
-                boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+                boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
                 if (hardmode && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0 && cooldown <= 0) {
                     int travelled = 0;
 
@@ -93,7 +93,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
 
     @Override
     public void run() {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (hardmode) {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {

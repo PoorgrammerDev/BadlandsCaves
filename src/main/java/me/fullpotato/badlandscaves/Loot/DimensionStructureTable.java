@@ -104,7 +104,7 @@ public class DimensionStructureTable implements LootTable {
 
         TreasureGear treasureGear = new TreasureGear();
         Collection<ItemStack> output = new ArrayList<>();
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int count = (chaos / 10) > 0 ? random.nextInt(chaos / 10) + random.nextInt(3) + 1 : random.nextInt(3) + 1;
         int failed = 0;
         for (int i = 0; i < count; i++) {

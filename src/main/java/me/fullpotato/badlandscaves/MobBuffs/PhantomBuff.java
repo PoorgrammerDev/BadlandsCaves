@@ -29,14 +29,14 @@ public class PhantomBuff implements Listener {
             Phantom phantom = (Phantom) event.getEntity();
             if (!phantom.getPassengers().isEmpty()) return;
 
-            boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+            boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
             if (!hardmode) return;
 
             if (event.getTarget() instanceof Player) {
                 Player player = (Player) event.getTarget();
                 final Random random = new Random();
 
-                final int chaos = plugin.getConfig().getInt("system.chaos_level");
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                 final double chance = Math.pow(1.045, chaos) - 1;
                 if (random.nextInt(100) < chance) {
                     ArrayList<Monster> nearbyMonsters = new ArrayList<>();

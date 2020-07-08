@@ -46,7 +46,7 @@ public class HallowedChambersWorld {
     public void spawnInStructure (StructureTrack[] structures) {
         World world = plugin.getServer().getWorld(plugin.getChambersWorldName());
         boolean initialSpawn = structures == null || structures.length <= 0;
-        if (initialSpawn && plugin.getConfig().getBoolean("system.chambers_spawned")) return;
+        if (initialSpawn && plugin.getSystemConfig().getBoolean("chambers_spawned")) return;
 
         if (initialSpawn) {
             structures = new StructureTrack[]{
@@ -125,8 +125,8 @@ public class HallowedChambersWorld {
         }
 
         if (initialSpawn) {
-            plugin.getConfig().set("system.chambers_spawned", true);
-            plugin.saveConfig();
+            plugin.getSystemConfig().set("chambers_spawned", true);
+            plugin.saveSystemConfig();
         }
     }
 }

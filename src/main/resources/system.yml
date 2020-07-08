@@ -1,0 +1,8 @@
+# This file is for system use. Please do not touch it.
+# To change options, please navigate to options.yml, or use the in-game commands.
+# Thank you! - FullPotato
+hardmode: false
+chaos_level: 0
+chambers_spawned: false
+starting_dungeons_spawned: 0
+starting_dungeons_finished_spawning: false

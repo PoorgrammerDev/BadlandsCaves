@@ -61,7 +61,7 @@ public class UseDimensionalAnchor implements Listener {
     @EventHandler
     public void useOnSpawner (PlayerInteractEvent event) {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (plugin.getConfig().getBoolean("system.hardmode")) {
+            if (plugin.getSystemConfig().getBoolean("hardmode")) {
                 final Block block = event.getClickedBlock();
                 if (block != null && block.getType().equals(Material.SPAWNER)) {
                     final ItemStack item = event.getItem();
@@ -217,7 +217,7 @@ public class UseDimensionalAnchor implements Listener {
             icon_lore.add("§r");
             icon_lore.add("§7Hazards:");
 
-            List<String> hazards = plugin.getConfig().getStringList("system.dim_stats." + world.getName() + ".hazards");
+            List<String> hazards = plugin.getSystemConfig().getStringList("dim_stats." + world.getName() + ".hazards");
             for (String code : hazards) {
                 icon_lore.add("§7 - " + nameFromCode.get(code));
             }

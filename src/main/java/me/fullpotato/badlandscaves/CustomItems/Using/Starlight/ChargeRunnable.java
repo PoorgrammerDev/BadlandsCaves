@@ -27,7 +27,7 @@ public class ChargeRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (hardmode) {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 for (ItemStack item : player.getInventory()) {

@@ -51,7 +51,7 @@ public class SoulDrop implements Listener {
             //can drop soul if player killed
             if (player != null) {
                 List<ItemStack> drops = event.getDrops();
-                final int soul_chance = plugin.getConfig().getInt("options.soul_drop_chance");
+                final int soul_chance = plugin.getOptionsConfig().getInt("soul_drop_chance");
                 final ItemStack soul = souls.get(entity.getType());
                 if (random.nextInt(100) <= soul_chance) {
                     drops.add(soul);

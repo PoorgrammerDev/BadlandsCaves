@@ -36,12 +36,12 @@ public class PiglinBuff implements Listener {
     public void HMPiglin (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Piglin)) return;
 
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         final Piglin piglin = (Piglin) event.getEntity();
         final Random random = new Random();
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
 
         final int[] enchantmentLevels = random.ints(4, 0, (chaos / 20) + 3).toArray();
         final ItemStack[] armor = new ItemStack[4];
@@ -105,7 +105,7 @@ public class PiglinBuff implements Listener {
 
     @EventHandler
     public void piglinShoot (EntityShootBowEvent event) {
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Piglin) {
@@ -131,7 +131,7 @@ public class PiglinBuff implements Listener {
 
     @EventHandler
     public void preventPiglinFriendlyFire (EntityDamageByEntityEvent event) {
-        if (plugin.getConfig().getBoolean("system.hardmode")) {
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
             if (event.getEntity() instanceof Piglin) {
                 if (event.getDamager() instanceof Piglin) {
                     event.setCancelled(true);

@@ -71,14 +71,14 @@ public class NaturalThirstDecrease implements Listener {
 
         }
 
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         int threshold;
 
         if (isHardmode) {
-            threshold = plugin.getConfig().getInt("options.hardmode_values.threshold_thirst_sys");
+            threshold = plugin.getOptionsConfig().getInt("hardmode_values.threshold_thirst_sys");
         }
         else {
-            threshold = plugin.getConfig().getInt("options.pre_hardmode_values.threshold_thirst_sys");
+            threshold = plugin.getOptionsConfig().getInt("pre_hardmode_values.threshold_thirst_sys");
         }
 
         if ((double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player) >= threshold) {

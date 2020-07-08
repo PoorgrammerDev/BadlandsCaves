@@ -116,10 +116,10 @@ public class SwapPowers implements Listener {
         ManaBarManager bar = new ManaBarManager(plugin);
             while (true) {
                 if (new_swap_slot == -1) {
-                    ItemStack orig_item = plugin.getConfig().getItemStack("player_info." + player.getUniqueId() + ".saved_offhand_item");
+                    ItemStack orig_item = plugin.getSystemConfig().getItemStack("player_info." + player.getUniqueId() + ".saved_offhand_item");
                     player.getInventory().setItemInOffHand(orig_item);
-                    plugin.getConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", null);
-                    plugin.saveConfig();
+                    plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", null);
+                    plugin.saveSystemConfig();
                     PlayerScore.SWAP_SLOT.setScore(plugin, player, new_swap_slot);
 
                     bar.clearMessage(player);
@@ -128,8 +128,8 @@ public class SwapPowers implements Listener {
                 else {
                     if (power_levels[new_swap_slot] > 0) {
                         if (!offhand_item.getType().equals(Material.KNOWLEDGE_BOOK)) {
-                            plugin.getConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", offhand_item);
-                            plugin.saveConfig();
+                            plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", offhand_item);
+                            plugin.saveSystemConfig();
                         }
                         player.getInventory().setItemInOffHand(power_items[new_swap_slot]);
 

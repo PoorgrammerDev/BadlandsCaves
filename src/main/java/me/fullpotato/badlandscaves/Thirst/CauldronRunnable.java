@@ -180,7 +180,7 @@ public class CauldronRunnable extends BukkitRunnable {
             ArrayList<String> green_lore = new ArrayList<String>();
 
             if (in_slots.contains(Material.GLASS_BOTTLE)) {
-                final boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+                final boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
 
                 if (!isHardmode && in_slots.contains(Material.BLAZE_POWDER) && emptyOutput) {
                     green_meta.setDisplayName(ChatColor.GREEN + "Purification Process Ready");

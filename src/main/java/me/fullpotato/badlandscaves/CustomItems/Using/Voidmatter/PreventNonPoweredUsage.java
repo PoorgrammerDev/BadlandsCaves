@@ -19,7 +19,7 @@ public class PreventNonPoweredUsage extends BukkitRunnable {
 
     @Override
     public void run() {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (hardmode) {
             Voidmatter voidmatter = new Voidmatter(plugin);
             for (Player player : plugin.getServer().getOnlinePlayers()) {

@@ -30,7 +30,7 @@ public class WitchBuff implements Listener {
 
     @EventHandler
     public void witchStatBuff (CreatureSpawnEvent event) {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Witch) {
@@ -41,7 +41,7 @@ public class WitchBuff implements Listener {
 
     @EventHandler
     public void witchTargetKeepDistance (EntityTargetLivingEntityEvent event) {
-        boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         if (event.getEntity() instanceof Witch) {
@@ -51,7 +51,7 @@ public class WitchBuff implements Listener {
             if (witch.hasMetadata("runnable") && witch.getMetadata("runnable").get(0).asBoolean()) return;
 
             final Random random = new Random();
-            final int chaos = plugin.getConfig().getInt("system.chaos_level");
+            final int chaos = plugin.getSystemConfig().getInt("chaos_level");
             final double chance = Math.pow(1.045, chaos) - 1;
 
 

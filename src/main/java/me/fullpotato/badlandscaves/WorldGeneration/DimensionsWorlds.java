@@ -146,7 +146,7 @@ public class DimensionsWorlds {
         genGravity(world);
         addHabitation(world, habitation);
 
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
         addHazards(world, habitation, environment, biome, amount);
 
@@ -270,8 +270,8 @@ public class DimensionsWorlds {
             gravityModifier = random.doubles(1, 0.1, 0.9).toArray()[0];
         }
 
-        plugin.getConfig().set("system.dim_stats." + world.getName() + ".gravity", gravityModifier);
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".gravity", gravityModifier);
+        plugin.saveSystemConfig();
     }
 
     public World.Environment getEnvironment() {
@@ -303,8 +303,8 @@ public class DimensionsWorlds {
 
     public void addHabitation(World world, Habitation habitation) {
         world.setGameRule(GameRule.DO_MOB_SPAWNING, habitation.getMobSpawn());
-        plugin.getConfig().set("system.dim_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
-        plugin.saveConfig();
+        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
+        plugin.saveSystemConfig();
     }
 
 

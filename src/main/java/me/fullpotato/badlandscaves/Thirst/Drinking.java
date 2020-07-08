@@ -33,7 +33,7 @@ public class Drinking implements Listener {
             return;
         }
 
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         Player player = event.getPlayer();
         if (item.getItemMeta() != null && item.getItemMeta().getLore() != null) {
             PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -44,10 +44,10 @@ public class Drinking implements Listener {
                 double thirst_add;
 
                 if (isHardmode) {
-                    thirst_add = plugin.getConfig().getInt("options.hardmode_values.tox_drink_thirst_incr");
+                    thirst_add = plugin.getOptionsConfig().getInt("hardmode_values.tox_drink_thirst_incr");
                 }
                 else {
-                    thirst_add = plugin.getConfig().getInt("options.pre_hardmode_values.tox_drink_thirst_incr");
+                    thirst_add = plugin.getOptionsConfig().getInt("pre_hardmode_values.tox_drink_thirst_incr");
                 }
 
                 PlayerScore.THIRST.setScore(plugin, player, Math.min(current_thirst + thirst_add, 100));
@@ -56,10 +56,10 @@ public class Drinking implements Listener {
                 double tox_add;
 
                 if (isHardmode) {
-                    tox_add = plugin.getConfig().getInt("options.hardmode_values.tox_drink_tox_incr");
+                    tox_add = plugin.getOptionsConfig().getInt("hardmode_values.tox_drink_tox_incr");
                 }
                 else {
-                    tox_add = plugin.getConfig().getInt("options.pre_hardmode_values.tox_drink_tox_incr");
+                    tox_add = plugin.getOptionsConfig().getInt("pre_hardmode_values.tox_drink_tox_incr");
                 }
 
                 PlayerScore.TOXICITY.setScore(plugin, player, current_tox + tox_add);
@@ -74,8 +74,8 @@ public class Drinking implements Listener {
                 //testing if purified
                 if (item.isSimilar(purified_water)) {
                     double current_thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
-                    int thirst_threshold = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.threshold_thirst_sys") : plugin.getConfig().getInt("options.pre_hardmode_values.threshold_thirst_sys");
-                    double thirst_add = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.purified_drink_thirst_incr") : plugin.getConfig().getInt("options.pre_hardmode_values.purified_drink_thirst_incr");
+                    int thirst_threshold = isHardmode ? plugin.getOptionsConfig().getInt("hardmode_values.threshold_thirst_sys") : plugin.getOptionsConfig().getInt("pre_hardmode_values.threshold_thirst_sys");
+                    double thirst_add = isHardmode ? plugin.getOptionsConfig().getInt("hardmode_values.purified_drink_thirst_incr") : plugin.getOptionsConfig().getInt("pre_hardmode_values.purified_drink_thirst_incr");
                     int overflow = (int) (Math.max((current_thirst + thirst_add) - 100, 0));
                     int buffer = isHardmode ? (thirst_threshold * -50) - (50 * overflow) : (thirst_threshold * -100) - (50 * overflow);
 
@@ -84,7 +84,7 @@ public class Drinking implements Listener {
                 }
                 else if (item.isSimilar(antidote)) {
                     double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
-                    double tox_decr = isHardmode ? plugin.getConfig().getInt("options.hardmode_values.antidote_drink_tox_decr") : plugin.getConfig().getInt("options.pre_hardmode_values.antidote_drink_tox_decr");
+                    double tox_decr = isHardmode ? plugin.getOptionsConfig().getInt("hardmode_values.antidote_drink_tox_decr") : plugin.getOptionsConfig().getInt("pre_hardmode_values.antidote_drink_tox_decr");
                     PlayerScore.TOXICITY.setScore(plugin, player, Math.max(current_tox - tox_decr, 0));
 
                     player.removePotionEffect(PotionEffectType.POISON);

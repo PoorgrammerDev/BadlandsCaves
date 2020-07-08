@@ -84,7 +84,7 @@ public class ShrineCapture extends BukkitRunnable {
                                             PlayerScore.DESCENSION_TIMER.setScore(plugin, player, (int) PlayerScore.DESCENSION_TIMER.getScore(plugin, player) + 60);
 
                                             //spawns more mobs
-                                            int normal_mob_cap = plugin.getConfig().getInt("options.descension_mob_limit");
+                                            int normal_mob_cap = plugin.getOptionsConfig().getInt("descension_mob_limit");
                                             DescensionReset descReset = new DescensionReset(plugin);
                                             Team desc_team = descReset.getDescensionTeam();
                                             descReset.spawnMobs(desc_team, normal_mob_cap / 4);

@@ -51,9 +51,9 @@ public class SpawnerTable implements LootTable {
     @Override
     public Collection<ItemStack> populateLoot(Random random, LootContext context) {
         final double luck = context.getLuck();
-        final int chaos = plugin.getConfig().getInt("system.chaos_level");
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 5);
-        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
 
 

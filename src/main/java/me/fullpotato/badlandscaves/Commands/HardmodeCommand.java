@@ -18,7 +18,7 @@ public class HardmodeCommand extends Commands implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("hardmode")) {
             if (sender.isOp()) {
                 if (args.length == 0 || args[0].equalsIgnoreCase("get")) {
-                    boolean isHM = plugin.getConfig().getBoolean("system.hardmode");
+                    boolean isHM = plugin.getSystemConfig().getBoolean("hardmode");
                     sender.sendMessage(ChatColor.GOLD + "Hardmode is currently set to " + ChatColor.RED + isHM + ChatColor.GOLD + ".");
                     return true;
                 }
@@ -39,8 +39,8 @@ public class HardmodeCommand extends Commands implements CommandExecutor {
                         return true;
                     }
 
-                    plugin.getConfig().set("system.hardmode", value);
-                    plugin.saveConfig();
+                    plugin.getSystemConfig().set("hardmode", value);
+                    plugin.saveSystemConfig();
                     sender.sendMessage(ChatColor.GOLD + "Hardmode is now set to " + ChatColor.RED + value + ChatColor.GOLD + ".");
 
                     plugin.getServer().resetRecipes();

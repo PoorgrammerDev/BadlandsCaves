@@ -21,7 +21,7 @@ public class PurgeEssence extends MatchCrafting implements Listener {
         ShapedRecipe purge_ess_craft = new ShapedRecipe(new NamespacedKey(plugin, "purge_essence"), purge_essence);
         purge_ess_craft.shape("###","#@#","###");
 
-        boolean isHardmode = plugin.getConfig().getBoolean("system.hardmode");
+        boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         /*SHAPE:
          *  ###
          *  #@#
@@ -42,7 +42,7 @@ public class PurgeEssence extends MatchCrafting implements Listener {
     @EventHandler
     public void purge_ess (PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
-        if (plugin.getConfig().getBoolean("system.hardmode")) return;
+        if (plugin.getSystemConfig().getBoolean("hardmode")) return;
 
         final ItemStack result = event.getRecipe().getResult();
         final ItemStack purge_essence = CustomItem.PURGE_ESSENCE.getItem();
