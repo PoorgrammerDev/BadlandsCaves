@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public class DimensionStructureTable implements LootTable {
     }
 
     @Override
-    public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, @NotNull LootContext lootContext) {
+    public Collection<ItemStack> populateLoot(Random random, LootContext lootContext) {
         ArrayList<ItemStack> items = new ArrayList<>();
         ArrayList<ItemStack> trash = new ArrayList<>();
 
@@ -129,11 +129,11 @@ public class DimensionStructureTable implements LootTable {
     }
 
     @Override
-    public void fillInventory(@NotNull Inventory inventory, @NotNull Random random, @NotNull LootContext lootContext) {
+    public void fillInventory(Inventory inventory, Random random, LootContext lootContext) {
     }
 
     @Override
-    public @NotNull NamespacedKey getKey() {
+    public NamespacedKey getKey() {
         return this.key;
     }
 

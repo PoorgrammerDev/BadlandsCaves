@@ -11,7 +11,7 @@ public class Backrooms {
     }
 
     public void gen_backrooms() {
-        WorldCreator backrooms = new WorldCreator(plugin.backroomsWorldName);
+        WorldCreator backrooms = new WorldCreator(plugin.getBackroomsWorldName());
         backrooms.environment(World.Environment.NORMAL)
                 .type(WorldType.FLAT)
                 .generator(new BackroomsGen());

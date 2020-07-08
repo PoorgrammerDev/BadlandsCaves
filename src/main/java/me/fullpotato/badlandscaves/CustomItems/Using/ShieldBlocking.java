@@ -34,6 +34,7 @@ public class ShieldBlocking implements Listener {
                 final ItemStack stoneShield = CustomItem.STONE_SHIELD.getItem();
                 final ItemStack ironShield = CustomItem.IRON_SHIELD.getItem();
                 final ItemStack diamondShield = CustomItem.DIAMOND_SHIELD.getItem();
+                final ItemStack netheriteShield = CustomItem.NETHERITE_SHIELD.getItem();
                 final Random random = new Random();
 
                 double modifier = 2;
@@ -53,10 +54,14 @@ public class ShieldBlocking implements Listener {
                                 modifier = 7;
                                 ignored = (damage / modifier < 1 || random.nextInt(100) < 25);
                             }
+                            else if (meta.getDisplayName().equals(netheriteShield.getItemMeta().getDisplayName()) && damage / 9.0 > 0) {
+                                modifier = 9;
+                                ignored = (damage / modifier < 1 || random.nextBoolean());
+                            }
                             else {
                                 StarlightTools starlightTools = new StarlightTools(plugin);
                                 if (starlightTools.isStarlightShield(playersShield)) {
-                                    modifier = 10;
+                                    modifier = 15;
                                     ignored = (damage / modifier < 1 || random.nextInt(100) < 75);
                                 }
                             }

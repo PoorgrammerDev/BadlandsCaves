@@ -2,7 +2,6 @@ package me.fullpotato.badlandscaves.Deaths;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -28,7 +27,7 @@ public class DeathHandler implements Listener {
     private final World world;
     public DeathHandler(BadlandsCaves bcav) {
         plugin = bcav;
-        world = plugin.getServer().getWorld(plugin.mainWorldName);
+        world = plugin.getServer().getWorld(plugin.getMainWorldName());
     }
 
     @EventHandler

@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockVector;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -65,7 +64,7 @@ public class DimensionStructures {
     }
 
     public void generateStructure (World world, DimensionsWorlds.Habitation habitation, @Nullable Location origin, @Nullable PlanetStructure structure) {
-        if (world.getName().startsWith(plugin.dimensionPrefixName)) {
+        if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
             if (origin == null || origin.getWorld() == null || !origin.getWorld().equals(world)) {
                 int y_start = 200;
 
@@ -141,7 +140,7 @@ public class DimensionStructures {
         return Material.STONE;
     }
 
-    public void loadStructure(@NotNull PlanetStructure queried, Location origin, DimensionsWorlds.Habitation habitation) {
+    public void loadStructure(PlanetStructure queried, Location origin, DimensionsWorlds.Habitation habitation) {
         //center ground level world origin ~(0, 60, 0)
 
         //multistructures

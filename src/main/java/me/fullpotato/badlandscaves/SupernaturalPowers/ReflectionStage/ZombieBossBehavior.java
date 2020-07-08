@@ -31,7 +31,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
     public ZombieBossBehavior(BadlandsCaves bcav) {
         plugin = bcav;
-        world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     @Override
@@ -136,7 +136,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
     }
 
     public void CloneMechanism (final Player player) {
-        FakePlayerNMS nms = plugin.fakePlayerNMS;
+        FakePlayerNMS nms = plugin.getFakePlayerNMS();
         if ((PlayerScore.REFLECTION_ZOMBIE.hasScore(plugin, player)) && (byte) PlayerScore.REFLECTION_ZOMBIE.getScore(plugin, player) == 1) {
             nms.move(zombie.getLocation(), fakePlayer, null, true);
         }

@@ -83,6 +83,7 @@ public class CraftingGuide implements Listener {
 
             CustomItem.TITANIUM_FRAGMENT.toString(),
             CustomItem.TITANIUM_INGOT.toString(),
+            CustomItem.REINFORCED_TITANIUM.toString(),
             CustomItem.TITANIUM_ROD.toString(),
 
             CustomItem.BINDING.toString(),
@@ -98,6 +99,7 @@ public class CraftingGuide implements Listener {
             CustomItem.STARLIGHT_LEGGINGS.toString(),
             CustomItem.STARLIGHT_BOOTS.toString(),
             CustomItem.STARLIGHT_SABER.toString(),
+            CustomItem.STARLIGHT_SHIELD.toString(),
             CustomItem.STARLIGHT_BLASTER.toString(),
             CustomItem.STARLIGHT_PAXEL.toString(),
 
@@ -635,13 +637,13 @@ public class CraftingGuide implements Listener {
 
         ItemStack[] voltshock_shocker_recipe = {
                 new ItemStack(Material.REDSTONE),
-                new ItemStack(Material.IRON_BARS),
+                new ItemStack(Material.CHAIN),
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.REDSTONE),
-                new ItemStack(Material.IRON_BARS),
+                new ItemStack(Material.CHAIN),
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.REDSTONE),
-                new ItemStack(Material.IRON_BARS),
+                new ItemStack(Material.CHAIN),
                 new ItemStack(Material.REDSTONE),
         };
         recipes.put(CustomItem.VOLTSHOCK_SHOCKER.getItem(), voltshock_shocker_recipe);
@@ -826,6 +828,21 @@ public class CraftingGuide implements Listener {
         };
         recipes.put(CustomItem.TITANIUM_INGOT.getItem(), titanium_ingot_recipe);
 
+        final ItemStack goldNugget = new ItemStack(Material.GOLD_NUGGET);
+        final ItemStack netheriteScrap = new ItemStack(Material.NETHERITE_SCRAP);
+        ItemStack[] reinforced_titanium_recipe = {
+                goldNugget,
+                goldNugget,
+                goldNugget,
+                netheriteScrap,
+                CustomItem.TITANIUM_INGOT.getItem(),
+                netheriteScrap,
+                goldNugget,
+                goldNugget,
+                goldNugget,
+        };
+        recipes.put(CustomItem.REINFORCED_TITANIUM.getItem(), reinforced_titanium_recipe);
+
         ItemStack[] binding_recipe = {
                 new ItemStack(Material.RED_SAND),
                 new ItemStack(Material.GRAVEL),
@@ -993,6 +1010,17 @@ public class CraftingGuide implements Listener {
         };
         recipes.put(CustomItem.STARLIGHT_SABER.getItem(), starlight_saber_recipe);
 
+        ItemStack[] starlight_shield_recipe = {
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                null,
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_SHIELD.getItem(), starlight_shield_recipe);
 
         ItemStack[] starlight_blaster_recipe = {
                 new ItemStack(Material.REDSTONE),

@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.TitleEffects;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -23,7 +25,7 @@ public class SpawnBoss extends BukkitRunnable {
     public SpawnBoss(BadlandsCaves bcav, Player ply) {
         plugin = bcav;
         player = ply;
-        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
 
         dmg.put(Material.WOODEN_SWORD, 4);
         dmg.put(Material.GOLDEN_SWORD, 4);
@@ -66,6 +68,9 @@ public class SpawnBoss extends BukkitRunnable {
         player.playSound(player_loc, Sound.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 1.2F, 1);
         player.playSound(player_loc, Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.HOSTILE, 1.2F, 0.5F);
         player.playSound(player_loc, Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.HOSTILE, 1.2F, 0.5F);
+
+        TitleEffects titleEffects = new TitleEffects(plugin);
+        titleEffects.sendDecodingTitle(player, "FIGHT", ChatColor.of("#007fff") + ChatColor.BOLD.toString(), "", "", 0, 30, 10, 2, false);
     }
 
     public Zombie spawnBoss (Location spawn_loc) {

@@ -12,7 +12,7 @@ public class ForceFixDescensionValues extends BukkitRunnable {
 
     public ForceFixDescensionValues(BadlandsCaves plugin) {
         this.plugin = plugin;
-        descension_world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        descension_world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
     }
 
     @Override

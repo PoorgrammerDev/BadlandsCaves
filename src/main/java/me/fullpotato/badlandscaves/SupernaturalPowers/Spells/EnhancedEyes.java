@@ -124,7 +124,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
 
                             ArrayList<Integer> ids = new ArrayList<>();
                             StringBuilder builder = new StringBuilder();
-                            EnhancedEyesNMS nms = plugin.enhancedEyesNMS;
+                            EnhancedEyesNMS nms = plugin.getEnhancedEyesNMS();
                             Location location = player.getLocation();
                             final double x = location.getX();
                             final double y = location.getY();
@@ -224,7 +224,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
 
         Location block_location = event.getBlock().getLocation();
         if (blocks_maps.containsKey(block_location)) {
-            EnhancedEyesNMS nms = plugin.enhancedEyesNMS;
+            EnhancedEyesNMS nms = plugin.getEnhancedEyesNMS();
             nms.removeIndicator(player, blocks_maps.get(block_location));
         }
 

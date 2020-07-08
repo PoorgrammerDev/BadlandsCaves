@@ -16,7 +16,7 @@ public class HallowedChambersWorld {
     }
 
     public void gen_world() {
-        WorldCreator worldCreator = new WorldCreator(plugin.chambersWorldName);
+        WorldCreator worldCreator = new WorldCreator(plugin.getChambersWorldName());
         worldCreator.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());
@@ -44,7 +44,7 @@ public class HallowedChambersWorld {
     }
 
     public void spawnInStructure (StructureTrack[] structures) {
-        World world = plugin.getServer().getWorld(plugin.chambersWorldName);
+        World world = plugin.getServer().getWorld(plugin.getChambersWorldName());
         boolean initialSpawn = structures == null || structures.length <= 0;
         if (initialSpawn && plugin.getConfig().getBoolean("system.chambers_spawned")) return;
 

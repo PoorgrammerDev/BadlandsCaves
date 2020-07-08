@@ -12,6 +12,9 @@ options:
   # Everytime it's upgraded, it goes back through this again until it either fails, or gets to max tier.
   fishing_crate_tier_upgrade: 25
 
+  # if this is enabled, you won't have to go searching for keys in the Hallowed Chambers when re-fighting the Wither in Hardmode
+  waive_hardmode_chambers_keys: false
+
   # if this is enabled, every time a player dies and respawns, they get a new starter kit
   give_new_starter_on_spawn: false
 

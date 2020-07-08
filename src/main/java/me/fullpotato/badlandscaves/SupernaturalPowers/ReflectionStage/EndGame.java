@@ -28,7 +28,7 @@ public class EndGame implements Listener {
 
     public EndGame(BadlandsCaves plugin) {
         this.plugin = plugin;
-        this.world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        this.world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     @EventHandler
@@ -102,7 +102,7 @@ public class EndGame implements Listener {
     }
 
     public void removeClone() {
-        FakePlayerNMS nms = plugin.fakePlayerNMS;
+        FakePlayerNMS nms = plugin.getFakePlayerNMS();
         nms.remove(ZombieBossBehavior.fakePlayer);
 
         ZombieBossBehavior.fakePlayer = null;

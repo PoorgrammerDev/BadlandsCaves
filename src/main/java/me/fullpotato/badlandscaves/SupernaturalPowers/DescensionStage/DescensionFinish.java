@@ -12,7 +12,7 @@ public class DescensionFinish extends BukkitRunnable {
     private final Location[] crystal_locations;
 
     public DescensionFinish(BadlandsCaves plugin) {
-        world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
 
         crystal_locations = new Location[]{
                 new Location(world, 46, 80, 46, 135, 0),

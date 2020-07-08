@@ -78,7 +78,7 @@ public class Apples extends MatchCrafting implements Listener {
         }
 
         final ItemStack purge_essence = CustomItem.PURGE_ESSENCE.getItem();
-        if (!isMatching(matrix, purge_essence, 3) || !isMatching(matrix, purge_essence, 5)) {
+        if (!isMatching(matrix, purge_essence, 3, 5)) {
             event.getInventory().setResult(null);
             return;
         }

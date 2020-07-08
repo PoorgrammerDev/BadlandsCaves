@@ -47,7 +47,7 @@ public class EnvironmentalHazards {
     }
 
     public boolean isDimension(World world) {
-        return (world.getName().startsWith(plugin.dimensionPrefixName));
+        return (world.getName().startsWith(plugin.getDimensionPrefixName()));
     }
 
     public boolean hasHazard(World world, Hazard hazard) throws IllegalArgumentException {

@@ -47,7 +47,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
             warp_range = 30;
         }
 
-        LineOfSightNMS nms = plugin.lineOfSightNMS;
+        LineOfSightNMS nms = plugin.getLineOfSightNMS();
         boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
         if (has_displace_marker) {
             //yes marker

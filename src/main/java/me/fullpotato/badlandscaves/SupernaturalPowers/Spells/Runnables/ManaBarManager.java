@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ManaBarManager extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     private final String title = ChatColor.DARK_AQUA + "Mana";
     public ManaBarManager(BadlandsCaves bcav) {
         plugin = bcav;
@@ -67,16 +67,13 @@ public class ManaBarManager extends BukkitRunnable {
 
     public KeyedBossBar getManaBar(Player player) {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
-        if (has_powers) {
-            NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
-            KeyedBossBar manaBar = plugin.getServer().getBossBar(key);
-            if (manaBar == null) {
-                manaBar = plugin.getServer().createBossBar(key, title, BarColor.BLUE, BarStyle.SEGMENTED_10);
-                manaBar.addPlayer(player);
-            }
-            return manaBar;
+        NamespacedKey key = new NamespacedKey(plugin, "mana_bar_" + player.getUniqueId());
+        KeyedBossBar manaBar = plugin.getServer().getBossBar(key);
+        if (manaBar == null && has_powers) {
+            manaBar = plugin.getServer().createBossBar(key, title, BarColor.BLUE, BarStyle.SEGMENTED_10);
+            manaBar.addPlayer(player);
         }
-        return null;
+        return manaBar;
     }
 
     public void displayMessage (Player player, String message, int time, boolean force) {

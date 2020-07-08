@@ -19,7 +19,7 @@ public class LostSoulParticle extends BukkitRunnable {
 
     @Override
     public void run() {
-        World world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        World world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(world)) {
                 int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));

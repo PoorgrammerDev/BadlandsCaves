@@ -6,6 +6,8 @@ import me.fullpotato.badlandscaves.CustomItems.Using.UseIncompleteSoulCrystal;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.Util.TitleEffects;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -26,7 +28,7 @@ public class DescensionPlayerMove implements Listener {
     private final BadlandsCaves plugin;
     public DescensionPlayerMove(BadlandsCaves bcav) {
         plugin = bcav;
-        world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
     }
 
     @EventHandler
@@ -55,7 +57,9 @@ public class DescensionPlayerMove implements Listener {
         if (player_location.distanceSquared(center_loc) < 25) {
             int towers_capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));
             if (towers_capped == 4) {
-                player.sendMessage(ChatColor.GRAY + "The strange sensation follows you back to reality.");
+                player.sendTitle(ChatColor.of("#4c158f") + "You are now a Heretic.", ChatColor.of("#25005c") + "The strange sensation follows you back to reality.", 20, 60, 20);
+                player.sendMessage(ChatColor.of("#4c158f") + "You are now a Heretic.");
+                player.sendMessage(ChatColor.of("#25005c") + "The strange sensation follows you back to reality.");
                 if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
                 player.setFallDistance(0);
                 resetPlayer(player, true);
@@ -120,7 +124,15 @@ public class DescensionPlayerMove implements Listener {
         detection = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
         int detect_max = plugin.getConfig().getInt("options.descension_max_detect");
         if (detection >= detect_max) {
-            playerDetected(player);
+            playerLost(player);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    TitleEffects titleEffects = new TitleEffects(plugin);
+                    titleEffects.sendDecodingTitle(player, "DETECTED", ChatColor.of("#ff0000") + ChatColor.BOLD.toString(), "", "", 0, 20, 10, 2, false);
+                }
+            }.runTaskLaterAsynchronously(plugin, 5);
         }
     }
 
@@ -143,7 +155,7 @@ public class DescensionPlayerMove implements Listener {
 
     }
 
-    public void playerDetected (Player player) {
+    public void playerLost(Player player) {
         Location player_location = player.getLocation();
         ArrayList<EnderCrystal> crystals = (ArrayList<EnderCrystal>) world.getEntitiesByClass(EnderCrystal.class);
         player_location.subtract(0, 0.5, 0);

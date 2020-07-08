@@ -3,8 +3,6 @@
     <output-path>$USER_HOME$/Documents/Minecraft Stuff/Plugin Testing Server/plugins</output-path>
     <root id="archive" name="BadlandsCaves.jar">
       <element id="module-output" name="BadlandsCaves" />
-      <element id="file-copy" path="$USER_HOME$/Documents/Minecraft Stuff/Plugin Testing Server/server.jar" />
-      <element id="library" level="project" name="Maven: org.jetbrains:annotations:18.0.0" />
     </root>
   </artifact>
 </component>

@@ -34,7 +34,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
         double mana = (double) PlayerScore.MANA.getScore(plugin, player);
         final int possession_mana_drain = plugin.getConfig().getInt("options.spell_costs.possess_mana_drain");
         final double possession_mana_drain_tick = possession_mana_drain / 20.0;
-        PossessionNMS nms = plugin.possessionNMS;
+        PossessionNMS nms = plugin.getPossessionNMS();
 
         if (in_possession && mana > possession_mana_drain_tick) {
             if (target.isDead() || player.isDead()) {
@@ -71,7 +71,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             target.setAI(true);
 
 
-            final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
+            final World descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
             if (player.getGameMode().equals(GameMode.ADVENTURE) && !player.getWorld().equals(descension)) player.setGameMode(GameMode.SURVIVAL);
 
             for (Player online_player : plugin.getServer().getOnlinePlayers()) {

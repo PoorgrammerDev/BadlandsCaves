@@ -202,7 +202,7 @@ public class UseDimensionalAnchor implements Listener {
             icon.setItemMeta(icon_meta);
         }
         else if (type.equals(MenuType.WARP)) {
-            World world = plugin.getServer().getWorld(plugin.dimensionPrefixName + worldName);
+            World world = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + worldName);
             if (world == null) {
                 DimensionsWorlds dimensions = new DimensionsWorlds(plugin);
                 world = dimensions.generate(worldName);
@@ -252,7 +252,7 @@ public class UseDimensionalAnchor implements Listener {
                     if (meta != null && meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING)) {
                         String worldName = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
                         if (worldName != null) {
-                            World world = plugin.getServer().getWorld(plugin.dimensionPrefixName + worldName);
+                            World world = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + worldName);
                             if (world != null) {
                                 player.closeInventory();
                                 player.teleport(world.getSpawnLocation());

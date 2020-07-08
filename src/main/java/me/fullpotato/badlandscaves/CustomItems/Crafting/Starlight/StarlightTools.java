@@ -89,7 +89,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         final ItemStack titanium_rod = CustomItem.TITANIUM_ROD.getItem();
         final ItemStack photon_emitter = CustomItem.PHOTON_EMITTER.getItem();
 
-        if (!isMatching(matrix, photon_emitter) || !isMatching(matrix, titanium_ingot, 1) || !isMatching(matrix, titanium_ingot, 4) || !isMatching(matrix, titanium_rod, 7)) {
+        if (!isMatching(matrix, photon_emitter) || !isMatching(matrix, titanium_ingot, 1, 4) || !isMatching(matrix, titanium_rod, 7)) {
             event.getInventory().setResult(null);
         }
     }
@@ -165,7 +165,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         final ItemStack titanium_rod = CustomItem.TITANIUM_ROD.getItem();
         final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
 
-        if (!isMatching(matrix, starlight_module) || !isMatching(matrix, titanium_ingot, 0) || !isMatching(matrix, titanium_ingot, 2) || !isMatching(matrix, titanium_ingot, 3) || !isMatching(matrix, titanium_rod, 4) || !isMatching(matrix, titanium_rod, 7)) {
+        if (!isMatching(matrix, starlight_module) || !isMatching(matrix, titanium_ingot, 0, 2, 3) || !isMatching(matrix, titanium_rod, 4, 7)) {
             event.getInventory().setResult(null);
         }
     }

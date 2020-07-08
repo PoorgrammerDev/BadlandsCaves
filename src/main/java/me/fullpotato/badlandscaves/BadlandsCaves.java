@@ -2,7 +2,6 @@ package me.fullpotato.badlandscaves;
 
 import me.fullpotato.badlandscaves.AlternateDimensions.GravityFallDamage;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
-import me.fullpotato.badlandscaves.AlternateDimensions.PreventWorldGenLag;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
@@ -53,6 +52,7 @@ import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,19 +60,21 @@ import java.io.File;
 import java.io.IOException;
 
 public final class BadlandsCaves extends JavaPlugin {
-    public String mainWorldName;
-    public String descensionWorldName;
-    public String withdrawWorldName;
-    public String reflectionWorldName;
-    public String backroomsWorldName;
-    public String chambersWorldName;
-    public String dimensionPrefixName;
+
+    //WORLD NAMES
+    private String mainWorldName;
+    private String descensionWorldName;
+    private String withdrawWorldName;
+    private String reflectionWorldName;
+    private String backroomsWorldName;
+    private String chambersWorldName;
+    private String dimensionPrefixName;
 
     //NMS
-    public EnhancedEyesNMS enhancedEyesNMS;
-    public FakePlayerNMS fakePlayerNMS;
-    public LineOfSightNMS lineOfSightNMS;
-    public PossessionNMS possessionNMS;
+    private EnhancedEyesNMS enhancedEyesNMS;
+    private FakePlayerNMS fakePlayerNMS;
+    private LineOfSightNMS lineOfSightNMS;
+    private PossessionNMS possessionNMS;
 
     @Override
     public void onEnable() {
@@ -115,7 +117,7 @@ public final class BadlandsCaves extends JavaPlugin {
         HallowedChambersWorld chambers = new HallowedChambersWorld(this);
         chambers.gen_world();
 
-        this.getServer().getWorld(mainWorldName).setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
+        this.getServer().getWorld(getMainWorldName()).setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
 
         StartingDungeons dungeons = new StartingDungeons(this);
         dungeons.genSpawnDungeons();
@@ -207,10 +209,10 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NoOxygen(this),
                 new NoFood(this),
                 new Freezing(this),
-                new PreventWorldGenLag(this),
                 new UseDimensionalAnchor(this),
                 new PiglinBuff(this),
                 new HoglinBuff(this),
+                new Silencer(this),
         };
 
         for (Listener event : events) {
@@ -347,6 +349,7 @@ public final class BadlandsCaves extends JavaPlugin {
         shield.craftStoneShield();
         shield.craftIronShield();
         shield.craftDiamondShield();
+        shield.craftNetheriteShield();
 
         TitaniumBar titaniumBar = new TitaniumBar(this);
         titaniumBar.fragmentIntoBar();
@@ -378,6 +381,10 @@ public final class BadlandsCaves extends JavaPlugin {
         starlightTools.blasterRecipe();
         starlightTools.paxelRecipe();
 
+        Silencer silencer = new Silencer(this);
+        silencer.wavelengthDisruptorRecipe();
+        silencer.silencerRecipe();
+
         EnergyCore energyCore = new EnergyCore(this);
         energyCore.energyCoreRecipe();
 
@@ -404,12 +411,12 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getLogger().warning("[BadlandsCaves] No default world found, defaulting to \"world\"");
             this.mainWorldName = "world";
         }
-        this.descensionWorldName = this.mainWorldName + "_descension";
-        this.withdrawWorldName = this.mainWorldName + "_empty";
-        this.reflectionWorldName = this.mainWorldName + "_reflection";
-        this.backroomsWorldName = this.mainWorldName + "_backrooms";
-        this.chambersWorldName = this.mainWorldName + "_chambers";
-        this.dimensionPrefixName = this.mainWorldName + "_dim_";
+        this.descensionWorldName = this.getMainWorldName() + "_descension";
+        this.withdrawWorldName = this.getMainWorldName() + "_empty";
+        this.reflectionWorldName = this.getMainWorldName() + "_reflection";
+        this.backroomsWorldName = this.getMainWorldName() + "_backrooms";
+        this.chambersWorldName = this.getMainWorldName() + "_chambers";
+        this.dimensionPrefixName = this.getMainWorldName() + "_dim_";
     }
 
     public void getServerVersion() {
@@ -425,5 +432,50 @@ public final class BadlandsCaves extends JavaPlugin {
             this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
             this.getServer().getPluginManager().disablePlugin(this);
         }
+    }
+
+
+    public String getMainWorldName() {
+        return mainWorldName;
+    }
+
+    public String getDescensionWorldName() {
+        return descensionWorldName;
+    }
+
+    public String getWithdrawWorldName() {
+        return withdrawWorldName;
+    }
+
+    public String getReflectionWorldName() {
+        return reflectionWorldName;
+    }
+
+    public String getBackroomsWorldName() {
+        return backroomsWorldName;
+    }
+
+    public String getChambersWorldName() {
+        return chambersWorldName;
+    }
+
+    public String getDimensionPrefixName() {
+        return dimensionPrefixName;
+    }
+
+    public EnhancedEyesNMS getEnhancedEyesNMS() {
+        return enhancedEyesNMS;
+    }
+
+    public FakePlayerNMS getFakePlayerNMS() {
+        return fakePlayerNMS;
+    }
+
+    public LineOfSightNMS getLineOfSightNMS() {
+        return lineOfSightNMS;
+    }
+
+    public PossessionNMS getPossessionNMS() {
+        return possessionNMS;
     }
 }

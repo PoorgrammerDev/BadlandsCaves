@@ -29,7 +29,7 @@ public class Surface extends BukkitRunnable {
 
     public Surface(BadlandsCaves plugin) {
         this.plugin = plugin;
-        world = plugin.getServer().getWorld(plugin.mainWorldName);
+        world = plugin.getServer().getWorld(plugin.getMainWorldName());
     }
 
     @Override

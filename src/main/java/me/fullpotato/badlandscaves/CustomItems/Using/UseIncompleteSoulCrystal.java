@@ -43,8 +43,8 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;
 
-        final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
-        final World reflection = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        final World descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        final World reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) return;
 

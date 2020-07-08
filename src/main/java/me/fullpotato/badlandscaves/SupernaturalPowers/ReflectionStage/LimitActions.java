@@ -51,7 +51,7 @@ public class LimitActions extends BukkitRunnable implements Listener {
 
     public LimitActions(BadlandsCaves plugin) {
         this.plugin = plugin;
-        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     /**

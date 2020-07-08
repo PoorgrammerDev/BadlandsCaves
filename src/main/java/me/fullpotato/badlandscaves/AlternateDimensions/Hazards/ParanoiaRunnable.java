@@ -39,7 +39,7 @@ public class ParanoiaRunnable extends BukkitRunnable {
                     }
 
                     if (random.nextInt(100) < 5) {
-                        FakePlayerNMS fakePlayerManager = plugin.fakePlayerNMS;
+                        FakePlayerNMS fakePlayerManager = plugin.getFakePlayerNMS();
                         Location fakePlayerLocation = locationFinder.getNearbyLocation(player.getLocation(), random, 10);
 
                         if (fakePlayerLocation != null && fakePlayerLocation.distanceSquared(player.getLocation()) > 25) {

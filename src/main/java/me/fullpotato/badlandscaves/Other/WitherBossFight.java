@@ -2,12 +2,11 @@ package me.fullpotato.badlandscaves.Other;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
-import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
+import me.fullpotato.badlandscaves.Util.TitleEffects;
 import me.fullpotato.badlandscaves.WorldGeneration.HallowedChambersWorld;
-import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -48,7 +47,7 @@ public class WitherBossFight implements Listener {
 
     public WitherBossFight(BadlandsCaves plugin) {
         this.plugin = plugin;
-        world = plugin.getServer().getWorld(plugin.chambersWorldName);
+        world = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
     //--------------------------------------------------
@@ -73,7 +72,7 @@ public class WitherBossFight implements Listener {
 
                 Random random = new Random();
                 spawnTunnel(spawnLocation, random);
-                removeWitherSpawningBlocks(spawnLocation);
+                destroyAroundPortal(spawnLocation);
                 regenMazesAndKeyHolders();
 
                 for (Player player : plugin.getServer().getOnlinePlayers()) {
@@ -113,7 +112,7 @@ public class WitherBossFight implements Listener {
         portalLocation.setY(0);
 
         if (event.getTo() != null && event.getTo().getWorld().equals(portalLocation.getWorld()) && event.getTo().distanceSquared(portalLocation) < 49 && event.getTo().getY() < 1.5) {
-            World chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
+            World chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
             Player player = event.getPlayer();
 
             player.teleport(chambers.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -136,13 +135,13 @@ public class WitherBossFight implements Listener {
         hallowedChambersWorld.spawnInStructure(structures);
     }
 
-    public void removeWitherSpawningBlocks (Location location) {
+    public void destroyAroundPortal(Location location) {
         Location middle = location.clone().add(0, 1, 0);
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
+        for (int x = -5; x <= 5; x++) {
+            for (int y = -5; y <= 5; y++) {
+                for (int z = -5; z <= 5; z++) {
                     Block block = middle.clone().add(x, y, z).getBlock();
-                    if (block.getType().equals(Material.SOUL_SAND) || block.getType().equals(Material.WITHER_SKELETON_SKULL) || block.getType().equals(Material.WITHER_SKELETON_WALL_SKULL)) {
+                    if (block.getType().getBlastResistance() < Material.BEDROCK.getBlastResistance() && block.getLocation().distanceSquared(middle) < 25) {
                         block.setType(Material.AIR);
                     }
                 }
@@ -176,18 +175,20 @@ public class WitherBossFight implements Listener {
                     for (int x = -range; x <= range; x++) {
                         for (int z = -range; z <= range; z++) {
                             test = new Location(clone.getWorld(), clone.getBlockX() + x, y[0], clone.getBlockZ() + z);
-                            if (test.distanceSquared(clone) < 25) {
-                                test.getBlock().setType(y[0] == 0 ? Material.END_GATEWAY : Material.AIR);
-                            }
-                            else if (test.distanceSquared(clone) < 36) {
-                                int rand = random.nextInt(3);
-                                if (rand == 0) test.getBlock().setType(Material.COAL_BLOCK);
-                                else if (rand == 1) test.getBlock().setType(Material.BLACK_CONCRETE);
-                                else test.getBlock().setType(Material.BLACK_WOOL);
-                            }
-                            else if (test.distanceSquared(clone) < 49) {
-                                if (test.getBlock().getType().equals(Material.LAVA)) test.getBlock().setType(Material.MAGMA_BLOCK);
-                                else if (test.getBlock().getType().equals(Material.FIRE)) test.getBlock().breakNaturally();
+                            if (test.getBlockY() < 5 || test.getBlock().getType().getBlastResistance() < Material.BEDROCK.getBlastResistance()) {
+                                if (test.distanceSquared(clone) < 25) {
+                                    test.getBlock().setType(y[0] == 0 ? Material.END_GATEWAY : Material.AIR);
+                                }
+                                else if (test.distanceSquared(clone) < 36) {
+                                    int rand = random.nextInt(3);
+                                    if (rand == 0) test.getBlock().setType(Material.COAL_BLOCK);
+                                    else if (rand == 1) test.getBlock().setType(Material.BLACK_CONCRETE);
+                                    else test.getBlock().setType(Material.BLACK_WOOL);
+                                }
+                                else if (test.distanceSquared(clone) < 49) {
+                                    if (test.getBlock().getType().equals(Material.LAVA)) test.getBlock().setType(Material.MAGMA_BLOCK);
+                                    else if (test.getBlock().getType().equals(Material.FIRE)) test.getBlock().breakNaturally();
+                                }
                             }
                         }
                     }
@@ -224,7 +225,7 @@ public class WitherBossFight implements Listener {
                     this.cancel();
                 }
                 else {
-                    clone.getWorld().createExplosion(clone, 7, true, true);
+                    clone.getWorld().createExplosion(clone, 9, true, true);
                     clone.setY(clone.getY() - 5);
                 }
             }
@@ -276,8 +277,18 @@ public class WitherBossFight implements Listener {
         }
 
         destroyTunnel(plugin.getConfig().getLocation("options.wither_fight.portal_location"));
-        genMazes(new Random());
-        plugin.getConfig().set("options.wither_fight.fight_stage", 2);
+        final boolean hardmode = plugin.getConfig().getBoolean("system.hardmode");
+        final boolean waive = plugin.getConfig().getBoolean("options.waive_hardmode_chambers_keys");
+
+        if (hardmode && waive) {
+            genMazes(new Random(), false);
+            advanceToBoss();
+        }
+        else {
+            genMazes(new Random(), true);
+            plugin.getConfig().set("options.wither_fight.fight_stage", 2);
+        }
+
         plugin.saveConfig();
     }
 
@@ -301,7 +312,7 @@ public class WitherBossFight implements Listener {
                         if (player.getWorld().equals(world)) {
                             Location respawn = player.getBedSpawnLocation();
                             if (respawn == null) {
-                                player.teleport(plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                player.teleport(plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                             }
                             else {
                                 player.teleport(respawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -319,24 +330,27 @@ public class WitherBossFight implements Listener {
 
     //---------------------------------------------------
 
-    public void genMazes (Random random) {
+    public void genMazes (Random random, boolean spawnMobs) {
         //magma maze
         Location magma_lower = new Location(world,-39, 128, 23);
         Location magma_upper = new Location(world, -11, 128, 51);
         genMaze(new Location(world, -25, 128, 23), magma_lower, magma_upper, random);
-        spawnMazeMobs(EntityType.ZOMBIFIED_PIGLIN, magma_lower, magma_upper, random, 20);
 
         //glowstone maze
         Location glowstone_lower = new Location(world, -76, 128, -14);
         Location glowstone_upper = new Location(world, -48, 128, 14);
         genMaze(new Location(world, -48, 128, 0), glowstone_lower, glowstone_upper, random);
-        spawnMazeMobs(EntityType.BLAZE, glowstone_lower, glowstone_upper, random, 20);
 
         //soulsand maze
         Location soulsand_lower = new Location(world, -39, 128, -51);
         Location soulsand_upper = new Location(world, -11, 128, -23);
         genMaze(new Location(world, -25, 128, -23), soulsand_lower, soulsand_upper, random);
-        spawnMazeMobs(EntityType.WITHER_SKELETON, soulsand_lower, soulsand_upper, random, 20);
+
+        if (spawnMobs) {
+            spawnMazeMobs(EntityType.ZOMBIFIED_PIGLIN, magma_lower, magma_upper, random, 20);
+            spawnMazeMobs(EntityType.BLAZE, glowstone_lower, glowstone_upper, random, 20);
+            spawnMazeMobs(EntityType.WITHER_SKELETON, soulsand_lower, soulsand_upper, random, 20);
+        }
 
     }
 
@@ -549,16 +563,19 @@ public class WitherBossFight implements Listener {
             }
             droppedKeys.clear();
 
-            plugin.getConfig().set("options.wither_fight.fight_stage", 3);
-            plugin.saveConfig();
-            for (int x = -26; x <= -24; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    world.getBlockAt(x, 127, z).breakNaturally();
-                    world.getBlockAt(x, 128, z).breakNaturally();
-                }
-            }
-
+            advanceToBoss();
             clearEntities(false);
+        }
+    }
+
+    public void advanceToBoss () {
+        plugin.getConfig().set("options.wither_fight.fight_stage", 3);
+        plugin.saveConfig();
+        for (int x = -26; x <= -24; x++) {
+            for (int z = -1; z <= 1; z++) {
+                world.getBlockAt(x, 127, z).breakNaturally();
+                world.getBlockAt(x, 128, z).breakNaturally();
+            }
         }
     }
 
@@ -610,6 +627,10 @@ public class WitherBossFight implements Listener {
                 if (time[0] <= 0) {
                     this.cancel();
                     spawnBoss(new Location(world, 300, 206, 0), new Random(), 45, players.size());
+                    TitleEffects titleEffects = new TitleEffects(plugin);
+                    players.forEach(player -> {
+                        titleEffects.sendDecodingTitle(player, "FIGHT", net.md_5.bungee.api.ChatColor.of("#ff7f00") + ChatColor.BOLD.toString(), "", "", 0, 30, 10, 2, false);
+                    });
                 }
                 else {
                     players.forEach(player -> {
@@ -902,12 +923,13 @@ public class WitherBossFight implements Listener {
                 plugin.getServer().broadcastMessage("§dThe Wither has been slain!");
 
                 if (!hardmode) {
-                    for (Player player: plugin.getServer().getOnlinePlayers()) {
-                        player.sendTitle("§6Entering Hardmode", "§cPrepare yourself", 20, 80, 20);
+                    TitleEffects titleEffects = new TitleEffects(plugin);
+                    plugin.getServer().getOnlinePlayers().forEach(player -> {
+                        titleEffects.sendDecodingTitle(player, "ENTERING HARDMODE", ChatColor.of("#ff6600") + ChatColor.BOLD.toString(), "Prepare yourself.", ChatColor.of("#ff4000").toString(), 0, 80, 20, 2, false);
                         player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.MASTER, 1, 0.5F);
                         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, SoundCategory.MASTER, 1, 1);
                         player.playSound(player.getLocation(), "custom.darkrooms_whispers", SoundCategory.MASTER, 0.5F, 0.5F);
-                    }
+                    });
 
                     plugin.getConfig().set("system.hardmode", true);
                     plugin.getConfig().set("system.chaos_level", 0);
@@ -987,7 +1009,7 @@ public class WitherBossFight implements Listener {
 
                     Location bedSpawn = player.getBedSpawnLocation();
                     if (bedSpawn == null) {
-                        player.teleport(plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation());
+                        player.teleport(plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation());
                     }
                     else {
                         player.teleport(bedSpawn);

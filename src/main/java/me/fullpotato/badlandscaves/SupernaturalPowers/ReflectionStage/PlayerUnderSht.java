@@ -15,7 +15,7 @@ public class PlayerUnderSht implements Listener {
 
     public PlayerUnderSht(BadlandsCaves plugin) {
         this.plugin = plugin;
-        this.world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        this.world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     @EventHandler
@@ -25,7 +25,7 @@ public class PlayerUnderSht implements Listener {
                 event.getDamager() instanceof Zombie &&
                 event.getDamager().getWorld().equals(world)) {
 
-            FakePlayerNMS nms = plugin.fakePlayerNMS;
+            FakePlayerNMS nms = plugin.getFakePlayerNMS();
             nms.damage(ZombieBossBehavior.fakePlayer, null, false);
 
             final Player player = (Player) event.getEntity();

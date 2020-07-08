@@ -24,7 +24,7 @@ public class ActionbarRunnable extends BukkitRunnable {
             final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
             if (in_reflection) continue;
 
-            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getBackroomsWorldName()))) continue;
 
             int death_count = (int) PlayerScore.DEATHS.getScore(plugin, player);
             String separator = ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + " | ";

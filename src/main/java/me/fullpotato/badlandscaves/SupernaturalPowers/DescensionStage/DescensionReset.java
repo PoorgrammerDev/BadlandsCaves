@@ -23,7 +23,7 @@ public class DescensionReset extends BukkitRunnable {
     private final World world;
     public DescensionReset(BadlandsCaves bcav) {
         plugin = bcav;
-        world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
     }
 
     @Override

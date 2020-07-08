@@ -57,9 +57,9 @@ public class PlayerJoinLeave implements Listener {
         //EVERYONE---------------------------------------
 
         //if in wither fight, tp out
-        if (player.getWorld().equals(plugin.getServer().getWorld(plugin.chambersWorldName))) {
+        if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getChambersWorldName()))) {
             if (plugin.getConfig().getInt("options.wither_fight.fight_stage") == -1) {
-                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation() : player.getBedSpawnLocation();
+                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation() : player.getBedSpawnLocation();
                 warp.setYaw(player.getLocation().getYaw());
                 warp.setPitch(player.getLocation().getPitch());
 
@@ -74,7 +74,7 @@ public class PlayerJoinLeave implements Listener {
         //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
-            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.withdrawWorldName))) {
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getWithdrawWorldName()))) {
                 String origworldname = plugin.getConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                 if (origworldname == null) {
                     player.setHealth(0);

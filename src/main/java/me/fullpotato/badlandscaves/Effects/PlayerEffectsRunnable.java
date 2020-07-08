@@ -29,7 +29,7 @@ public class PlayerEffectsRunnable extends BukkitRunnable {
             final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
             if (in_reflection) continue;
 
-            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.backroomsWorldName))) continue;
+            if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getBackroomsWorldName()))) continue;
 
             final int agility_speed = ((int) PlayerScore.AGILITY_BUFF_SPEED_LVL.getScore(plugin, player));
 

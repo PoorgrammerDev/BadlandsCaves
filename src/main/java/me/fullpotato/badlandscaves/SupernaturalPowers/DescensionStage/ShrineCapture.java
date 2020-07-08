@@ -20,7 +20,7 @@ public class ShrineCapture extends BukkitRunnable {
 
     public ShrineCapture(BadlandsCaves bcav) {
         plugin = bcav;
-        world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
 
         this.crystal_locations = new Location[]{
                 new Location(world, 46, 80, 46),
@@ -93,6 +93,10 @@ public class ShrineCapture extends BukkitRunnable {
                                             PlayerScore.DESCENSION_SHRINES_CAPPED.setScore(plugin, player, a + 1);
                                             switch (a) {
                                                 case 0:
+                                                    player.sendTitle(ChatColor.LIGHT_PURPLE + "You now have access to Abilities.", net.md_5.bungee.api.ChatColor.of("#7c00a6") + "Double Shift, then hold it down to access them.", 20, 60, 20);
+                                                    player.sendMessage(ChatColor.LIGHT_PURPLE + "You now have access to Abilities.");
+                                                    player.sendMessage(net.md_5.bungee.api.ChatColor.of("#7c00a6") + "Double Shift, then hold it down to access them.");
+
                                                     PlayerScore.HAS_SUPERNATURAL_POWERS.setScore(plugin, player, 1);
                                                     PlayerScore.AGILITY_LEVEL.setScore(plugin, player, 1);
                                                     PlayerScore.DISPLACE_LEVEL.setScore(plugin, player, 1);
@@ -106,6 +110,9 @@ public class ShrineCapture extends BukkitRunnable {
                                                     PlayerScore.POSSESS_LEVEL.setScore(plugin, player, 2);
                                                     break;
                                                 case 3:
+                                                    player.sendTitle(net.md_5.bungee.api.ChatColor.of("#3b26de") + "You can now walk along the beam.", net.md_5.bungee.api.ChatColor.of("#5600bf") + "Go towards the center to leave.", 20, 60, 20);
+                                                    player.sendMessage(net.md_5.bungee.api.ChatColor.of("#3b26de") + "You can now walk along the beam.");
+                                                    player.sendMessage(net.md_5.bungee.api.ChatColor.of("#5600bf") + "Go towards the center to leave.");
                                                     new DescensionFinish(plugin).runTask(plugin);
                                                     break;
                                             }

@@ -22,7 +22,7 @@ public class ReflectionZombie implements Listener {
     private final World world;
     public ReflectionZombie (BadlandsCaves bcav) {
         plugin = bcav;
-        world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     // TODO: 6/3/2020 remove?
@@ -44,7 +44,7 @@ public class ReflectionZombie implements Listener {
     public void damageZombie (EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Zombie && event.getEntity().getWorld().equals(world)) {
             if (event.getDamager() instanceof Player && event.getDamager().getWorld().equals(world)) {
-                FakePlayerNMS nms = plugin.fakePlayerNMS;
+                FakePlayerNMS nms = plugin.getFakePlayerNMS();
                 nms.damage(ZombieBossBehavior.fakePlayer, null, true);
 
                 final Zombie zombie = (Zombie) event.getEntity();

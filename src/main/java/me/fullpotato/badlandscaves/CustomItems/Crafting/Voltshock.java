@@ -28,6 +28,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     private final Material[] swords = {
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
+            Material.NETHERITE_SWORD,
     };
 
     public Voltshock(BadlandsCaves plugin) {
@@ -64,7 +65,7 @@ public class Voltshock extends MatchCrafting implements Listener {
          */
         recipe.shape("*#*", "*#*", "*#*");
         recipe.setIngredient('*', Material.REDSTONE);
-        recipe.setIngredient('#', Material.IRON_BARS);
+        recipe.setIngredient('#', Material.CHAIN);
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -83,7 +84,7 @@ public class Voltshock extends MatchCrafting implements Listener {
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('*', Material.REDSTONE);
         recipe.setIngredient('|', Material.COMMAND_BLOCK);
-        recipe.setIngredient('&', new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD));
+        recipe.setIngredient('&', new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.NETHERITE_SWORD));
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -92,7 +93,7 @@ public class Voltshock extends MatchCrafting implements Listener {
         final ItemStack voltshock_sword_charge_placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "charge_voltshock_sword"), voltshock_sword_charge_placeholder);
         recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
-        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD));
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.NETHERITE_SWORD));
 
         plugin.getServer().addRecipe(recipe);
 
@@ -145,7 +146,7 @@ public class Voltshock extends MatchCrafting implements Listener {
                     final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
 
                     if (battery != null && shocker != null) {
-                        if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2) && isMatching(matrix, shocker, 5)) {
+                        if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2, 5)) {
                             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
                                 SerratedSwords serrated = new SerratedSwords(plugin);
                                 Corrosive corrosive = new Corrosive(plugin);

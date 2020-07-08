@@ -15,7 +15,7 @@ public class ReflectionWorld {
 
 
     public void gen_refl_world() {
-        WorldCreator reflectionworld = new WorldCreator(plugin.reflectionWorldName);
+        WorldCreator reflectionworld = new WorldCreator(plugin.getReflectionWorldName());
         reflectionworld.environment(World.Environment.NORMAL)
                 .generator(new ReflectionGen());
         World world_reflection = plugin.getServer().createWorld(reflectionworld);

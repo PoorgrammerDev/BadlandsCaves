@@ -72,7 +72,7 @@ public class Displace extends UsePowers implements Listener {
                         Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
 
                         if (player.getLocation().distance(displace_marker) <= warp_range) {
-                            LineOfSightNMS nms = plugin.lineOfSightNMS;
+                            LineOfSightNMS nms = plugin.getLineOfSightNMS();
                             if (nms.hasLineOfSight(player, displace_marker)) {
                                 if (mana >= displace_mana_cost) {
                                     preventDoubleClick(player);
@@ -117,7 +117,7 @@ public class Displace extends UsePowers implements Listener {
                         Location lastLastBlockLoc = null;
                         Block lastBlock = iter.next();
                         Location lastBlockLocation = lastBlock.getLocation().add(0.5, 0.5, 0.5);
-                        LineOfSightNMS nms = plugin.lineOfSightNMS;
+                        LineOfSightNMS nms = plugin.getLineOfSightNMS();
 
                         while (iter.hasNext()) {
                             lastLastBlockLoc = lastBlockLocation;

@@ -5,9 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class BackroomsCommandTabComplete implements TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         if (command.getName().equalsIgnoreCase("backrooms")) {
             if (commandSender.isOp()) {
                 ArrayList<String> list = new ArrayList<>();

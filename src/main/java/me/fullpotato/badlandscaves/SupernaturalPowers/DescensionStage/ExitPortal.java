@@ -15,7 +15,7 @@ public class ExitPortal extends BukkitRunnable {
 
     public ExitPortal(BadlandsCaves plugin) {
         this.plugin = plugin;
-        World world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        World world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         location = new Location(world, 0.5, 82, 0.5);
     }
 

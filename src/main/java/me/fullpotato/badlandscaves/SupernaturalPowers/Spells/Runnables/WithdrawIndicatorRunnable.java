@@ -16,7 +16,7 @@ public class WithdrawIndicatorRunnable extends BukkitRunnable {
     public WithdrawIndicatorRunnable(BadlandsCaves plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.empty = plugin.getServer().getWorld(plugin.withdrawWorldName);
+        this.empty = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @Override

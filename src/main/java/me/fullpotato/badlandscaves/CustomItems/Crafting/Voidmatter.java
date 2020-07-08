@@ -15,7 +15,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.ArrayList;
 
@@ -189,11 +189,11 @@ public class Voidmatter extends MatchCrafting implements Listener {
         }
     }
 
-    public boolean isVoidmatter (@NotNull ItemStack item) {
+    public boolean isVoidmatter (ItemStack item) {
         return isVoidmatterArmor(item) || isVoidmatterTool(item);
     }
 
-    public boolean isVoidmatterArmor (@NotNull ItemStack item) {
+    public boolean isVoidmatterArmor (ItemStack item) {
         ArrayList<Material> armorTypes = new ArrayList<>();
         armorTypes.add(CustomItem.VOIDMATTER_HELMET.getItem().getType());
         armorTypes.add(CustomItem.VOIDMATTER_CHESTPLATE.getItem().getType());
@@ -216,12 +216,12 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
-    public boolean isVoidmatterTool (@NotNull ItemStack item) {
+    public boolean isVoidmatterTool (ItemStack item) {
         return isVoidmatterPickaxe(item) || isVoidmatterBlade(item) ||
                 isVoidmatterShovel(item) || isVoidmatterAxe(item) || isVoidmatterBow(item);
     }
 
-    public boolean isVoidmatterPickaxe (@NotNull ItemStack item) {
+    public boolean isVoidmatterPickaxe (ItemStack item) {
         if (item.getType().equals(CustomItem.VOIDMATTER_PICKAXE.getItem().getType())) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -238,7 +238,7 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
-    public boolean isVoidmatterBlade (@NotNull ItemStack item) {
+    public boolean isVoidmatterBlade (ItemStack item) {
         if (item.getType().equals(CustomItem.VOIDMATTER_BLADE.getItem().getType())) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -255,7 +255,7 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
-    public boolean isVoidmatterShovel (@NotNull ItemStack item) {
+    public boolean isVoidmatterShovel (ItemStack item) {
         if (item.getType().equals(CustomItem.VOIDMATTER_SHOVEL.getItem().getType())) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -272,7 +272,7 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
-    public boolean isVoidmatterAxe (@NotNull ItemStack item) {
+    public boolean isVoidmatterAxe (ItemStack item) {
         if (item.getType().equals(CustomItem.VOIDMATTER_AXE.getItem().getType())) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -289,7 +289,7 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
-    public boolean isVoidmatterBow (@NotNull ItemStack item) {
+    public boolean isVoidmatterBow (ItemStack item) {
         if (item.getType().equals(CustomItem.VOIDMATTER_BOW.getItem().getType())) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {

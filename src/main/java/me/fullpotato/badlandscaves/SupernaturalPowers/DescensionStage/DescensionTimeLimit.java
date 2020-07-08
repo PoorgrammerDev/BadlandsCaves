@@ -1,10 +1,12 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionPlayerMove;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.Util.TitleEffects;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,15 +23,27 @@ public class DescensionTimeLimit extends BukkitRunnable {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
                 if (in_descension == 2) {
+                    int captured = (int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player);
                     int descension_timer = (int) PlayerScore.DESCENSION_TIMER.getScore(plugin, player);
-                    if (descension_timer > 0) {
-                        descension_timer--;
-                        PlayerScore.DESCENSION_TIMER.setScore(plugin, player, descension_timer);
-                        sendActionBarMsg(player, descension_timer);
+                    if (captured < 4) {
+                        if (descension_timer > 0) {
+                            descension_timer--;
+                            PlayerScore.DESCENSION_TIMER.setScore(plugin, player, descension_timer);
+                        }
+                        else {
+                            DescensionPlayerMove kicker = new DescensionPlayerMove(plugin);
+                            kicker.playerLost(player);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    TitleEffects titleEffects = new TitleEffects(plugin);
+                                    titleEffects.sendDecodingTitle(player, "TIME'S UP!", ChatColor.DARK_RED.toString(), "", "", 0, 20, 10, 2, false);
+                                }
+                            }.runTaskLaterAsynchronously(plugin, 5);
+                        }
                     }
-                    else {
-                        player.setHealth(0);
-                    }
+                    sendActionBarMsg(player, descension_timer);
                 }
             }
         }

@@ -86,7 +86,7 @@ public class DestroySpawner implements Listener {
 
                 loot(player, block.getLocation(), random, spawner.getSpawnedType());
             }
-            else {
+            else if (!player.getGameMode().equals(GameMode.CREATIVE)) {
                 event.setCancelled(true);
             }
         }

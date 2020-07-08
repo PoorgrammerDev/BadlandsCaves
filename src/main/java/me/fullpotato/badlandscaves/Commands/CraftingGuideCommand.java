@@ -7,7 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+
 
 public class CraftingGuideCommand extends Commands implements CommandExecutor {
     private BadlandsCaves plugin;
@@ -17,7 +17,7 @@ public class CraftingGuideCommand extends Commands implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (command.getName().equals("craftguide")) {
             if (commandSender instanceof Player) {
                 CraftingGuide craftingGuide = new CraftingGuide(plugin);

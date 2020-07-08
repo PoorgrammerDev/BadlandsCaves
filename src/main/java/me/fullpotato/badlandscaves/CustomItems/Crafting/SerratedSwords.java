@@ -28,6 +28,7 @@ public class SerratedSwords implements Listener {
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
             Material.DIAMOND_SWORD,
+            Material.NETHERITE_SWORD,
     };
 
     public SerratedSwords(BadlandsCaves plugin) {

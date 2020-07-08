@@ -11,7 +11,7 @@ public class DescensionWorld {
     }
 
     public void gen_descension_world() {
-        WorldCreator descension = new WorldCreator(plugin.descensionWorldName);
+        WorldCreator descension = new WorldCreator(plugin.getDescensionWorldName());
         descension.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new EmptyWorldGen());

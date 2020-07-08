@@ -16,7 +16,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.List;
 
@@ -92,11 +92,11 @@ public class StarlightCharge implements Listener {
         }
     }
 
-    public boolean isStarlight(@NotNull ItemStack item) {
+    public boolean isStarlight(ItemStack item) {
         return armor.isStarlightArmor(item) || tools.isStarlightSaber(item) || tools.isStarlightShield(item) || tools.isStarlightBlaster(item) || tools.isStarlightPaxel(item);
     }
 
-    public int getCharge(@NotNull ItemStack item) {
+    public int getCharge(ItemStack item) {
         if (isStarlight(item)) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
@@ -111,7 +111,7 @@ public class StarlightCharge implements Listener {
         return -1;
     }
 
-    public int getMaxCharge(@NotNull ItemStack item) {
+    public int getMaxCharge(ItemStack item) {
         if (isStarlight(item)) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
@@ -126,7 +126,7 @@ public class StarlightCharge implements Listener {
         return -1;
     }
 
-    public void setCharge (@NotNull ItemStack item, int charge) {
+    public void setCharge (ItemStack item, int charge) {
         if (isStarlight(item)) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -156,7 +156,7 @@ public class StarlightCharge implements Listener {
         }
     }
 
-    public void setMaxCharge (@NotNull ItemStack item, int charge) {
+    public void setMaxCharge (ItemStack item, int charge) {
         if (isStarlight(item)) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {

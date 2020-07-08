@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Collection;
 
@@ -116,7 +116,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
         }
     }
 
-    public void setCooldown(@NotNull ItemStack item, short time) {
+    public void setCooldown(ItemStack item, short time) {
         if (toolManager.isStarlightBlaster(item)) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
@@ -128,7 +128,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
         }
     }
 
-    public short getCooldown(@NotNull ItemStack item) {
+    public short getCooldown(ItemStack item) {
         if (toolManager.isStarlightBlaster(item)) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();

@@ -26,7 +26,7 @@ public class SkeleBuff implements Listener {
     private final World chambers;
     public SkeleBuff(BadlandsCaves bcav) {
         plugin = bcav;
-        chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
+        chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
     @EventHandler

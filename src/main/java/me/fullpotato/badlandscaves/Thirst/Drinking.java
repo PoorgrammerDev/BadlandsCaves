@@ -108,11 +108,11 @@ public class Drinking implements Listener {
                 else if (item.isSimilar(recall_potion)) {
                     Location location = player.getLocation();
                     ArrayList<World> blacklisted = new ArrayList<>();
-                    blacklisted.add(plugin.getServer().getWorld(plugin.reflectionWorldName));
-                    blacklisted.add(plugin.getServer().getWorld(plugin.backroomsWorldName));
-                    blacklisted.add(plugin.getServer().getWorld(plugin.descensionWorldName));
-                    blacklisted.add(plugin.getServer().getWorld(plugin.chambersWorldName));
-                    blacklisted.add(plugin.getServer().getWorld(plugin.withdrawWorldName));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.getReflectionWorldName()));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.getBackroomsWorldName()));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.getDescensionWorldName()));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.getChambersWorldName()));
+                    blacklisted.add(plugin.getServer().getWorld(plugin.getWithdrawWorldName()));
 
                     if (location.getWorld() != null && blacklisted.contains(location.getWorld())) {
                         player.sendMessage("§cYou cannot drink that right now.");
@@ -128,7 +128,7 @@ public class Drinking implements Listener {
                             if (tracker[0] > player.getHeight()) {
                                 this.cancel();
                                 Location updated = player.getLocation();
-                                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.mainWorldName).getSpawnLocation() : player.getBedSpawnLocation();
+                                Location warp = player.getBedSpawnLocation() == null ? plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation() : player.getBedSpawnLocation();
                                 warp.setYaw(updated.getYaw());
                                 warp.setPitch(updated.getPitch());
 

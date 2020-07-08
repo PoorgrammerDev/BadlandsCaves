@@ -17,7 +17,7 @@ public class GravityFallDamage implements Listener {
     public void fallDamage (EntityDamageEvent event) {
         if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
             Entity entity = event.getEntity();
-            if (entity.getWorld().getName().startsWith(plugin.dimensionPrefixName)) {
+            if (entity.getWorld().getName().startsWith(plugin.getDimensionPrefixName())) {
                 double gravity = plugin.getConfig().getDouble("system.dim_stats." + entity.getWorld().getName() + ".gravity");
 
                 double damage = event.getDamage() * gravity;

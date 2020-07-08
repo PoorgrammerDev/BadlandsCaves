@@ -33,7 +33,7 @@ public class SpawnInhabitants implements Listener {
     public void mobSpawn(CreatureSpawnEvent event) {
         LivingEntity entity = event.getEntity();
         World world = entity.getWorld();
-        if (world.getName().startsWith(plugin.dimensionPrefixName)) {
+        if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
 
             if (plugin.getConfig().getBoolean("system.hardmode")) {
                 if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {

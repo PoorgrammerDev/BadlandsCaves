@@ -13,7 +13,6 @@ import org.bukkit.entity.Wither;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.RayTraceResult;
 
 import java.util.Random;
 
@@ -48,7 +47,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
                 boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
                 if (target_already_pos) return;
 
-                PossessionNMS nms = plugin.possessionNMS;
+                PossessionNMS nms = plugin.getPossessionNMS();
                 nms.setIndicator(player, target);
 
                 Location location = target.getLocation();

@@ -23,7 +23,7 @@ public class StartingDungeons {
         if (starting_dungeons > 0) {
             Random random = new Random();
             DestroySpawner dungeonGenerator = new DestroySpawner(plugin);
-            World world = plugin.getServer().getWorld(plugin.mainWorldName);
+            World world = plugin.getServer().getWorld(plugin.getMainWorldName());
 
             int[] ran = {0};
             new BukkitRunnable() {

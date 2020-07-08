@@ -87,8 +87,8 @@ public class DimensionsWorlds {
     }
 
     public World generate(String name) {
-        UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.dimensionPrefixName + name);
-        World alreadyExisting = plugin.getServer().getWorld(plugin.dimensionPrefixName + name);
+        UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.getDimensionPrefixName() + name);
+        World alreadyExisting = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + name);
         if (plugin.getServer().getWorlds().contains(alreadyExisting)) {
             if (alreadyExisting != null) {
                 new GravityRunnable(plugin, alreadyExisting).runTaskTimerAsynchronously(plugin, 0, 0);
@@ -97,7 +97,7 @@ public class DimensionsWorlds {
         }
         else if (unloadedWorld.exists()) {
             unloadedWorld.load(plugin);
-            alreadyExisting = plugin.getServer().getWorld(plugin.dimensionPrefixName + name);
+            alreadyExisting = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + name);
 
             if (alreadyExisting != null) {
                 new GravityRunnable(plugin, alreadyExisting).runTaskTimerAsynchronously(plugin, 0, 0);
@@ -106,7 +106,7 @@ public class DimensionsWorlds {
             return alreadyExisting;
         }
 
-        Habitation habitation = getRandomHabitation();
+        Habitation habitation = Habitation.INHABITED; //getRandomHabitation(); TODO: 7/6/2020 change
         Biome biome;
         if (habitation.equals(Habitation.INHABITED)) {
             biome = habitableBiomes[random.nextInt(habitableBiomes.length)];
@@ -114,10 +114,11 @@ public class DimensionsWorlds {
         else {
             biome = allBiomes[random.nextInt(allBiomes.length)];
         }
+        biome = Biome.JUNGLE; // TODO: 7/6/2020 remove
 
-        WorldCreator creator = new WorldCreator(plugin.dimensionPrefixName + name);
+        WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
 
-        World.Environment environment = getEnvironment();
+        World.Environment environment = World.Environment.NORMAL; //getEnvironment(); TODO revert
         creator.environment(environment);
         creator.generator(new DimensionsGen(biome));
 
@@ -133,6 +134,7 @@ public class DimensionsWorlds {
         world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
         world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
         world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+        world.setKeepSpawnInMemory(false);
 
         WorldBorder border = world.getWorldBorder();
         border.setCenter(0, 0);
@@ -160,6 +162,10 @@ public class DimensionsWorlds {
 
 
         new GravityRunnable(plugin, world).runTaskTimerAsynchronously(plugin, 0, 0);
+
+
+        Bukkit.broadcastMessage(environment.name());
+        Bukkit.broadcastMessage(habitation.name());
         return world;
     }
 

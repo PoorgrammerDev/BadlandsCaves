@@ -29,7 +29,7 @@ public class Withdraw extends UsePowers implements Listener {
     private final World void_world;
     public Withdraw(BadlandsCaves bcav) {
         super(bcav);
-        void_world = plugin.getServer().getWorld(plugin.withdrawWorldName);
+        void_world = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
 

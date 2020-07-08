@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Shield implements Listener {
@@ -69,6 +70,16 @@ public class Shield implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
+    public void craftNetheriteShield() {
+        final ItemStack shield = CustomItem.NETHERITE_SHIELD.getItem();
+
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "netherite_shield"), shield);
+        recipe.shape("# #", "###", " # ");
+        recipe.setIngredient('#', Material.NETHERITE_SCRAP);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
     @EventHandler
     public void craftShield(PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
@@ -77,8 +88,9 @@ public class Shield implements Listener {
         final ItemStack stoneShield = CustomItem.STONE_SHIELD.getItem();
         final ItemStack ironShield = CustomItem.IRON_SHIELD.getItem();
         final ItemStack diamondShield = CustomItem.DIAMOND_SHIELD.getItem();
+        final ItemStack netheriteShield = CustomItem.NETHERITE_SHIELD.getItem();
 
-        if (result.isSimilar(stoneShield) || result.isSimilar(ironShield) || result.isSimilar(diamondShield)) {
+        if (result.isSimilar(stoneShield) || result.isSimilar(ironShield) || result.isSimilar(diamondShield) || result.isSimilar(netheriteShield)) {
             for (HumanEntity humanEntity : event.getViewers()) {
                 Player player = (Player) humanEntity;
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {

@@ -24,7 +24,7 @@ public class PigZombieBuff implements Listener {
     private final World chambers;
     public PigZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
-        chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
+        chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
     @EventHandler

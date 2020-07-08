@@ -24,8 +24,8 @@ public class ZombieBuff implements Listener {
     private final World reflection_world;
     public ZombieBuff(BadlandsCaves bcav) {
         plugin = bcav;
-        descension_world = plugin.getServer().getWorld(plugin.descensionWorldName);
-        reflection_world = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        descension_world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     @EventHandler

@@ -23,7 +23,7 @@ import java.util.UUID;
 public class LoadCustomItems {
     private final BadlandsCaves plugin = JavaPlugin.getPlugin(BadlandsCaves.class);
 
-    private static final String[] uuid_names = {
+    private static final String[] uuids = {
             "2018ae4d-9bf8-47b9-8c1f-3107007afeab",
             "a552bcbf-413c-493d-a2c2-cbcbd0f008cb",
             "f3eadd40-8340-4263-ae9e-0227caa026a8",
@@ -608,8 +608,8 @@ public class LoadCustomItems {
             ItemMeta stone_shield_meta = stone_shield.getItemMeta();
             stone_shield_meta.setDisplayName(ChatColor.WHITE + "Stone Shield");
             stone_shield_meta.setCustomModelData(141);
-            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[0]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[1]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[0]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[1]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             stone_shield_meta.addEnchant(Enchantment.DURABILITY, 4, true);
             stone_shield.setItemMeta(stone_shield_meta);
 
@@ -621,8 +621,8 @@ public class LoadCustomItems {
             ItemMeta iron_shield_meta = iron_shield.getItemMeta();
             iron_shield_meta.setDisplayName(ChatColor.WHITE + "Iron Shield");
             iron_shield_meta.setCustomModelData(142);
-            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[2]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[3]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[2]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[3]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             iron_shield_meta.addEnchant(Enchantment.DURABILITY, 5, true);
             iron_shield.setItemMeta(iron_shield_meta);
 
@@ -634,12 +634,25 @@ public class LoadCustomItems {
             ItemMeta diamond_shield_meta = diamond_shield.getItemMeta();
             diamond_shield_meta.setDisplayName(ChatColor.WHITE + "Diamond Shield");
             diamond_shield_meta.setCustomModelData(144);
-            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[4]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuid_names[5]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[4]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[5]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             diamond_shield_meta.addEnchant(Enchantment.DURABILITY, 6, true);
             diamond_shield.setItemMeta(diamond_shield_meta);
 
             return diamond_shield;
+        }
+
+        else if (item.equals(CustomItem.NETHERITE_SHIELD)){
+            ItemStack netherite_shield = new ItemStack(Material.SHIELD);
+            ItemMeta meta = netherite_shield.getItemMeta();
+            meta.setDisplayName(ChatColor.WHITE + "Netherite Shield");
+            meta.setCustomModelData(178);
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            meta.addEnchant(Enchantment.DURABILITY, 6, true);
+            netherite_shield.setItemMeta(meta);
+
+            return netherite_shield;
         }
 
         else if (item.equals(CustomItem.RECALL_POTION)){
@@ -773,6 +786,26 @@ public class LoadCustomItems {
             return photon_emitter;
         }
 
+        else if (item.equals(CustomItem.WAVELENGTH_DISRUPTOR)) {
+            ItemStack wavelength_disruptor = new ItemStack(Material.STRUCTURE_BLOCK);
+            ItemMeta meta = wavelength_disruptor.getItemMeta();
+            meta.setDisplayName("§eWavelength Disruptor");
+            meta.setCustomModelData(179);
+            wavelength_disruptor.setItemMeta(meta);
+
+            return wavelength_disruptor;
+        }
+
+        else if (item.equals(CustomItem.SILENCER)) {
+            ItemStack silencer = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta meta = silencer.getItemMeta();
+            meta.setDisplayName("§eSilencer");
+            meta.setCustomModelData(180);
+            silencer.setItemMeta(meta);
+
+            return silencer;
+        }
+
         else if (item.equals(CustomItem.FOREVER_FISH)) {
             ItemStack forever_fish = new ItemStack(Material.COOKED_COD);
             ItemMeta forever_fish_meta = forever_fish.getItemMeta();
@@ -803,8 +836,8 @@ public class LoadCustomItems {
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
-            starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
-            starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+            starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+            starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_helmet_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -831,8 +864,8 @@ public class LoadCustomItems {
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
-            starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
-            starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
+            starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
+            starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_chestplate_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -859,8 +892,8 @@ public class LoadCustomItems {
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
-            starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
-            starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+            starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+            starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_leggings_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -887,8 +920,8 @@ public class LoadCustomItems {
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
-            starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuid_names[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
-            starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuid_names[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+            starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+            starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
             starlight_boots_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -1000,8 +1033,8 @@ public class LoadCustomItems {
             paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
 
-            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuid_names[14]), "Starlight Paxel No Damage", -999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuid_names[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[14]), "Starlight Paxel No Damage", -999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
             paxel_meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             paxel_meta.addEnchant(Enchantment.DIG_SPEED, 7, true);

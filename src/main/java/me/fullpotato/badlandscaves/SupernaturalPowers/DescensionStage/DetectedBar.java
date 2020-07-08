@@ -27,7 +27,7 @@ public class DetectedBar extends BukkitRunnable {
             detected_bar = plugin.getServer().createBossBar(key, title, BarColor.RED, BarStyle.SEGMENTED_6);
         }
 
-        World world = plugin.getServer().getWorld(plugin.descensionWorldName);
+        World world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2 && player.getWorld().equals(world)) {

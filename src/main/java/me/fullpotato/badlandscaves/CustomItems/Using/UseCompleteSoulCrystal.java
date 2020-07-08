@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.StageEnter;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener {
     private BadlandsCaves plugin;
@@ -35,8 +37,8 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         final Player player = event.getPlayer();
         event.setCancelled(true);
 
-        final World descension = plugin.getServer().getWorld(plugin.descensionWorldName);
-        final World reflection = plugin.getServer().getWorld(plugin.reflectionWorldName);
+        final World descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        final World reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
 
         if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) return;
@@ -56,5 +58,18 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
 
         //put you into the descension stage
         new StageEnter(plugin, player).runTask(plugin);
+        player.sendTitle(ChatColor.DARK_PURPLE + "Capture the Four Shrines.", net.md_5.bungee.api.ChatColor.of("#6c2b9e") + "Stand under each one for a while to capture them.", 20, 60, 20);
+        player.sendMessage(ChatColor.DARK_PURPLE + "Capture the Four Shrines.");
+        player.sendMessage(net.md_5.bungee.api.ChatColor.of("#6c2b9e") + "Stand under each one for a while to capture them.");
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.sendTitle(ChatColor.GOLD + "Don't let the Lost Souls find you.", net.md_5.bungee.api.ChatColor.of("#ff6a00") + "Moving near any of them will raise Detection.", 20, 60, 20);
+                player.sendMessage(ChatColor.GOLD + "Don't let the Lost Souls find you.");
+                player.sendMessage(net.md_5.bungee.api.ChatColor.of("#ff6a00") + "Moving near any of them will raise Detection.");
+            }
+        }.runTaskLaterAsynchronously(plugin, 100);
+
     }
 }

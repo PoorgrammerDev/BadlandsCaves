@@ -23,7 +23,7 @@ public class BlazeBuff implements Listener {
     private final World chambers;
     public BlazeBuff(BadlandsCaves bcav) {
         plugin = bcav;
-        chambers = plugin.getServer().getWorld(plugin.chambersWorldName);
+        chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
     @EventHandler
