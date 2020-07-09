@@ -797,10 +797,9 @@ public class LoadCustomItems {
         }
 
         else if (item.equals(CustomItem.SILENCER)) {
-            ItemStack silencer = new ItemStack(Material.COMMAND_BLOCK);
+            ItemStack silencer = new ItemStack(Material.STRUCTURE_BLOCK);
             ItemMeta meta = silencer.getItemMeta();
-            meta.setDisplayName("§eSilencer");
-            meta.setCustomModelData(180);
+            meta.setDisplayName(net.md_5.bungee.api.ChatColor.DARK_PURPLE + "Silencer");
             silencer.setItemMeta(meta);
 
             return silencer;

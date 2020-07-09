@@ -1,4 +1,8 @@
-#BadlandsCaves Options
+###########################################
+#*---------------------------------------*#
+#|         BadlandsCaves Options         |#
+#*---------------------------------------*#
+###########################################
 
 # Y Coordinate where Caves end and Surface begins
 surface_layer: 128

@@ -84,6 +84,11 @@ public class EnergyCore extends MatchCrafting implements Listener {
         final ItemStack energyCore = CustomItem.ENERGY_CORE.getItem();
         if (!result.isSimilar(energyCore)) return;
 
+        if (event.getViewers().isEmpty() || event.getViewers().size() < 1) {
+            event.getInventory().setResult(null);
+            return;
+        }
+
         if (event.getViewers().get(0) instanceof Player) {
             Player player = (Player) event.getViewers().get(0);
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {

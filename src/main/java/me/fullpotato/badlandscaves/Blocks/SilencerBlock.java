@@ -21,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -50,7 +51,7 @@ public class SilencerBlock implements Listener {
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
                     final Block clickedBlock = event.getClickedBlock();
                     if (clickedBlock != null) {
-                        final Block block = clickedBlock.getRelative(event.getBlockFace());
+                        final Block block = clickedBlock.isPassable() ? clickedBlock : clickedBlock.getRelative(event.getBlockFace());
                         if (block.isPassable()) {
                             Location nearbySilencer = getNearbySilencer(block.getLocation());
                             if (nearbySilencer == null) {
@@ -58,6 +59,7 @@ public class SilencerBlock implements Listener {
                                 addSilencer(block);
                             }
                             else {
+                                block.getWorld().playSound(block.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.BLOCKS, 1, 0.5F);
                                 ParticleShapes.particleLine(null, Particle.REDSTONE, block.getLocation().add(0.5, 0.5, 0.5), nearbySilencer.clone().add(0.5, 0.5, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 0.7F), 1);
                             }
                         }
@@ -91,10 +93,12 @@ public class SilencerBlock implements Listener {
     public void silencerInteract (PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
         if (block != null && isSilencer(block) && block.getState() instanceof Structure) {
-            Structure state = (Structure) block.getState();
-            ItemStack item = event.getItem();
+            final World world = block.getWorld();
+            final Location location = block.getLocation();
+            final Structure state = (Structure) block.getState();
+            final ItemStack item = event.getItem();
+            final Player player = event.getPlayer();
             event.setCancelled(true);
-            Player player = event.getPlayer();
 
             if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 if (player.getGameMode().equals(GameMode.CREATIVE) || (item != null && (item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.NETHERITE_PICKAXE)))) {
@@ -110,69 +114,107 @@ public class SilencerBlock implements Listener {
                     else {
                         ready = true;
                     }
-                    if (ready) openDestroySilencerMenu(player, block.getLocation());
+                    if (ready) openDestroySilencerMenu(player, location);
                 }
                 else {
                     player.sendMessage(ChatColor.RED + "You need a stronger tool.");
                 }
             }
             else if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+
                 if (event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
-                    final int silencerCharge = getCharge(block);
+                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                        final int silencerCharge = getCharge(block);
 
-                    Integer maxChargeResult = state.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_max_charge"), PersistentDataType.INTEGER);
-                    if (maxChargeResult != null) {
-                        final int maxCharge = maxChargeResult;
-                        if (item != null) {
-                            EnergyCore energyCore = new EnergyCore(plugin);
-                            if (energyCore.isEnergyCore(item)) {
-                                final int coreCharge = energyCore.getCharge(item);
-                                item.setAmount(item.getAmount() - 1);
+                        Integer maxChargeResult = state.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_max_charge"), PersistentDataType.INTEGER);
+                        if (maxChargeResult != null) {
+                            final int maxCharge = maxChargeResult;
+                            if (item != null) {
+                                EnergyCore energyCore = new EnergyCore(plugin);
+                                if (energyCore.isEnergyCore(item)) {
+                                    final int coreCharge = energyCore.getCharge(item);
+                                    item.setAmount(item.getAmount() - 1);
 
-                                state.getPersistentDataContainer().set(new NamespacedKey(plugin, "silencer_charge"), PersistentDataType.INTEGER, Math.min(silencerCharge + coreCharge, maxCharge));
-                                state.update(true);
-                            }
-                        }
+                                    setCharge(block, Math.min(silencerCharge + coreCharge, maxCharge));
 
-                        final Location location = block.getLocation().add(0.5, 1, 0.5);
-                        block.getWorld().getNearbyEntities(location, 0.1, 0.1, 0.1).forEach(entity -> {
-                            if (entity instanceof ArmorStand) {
-                                ArmorStand armorStand = (ArmorStand) entity;
-                                if (armorStand.getPersistentDataContainer().has(new NamespacedKey(plugin, "is_silencer_icon"), PersistentDataType.BYTE)) {
-                                    Byte isSilencerIcon = armorStand.getPersistentDataContainer().get(new NamespacedKey(plugin, "is_silencer_icon"), PersistentDataType.BYTE);
-                                    if (isSilencerIcon != null && isSilencerIcon == (byte) 1) {
-                                        armorStand.remove();
+                                    if (silencerCharge <= 0 && getCharge(block) > 0) {
+                                        final int range = plugin.getOptionsConfig().getInt("hardmode_values.silencer_range");
+
+                                        world.playSound(location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1, 1);
+                                        ParticleShapes particleShapes = new ParticleShapes(plugin);
+                                        particleShapes.particleLineDelayed(player, Particle.REDSTONE, location.clone().add(0.5, 0, 0.5), location.clone().add(0.5, range, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 1, 2);
+
+                                        new BukkitRunnable() {
+                                            @Override
+                                            public void run() {
+                                                particleShapes.particleSphereDelayed(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1), 2, false);
+
+                                                new BukkitRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        world.playSound(location, Sound.BLOCK_BEACON_POWER_SELECT, SoundCategory.BLOCKS, 10, 1);
+                                                        ParticleShapes.particleSphere(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1));
+                                                    }
+                                                }.runTaskLaterAsynchronously(plugin, range * 2);
+
+                                            }
+                                        }.runTaskLaterAsynchronously(plugin, range * 2);
+                                    }
+                                    else {
+                                        world.playSound(location, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1, 1);
                                     }
                                 }
                             }
-                        });
 
-                        ArmorStand armorStand = (ArmorStand) block.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
-                        armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_silencer_icon"), PersistentDataType.BYTE, (byte) 1);
-                        armorStand.setMarker(true);
-                        armorStand.setInvulnerable(true);
-                        armorStand.setVisible(false);
-                        armorStand.setCustomName(getCharge(block) + " / " + maxCharge + " Charge");
-                        armorStand.setCustomNameVisible(true);
+                            final Location centered = location.add(0.5, 1.0, 0.5);
+                            destroySilencerIcon(centered);
 
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                armorStand.remove();
-                            }
-                        }.runTaskLaterAsynchronously(plugin, 100);
-                    }
+                            Location clone = centered.clone();
+                            clone.setY(0);
 
-                    if (getCharge(block) > 0) {
-                        state.setUsageMode(UsageMode.SAVE);
+                            ArmorStand armorStand = (ArmorStand) world.spawnEntity(clone, EntityType.ARMOR_STAND);
+                            armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_silencer_icon"), PersistentDataType.BYTE, (byte) 1);
+                            armorStand.setMarker(true);
+                            armorStand.setInvulnerable(true);
+                            armorStand.setVisible(false);
+                            armorStand.setCustomName(ChatColor.of("#9d00ff").toString() + getCharge(block) + " / " + maxCharge + " Charge");
+                            armorStand.setCustomNameVisible(true);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    armorStand.teleport(centered, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                }
+                            }.runTaskLater(plugin, 2);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    armorStand.remove();
+                                }
+                            }.runTaskLaterAsynchronously(plugin, 100);
+                        }
                     }
-                    else {
-                        state.setUsageMode(UsageMode.LOAD);
-                    }
-                    state.update(true);
                 }
             }
         }
+    }
+
+    public void destroySilencerIcon(Location location) {
+        final World world = location.getWorld();
+
+        assert world != null;
+        world.getNearbyEntities(location, 1, 1, 1).forEach(entity -> {
+            if (entity instanceof ArmorStand) {
+                ArmorStand armorStand = (ArmorStand) entity;
+                if (armorStand.getPersistentDataContainer().has(new NamespacedKey(plugin, "is_silencer_icon"), PersistentDataType.BYTE)) {
+                    Byte isSilencerIcon = armorStand.getPersistentDataContainer().get(new NamespacedKey(plugin, "is_silencer_icon"), PersistentDataType.BYTE);
+                    if (isSilencerIcon != null && isSilencerIcon == (byte) 1) {
+                        armorStand.remove();
+                    }
+                }
+            }
+        });
     }
 
     public void openDestroySilencerMenu (Player player, Location location) {
@@ -210,13 +252,17 @@ public class SilencerBlock implements Listener {
                 ItemMeta meta = item.getItemMeta();
 
                 assert meta != null;
-                String world = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_world"), PersistentDataType.STRING);
+                String worldName = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_world"), PersistentDataType.STRING);
+
+                assert worldName != null;
+                World world = plugin.getServer().getWorld(worldName);
+
                 int x = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_x"), PersistentDataType.INTEGER);
                 int y = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_y"), PersistentDataType.INTEGER);
                 int z = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_z"), PersistentDataType.INTEGER);
 
                 assert world != null;
-                final Location location = new Location(plugin.getServer().getWorld(world), x, y, z);
+                final Location location = new Location(world, x, y, z);
                 final Block block = location.getBlock();
 
 
@@ -224,12 +270,15 @@ public class SilencerBlock implements Listener {
                     Structure state = (Structure) block.getState();
                     String uuid = state.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_id"), PersistentDataType.STRING);
                     if (uuid != null) {
+                        destroySilencerIcon(block.getLocation().add(0.5, 1, 0.5));
                         block.breakNaturally();
                         block.getWorld().dropItemNaturally(block.getLocation(), CustomItem.SILENCER.getItem());
 
                         event.getWhoClicked().closeInventory();
                         plugin.getSystemConfig().set("silencer_locations." + uuid, null);
                         plugin.saveSystemConfig();
+
+                        world.playSound(location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, SoundCategory.BLOCKS, 1, 1);
                     }
                 }
             }
@@ -318,7 +367,14 @@ public class SilencerBlock implements Listener {
                 Integer result = state.getPersistentDataContainer().get(new NamespacedKey(plugin, "silencer_max_charge"), PersistentDataType.INTEGER);
                 if (result != null) {
                     final int maxCharge = result;
-                    state.getPersistentDataContainer().set(new NamespacedKey(plugin, "silencer_charge"), PersistentDataType.INTEGER, Math.min(charge, maxCharge));
+                    state.getPersistentDataContainer().set(new NamespacedKey(plugin, "silencer_charge"), PersistentDataType.INTEGER, Math.max(Math.min(charge, maxCharge), 0));
+                    state.update(true);
+                    if (getCharge(block) > 0) {
+                        state.setUsageMode(UsageMode.SAVE);
+                    }
+                    else {
+                        state.setUsageMode(UsageMode.LOAD);
+                    }
                     state.update(true);
                 }
             }

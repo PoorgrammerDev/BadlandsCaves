@@ -28,6 +28,8 @@ public class ManaRegen extends BukkitRunnable {
             double thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
             if (thirst < 30) return;
 
+            if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+
             int mana_regen_delay_timer = ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player));
             if (mana_regen_delay_timer > 0) {
                 mana_regen_delay_timer--;

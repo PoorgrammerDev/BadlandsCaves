@@ -41,7 +41,7 @@ public abstract class UsePowers {
             silencerBlock.useSilencer(silencer);
             PlayerScore.SPELLS_SILENCED_TIMER.setScore(plugin, player, 100);
             manaBar.changeColor(player, BarColor.PURPLE, 5, true);
-            manaBar.displayMessage(player, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "SILENCED", 5, true);
+            manaBar.displayMessage(player, net.md_5.bungee.api.ChatColor.of("#9d00ff").toString() + ChatColor.BOLD + "SILENCED", 5, true);
 
 
             //PARTICLES
@@ -52,8 +52,8 @@ public abstract class UsePowers {
 
             //SOUND
             player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.BLOCKS, 1, 0.5F);
-            player.playSound(player.getLocation(), Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.BLOCKS, 10, 1);
-            player.playSound(player.getLocation(), "custom.darkrooms_whispers", SoundCategory.BLOCKS, 1, 1);
+            player.playSound(player.getLocation(), Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.BLOCKS, 1, 1);
+            player.playSound(player.getLocation(), "custom.darkrooms_ambience", SoundCategory.BLOCKS, 1, 1);
 
             //HIGHLIGHT
             EnhancedEyesNMS nms = plugin.getEnhancedEyesNMS();
