@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.SupernaturalPowers;
+package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
@@ -16,6 +16,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -137,6 +138,17 @@ public class DescensionPlayerMove implements Listener {
     }
 
     @EventHandler
+    public void playerDisconnected (PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        if (player.getWorld().equals(world)) {
+            final int inDescension = (int) PlayerScore.IN_DESCENSION.getScore(plugin, player);
+            if (inDescension == 2) {
+                playerLost(player);
+            }
+        }
+    }
+
+    @EventHandler
     public void cancelMobTarget (EntityTargetLivingEntityEvent event) {
         if (!event.getEntity().getWorld().equals(world) ||
                 event.getTarget() == null ||
@@ -162,6 +174,7 @@ public class DescensionPlayerMove implements Listener {
         for (EnderCrystal crystal : crystals) {
             crystal.setBeamTarget(player_location);
         }
+        player.setFallDistance(0);
         resetPlayer(player);
     }
 

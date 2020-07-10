@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionPlayerMove;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TitleEffects;
 import net.md_5.bungee.api.ChatColor;

@@ -127,6 +127,38 @@ public class LoadCustomItems {
             return purified_water;
         }
 
+        else if (item.equals(CustomItem.CANTEEN)) {
+            ItemStack canteen = new ItemStack(Material.POTION);
+            PotionMeta meta = (PotionMeta) canteen.getItemMeta();
+            ArrayList<String> lore = new ArrayList<>();
+
+            meta.setDisplayName(ChatColor.WHITE + "Canteen");
+            meta.setCustomModelData(180);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_canteen"), PersistentDataType.BYTE, (byte) 1);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "canteen_liquid"), PersistentDataType.STRING, "EMPTY");
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "canteen_amount"), PersistentDataType.INTEGER, 0);
+
+            lore.add(ChatColor.GRAY + "Empty");
+            meta.setLore(lore);
+
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            meta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
+            canteen.setItemMeta(meta);
+
+            return canteen;
+        }
+
+        else if (item.equals(CustomItem.CANTEEN_FILL_PLACEHOLDER)) {
+            ItemStack placeholder = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta meta = placeholder.getItemMeta();
+
+            meta.setDisplayName(ChatColor.WHITE + "Fill Canteen");
+            meta.setCustomModelData(181);
+
+            placeholder.setItemMeta(meta);
+            return placeholder;
+        }
+
         else if (item.equals(CustomItem.FISHING_CRATE)){
             ItemStack fishing_crate = new ItemStack(Material.BARREL);
             ItemMeta fishing_crate_meta = fishing_crate.getItemMeta();
@@ -398,6 +430,23 @@ public class LoadCustomItems {
             merged_souls.setItemMeta(merged_souls_meta);
 
             return merged_souls;
+        }
+
+        else if (item.equals(CustomItem.SOUL_LANTERN)) {
+            ItemStack lantern = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = lantern.getItemMeta();
+
+            meta.setCustomModelData(182);
+            meta.setDisplayName(ChatColor.RESET.toString() + net.md_5.bungee.api.ChatColor.of("#2ac9cf") + "Soul Lantern");
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_soul_lantern"), PersistentDataType.BYTE, (byte) 1);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "soul_lantern_items"), PersistentDataType.STRING, "");
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "Right Click" + ChatColor.RESET.toString() + ChatColor.GRAY + " to open.");
+
+            meta.setLore(lore);
+            lantern.setItemMeta(meta);
+            return lantern;
         }
 
         else if (item.equals(CustomItem.SOUL_CRYSTAL_INCOMPLETE)){

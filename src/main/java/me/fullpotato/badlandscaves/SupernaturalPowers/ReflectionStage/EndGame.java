@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -77,6 +78,14 @@ public class EndGame implements Listener {
                     }
                 }.runTaskLater(plugin, 5);
             }
+        }
+    }
+
+    @EventHandler
+    public void loseOnLogout (PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        if (player.getWorld().equals(world)) {
+            player.setHealth(0);
         }
     }
 

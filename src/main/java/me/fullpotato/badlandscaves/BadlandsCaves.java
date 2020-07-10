@@ -37,7 +37,7 @@ import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R1;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
-import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionPlayerMove;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.DescensionPlayerMove;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.*;
@@ -271,6 +271,10 @@ public final class BadlandsCaves extends JavaPlugin {
                 new HoglinBuff(this),
                 new Silencer(this),
                 new SilencerBlock(this),
+                new Canteen(this),
+                new UseCanteen(this),
+                new SoulLantern(this),
+                new UseSoulLantern(this),
         };
 
         for (Listener event : events) {
@@ -459,6 +463,13 @@ public final class BadlandsCaves extends JavaPlugin {
         voidmatter.pickaxeRecipe();
         voidmatter.shovelRecipe();
         voidmatter.axeRecipe();
+
+        Canteen canteen = new Canteen(this);
+        canteen.canteenRecipe();
+        canteen.fillCanteen();
+
+        SoulLantern soulLantern = new SoulLantern(this);
+        soulLantern.soulLanternRecipe();
     }
 
     public void loadWorldNames() {

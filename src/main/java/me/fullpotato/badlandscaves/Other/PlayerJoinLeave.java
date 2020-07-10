@@ -43,7 +43,6 @@ public class PlayerJoinLeave implements Listener {
                 player.getInventory().addItem(GuideBook.getGuideBook(plugin));
 
 
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -68,18 +67,15 @@ public class PlayerJoinLeave implements Listener {
         }
 
 
-
         //REGARDING SUPERNATURAL POWERS----------------------------------
-
-        //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
+            //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getWithdrawWorldName()))) {
                 String origworldname = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
                 if (origworldname == null) {
                     player.setHealth(0);
-                }
-                else {
+                } else {
                     PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, 0);
                     final World origworld = plugin.getServer().getWorld(origworldname);
                     final double x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
@@ -93,7 +89,6 @@ public class PlayerJoinLeave implements Listener {
             }
 
             //reset agility jump timer
-            // FIXME: 6/7/2020 idk man
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
 
@@ -102,10 +97,5 @@ public class PlayerJoinLeave implements Listener {
             PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
             PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 0);
         }
-    }
-
-    @EventHandler
-    public void player_leave (PlayerQuitEvent event) {
-        Player player = event.getPlayer();
     }
 }

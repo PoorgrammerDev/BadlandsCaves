@@ -312,7 +312,7 @@ public class SilencerBlock implements Listener {
         if (section != null) {
             for (String string : section.getValues(false).keySet()) {
                 Location silencerLocation = plugin.getSystemConfig().getLocation("silencer_locations." + string);
-                if (silencerLocation != null && location.distanceSquared(silencerLocation) < rangeSquared) {
+                if (silencerLocation != null && location.getWorld() != null && location.getWorld().equals(silencerLocation.getWorld()) && location.distanceSquared(silencerLocation) < rangeSquared) {
                     Block block = silencerLocation.getBlock();
                     if (isSilencer(block)) {
                         if (getCharge(block) > 0) {
