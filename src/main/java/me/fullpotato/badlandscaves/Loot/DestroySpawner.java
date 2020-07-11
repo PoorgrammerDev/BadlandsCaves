@@ -28,6 +28,7 @@ public class DestroySpawner implements Listener {
     private final BadlandsCaves plugin;
     private final HashMap<Material, Material> matMap = new HashMap<>();
     private static Location newLoc;
+    private final ArrayList<Material> pickaxes = new ArrayList<>();
     private final EntityType[] mobTypes = {
             EntityType.ZOMBIE,
             EntityType.SKELETON,
@@ -42,6 +43,13 @@ public class DestroySpawner implements Listener {
         matMap.put(Material.COBBLESTONE , Material.MOSSY_COBBLESTONE);
         matMap.put(Material.COBBLESTONE_SLAB , Material.MOSSY_COBBLESTONE_SLAB);
         matMap.put(Material.COBBLESTONE_WALL , Material.MOSSY_COBBLESTONE_WALL);
+
+        pickaxes.add(Material.WOODEN_PICKAXE);
+        pickaxes.add(Material.STONE_PICKAXE);
+        pickaxes.add(Material.IRON_PICKAXE);
+        pickaxes.add(Material.GOLDEN_PICKAXE);
+        pickaxes.add(Material.DIAMOND_PICKAXE);
+        pickaxes.add(Material.NETHERITE_PICKAXE);
     }
 
     @EventHandler
@@ -49,15 +57,6 @@ public class DestroySpawner implements Listener {
         final Block block = event.getBlock();
         if (block.getType().equals(Material.SPAWNER)) {
             final Player player = event.getPlayer();
-
-            ArrayList<Material> pickaxes = new ArrayList<>();
-            pickaxes.add(Material.WOODEN_PICKAXE);
-            pickaxes.add(Material.STONE_PICKAXE);
-            pickaxes.add(Material.IRON_PICKAXE);
-            pickaxes.add(Material.GOLDEN_PICKAXE);
-            pickaxes.add(Material.DIAMOND_PICKAXE);
-
-
             if (pickaxes.contains(player.getInventory().getItemInMainHand().getType())) {
                 incrementChaos(false);
 

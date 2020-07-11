@@ -787,10 +787,12 @@ public class LoadCustomItems {
 
         else if (item.equals(CustomItem.NETHER_STAR_FRAGMENT)){
             ItemStack nether_star_fragment = new ItemStack(Material.COMMAND_BLOCK);
-            ItemMeta nether_star_fragment_meta = nether_star_fragment.getItemMeta();
-            nether_star_fragment_meta.setDisplayName("§eNether Star Fragment");
-            nether_star_fragment_meta.setCustomModelData(147);
-            nether_star_fragment.setItemMeta(nether_star_fragment_meta);
+            ItemMeta meta = nether_star_fragment.getItemMeta();
+            meta.setDisplayName("§eNether Star Fragment");
+            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.setCustomModelData(147);
+            nether_star_fragment.setItemMeta(meta);
 
             return nether_star_fragment;
         }
@@ -1343,6 +1345,15 @@ public class LoadCustomItems {
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_dim_anchor"), PersistentDataType.BYTE, (byte) 1);
             map.setItemMeta(meta);
             return map;
+        }
+        else if (item.equals(CustomItem.TOTEM_OF_PRESERVATION)) {
+            ItemStack totem = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = totem.getItemMeta();
+            meta.setDisplayName(ChatColor.RED + "Totem of Preservation");
+            meta.setCustomModelData(183);
+
+            totem.setItemMeta(meta);
+            return totem;
         }
 
 

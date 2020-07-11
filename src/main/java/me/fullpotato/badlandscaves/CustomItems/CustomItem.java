@@ -92,7 +92,8 @@ public enum CustomItem {
     VOIDMATTER_PICKAXE(false),
     VOIDMATTER_SHOVEL(false),
     VOIDMATTER_AXE(false),
-    DIMENSIONAL_ANCHOR(true);
+    DIMENSIONAL_ANCHOR(true),
+    TOTEM_OF_PRESERVATION(true);
 
     private final boolean preventUse;
 

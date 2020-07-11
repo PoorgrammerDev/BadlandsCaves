@@ -62,6 +62,7 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            tier2.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
             tier2.add(new ItemStack(Material.COW_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.PIG_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.SHEEP_SPAWN_EGG, randomCount(random, 1, 4)));
@@ -155,6 +156,7 @@ public class FishingCrateTreasureTable implements LootTable {
             ArrayList<ItemStack> tier4 = new ArrayList<>();
             tier4.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 2)));
             tier4.add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            tier4.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
             tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_HELMET, random));
             tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_CHESTPLATE, random));
             tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_LEGGINGS, random));

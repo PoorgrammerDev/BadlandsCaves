@@ -17,15 +17,18 @@ public class ParticleShapes {
 
     public static void particleLine(Player player, Particle particle, Location origin, Location target, double extra, Object options, double line_scale) {
         if (origin != null && target != null) {
-            if (origin.getWorld() != null && target.getWorld() != null && origin.getWorld().equals(target.getWorld())) {
-                final World world = origin.getWorld();
-                final Vector target_vector = target.toVector();
-                origin.setDirection(target_vector.subtract(origin.toVector()));
-                Vector incr = origin.getDirection();
+            final Location originClone = origin.clone();
+            final Location targetClone = target.clone();
+
+            if (originClone.getWorld() != null && targetClone.getWorld() != null && originClone.getWorld().equals(targetClone.getWorld())) {
+                final World world = originClone.getWorld();
+                final Vector target_vector = targetClone.toVector();
+                originClone.setDirection(target_vector.subtract(originClone.toVector()));
+                Vector incr = originClone.getDirection();
                 if (line_scale != 1) incr.multiply(line_scale);
                 for (int i = 0; i < 100; i++) {
-                    final Location scout = origin.add(incr);
-                    if (scout.distanceSquared(target) < 2) {
+                    final Location scout = originClone.add(incr);
+                    if (scout.distanceSquared(targetClone) < 2) {
                         break;
                     }
                     else {
@@ -38,11 +41,14 @@ public class ParticleShapes {
 
     public void particleLineDelayed(Player player, Particle particle, Location origin, Location target, double extra, Object options, double line_scale, long delay) {
         if (origin != null && target != null) {
-            if (origin.getWorld() != null && target.getWorld() != null && origin.getWorld().equals(target.getWorld())) {
-                final World world = origin.getWorld();
-                final Vector target_vector = target.toVector();
-                origin.setDirection(target_vector.subtract(origin.toVector()));
-                Vector incr = origin.getDirection();
+            final Location originClone = origin.clone();
+            final Location targetClone = target.clone();
+
+            if (originClone.getWorld() != null && targetClone.getWorld() != null && originClone.getWorld().equals(targetClone.getWorld())) {
+                final World world = originClone.getWorld();
+                final Vector target_vector = targetClone.toVector();
+                originClone.setDirection(target_vector.subtract(originClone.toVector()));
+                Vector incr = originClone.getDirection();
                 if (line_scale != 1) incr.multiply(line_scale);
 
                 int[] i = {0};
@@ -52,8 +58,8 @@ public class ParticleShapes {
                         if (i[0] > 100) this.cancel();
                         else {
                             i[0]++;
-                            final Location scout = origin.add(incr);
-                            if (scout.distanceSquared(target) < 2) {
+                            final Location scout = originClone.add(incr);
+                            if (scout.distanceSquared(targetClone) < 2) {
                                 this.cancel();
                             }
                             else {
@@ -68,8 +74,9 @@ public class ParticleShapes {
     }
 
     public static void particleSphere (Player player, Particle particle, Location location, double radius, double extra, Object options) {
-        if (location.getWorld() != null) {
-            final World world = location.getWorld();
+        final Location clone = location.clone();
+        if (clone.getWorld() != null) {
+            final World world = clone.getWorld();
             double phi = 0;
             while (phi <= Math.PI) {
                 phi += Math.PI / (radius * 2);
@@ -79,9 +86,9 @@ public class ParticleShapes {
                     double y = radius * Math.cos(phi) + 1.5;
                     double z = radius * Math.sin(theta) * Math.sin(phi);
 
-                    location.add(x, y, z);
-                    findCorrectParticleMethod(player, world, particle, location, extra, options);
-                    location.subtract(x, y, z);
+                    clone.add(x, y, z);
+                    findCorrectParticleMethod(player, world, particle, clone, extra, options);
+                    clone.subtract(x, y, z);
 
                 }
             }
@@ -89,8 +96,9 @@ public class ParticleShapes {
     }
 
     public void particleSphereDelayed (Player player, Particle particle, Location location, double radius, double extra, Object options, long delay, boolean reverse) {
-        if (location.getWorld() != null) {
-            final World world = location.getWorld();
+        final Location clone = location.clone();
+        if (clone.getWorld() != null) {
+            final World world = clone.getWorld();
             double[] phi = {reverse ? Math.PI : 0};
 
             new BukkitRunnable() {
@@ -112,9 +120,9 @@ public class ParticleShapes {
                             double y = radius * Math.cos(phi[0]) + 1.5;
                             double z = radius * Math.sin(theta) * Math.sin(phi[0]);
 
-                            location.add(x, y, z);
-                            findCorrectParticleMethod(player, world, particle, location, extra, options);
-                            location.subtract(x, y, z);
+                            clone.add(x, y, z);
+                            findCorrectParticleMethod(player, world, particle, clone, extra, options);
+                            clone.subtract(x, y, z);
 
                         }
                     }
@@ -124,13 +132,14 @@ public class ParticleShapes {
     }
 
     public static void particleCircle(Player player, Particle particle, Location location, double radius, double extra, Object options) {
+        final Location clone = location.clone();
         for (double theta = 0; theta <= 2*Math.PI; theta += Math.PI / 5) {
             double x = (radius / 2) * Math.cos(theta);
             double z = (radius / 2) * Math.sin(theta);
 
-            location.add(x, 0, z);
-            findCorrectParticleMethod(player, location.getWorld(), particle, location, extra, options);
-            location.subtract(x, 0, z);
+            clone.add(x, 0, z);
+            findCorrectParticleMethod(player, clone.getWorld(), particle, clone, extra, options);
+            clone.subtract(x, 0, z);
         }
     }
 

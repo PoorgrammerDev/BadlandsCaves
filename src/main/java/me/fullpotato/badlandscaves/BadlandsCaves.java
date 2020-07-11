@@ -275,6 +275,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new UseCanteen(this),
                 new SoulLantern(this),
                 new UseSoulLantern(this),
+                new PreservationTotem(this),
         };
 
         for (Listener event : events) {

@@ -70,6 +70,7 @@ public class DimensionStructureTable implements LootTable {
         items.add(new ItemStack(Material.LEAD, randomCount(random, 1, 2)));
 
         items.add(new ItemStack(Material.TOTEM_OF_UNDYING));
+        items.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
         items.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
         items.add(CustomItem.RECALL_POTION.getItem());
         items.add(CustomItem.MANA_POTION.getItem());

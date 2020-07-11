@@ -70,6 +70,8 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.EMERALD_BLOCK, 2));
             generic.add(new ItemStack(Material.QUARTZ_BLOCK, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 16));
+            generic.add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            generic.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
             generic.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
             generic.add(CustomItem.RECALL_POTION.getItem());
             generic.add(CustomItem.DIMENSIONAL_ANCHOR.getItem());
@@ -106,6 +108,8 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.QUARTZ, 8));
             generic.add(new ItemStack(Material.NETHER_WART, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 4));
+            generic.add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            generic.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
             generic.add(CustomItem.FISHING_CRATE.getItem());
             generic.add(CustomItem.RECALL_POTION.getItem());
 

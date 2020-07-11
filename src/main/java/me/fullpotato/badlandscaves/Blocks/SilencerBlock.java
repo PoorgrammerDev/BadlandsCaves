@@ -142,12 +142,12 @@ public class SilencerBlock implements Listener {
 
                                         world.playSound(location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1, 1);
                                         ParticleShapes particleShapes = new ParticleShapes(plugin);
-                                        particleShapes.particleLineDelayed(player, Particle.REDSTONE, location.clone().add(0.5, 0, 0.5), location.clone().add(0.5, range, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 1, 2);
+                                        particleShapes.particleLineDelayed(player, Particle.REDSTONE, location.clone().add(0.5, 0, 0.5), location.clone().add(0.5, range, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 1, 1);
 
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
-                                                particleShapes.particleSphereDelayed(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1), 2, false);
+                                                particleShapes.particleSphereDelayed(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1), 1, false);
 
                                                 new BukkitRunnable() {
                                                     @Override
@@ -155,10 +155,10 @@ public class SilencerBlock implements Listener {
                                                         world.playSound(location, Sound.BLOCK_BEACON_POWER_SELECT, SoundCategory.BLOCKS, 10, 1);
                                                         ParticleShapes.particleSphere(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1));
                                                     }
-                                                }.runTaskLaterAsynchronously(plugin, range * 2);
+                                                }.runTaskLaterAsynchronously(plugin, range);
 
                                             }
-                                        }.runTaskLaterAsynchronously(plugin, range * 2);
+                                        }.runTaskLaterAsynchronously(plugin, range);
                                     }
                                     else {
                                         world.playSound(location, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1, 1);
