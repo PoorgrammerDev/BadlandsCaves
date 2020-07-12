@@ -29,6 +29,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
     private final BadlandsCaves plugin;
     private final StarlightCharge chargeManager;
     private final StarlightTools toolManager;
+    private final int damage = 20;
 
     public StarlightBlasterMechanism(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -73,9 +74,9 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                     TargetEntity targetEntity = new TargetEntity();
                     LivingEntity target = targetEntity.findTargetLivingEntity(location, 50, 0.2, player);
 
+                    player.getWorld().playSound(location, "custom.starlight_blaster", 1, 1);
                     ParticleShapes.particleLine(null, Particle.REDSTONE, player.getEyeLocation(), targetEntity.getTargetLocation(), 0, new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), 1);
 
-                    final int damage = 20;
                     if (target != null) {
                         target.damage(damage, player);
                     }
@@ -141,4 +142,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
         return -1;
     }
 
+    public int getDamage() {
+        return damage;
+    }
 }

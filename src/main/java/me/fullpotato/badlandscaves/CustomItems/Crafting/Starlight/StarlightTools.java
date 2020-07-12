@@ -68,6 +68,17 @@ public class StarlightTools extends MatchCrafting implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
+    public void sentryRecipe() {
+        final ItemStack sentry = CustomItem.STARLIGHT_SENTRY.getItem();
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_sentry"), sentry);
+        recipe.shape("#@#", "#%#", "###");
+        recipe.setIngredient('#', Material.COMMAND_BLOCK);
+        recipe.setIngredient('@', Material.ENDER_EYE);
+        recipe.setIngredient('%', Material.CROSSBOW);
+
+        plugin.getServer().addRecipe(recipe);
+    }
+
     @EventHandler
     public void craftSaber(PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
@@ -170,6 +181,41 @@ public class StarlightTools extends MatchCrafting implements Listener {
         }
     }
 
+    @EventHandler
+    public void craftSentry(PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
+
+        final ItemStack result = event.getRecipe().getResult();
+        final ItemStack sentry = CustomItem.STARLIGHT_SENTRY.getItem();
+        if (!result.isSimilar(sentry)) return;
+
+        if (event.getViewers().get(0) instanceof Player) {
+            Player player = (Player) event.getViewers().get(0);
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
+                event.getInventory().setResult(null);
+                return;
+            }
+        }
+
+        final ItemStack[] matrix = event.getInventory().getMatrix();
+        final ItemStack titanium = CustomItem.REINFORCED_TITANIUM.getItem();
+
+        if (isMatching(matrix, titanium)) {
+            for (ItemStack item : matrix) {
+                if (item != null && item.getType().equals(Material.CROSSBOW)) {
+                    if (isStarlightBlaster(item)) {
+                        StarlightCharge charge = new StarlightCharge(plugin);
+                        charge.setCharge(sentry, charge.getCharge(item));
+                        event.getInventory().setResult(sentry);
+                        return;
+                    }
+                }
+            }
+        }
+        event.getInventory().setResult(null);
+    }
+
+
     public boolean isStarlightSaber (ItemStack item) {
         if (item.getType().equals(CustomItem.STARLIGHT_SABER.getItem().getType())) {
             if (item.hasItemMeta()) {
@@ -236,6 +282,25 @@ public class StarlightTools extends MatchCrafting implements Listener {
                 if (meta != null) {
                     PersistentDataContainer container = meta.getPersistentDataContainer();
                     NamespacedKey key = new NamespacedKey(plugin, "is_starlight_paxel");
+                    if (container.has(key, PersistentDataType.BYTE)) {
+                        Byte matches = container.get(key, PersistentDataType.BYTE);
+                        if (matches != null) {
+                            return matches == (byte) 1;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isStarlightSentry (ItemStack item) {
+        if (item.getType().equals(CustomItem.STARLIGHT_SENTRY.getItem().getType())) {
+            if (item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    PersistentDataContainer container = meta.getPersistentDataContainer();
+                    NamespacedKey key = new NamespacedKey(plugin, "is_starlight_sentry");
                     if (container.has(key, PersistentDataType.BYTE)) {
                         Byte matches = container.get(key, PersistentDataType.BYTE);
                         if (matches != null) {

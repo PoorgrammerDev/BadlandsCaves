@@ -15,6 +15,7 @@ import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.ChargeRunnable;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightBlasterMechanism;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSentryMechanism;
 import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
@@ -276,6 +277,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new SoulLantern(this),
                 new UseSoulLantern(this),
                 new PreservationTotem(this),
+                new StarlightSentryMechanism(this),
         };
 
         for (Listener event : events) {
@@ -444,6 +446,7 @@ public final class BadlandsCaves extends JavaPlugin {
         starlightTools.shieldRecipe();
         starlightTools.blasterRecipe();
         starlightTools.paxelRecipe();
+        starlightTools.sentryRecipe();
 
         Silencer silencer = new Silencer(this);
         silencer.wavelengthDisruptorRecipe();

@@ -60,6 +60,9 @@ public class ChargeRunnable extends BukkitRunnable {
                                             meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 5, true);
                                             meta.addEnchant(Enchantment.DURABILITY, 5, true);
                                         }
+                                        else if (toolManager.isStarlightSentry(item)) {
+                                            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                                        }
 
                                         item.setItemMeta(meta);
                                     }

@@ -77,6 +77,7 @@ public enum CustomItem {
     STARLIGHT_SHIELD(false),
     STARLIGHT_BLASTER(false),
     STARLIGHT_PAXEL(false),
+    STARLIGHT_SENTRY(false),
     ENERGIUM(true),
     ENERGY_CORE(true),
     STARLIGHT_CHARGE_PLACEHOLDER(true),

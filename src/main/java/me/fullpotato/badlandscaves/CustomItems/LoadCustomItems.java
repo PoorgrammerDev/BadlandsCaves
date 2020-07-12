@@ -1097,9 +1097,37 @@ public class LoadCustomItems {
             Repairable repairable = (Repairable) damageable;
             repairable.setRepairCost(999999);
 
-            paxel_pick.setItemMeta(paxel_meta);
+            paxel_pick.setItemMeta((ItemMeta) repairable);
             return paxel_pick;
         }
+
+        else if (item.equals(CustomItem.STARLIGHT_SENTRY)) {
+            ItemStack sentry = new ItemStack(Material.FISHING_ROD);
+            ItemMeta meta = sentry.getItemMeta();
+
+            meta.setDisplayName(ChatColor.YELLOW + "Starlight Sentry");
+            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.setCustomModelData(184);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add("§7Charge: 0 / 2000");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry"), PersistentDataType.BYTE, (byte) 1);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+
+            Damageable damageable = (Damageable) meta;
+            damageable.setDamage(sentry.getType().getMaxDurability() - 1);
+
+            Repairable repairable = (Repairable) damageable;
+            repairable.setRepairCost(999999);
+
+            sentry.setItemMeta((ItemMeta) repairable);
+            return sentry;
+        }
+
         else if (item.equals(CustomItem.ENERGIUM)) {
             ItemStack energium = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta energium_meta = energium.getItemMeta();

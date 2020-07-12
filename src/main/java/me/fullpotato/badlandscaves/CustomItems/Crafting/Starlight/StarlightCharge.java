@@ -34,7 +34,7 @@ public class StarlightCharge implements Listener {
     public void chargeRecipe() {
         final ItemStack item = CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem();
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "starlight_helmet_charge"), item);
-        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS, Material.NETHERITE_SWORD, Material.NETHERITE_SHOVEL, Material.NETHERITE_PICKAXE, Material.NETHERITE_AXE, Material.CROSSBOW, Material.SHIELD));
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS, Material.NETHERITE_SWORD, Material.NETHERITE_SHOVEL, Material.NETHERITE_PICKAXE, Material.NETHERITE_AXE, Material.CROSSBOW, Material.SHIELD, Material.FISHING_ROD));
         recipe.addIngredient(Material.KNOWLEDGE_BOOK);
 
         plugin.getServer().addRecipe(recipe);
@@ -93,7 +93,9 @@ public class StarlightCharge implements Listener {
     }
 
     public boolean isStarlight(ItemStack item) {
-        return armor.isStarlightArmor(item) || tools.isStarlightSaber(item) || tools.isStarlightShield(item) || tools.isStarlightBlaster(item) || tools.isStarlightPaxel(item);
+        return armor.isStarlightArmor(item) || tools.isStarlightSaber(item) ||
+                tools.isStarlightShield(item) || tools.isStarlightBlaster(item) ||
+                tools.isStarlightPaxel(item) || tools.isStarlightSentry(item);
     }
 
     public int getCharge(ItemStack item) {

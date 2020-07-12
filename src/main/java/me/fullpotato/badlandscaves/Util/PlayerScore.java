@@ -62,7 +62,9 @@ public enum PlayerScore {
     HAS_SEEN_BACKROOMS(PersistentDataType.BYTE),
     BACKROOMS_TIMER(PersistentDataType.INTEGER),
     TEMPERATURE(PersistentDataType.INTEGER, 100),
-    USED_PRESERVE_TOTEM(PersistentDataType.BYTE);
+    USED_PRESERVE_TOTEM(PersistentDataType.BYTE),
+    HAS_STARLIGHT_SENTRY(PersistentDataType.BYTE),
+    STARLIGHT_SENTRY_UUID(PersistentDataType.STRING);
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

@@ -34,7 +34,7 @@ public class AugmentedZombie extends BukkitRunnable {
                     byte wryyCooldown = zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE);
                     if (wryyCooldown <= 0) {
                         if (random.nextInt(100) < 5) {
-                            zombie.getWorld().playSound(zombie.getLocation(), "custom.dio.wryy", SoundCategory.HOSTILE, 0.5F, 1);
+                            zombie.getWorld().playSound(zombie.getLocation(), "custom.vampire.ambient", SoundCategory.HOSTILE, 0.5F, 1);
                             zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE, (byte) 15);
                         }
                     }
@@ -58,7 +58,7 @@ public class AugmentedZombie extends BukkitRunnable {
                                         playerLocation.setPitch(zombie.getLocation().getPitch());
 
                                         zombie.teleport(playerLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                        world.playSound(player.getLocation(), "custom.dio.za_warudo", SoundCategory.HOSTILE, 10, 1);
+                                        world.playSound(player.getLocation(), "custom.vampire.ability", SoundCategory.HOSTILE, 10, 1);
 
                                         double damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() * 4;
                                         player.setVelocity(zombie.getVelocity().subtract(player.getVelocity()).multiply(damage));
@@ -99,7 +99,7 @@ public class AugmentedZombie extends BukkitRunnable {
                                                                 knife.remove();
                                                                 this.cancel();
                                                             } else {
-                                                                if (knife.getLocation().distanceSquared(player.getLocation()) < 1.5) {
+                                                                if (knife.getWorld().equals(player.getWorld()) && knife.getLocation().distanceSquared(player.getLocation()) < 1.5) {
                                                                     double health = player.getHealth();
                                                                     if (health > 0) {
                                                                         double damage = 3;
