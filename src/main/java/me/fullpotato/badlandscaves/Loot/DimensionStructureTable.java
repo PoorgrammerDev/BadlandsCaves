@@ -21,16 +21,6 @@ public class DimensionStructureTable implements LootTable {
     private BadlandsCaves plugin;
     private final NamespacedKey key;
     private final DimensionsWorlds.Habitation habitation;
-    private final Material[] armor = {
-            Material.DIAMOND_HELMET,
-            Material.DIAMOND_CHESTPLATE,
-            Material.DIAMOND_LEGGINGS,
-            Material.DIAMOND_BOOTS,
-            Material.DIAMOND_SWORD,
-            Material.DIAMOND_SHOVEL,
-            Material.DIAMOND_PICKAXE,
-            Material.DIAMOND_AXE,
-    };
 
     public DimensionStructureTable(BadlandsCaves plugin, DimensionsWorlds.Habitation habitation) {
         this.plugin = plugin;
@@ -97,11 +87,7 @@ public class DimensionStructureTable implements LootTable {
         enchantedBlessedApple.setAmount(randomCount(random, 1, 2));
         items.add(enchantedBlessedApple);
 
-        ItemStack treasureGearVoucher = new ItemStack(Material.PAPER);
-        ItemMeta voucherMeta = treasureGearVoucher.getItemMeta();
-        voucherMeta.setDisplayName(ChatColor.WHITE + "Treasure Gear Voucher");
-        treasureGearVoucher.setItemMeta(voucherMeta);
-        items.add(treasureGearVoucher);
+        items.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
 
         TreasureGear treasureGear = new TreasureGear();
         Collection<ItemStack> output = new ArrayList<>();
@@ -112,8 +98,8 @@ public class DimensionStructureTable implements LootTable {
             if (failed > 100) break;
             ItemStack item = habitation.equals(DimensionsWorlds.Habitation.INHABITED) || random.nextBoolean() ? items.get(random.nextInt(items.size())) : trash.get(random.nextInt(trash.size()));
 
-            if (item.isSimilar(treasureGearVoucher)) {
-                output.add(treasureGear.getTreasureGear(true, armor[random.nextInt(armor.length)], random));
+            if (item.isSimilar(CustomItem.TREASURE_GEAR_VOUCHER.getItem())) {
+                output.add(treasureGear.getTreasureGear(true, random));
             }
             else {
                 if (!output.contains(item)) {

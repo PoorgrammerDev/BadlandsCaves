@@ -918,6 +918,9 @@ public class WitherBossFight implements Listener {
         if (event.getEntity() instanceof Wither) {
             Wither wither = (Wither) event.getEntity();
             if (wither.getWorld().equals(world)) {
+                event.getDrops().clear();
+                event.setDroppedExp(0);
+
                 boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
                 clearEntities(false);
                 plugin.getServer().broadcastMessage("§dThe Wither has been slain!");
@@ -947,7 +950,7 @@ public class WitherBossFight implements Listener {
                         plugin.getSystemConfig().set("wither_fight.fight_stage", 5);
                         plugin.saveSystemConfig();
                         exitPortalParticles();
-                        giveLoot();
+                        giveLoot(hardmode);
                     }
                 }.runTaskLater(plugin, 5);
             }
@@ -969,16 +972,16 @@ public class WitherBossFight implements Listener {
         }.runTaskLater(plugin, 1);
     }
 
-    public void giveLoot () {
-        ItemStack crate = CustomItem.FISHING_CRATE_HARDMODE.getItem();
-        crate.setAmount(new Random().nextInt(16) + 16);
-
+    public void giveLoot (boolean hardmode) {
+        ItemStack loot_bag = CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.getItem();
         for (Player player : players) {
+            player.giveExp(hardmode ? 50 : 100);
+
             if (player.getInventory().firstEmpty() == -1) {
-                world.dropItemNaturally(player.getLocation(), crate);
+                world.dropItemNaturally(player.getLocation(), loot_bag);
             }
             else {
-                player.getInventory().addItem(crate);
+                player.getInventory().addItem(loot_bag);
             }
         }
     }

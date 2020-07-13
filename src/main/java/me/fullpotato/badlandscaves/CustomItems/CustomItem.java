@@ -94,7 +94,9 @@ public enum CustomItem {
     VOIDMATTER_SHOVEL(false),
     VOIDMATTER_AXE(false),
     DIMENSIONAL_ANCHOR(true),
-    TOTEM_OF_PRESERVATION(true);
+    TOTEM_OF_PRESERVATION(true),
+    TREASURE_GEAR_VOUCHER(true),
+    HALLOWED_CHAMBERS_TREASURE_BAG(false);
 
     private final boolean preventUse;
 

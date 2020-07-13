@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -76,7 +77,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_battery"), battery);
         recipe.shape(" % ", "#@#", "#@#");
 
-        recipe.setIngredient('%', Material.COMPARATOR);
+        recipe.setIngredient('%', Material.COMMAND_BLOCK);
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('@', Material.COMMAND_BLOCK);
 
@@ -87,10 +88,10 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         ItemStack module = CustomItem.STARLIGHT_MODULE.getItem();
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_module"), module);
-        recipe.shape("###", "#@#", "#%#");
+        recipe.shape("###", "#%#", "#@#");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('@', Material.STRUCTURE_BLOCK);
-        recipe.setIngredient('%', Material.COMMAND_BLOCK);
+        recipe.setIngredient('%', Material.STRUCTURE_BLOCK);
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -200,27 +201,17 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
         final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
+        final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
 
-        boolean matches = true;
-        final int[] titanium_slots = {3, 5, 6, 8};
-        for (int slot : titanium_slots) {
-            if (!matrix[slot].isSimilar(titanium_ingot)) {
-                matches = false;
-            }
-        }
-
-        if (matches) {
-            final int[] fragment_slots = {4, 7};
-            for (int slot : fragment_slots) {
-                if (!matrix[slot].isSimilar(nether_star_fragment)) {
-                    matches = false;
+        if (isMatching(matrix, titanium_ingot, 3, 5, 6, 8)) {
+            if (isMatching(matrix, nether_star_fragment, 4, 7)) {
+                if (isMatching(matrix, golden_cable, 1)) {
+                    return;
                 }
             }
         }
 
-        if (!matches) {
-            event.getInventory().setResult(null);
-        }
+        event.getInventory().setResult(null);
     }
 
     @EventHandler
@@ -244,28 +235,14 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
         final ItemStack starlight_circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
 
-        boolean matches = true;
-        final int[] titanium_slots = {0, 1, 2, 3, 5, 6, 8};
-        for (int slot : titanium_slots) {
-            if (!matrix[slot].isSimilar(titanium_ingot)) {
-                matches = false;
-            }
-        }
-
-        if (matches) {
-            if (!isMatching(matrix, starlight_circuit)) {
-                matches = false;
-            }
-            if (matches) {
-                if (!isMatching(matrix, starlight_battery, 7)) {
-                    matches = false;
+        if (isMatching(matrix, titanium_ingot)) {
+            if (isMatching(matrix, starlight_circuit, 4)) {
+                if (isMatching(matrix, starlight_battery, 7)) {
+                    return;
                 }
             }
         }
-
-        if (!matches) {
-            event.getInventory().setResult(null);
-        }
+        event.getInventory().setResult(null);
     }
 
     @EventHandler

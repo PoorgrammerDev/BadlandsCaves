@@ -76,10 +76,14 @@ public class CraftingGuide implements Listener {
             CustomItem.STONE_SHIELD.toString(),
             CustomItem.IRON_SHIELD.toString(),
             CustomItem.DIAMOND_SHIELD.toString(),
+            CustomItem.NETHERITE_SHIELD.toString(),
 
             CustomItem.RUNE.toString(),
             CustomItem.CHARGED_RUNE.toString(),
+            CustomItem.TOTEM_OF_PRESERVATION.toString(),
             CustomItem.RECALL_POTION.toString(),
+
+            CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.toString(),
 
             CustomItem.TITANIUM_FRAGMENT.toString(),
             CustomItem.TITANIUM_INGOT.toString(),
@@ -102,10 +106,16 @@ public class CraftingGuide implements Listener {
             CustomItem.STARLIGHT_SHIELD.toString(),
             CustomItem.STARLIGHT_BLASTER.toString(),
             CustomItem.STARLIGHT_PAXEL.toString(),
+            CustomItem.STARLIGHT_SENTRY.toString(),
+
+            CustomItem.WAVELENGTH_DISRUPTOR.toString(),
+            CustomItem.SILENCER.toString(),
 
             CustomItem.ENERGIUM.toString(),
             CustomItem.ENERGY_CORE.toString(),
             CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.toString(),
+
+            CustomItem.DIMENSIONAL_ANCHOR.toString(),
 
             CustomItem.VOIDMATTER.toString(),
             CustomItem.VOIDMATTER_STICK.toString(),
@@ -765,6 +775,19 @@ public class CraftingGuide implements Listener {
         };
         recipes.put(CustomItem.DIAMOND_SHIELD.getItem(), diamond_shield_recipe);
 
+        ItemStack netherite_scrap = new ItemStack(Material.NETHERITE_SCRAP);
+        ItemStack[] netherite_shield_recipe = {
+                netherite_scrap,
+                null,
+                netherite_scrap,
+                netherite_scrap,
+                netherite_scrap,
+                netherite_scrap,
+                null,
+                netherite_scrap,
+        };
+        recipes.put(CustomItem.NETHERITE_SHIELD.getItem(), netherite_shield_recipe);
+
         ItemStack planks = new ItemStack(Material.OAK_PLANKS);
         ItemMeta planks_meta = planks.getItemMeta();
         planks_meta.setDisplayName(ChatColor.WHITE + "Any Wooden Planks");
@@ -885,7 +908,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack[] starlight_battery_recipe = {
                 null,
-                new ItemStack(Material.COMPARATOR),
+                CustomItem.GOLDEN_CABLE.getItem(),
                 null,
                 CustomItem.TITANIUM_INGOT.getItem(),
                 CustomItem.NETHER_STAR_FRAGMENT.getItem(),
@@ -910,10 +933,10 @@ public class CraftingGuide implements Listener {
         recipes.put(CustomItem.STARLIGHT_MODULE.getItem(), starlight_module_recipe);
 
         ItemStack[] titanium_rod_recipe = {
-                CustomItem.TITANIUM_ROD.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
                 null,
                 null,
-                CustomItem.TITANIUM_ROD.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
         };
         recipes.put(CustomItem.TITANIUM_ROD.getItem(), titanium_rod_recipe);
 
@@ -935,8 +958,9 @@ public class CraftingGuide implements Listener {
         ItemStack[] energium_recipe = {
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.DIAMOND),
-                new ItemStack(Material.REDSTONE),
+                null,
                 new ItemStack(Material.DIAMOND),
+                new ItemStack(Material.REDSTONE),
         };
         recipes.put(CustomItem.ENERGIUM.getItem(), energium_recipe);
 
@@ -1038,7 +1062,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack[] starlight_paxel_recipe = {
                 CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.PHOTON_EMITTER.getItem(),
+                CustomItem.STARLIGHT_MODULE.getItem(),
                 CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.REINFORCED_TITANIUM.getItem(),
                 CustomItem.TITANIUM_ROD.getItem(),
@@ -1047,6 +1071,21 @@ public class CraftingGuide implements Listener {
                 CustomItem.TITANIUM_ROD.getItem(),
         };
         recipes.put(CustomItem.STARLIGHT_PAXEL.getItem(), starlight_paxel_recipe);
+
+
+        ItemStack[] starlight_sentry_recipe = {
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                new ItemStack(Material.ENDER_EYE),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.STARLIGHT_BLASTER.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+                CustomItem.REINFORCED_TITANIUM.getItem(),
+        };
+        recipes.put(CustomItem.STARLIGHT_SENTRY.getItem(), starlight_sentry_recipe);
+
 
         ItemStack starlight_icon = CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem();
         ItemMeta starlight_icon_meta = starlight_icon.getItemMeta();
@@ -1058,6 +1097,34 @@ public class CraftingGuide implements Listener {
                 starlight_icon,
         };
         recipes.put(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem(), starlight_charge_placeholder_recipe);
+
+
+        ItemStack[] wavelength_disruptor_recipe = {
+                CustomItem.WITCH_SOUL.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.WITCH_SOUL.getItem(),
+                CustomItem.WITCH_SOUL.getItem(),
+                CustomItem.PHOTON_EMITTER.getItem(),
+                CustomItem.WITCH_SOUL.getItem(),
+                CustomItem.WITCH_SOUL.getItem(),
+                CustomItem.VOIDMATTER.getItem(),
+                CustomItem.WITCH_SOUL.getItem(),
+        };
+        recipes.put(CustomItem.WAVELENGTH_DISRUPTOR.getItem(), wavelength_disruptor_recipe);
+
+        ItemStack[] silencer_recipe = {
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.WAVELENGTH_DISRUPTOR.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.STARLIGHT_BATTERY.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+                CustomItem.TITANIUM_INGOT.getItem(),
+        };
+        recipes.put(CustomItem.SILENCER.getItem(), silencer_recipe);
+
 
         ItemStack[] voidmatter_stick_recipe = {
                 CustomItem.VOIDMATTER.getItem(),
@@ -1137,7 +1204,6 @@ public class CraftingGuide implements Listener {
                 CustomItem.VOIDMATTER_STRING.getItem(),
                 null,
                 CustomItem.VOIDMATTER_STICK.getItem(),
-                null,
                 CustomItem.VOIDMATTER_STRING.getItem(),
                 CustomItem.VOIDMATTER_STICK.getItem(),
         };
@@ -1334,14 +1400,17 @@ public class CraftingGuide implements Listener {
         descs.put(CustomItem.SOUL_CRYSTAL.getItem(), soul_crystal_desc);
 
 
-        ItemStack rune_desc = new ItemStack(Material.SPAWNER);
-        ItemMeta rune_meta = rune_desc.getItemMeta();
-        rune_meta.setDisplayName("§2Dungeon Loot");
+        ItemStack spawner_loot = new ItemStack(Material.SPAWNER);
+        ItemMeta spawner_loot_meta = spawner_loot.getItemMeta();
+        spawner_loot_meta.setDisplayName("§2Dungeon Loot");
         ArrayList<String> rune_lore = new ArrayList<>();
         rune_lore.add("§7This item is obtained by destroying spawners.");
-        rune_meta.setLore(rune_lore);
-        rune_desc.setItemMeta(rune_meta);
-        descs.put(CustomItem.RUNE.getItem(), rune_desc);
+        spawner_loot_meta.setLore(rune_lore);
+        spawner_loot.setItemMeta(spawner_loot_meta);
+        descs.put(CustomItem.RUNE.getItem(), spawner_loot);
+        descs.put(CustomItem.RECALL_POTION.getItem(), spawner_loot);
+        descs.put(CustomItem.TOTEM_OF_PRESERVATION.getItem(), spawner_loot);
+        descs.put(CustomItem.DIMENSIONAL_ANCHOR.getItem(), spawner_loot);
 
 
         ItemStack charged_rune_desc = CustomItem.RUNE.getItem();
@@ -1353,10 +1422,11 @@ public class CraftingGuide implements Listener {
         charged_rune_desc.setItemMeta(charged_rune_meta);
         descs.put(CustomItem.CHARGED_RUNE.getItem(), charged_rune_desc);
 
-
-        ItemStack recall_potion_desc = rune_desc.clone();
-        descs.put(CustomItem.RECALL_POTION.getItem(), recall_potion_desc);
-
+        ItemStack hallowed_chambers_treasure_bag_desc = new ItemStack(Material.WITHER_SKELETON_SKULL);
+        ItemMeta hallowed_chambers_treasure_bag_meta = hallowed_chambers_treasure_bag_desc.getItemMeta();
+        hallowed_chambers_treasure_bag_meta.setDisplayName(ChatColor.DARK_PURPLE + "Kill The Wither.");
+        hallowed_chambers_treasure_bag_desc.setItemMeta(hallowed_chambers_treasure_bag_meta);
+        descs.put(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.getItem(), hallowed_chambers_treasure_bag_desc);
 
         ItemStack titanium_fragment_desc = new ItemStack(Material.DEAD_TUBE_CORAL_BLOCK);
         ItemMeta titanium_fragment_meta = titanium_fragment_desc.getItemMeta();
@@ -1367,7 +1437,6 @@ public class CraftingGuide implements Listener {
         titanium_fragment_meta.setLore(titanium_fragment_lore);
         titanium_fragment_desc.setItemMeta(titanium_fragment_meta);
         descs.put(CustomItem.TITANIUM_FRAGMENT.getItem(), titanium_fragment_desc);
-
 
         ItemStack forever_fish_desc = CustomItem.FISHING_CRATE_HARDMODE.getItem();
         ItemMeta forever_fish_meta = forever_fish_desc.getItemMeta();

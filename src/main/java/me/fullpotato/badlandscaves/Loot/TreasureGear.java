@@ -16,7 +16,20 @@ import java.util.*;
 public class TreasureGear extends RandomlyEnchantedGear implements Listener {
     private String prehardmode_label = "§2Prehardmode Treasure Gear";
     private String hardmode_label = "§6Hardmode Treasure Gear";
+    private final Material[] armor = {
+            Material.DIAMOND_HELMET,
+            Material.DIAMOND_CHESTPLATE,
+            Material.DIAMOND_LEGGINGS,
+            Material.DIAMOND_BOOTS,
+            Material.DIAMOND_SWORD,
+            Material.DIAMOND_SHOVEL,
+            Material.DIAMOND_PICKAXE,
+            Material.DIAMOND_AXE,
+    };
 
+    public ItemStack getTreasureGear (boolean hardmode, Random random) {
+        return getTreasureGear(hardmode, armor[random.nextInt(armor.length)], random);
+    }
 
 
     public ItemStack getTreasureGear (boolean hardmode, Material material, Random random) {

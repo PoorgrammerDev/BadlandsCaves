@@ -23,7 +23,7 @@ public class Silencer extends MatchCrafting implements Listener {
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "wavelength_disruptor"), disruptor);
         recipe.shape("#*#", "#@#", "#*#");
         recipe.setIngredient('#', Material.COMMAND_BLOCK); //witch soul
-        recipe.setIngredient('*', Material.COMMAND_BLOCK); //voidmatter
+        recipe.setIngredient('*', Material.STRUCTURE_BLOCK); //voidmatter
         recipe.setIngredient('@', Material.STRUCTURE_BLOCK); //photon emitter
 
         plugin.getServer().addRecipe(recipe);
@@ -37,7 +37,7 @@ public class Silencer extends MatchCrafting implements Listener {
 
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('@', Material.STRUCTURE_BLOCK);
-        recipe.setIngredient('%', Material.COMMAND_BLOCK);
+        recipe.setIngredient('%', Material.STRUCTURE_BLOCK);
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -55,7 +55,7 @@ public class Silencer extends MatchCrafting implements Listener {
         final ItemStack voidmatter = CustomItem.VOIDMATTER.getItem();
         final ItemStack photon_emitter = CustomItem.PHOTON_EMITTER.getItem();
 
-        if (!isMatching(matrix, photon_emitter) ||
+        if (!isMatching(matrix, photon_emitter, 4) ||
                 !isMatching(matrix, witch_soul, 0, 2, 3, 5, 6, 8) ||
                 !isMatching(matrix, voidmatter, 1, 7)) {
             event.getInventory().setResult(null);
@@ -75,8 +75,8 @@ public class Silencer extends MatchCrafting implements Listener {
         final ItemStack battery = CustomItem.STARLIGHT_BATTERY.getItem();
         final ItemStack wavelength_disruptor = CustomItem.WAVELENGTH_DISRUPTOR.getItem();
 
-        if (!isMatching(matrix, wavelength_disruptor) ||
-                !isMatching(matrix, titanium, 0, 2, 3, 5, 6, 7, 8) ||
+        if (!isMatching(matrix, wavelength_disruptor, 1) ||
+                !isMatching(matrix, titanium) ||
                 !isMatching(matrix, battery, 4)) {
             event.getInventory().setResult(null);
         }

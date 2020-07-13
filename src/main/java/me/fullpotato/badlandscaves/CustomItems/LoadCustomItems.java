@@ -808,7 +808,7 @@ public class LoadCustomItems {
         }
 
         else if (item.equals(CustomItem.STARLIGHT_BATTERY)){
-            ItemStack starlight_battery = new ItemStack(Material.COMMAND_BLOCK);
+            ItemStack starlight_battery = new ItemStack(Material.STRUCTURE_BLOCK);
             ItemMeta starlight_battery_meta = starlight_battery.getItemMeta();
             starlight_battery_meta.setDisplayName("§eStarlight Battery");
             starlight_battery_meta.setCustomModelData(149);
@@ -1164,7 +1164,7 @@ public class LoadCustomItems {
             return charge_placeholder;
         }
         else if (item.equals(CustomItem.VOIDMATTER)) {
-            ItemStack voidmatter = new ItemStack(Material.COMMAND_BLOCK);
+            ItemStack voidmatter = new ItemStack(Material.STRUCTURE_BLOCK);
             ItemMeta voidmatter_meta = voidmatter.getItemMeta();
             voidmatter_meta.setDisplayName("§5Voidmatter");
             voidmatter_meta.setCustomModelData(158);
@@ -1173,7 +1173,7 @@ public class LoadCustomItems {
             return voidmatter;
         }
         else if (item.equals(CustomItem.VOIDMATTER_STICK)) {
-            ItemStack voidmatter_stick = new ItemStack(Material.STRUCTURE_BLOCK);
+            ItemStack voidmatter_stick = new ItemStack(Material.COMMAND_BLOCK);
             ItemMeta meta = voidmatter_stick.getItemMeta();
             meta.setDisplayName("§5Void Stick");
             meta.setCustomModelData(173);
@@ -1182,7 +1182,7 @@ public class LoadCustomItems {
             return voidmatter_stick;
         }
         else if (item.equals(CustomItem.VOIDMATTER_STRING)) {
-            ItemStack string = new ItemStack(Material.COMMAND_BLOCK);
+            ItemStack string = new ItemStack(Material.STRUCTURE_BLOCK);
             ItemMeta meta = string.getItemMeta();
             meta.setDisplayName("§5Void String");
             meta.setCustomModelData(174);
@@ -1383,7 +1383,24 @@ public class LoadCustomItems {
             totem.setItemMeta(meta);
             return totem;
         }
+        else if (item.equals(CustomItem.TREASURE_GEAR_VOUCHER)) {
+            ItemStack treasureGearVoucher = new ItemStack(Material.PAPER);
+            ItemMeta voucherMeta = treasureGearVoucher.getItemMeta();
+            voucherMeta.setDisplayName(ChatColor.WHITE + "Treasure Gear Voucher");
+            treasureGearVoucher.setItemMeta(voucherMeta);
 
+            return treasureGearVoucher;
+        }
+        else if (item.equals(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG)) {
+            ItemStack bag = new ItemStack(Material.COMMAND_BLOCK);
+            ItemMeta meta = bag.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RED + "Hallowed Chambers Treasure Bag");
+            meta.setCustomModelData(191);
+
+            bag.setItemMeta(meta);
+            return bag;
+        }
 
         return null;
     }

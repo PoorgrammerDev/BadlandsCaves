@@ -40,11 +40,14 @@ public class FishingCrateTreasureTable implements LootTable {
         int tier;
         final TreasureGear treasureGear = new TreasureGear();
 
-
+        ArrayList<ItemStack> tier1 = new ArrayList<>();
+        ArrayList<ItemStack> tier2 = new ArrayList<>();
+        ArrayList<ItemStack> tier3 = new ArrayList<>();
+        ArrayList<ItemStack> tier4 = new ArrayList<>();
         if (hardmode) {
             final boolean heretic = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         //HARDMODE-------------------------------------
-            ArrayList<ItemStack> tier1 = new ArrayList<>();
+
             tier1.add(new ItemStack(Material.IRON_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.DIAMOND_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.EMERALD_BLOCK, randomCount(random, 1, 8)));
@@ -58,7 +61,6 @@ public class FishingCrateTreasureTable implements LootTable {
             tier1.add(CustomItem.TAINTED_POWDER.getItem());
             tier1.add(CustomItem.RECALL_POTION.getItem());
 
-            ArrayList<ItemStack> tier2 = new ArrayList<>();
             tier2.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.TOTEM_OF_UNDYING));
@@ -82,38 +84,15 @@ public class FishingCrateTreasureTable implements LootTable {
                 tier2.add(new ItemStack(Material.REDSTONE_BLOCK, randomCount(random, 8, 32)));
             }
 
-            ArrayList<ItemStack> tier3 = new ArrayList<>();
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_HELMET, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_CHESTPLATE, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_LEGGINGS, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_BOOTS, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_SWORD, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_SHOVEL, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_PICKAXE, random));
-            tier3.add(treasureGear.getTreasureGear(true, Material.DIAMOND_AXE, random));
+            tier3.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
             if (!heretic) {
                 tier3.add(CustomItem.TITANIUM_FRAGMENT.getItem());
             }
 
-            ArrayList<ItemStack> tier4 = new ArrayList<>();
             tier4.add(CustomItem.FOREVER_FISH.getItem());
-
-            ArrayList<ArrayList<ItemStack>> items = new ArrayList<>();
-            items.add(tier1);
-            items.add(tier2);
-            items.add(tier3);
-            items.add(tier4);
-
-            ArrayList<ItemStack> output = new ArrayList<>();
-            for (int i = 0; i < count; i++) {
-                tier = getTier(random, tier_upgrade, 1);
-                output.add(items.get(tier - 1).get(random.nextInt(items.get(tier - 1).size())));
-            }
-            return output;
         }
         else {
         //PREHARDMODE----------------------------------
-            ArrayList<ItemStack> tier1 = new ArrayList<>();
             tier1.add(new ItemStack(Material.IRON_INGOT, randomCount(random, 1, 16)));
             tier1.add(new ItemStack(Material.QUARTZ, randomCount(random, 1, 16)));
             tier1.add(new ItemStack(Material.EMERALD, randomCount(random, 1, 16)));
@@ -125,7 +104,6 @@ public class FishingCrateTreasureTable implements LootTable {
             tier1.add(new ItemStack(Material.NETHER_WART, randomCount(random, 1, 16)));
             tier1.add(new ItemStack(Material.GOLD_INGOT, randomCount(random, 1, 16)));
 
-            ArrayList<ItemStack> tier2 = new ArrayList<>();
             tier2.add(new ItemStack(Material.DIAMOND_HELMET));
             tier2.add(new ItemStack(Material.DIAMOND_CHESTPLATE));
             tier2.add(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -142,7 +120,6 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(CustomItem.TAINTED_POWDER.getItem());
             tier2.add(CustomItem.RECALL_POTION.getItem());
 
-            ArrayList<ItemStack> tier3 = new ArrayList<>();
             tier3.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
             tier3.add(getDiamondGear(Material.DIAMOND_HELMET, random));
             tier3.add(getDiamondGear(Material.DIAMOND_CHESTPLATE, random));
@@ -153,32 +130,30 @@ public class FishingCrateTreasureTable implements LootTable {
             tier3.add(getDiamondGear(Material.DIAMOND_PICKAXE, random));
             tier3.add(getDiamondGear(Material.DIAMOND_AXE, random));
 
-            ArrayList<ItemStack> tier4 = new ArrayList<>();
             tier4.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 2)));
             tier4.add(new ItemStack(Material.TOTEM_OF_UNDYING));
             tier4.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_HELMET, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_CHESTPLATE, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_LEGGINGS, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_BOOTS, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_SWORD, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_SHOVEL, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_PICKAXE, random));
-            tier4.add(treasureGear.getTreasureGear(false, Material.DIAMOND_AXE, random));
-
-            ArrayList<ArrayList<ItemStack>> items = new ArrayList<>();
-            items.add(tier1);
-            items.add(tier2);
-            items.add(tier3);
-            items.add(tier4);
-
-            ArrayList<ItemStack> output = new ArrayList<>();
-            for (int i = 0; i < count; i++) {
-                tier = getTier(random, tier_upgrade, 1);
-                output.add(items.get(tier - 1).get(random.nextInt(items.get(tier - 1).size())));
-            }
-            return output;
+            tier4.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
         }
+
+        ArrayList<ArrayList<ItemStack>> items = new ArrayList<>();
+        items.add(tier1);
+        items.add(tier2);
+        items.add(tier3);
+        items.add(tier4);
+
+        ArrayList<ItemStack> output = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            tier = getTier(random, tier_upgrade, 1);
+            ItemStack item = items.get(tier - 1).get(random.nextInt(items.get(tier - 1).size()));
+            if (item.isSimilar(CustomItem.TREASURE_GEAR_VOUCHER.getItem())) {
+                output.add(treasureGear.getTreasureGear(hardmode, random));
+            }
+            else {
+                output.add(item);
+            }
+        }
+        return output;
     }
 
     @Override

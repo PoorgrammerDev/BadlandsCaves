@@ -21,12 +21,9 @@ import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
-import me.fullpotato.badlandscaves.Loot.DestroySpawner;
-import me.fullpotato.badlandscaves.Loot.GetFishingCrate;
+import me.fullpotato.badlandscaves.Loot.*;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
-import me.fullpotato.badlandscaves.Loot.TreasureGear;
-import me.fullpotato.badlandscaves.Loot.UseFishingCrate;
 import me.fullpotato.badlandscaves.MobBuffs.*;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R1;
@@ -278,6 +275,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new UseSoulLantern(this),
                 new PreservationTotem(this),
                 new StarlightSentryMechanism(this),
+                new UseChambersBag(this),
         };
 
         for (Listener event : events) {
