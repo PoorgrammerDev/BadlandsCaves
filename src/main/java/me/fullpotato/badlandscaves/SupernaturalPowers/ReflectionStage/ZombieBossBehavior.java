@@ -367,7 +367,6 @@ public class ZombieBossBehavior extends BukkitRunnable {
                 blacklisted.add(Material.DISPENSER);
                 blacklisted.add(Material.DROPPER);
                 blacklisted.add(Material.TRAPPED_CHEST);
-                //TODO add more here
                 if (blacklisted.contains(material)) continue;
 
                 final int range = 5;

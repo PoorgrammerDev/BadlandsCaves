@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 public class LoadCustomItems {
     private final BadlandsCaves plugin = JavaPlugin.getPlugin(BadlandsCaves.class);
+    private final EnchantmentStorage enchantmentStorage = new EnchantmentStorage(plugin);
 
     private static final String[] uuids = {
             "2018ae4d-9bf8-47b9-8c1f-3107007afeab",
@@ -898,6 +900,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             starlight_helmet.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(starlight_helmet, false);
             return starlight_helmet;
         }
         else if (item.equals(CustomItem.STARLIGHT_CHESTPLATE)) {
@@ -926,6 +929,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             starlight_chestplate.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(starlight_chestplate, false);
             return starlight_chestplate;
         }
         else if (item.equals(CustomItem.STARLIGHT_LEGGINGS)) {
@@ -954,6 +958,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             starlight_leggings.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(starlight_leggings, false);
             return starlight_leggings;
         }
         else if (item.equals(CustomItem.STARLIGHT_BOOTS)) {
@@ -982,6 +987,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             starlight_boots.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(starlight_boots, false);
             return starlight_boots;
         }
         else if (item.equals(CustomItem.STARLIGHT_SABER)) {
@@ -1008,6 +1014,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             saber.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(saber, false);
             return saber;
         }
         else if (item.equals(CustomItem.STARLIGHT_SHIELD)) {
@@ -1033,6 +1040,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             shield.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(shield, false);
             return shield;
         }
         else if (item.equals(CustomItem.STARLIGHT_BLASTER)) {
@@ -1067,6 +1075,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             blaster.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(blaster, false);
             return blaster;
         }
         else if (item.equals(CustomItem.STARLIGHT_PAXEL)) {
@@ -1098,6 +1107,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             paxel_pick.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(paxel_pick, false);
             return paxel_pick;
         }
 
@@ -1125,6 +1135,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             sentry.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(sentry, false);
             return sentry;
         }
 
@@ -1208,6 +1219,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             voidmatter_helmet.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(voidmatter_helmet, false);
             return voidmatter_helmet;
         }
         else if (item.equals(CustomItem.VOIDMATTER_CHESTPLATE)) {
@@ -1228,6 +1240,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             voidmatter_chestplate.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(voidmatter_chestplate, false);
             return voidmatter_chestplate;
         }
         else if (item.equals(CustomItem.VOIDMATTER_LEGGINGS)) {
@@ -1248,6 +1261,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             voidmatter_leggings.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(voidmatter_leggings, false);
             return voidmatter_leggings;
         }
         else if (item.equals(CustomItem.VOIDMATTER_BOOTS)) {
@@ -1268,6 +1282,8 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             voidmatter_boots.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(voidmatter_boots, false);
+
             return voidmatter_boots;
         }
         else if (item.equals(CustomItem.VOIDMATTER_BLADE)) {
@@ -1284,6 +1300,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             blade.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(blade, false);
             return blade;
         }
 
@@ -1302,6 +1319,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             bow.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(bow, false);
             return bow;
         }
 
@@ -1320,6 +1338,7 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             pickaxe.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(pickaxe, false);
             return pickaxe;
         }
 
@@ -1338,6 +1357,8 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             shovel.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(shovel, false);
+
             return shovel;
         }
 
@@ -1356,6 +1377,8 @@ public class LoadCustomItems {
             repairable.setRepairCost(999999);
 
             axe.setItemMeta((ItemMeta) repairable);
+            enchantmentStorage.storeEnchantments(axe, false);
+
             return axe;
         }
         else if (item.equals(CustomItem.DIMENSIONAL_ANCHOR)) {

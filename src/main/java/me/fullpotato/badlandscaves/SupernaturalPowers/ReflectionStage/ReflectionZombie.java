@@ -25,21 +25,6 @@ public class ReflectionZombie implements Listener {
         world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
-    // TODO: 6/3/2020 remove?
-    @EventHandler
-    public void damagedZombieAvoidPlayer (EntityTargetLivingEntityEvent event) {
-        if (event.getEntity() instanceof Zombie &&
-                event.getEntity().getWorld().equals(world) &&
-                event.getTarget() instanceof Player &&
-                event.getTarget().getWorld().equals(world)) {
-            final Zombie zombie = (Zombie) event.getEntity();
-            final double zombie_health = zombie.getHealth() / zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            if (zombie_health < 0.3) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
     @EventHandler
     public void damageZombie (EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Zombie && event.getEntity().getWorld().equals(world)) {

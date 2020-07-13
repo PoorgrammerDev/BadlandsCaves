@@ -80,7 +80,6 @@ public class UseChargedRune implements Listener {
         final Player player = (Player) event.getPlayer();
 
         if ((view.getTitle().equals(title) || view.getTitle().equals(confirm_title))) {
-            // FIXME: 4/28/2020 uh sound no work pls fix
             new BukkitRunnable() {
                 @Override
                 public void run() {
