@@ -22,6 +22,7 @@ import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Loot.*;
+import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AugmentedDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
@@ -276,6 +277,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new PreservationTotem(this),
                 new StarlightSentryMechanism(this),
                 new UseChambersBag(this),
+                new AugmentedDrops(this),
         };
 
         for (Listener event : events) {

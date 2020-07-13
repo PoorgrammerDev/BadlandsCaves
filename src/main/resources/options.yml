@@ -117,6 +117,9 @@ hardmode_values:
   # This is the base percent chance that happens. [Not factoring in Chaos]
   augmented_spawn_chance: 5
 
+  #The EXP dropped from Augmented Mobs are multiplied by this amount as a reward for killing them.
+  augmented_exp_multiplier: 10
+
   #In Hardmode, Silencers are blocks that prevent Heretics from using their powers. This is their radius of effect.
   silencer_range: 25
 
