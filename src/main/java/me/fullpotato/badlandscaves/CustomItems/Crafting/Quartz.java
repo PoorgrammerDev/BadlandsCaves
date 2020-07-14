@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 public class Quartz {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public Quartz(BadlandsCaves plugin) {
         this.plugin = plugin;

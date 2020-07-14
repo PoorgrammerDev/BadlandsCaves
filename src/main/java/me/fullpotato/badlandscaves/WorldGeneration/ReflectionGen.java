@@ -1,18 +1,18 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
-import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
 public class ReflectionGen extends ChunkGenerator {
 
     @Override
-    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
+    public @NotNull ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, @NotNull BiomeGrid biome) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
         ChunkData chunk = createChunkData(world);
         generator.setScale(random.nextDouble() / 15);

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class TitleEffects {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public TitleEffects(BadlandsCaves plugin) {
         this.plugin = plugin;

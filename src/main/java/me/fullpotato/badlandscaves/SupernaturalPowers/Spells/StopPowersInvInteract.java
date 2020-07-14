@@ -15,11 +15,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class StopPowersInvInteract implements Listener {
-    private BadlandsCaves plugin;
-    private ItemStack displace;
-    private ItemStack withdraw;
-    private ItemStack eyes;
-    private ItemStack possess;
+    private final BadlandsCaves plugin;
+    private final ItemStack displace;
+    private final ItemStack withdraw;
+    private final ItemStack eyes;
+    private final ItemStack possess;
     public StopPowersInvInteract(BadlandsCaves bcav) {
         plugin = bcav;
 

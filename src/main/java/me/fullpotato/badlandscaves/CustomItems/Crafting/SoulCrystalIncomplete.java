@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 public class SoulCrystalIncomplete extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public SoulCrystalIncomplete (BadlandsCaves bcav) {
         plugin = bcav;
     }

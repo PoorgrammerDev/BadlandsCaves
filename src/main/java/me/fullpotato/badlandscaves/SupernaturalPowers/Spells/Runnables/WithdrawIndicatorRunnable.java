@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class WithdrawIndicatorRunnable extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
+    private final BadlandsCaves plugin;
+    private final Player player;
     private final World empty;
 
     public WithdrawIndicatorRunnable(BadlandsCaves plugin, Player player) {

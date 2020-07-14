@@ -50,7 +50,7 @@ public class MakeDescensionStage extends BukkitRunnable {
         generator.setScale(0.1D);
         Location origin = new Location(world, 0, 64, 0);
 
-        int currentHeight, rand;
+        int currentHeight;
         int inner_lim = 10;
         int upper_lim = 80;
         int lower_lim = 50;

@@ -17,7 +17,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import java.util.HashMap;
 
 public class MergedSouls extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public MergedSouls(BadlandsCaves bcav) {
         plugin = bcav;
     }

@@ -21,8 +21,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class UseRune implements Listener {
-    private BadlandsCaves plugin;
-    private String title = "§8Rune";
+    private final BadlandsCaves plugin;
+    private final String title = "§8Rune";
     private int task_id;
 
     public UseRune(BadlandsCaves plugin) {

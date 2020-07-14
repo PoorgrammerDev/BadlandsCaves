@@ -14,11 +14,10 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Shield implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public Shield(BadlandsCaves plugin) {
         this.plugin = plugin;

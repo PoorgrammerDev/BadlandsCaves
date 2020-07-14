@@ -34,7 +34,6 @@ import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R1;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
-import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.DescensionPlayerMove;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.*;
@@ -191,9 +190,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ToxicWaterBottling(this),
                 new BlazePowder(this),
                 new PurgeEssence(this),
-                new StopCustomItemsInteract(this),
+                new StopCustomItemsInteract(),
                 new UseTaintPowder(this),
-                new ZombieDeathLoot(this),
+                new ZombieDeathLoot(),
                 new GetFishingCrate(this),
                 new UseFishingCrate(this),
                 new SkeleBuff(this),
@@ -228,7 +227,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new EndGame(this),
                 new LimitActions(this),
                 new UseCompleteSoulCrystal(this),
-                new MushroomStew(this),
+                new MushroomStew(),
                 new DestroySpawner(this),
                 new UseRune(this),
                 new UseChargedRune(this),
@@ -244,7 +243,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new CustomBows(this),
                 new WitherBossFight(this),
                 new Apples(this),
-                new NoMending(this),
+                new NoMending(),
                 new ShieldBlocking(this),
                 new Shield(this),
                 new CraftingGuide(this),

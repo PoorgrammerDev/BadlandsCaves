@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class MagicEssence extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public MagicEssence(BadlandsCaves bcav) {
         plugin = bcav;
     }

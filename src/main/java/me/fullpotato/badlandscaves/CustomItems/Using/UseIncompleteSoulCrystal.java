@@ -22,7 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public UseIncompleteSoulCrystal (BadlandsCaves bcav) {
         plugin = bcav;
     }

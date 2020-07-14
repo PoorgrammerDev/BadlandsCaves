@@ -11,7 +11,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitTask;
 
 public class ToxicWaterBottling implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public ToxicWaterBottling(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -23,7 +23,7 @@ public class ToxicWaterBottling implements Listener {
                 if (event.getHand().equals(EquipmentSlot.HAND)) {
                     if (event.getItem() != null) {
                         if (event.getItem().getType().equals(Material.GLASS_BOTTLE)) {
-                            BukkitTask bottling = new ToxBottlingRunnable(plugin, event.getPlayer()).runTaskLaterAsynchronously(plugin, 1);
+                            new ToxBottlingRunnable(event.getPlayer()).runTaskLaterAsynchronously(plugin, 1);
                         }
                     }
                 }

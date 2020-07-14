@@ -11,11 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EnchantmentStorage {
-    private final BadlandsCaves plugin;
     private final NamespacedKey key;
 
     public EnchantmentStorage(BadlandsCaves plugin) {
-        this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "stored_enchantments");
     }
 

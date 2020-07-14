@@ -5,19 +5,20 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PowersTabComplete implements TabCompleter {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public PowersTabComplete(BadlandsCaves plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         if (command.getName().equalsIgnoreCase("powers")) {
             if (sender.isOp()) {
                 List<String> list = new ArrayList<>();

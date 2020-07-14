@@ -7,16 +7,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class ToxicityCommand extends Commands implements CommandExecutor {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public ToxicityCommand (BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         if (command.getName().equalsIgnoreCase("toxicity")) {
             if (sender.isOp()) {
                 if (args.length == 0) {

@@ -628,9 +628,7 @@ public class WitherBossFight implements Listener {
                     this.cancel();
                     spawnBoss(new Location(world, 300, 206, 0), new Random(), 45, players.size());
                     TitleEffects titleEffects = new TitleEffects(plugin);
-                    players.forEach(player -> {
-                        titleEffects.sendDecodingTitle(player, "FIGHT", net.md_5.bungee.api.ChatColor.of("#ff7f00") + ChatColor.BOLD.toString(), "", "", 0, 30, 10, 2, false);
-                    });
+                    players.forEach(player -> titleEffects.sendDecodingTitle(player, "FIGHT", ChatColor.of("#ff7f00") + ChatColor.BOLD.toString(), "", "", 0, 30, 10, 2, false));
                 }
                 else {
                     players.forEach(player -> {

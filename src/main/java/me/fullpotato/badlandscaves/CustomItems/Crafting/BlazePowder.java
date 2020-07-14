@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 public class BlazePowder extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public BlazePowder(BadlandsCaves bcav) {
         plugin = bcav;

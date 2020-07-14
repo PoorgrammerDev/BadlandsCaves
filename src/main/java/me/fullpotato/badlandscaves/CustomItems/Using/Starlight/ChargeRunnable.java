@@ -13,14 +13,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ChargeRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
-    private final StarlightArmor armorManager;
-    private final StarlightTools toolManager;
     private final StarlightCharge chargeManager;
     final EnchantmentStorage enchantmentStorage;
     public ChargeRunnable(BadlandsCaves plugin) {
         this.plugin = plugin;
-        this.armorManager = new StarlightArmor(plugin);
-        this.toolManager = new StarlightTools(plugin);
         this.chargeManager = new StarlightCharge(plugin);
         enchantmentStorage = new EnchantmentStorage(plugin);
     }

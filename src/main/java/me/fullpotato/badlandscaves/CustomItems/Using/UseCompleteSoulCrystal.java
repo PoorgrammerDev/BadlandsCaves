@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public UseCompleteSoulCrystal(BadlandsCaves plugin) {
         this.plugin = plugin;

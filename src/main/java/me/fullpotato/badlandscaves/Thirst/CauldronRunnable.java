@@ -75,7 +75,7 @@ public class CauldronRunnable extends BukkitRunnable {
             assert lvl_indic_em_meta != null;
             lvl_indic_em_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GRAY + "0% Full");
 
-            ArrayList<String> lvl_indic_lore = new ArrayList<String>();
+            ArrayList<String> lvl_indic_lore = new ArrayList<>();
             lvl_indic_lore.add(ChatColor.DARK_GRAY + "Fill to use Cauldron.");
             lvl_indic_em_meta.setLore(lvl_indic_lore);
 
@@ -99,7 +99,7 @@ public class CauldronRunnable extends BukkitRunnable {
             assert lvl_indic_wa_meta != null;
             lvl_indic_wa_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GREEN + "33% Full");
 
-            ArrayList<String> lvl_indic_lore = new ArrayList<String>();
+            ArrayList<String> lvl_indic_lore = new ArrayList<>();
             lvl_indic_lore.add(ChatColor.DARK_GREEN + "Fill to use Cauldron.");
             lvl_indic_em_meta.setLore(lvl_indic_lore);
             lvl_indic_wa_meta.setLore(lvl_indic_lore);
@@ -125,7 +125,7 @@ public class CauldronRunnable extends BukkitRunnable {
             assert lvl_indic_wa_meta != null;
             lvl_indic_wa_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.DARK_GREEN + "67% Full");
 
-            ArrayList<String> lvl_indic_lore = new ArrayList<String>();
+            ArrayList<String> lvl_indic_lore = new ArrayList<>();
             lvl_indic_lore.add(ChatColor.DARK_GREEN + "Fill to use Cauldron.");
             lvl_indic_em_meta.setLore(lvl_indic_lore);
             lvl_indic_wa_meta.setLore(lvl_indic_lore);
@@ -151,7 +151,7 @@ public class CauldronRunnable extends BukkitRunnable {
             assert lvl_indic_wa_meta != null;
             lvl_indic_wa_meta.setDisplayName(ChatColor.GRAY + "Cauldron: " + ChatColor.GREEN + "100% Full");
 
-            ArrayList<String> lvl_indic_lore = new ArrayList<String>();
+            ArrayList<String> lvl_indic_lore = new ArrayList<>();
             lvl_indic_lore.add(ChatColor.GREEN + "There's enough water.");
             lvl_indic_em_meta.setLore(lvl_indic_lore);
             lvl_indic_wa_meta.setLore(lvl_indic_lore);
@@ -177,7 +177,7 @@ public class CauldronRunnable extends BukkitRunnable {
             ItemStack green = new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1);
             ItemMeta green_meta = green.getItemMeta();
             assert green_meta != null;
-            ArrayList<String> green_lore = new ArrayList<String>();
+            ArrayList<String> green_lore = new ArrayList<>();
 
             if (in_slots.contains(Material.GLASS_BOTTLE)) {
                 final boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");

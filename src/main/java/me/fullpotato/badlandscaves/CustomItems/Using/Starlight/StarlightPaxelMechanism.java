@@ -17,9 +17,9 @@ public class StarlightPaxelMechanism extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final StarlightTools toolManager;
 
-    public List<Material> pickaxeBlocks;
-    public List<Material> axeBlocks;
-    public List<Material> shovelBlocks;
+    public final List<Material> pickaxeBlocks;
+    public final List<Material> axeBlocks;
+    public final List<Material> shovelBlocks;
 
 
     public StarlightPaxelMechanism(BadlandsCaves plugin) {

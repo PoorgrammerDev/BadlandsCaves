@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ForceFixDescensionValues extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private World descension_world;
+    private final BadlandsCaves plugin;
+    private final World descension_world;
 
     public ForceFixDescensionValues(BadlandsCaves plugin) {
         this.plugin = plugin;

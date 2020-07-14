@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 
 public class DeathEffects {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public DeathEffects(BadlandsCaves plugin) {
         this.plugin = plugin;

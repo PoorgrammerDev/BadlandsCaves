@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class InventorySerialize {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public InventorySerialize(BadlandsCaves plugin) {
         this.plugin = plugin;

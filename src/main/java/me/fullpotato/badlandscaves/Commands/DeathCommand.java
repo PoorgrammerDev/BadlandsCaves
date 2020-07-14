@@ -7,17 +7,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class DeathCommand extends Commands implements CommandExecutor {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public DeathCommand(BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         if (command.getName().equalsIgnoreCase("deaths")) {
             if (sender.isOp()) {
                 if (args.length == 0) {
@@ -34,7 +35,7 @@ public class DeathCommand extends Commands implements CommandExecutor {
                     } else {
                         for (Player targets : plugin.getServer().getOnlinePlayers()) {
                             if (args[1].equalsIgnoreCase(targets.getDisplayName()) || args[1].equalsIgnoreCase(targets.getName()) || args[1].equalsIgnoreCase(targets.getUniqueId().toString())) {
-                                sender.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + ((int) PlayerScore.DEATHS.getScore(plugin, targets)) + ChatColor.GOLD + ".");
+                                sender.sendMessage(ChatColor.GOLD + "The Deaths count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " is " + ChatColor.RED + PlayerScore.DEATHS.getScore(plugin, targets) + ChatColor.GOLD + ".");
                                 return true;
                             }
                         }

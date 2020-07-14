@@ -11,11 +11,9 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class NoFood implements Listener {
-    private final BadlandsCaves plugin;
     private final EnvironmentalHazards dims;
 
     public NoFood(BadlandsCaves plugin) {
-        this.plugin = plugin;
         this.dims = new EnvironmentalHazards(plugin);
     }
 

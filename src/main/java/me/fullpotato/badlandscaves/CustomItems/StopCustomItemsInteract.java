@@ -11,12 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class StopCustomItemsInteract implements Listener {
-    private final BadlandsCaves plugin;
-
-    public StopCustomItemsInteract(BadlandsCaves bcav) {
-        plugin = bcav;
-    }
-
 
     @EventHandler
     public void preventRightClick (PlayerInteractEvent event) {

@@ -20,9 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SerratedSwords implements Listener {
-    private BadlandsCaves plugin;
-    private String serrated_lore = "§cSerrated";
-    private Material[] swords = {
+    private final BadlandsCaves plugin;
+    private final String serrated_lore = "§cSerrated";
+    private final Material[] swords = {
             Material.WOODEN_SWORD,
             Material.STONE_SWORD,
             Material.IRON_SWORD,

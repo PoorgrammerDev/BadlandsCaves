@@ -10,8 +10,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class StageEnter extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
+    private final BadlandsCaves plugin;
+    private final Player player;
 
     public StageEnter(BadlandsCaves plugin, Player player) {
         this.plugin = plugin;

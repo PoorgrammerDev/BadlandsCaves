@@ -12,7 +12,6 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 
 public class GravityRunnable extends BukkitRunnable {
-    private final BadlandsCaves plugin;
     private final World world;
     private final double gravity;
     private final HashMap<Entity, Boolean> onGroundMap = new HashMap<>();
@@ -21,7 +20,6 @@ public class GravityRunnable extends BukkitRunnable {
 
 
     public GravityRunnable(BadlandsCaves plugin, World world) {
-        this.plugin = plugin;
         this.world = world;
         this.gravity = plugin.getSystemConfig().getDouble("dim_stats." + world.getName() + ".gravity");
     }

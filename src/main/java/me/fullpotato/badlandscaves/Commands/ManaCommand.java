@@ -7,16 +7,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class ManaCommand extends Commands implements CommandExecutor {
 
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public ManaCommand (BadlandsCaves bcav) {
         plugin = bcav;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         if (command.getName().equalsIgnoreCase("mana")) {
             if (sender.isOp()) {
                 if (args.length == 0) {
@@ -26,7 +27,7 @@ public class ManaCommand extends Commands implements CommandExecutor {
                     if (args.length < 2) {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
-                            player.sendMessage(ChatColor.GOLD + "Your Mana count is " + ChatColor.RED + ((double) PlayerScore.MANA.getScore(plugin, player)) + ChatColor.GOLD + ".");
+                            player.sendMessage(ChatColor.GOLD + "Your Mana count is " + ChatColor.RED + PlayerScore.MANA.getScore(plugin, player) + ChatColor.GOLD + ".");
                         }
                         else {
                             playerNotValid(sender);

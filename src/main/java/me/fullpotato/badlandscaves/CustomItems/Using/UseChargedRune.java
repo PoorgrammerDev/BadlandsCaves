@@ -68,11 +68,10 @@ public class UseChargedRune implements Listener {
 
     @EventHandler
     public void closeInventory (InventoryCloseEvent event) {
-        final Inventory inventory = event.getInventory();
         final InventoryView view = event.getView();
-        final Player player = (Player) event.getPlayer();
 
         if ((view.getTitle().equals(title) || view.getTitle().equals(confirm_title))) {
+            final Player player = (Player) event.getPlayer();
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -117,7 +116,6 @@ public class UseChargedRune implements Listener {
                 final Player player = (Player) event.getWhoClicked();
                 final ItemStack current = event.getCurrentItem();
                 final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
-                final int slot = event.getSlot();
 
                 if (clicked_inv.equals(target_inv)) {
                     if (current == null || current.getType().equals(Material.BARRIER) || current.getType().equals(Material.BLACK_STAINED_GLASS_PANE)) {

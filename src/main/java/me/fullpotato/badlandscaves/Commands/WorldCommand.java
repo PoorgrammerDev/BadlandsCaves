@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 
 public class WorldCommand extends Commands implements CommandExecutor {
@@ -16,7 +17,7 @@ public class WorldCommand extends Commands implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String s, String[] args) {
         if (command.getName().equalsIgnoreCase("world")) {
             if (commandSender.isOp()) {
                 if (commandSender instanceof Player) {
@@ -30,23 +31,20 @@ public class WorldCommand extends Commands implements CommandExecutor {
                             }
                         }
                         commandSender.sendMessage("§cInvalid world!");
-                        return true;
 
                     }
                     else {
                         tooFewArgs(commandSender);
-                        return true;
                     }
                 }
                 else {
                     commandSender.sendMessage("§cYou must be a Player to use this command!");
-                    return true;
                 }
             }
             else {
                 notOp(commandSender);
-                return true;
             }
+            return true;
         }
         return false;
     }

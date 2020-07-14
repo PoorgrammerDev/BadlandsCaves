@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class DetectionDecrease extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public DetectionDecrease(BadlandsCaves bcav) {
         plugin = bcav;
     }

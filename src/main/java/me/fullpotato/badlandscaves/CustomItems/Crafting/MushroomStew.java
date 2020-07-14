@@ -14,11 +14,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Random;
 
 public class MushroomStew implements Listener {
-    private BadlandsCaves plugin;
-
-    public MushroomStew(BadlandsCaves plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void randomStewCraft (PrepareItemCraftEvent event) {

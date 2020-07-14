@@ -7,17 +7,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 
 public class GuideCommand extends Commands implements CommandExecutor {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public GuideCommand(BadlandsCaves plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String s, String[] strings) {
         if (command.getName().equals("guide")) {
             if (commandSender instanceof Player) {
                 Player player = (Player) commandSender;

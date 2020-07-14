@@ -3,14 +3,13 @@ package me.fullpotato.badlandscaves.Loot;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.Collection;
 import java.util.Random;
 
 public class DimensionStructureTable implements LootTable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     private final NamespacedKey key;
     private final DimensionsWorlds.Habitation habitation;
 
@@ -29,7 +28,7 @@ public class DimensionStructureTable implements LootTable {
     }
 
     @Override
-    public Collection<ItemStack> populateLoot(Random random, LootContext lootContext) {
+    public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, @NotNull LootContext lootContext) {
         ArrayList<ItemStack> items = new ArrayList<>();
         ArrayList<ItemStack> trash = new ArrayList<>();
 
@@ -116,11 +115,11 @@ public class DimensionStructureTable implements LootTable {
     }
 
     @Override
-    public void fillInventory(Inventory inventory, Random random, LootContext lootContext) {
+    public void fillInventory(@NotNull Inventory inventory, @NotNull Random random, @NotNull LootContext lootContext) {
     }
 
     @Override
-    public NamespacedKey getKey() {
+    public @NotNull NamespacedKey getKey() {
         return this.key;
     }
 

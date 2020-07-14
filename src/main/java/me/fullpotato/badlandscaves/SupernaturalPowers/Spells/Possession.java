@@ -21,7 +21,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.RayTraceResult;
 
 public class Possession extends UsePowers implements Listener {
     public Possession(BadlandsCaves bcav) {

@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 
 public class EnduranceCancelHunger implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public EnduranceCancelHunger(BadlandsCaves bcav) {
         this.plugin = bcav;
     }

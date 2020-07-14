@@ -104,15 +104,12 @@ public class SkeleBuff implements Listener {
             if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
 
-            Location one_up = location;
+            final Location one_up = location.clone();
             one_up.setY(one_up.getBlockY() + 2);
 
             if (!one_up.getBlock().getType().equals(Material.AIR)) {
                 one_up.getBlock().setType(Material.AIR);
             }
-
-            location.setY(location.getBlockY() - 2);
-
 
             //witherskeleton
             if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) {

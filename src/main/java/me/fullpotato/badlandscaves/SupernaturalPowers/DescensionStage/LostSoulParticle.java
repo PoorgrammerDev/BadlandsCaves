@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class LostSoulParticle extends BukkitRunnable {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public LostSoulParticle(BadlandsCaves plugin) {
         this.plugin = plugin;

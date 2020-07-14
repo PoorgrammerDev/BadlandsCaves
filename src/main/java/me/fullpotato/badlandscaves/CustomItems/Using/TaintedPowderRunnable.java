@@ -68,23 +68,22 @@ public class TaintedPowderRunnable extends BukkitRunnable {
         }
 
         Entity[] entity_list = location.getChunk().getEntities();
-        for (int a = 0; a < entity_list.length; a++) {
-            if (location.distance(entity_list[a].getLocation()) <= 3) {
+        for (Entity entity : entity_list) {
+            if (location.distance(entity.getLocation()) <= 3) {
                 boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
-                if (entity_list[a].getType().equals(EntityType.SILVERFISH)) {
+                if (entity.getType().equals(EntityType.SILVERFISH)) {
                     int duration = isHardmode ? 50 : 9999;
                     int amplifier = isHardmode ? 0 : 4;
                     int count = isHardmode ? 5 : 50;
-                    LivingEntity silverfish = (LivingEntity) entity_list[a];
+                    LivingEntity silverfish = (LivingEntity) entity;
                     silverfish.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, amplifier));
-                    world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), count,0.2,0.5,0.2);
+                    world.spawnParticle(Particle.DAMAGE_INDICATOR, entity.getLocation(), count, 0.2, 0.5, 0.2);
 
-                }
-                else if (entity_list[a].getType().equals(EntityType.PLAYER)) {
-                    Player player = (Player) entity_list[a];
+                } else if (entity.getType().equals(EntityType.PLAYER)) {
+                    Player player = (Player) entity;
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                        if (true) { //!player.getUniqueId().equals(thrower.getUniqueId())
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20, 1));
+                        if (!player.equals(thrower)) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                             double tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                             final Random random = new Random();
                             if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
@@ -94,16 +93,15 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                                 if (tox_incr > 0) {
                                     PlayerScore.TOXICITY.setScore(plugin, player, tox + tox_incr);
                                 }
-                                world.spawnParticle(Particle.DAMAGE_INDICATOR, entity_list[a].getLocation(), part_num,0.2, 0.5 ,0.2);
+                                world.spawnParticle(Particle.DAMAGE_INDICATOR, entity.getLocation(), part_num, 0.2, 0.5, 0.2);
                             }
                         }
                     }
-                }
-                else {
-                    if (entity_list[a] instanceof LivingEntity) {
-                        LivingEntity living = (LivingEntity) entity_list[a];
-                        living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20, 1));
-                        world.spawnParticle(Particle.DAMAGE_INDICATOR, living.getLocation(), 5,0.2, 0.5 ,0.2);
+                } else {
+                    if (entity instanceof LivingEntity) {
+                        LivingEntity living = (LivingEntity) entity;
+                        living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
+                        world.spawnParticle(Particle.DAMAGE_INDICATOR, living.getLocation(), 5, 0.2, 0.5, 0.2);
                     }
                 }
             }

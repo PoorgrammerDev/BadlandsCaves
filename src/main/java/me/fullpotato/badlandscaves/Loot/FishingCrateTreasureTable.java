@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +33,7 @@ public class FishingCrateTreasureTable implements LootTable {
     }
 
     @Override
-    public Collection<ItemStack> populateLoot(Random random, LootContext context) {
+    public @NotNull Collection<ItemStack> populateLoot(Random random, LootContext context) {
         final double luck = context.getLuck();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int count = random.nextInt(Math.max(Math.min((int) (Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0 + (chaos / 25.0)), 10), 3));
@@ -157,11 +158,11 @@ public class FishingCrateTreasureTable implements LootTable {
     }
 
     @Override
-    public void fillInventory(Inventory inventory, Random random, LootContext context) {
+    public void fillInventory(@NotNull Inventory inventory, @NotNull Random random, @NotNull LootContext context) {
     }
 
     @Override
-    public NamespacedKey getKey() {
+    public @NotNull NamespacedKey getKey() {
         return key;
     }
 

@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 
 public class ReflectionBuild implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     private final World reflection_world;
     public ReflectionBuild (BadlandsCaves bcav) {
         plugin = bcav;

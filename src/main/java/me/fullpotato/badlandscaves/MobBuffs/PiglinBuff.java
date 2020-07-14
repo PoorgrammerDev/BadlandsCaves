@@ -1,12 +1,9 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.CustomItems.Crafting.Voltshock;
 import me.fullpotato.badlandscaves.CustomItems.Using.CustomBows;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

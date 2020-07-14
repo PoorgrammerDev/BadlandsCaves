@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 
 public class ShieldBlocking implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public ShieldBlocking(BadlandsCaves plugin) {
         this.plugin = plugin;

@@ -98,7 +98,6 @@ public class CauldronMenu implements Listener {
             if (isCauldron && clicked_inv.equals(target_inv)) {
                 cauldron_inv = target_inv;
                 Player player = (Player) event.getWhoClicked();
-                ClickType click = event.getClick();
                 ItemStack item = event.getCurrentItem();
 
                 if (cauldron_block == null) {
@@ -282,8 +281,6 @@ public class CauldronMenu implements Listener {
         black_meta.setDisplayName(ChatColor.RESET + "");
         black.setItemMeta(black_meta);
 
-        ItemStack blue = new ItemStack(Material.BLUE_STAINED_GLASS_PANE, 1);
-
         ItemStack d_gray = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
         ItemMeta d_gray_meta = d_gray.getItemMeta();
         assert d_gray_meta != null;
@@ -295,8 +292,6 @@ public class CauldronMenu implements Listener {
         assert l_gray_meta != null;
         l_gray_meta.setDisplayName(ChatColor.RESET + "");
         l_gray.setItemMeta(l_gray_meta);
-
-        String cauldron_level = block.getBlockData().getAsString();
 
         //making the inv
         pure_inv.setItem(1, black);

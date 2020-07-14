@@ -13,7 +13,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.ArrayList;
 
 public class Apples extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public Apples(BadlandsCaves plugin) {
         this.plugin = plugin;

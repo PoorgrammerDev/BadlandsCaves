@@ -14,8 +14,8 @@ import org.bukkit.inventory.meta.Repairable;
 import java.util.*;
 
 public class TreasureGear extends RandomlyEnchantedGear implements Listener {
-    private String prehardmode_label = "§2Prehardmode Treasure Gear";
-    private String hardmode_label = "§6Hardmode Treasure Gear";
+    private final String prehardmode_label = "§2Prehardmode Treasure Gear";
+    private final String hardmode_label = "§6Hardmode Treasure Gear";
     private final Material[] armor = {
             Material.DIAMOND_HELMET,
             Material.DIAMOND_CHESTPLATE,
@@ -328,9 +328,7 @@ public class TreasureGear extends RandomlyEnchantedGear implements Listener {
                 if (item.getItemMeta().hasLore()) {
                     List<String> lore = item.getItemMeta().getLore();
                     if (lore != null && lore.size() >= 1) {
-                        if (lore.get(0).equalsIgnoreCase(prehardmode_label) || lore.get(0).equalsIgnoreCase(hardmode_label)) {
-                            return true;
-                        }
+                        return lore.get(0).equalsIgnoreCase(prehardmode_label) || lore.get(0).equalsIgnoreCase(hardmode_label);
                     }
                 }
             }

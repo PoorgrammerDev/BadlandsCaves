@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class SpawnerTable implements LootTable {
 
 
     @Override
-    public Collection<ItemStack> populateLoot(Random random, LootContext context) {
+    public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, LootContext context) {
         final double luck = context.getLuck();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 5);
@@ -164,11 +165,11 @@ public class SpawnerTable implements LootTable {
     }
 
     @Override
-    public void fillInventory(Inventory inventory, Random random, LootContext lootContext) {
+    public void fillInventory(@NotNull Inventory inventory, @NotNull Random random, @NotNull LootContext lootContext) {
     }
 
     @Override
-    public NamespacedKey getKey() {
+    public @NotNull NamespacedKey getKey() {
         return key;
     }
 }

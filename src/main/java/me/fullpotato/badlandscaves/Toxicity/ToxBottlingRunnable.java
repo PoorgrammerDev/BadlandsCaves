@@ -10,11 +10,9 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ToxBottlingRunnable extends BukkitRunnable {
-    private BadlandsCaves plugin;
-    private Player player;
+    private final Player player;
 
-    public ToxBottlingRunnable(BadlandsCaves bcav, Player ply){
-        plugin = bcav;
+    public ToxBottlingRunnable(Player ply){
         player = ply;
     }
 

@@ -18,6 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -72,7 +73,7 @@ public class LoadCustomItems {
     };
 
     @SuppressWarnings("ConstantConditions")
-    public ItemStack getItem(CustomItem item) {
+    public ItemStack getItem(@NotNull CustomItem item) {
         if (item.equals(CustomItem.STARTER_SAPLING)){
             ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING);
             ItemMeta starter_sapling_meta = starter_sapling.getItemMeta();
@@ -1472,6 +1473,8 @@ public class LoadCustomItems {
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "Hits inflict Corrosion.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Jagged Lights.");
+
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1490,6 +1493,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "Hits inflict Bleeding.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Corroding Lights.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1509,6 +1513,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "Increases attack speed, but lowers damage per swing.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Decisive Slice.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1528,6 +1533,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "Decreases attack speed, but increases damage per swing.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Flurrying Swings.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1554,6 +1560,456 @@ public class LoadCustomItems {
             wide_swing.setItemMeta(meta);
             return wide_swing;
         }
+        else if (item.equals(CustomItem.NEBULITE_REINFORCED_PLATING)) {
+            ItemStack reinforced_plating = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = reinforced_plating.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#5f6d75") + "Reinforced Plating");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+3 Protection");
+            lore.add(ChatColor.GRAY + "-10% Speed");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            reinforced_plating.setItemMeta(meta);
+            return reinforced_plating;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_STRONG_STANCE)) {
+            ItemStack strong_stance = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = strong_stance.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#222a70") + "Strong Stance");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+25% Knockback Resistance");
+            lore.add(ChatColor.GRAY + "-10% Speed");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Rooted Feet.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            strong_stance.setItemMeta(meta);
+            return strong_stance;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_ROOTED_FEET)) {
+            ItemStack rooted_feet = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = rooted_feet.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#2e5205") + "Rooted Feet");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+75% Knockback Resistance");
+            lore.add(ChatColor.GRAY + "-25% Speed");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Strong Stance.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            rooted_feet.setItemMeta(meta);
+            return rooted_feet;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_THRUSTER)) {
+            ItemStack thruster = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = thruster.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#0dbed9") + "Thruster");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Reverses the Speed costs of Plating, Strong Stance, and Rooted Feet.");
+            lore.add(ChatColor.GRAY + "Consumes Charge when moving around.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            thruster.setItemMeta(meta);
+            return thruster;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_OXYGENATOR)) {
+            ItemStack oxygenator = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = oxygenator.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#0b8de3") + "Oxygenator");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+3 Respiration");
+            lore.add(ChatColor.GRAY + "Adds Aqua Affinity.");
+            lore.add(ChatColor.GRAY + "Consumes Charge to supply Oxygen if it runs out.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Helmet.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            oxygenator.setItemMeta(meta);
+            return oxygenator;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SMOLDERING_FLAMES)) {
+            ItemStack smoldering_flames = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = smoldering_flames.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#e38a0e") + "Smoldering Flames");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+5 Fire Protection");
+            lore.add(ChatColor.GRAY + "Applies Fire Resistance if on fire under 25% HP.");
+            lore.add(ChatColor.GRAY + "Consumes Charge to apply Fire Resistance.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            smoldering_flames.setItemMeta(meta);
+            return smoldering_flames;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_TOXIN_EXPELLER)) {
+            ItemStack toxin_expeller = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = toxin_expeller.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#0a6300") + "Toxin Expeller");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Full Corrosive Resistance.");
+            lore.add(ChatColor.GRAY + "Increased Resistance to Toxicity when swimming.");
+            lore.add(ChatColor.GRAY + "Consumes Charge when resisting Corrosive or Toxic.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            toxin_expeller.setItemMeta(meta);
+            return toxin_expeller;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SHOCK_ABSORBER)) {
+            ItemStack shock_absorber = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = shock_absorber.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#72dce8") + "Shock Absorber");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+5 Feather Falling");
+            lore.add(ChatColor.GRAY + "Consumes Extra Charge when taking Fall Damage.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            shock_absorber.setItemMeta(meta);
+            return shock_absorber;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SONIC_SPEED)) {
+            ItemStack sonic_speed = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = sonic_speed.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#039eff") + "Sonic Speed");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+100% Speed when Sprinting");
+            lore.add(ChatColor.GRAY + "Consumes Charge when Sprinting.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            sonic_speed.setItemMeta(meta);
+            return sonic_speed;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_FORCEFIELD)) {
+            ItemStack forcefield = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = forcefield.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#0055ff") + "Forcefield");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "25% of ignoring entire attacks, inflicts damage onto Charge at 5x rate.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            forcefield.setItemMeta(meta);
+            return forcefield;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_GUARDIAN_ANGEL)) {
+            ItemStack guardian_angel = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = guardian_angel.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.YELLOW + "Guardian Angel");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Requires Forcefield to be applied on the same item to function.");
+            lore.add(ChatColor.GRAY + "Ignores all fatal attacks, inflicts damage onto Charge at 20x rate.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            guardian_angel.setItemMeta(meta);
+            return guardian_angel;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_RAPID_FIRE)) {
+            ItemStack rapid_fire = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = rapid_fire.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#fbff00") + "Rapid Fire");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Removes cooldown. Consecutive shots drain more Charge.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            rapid_fire.setItemMeta(meta);
+            return rapid_fire;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SCATTERING_LIGHTS)) {
+            ItemStack scattering_lights = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = scattering_lights.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ff00aa") + "Scattering Lights");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Deals damage to surrounding entities.");
+            lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Penetrating Beam.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            scattering_lights.setItemMeta(meta);
+            return scattering_lights;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_PENETRATING_BEAM)) {
+            ItemStack penetrating_beam = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = penetrating_beam.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#d0ff00") + "Penetrating Beam");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Passes through entities and damages ones behind them.");
+            lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Scattering Lights.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            penetrating_beam.setItemMeta(meta);
+            return penetrating_beam;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SUPERHEATING_LASER)) {
+            ItemStack superheating_laser = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = superheating_laser.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ff6f00") + "Superheating Laser");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Melts and combusts entities and blocks.");
+            lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            superheating_laser.setItemMeta(meta);
+            return superheating_laser;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_LIGHTSPEED_PROPULSORS)) {
+            ItemStack lightspeed_propulsors = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = lightspeed_propulsors.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#75d8ff") + "Lightspeed Propulsors");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "+5 Efficiency");
+            lore.add(ChatColor.GRAY + "+3 Unbreaking");
+            lore.add(ChatColor.GRAY + "-3 Fortune");
+            lore.add(ChatColor.GRAY + "If the Paxel has Molecular Preservation, it won't work on ores.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            lightspeed_propulsors.setItemMeta(meta);
+            return lightspeed_propulsors;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_MOLECULAR_PRESERVATION)) {
+            ItemStack molecular_preservation = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = molecular_preservation.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#a42eff") + "Molecular Preservation");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Substitutes Fortune for Silk Touch.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            molecular_preservation.setItemMeta(meta);
+            return molecular_preservation;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_BIG_SMASH)) {
+            ItemStack big_smash = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = big_smash.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#058f00") + "BIG SMASH");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Digs in a 3x3 pattern.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Decisive Disintegration.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            big_smash.setItemMeta(meta);
+            return big_smash;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_DECISIVE_DISINTEGRATION)) {
+            ItemStack decisive_disintegration = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = decisive_disintegration.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#6200ff") + "Decisive Disintegration");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Adds Tree Feller / Vein Miner.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with BIG SMASH.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            decisive_disintegration.setItemMeta(meta);
+            return decisive_disintegration;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_HARDENED_DEFENSE)) {
+            ItemStack hardened_defense = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = hardened_defense.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#537572") + "Hardened Defense");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Acts like a Vanilla shield and always cancels damage.");
+            lore.add(ChatColor.GRAY + "Weight Increases to Stone.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Shield Generator.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            hardened_defense.setItemMeta(meta);
+            return hardened_defense;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SHIELD_GENERATOR)) {
+            ItemStack shield_generator = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = shield_generator.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#00b6ff") + "Shield Generator");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Shield no longer needs to be held.");
+            lore.add(ChatColor.GRAY + "It constantly protects you by blocking all damage, but consumes 10x Charge.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Hardened Defense and Propulsion Bash.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            shield_generator.setItemMeta(meta);
+            return shield_generator;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_PROPULSION_BASH)) {
+            ItemStack propulsion_bash = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = propulsion_bash.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ff001e") + "Propulsion Bash");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Double jump while blocking to charge forwards.");
+            lore.add(ChatColor.GRAY + "Propulsion Bash deals damage to entities in front of you.");
+            lore.add(ChatColor.GRAY + "Consumes Charge.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Shield Generator.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            propulsion_bash.setItemMeta(meta);
+            return propulsion_bash;
+        }
+
 
         return null;
     }

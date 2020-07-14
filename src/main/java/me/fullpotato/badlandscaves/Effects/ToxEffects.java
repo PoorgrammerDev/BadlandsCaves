@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class ToxEffects {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
 
     public ToxEffects(BadlandsCaves plugin) {
         this.plugin = plugin;

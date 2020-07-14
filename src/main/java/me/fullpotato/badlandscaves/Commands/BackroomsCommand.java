@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.util.Random;
@@ -21,7 +22,7 @@ public class BackroomsCommand extends Commands implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String s, String[] args) {
         if (command.getName().equalsIgnoreCase("backrooms")) {
             if (commandSender.isOp()) {
                 BackroomsManager backroomsManager = new BackroomsManager(plugin);

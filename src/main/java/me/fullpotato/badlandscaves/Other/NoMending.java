@@ -10,11 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class NoMending implements Listener {
-    private BadlandsCaves plugin;
-
-    public NoMending(BadlandsCaves plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void villagerTrade (VillagerAcquireTradeEvent event) {

@@ -31,8 +31,6 @@ public class PlayerUnderSht implements Listener {
             final Player player = (Player) event.getEntity();
             player.setCooldown(Material.SHIELD, 20);
 
-            final Zombie boss = (Zombie) event.getDamager();
-
             final double hp_before_atk = player.getHealth();
             final double hp_after_atk = hp_before_atk - event.getFinalDamage();
 

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class Reeds {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public Reeds(BadlandsCaves bcav) {
         plugin = bcav;
     }

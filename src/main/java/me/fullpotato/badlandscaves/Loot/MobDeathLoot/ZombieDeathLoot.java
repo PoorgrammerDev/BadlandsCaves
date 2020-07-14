@@ -14,10 +14,6 @@ import java.util.List;
 import java.util.Random;
 
 public class ZombieDeathLoot implements Listener {
-    private BadlandsCaves plugin;
-    public ZombieDeathLoot(BadlandsCaves bcav) {
-        plugin = bcav;
-    }
 
     @EventHandler
     public void zombieDeath (EntityDeathEvent event) {

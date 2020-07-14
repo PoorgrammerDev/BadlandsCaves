@@ -19,7 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class SwapPowers implements Listener {
-    private BadlandsCaves plugin;
+    private final BadlandsCaves plugin;
     public SwapPowers(BadlandsCaves bcav) {
         plugin = bcav;
     }
@@ -140,7 +140,7 @@ public class SwapPowers implements Listener {
                         player.getInventory().setItemInOffHand(power_items[new_swap_slot]);
 
                         if (power_runnables[new_swap_slot] != null) {
-                            BukkitTask task = power_runnables[new_swap_slot];
+                            BukkitTask task = power_runnables[new_swap_slot]; // FIXME: 7/14/2020 how does this work?
                         }
                         PlayerScore.SWAP_SLOT.setScore(plugin, player, new_swap_slot);
 

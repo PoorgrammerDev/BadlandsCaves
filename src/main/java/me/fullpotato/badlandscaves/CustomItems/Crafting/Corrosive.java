@@ -26,10 +26,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Corrosive extends MatchCrafting implements Listener {
-    private BadlandsCaves plugin;
-    private String corrosiveLore = "§2Corrosive";
-    private NamespacedKey hitsLeftKey;
-    private Material[] swords = {
+    private final BadlandsCaves plugin;
+    private final String corrosiveLore = "§2Corrosive";
+    private final NamespacedKey hitsLeftKey;
+    private final Material[] swords = {
             Material.WOODEN_SWORD,
             Material.STONE_SWORD,
             Material.IRON_SWORD,
