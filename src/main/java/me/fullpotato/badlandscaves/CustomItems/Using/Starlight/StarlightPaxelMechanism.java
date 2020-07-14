@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using.Starlight;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
+import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -34,27 +35,29 @@ public class StarlightPaxelMechanism extends BukkitRunnable {
         boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (hardmode) {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
-                EntityEquipment equipment = player.getEquipment();
-                if (equipment != null) {
-                    ItemStack paxel = equipment.getItemInMainHand();
-                    if (paxel != null) {
-                        if (toolManager.isStarlightPaxel(paxel)) {
-                            Block block = player.getTargetBlockExact(5);
-                            if (block != null) {
-                                Material material = block.getType();
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                    EntityEquipment equipment = player.getEquipment();
+                    if (equipment != null) {
+                        ItemStack paxel = equipment.getItemInMainHand();
+                        if (paxel != null) {
+                            if (toolManager.isStarlightPaxel(paxel)) {
+                                Block block = player.getTargetBlockExact(5);
+                                if (block != null) {
+                                    Material material = block.getType();
 
-                                if (pickaxeBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_PICKAXE)) {
-                                    paxel.setType(Material.NETHERITE_PICKAXE);
-                                }
-                                else if (axeBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_AXE)) {
-                                    paxel.setType(Material.NETHERITE_AXE);
-                                }
-                                else if (shovelBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_SHOVEL)) {
-                                    paxel.setType(Material.NETHERITE_SHOVEL);
-                                }
-                                else return;
+                                    if (pickaxeBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_PICKAXE)) {
+                                        paxel.setType(Material.NETHERITE_PICKAXE);
+                                    }
+                                    else if (axeBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_AXE)) {
+                                        paxel.setType(Material.NETHERITE_AXE);
+                                    }
+                                    else if (shovelBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_SHOVEL)) {
+                                        paxel.setType(Material.NETHERITE_SHOVEL);
+                                    }
+                                    else return;
 
-                                equipment.setItemInMainHand(paxel);
+                                    equipment.setItemInMainHand(paxel);
+                                }
                             }
                         }
                     }

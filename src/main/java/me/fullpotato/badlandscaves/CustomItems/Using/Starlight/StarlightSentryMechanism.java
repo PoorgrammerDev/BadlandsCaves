@@ -41,26 +41,6 @@ public class StarlightSentryMechanism implements Listener {
         this.plugin = plugin;
     }
 
-    /*
-    enum ModelType {
-        SENTRY(185),
-        LOADING_0(186),
-        LOADING_1(187),
-        LOADING_2(188),
-        LOADING_3(189),
-        LOADING_4(190);
-
-        private final int modelData;
-        ModelType(int modelData) {
-            this.modelData = modelData;
-        }
-
-        public int getModelData() {
-            return modelData;
-        }
-    }
-     */
-
     @EventHandler
     public void placeSentry(PlayerInteractEvent event) {
         final ItemStack item = event.getItem();
@@ -73,86 +53,89 @@ public class StarlightSentryMechanism implements Listener {
                     final Block clickedBlock = event.getClickedBlock();
                     event.setCancelled(true);
 
-                    if (clickedBlock != null) {
-                        final Block block = clickedBlock.getRelative(event.getBlockFace());
-                        final Location location = block.getLocation().add(0.5, 0, 0.5);
+                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                        if (clickedBlock != null) {
+                            final Block block = clickedBlock.getRelative(event.getBlockFace());
+                            final Location location = block.getLocation().add(0.5, 0, 0.5);
 
-                        if (block.getRelative(BlockFace.DOWN).getType().isSolid()) {
-                            if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 0) {
-                                final StarlightCharge chargeManager = new StarlightCharge(plugin);
-                                final int charge = chargeManager.getCharge(item);
-                                final int maxCharge = chargeManager.getMaxCharge(item);
-                                if (charge > 0) {
-                                    final Location bottom = location.clone();
-                                    bottom.setY(0);
+                            if (block.getRelative(BlockFace.DOWN).getType().isSolid()) {
+                                if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 0) {
+                                    final StarlightCharge chargeManager = new StarlightCharge(plugin);
+                                    final int charge = chargeManager.getCharge(item);
+                                    final int maxCharge = chargeManager.getMaxCharge(item);
+                                    if (charge > 0) {
+                                        final Location bottom = location.clone();
+                                        bottom.setY(0);
 
-                                    Slime slime = (Slime) world.spawnEntity(bottom, EntityType.SLIME);
-                                    slime.setAI(false);
-                                    slime.setGravity(false);
-                                    slime.setSize(6);
-                                    slime.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false));
-                                    slime.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 99, false, false));
-                                    slime.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry_hit_detector"), PersistentDataType.BYTE, (byte) 1);
+                                        Slime slime = (Slime) world.spawnEntity(bottom, EntityType.SLIME);
+                                        slime.setAI(false);
+                                        slime.setGravity(false);
+                                        slime.setSize(6);
+                                        slime.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false));
+                                        slime.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 99, false, false));
+                                        slime.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry_hit_detector"), PersistentDataType.BYTE, (byte) 1);
 
-                                    ArmorStand armorStand = (ArmorStand) world.spawnEntity(bottom, EntityType.ARMOR_STAND);
-                                    armorStand.setCustomName(player.getDisplayName() + "'s Starlight Sentry");
-                                    armorStand.setMarker(true);
-                                    armorStand.setVisible(false);
-                                    armorStand.setInvulnerable(true);
-                                    armorStand.setGravity(false);
+                                        ArmorStand armorStand = (ArmorStand) world.spawnEntity(bottom, EntityType.ARMOR_STAND);
+                                        armorStand.setCustomName(player.getDisplayName() + "'s Starlight Sentry");
+                                        armorStand.setMarker(true);
+                                        armorStand.setVisible(false);
+                                        armorStand.setInvulnerable(true);
+                                        armorStand.setGravity(false);
 
-                                    armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry"), PersistentDataType.BYTE, (byte) 1);
-                                    armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "charge"), PersistentDataType.INTEGER, charge);
-                                    armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "max_charge"), PersistentDataType.INTEGER, maxCharge);
-                                    armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "owner"), PersistentDataType.STRING, player.getUniqueId().toString());
-                                    armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "hitreg_id"), PersistentDataType.STRING, slime.getUniqueId().toString());
-                                    slime.getPersistentDataContainer().set(new NamespacedKey(plugin, "sentry_id"), PersistentDataType.STRING, armorStand.getUniqueId().toString());
+                                        armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry"), PersistentDataType.BYTE, (byte) 1);
+                                        armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "charge"), PersistentDataType.INTEGER, charge);
+                                        armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "max_charge"), PersistentDataType.INTEGER, maxCharge);
+                                        armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "owner"), PersistentDataType.STRING, player.getUniqueId().toString());
+                                        armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "hitreg_id"), PersistentDataType.STRING, slime.getUniqueId().toString());
+                                        slime.getPersistentDataContainer().set(new NamespacedKey(plugin, "sentry_id"), PersistentDataType.STRING, armorStand.getUniqueId().toString());
 
-                                    PlayerScore.HAS_STARLIGHT_SENTRY.setScore(plugin, player, (byte) 1);
-                                    PlayerScore.STARLIGHT_SENTRY_UUID.setScore(plugin, player, armorStand.getUniqueId().toString());
-                                    item.setAmount(item.getAmount() - 1);
+                                        PlayerScore.HAS_STARLIGHT_SENTRY.setScore(plugin, player, (byte) 1);
+                                        PlayerScore.STARLIGHT_SENTRY_UUID.setScore(plugin, player, armorStand.getUniqueId().toString());
+                                        item.setAmount(item.getAmount() - 1);
 
-                                    int[] current_cmd = {186};
-                                    final int end = 190;
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            world.playSound(location, Sound.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 2, 0.7F);
-                                            slime.teleport(location.clone().add(0, 0.5, 0), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                            armorStand.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                            armorStand.getEquipment().setHelmet(getModel(current_cmd[0]));
+                                        int[] current_cmd = {186};
+                                        final int end = 190;
+                                        new BukkitRunnable() {
+                                            @Override
+                                            public void run() {
+                                                world.playSound(location, Sound.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 2, 0.7F);
+                                                slime.teleport(location.clone().add(0, 0.5, 0), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                                armorStand.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                                armorStand.getEquipment().setHelmet(getModel(current_cmd[0]));
 
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (armorStand.isDead() || slime.isDead()) {
-                                                        this.cancel();
-                                                        return;
+                                                new BukkitRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (armorStand.isDead() || slime.isDead()) {
+                                                            this.cancel();
+                                                            return;
+                                                        }
+
+                                                        if (current_cmd[0] > end) {
+                                                            this.cancel();
+                                                            armorStand.getEquipment().setHelmet(getModel(185));
+                                                            world.playSound(location, Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.BLOCKS, 2, 1);
+                                                            armorStandSys(armorStand, slime);
+                                                            displayChargeBar(player, true);
+                                                            setChargeBarValue(player, charge, maxCharge);
+
+                                                            return;
+                                                        }
+
+                                                        armorStand.getEquipment().setHelmet(getModel(current_cmd[0]));
+                                                        world.playSound(location, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 2, (float) ((current_cmd[0] - 185) / 3.0));
+                                                        current_cmd[0]++;
                                                     }
-
-                                                    if (current_cmd[0] > end) {
-                                                        this.cancel();
-                                                        armorStand.getEquipment().setHelmet(getModel(185));
-                                                        world.playSound(location, Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.BLOCKS, 2, 1);
-                                                        armorStandSys(armorStand, slime);
-                                                        displayChargeBar(player, true);
-                                                        setChargeBarValue(player, charge, maxCharge);
-
-                                                        return;
-                                                    }
-
-                                                    armorStand.getEquipment().setHelmet(getModel(current_cmd[0]));
-                                                    world.playSound(location, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 2, (float) ((current_cmd[0] - 185) / 3.0));
-                                                    current_cmd[0]++;
-                                                }
-                                            }.runTaskTimer(plugin, 0, 10);
-                                        }
-                                    }.runTaskLater(plugin, 2);
+                                                }.runTaskTimer(plugin, 0, 10);
+                                            }
+                                        }.runTaskLater(plugin, 2);
+                                    }
                                 }
                             }
                         }
                     }
-                } else if (event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+                }
+                else if (event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
                     event.setCancelled(true);
                 }
             }

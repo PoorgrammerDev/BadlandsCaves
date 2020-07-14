@@ -1,8 +1,9 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -70,6 +71,7 @@ public class LoadCustomItems {
             "f332ed08-1974-4dd3-9a0f-d7a6c1edbf06",
     };
 
+    @SuppressWarnings("ConstantConditions")
     public ItemStack getItem(CustomItem item) {
         if (item.equals(CustomItem.STARTER_SAPLING)){
             ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING);
@@ -439,7 +441,7 @@ public class LoadCustomItems {
             ItemMeta meta = lantern.getItemMeta();
 
             meta.setCustomModelData(182);
-            meta.setDisplayName(ChatColor.RESET.toString() + net.md_5.bungee.api.ChatColor.of("#2ac9cf") + "Soul Lantern");
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#2ac9cf") + "Soul Lantern");
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_soul_lantern"), PersistentDataType.BYTE, (byte) 1);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "soul_lantern_items"), PersistentDataType.STRING, "");
 
@@ -852,7 +854,7 @@ public class LoadCustomItems {
         else if (item.equals(CustomItem.SILENCER)) {
             ItemStack silencer = new ItemStack(Material.STRUCTURE_BLOCK);
             ItemMeta meta = silencer.getItemMeta();
-            meta.setDisplayName(net.md_5.bungee.api.ChatColor.DARK_PURPLE + "Silencer");
+            meta.setDisplayName(ChatColor.DARK_PURPLE + "Silencer");
             silencer.setItemMeta(meta);
 
             return silencer;
@@ -888,6 +890,7 @@ public class LoadCustomItems {
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_helmet_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             starlight_helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
@@ -917,6 +920,7 @@ public class LoadCustomItems {
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_chestplate_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[8]), "Starlight Base Armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[9]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
             starlight_chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
@@ -946,6 +950,7 @@ public class LoadCustomItems {
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_leggings_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[10]), "Starlight Base Armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[11]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
             starlight_leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
@@ -975,6 +980,7 @@ public class LoadCustomItems {
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000);
             starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1);
+            starlight_boots_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[12]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[13]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
             starlight_boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
@@ -1003,6 +1009,7 @@ public class LoadCustomItems {
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_saber"), PersistentDataType.BYTE, (byte) 1);
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+            saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             saber_meta.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
             saber_meta.addEnchant(Enchantment.DURABILITY, 5, true);
@@ -1030,6 +1037,7 @@ public class LoadCustomItems {
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_shield"), PersistentDataType.BYTE, (byte) 1);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -1057,15 +1065,12 @@ public class LoadCustomItems {
             blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
             blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "blaster_cooldown"), PersistentDataType.SHORT, (short) 0);
+            blaster_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             blaster_meta.addEnchant(Enchantment.DURABILITY, 1, true);
             blaster_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-            ItemStack empty = new ItemStack(Material.ARROW);
-            ItemMeta emptyMeta = empty.getItemMeta();
-            emptyMeta.setDisplayName(ChatColor.WHITE + "");
-            empty.setItemMeta(emptyMeta);
-
+            final ItemStack empty = EmptyItem.getEmptyItem(Material.ARROW);
             blaster_meta.addChargedProjectile(empty);
 
             Damageable damageable = (Damageable) blaster_meta;
@@ -1091,6 +1096,7 @@ public class LoadCustomItems {
             paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_paxel"), PersistentDataType.BYTE, (byte) 1);
             paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+            paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[14]), "Starlight Paxel No Damage", -999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
             paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
@@ -1127,6 +1133,7 @@ public class LoadCustomItems {
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry"), PersistentDataType.BYTE, (byte) 1);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             Damageable damageable = (Damageable) meta;
             damageable.setDamage(sentry.getType().getMaxDurability() - 1);
@@ -1423,6 +1430,129 @@ public class LoadCustomItems {
 
             bag.setItemMeta(meta);
             return bag;
+        }
+        else if (item.equals(CustomItem.NEBULITE_INSTALLER)) {
+            ItemStack installer = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = installer.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#0081fa") + "Nebulite Installer");
+            meta.setCustomModelData(192);
+
+            installer.setItemMeta(meta);
+            return installer;
+        }
+
+        //NEBULITES
+        else if (item.equals(CustomItem.NEBULITE_ENERGY_STORAGE)) {
+            ItemStack energy_storage = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = energy_storage.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.YELLOW + "Energy Storage");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Increases Max Charge by 500.");
+            lore.add(ChatColor.GRAY + "Can be used on All Starlight Items.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            energy_storage.setItemMeta(meta);
+            return energy_storage;
+        }
+        else if (item.equals(CustomItem.NEBULITE_CORRODING_LIGHTS)) {
+            ItemStack corroding_lights = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = corroding_lights.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.DARK_GREEN + "Corroding Lights");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Hits inflict Corrosion.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            corroding_lights.setItemMeta(meta);
+            return corroding_lights;
+        }
+        else if (item.equals(CustomItem.NEBULITE_JAGGED_LIGHTS)) {
+            ItemStack jagged_lights = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = jagged_lights.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.RED + "Jagged Lights");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Hits inflict Bleeding.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            jagged_lights.setItemMeta(meta);
+            return jagged_lights;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_FLURRYING_SWINGS)) {
+            ItemStack flurrying_swings = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = flurrying_swings.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.AQUA + "Flurrying Swings");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Increases attack speed, but lowers damage per swing.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            flurrying_swings.setItemMeta(meta);
+            return flurrying_swings;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_DECISIVE_SLICE)) {
+            ItemStack decisive_slice = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = decisive_slice.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.DARK_PURPLE + "Decisive Slice");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Decreases attack speed, but increases damage per swing.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            decisive_slice.setItemMeta(meta);
+            return decisive_slice;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_WIDE_SWING)) {
+            ItemStack wide_swing = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = wide_swing.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ff9900") + "Wide Swing");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Deals extra damage to nearby enemies.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            wide_swing.setItemMeta(meta);
+            return wide_swing;
         }
 
         return null;

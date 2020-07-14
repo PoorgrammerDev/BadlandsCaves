@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,7 +29,7 @@ public class UseChargedRune implements Listener {
     private final BadlandsCaves plugin;
     private final String title = "§8Upgrade Supernatural Abilities";
     private String confirm_title;
-    private ItemStack empty;
+    private final ItemStack empty = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
     private final int displace_max_level = 2;
     private final int eyes_max_level = 2;
     private final int withdraw_max_level = 2;
@@ -39,14 +40,6 @@ public class UseChargedRune implements Listener {
 
     public UseChargedRune(BadlandsCaves plugin) {
         this.plugin = plugin;
-        makeEmpty();
-    }
-
-    private void makeEmpty() {
-        empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
-        ItemMeta empty_meta = empty.getItemMeta();
-        empty_meta.setDisplayName("§r");
-        empty.setItemMeta(empty_meta);
     }
     
     @EventHandler

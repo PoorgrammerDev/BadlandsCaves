@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
+import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.*;
 import org.bukkit.block.*;
@@ -177,11 +178,7 @@ public class UseDimensionalAnchor implements Listener {
     public void openWarpMenu (Player player, Block doorway, String worldName, MenuType type) {
         Inventory inventory = plugin.getServer().createInventory(null, InventoryType.HOPPER, this.title);
 
-        ItemStack empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        ItemMeta empty_meta = empty.getItemMeta();
-        empty_meta.setDisplayName("§r");
-        empty.setItemMeta(empty_meta);
-
+        final ItemStack empty = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
         inventory.setItem(0, empty);
         inventory.setItem(1, empty);
         inventory.setItem(3, empty);

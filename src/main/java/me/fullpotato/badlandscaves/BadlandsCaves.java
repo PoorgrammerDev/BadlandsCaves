@@ -12,10 +12,8 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.*;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.ChargeRunnable;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightBlasterMechanism;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSentryMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteInstaller;
 import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
@@ -278,6 +276,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightSentryMechanism(this),
                 new UseChambersBag(this),
                 new AugmentedDrops(this),
+                //new RestlessNight(this),
+                new NebuliteInstaller(this),
         };
 
         for (Listener event : events) {

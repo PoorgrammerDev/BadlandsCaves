@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Info;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.EmptyItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,6 +25,8 @@ import java.util.Objects;
 public class CraftingGuide implements Listener {
     private final BadlandsCaves plugin;
     private final String title = "§8Crafting Guide";
+    final ItemStack blackGlass = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
+    final ItemStack whiteGlass = EmptyItem.getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
     private final String[] custom_items = {
             CustomItem.PURIFIED_WATER.toString(),
             CustomItem.ANTIDOTE.toString(),
@@ -267,16 +270,15 @@ public class CraftingGuide implements Listener {
         inventory.clear();
 
         fillInventory(inventory, 0);
-        ItemStack empty = getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
-        inventory.setItem(45, empty);
-        inventory.setItem(46, empty);
-        inventory.setItem(47, empty);
+        inventory.setItem(45, whiteGlass);
+        inventory.setItem(46, whiteGlass);
+        inventory.setItem(47, whiteGlass);
         inventory.setItem(48, getArrow(true));
         inventory.setItem(49, getPageNumber(1));
         inventory.setItem(50, getArrow(false));
-        inventory.setItem(51, empty);
-        inventory.setItem(52, empty);
-        inventory.setItem(53, empty);
+        inventory.setItem(51, whiteGlass);
+        inventory.setItem(52, whiteGlass);
+        inventory.setItem(53, whiteGlass);
     }
 
     public void fillInventory (Inventory inventory, int start) {
@@ -307,8 +309,6 @@ public class CraftingGuide implements Listener {
     }
 
     public void craftingGUI (Inventory inventory, ItemStack item, boolean hardmode) {
-        final ItemStack black = getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
-        final ItemStack white = getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
 
         ItemStack[] ingredients = null;
         for (ItemStack result : craftingRecipes.keySet()) {
@@ -322,12 +322,12 @@ public class CraftingGuide implements Listener {
 
         //layout
         for (int i = 0; i < 45; i++) {
-            inventory.setItem(i, black);
+            inventory.setItem(i, blackGlass);
         }
 
         //bottom bar
         for (int i = 45; i < 54; i++) {
-            inventory.setItem(i, white);
+            inventory.setItem(i, whiteGlass);
         }
 
         //hardmode button
@@ -358,9 +358,6 @@ public class CraftingGuide implements Listener {
     }
 
     public void cauldronGUI (Inventory inventory, ItemStack item, boolean hardmode) {
-        final ItemStack black = getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
-        final ItemStack white = getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
-
         ItemStack[] ingredients = null;
         for (ItemStack result : cauldronRecipes.keySet()) {
             if (result.isSimilar(item)) {
@@ -372,12 +369,12 @@ public class CraftingGuide implements Listener {
 
         //layout
         for (int i = 0; i < 45; i++) {
-            inventory.setItem(i, black);
+            inventory.setItem(i, blackGlass);
         }
 
         //bottom bar
         for (int i = 45; i < 54; i++) {
-            inventory.setItem(i, white);
+            inventory.setItem(i, whiteGlass);
         }
 
         //hardmode button
@@ -397,8 +394,8 @@ public class CraftingGuide implements Listener {
 
         final int[] green_slots = {9, 18, 27, 17, 26, 35};
         final int[] gray_slots = {11, 12, 13, 14, 15, 21, 23, 29, 30, 31, 32, 33};
-        final ItemStack green = getEmptyItem(Material.GREEN_STAINED_GLASS_PANE);
-        final ItemStack gray = getEmptyItem(Material.GRAY_STAINED_GLASS_PANE);
+        final ItemStack green = EmptyItem.getEmptyItem(Material.GREEN_STAINED_GLASS_PANE);
+        final ItemStack gray = EmptyItem.getEmptyItem(Material.GRAY_STAINED_GLASS_PANE);
 
         for (int green_slot : green_slots) {
             inventory.setItem(green_slot, green);
@@ -408,7 +405,7 @@ public class CraftingGuide implements Listener {
             inventory.setItem(gray_slot, gray);
         }
 
-        inventory.setItem(22, getEmptyItem(Material.LIME_STAINED_GLASS_PANE));
+        inventory.setItem(22, EmptyItem.getEmptyItem(Material.LIME_STAINED_GLASS_PANE));
 
 
         final int[] slots = {20, 24};
@@ -425,9 +422,6 @@ public class CraftingGuide implements Listener {
     }
 
     public void otherGUI (Inventory inventory, ItemStack item) {
-        final ItemStack black = getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
-        final ItemStack white = getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
-
         ItemStack descriptions = null;
         for (ItemStack result : otherDescription.keySet()) {
             if (result.isSimilar(item)) {
@@ -439,27 +433,18 @@ public class CraftingGuide implements Listener {
 
         //layout
         for (int i = 0; i < 45; i++) {
-            inventory.setItem(i, black);
+            inventory.setItem(i, blackGlass);
         }
 
         //bottom bar
         for (int i = 45; i < 54; i++) {
-            inventory.setItem(i, white);
+            inventory.setItem(i, whiteGlass);
         }
 
         inventory.setItem(53, getReturnButton());
 
         inventory.setItem(20, descriptions);
         inventory.setItem(24, item);
-    }
-
-    public ItemStack getEmptyItem(Material material) {
-        ItemStack empty = new ItemStack(material);
-        ItemMeta meta = empty.getItemMeta();
-        meta.setDisplayName(ChatColor.RESET.toString());
-        empty.setItemMeta(meta);
-
-        return empty;
     }
 
     public ItemStack getArrow (boolean reverse) {

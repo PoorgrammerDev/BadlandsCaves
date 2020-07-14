@@ -102,7 +102,6 @@ public class UseSoulLantern implements Listener {
     @EventHandler
     public void preventInputNonSoulItemDrag(InventoryDragEvent event) {
         if (event.getView().getTitle().equals(title)) {
-            event.getOldCursor();
             final CustomItem item = getCustomItemFromSoulItemStack(event.getOldCursor());
             if (item == null) {
                 boolean affectsSoulLantern = false;

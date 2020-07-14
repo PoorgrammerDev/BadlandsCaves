@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.EnergyCore;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
+import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatColor;
@@ -220,8 +221,7 @@ public class SilencerBlock implements Listener {
     public void openDestroySilencerMenu (Player player, Location location) {
         final Inventory inventory = plugin.getServer().createInventory(player, InventoryType.HOPPER, destroyMenuTitle);
 
-        final CraftingGuide craftingGuide = new CraftingGuide(plugin);
-        final ItemStack empty = craftingGuide.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
+        final ItemStack empty = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
 
         final ItemStack icon = new ItemStack(Material.BARRIER);
         final ItemMeta meta = icon.getItemMeta();

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -80,18 +81,8 @@ public class UseRune implements Listener {
     }
 
     public void openInputGUI (final Player player) {
-        Inventory inventory = plugin.getServer().createInventory(player, InventoryType.HOPPER, title);
-
-        ItemStack empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
-        ItemMeta empty_meta = empty.getItemMeta();
-        empty_meta.setDisplayName("§r");
-        /*
-        ArrayList<String> desc = new ArrayList<>();
-        desc.add("§7" + souls + " / 8 §dMerged Souls");
-        desc.add("§7" + magic_essence + " / 8 §9Essences of Magic");
-        empty_meta.setLore(desc);
-         */
-        empty.setItemMeta(empty_meta);
+        final Inventory inventory = plugin.getServer().createInventory(player, InventoryType.HOPPER, title);
+        final ItemStack empty = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
 
         inventory.setItem(0, empty);
         inventory.setItem(1, empty);
