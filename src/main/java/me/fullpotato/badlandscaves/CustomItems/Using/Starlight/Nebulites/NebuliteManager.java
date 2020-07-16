@@ -58,7 +58,7 @@ public class NebuliteManager {
         return false;
     }
 
-    public boolean starlightHasNebulite(ItemStack starlight, Nebulite check) {
+    public boolean hasNebulite(ItemStack starlight, Nebulite check) {
         for (Nebulite nebulite : getNebulites(starlight)) {
             if (nebulite.equals(check)) return true;
         }
@@ -66,7 +66,7 @@ public class NebuliteManager {
     }
 
     public boolean isConflicting (ItemStack starlight, Nebulite check) {
-        if (starlightHasNebulite(starlight, check)) return true;
+        if (hasNebulite(starlight, check)) return true;
 
         for (Nebulite nebulite : getNebulites(starlight)) {
             final CustomItem[] conflictingItems = nebulite.getMutuallyExplicit();

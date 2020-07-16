@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public class NebuliteInstaller implements Listener {
     private final BadlandsCaves plugin;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
+    private final NebuliteStatChanges statChanger;
     final ItemStack emptyNebuliteFiller = EmptyItem.getEmptyItem(Material.GRAY_STAINED_GLASS_PANE);
     private final String title = ChatColor.of("#0081fa") + "Nebulite Installer";
 
@@ -32,6 +34,7 @@ public class NebuliteInstaller implements Listener {
         this.plugin = plugin;
         starlightCharge = new StarlightCharge(plugin);
         nebuliteManager = new NebuliteManager(plugin);
+        statChanger = new NebuliteStatChanges(plugin);
     }
 
     @EventHandler
@@ -86,7 +89,7 @@ public class NebuliteInstaller implements Listener {
                         if (cursor != null) {
                             //ADDING STARLIGHT ITEM
                             if (slot == 10) {
-                                if (starlightCharge.isStarlight(cursor)) {
+                                if (starlightCharge.isStarlight(cursor) && (int) (starlightCharge.getCharge(cursor) * 0.99) > 0) {
                                     displayNebulites(player, inventory);
                                 }
                                 //PREVENT ADD OTHER ITEMS
@@ -169,7 +172,7 @@ public class NebuliteInstaller implements Listener {
                        else if (action.equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
                            if (inventory.getItem(10) == null || inventory.getItem(10).getType().equals(Material.AIR)) {
                                //QUICK-ADD STARLIGHT ITEM
-                               if (starlightCharge.isStarlight(item)) {
+                               if (starlightCharge.isStarlight(item) && (int) (starlightCharge.getCharge(item) * 0.99) > 0) {
                                    displayNebulites(player, inventory);
                                }
                                //PREVENT QUICK-ADD OTHER ITEMS
@@ -239,7 +242,7 @@ public class NebuliteInstaller implements Listener {
         }.runTaskLater(plugin, 1);
     }
 
-    public void updateNebulites(Player player, Inventory inventory, boolean sound) {
+    public void updateNebulites(Player player, Inventory inventory, boolean active) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -259,9 +262,22 @@ public class NebuliteInstaller implements Listener {
                     }
 
                     nebuliteManager.setNebulites(starlight, nebulites);
+                    statChanger.updateStats(starlight);
+
+
+                    if (active) {
+                        player.playSound(player.getLocation(), "custom.nebulite_installer_use", SoundCategory.PLAYERS, 1, 1.5F);
+
+                        int newCharge = (int) (starlightCharge.getCharge(starlight) * 0.99);
+                        starlightCharge.setCharge(starlight, newCharge);
+
+                        if ((int) (newCharge * 0.99) <= 0) {
+                            player.closeInventory();
+                            return;
+                        }
+                    }
                 }
                 player.updateInventory();
-                if (sound) player.playSound(player.getLocation(), "custom.nebulite_installer_use", SoundCategory.PLAYERS, 1, 1.5F);
             }
         }.runTaskLater(plugin, 1);
     }

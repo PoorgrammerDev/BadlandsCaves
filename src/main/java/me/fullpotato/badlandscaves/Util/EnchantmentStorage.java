@@ -95,5 +95,15 @@ public class EnchantmentStorage {
         }
     }
 
+    public void setEnchantments (ItemStack item, Map<Enchantment, Integer> enchantments) {
+        final String str = getStringFromEnchantments(enchantments);
+        final ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, str);
+        item.setItemMeta(meta);
+
+        disenchantItem(item);
+        loadEnchantments(item);
+    }
+
 
 }

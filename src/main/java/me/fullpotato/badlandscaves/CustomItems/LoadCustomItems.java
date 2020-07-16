@@ -1509,9 +1509,11 @@ public class LoadCustomItems {
             meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.AQUA + "Flurrying Swings");
             meta.setCustomModelData(193);
 
+            // TODO: 7/15/2020 work on balancing this and decisive slice later, these are just placeholder values
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Increases attack speed, but lowers damage per swing.");
+            lore.add(ChatColor.GRAY + "+0.5 Attack Speed");
+            lore.add(ChatColor.GRAY + "-3 Sharpness");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
             lore.add(ChatColor.RED + "Mutually Exclusive with Decisive Slice.");
             meta.setLore(lore);
@@ -1531,7 +1533,8 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Decreases attack speed, but increases damage per swing.");
+            lore.add(ChatColor.GRAY + "+3 Sharpness");
+            lore.add(ChatColor.GRAY + "-0.5 Attack Speed");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
             lore.add(ChatColor.RED + "Mutually Exclusive with Flurrying Swings.");
             meta.setLore(lore);
@@ -1875,8 +1878,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "+5 Efficiency");
-            lore.add(ChatColor.GRAY + "+3 Unbreaking");
-            lore.add(ChatColor.GRAY + "-3 Fortune");
+            lore.add(ChatColor.GRAY + "-4 Fortune");
             lore.add(ChatColor.GRAY + "If the Paxel has Molecular Preservation, it won't work on ores.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
             meta.setLore(lore);
