@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NebuliteManager {
     private final BadlandsCaves plugin;
@@ -124,6 +125,26 @@ public class NebuliteManager {
                 final ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
                     meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, str);
+
+                    List<String> lore = meta.getLore();
+                    if (lore == null) lore = new ArrayList<>();
+                    for (int i = 0; i < 3; i++) {
+                        if (nebulites[i] != null) {
+                            if (lore.size() > i + 1) {
+                                lore.set(i + 1, nebulites[i].getNebuliteItem().getItem().getItemMeta().getDisplayName());
+                            }
+                            else {
+                                lore.add(nebulites[i].getNebuliteItem().getItem().getItemMeta().getDisplayName());
+                            }
+                        }
+                        else {
+                            if (lore.size() > i + 1) {
+                                lore.set(i + 1, null);
+                            }
+                        }
+                    }
+                    meta.setLore(lore);
+
                 }
                 item.setItemMeta(meta);
             }
