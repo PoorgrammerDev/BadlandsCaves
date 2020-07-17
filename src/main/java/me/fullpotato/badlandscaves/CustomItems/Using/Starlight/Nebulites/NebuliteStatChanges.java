@@ -177,6 +177,7 @@ public class NebuliteStatChanges {
         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
 
         int efficiency = defaultEnchantments.getOrDefault(Enchantment.DIG_SPEED, 7);
+
         int fortune = defaultEnchantments.getOrDefault(Enchantment.LOOT_BONUS_BLOCKS, 5);
         int silkTouch = defaultEnchantments.getOrDefault(Enchantment.SILK_TOUCH, 0);
 

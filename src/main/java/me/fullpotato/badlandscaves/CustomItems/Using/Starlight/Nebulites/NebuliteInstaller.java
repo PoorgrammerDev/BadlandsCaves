@@ -261,8 +261,13 @@ public class NebuliteInstaller implements Listener {
                         }
                     }
 
-                    nebuliteManager.setNebulites(starlight, nebulites);
-                    statChanger.updateStats(starlight);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            nebuliteManager.setNebulites(starlight, nebulites);
+                            statChanger.updateStats(starlight);
+                        }
+                    }.runTaskLater(plugin, 1);
 
 
                     if (active) {
