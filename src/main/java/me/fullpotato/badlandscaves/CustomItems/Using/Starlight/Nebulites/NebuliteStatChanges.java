@@ -23,6 +23,7 @@ import java.util.*;
 public class NebuliteStatChanges {
     private final BadlandsCaves plugin;
     private final NebuliteManager nebuliteManager;
+    private final StarlightCharge starlightCharge;
     private final StarlightArmor starlightArmor;
     private final StarlightTools starlightTools;
     private final EnchantmentStorage enchantmentStorage;
@@ -31,6 +32,7 @@ public class NebuliteStatChanges {
     public NebuliteStatChanges(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.nebuliteManager = new NebuliteManager(plugin);
+        this.starlightCharge = new StarlightCharge(plugin);
         this.starlightArmor = new StarlightArmor(plugin);
         this.starlightTools = new StarlightTools(plugin);
         this.enchantmentStorage = new EnchantmentStorage(plugin);
@@ -43,15 +45,38 @@ public class NebuliteStatChanges {
     }
 
     public void updateStats(ItemStack item) {
-        if (starlightArmor.isStarlightArmor(item)) {
-            updateArmorStats(item);
+        if (starlightCharge.isStarlight(item)) {
+            if (starlightArmor.isStarlightArmor(item)) {
+                updateArmorStats(item);
+                updateAllStats(item, CustomItem.STARLIGHT_CHESTPLATE);
+            }
+            else if (starlightTools.isStarlightSaber(item)) {
+                updateSaberStats(item);
+                updateAllStats(item, CustomItem.STARLIGHT_SABER);
+            }
+            else if (starlightTools.isStarlightPaxel(item)) {
+                updatePaxelStats(item);
+                updateAllStats(item, CustomItem.STARLIGHT_PAXEL);
+            }
+            else if (starlightTools.isStarlightBlaster(item)) {
+                updateAllStats(item, CustomItem.STARLIGHT_BLASTER);
+            }
+            else if (starlightTools.isStarlightShield(item)) {
+                updateAllStats(item, CustomItem.STARLIGHT_SHIELD);
+            }
         }
-        else if (starlightTools.isStarlightSaber(item)) {
-            updateSaberStats(item);
+    }
+
+    public void updateAllStats (ItemStack item, CustomItem starlightType) {
+        int defaultCharge = starlightCharge.getMaxCharge(starlightType.getItem());
+        final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
+        for (Nebulite nebulite : nebulites) {
+            if (nebulite.equals(Nebulite.ENERGY_STORAGE)) {
+                defaultCharge *= 2;
+            }
         }
-        else if (starlightTools.isStarlightPaxel(item)) {
-            updatePaxelStats(item);
-        }
+
+        starlightCharge.setMaxCharge(item, defaultCharge);
     }
 
     public void updateArmorStats (ItemStack item) {
@@ -60,7 +85,6 @@ public class NebuliteStatChanges {
 
         int protection = defaultEnchantments.getOrDefault(Enchantment.PROTECTION_ENVIRONMENTAL, 7);
         int fire_protection = defaultEnchantments.getOrDefault(Enchantment.PROTECTION_FIRE, 0);
-        int fall_protection = defaultEnchantments.getOrDefault(Enchantment.PROTECTION_FALL, 0);
         int respiration = defaultEnchantments.getOrDefault(Enchantment.OXYGEN, 0);
         int aqua_affinity = defaultEnchantments.getOrDefault(Enchantment.WATER_WORKER, 0);
         int knockback_resist = 0;
@@ -69,20 +93,15 @@ public class NebuliteStatChanges {
         for (Nebulite nebulite : nebulites) {
             if (nebulite.equals(Nebulite.REINFORCED_PLATING)) {
                 protection += 3;
-                speed -= 10;
+                speed -= 5;
             }
             else if (nebulite.equals(Nebulite.STRONG_STANCE)) {
-                knockback_resist += 25;
+                knockback_resist += 100;
                 speed -= 10;
             }
-            else if (nebulite.equals(Nebulite.ROOTED_FEET)) {
-                knockback_resist += 75;
-                speed -= 25;
-            }
             else if (nebulite.equals(Nebulite.THRUSTER)) {
-                if (nebulites.contains(Nebulite.REINFORCED_PLATING)) speed += 10;
+                if (nebulites.contains(Nebulite.REINFORCED_PLATING)) speed += 5;
                 if (nebulites.contains(Nebulite.STRONG_STANCE)) speed += 10;
-                if (nebulites.contains(Nebulite.ROOTED_FEET)) speed += 25;
             }
             else if (nebulite.equals(Nebulite.OXYGENATOR)) {
                 respiration += 3;
@@ -91,15 +110,11 @@ public class NebuliteStatChanges {
             else if (nebulite.equals(Nebulite.SMOLDERING_FLAMES)) {
                 fire_protection += 5;
             }
-            else if (nebulite.equals(Nebulite.SHOCK_ABSORBER)) {
-                fall_protection += 5;
-            }
         }
 
         Map<Enchantment, Integer> newEnchants = new HashMap<>();
         if (protection > 0) newEnchants.put(Enchantment.PROTECTION_ENVIRONMENTAL, protection);
         if (fire_protection > 0) newEnchants.put(Enchantment.PROTECTION_FIRE, fire_protection);
-        if (fall_protection > 0) newEnchants.put(Enchantment.PROTECTION_FALL, fall_protection);
         if (respiration > 0) newEnchants.put(Enchantment.OXYGEN, respiration);
         if (aqua_affinity > 0) newEnchants.put(Enchantment.WATER_WORKER, aqua_affinity);
 
@@ -143,7 +158,7 @@ public class NebuliteStatChanges {
                 speed -= 0.5;
             }
             else if (nebulite.equals(Nebulite.WIDE_SWING)) {
-                sweeping += 3;
+                sweeping += 10;
             }
         }
 
@@ -176,7 +191,7 @@ public class NebuliteStatChanges {
         final Map<Enchantment, Integer> defaultEnchantments = CustomItem.STARLIGHT_PAXEL.getItem().getEnchantments();
         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
 
-        int efficiency = defaultEnchantments.getOrDefault(Enchantment.DIG_SPEED, 7);
+        int efficiency = defaultEnchantments.getOrDefault(Enchantment.DIG_SPEED, 5);
 
         int fortune = defaultEnchantments.getOrDefault(Enchantment.LOOT_BONUS_BLOCKS, 5);
         int silkTouch = defaultEnchantments.getOrDefault(Enchantment.SILK_TOUCH, 0);
@@ -184,10 +199,10 @@ public class NebuliteStatChanges {
         for (Nebulite nebulite : nebulites) {
             if (nebulite.equals(Nebulite.LIGHTSPEED_PROPULSORS)) {
                 efficiency += 5;
-                fortune -= 4;
+                fortune -= 5;
             }
             else if (nebulite.equals(Nebulite.MOLECULAR_PRESERVATION)) {
-                fortune -= 5;
+                fortune = 0;
                 silkTouch++;
             }
         }
@@ -199,6 +214,7 @@ public class NebuliteStatChanges {
 
         for (Enchantment enchantment : defaultEnchantments.keySet()) {
             if (!enchantments.containsKey(enchantment)) {
+                if (enchantment.equals(Enchantment.LOOT_BONUS_BLOCKS) && fortune <= 0) continue;
                 enchantments.put(enchantment, defaultEnchantments.get(enchantment));
             }
         }

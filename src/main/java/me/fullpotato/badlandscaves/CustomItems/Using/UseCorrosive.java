@@ -45,20 +45,18 @@ public class UseCorrosive implements Listener {
                             if (event.getDamage() >= player_dmg) {
                                 Random random = new Random();
                                 boolean critical = event.getDamage() > player_dmg;
+                                if ((critical && random.nextInt(100) < 80) || (!critical && random.nextInt(100) < 40)) {
+                                    if (applyCorrosion(entity, random, random.nextInt(5) + 10,false)) {
+                                        if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                                            corrosive.setHitsLeft(item, corrosive.getHitsLeft(item) - 1);
 
-                                boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
-
-                                if (!already_corroding && ((critical && random.nextInt(100) < 80) || (!critical && random.nextInt(100) < 40))) {
-                                    if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                                        corrosive.setHitsLeft(item, corrosive.getHitsLeft(item) - 1);
-
-                                        if (item.getType().equals(Material.WOODEN_SWORD)) {
-                                            Damageable meta = (Damageable) item.getItemMeta();
-                                            meta.setDamage(meta.getDamage() + random.nextInt(3) + 3);
-                                            item.setItemMeta((ItemMeta) meta);
+                                            if (item.getType().equals(Material.WOODEN_SWORD)) {
+                                                Damageable meta = (Damageable) item.getItemMeta();
+                                                meta.setDamage(meta.getDamage() + random.nextInt(3) + 3);
+                                                item.setItemMeta((ItemMeta) meta);
+                                            }
                                         }
                                     }
-                                    applyCorrosion(entity, random, random.nextInt(5) + 10);
                                 }
                             }
                         }
@@ -77,8 +75,7 @@ public class UseCorrosive implements Listener {
                     if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event.getHitEntity();
                         Random random = new Random();
-                        boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
-                        if (!already_corroding) applyCorrosion(entity, random, random.nextInt(3) + 2);
+                        applyCorrosion(entity, random, random.nextInt(3) + 2, false);
                     }
                     else {
                         arrow.getWorld().spawnParticle(Particle.REDSTONE, arrow.getLocation(), 5, 0.1, 0.1, 0.1, 0, new Particle.DustOptions(Color.GREEN, 1.5F));
@@ -89,33 +86,39 @@ public class UseCorrosive implements Listener {
         }
     }
 
-    public void applyCorrosion (LivingEntity entity, Random random, int max_times) {
-        entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 1);
-        int[] times_ran = {0};
+    public boolean applyCorrosion (LivingEntity entity, Random random, int max_times, boolean force) {
+        boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
 
-        PersistentDataContainer dataContainer = entity.getPersistentDataContainer();
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                if (entity.isDead() || times_ran[0] > max_times || dataContainer.get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 0) {
-                    dataContainer.set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 0);
-                    this.cancel();
-                }
-                else {
-                    entity.setHealth(Math.max(Math.min(entity.getHealth() - random.nextDouble() / 2.0, 20.0), 0.0));
-                    entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.PLAYERS, 2, 2);
-                    entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.PLAYERS, 2, 2);
-                    entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_CORAL_BLOCK_BREAK, SoundCategory.PLAYERS, 0.5F, 1);
-                    entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getEyeLocation(), 5, 0.3, 0.3, 0.3, 0, new Particle.DustOptions(Color.GREEN, 2));
+        if (force || !already_corroding) {
+            entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 1);
+            int[] times_ran = {0};
 
-                    if (entity instanceof Player) {
-                        Player target = (Player) entity;
-                        PlayerScore.TOXICITY.setScore(plugin, target, ((double) PlayerScore.TOXICITY.getScore(plugin, target)) + (random.nextDouble() / 2));
+            PersistentDataContainer dataContainer = entity.getPersistentDataContainer();
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    if (entity.isDead() || times_ran[0] > max_times || dataContainer.get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 0) {
+                        dataContainer.set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 0);
+                        this.cancel();
                     }
+                    else {
+                        entity.setHealth(Math.max(Math.min(entity.getHealth() - random.nextDouble() / 2.0, 20.0), 0.0));
+                        entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.PLAYERS, 2, 2);
+                        entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.PLAYERS, 2, 2);
+                        entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_CORAL_BLOCK_BREAK, SoundCategory.PLAYERS, 0.5F, 1);
+                        entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getEyeLocation(), 5, 0.3, 0.3, 0.3, 0, new Particle.DustOptions(Color.GREEN, 2));
 
-                    times_ran[0]++;
+                        if (entity instanceof Player) {
+                            Player target = (Player) entity;
+                            PlayerScore.TOXICITY.setScore(plugin, target, ((double) PlayerScore.TOXICITY.getScore(plugin, target)) + (random.nextDouble() / 2));
+                        }
+
+                        times_ran[0]++;
+                    }
                 }
-            }
-        }.runTaskTimer(plugin, 0, 5);
+            }.runTaskTimer(plugin, 0, 5);
+            return true;
+        }
+        return false;
     }
 }

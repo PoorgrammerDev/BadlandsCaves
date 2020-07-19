@@ -40,43 +40,49 @@ public class UseSerrated implements Listener {
                         if (event.getDamage() >= player_dmg) {
                             Random random = new Random();
                             boolean critical = event.getDamage() > player_dmg;
-
-                            boolean already_bleeding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) == (byte) 1;
-                            if (!already_bleeding && ((critical && random.nextInt(100) < 80)) || (!critical && random.nextInt(100) < 40)) {
-                                if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                                    Damageable meta = (Damageable) item.getItemMeta();
-                                    meta.setDamage(meta.getDamage() + 4);
-                                    item.setItemMeta((ItemMeta) meta);
-                                }
-
-
-                                entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE, (byte) 1);
-                                int max_times = random.nextInt(5) + 5;
-                                int[] times_ran = {0};
-
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        if (entity.isDead() || times_ran[0] > max_times || entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) == (byte) 0) {
-                                            entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE, (byte) 0);
-                                            this.cancel();
-                                        }
-                                        else {
-                                            entity.getWorld().spawnParticle(Particle.BLOCK_DUST, entity.getEyeLocation(), 10, 0.25, 0.25, 0.25, 0, Material.REDSTONE_BLOCK.createBlockData());
-                                            entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 2, 0.5F);
-
-                                            double bleed = Math.min(Math.max(event.getDamage() * 0.15, 1), 2);
-                                            entity.damage(bleed, player);
-
-                                            times_ran[0]++;
-                                        }
+                            if (((critical && random.nextInt(100) < 80)) || (!critical && random.nextInt(100) < 40)) {
+                                if (applyBleeding(player, entity, event.getDamage(), random.nextInt(5) + 5, false)) {
+                                    if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                                        Damageable meta = (Damageable) item.getItemMeta();
+                                        meta.setDamage(meta.getDamage() + 4);
+                                        item.setItemMeta((ItemMeta) meta);
                                     }
-                                }.runTaskTimer(plugin, 0, 60);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    public boolean applyBleeding (Player player, LivingEntity entity, double originalHitDamage, int count, boolean force) {
+        boolean alreadyBleeding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) == (byte) 1;
+
+        if (force || !alreadyBleeding) {
+            entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE, (byte) 1);
+            int[] times_ran = {0};
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (entity.isDead() || times_ran[0] > count || entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE) == (byte) 0) {
+                        entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "bleeding_debuff"), PersistentDataType.BYTE, (byte) 0);
+                        this.cancel();
+                    }
+                    else {
+                        entity.getWorld().spawnParticle(Particle.BLOCK_DUST, entity.getEyeLocation(), 10, 0.25, 0.25, 0.25, 0, Material.REDSTONE_BLOCK.createBlockData());
+                        entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 2, 0.5F);
+
+                        double bleed = Math.min(Math.max(originalHitDamage * 0.15, 1), 2);
+                        entity.damage(bleed, player);
+
+                        times_ran[0]++;
+                    }
+                }
+            }.runTaskTimer(plugin, 0, 60);
+            return true;
+        }
+        return false;
     }
 }

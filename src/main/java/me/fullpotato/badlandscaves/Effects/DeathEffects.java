@@ -146,7 +146,6 @@ public class DeathEffects {
         else if (deaths == 5) {
             if (supernatural) {
                 walk_speed = 1;
-                mine_speed = 1;
             }
         }
 
@@ -167,12 +166,12 @@ public class DeathEffects {
         else if (deaths == 0) {
             if (supernatural) {
                 walk_speed = 2;
-                mine_speed = 2;
+                mine_speed = 1;
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 0, true, false));
             }
             else {
                 walk_speed = 2;
-                mine_speed = 2;
+                mine_speed = 1;
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));

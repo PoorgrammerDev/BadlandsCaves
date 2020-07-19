@@ -73,10 +73,9 @@ public class StarlightCharge implements Listener {
         }
 
         if (starlight != null && energyCore != null) {
-            StarlightCharge chargeManager = new StarlightCharge(plugin);
             int newCharge = coreChecker.getCharge(energyCore);
 
-            chargeManager.setCharge(starlight, chargeManager.getCharge(starlight) + newCharge);
+            setCharge(starlight, getCharge(starlight) + newCharge);
             event.getInventory().setResult(starlight);
             return;
         }
@@ -172,7 +171,14 @@ public class StarlightCharge implements Listener {
 
                     lore.set(0, chargeDesc[0] + " " + chargeDesc[1] + " " + chargeDesc[2] + " " + chargeDesc[3]);
                     meta.setLore(lore);
-                    item.setItemMeta(meta);
+
+                    //change "durability" bar
+                    Damageable durabilityMeta = (Damageable) meta;
+
+                    final int max = item.getType().getMaxDurability();
+                    durabilityMeta.setDamage(Math.max(Math.min(max - (int) ((1.0 * getCharge(item) / charge) * max), max - 1), 1));
+
+                    item.setItemMeta((ItemMeta) durabilityMeta);
                 }
             }
         }

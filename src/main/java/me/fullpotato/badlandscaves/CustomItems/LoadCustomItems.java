@@ -1010,6 +1010,7 @@ public class LoadCustomItems {
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_saber"), PersistentDataType.BYTE, (byte) 1);
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
+            saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "saber_cooldown"), PersistentDataType.BYTE, (byte) 0);
             saber_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             saber_meta.addEnchant(Enchantment.DAMAGE_ALL, 10, true);
@@ -1103,7 +1104,7 @@ public class LoadCustomItems {
             paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
             paxel_meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
-            paxel_meta.addEnchant(Enchantment.DIG_SPEED, 7, true);
+            paxel_meta.addEnchant(Enchantment.DIG_SPEED, 5, true);
             paxel_meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 5, true);
             paxel_meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -1453,7 +1454,7 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Increases Max Charge by 500.");
+            lore.add(ChatColor.GRAY + "+100% Max Charge");
             lore.add(ChatColor.GRAY + "Can be used on All Starlight Items.");
             meta.setLore(lore);
 
@@ -1554,7 +1555,7 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Deals extra damage to nearby enemies.");
+            lore.add(ChatColor.GRAY + "+10 Sweeping Edge");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Saber.");
             meta.setLore(lore);
 
@@ -1573,7 +1574,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "+3 Protection");
-            lore.add(ChatColor.GRAY + "-10% Speed");
+            lore.add(ChatColor.GRAY + "-5% Speed");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
             meta.setLore(lore);
 
@@ -1592,37 +1593,15 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "+25% Knockback Resistance");
+            lore.add(ChatColor.GRAY + "+100% Knockback Resistance");
             lore.add(ChatColor.GRAY + "-10% Speed");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Rooted Feet.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
 
             strong_stance.setItemMeta(meta);
             return strong_stance;
-        }
-
-        else if (item.equals(CustomItem.NEBULITE_ROOTED_FEET)) {
-            ItemStack rooted_feet = new ItemStack(Material.KNOWLEDGE_BOOK);
-            ItemMeta meta = rooted_feet.getItemMeta();
-
-            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#2e5205") + "Rooted Feet");
-            meta.setCustomModelData(193);
-
-            ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "+75% Knockback Resistance");
-            lore.add(ChatColor.GRAY + "-25% Speed");
-            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Strong Stance.");
-            meta.setLore(lore);
-
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
-
-            rooted_feet.setItemMeta(meta);
-            return rooted_feet;
         }
 
         else if (item.equals(CustomItem.NEBULITE_THRUSTER)) {
@@ -1634,7 +1613,7 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Reverses the Speed costs of Plating, Strong Stance, and Rooted Feet.");
+            lore.add(ChatColor.GRAY + "Reverses the Speed costs of Plating and Strong Stance.");
             lore.add(ChatColor.GRAY + "Consumes Charge when moving around.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
             meta.setLore(lore);
@@ -1717,8 +1696,7 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "+5 Feather Falling");
-            lore.add(ChatColor.GRAY + "Consumes Extra Charge when taking Fall Damage.");
+            lore.add(ChatColor.GRAY + "Consumes Charge to prevent Fall Damage.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
             meta.setLore(lore);
 
@@ -1878,7 +1856,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "+5 Efficiency");
-            lore.add(ChatColor.GRAY + "-4 Fortune");
+            lore.add(ChatColor.GRAY + "-5 Fortune");
             lore.add(ChatColor.GRAY + "If the Paxel has Molecular Preservation, it won't work on ores.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
             meta.setLore(lore);

@@ -80,6 +80,12 @@ public class NebuliteInstaller implements Listener {
                 final ItemStack cursor = event.getCursor();
                 final InventoryAction action = event.getAction();
                 final int slot = event.getSlot();
+
+                if (action.equals(InventoryAction.HOTBAR_MOVE_AND_READD) || action.equals(InventoryAction.HOTBAR_SWAP)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 //INSTALLER INVENTORY
                 if (inventory.equals(event.getClickedInventory())) {
                     if (action.equals(InventoryAction.PLACE_ALL) ||

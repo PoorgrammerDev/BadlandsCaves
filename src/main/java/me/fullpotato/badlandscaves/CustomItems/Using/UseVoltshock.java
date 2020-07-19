@@ -81,11 +81,8 @@ public class UseVoltshock implements Listener {
                 if (arrow.isCritical()) {
                     if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event.getHitEntity();
-                        int metal = metallicArmor(entity);
-
-                        arrow.setDamage((arrow.getDamage() / 2.0) + (metal / 4.0));
-                        int duration = 15 + (2 * (metal));
-                        applyShock(entity, duration);
+                        arrow.setDamage((arrow.getDamage() / 2.0) + (metallicArmor(entity) / 4.0));
+                        applyShock(entity);
                     }
                     else {
                         arrow.getWorld().spawnParticle(Particle.CRIT_MAGIC, arrow.getLocation(), 5, 0.1, 0.1, 0.1, 0);
@@ -94,6 +91,10 @@ public class UseVoltshock implements Listener {
                 }
             }
         }
+    }
+
+    public void applyShock (LivingEntity entity) {
+        applyShock(entity, 15 + (2 * metallicArmor(entity)));
     }
 
     public void applyShock (LivingEntity entity, int duration) {
@@ -123,24 +124,28 @@ public class UseVoltshock implements Listener {
                 if (equipment.getHelmet().getType().equals(Material.IRON_HELMET)) output++;
                 else if (equipment.getHelmet().getType().equals(Material.GOLDEN_HELMET)) output++;
                 else if (equipment.getHelmet().getType().equals(Material.CHAINMAIL_HELMET)) output++;
+                else if (equipment.getHelmet().getType().equals(Material.NETHERITE_HELMET)) output++;
             }
 
             if (equipment.getChestplate() != null) {
                 if (equipment.getChestplate().getType().equals(Material.IRON_CHESTPLATE)) output++;
                 else if (equipment.getChestplate().getType().equals(Material.GOLDEN_CHESTPLATE)) output++;
                 else if (equipment.getChestplate().getType().equals(Material.CHAINMAIL_CHESTPLATE)) output++;
+                else if (equipment.getChestplate().getType().equals(Material.NETHERITE_CHESTPLATE)) output++;
             }
 
             if (equipment.getLeggings() != null) {
                 if (equipment.getLeggings().getType().equals(Material.IRON_LEGGINGS)) output++;
                 else if (equipment.getLeggings().getType().equals(Material.GOLDEN_LEGGINGS)) output++;
                 else if (equipment.getLeggings().getType().equals(Material.CHAINMAIL_LEGGINGS)) output++;
+                else if (equipment.getLeggings().getType().equals(Material.NETHERITE_LEGGINGS)) output++;
             }
 
             if (equipment.getBoots() != null) {
                 if (equipment.getBoots().getType().equals(Material.IRON_BOOTS)) output++;
                 else if (equipment.getBoots().getType().equals(Material.GOLDEN_BOOTS)) output++;
                 else if (equipment.getBoots().getType().equals(Material.CHAINMAIL_BOOTS)) output++;
+                else if (equipment.getBoots().getType().equals(Material.NETHERITE_BOOTS)) output++;
             }
         }
 
