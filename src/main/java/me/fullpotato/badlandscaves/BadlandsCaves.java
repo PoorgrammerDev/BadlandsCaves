@@ -14,8 +14,8 @@ import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteOxygenator;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteSmolderingFlames;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteThruster;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSaberMechanism;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteInstaller;
 import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
@@ -283,6 +283,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightSaberMechanism(this),
                 new NebuliteThruster(this),
                 new NebuliteOxygenator(this),
+                new NebuliteSmolderingFlames(this),
         };
 
         for (Listener event : events) {

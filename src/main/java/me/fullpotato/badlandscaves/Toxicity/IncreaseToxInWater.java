@@ -2,6 +2,10 @@ package me.fullpotato.badlandscaves.Toxicity;
 
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -12,12 +16,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Random;
 
 public class IncreaseToxInWater implements Listener {
     private final BadlandsCaves plugin;
-    public IncreaseToxInWater(BadlandsCaves bcav) {
-        plugin = bcav;
+    private final Random random = new Random();
+    private final StarlightArmor starlightArmor;
+    private final StarlightCharge starlightCharge;
+    private final NebuliteManager nebuliteManager;
+
+    public IncreaseToxInWater(BadlandsCaves plugin) {
+        this.plugin = plugin;
+        this.starlightArmor = new StarlightArmor(plugin);
+        this.starlightCharge = new StarlightCharge(plugin);
+        this.nebuliteManager = new NebuliteManager(plugin);
     }
 
 
@@ -46,6 +62,29 @@ public class IncreaseToxInWater implements Listener {
                  *  Nothing
                  * */
                 if (!player.isDead() && (double) PlayerScore.TOXICITY.getScore(plugin, player) <= 100) {
+                    if (plugin.getSystemConfig().getBoolean("hardmode")) {
+                        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                            final EntityEquipment equipment = player.getEquipment();
+                            if (equipment != null) {
+                                for (ItemStack armor : equipment.getArmorContents()) {
+                                    if (armor != null && starlightArmor.isStarlightArmor(armor) && starlightCharge.getCharge(armor) > 0) {
+                                        final Nebulite[] nebulites = nebuliteManager.getNebulites(armor);
+                                        for (Nebulite nebulite : nebulites) {
+                                            if (nebulite != null && nebulite.equals(Nebulite.TOXIN_EXPELLER)) {
+                                                if (random.nextInt(100) < 5) starlightCharge.setCharge(armor, starlightCharge.getCharge(armor) - 1);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+
                     if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
                         if ((player.getVehicle() instanceof Boat)) {
                             //Boat with wbreath

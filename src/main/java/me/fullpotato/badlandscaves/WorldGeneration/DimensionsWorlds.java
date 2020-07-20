@@ -108,7 +108,7 @@ public class DimensionsWorlds {
 
         Habitation habitation = Habitation.INHABITED; //getRandomHabitation(); TODO: 7/6/2020 change
         Biome biome;
-        if (habitation.equals(Habitation.INHABITED)) {
+        if (habitation.equals(Habitation.UNINHABITED)) {
             biome = habitableBiomes[random.nextInt(habitableBiomes.length)];
         }
         else {
@@ -118,7 +118,7 @@ public class DimensionsWorlds {
 
         WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
 
-        World.Environment environment = World.Environment.NORMAL; //getEnvironment(); TODO revert
+        World.Environment environment = World.Environment.THE_END; //getEnvironment(); TODO revert
         creator.environment(environment);
         creator.generator(new DimensionsGen(biome));
 
@@ -237,6 +237,7 @@ public class DimensionsWorlds {
 
         //RETURNING----------------------------------------------------------------------------
         EnvironmentalHazards hazards = new EnvironmentalHazards(plugin);
+        hazards.addHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN);
 
         for (int i = 0; i < amount; i++) {
             EnvironmentalHazards.Hazard hazard;

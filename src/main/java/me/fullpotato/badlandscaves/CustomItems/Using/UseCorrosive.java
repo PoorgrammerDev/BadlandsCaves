@@ -2,6 +2,10 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Corrosive;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -13,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,9 +29,15 @@ import java.util.Random;
 
 public class UseCorrosive implements Listener {
     private final BadlandsCaves plugin;
+    private final StarlightArmor starlightArmor;
+    private final StarlightCharge starlightCharge;
+    private final NebuliteManager nebuliteManager;
 
     public UseCorrosive(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.starlightArmor = new StarlightArmor(plugin);
+        this.starlightCharge = new StarlightCharge(plugin);
+        this.nebuliteManager = new NebuliteManager(plugin);
     }
 
     @EventHandler
@@ -90,6 +101,33 @@ public class UseCorrosive implements Listener {
         boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
 
         if (force || !already_corroding) {
+            if (!force) {
+                boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
+                if (hardmode) {
+                    if (entity instanceof Player) {
+                        final Player player = (Player) entity;
+                        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                            final EntityEquipment equipment = player.getEquipment();
+                            if (equipment != null) {
+                                for (final ItemStack armor : equipment.getArmorContents()) {
+                                    if (armor != null && starlightArmor.isStarlightArmor(armor) && starlightCharge.getCharge(armor) > 0) {
+                                        final Nebulite[] nebulites = nebuliteManager.getNebulites(armor);
+                                        for (final Nebulite nebulite : nebulites) {
+                                            if (nebulite != null && nebulite.equals(Nebulite.TOXIN_EXPELLER)) {
+                                                starlightCharge.setCharge(armor, starlightCharge.getCharge(armor) - (max_times * 2));
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
             entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 1);
             int[] times_ran = {0};
 
