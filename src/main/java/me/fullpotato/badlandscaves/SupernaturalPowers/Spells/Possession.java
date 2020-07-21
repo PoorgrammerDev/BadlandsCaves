@@ -56,7 +56,7 @@ public class Possession extends UsePowers implements Listener {
                         if (mana >= (pos_drain_tick + possession_mana_cost)) {
                             preventDoubleClick(player);
                             TargetEntity targetEntity = new TargetEntity();
-                            LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, player);
+                            LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, 0.2, player);
                             if (target != null && player.hasLineOfSight(target)) {
                                 if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
                                     boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();

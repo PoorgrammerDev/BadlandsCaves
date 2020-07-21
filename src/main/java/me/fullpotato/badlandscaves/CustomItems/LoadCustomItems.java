@@ -1449,7 +1449,7 @@ public class LoadCustomItems {
             ItemStack energy_storage = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = energy_storage.getItemMeta();
 
-            meta.setDisplayName(ChatColor.YELLOW + "Energy Storage");
+            meta.setDisplayName(ChatColor.of("#ffe62b") + "Energy Storage");
             meta.setCustomModelData(193);
 
             ArrayList<String> lore = new ArrayList<>();
@@ -1657,7 +1657,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "+5 Fire Protection");
             lore.add(ChatColor.GRAY + "Applies Fire Resistance if on fire under 25% HP.");
             lore.add(ChatColor.GRAY + "Consumes Charge to apply Fire Resistance.");
-            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Chestplate or Leggings.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1678,7 +1678,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "Full Corrosive Resistance.");
             lore.add(ChatColor.GRAY + "Increased Resistance to Toxicity when swimming.");
             lore.add(ChatColor.GRAY + "Consumes Charge when resisting Corrosive or Toxic.");
-            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Chestplate or Leggings.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1706,26 +1706,6 @@ public class LoadCustomItems {
             return shock_absorber;
         }
 
-        else if (item.equals(CustomItem.NEBULITE_SONIC_SPEED)) {
-            ItemStack sonic_speed = new ItemStack(Material.KNOWLEDGE_BOOK);
-            ItemMeta meta = sonic_speed.getItemMeta();
-
-            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#039eff") + "Sonic Speed");
-            meta.setCustomModelData(193);
-
-            ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "+100% Speed when Sprinting");
-            lore.add(ChatColor.GRAY + "Consumes Charge when Sprinting.");
-            lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
-            meta.setLore(lore);
-
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
-
-            sonic_speed.setItemMeta(meta);
-            return sonic_speed;
-        }
-
         else if (item.equals(CustomItem.NEBULITE_FORCEFIELD)) {
             ItemStack forcefield = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = forcefield.getItemMeta();
@@ -1735,7 +1715,7 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "25% of ignoring entire attacks, inflicts damage onto Charge at 5x rate.");
+            lore.add(ChatColor.GRAY + "25% of ignoring entire attacks, inflicts damage onto Charge at 2x rate.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Armor.");
             meta.setLore(lore);
 
@@ -1774,7 +1754,8 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Removes cooldown. Consecutive shots drain more Charge.");
+            lore.add(ChatColor.GRAY + "You can now shoot during Cooldown.");
+            lore.add(ChatColor.GRAY + "Shooting during Cooldown consumes extra Charge.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
             meta.setLore(lore);
 

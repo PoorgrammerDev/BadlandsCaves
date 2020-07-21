@@ -39,7 +39,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
         if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
 
         TargetEntity targetEntity = new TargetEntity();
-        LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, player);
+        LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, 0.2, player);
 
         if (target != null && !(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) &&
                 !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) &&

@@ -13,9 +13,7 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.*;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteOxygenator;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteSmolderingFlames;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteThruster;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteInstaller;
 import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
@@ -284,6 +282,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NebuliteThruster(this),
                 new NebuliteOxygenator(this),
                 new NebuliteSmolderingFlames(this),
+                new NebuliteShockAbsorber(this),
+                new NebuliteForcefield(this),
         };
 
         for (Listener event : events) {
@@ -350,7 +350,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
         new Surface(this).runTaskTimer(this, 0, 100);
         new ChargeRunnable(this).runTaskTimer(this, 0, 0);
-        new StarlightPaxelMechanism(this).runTaskTimerAsynchronously(this, 0, 0);
+        new StarlightPaxelMechanism(this).runTaskTimer(this, 0, 0);
         new StarlightBlasterMechanism(this).runTaskTimer(this, 0, 0);
         new SlowBreakRunnable(this).runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this).runTaskTimer(this, 0, 20);

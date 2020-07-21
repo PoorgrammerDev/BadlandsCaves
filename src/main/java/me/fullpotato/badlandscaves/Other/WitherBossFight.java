@@ -1013,7 +1013,7 @@ public class WitherBossFight implements Listener {
                         player.teleport(plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation());
                     }
                     else {
-                        player.teleport(bedSpawn);
+                        player.teleport(bedSpawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
                     }
                 }
             }

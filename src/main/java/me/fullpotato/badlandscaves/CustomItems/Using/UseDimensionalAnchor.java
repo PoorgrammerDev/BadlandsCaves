@@ -24,6 +24,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -252,7 +253,7 @@ public class UseDimensionalAnchor implements Listener {
                             World world = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + worldName);
                             if (world != null) {
                                 player.closeInventory();
-                                player.teleport(world.getSpawnLocation());
+                                player.teleport(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                                 player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.BLOCKS, 0.5F, 1);
                             }
                         }

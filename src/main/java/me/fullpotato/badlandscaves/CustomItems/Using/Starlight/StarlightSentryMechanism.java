@@ -4,6 +4,8 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.EnhancedEyes;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -36,16 +38,21 @@ import java.util.UUID;
 
 public class StarlightSentryMechanism implements Listener {
     private final BadlandsCaves plugin;
+    private final StarlightTools toolManager;
+    private final StarlightCharge chargeManager;
+    private final EnhancedEyesNMS nms;
 
     public StarlightSentryMechanism(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.toolManager = new StarlightTools(plugin);
+        this.chargeManager = new StarlightCharge(plugin);
+        this.nms = plugin.getEnhancedEyesNMS();
     }
 
     @EventHandler
     public void placeSentry(PlayerInteractEvent event) {
         final ItemStack item = event.getItem();
         if (item != null) {
-            final StarlightTools toolManager = new StarlightTools(plugin);
             if (toolManager.isStarlightSentry(item)) {
                 if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                     final Player player = event.getPlayer();
@@ -60,7 +67,6 @@ public class StarlightSentryMechanism implements Listener {
 
                             if (block.getRelative(BlockFace.DOWN).getType().isSolid()) {
                                 if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 0) {
-                                    final StarlightCharge chargeManager = new StarlightCharge(plugin);
                                     final int charge = chargeManager.getCharge(item);
                                     final int maxCharge = chargeManager.getMaxCharge(item);
                                     if (charge > 0) {
@@ -116,9 +122,10 @@ public class StarlightSentryMechanism implements Listener {
                                                             armorStand.getEquipment().setHelmet(getModel(185));
                                                             world.playSound(location, Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.BLOCKS, 2, 1);
                                                             armorStandSys(armorStand, slime);
+                                                            makeGlowing(armorStand, player);
                                                             displayChargeBar(player, true);
                                                             setChargeBarValue(player, charge, maxCharge);
-
+                                                            //nms.highlightEntity(player, armorStand);
                                                             return;
                                                         }
 
@@ -258,7 +265,6 @@ public class StarlightSentryMechanism implements Listener {
             final Player player = getOwner(armorStand);
             if (player != null) {
                 final ItemStack item = CustomItem.STARLIGHT_SENTRY.getItem();
-                StarlightCharge chargeManager = new StarlightCharge(plugin);
                 chargeManager.setCharge(item, charge);
 
                 for (Entity entity : slime.getNearbyEntities(10, 10, 10)) {
@@ -347,8 +353,6 @@ public class StarlightSentryMechanism implements Listener {
                 }
 
                 if (target != null) {
-                    //location.setDirection(target.getLocation().subtract(armorStand.getLocation()).toVector());
-                    //armorStand.teleport(location);
 
                     if (target instanceof Mob) {
                         Mob mob = (Mob) target;
@@ -368,6 +372,22 @@ public class StarlightSentryMechanism implements Listener {
                 }
             }
         }.runTaskTimer(plugin, 0, 20);
+    }
+
+    public void makeGlowing (ArmorStand armorStand, Player owner) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!owner.isOnline() || armorStand.isDead()) {
+                    this.cancel();
+                    return;
+                }
+
+                if (owner.getWorld().equals(armorStand.getWorld()) && !owner.hasLineOfSight(armorStand)) {
+                    nms.highlightEntity(owner, armorStand, ChatColor.YELLOW);
+                }
+            }
+        }.runTaskTimer(plugin, 0, 0);
     }
 
     public boolean isSentry (ArmorStand armorStand) {

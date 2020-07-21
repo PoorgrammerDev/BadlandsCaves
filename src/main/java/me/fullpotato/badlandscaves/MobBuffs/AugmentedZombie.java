@@ -115,7 +115,7 @@ public class AugmentedZombie extends BukkitRunnable {
                                                                 }
 
                                                                 Location move = knife.getLocation().clone().add(knife.getLocation().getDirection());
-                                                                knife.teleport(move);
+                                                                knife.teleport(move, PlayerTeleportEvent.TeleportCause.PLUGIN);
                                                                 time[0]++;
                                                             }
                                                         }

@@ -6,34 +6,33 @@ import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityAirChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
-public class NebuliteOxygenator extends NebuliteMechanisms implements Listener {
+public class NebuliteShockAbsorber extends NebuliteMechanisms implements Listener {
 
-    public NebuliteOxygenator(BadlandsCaves plugin) {
+    public NebuliteShockAbsorber(BadlandsCaves plugin) {
         super(plugin);
     }
 
     @EventHandler
-    public void replenishOxygen (EntityAirChangeEvent event) {
+    public void preventFallDamage (EntityDamageEvent event) {
         if (plugin.getSystemConfig().getBoolean("hardmode")) {
             if (event.getEntity() instanceof Player) {
                 final Player player = (Player) event.getEntity();
-
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
-                    int amount = event.getAmount();
-                    if (amount < 0 && amount < player.getRemainingAir()) {
+                    EntityDamageEvent.DamageCause cause = event.getCause();
+                    if (cause.equals(EntityDamageEvent.DamageCause.FALL)) {
                         final EntityEquipment equipment = player.getEquipment();
                         if (equipment != null) {
-                            final ItemStack helmet = equipment.getHelmet();
-                            if (helmet != null && starlightArmor.isStarlightArmor(helmet) && starlightCharge.getCharge(helmet) > 0) {
-                                final Nebulite[] nebulites = nebuliteManager.getNebulites(helmet);
+                            final ItemStack boots = equipment.getBoots();
+                            if (boots != null && starlightArmor.isStarlightArmor(boots) && starlightCharge.getCharge(boots) > 0) {
+                                final Nebulite[] nebulites = nebuliteManager.getNebulites(boots);
                                 for (Nebulite nebulite : nebulites) {
-                                    if (nebulite != null && nebulite.equals(Nebulite.OXYGENATOR)) {
-                                        event.setAmount(30);
-                                        starlightCharge.setCharge(helmet, starlightCharge.getCharge(helmet) - 30);
+                                    if (nebulite != null && nebulite.equals(Nebulite.SHOCK_ABSORBER)) {
+                                        event.setCancelled(true);
+                                        starlightCharge.setCharge(boots, (int) (starlightCharge.getCharge(boots) - (event.getFinalDamage() * 3)));
                                         return;
                                     }
                                 }
