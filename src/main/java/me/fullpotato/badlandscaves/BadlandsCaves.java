@@ -284,6 +284,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NebuliteSmolderingFlames(this),
                 new NebuliteShockAbsorber(this),
                 new NebuliteForcefield(this),
+                new NebuliteLightSpeed(this),
+                new NebuliteBigSmash(this),
+                new NebuliteDecisiveDisintegration(this),
         };
 
         for (Listener event : events) {

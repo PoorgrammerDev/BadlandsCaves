@@ -3,9 +3,9 @@ package me.fullpotato.badlandscaves.CustomItems.Using.Starlight;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.NebuliteMechanisms;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TargetEntity;
@@ -32,13 +32,20 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
     private final StarlightCharge chargeManager;
     private final StarlightTools toolManager;
     private final NebuliteManager nebuliteManager;
+    private final EnhancedEyesNMS nms;
     private final int damage = 20;
+    private final Particle.DustOptions[] dustOptions = {
+            new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), // default yellow
+            new Particle.DustOptions(Color.fromRGB(255, 125, 1), 1), // superheating orange
+            new Particle.DustOptions(Color.fromRGB(0, 180, 255), 1), // hunters blue
+    };
 
     public StarlightBlasterMechanism(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.chargeManager = new StarlightCharge(plugin);
         this.toolManager = new StarlightTools(plugin);
         this.nebuliteManager = new NebuliteManager(plugin);
+        this.nms = plugin.getEnhancedEyesNMS();
     }
 
     @EventHandler
@@ -75,14 +82,24 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                 if (hardmode && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0 && (cooldown <= 0 || nebuliteList.contains(Nebulite.RAPID_FIRE))) {
                     Location location = player.getEyeLocation();
                     TargetEntity targetEntity = new TargetEntity();
-                    Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, nebuliteList.contains(Nebulite.SUPERHEATING_LASER) ? 125 : 200, 1), 1);
+                    Particle.DustOptions dustOptions = this.dustOptions[0];
 
+                    //PARTICLE COLOR
+                    if (nebuliteList.contains(Nebulite.SUPERHEATING_LASER)) {
+                        dustOptions = this.dustOptions[1];
+                    }
+                    else if (nebuliteList.contains(Nebulite.HUNTERS_EYES)) {
+                        dustOptions = this.dustOptions[2];
+                    }
+
+
+                    //FINDING HIT TARGET ENTITIES
                     Location targetLocation;
                     LivingEntity defaultTarget = null;
                     Collection<LivingEntity> scatteredTargets = null;
                     Set<LivingEntity> penetratingBeamTargets = null;
                     if (nebuliteList.contains(Nebulite.SCATTERING_LIGHTS)) {
-                        scatteredTargets = targetEntity.findTargetLivingEntities(location, 50, 0.2, 1.5, player);
+                        scatteredTargets = targetEntity.findTargetLivingEntities(location, 50, 0.2, 1.5, false, player);
 
                         scatteredTargets.forEach(entity -> {
                             if (entity != null) {
@@ -108,8 +125,34 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                         targetEntity.setTargetLocation(location, 50);
                         targetLocation = targetEntity.getTargetLocation();
                     }
+                    else if (nebuliteList.contains(Nebulite.HUNTERS_EYES)) {
+                        defaultTarget = targetEntity.findTargetLivingEntity(location, 50, 0.2, 0.2, true, player);
+
+                        if (defaultTarget != null) {
+                            if (nebuliteList.contains(Nebulite.SUPERHEATING_LASER)) defaultTarget.setFireTicks(999999);
+                            defaultTarget.damage(damage, player);
+                            defaultTarget.setNoDamageTicks(0);
+
+                            int[] ran = {0};
+                            final int times = 120;
+                            LivingEntity finalDefaultTarget = defaultTarget;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (ran[0] > times) {
+                                        this.cancel();
+                                        return;
+                                    }
+
+                                    nms.highlightEntity(player, finalDefaultTarget, ChatColor.AQUA);
+                                    ran[0]++;
+                                }
+                            }.runTaskTimer(plugin, 0, 0);
+                        }
+                        targetLocation = targetEntity.getTargetLocation();
+                    }
                     else {
-                        defaultTarget = targetEntity.findTargetLivingEntity(location, 50, 0.2, 0.2, player);
+                        defaultTarget = targetEntity.findTargetLivingEntity(location, 50, 0.2, 0.2, false, player);
 
                         if (defaultTarget != null) {
                             if (nebuliteList.contains(Nebulite.SUPERHEATING_LASER)) defaultTarget.setFireTicks(999999);
@@ -138,6 +181,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                                         }
                                         else if (block.getType().equals(Material.WATER)) block.setType(Material.AIR);
                                         else if (block.getType().equals(Material.SNOW)) block.setType(Material.AIR);
+                                        else if (block.getType().isAir()) block.setType(Material.FIRE);
                                         block.getState().update(true);
                                     }
                                 }
@@ -150,7 +194,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
 
 
                     player.getWorld().playSound(location, "custom.starlight_blaster", 1, 1);
-                    ParticleShapes.particleLine(null, Particle.REDSTONE, player.getEyeLocation(), targetLocation, 0, dustOptions, 1);
+                    ParticleShapes.particleLine(null, Particle.REDSTONE, player.getEyeLocation(), targetLocation, 0, dustOptions, 0.5);
 
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                         int cost = 25;
@@ -166,8 +210,14 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                             if (defaultTarget != null) cost += damage / 2;
                         }
 
+                        //HUNTER'S EYES COST FACTOR
+                        if (nebuliteList.contains(Nebulite.HUNTERS_EYES)) cost *= 3;
+
+                        //SUPERHEAT COST FACTOR
+                        if (nebuliteList.contains(Nebulite.SUPERHEATING_LASER)) cost *= 5;
+
                         //RAPID FIRE COST FACTOR
-                        if (nebuliteList.contains(Nebulite.RAPID_FIRE) && cooldown > 0) cost *= (cooldown / 10.0);
+                        if (nebuliteList.contains(Nebulite.RAPID_FIRE) && cooldown > 0) cost *= (cooldown / 5.0);
 
                         chargeManager.setCharge(item, charge - cost);
                     }
@@ -231,6 +281,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
     public int getDamage() {
         return damage;
     }
+
 
     public Set<LivingEntity> findLinedTargets (Location location, int range, double radius, Entity... excludeEntities) {
         Location clone = location.clone();

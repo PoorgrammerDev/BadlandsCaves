@@ -1,23 +1,19 @@
 package me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites;
 
-import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class NebuliteStatChanges {
@@ -199,11 +195,13 @@ public class NebuliteStatChanges {
         for (Nebulite nebulite : nebulites) {
             if (nebulite.equals(Nebulite.LIGHTSPEED_PROPULSORS)) {
                 efficiency += 5;
-                fortune -= 5;
             }
             else if (nebulite.equals(Nebulite.MOLECULAR_PRESERVATION)) {
                 fortune = 0;
                 silkTouch++;
+            }
+            else if (nebulite.equals(Nebulite.BIG_SMASH)) {
+                efficiency -= 2;
             }
         }
 

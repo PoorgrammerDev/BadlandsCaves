@@ -25,7 +25,7 @@ public class TargetEntity {
      * @param radius Maximum range / distance from the hit location
      * @param excludeEntities Any entities to exclude, aside from spectator players (as they are already automatically excluded)
      * */
-    public Collection<Entity> findTargetEntities (Location location, int range, double searching_radius, double radius, Entity... excludeEntities) {
+    public Collection<Entity> findTargetEntities (Location location, int range, double searching_radius, double radius, boolean ignoreBlocks, Entity... excludeEntities) {
         Location clone = location.clone();
         final World world = clone.getWorld();
         final BlockIterator iterator = new BlockIterator(clone);
@@ -37,7 +37,7 @@ public class TargetEntity {
         Collection<Entity> entityList;
         while (travelled < range && iterator.hasNext()) {
             Block block = iterator.next();
-            if (block.isPassable()) {
+            if (ignoreBlocks || block.isPassable()) {
                 clone = block.getLocation().add(0.5, 0.5, 0.5);
                 entityList = world.getNearbyEntities(clone, searching_radius, searching_radius, searching_radius);
                 entityList.removeIf(entity -> {
@@ -78,8 +78,8 @@ public class TargetEntity {
      * @param radius Maximum range / distance from the hit location
      * @param excludeEntities Any entities to exclude, aside from spectator players (as they are already automatically excluded)
      * */
-    public Entity findTargetEntity (Location location, int range, double searching_radius, double radius, Entity... excludeEntities) {
-        Collection<Entity> entities = findTargetEntities(location, range, searching_radius, radius, excludeEntities);
+    public Entity findTargetEntity (Location location, int range, double searching_radius, double radius, boolean ignoreBlocks, Entity... excludeEntities) {
+        Collection<Entity> entities = findTargetEntities(location, range, searching_radius, radius, ignoreBlocks, excludeEntities);
         double shortestDistance = Double.MAX_VALUE;
         Entity target = null;
         for (Entity entity : entities) {
@@ -100,8 +100,8 @@ public class TargetEntity {
      * @param radius Maximum range / distance from the hit location
      * @param excludeEntities Any entities to exclude, aside from spectator players (as they are already automatically excluded)
      * */
-    public Collection<LivingEntity> findTargetLivingEntities (Location location, int range, double searching_radius, double radius, Entity... excludeEntities) {
-        Collection<Entity> entities = findTargetEntities(location, range, searching_radius, radius, excludeEntities);
+    public Collection<LivingEntity> findTargetLivingEntities (Location location, int range, double searching_radius, double radius, boolean ignoreBlocks, Entity... excludeEntities) {
+        Collection<Entity> entities = findTargetEntities(location, range, searching_radius, radius, ignoreBlocks, excludeEntities);
 
         Collection<LivingEntity> livingEntities = new ArrayList<>();
 
@@ -119,8 +119,8 @@ public class TargetEntity {
      * @param radius Maximum range / distance from the hit location
      * @param excludeEntities Any entities to exclude, aside from spectator players (as they are already automatically excluded)
      * */
-    public LivingEntity findTargetLivingEntity (Location location, int range, double searching_radius, double radius, Entity... excludeEntities) {
-        Collection<LivingEntity> entities = findTargetLivingEntities(location, range, searching_radius, radius, excludeEntities);
+    public LivingEntity findTargetLivingEntity (Location location, int range, double searching_radius, double radius, boolean ignoreBlocks, Entity... excludeEntities) {
+        Collection<LivingEntity> entities = findTargetLivingEntities(location, range, searching_radius, radius, ignoreBlocks, excludeEntities);
         double shortestDistance = Double.MAX_VALUE;
         LivingEntity target = null;
         for (LivingEntity entity : entities) {

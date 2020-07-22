@@ -1777,7 +1777,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "Deals damage to surrounding entities.");
             lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Penetrating Beam.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Penetrating Beam and Hunter's Eyes.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1798,13 +1798,35 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "Passes through entities and damages ones behind them.");
             lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Scattering Lights.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Scattering Lights and Hunter's Eyes.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
 
             penetrating_beam.setItemMeta(meta);
             return penetrating_beam;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_HUNTERS_EYES)) {
+            ItemStack superheating_laser = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = superheating_laser.getItemMeta();
+
+            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#00b7ff") + "Hunter's Eyes");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Shoots through walls. Hit enemies become revealed to you.");
+            lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Scattering Lights, Penetrating Beam, and Superheating Laser.");
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#00b7ff") + "\"You are the Hunter!\"");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            superheating_laser.setItemMeta(meta);
+            return superheating_laser;
         }
 
         else if (item.equals(CustomItem.NEBULITE_SUPERHEATING_LASER)) {
@@ -1819,6 +1841,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "Melts and combusts entities and blocks.");
             lore.add(ChatColor.GRAY + "Consumes more Charge to shoot.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Blaster.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Hunter's Eyes.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1837,9 +1860,9 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "+5 Efficiency");
-            lore.add(ChatColor.GRAY + "-5 Fortune");
-            lore.add(ChatColor.GRAY + "If the Paxel has Molecular Preservation, it won't work on ores.");
+            lore.add(ChatColor.GRAY + "Fortune and Silk Touch will not work on ores.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with BIG SMASH.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1877,8 +1900,9 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "Digs in a 3x3 pattern.");
+            lore.add(ChatColor.GRAY + "-2 Efficiency");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Paxel.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Decisive Disintegration.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Decisive Disintegration and Lightspeed Propulsors.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
