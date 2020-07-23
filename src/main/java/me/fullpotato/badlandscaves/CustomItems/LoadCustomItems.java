@@ -27,7 +27,7 @@ public class LoadCustomItems {
     private final BadlandsCaves plugin = JavaPlugin.getPlugin(BadlandsCaves.class);
     private final EnchantmentStorage enchantmentStorage = new EnchantmentStorage(plugin);
 
-    private static final String[] uuids = {
+    public static final String[] uuids = {
             "2018ae4d-9bf8-47b9-8c1f-3107007afeab",
             "a552bcbf-413c-493d-a2c2-cbcbd0f008cb",
             "f3eadd40-8340-4263-ae9e-0227caa026a8",
@@ -703,7 +703,7 @@ public class LoadCustomItems {
             meta.setCustomModelData(178);
             meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
             meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
-            meta.addEnchant(Enchantment.DURABILITY, 6, true);
+            meta.addEnchant(Enchantment.DURABILITY, 7, true);
             netherite_shield.setItemMeta(meta);
 
             return netherite_shield;
@@ -1040,6 +1040,9 @@ public class LoadCustomItems {
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_charge"), PersistentDataType.INTEGER, 0);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
+
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
 
             meta.addEnchant(Enchantment.DURABILITY, 5, true);
 
@@ -1941,9 +1944,8 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
             lore.add(ChatColor.GRAY + "Acts like a Vanilla shield and always cancels damage.");
-            lore.add(ChatColor.GRAY + "Weight Increases to Stone.");
+            lore.add(ChatColor.GRAY + "Weight Increases to Iron.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Shield Generator.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1952,25 +1954,45 @@ public class LoadCustomItems {
             return hardened_defense;
         }
 
-        else if (item.equals(CustomItem.NEBULITE_SHIELD_GENERATOR)) {
-            ItemStack shield_generator = new ItemStack(Material.KNOWLEDGE_BOOK);
-            ItemMeta meta = shield_generator.getItemMeta();
+        else if (item.equals(CustomItem.NEBULITE_REFLECTOR)) {
+            ItemStack deflector = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = deflector.getItemMeta();
 
-            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#00b6ff") + "Shield Generator");
+            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#b0f047") + "Reflector");
             meta.setCustomModelData(193);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Shield no longer needs to be held.");
-            lore.add(ChatColor.GRAY + "It constantly protects you by blocking all damage, but consumes 10x Charge.");
+            lore.add(ChatColor.GRAY + "Reflects projectiles back.");
+            lore.add(ChatColor.GRAY + "Consumes Charge when Reflecting.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Hardened Defense and Propulsion Bash.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Energy Converter.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
 
-            shield_generator.setItemMeta(meta);
-            return shield_generator;
+            deflector.setItemMeta(meta);
+            return deflector;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_ENERGY_CONVERTER)) {
+            ItemStack energy_converter = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = energy_converter.getItemMeta();
+
+            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#2bffea") + "Energy Converter");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Projectiles are absorbed as energy for the Shield.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
+            lore.add(ChatColor.RED + "Mutually Exclusive with Reflector.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            energy_converter.setItemMeta(meta);
+            return energy_converter;
         }
 
         else if (item.equals(CustomItem.NEBULITE_PROPULSION_BASH)) {
@@ -1982,11 +2004,10 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
-            lore.add(ChatColor.GRAY + "Double jump while blocking to charge forwards.");
+            lore.add(ChatColor.GRAY + "Double shift while blocking to charge forwards.");
             lore.add(ChatColor.GRAY + "Propulsion Bash deals damage to entities in front of you.");
-            lore.add(ChatColor.GRAY + "Consumes Charge.");
+            lore.add(ChatColor.GRAY + "Consumes Charge when using Bash.");
             lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
-            lore.add(ChatColor.RED + "Mutually Exclusive with Shield Generator.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
@@ -1994,6 +2015,48 @@ public class LoadCustomItems {
             propulsion_bash.setItemMeta(meta);
             return propulsion_bash;
         }
+
+        else if (item.equals(CustomItem.NEBULITE_COUNTERATTACK)) {
+            ItemStack counterattack = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = counterattack.getItemMeta();
+
+            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#db2121") + "Counterattack");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Blocking an attack very quickly gives you temporary Strength to land a hard hit.");
+            lore.add(ChatColor.GRAY + "Consumes Charge when countering.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            counterattack.setItemMeta(meta);
+            return counterattack;
+        }
+
+        else if (item.equals(CustomItem.NEBULITE_SHIELD_THRUSTER)) {
+            ItemStack shield_thruster = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = shield_thruster.getItemMeta();
+
+            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#3ba3ff") + "Shield Thruster");
+            meta.setCustomModelData(193);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
+            lore.add(ChatColor.GRAY + "Shield no longer has any weight.");
+            lore.add(ChatColor.GRAY + "While blocking, your speed is increased.");
+            lore.add(ChatColor.GRAY + "Consumes Charge when moving around.");
+            lore.add(ChatColor.GRAY + "Can be used on Starlight Shield.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1);
+
+            shield_thruster.setItemMeta(meta);
+            return shield_thruster;
+        }
+
 
 
         return null;

@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.LoadCustomItems;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -58,6 +59,7 @@ public class NebuliteStatChanges {
                 updateAllStats(item, CustomItem.STARLIGHT_BLASTER);
             }
             else if (starlightTools.isStarlightShield(item)) {
+                updateShieldStats(item);
                 updateAllStats(item, CustomItem.STARLIGHT_SHIELD);
             }
         }
@@ -218,5 +220,28 @@ public class NebuliteStatChanges {
         }
         enchantmentStorage.setEnchantments(item, enchantments);
     }
+
+    public void updateShieldStats (ItemStack item) {
+        final List<Nebulite> nebulites = Arrays.asList(nebuliteManager.getNebulites(item));
+
+        double speedMod = CustomItem.STARLIGHT_SHIELD.getItem().getItemMeta().getAttributeModifiers(Attribute.GENERIC_MOVEMENT_SPEED).iterator().next().getAmount();
+
+        //SPEED MODS
+        if (nebulites.contains(Nebulite.SHIELD_THRUSTER)) {
+            speedMod = 0;
+        }
+        else if (nebulites.contains(Nebulite.HARDENED_DEFENSE)) {
+            speedMod -= 0.1;
+        }
+
+        final ItemMeta meta = item.getItemMeta();
+        meta.removeAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED);
+        if (speedMod != 0) {
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(LoadCustomItems.uuids[16]), "Shield Speed Modifier", speedMod, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(LoadCustomItems.uuids[17]), "Shield Speed Modifier", speedMod, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+        }
+        item.setItemMeta(meta);
+    }
+
 
 }

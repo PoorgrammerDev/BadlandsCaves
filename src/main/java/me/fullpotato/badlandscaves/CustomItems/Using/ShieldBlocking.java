@@ -1,11 +1,16 @@
 package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -18,9 +23,15 @@ import java.util.Random;
 
 public class ShieldBlocking implements Listener {
     private final BadlandsCaves plugin;
+    private final StarlightTools starlightTools;
+    private final StarlightCharge starlightCharge;
+    private final NebuliteManager nebuliteManager;
 
     public ShieldBlocking(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.starlightTools = new StarlightTools(plugin);
+        this.nebuliteManager = new NebuliteManager(plugin);
+        this.starlightCharge = new StarlightCharge(plugin);
     }
 
     @EventHandler
@@ -38,7 +49,7 @@ public class ShieldBlocking implements Listener {
                 final Random random = new Random();
 
                 double modifier = 2;
-                boolean ignored = false;
+                boolean damageIgnored = false;
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                     if (playersShield.hasItemMeta()) {
                         ItemMeta meta = playersShield.getItemMeta();
@@ -48,40 +59,100 @@ public class ShieldBlocking implements Listener {
                             }
                             else if (meta.getDisplayName().equals(ironShield.getItemMeta().getDisplayName()) && damage / 5.0 > 0) {
                                 modifier = 5;
-                                ignored = (damage / modifier < 1 && random.nextBoolean());
+                                damageIgnored = (damage / modifier < 1 && random.nextBoolean());
                             }
                             else if (meta.getDisplayName().equals(diamondShield.getItemMeta().getDisplayName()) && damage / 7.0 > 0) {
                                 modifier = 7;
-                                ignored = (damage / modifier < 1 || random.nextInt(100) < 25);
+                                damageIgnored = (damage / modifier < 1 || random.nextInt(100) < 25);
                             }
                             else if (meta.getDisplayName().equals(netheriteShield.getItemMeta().getDisplayName()) && damage / 9.0 > 0) {
                                 modifier = 9;
-                                ignored = (damage / modifier < 1 || random.nextBoolean());
+                                damageIgnored = (damage / modifier < 1 || random.nextBoolean());
                             }
                             else {
-                                StarlightTools starlightTools = new StarlightTools(plugin);
                                 if (starlightTools.isStarlightShield(playersShield)) {
+                                    final Nebulite[] nebulites = nebuliteManager.getNebulites(playersShield);
+
+                                    for (Nebulite nebulite : nebulites) {
+                                        if (nebulite.equals(Nebulite.HARDENED_DEFENSE)) damageIgnored = true;
+                                        else if (nebulite.equals(Nebulite.ENERGY_CONVERTER)) {
+                                            if (event.getDamager() instanceof Projectile) {
+                                                Projectile projectile = (Projectile) event.getDamager();
+                                                absorbProjectile(playersShield, projectile);
+                                            }
+                                        }
+                                        else if (nebulite.equals(Nebulite.REFLECTOR)) {
+                                            if (event.getDamager() instanceof Projectile) {
+                                                Projectile projectile = (Projectile) event.getDamager();
+                                                deflectProjectile(player, projectile);
+                                            }
+                                        }
+                                    }
+
                                     modifier = 15;
-                                    ignored = (damage / modifier < 1 || random.nextInt(100) < 75);
+                                    if (!damageIgnored) damageIgnored = (damage / modifier < 1 || random.nextInt(100) < 75);
                                 }
                             }
                         }
                     }
                 }
 
-                player.setCooldown(Material.SHIELD, Math.max((int) (( damage) * 10 / modifier), player.getCooldown(Material.SHIELD)));
-                if (!ignored) {
-                    Vector velocity = player.getVelocity();
+                final Vector velocity = player.getVelocity().clone();
+                if (!damageIgnored) {
                     player.damage(damage / modifier);
-
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            player.setVelocity(velocity);
-                        }
-                    }.runTaskLater(plugin, 1);
+                    player.setCooldown(Material.SHIELD, Math.max((int) (( damage) * 10 / modifier), player.getCooldown(Material.SHIELD)));
                 }
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setVelocity(velocity);
+                    }
+                }.runTaskLater(plugin, 1);
             }
         }
+    }
+
+    public void deflectProjectile (Player player, Projectile projectile) {
+        projectile.remove();
+
+        final World world = player.getWorld();
+        final Location location = projectile.getLocation();
+        if (location.getWorld() == null || !location.getWorld().equals(world)) return;
+
+        final Vector vector = player.getEyeLocation().getDirection().multiply(2);
+        final Projectile clone = (Projectile) world.spawnEntity(location, projectile.getType());
+        clone.setShooter(player);
+        clone.setVelocity(vector);
+
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (clone.isDead() || clone.isOnGround() || player.isDead() || !player.isOnline() || !clone.getWorld().equals(player.getWorld()) || clone.getLocation().distanceSquared(player.getLocation()) > 625) {
+                    clone.remove();
+                    this.cancel();
+                    return;
+                }
+
+                if (clone instanceof AbstractArrow) {
+                    AbstractArrow abstractArrow = (AbstractArrow) clone;
+                    if (abstractArrow.isInBlock()) {
+                        abstractArrow.remove();
+                        this.cancel();
+                        return;
+                    }
+                }
+
+                world.spawnParticle(Particle.REDSTONE, clone.getLocation(), 1, new Particle.DustOptions(Color.fromRGB(176, 240, 71), 1));
+            }
+        }.runTaskTimer(plugin, 0, 0);
+    }
+
+    public void absorbProjectile (ItemStack shield, Projectile projectile) {
+        final int length = (int) (projectile.getVelocity().lengthSquared() * 1.5);
+        projectile.remove();
+
+        if (length > 0 && starlightTools.isStarlightShield(shield)) starlightCharge.setCharge(shield, starlightCharge.getCharge(shield) + length);
     }
 }

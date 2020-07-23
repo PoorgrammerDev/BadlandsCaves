@@ -26,27 +26,34 @@ public class GhastBuff implements Listener {
         if (event.getEntity() instanceof Fireball) {
             final Fireball fireball = (Fireball) event.getEntity();
             if (fireball.getShooter() instanceof Ghast) {
-                final Ghast ghast = (Ghast) fireball.getShooter();
-                final Random random = new Random();
-                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-                final double chance = Math.pow(1.045, chaos) - 1;
-                Location location = fireball.getLocation();
-
-                fireball.getWorld().createExplosion(location, 3, true, true, ghast);
-
-                int[] times = {0};
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (random.nextInt(100) < chance && times[0] < 5) {
-                            fireball.getWorld().createExplosion(location.add(0, 2, 0), 3, true, true, ghast);
-                            times[0]++;
-                        }
-                        else {
-                            this.cancel();
-                        }
+                        if (fireball.isDead()) return;
+
+                        final Ghast ghast = (Ghast) fireball.getShooter();
+                        final Random random = new Random();
+                        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+                        final double chance = Math.pow(1.045, chaos) - 1;
+                        Location location = fireball.getLocation();
+
+                        fireball.getWorld().createExplosion(location, 3, true, true, ghast);
+
+                        int[] times = {0};
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (random.nextInt(100) < chance && times[0] < 5) {
+                                    fireball.getWorld().createExplosion(location.add(0, 2, 0), 3, true, true, ghast);
+                                    times[0]++;
+                                }
+                                else {
+                                    this.cancel();
+                                }
+                            }
+                        }.runTaskTimer(plugin, 5, 5);
                     }
-                }.runTaskTimer(plugin, 5, 5);
+                }.runTaskLater(plugin, 1);
             }
         }
     }
