@@ -374,6 +374,9 @@ public final class BadlandsCaves extends JavaPlugin {
         WitherBossFight witherFight = new WitherBossFight(this);
         witherFight.checkIfEnded();
         witherFight.portalDestroyTimer();
+
+        NebulitePropulsionBash propulsionBash = new NebulitePropulsionBash(this);
+        propulsionBash.cooldownMechanism();
     }
 
     //RECIPES

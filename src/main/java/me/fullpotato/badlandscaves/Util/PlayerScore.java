@@ -66,6 +66,7 @@ public enum PlayerScore {
     HAS_STARLIGHT_SENTRY(PersistentDataType.BYTE),
     STARLIGHT_SENTRY_UUID(PersistentDataType.STRING),
     PROPULSION_DOUBLESHIFT_WINDOW(PersistentDataType.BYTE),
+    PROPULSION_COOLDOWN(PersistentDataType.BYTE),
     COUNTERATTACK_TRACKER(PersistentDataType.BYTE);
 
     private final PersistentDataType<?, ?> type;
@@ -90,7 +91,13 @@ public enum PlayerScore {
     }
 
     public Object getScore(BadlandsCaves plugin, Player player) {
-        return player.getPersistentDataContainer().get(new NamespacedKey(plugin, this.name()), this.getType());
+        final NamespacedKey key = new NamespacedKey(plugin, this.name());
+        if (player.getPersistentDataContainer().has(key, this.getType())) {
+            final Object output = player.getPersistentDataContainer().get(key, this.getType());
+            if (output != null) return output;
+        }
+        setScore(plugin, player, this.getDefaultScore());
+        return this.getDefaultScore();
     }
 
     public void setScore(BadlandsCaves plugin, Player player, Object score) {

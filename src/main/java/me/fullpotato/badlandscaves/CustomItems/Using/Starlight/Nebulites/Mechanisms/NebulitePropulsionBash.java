@@ -3,10 +3,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechan
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -35,6 +32,7 @@ public class NebulitePropulsionBash extends NebuliteMechanisms implements Listen
         if (!nopower) return;
 
         if (!((LivingEntity) player).isOnGround() || !player.isBlocking()) return;
+        if ((byte) PlayerScore.PROPULSION_COOLDOWN.getScore(plugin, player) > 0) return;
 
         final ItemStack mainHand = player.getEquipment().getItemInMainHand();
         final ItemStack offHand = player.getEquipment().getItemInOffHand();
@@ -88,6 +86,7 @@ public class NebulitePropulsionBash extends NebuliteMechanisms implements Listen
                 final Location front = player.getEyeLocation().add(player.getEyeLocation().getDirection());
                 final Location behind = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(-1));
                 world.spawnParticle(Particle.REDSTONE, behind, 20, 0.5, 0.5, 0.5, dustOptions);
+                PlayerScore.PROPULSION_COOLDOWN.setScore(plugin, player, 3);
 
                 final double range = 1;
                 final Collection<Entity> rawList = world.getNearbyEntities(front, range, range, range, entity -> (entity instanceof LivingEntity));
@@ -114,12 +113,31 @@ public class NebulitePropulsionBash extends NebuliteMechanisms implements Listen
                     if (target != null) {
                         starlightCharge.setCharge(shield, starlightCharge.getCharge(shield) - 5);
                         player.setVelocity(player.getVelocity().multiply(-0.25));
-
                         target.damage(((velocity * -3) + 30), player);
                         this.cancel();
                     }
                 }
             }
         }.runTaskTimer(plugin, 0, 0);
+    }
+
+    public void cooldownMechanism () {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (plugin.getSystemConfig().getBoolean("hardmode")) {
+                    plugin.getServer().getOnlinePlayers().forEach(player -> {
+                        byte cooldown = (byte) PlayerScore.PROPULSION_COOLDOWN.getScore(plugin, player);
+                        if (cooldown > 0) {
+                            if (cooldown == 1) {
+                                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
+                            }
+
+                            PlayerScore.PROPULSION_COOLDOWN.setScore(plugin, player, --cooldown);
+                        }
+                    });
+                }
+            }
+        }.runTaskTimer(plugin, 0, 20);
     }
 }
