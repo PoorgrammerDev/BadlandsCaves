@@ -64,7 +64,9 @@ public enum PlayerScore {
     TEMPERATURE(PersistentDataType.INTEGER, 100),
     USED_PRESERVE_TOTEM(PersistentDataType.BYTE),
     HAS_STARLIGHT_SENTRY(PersistentDataType.BYTE),
-    STARLIGHT_SENTRY_UUID(PersistentDataType.STRING);
+    STARLIGHT_SENTRY_UUID(PersistentDataType.STRING),
+    PROPULSION_DOUBLESHIFT_WINDOW(PersistentDataType.BYTE),
+    COUNTERATTACK_TRACKER(PersistentDataType.BYTE);
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

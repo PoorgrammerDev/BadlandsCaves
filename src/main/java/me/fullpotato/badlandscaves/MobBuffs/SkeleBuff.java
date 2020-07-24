@@ -179,7 +179,6 @@ public class SkeleBuff implements Listener {
                 if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                     player.setNoDamageTicks(0);
 
-
                     final Random random = new Random();
                     final int chaos = plugin.getSystemConfig().getInt("chaos_level");
 

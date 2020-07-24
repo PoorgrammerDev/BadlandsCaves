@@ -287,6 +287,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NebuliteLightSpeed(this),
                 new NebuliteBigSmash(this),
                 new NebuliteDecisiveDisintegration(this),
+                new NebulitePropulsionBash(this),
+                new NebuliteShieldThruster(this),
+                new NebuliteCounterattack(this),
         };
 
         for (Listener event : events) {
@@ -365,6 +368,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new Freezing(this).runTaskTimer(this, 0, 5);
         new PreventNonPoweredUsage(this).runTaskTimerAsynchronously(this, 0, 0);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
+        new NebuliteCounterattack(this).runTaskTimer(this, 0, 0);
 
 
         WitherBossFight witherFight = new WitherBossFight(this);

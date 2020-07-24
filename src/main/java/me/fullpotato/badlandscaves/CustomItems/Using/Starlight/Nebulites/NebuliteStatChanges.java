@@ -62,6 +62,9 @@ public class NebuliteStatChanges {
                 updateShieldStats(item);
                 updateAllStats(item, CustomItem.STARLIGHT_SHIELD);
             }
+            else if (starlightTools.isStarlightSentry(item)) {
+                updateAllStats(item, CustomItem.STARLIGHT_SENTRY);
+            }
         }
     }
 
