@@ -80,7 +80,7 @@ public class DescensionReset extends BukkitRunnable {
             PlayerScore.DESCENSION_TIMER.setScore(plugin, waiting, time_limit);
 
             //deploy player in stage
-            waiting.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0));
+            //waiting.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0));
             Location deploy = new Location(world, 65, 127, 0, 0, 90);
             waiting.teleport(deploy, PlayerTeleportEvent.TeleportCause.PLUGIN);
         }

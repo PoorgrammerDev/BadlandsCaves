@@ -1452,7 +1452,7 @@ public class LoadCustomItems {
             ItemStack energy_storage = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = energy_storage.getItemMeta();
 
-            meta.setDisplayName(ChatColor.of("#ffe62b") + "Energy Storage");
+            meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#ffe62b") + "Energy Storage");
             meta.setCustomModelData(193);
 
             ArrayList<String> lore = new ArrayList<>();
@@ -1471,7 +1471,7 @@ public class LoadCustomItems {
             ItemMeta meta = corroding_lights.getItemMeta();
 
             meta.setDisplayName(ChatColor.DARK_GREEN + "Corroding Lights");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(194);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1491,7 +1491,7 @@ public class LoadCustomItems {
             ItemMeta meta = jagged_lights.getItemMeta();
 
             meta.setDisplayName(ChatColor.RED + "Jagged Lights");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(195);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1511,7 +1511,7 @@ public class LoadCustomItems {
             ItemMeta meta = flurrying_swings.getItemMeta();
 
             meta.setDisplayName(ChatColor.AQUA + "Flurrying Swings");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(196);
 
             // TODO: 7/15/2020 work on balancing this and decisive slice later, these are just placeholder values
             ArrayList<String> lore = new ArrayList<>();
@@ -1533,7 +1533,7 @@ public class LoadCustomItems {
             ItemMeta meta = decisive_slice.getItemMeta();
 
             meta.setDisplayName(ChatColor.DARK_PURPLE + "Decisive Slice");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(197);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1554,7 +1554,7 @@ public class LoadCustomItems {
             ItemMeta meta = wide_swing.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#ff9900") + "Wide Swing");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(198);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1572,7 +1572,7 @@ public class LoadCustomItems {
             ItemMeta meta = reinforced_plating.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#5f6d75") + "Reinforced Plating");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(199);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1592,7 +1592,7 @@ public class LoadCustomItems {
             ItemMeta meta = strong_stance.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#222a70") + "Strong Stance");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(200);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1612,7 +1612,7 @@ public class LoadCustomItems {
             ItemMeta meta = thruster.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#0dbed9") + "Thruster");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(201);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1632,7 +1632,7 @@ public class LoadCustomItems {
             ItemMeta meta = oxygenator.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#0b8de3") + "Oxygenator");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(202);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1653,7 +1653,7 @@ public class LoadCustomItems {
             ItemMeta meta = smoldering_flames.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#e38a0e") + "Smoldering Flames");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(203);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1674,7 +1674,7 @@ public class LoadCustomItems {
             ItemMeta meta = toxin_expeller.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#0a6300") + "Toxin Expeller");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(204);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1695,7 +1695,7 @@ public class LoadCustomItems {
             ItemMeta meta = shock_absorber.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#72dce8") + "Shock Absorber");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(205);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1714,7 +1714,7 @@ public class LoadCustomItems {
             ItemMeta meta = forcefield.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#0055ff") + "Forcefield");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(206);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1733,7 +1733,7 @@ public class LoadCustomItems {
             ItemMeta meta = guardian_angel.getItemMeta();
 
             meta.setDisplayName(ChatColor.YELLOW + "Guardian Angel");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(207);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1753,7 +1753,7 @@ public class LoadCustomItems {
             ItemMeta meta = rapid_fire.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#fbff00") + "Rapid Fire");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(208);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1773,7 +1773,7 @@ public class LoadCustomItems {
             ItemMeta meta = scattering_lights.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#ff00aa") + "Scattering Lights");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(209);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1794,7 +1794,7 @@ public class LoadCustomItems {
             ItemMeta meta = penetrating_beam.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#d0ff00") + "Penetrating Beam");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(210);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1815,7 +1815,7 @@ public class LoadCustomItems {
             ItemMeta meta = superheating_laser.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#00b7ff") + "Hunter's Eyes");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(211);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1837,7 +1837,7 @@ public class LoadCustomItems {
             ItemMeta meta = superheating_laser.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#ff6f00") + "Superheating Laser");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(212);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1858,7 +1858,7 @@ public class LoadCustomItems {
             ItemMeta meta = lightspeed_propulsors.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#75d8ff") + "Lightspeed Propulsors");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(213);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1879,7 +1879,7 @@ public class LoadCustomItems {
             ItemMeta meta = molecular_preservation.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#a42eff") + "Molecular Preservation");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(214);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1898,7 +1898,7 @@ public class LoadCustomItems {
             ItemMeta meta = big_smash.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#058f00") + "BIG SMASH");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(215);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1919,7 +1919,7 @@ public class LoadCustomItems {
             ItemMeta meta = decisive_disintegration.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#6200ff") + "Decisive Disintegration");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(216);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1939,7 +1939,7 @@ public class LoadCustomItems {
             ItemMeta meta = hardened_defense.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#537572") + "Hardened Defense");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(217);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1959,7 +1959,7 @@ public class LoadCustomItems {
             ItemMeta meta = deflector.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#b0f047") + "Reflector");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(218);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -1980,7 +1980,7 @@ public class LoadCustomItems {
             ItemMeta meta = energy_converter.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#2bffea") + "Energy Converter");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(219);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -2000,7 +2000,7 @@ public class LoadCustomItems {
             ItemMeta meta = propulsion_bash.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#ff001e") + "Propulsion Bash");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(220);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -2021,7 +2021,7 @@ public class LoadCustomItems {
             ItemMeta meta = counterattack.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#db2121") + "Counterattack");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(221);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");
@@ -2041,7 +2041,7 @@ public class LoadCustomItems {
             ItemMeta meta = shield_thruster.getItemMeta();
 
             meta.setDisplayName(ChatColor.WHITE.toString() + ChatColor.of("#3ba3ff") + "Shield Thruster");
-            meta.setCustomModelData(193);
+            meta.setCustomModelData(222);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite");

@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,36 +15,22 @@ import java.util.List;
 
 public class StopPowersInvInteract implements Listener {
     private final BadlandsCaves plugin;
-    private final ItemStack displace;
-    private final ItemStack withdraw;
-    private final ItemStack eyes;
-    private final ItemStack possess;
+    private final ActivePowers[] activePowers = ActivePowers.values();
     public StopPowersInvInteract(BadlandsCaves bcav) {
         plugin = bcav;
-
-        displace = CustomItem.DISPLACE.getItem();
-        withdraw = CustomItem.WITHDRAW.getItem();
-        eyes = CustomItem.ENHANCED_EYES.getItem();
-        possess = CustomItem.POSSESS.getItem();
     }
 
     @EventHandler
     public void stop_click (InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
-        if (!has_powers) return;
-
-        ItemStack item = event.getCurrentItem();
-
+        final ItemStack item = event.getCurrentItem();
         if (item == null) return;
 
-        if (item.isSimilar(displace) ||
-                item.isSimilar(withdraw) ||
-                item.isSimilar(eyes) ||
-                item.isSimilar(possess)){
-                    event.setCancelled(true);
+        for (ActivePowers activePower : activePowers) {
+            if (item.isSimilar(activePower.getItem().getItem())) {
+                event.setCancelled(true);
+                return;
             }
-
+        }
     }
 
     @EventHandler
@@ -54,20 +39,14 @@ public class StopPowersInvInteract implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        ItemStack item = event.getOffHandItem();
-        ItemStack item_2 = event.getMainHandItem();
-        if (item == null) return;
+        final ItemStack offhand = event.getOffHandItem();
+        final ItemStack mainhand = event.getMainHandItem();
 
-        assert item_2 != null;
-        if (item.isSimilar(displace) ||
-                item.isSimilar(withdraw) ||
-                item.isSimilar(eyes) ||
-                item.isSimilar(possess) ||
-                item_2.isSimilar(displace) ||
-                item_2.isSimilar(withdraw) ||
-                item_2.isSimilar(eyes) ||
-                item_2.isSimilar(possess)){
-            event.setCancelled(true);
+        for (ActivePowers activePower : activePowers) {
+            if ((offhand != null && offhand.isSimilar(activePower.getItem().getItem())) || (mainhand != null && mainhand.isSimilar(activePower.getItem().getItem()))) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 
@@ -77,13 +56,12 @@ public class StopPowersInvInteract implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        ItemStack item = event.getItemDrop().getItemStack();
-
-        if (item.isSimilar(displace) ||
-                item.isSimilar(withdraw) ||
-                item.isSimilar(eyes) ||
-                item.isSimilar(possess)){
-            event.setCancelled(true);
+        final ItemStack item = event.getItemDrop().getItemStack();
+        for (ActivePowers activePower : activePowers) {
+            if (item.isSimilar(activePower.getItem().getItem())) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 
@@ -95,11 +73,10 @@ public class StopPowersInvInteract implements Listener {
 
         List<ItemStack> items = event.getDrops();
         for (int a = items.size() - 1; a >= 0; a--) {
-            if (items.get(a).isSimilar(displace) ||
-                    items.get(a).isSimilar(withdraw) ||
-                    items.get(a).isSimilar(eyes) ||
-                    items.get(a).isSimilar(possess)){
-                event.getDrops().remove(a);
+            for (ActivePowers activePower : activePowers) {
+                if (items.get(a).isSimilar(activePower.getItem().getItem())) {
+                    event.getDrops().remove(a);
+                }
             }
         }
 

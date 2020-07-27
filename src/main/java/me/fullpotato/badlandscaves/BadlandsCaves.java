@@ -37,10 +37,9 @@ import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.*;
+import me.fullpotato.badlandscaves.SupernaturalPowers.SoulCampfire;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.*;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.AgilitySpeedRunnable;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaRegen;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.*;
 import me.fullpotato.badlandscaves.Thirst.CauldronMenu;
 import me.fullpotato.badlandscaves.Thirst.Drinking;
 import me.fullpotato.badlandscaves.Thirst.NaturalThirstDecrease;
@@ -156,7 +155,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
     //WORLDS
     public void loadCustomWorlds() {
-        EmptyWorld empty_world = new EmptyWorld(this);
+        WithdrawWorld empty_world = new WithdrawWorld(this);
         empty_world.gen_void_world();
 
         DescensionWorld desc_world = new DescensionWorld(this);
@@ -290,6 +289,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NebulitePropulsionBash(this),
                 new NebuliteShieldThruster(this),
                 new NebuliteCounterattack(this),
+                new SoulCampfire(this),
         };
 
         for (Listener event : events) {
@@ -339,6 +339,9 @@ public final class BadlandsCaves extends JavaPlugin {
         new ActionbarRunnable(this).runTaskTimer(this, 0 ,0);
         new PlayerEffectsRunnable(this).runTaskTimer(this,0,0);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
+        new DisplaceParticleRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
+        new WithdrawIndicatorRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
+        new PossessionIndicatorRunnable(this).runTaskTimer(this, 0, 0);
         new ManaBarManager(this).runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 0);
         new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
