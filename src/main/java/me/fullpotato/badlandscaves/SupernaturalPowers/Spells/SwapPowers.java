@@ -83,14 +83,22 @@ public class SwapPowers implements Listener {
 
         final ItemStack offhandItem = player.getInventory().getItemInOffHand();
         final ActivePowers[] order = getSwapOrder(player);
-        int swap_slot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
-        event.setCancelled(true);
+        int swapSlot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
 
+        final int newSlot = event.getNewSlot();
+        final int oldSlot = event.getPreviousSlot();
+        boolean reverse = ((newSlot < oldSlot) || (newSlot == 8 && oldSlot == 0)) && (newSlot != 0 && oldSlot != 8);
+
+        event.setCancelled(true);
         for (int tries = 0; tries < order.length * 2; tries++) {
-            swap_slot = ++swap_slot >= order.length ? -1 : swap_slot;
+            if (reverse) swapSlot--;
+            else swapSlot++;
+
+            if (swapSlot >= order.length) swapSlot = -1;
+            else if (swapSlot < -1) swapSlot = order.length - 1;
 
             //Switching back to default offhand
-            if (swap_slot == -1) {
+            if (swapSlot == -1) {
                 final ItemStack orig_item = plugin.getSystemConfig().getItemStack("player_info." + player.getUniqueId() + ".saved_offhand_item");
                 player.getInventory().setItemInOffHand(orig_item);
 
@@ -100,12 +108,12 @@ public class SwapPowers implements Listener {
                 if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
                     manaBarManager.clearMessage(player);
                 }
-                successfulSwap(player, swap_slot);
+                successfulSwap(player, swapSlot);
                 return;
             }
             else {
                 //If the next spell in the list is unlocked
-                if ((int) order[swap_slot].getLevelScore().getScore(plugin, player) > 0) {
+                if ((int) order[swapSlot].getLevelScore().getScore(plugin, player) > 0) {
 
                     //Checks if current offhand item is spell
                     boolean offHandIsSpell = false;
@@ -122,12 +130,12 @@ public class SwapPowers implements Listener {
                         plugin.saveSystemConfig();
                     }
 
-                    player.getInventory().setItemInOffHand(order[swap_slot].getItem().getItem());
+                    player.getInventory().setItemInOffHand(order[swapSlot].getItem().getItem());
 
                     if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                        manaBarManager.displayMessage(player, order[swap_slot].getDisplayName(), 2, true);
+                        manaBarManager.displayMessage(player, order[swapSlot].getDisplayName(), 2, true);
                     }
-                    successfulSwap(player, swap_slot);
+                    successfulSwap(player, swapSlot);
                     return;
                 }
             }
