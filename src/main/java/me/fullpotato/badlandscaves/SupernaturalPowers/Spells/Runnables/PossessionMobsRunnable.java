@@ -61,7 +61,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
             PlayerScore.MANA.setScore(plugin, player, mana - possession_mana_drain_tick);
         }
         else {
-            plugin.getServer().getScheduler().cancelTask(this.getTaskId());
+            this.cancel();
             //set target and player back to normal
             team.unregister();
 

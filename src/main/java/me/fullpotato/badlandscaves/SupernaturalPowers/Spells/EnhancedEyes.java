@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -232,6 +233,26 @@ public class EnhancedEyes extends UsePowers implements Listener {
         }
 
     }
+
+    @EventHandler
+    public void forceExit (PlayerSwapHandItemsEvent event) {
+        final Player player = event.getPlayer();
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            if ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1) {
+                final ItemStack item = event.getMainHandItem();
+                if (item != null) {
+                    for (ActivePowers value : ActivePowers.values()) {
+                        if (item.isSimilar(value.getItem().getItem())) {
+                            event.setCancelled(true);
+                            PlayerScore.USING_EYES.setScore(plugin, player, 0);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public HashMap<Location, Integer> stringToMap(Player player, String string_map) {
         World world = player.getWorld();

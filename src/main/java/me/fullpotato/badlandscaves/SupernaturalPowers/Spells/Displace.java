@@ -5,7 +5,10 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -13,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -104,9 +108,7 @@ public class Displace extends UsePowers implements Listener {
                                 manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
                             }
                         }
-                        else if (player.getLocation().distance(displace_marker) < 20) {
-                        }
-                        else {
+                        else if (player.getLocation().distance(displace_marker) > (warp_range * 1.5)) {
                             PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
                         }
                     }
@@ -143,6 +145,18 @@ public class Displace extends UsePowers implements Listener {
                         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void destroyMarker (PlayerSwapHandItemsEvent event) {
+        final Player player = event.getPlayer();
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            final ItemStack item = event.getMainHandItem();
+            if (item != null && item.isSimilar(CustomItem.DISPLACE.getItem())) {
+                event.setCancelled(true);
+                PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
             }
         }
     }

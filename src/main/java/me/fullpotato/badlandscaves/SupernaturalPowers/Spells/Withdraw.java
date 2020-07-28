@@ -118,13 +118,13 @@ public class Withdraw extends UsePowers implements Listener {
                                             public void run() {
                                                 final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
                                                 if (withdraw_timer <= 0) {
-                                                    getOuttaHere(player, location, voidloc, true, this.getTaskId());
+                                                    exitWithdraw(player, location, voidloc, true, this.getTaskId());
                                                 }
                                                 else {
                                                     if (withdraw_level > 1 && withdraw_timer % (70) == 0) {
                                                         if (player.getHealth() < 20 && player.getHealth() > 0) player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
-                                                        player.setFoodLevel(player.getFoodLevel() + 1);
-                                                        PlayerScore.THIRST.setScore(plugin, player, Math.min((double) PlayerScore.THIRST.getScore(plugin, player) + 0.5, 100));
+                                                        //player.setFoodLevel(player.getFoodLevel() + 1);
+                                                        //PlayerScore.THIRST.setScore(plugin, player, Math.min((double) PlayerScore.THIRST.getScore(plugin, player) + 0.5, 100));
                                                         PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0));
                                                     }
                                                     player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidloc, 10, 0, 1, 0);
@@ -177,11 +177,11 @@ public class Withdraw extends UsePowers implements Listener {
         }
     }
 
-    public void getOuttaHere (Player player, Location returnLocation, Location voidLocation) {
-        getOuttaHere(player, returnLocation, voidLocation, false, 0);
+    public void exitWithdraw(Player player, Location returnLocation, Location voidLocation) {
+        exitWithdraw(player, returnLocation, voidLocation, false, 0);
     }
 
-    public void getOuttaHere (Player player, Location returnLocation, Location voidLocation, boolean cancel, int taskID) {
+    public void exitWithdraw(Player player, Location returnLocation, Location voidLocation, boolean cancel, int taskID) {
         final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         if (withdraw_level == 1) {

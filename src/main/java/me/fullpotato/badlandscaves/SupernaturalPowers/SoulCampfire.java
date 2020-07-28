@@ -29,6 +29,7 @@ public class SoulCampfire implements Listener {
     private final ItemStack empty = EmptyItem.getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
     private final ItemStack selectedIndicator = getSelectedIndicator();
     private final ItemStack orderChangeExplanation = getOrderChangeExplanation();
+    private final ItemStack optionsExplanation = getOptionsExplanation();
     private final ItemStack doubleShiftIconOn = getDoubleShiftIcon(true);
     private final ItemStack doubleShiftIconOff = getDoubleShiftIcon(false);
     private final ItemStack swapCooldownIconOn = getSwapCooldownIcon(true);
@@ -69,6 +70,8 @@ public class SoulCampfire implements Listener {
         for (int i = 0; i < order.length; i++) {
             inventory.setItem(10 + (2 * i), order[i].getItem().getItem());
         }
+
+        inventory.setItem(31, optionsExplanation);
 
         //Add more things here (Utilize slots 37, 39, 41, 43)
         inventory.setItem(37, (byte) PlayerScore.SWAP_DOUBLESHIFT_OPTION.getScore(plugin, player) == 1 ? doubleShiftIconOn : doubleShiftIconOff);
@@ -202,6 +205,16 @@ public class SoulCampfire implements Listener {
         return item;
     }
 
+    public ItemStack getOptionsExplanation() {
+        final ItemStack item = CustomItem.SOUL_CRYSTAL.getItem();
+        final ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "Extra Options");
+        meta.setLore(null);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public ItemStack getSelectedIndicator () {
         final ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
         final ItemMeta meta = item.getItemMeta();
@@ -217,10 +230,9 @@ public class SoulCampfire implements Listener {
     }
 
     public ItemStack getDoubleShiftIcon(boolean activated) {
-        final ItemStack item = new ItemStack(Material.KNOWLEDGE_BOOK);
+        final ItemStack item = new ItemStack(Material.GLOWSTONE_DUST);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.BLUE.toString() + ChatColor.BOLD + "Doubleshift");
-        meta.setCustomModelData(223);
 
         final ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "This is activated by default.");
@@ -241,10 +253,9 @@ public class SoulCampfire implements Listener {
     }
 
     public ItemStack getSwapCooldownIcon(boolean activated) {
-        final ItemStack item = new ItemStack(Material.KNOWLEDGE_BOOK);
+        final ItemStack item = new ItemStack(Material.CLOCK);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.BLUE.toString() + ChatColor.BOLD + "Swap Cooldown");
-        meta.setCustomModelData(224);
 
         final ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "This is activated by default.");

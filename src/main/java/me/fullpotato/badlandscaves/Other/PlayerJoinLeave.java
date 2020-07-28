@@ -83,7 +83,7 @@ public class PlayerJoinLeave implements Listener {
 
                     final Location location = new Location(origworld, x, y, z);
                     Withdraw sendback = new Withdraw(plugin);
-                    sendback.getOuttaHere(player, location, player.getLocation());
+                    sendback.exitWithdraw(player, location, player.getLocation());
                 }
             }
 
@@ -94,6 +94,7 @@ public class PlayerJoinLeave implements Listener {
             //reset cooldowns
             PlayerScore.SWAP_DOUBLESHIFT_WINDOW.setScore(plugin, player, 0);
             PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
+            PlayerScore.SWAP_COOLDOWN.setScore(plugin, player, 0);
             PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 0);
         }
     }

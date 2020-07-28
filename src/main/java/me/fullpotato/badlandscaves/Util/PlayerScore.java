@@ -69,7 +69,8 @@ public enum PlayerScore {
     STARLIGHT_SENTRY_UUID(PersistentDataType.STRING),
     PROPULSION_DOUBLESHIFT_WINDOW(PersistentDataType.BYTE),
     PROPULSION_COOLDOWN(PersistentDataType.BYTE),
-    COUNTERATTACK_TRACKER(PersistentDataType.BYTE);
+    COUNTERATTACK_TRACKER(PersistentDataType.BYTE),
+    ARTIFACTS(PersistentDataType.STRING);
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

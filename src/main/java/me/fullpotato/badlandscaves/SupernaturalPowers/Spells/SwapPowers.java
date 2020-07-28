@@ -74,7 +74,7 @@ public class SwapPowers implements Listener {
 
 
     @EventHandler
-    public void swap_to_powers (PlayerItemHeldEvent event) {
+    public void swapPowers(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 0) return;
         if (!player.isSneaking()) return;

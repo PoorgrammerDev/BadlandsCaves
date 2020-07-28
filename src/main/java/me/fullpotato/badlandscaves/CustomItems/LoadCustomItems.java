@@ -2057,6 +2057,564 @@ public class LoadCustomItems {
             return shield_thruster;
         }
 
+        // TODO: 7/27/2020 write in color codes and descriptions 
+
+        else if (item.equals(CustomItem.ARTIFACT_TENACIOUS_TRICKERY)) {
+            ItemStack tenacious_trickery = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = tenacious_trickery.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#314966") + "Tenacious Trickery");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "All Void Items");
+            lore.add(ChatColor.GRAY + "Redirect durability loss to Mana if Mana is high.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            tenacious_trickery.setItemMeta(meta);
+            return tenacious_trickery;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_ECLIPSED_SHADOWS)) {
+            ItemStack eclipsed_shadows = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = eclipsed_shadows.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#1e0c45") + "Eclipsed Shadows");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Armor");
+            lore.add(ChatColor.GRAY + "Become invisible and fast when sneaking. Hides armor.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            eclipsed_shadows.setItemMeta(meta);
+            return eclipsed_shadows;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_MANA_WARDING)) {
+            ItemStack mana_warding = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = mana_warding.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#1c73ed") + "Mana Warding");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Armor");
+            lore.add(ChatColor.GRAY + "75% of all damage is inflicted onto Mana.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            mana_warding.setItemMeta(meta);
+            return mana_warding;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_FLEETING_SPIRITS)) {
+            ItemStack fleeting_spirits = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = fleeting_spirits.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#594bd1") + "Fleeting Spirits");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Armor");
+            lore.add(ChatColor.GRAY + "Fatal or powerful hits can trigger Displace to bring you to safety.");
+            lore.add(ChatColor.GRAY + "Spawns a Vindicator in your place.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            fleeting_spirits.setItemMeta(meta);
+            return fleeting_spirits;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_CONVERGING_SWINGS)) {
+            ItemStack converging_swings = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = converging_swings.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#4b0091") + "Converging Swings");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
+            lore.add(ChatColor.GRAY + "Missed swings send out a particle that warps entities to you.");
+            lore.add(ChatColor.GRAY + "Costs 25 Mana.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            converging_swings.setItemMeta(meta);
+            return converging_swings;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_TRAVELING_BLADES)) {
+            ItemStack traveling_blades = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = traveling_blades.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#bfbfbf") + "Traveling Blades");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
+            lore.add(ChatColor.GRAY + "Swings send out slashes and further damage entities.");
+            lore.add(ChatColor.GRAY + "Costs 5 Mana.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            traveling_blades.setItemMeta(meta);
+            return traveling_blades;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_HASTE_WIND)) {
+            ItemStack haste_wind = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = haste_wind.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#75c6ff") + "Haste Wind");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
+            lore.add(ChatColor.GRAY + "Removes attack cooldown.");
+            lore.add(ChatColor.GRAY + "-5 Sharpness, +1 Knockback");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            haste_wind.setItemMeta(meta);
+            return haste_wind;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_BLOODSAPPING_BAYONET)) {
+            ItemStack bloodsapping_bayonet = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = bloodsapping_bayonet.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#b50c00") + "Bloodsapping Bayonet");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
+            lore.add(ChatColor.GRAY + "Heal 25% of the damage you deal.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            bloodsapping_bayonet.setItemMeta(meta);
+            return bloodsapping_bayonet;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_SIGHT_STEALING)) {
+            ItemStack sight_stealing = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = sight_stealing.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#1b0073") + "Sight Stealing");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Bow");
+            lore.add(ChatColor.GRAY + "You can see hit entities through walls, and they're blinded whilst glowing.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            sight_stealing.setItemMeta(meta);
+            return sight_stealing;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_BLOODSAPPING_BOW)) {
+            ItemStack bloodsapping_bow = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = bloodsapping_bow.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#91001f") + "Bloodsapping Bow");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Bow");
+            lore.add(ChatColor.GRAY + "Arrows no longer deal damage, but suck health directly from entities.");
+            lore.add(ChatColor.GRAY + "This health is turned into Mana and returned to you.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            bloodsapping_bow.setItemMeta(meta);
+            return bloodsapping_bow;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_SUMMONERS_RIFT)) {
+            ItemStack summoners_rift = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = summoners_rift.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#1f2e28") + "Summoner’s Rift");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Bow");
+            lore.add(ChatColor.GRAY + "Shoot out multiple arrows at a time.");
+            lore.add(ChatColor.GRAY + "Every arrow that hits an entity summons a Vindicator, targeted to them.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            summoners_rift.setItemMeta(meta);
+            return summoners_rift;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_EMANCIPATED_EYES)) {
+            ItemStack emancipated_eyes = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = emancipated_eyes.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#5cb6ff") + "Emancipated Eyes");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Tools");
+            lore.add(ChatColor.GRAY + "Sneak and mine blocks with Enhanced Eyes out to activate it");
+            lore.add(ChatColor.GRAY + "on the 25 blocks behind it, and all their adjacent blocks.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            emancipated_eyes.setItemMeta(meta);
+            return emancipated_eyes;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_DIGGING_DOPPELGANGER)) {
+            ItemStack digging_doppelganger = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = digging_doppelganger.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#311e47") + "Digging Doppelganger");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Tools");
+            lore.add(ChatColor.GRAY + "Sneak and mine blocks with Possession out to summon a clone");
+            lore.add(ChatColor.GRAY + "that mines in a straight line for 25 blocks.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            digging_doppelganger.setItemMeta(meta);
+            return digging_doppelganger;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_UNDISPLACE)) {
+            ItemStack undisplace = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = undisplace.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ccff00") + "Undisplace");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
+            lore.add(ChatColor.GRAY + "Put down a Displace marker where you were when you teleport.");
+            lore.add(ChatColor.GRAY + "For a short period of time, you can teleport back to this marker without using Mana.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            undisplace.setItemMeta(meta);
+            return undisplace;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_MOMENTOUS_MOMENTUM)) {
+            ItemStack momentous_momentum = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = momentous_momentum.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ffa600") + "Momentous Momentum");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
+            lore.add(ChatColor.GRAY + "For a very short period of time after using Displace,");
+            lore.add(ChatColor.GRAY + "hit at full attack charge to deal 3-5x damage and send target flying.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            momentous_momentum.setItemMeta(meta);
+            return momentous_momentum;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_DISTRACTION_CLONE)) {
+            ItemStack distraction_clone = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = distraction_clone.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#60009c") + "Distraction Clone");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
+            lore.add(ChatColor.GRAY + "After teleporting, put down a clone where you were.");
+            lore.add(ChatColor.GRAY + "This clone distracts enemies.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            distraction_clone.setItemMeta(meta);
+            return distraction_clone;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_COMBAT_CLONE)) {
+            ItemStack combat_clone = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = combat_clone.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#c41a00") + "Combat Clone");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
+            lore.add(ChatColor.GRAY + "Placing a Displace Marker now summons a Clone there.");
+            lore.add(ChatColor.GRAY + "This clone will shoot nearby enemies and drain Mana while active.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            combat_clone.setItemMeta(meta);
+            return combat_clone;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_DIMENSIONAL_CAPTURING)) {
+            ItemStack dimensional_capturing = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = dimensional_capturing.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#8b00c7") + "Dimensional Capturing");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "Withdraw");
+            lore.add(ChatColor.GRAY + "Aim at entities to pull them into the Withdraw world.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            dimensional_capturing.setItemMeta(meta);
+            return dimensional_capturing;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_TEMPORAL_SUSPENSION)) {
+            ItemStack temporal_suspension = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = temporal_suspension.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#00217a") + "Temporal Suspension");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "Withdraw Override");
+            lore.add(ChatColor.GRAY + "Stop Time in your current chunk for 20 seconds.");
+            lore.add(ChatColor.GRAY + "You can move freely, but cannot leave the chunk.");
+            lore.add(ChatColor.GRAY + "After time resumes, your Mana is set to 0. Regen cooldown is extended. Mana Potions cannot be used for a while.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            temporal_suspension.setItemMeta(meta);
+            return temporal_suspension;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_DIRECTIONAL_VISION)) {
+            ItemStack directional_vision = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = directional_vision.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#0044ff") + "Directional Vision");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.BLUE + "Enhanced Eyes");
+            lore.add(ChatColor.GRAY + "Instead of seeing around you, shoot out a directional ray of \"seeing\".");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            directional_vision.setItemMeta(meta);
+            return directional_vision;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_FORESIGHT)) {
+            ItemStack foresight = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = foresight.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#005c9e") + "Foresight");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.BLUE + "Enhanced Eyes Override");
+            lore.add(ChatColor.GRAY + "Exit your body and fly around freely.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            foresight.setItemMeta(meta);
+            return foresight;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_CHEAP_SIGHT)) {
+            ItemStack cheap_sight = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = cheap_sight.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#00ad03") + "Cheap Sight");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.BLUE + "Enhanced Eyes");
+            lore.add(ChatColor.GRAY + "Removes the upfront Mana cost.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            cheap_sight.setItemMeta(meta);
+            return cheap_sight;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_ADAPTIVE_EXPLOITATION)) {
+            ItemStack adaptive_exploitation = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = adaptive_exploitation.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#64a326") + "Adaptive Exploitation");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GREEN + "Possession");
+            lore.add(ChatColor.GRAY + "Mimic the functions of the Entity you possess.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            adaptive_exploitation.setItemMeta(meta);
+            return adaptive_exploitation;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_SAFEGUARD)) {
+            ItemStack safeguard = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = safeguard.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ffff00") + "Safeguard");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GREEN + "Possession");
+            lore.add(ChatColor.GRAY + "If you die in Possession, you are always returned to your body unharmed.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            safeguard.setItemMeta(meta);
+            return safeguard;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_INSPIRE)) {
+            ItemStack a_new_acquisition = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = a_new_acquisition.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#f6116c") + "Inspire");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GREEN + "Possession Override");
+            lore.add(ChatColor.GRAY + "Turn entities into your minion.");
+            lore.add(ChatColor.GRAY + "It follows you for a while and attacks anything you attack before disappearing.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            a_new_acquisition.setItemMeta(meta);
+            return a_new_acquisition;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_DOMINO)) {
+            ItemStack domino = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = domino.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#ffbb00") + "Domino");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GREEN + "Possession Override");
+            lore.add(ChatColor.GRAY + "Link up to 5 entities together and damage them all at the same time.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            domino.setItemMeta(meta);
+            return domino;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_TRIPLE_JUMP)) {
+            ItemStack triple_jump_artifact = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = triple_jump_artifact.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#70c0cf") + "Triple Jump");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.AQUA + "Agility");
+            lore.add(ChatColor.GRAY + "You can jump three times now.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            triple_jump_artifact.setItemMeta(meta);
+            return triple_jump_artifact;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_RECOVERY_ROLL)) {
+            ItemStack recovery_roll = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = recovery_roll.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#366f9e") + "Recovery Roll");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.AQUA + "Agility");
+            lore.add(ChatColor.GRAY + "Take drastically less fall damage.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            recovery_roll.setItemMeta(meta);
+            return recovery_roll;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_SHADOWSTEP)) {
+            ItemStack shadowstep = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = shadowstep.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#6c1eb0") + "Shadowstep");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.AQUA + "Agility");
+            lore.add(ChatColor.GRAY + "Automatically walk up blocks.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            shadowstep.setItemMeta(meta);
+            return shadowstep;
+        }
+
+        else if (item.equals(CustomItem.ARTIFACT_METAPHYSICAL_NOURISHMENT)) {
+            ItemStack metaphysical_nourishment = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta meta = metaphysical_nourishment.getItemMeta();
+
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#b35e04") + "Metaphysical Nourishment");
+            meta.setCustomModelData(223);
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GOLD + "Endurance");
+            lore.add(ChatColor.GRAY + "If there's no viable food in your inventory,");
+            lore.add(ChatColor.GRAY + "sacrifice Mana to feed you.");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
+
+            metaphysical_nourishment.setItemMeta(meta);
+            return metaphysical_nourishment;
+        }
+
 
 
         return null;

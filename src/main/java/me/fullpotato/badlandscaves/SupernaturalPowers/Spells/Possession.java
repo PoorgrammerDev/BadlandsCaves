@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -151,6 +152,25 @@ public class Possession extends UsePowers implements Listener {
                 if (event.getEntity() instanceof Mob) {
                     Mob mob = (Mob) event.getEntity();
                     mob.setTarget(null);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void forceExit (PlayerSwapHandItemsEvent event) {
+        final Player player = event.getPlayer();
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            if ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1) {
+                final ItemStack item = event.getMainHandItem();
+                if (item != null) {
+                    for (ActivePowers value : ActivePowers.values()) {
+                        if (item.isSimilar(value.getItem().getItem())) {
+                            event.setCancelled(true);
+                            PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
+                            return;
+                        }
+                    }
                 }
             }
         }
