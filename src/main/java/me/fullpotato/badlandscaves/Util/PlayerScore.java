@@ -70,7 +70,7 @@ public enum PlayerScore {
     PROPULSION_DOUBLESHIFT_WINDOW(PersistentDataType.BYTE),
     PROPULSION_COOLDOWN(PersistentDataType.BYTE),
     COUNTERATTACK_TRACKER(PersistentDataType.BYTE),
-    ARTIFACTS(PersistentDataType.STRING);
+    ARTIFACTS(PersistentDataType.STRING, "");
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

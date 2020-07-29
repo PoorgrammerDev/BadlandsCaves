@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.Artifacts;
+package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts;
 
 public enum ArtifactBaseItem {
     ALL_VOIDMATTER,

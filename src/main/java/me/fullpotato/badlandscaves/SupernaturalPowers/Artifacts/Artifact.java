@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.Artifacts;
+package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts;
 
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 

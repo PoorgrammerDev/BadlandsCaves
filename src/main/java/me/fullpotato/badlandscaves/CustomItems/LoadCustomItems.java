@@ -72,6 +72,7 @@ public class LoadCustomItems {
             "f332ed08-1974-4dd3-9a0f-d7a6c1edbf06",
     };
 
+    // TODO: 7/28/2020 make an item builder and clean up this garbag
     @SuppressWarnings("ConstantConditions")
     public ItemStack getItem(@NotNull CustomItem item) {
         if (item.equals(CustomItem.STARTER_SAPLING)){
@@ -332,6 +333,8 @@ public class LoadCustomItems {
 
             return tainted_powder;
         }
+
+
 
         else if (item.equals(CustomItem.ZOMBIE_SOUL)){
             ItemStack zombie_soul = new ItemStack(Material.COMMAND_BLOCK);
@@ -1104,7 +1107,7 @@ public class LoadCustomItems {
             paxel_meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
             paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[14]), "Starlight Paxel No Damage", -999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.fromString(uuids[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+            paxel_meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.fromString(uuids[15]), "Starlight Paxel Instant Raise", 999999, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
             paxel_meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             paxel_meta.addEnchant(Enchantment.DIG_SPEED, 5, true);

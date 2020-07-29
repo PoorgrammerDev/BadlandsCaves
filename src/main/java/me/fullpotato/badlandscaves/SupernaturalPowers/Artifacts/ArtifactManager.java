@@ -1,8 +1,12 @@
-package me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.Artifacts;
+package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,5 +49,33 @@ public class ArtifactManager {
             map.put(baseItem, artifact);
         }
         return map;
+    }
+
+    public boolean isArtifact (ItemStack item) {
+        if (item != null) {
+            if (item.hasItemMeta()) {
+                final ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    if (meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE)) {
+                        Byte result = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE);
+                        if (result != null) {
+                            return result == (byte) 1;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public Artifact toArtifact(ItemStack item) {
+        if (isArtifact(item)) {
+            for (Artifact value : Artifact.values()) {
+                if (value.getArtifactItem().getItem().isSimilar(item)) {
+                    return value;
+                }
+            }
+        }
+        return null;
     }
 }
