@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts;
 
 public enum ArtifactBaseItem {
-    ALL_VOIDMATTER,
     VOIDMATTER_ARMOR,
     VOIDMATTER_BLADE,
     VOIDMATTER_BOW,

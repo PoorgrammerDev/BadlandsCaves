@@ -32,10 +32,11 @@ public class SoulCampfire implements Listener {
     private final BadlandsCaves plugin;
     private final SwapPowers swapPowers;
     private final ArtifactManager artifactManager;
-    private final Map<Integer, ArtifactBaseItem> artifactSlots;
+    private final Map<ArtifactBaseItem, Integer> artifactSlots;
     private final ItemStack emptyWhite = EmptyItem.getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
     private final ItemStack emptyBlack = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
-    private final ItemStack selectedIndicator = getSelectedIndicator();
+    private final ItemStack selectedIndicator = getPowerSelectedIndicator();
+    private final ItemStack artifactAvailable = getArtifactAvailableIndicator();
     private final ItemStack orderChangeExplanation = getOrderChangeIcon();
     private final ItemStack optionsExplanation = getOptionsIcon();
     private final ItemStack homeButton = getHomeButton();
@@ -58,14 +59,14 @@ public class SoulCampfire implements Listener {
         this.artifactManager = new ArtifactManager(plugin);
 
         this.artifactSlots = new HashMap<>();
-        artifactSlots.put(11, ArtifactBaseItem.VOIDMATTER_ARMOR);
-        artifactSlots.put(20, ArtifactBaseItem.VOIDMATTER_BLADE);
-        artifactSlots.put(29, ArtifactBaseItem.VOIDMATTER_BOW);
-        artifactSlots.put(38, ArtifactBaseItem.VOIDMATTER_TOOLS);
-        artifactSlots.put(15, ArtifactBaseItem.DISPLACE);
-        artifactSlots.put(24, ArtifactBaseItem.WITHDRAW);
-        artifactSlots.put(33, ArtifactBaseItem.ENHANCED_EYES);
-        artifactSlots.put(42, ArtifactBaseItem.POSSESSION);
+        artifactSlots.put(ArtifactBaseItem.VOIDMATTER_ARMOR, 11);
+        artifactSlots.put(ArtifactBaseItem.VOIDMATTER_BLADE, 20);
+        artifactSlots.put(ArtifactBaseItem.VOIDMATTER_BOW, 29);
+        artifactSlots.put(ArtifactBaseItem.VOIDMATTER_TOOLS, 38);
+        artifactSlots.put(ArtifactBaseItem.DISPLACE, 15);
+        artifactSlots.put(ArtifactBaseItem.WITHDRAW, 24);
+        artifactSlots.put(ArtifactBaseItem.ENHANCED_EYES, 33);
+        artifactSlots.put(ArtifactBaseItem.POSSESSION, 42);
 
     }
 
@@ -87,13 +88,21 @@ public class SoulCampfire implements Listener {
 
     public void openInventory(Player player) {
         final Inventory inventory = plugin.getServer().createInventory(player, 54, title);
-        changeMenu(player, inventory, Menu.MAIN_MENU);
+        changeMenu(player, inventory, Menu.MAIN_MENU, false);
 
         player.openInventory(inventory);
     }
 
-    public void changeMenu (Player player, Inventory inventory, Menu menu) {
+    public void changeMenu (Player player, Inventory inventory, Menu menu, boolean saveSettings) {
+        if (saveSettings) saveSettings(player, inventory);
         inventory.clear();
+
+        //FILL
+        for (int i = 0; i < 45; i++) {
+            inventory.setItem(i, emptyBlack);
+        }
+
+
         //BOTTOM ROW
         inventory.setItem(45, getMenuMarker(menu));
         for (int i = 46; i < 53; i++) {
@@ -112,9 +121,6 @@ public class SoulCampfire implements Listener {
             //inventory.setItem(34, );
         }
         else if (menu.equals(Menu.SWAP_ORDER)) {
-            for (int i = 0; i < 45; i++) {
-                inventory.setItem(i, emptyBlack);
-            }
             inventory.setItem(13, orderChangeExplanation);
 
             final ActivePowers[] order = swapPowers.getSwapOrder(player);
@@ -123,26 +129,15 @@ public class SoulCampfire implements Listener {
             }
         }
         else if (menu.equals(Menu.OTHER_OPTIONS)) {
-            for (int i = 0; i < 45; i++) {
-                inventory.setItem(i, emptyBlack);
-            }
-
             inventory.setItem(13, optionsExplanation);
             inventory.setItem(28, (byte) PlayerScore.SWAP_DOUBLESHIFT_OPTION.getScore(plugin, player) == 1 ? doubleShiftIconOn : doubleShiftIconOff);
             inventory.setItem(30, (byte) PlayerScore.SWAP_COOLDOWN_OPTION.getScore(plugin, player) == 1 ? swapCooldownIconOn : swapCooldownIconOff);
         }
         else if (menu.equals(Menu.ARTIFACTS)) {
-            for (int i = 0; i < 9; i++) {
-                inventory.setItem(i, emptyWhite);
-            }
-            for (int i = 9; i < 45; i++) {
-                inventory.setItem(i, emptyBlack);
-            }
-
-            inventory.setItem(13, getArtifactsIcon(true));
+            inventory.setItem(4, getArtifactsIcon(true));
 
             final Map<ArtifactBaseItem, Artifact> artifactMap = artifactManager.getArtifacts(player);
-            artifactSlots.forEach((slot, baseItem) -> {
+            artifactSlots.forEach((baseItem, slot) -> {
                 if (artifactMap.containsKey(baseItem)) {
                     inventory.setItem(slot, artifactMap.get(baseItem).getArtifactItem().getItem());
                 }
@@ -150,42 +145,52 @@ public class SoulCampfire implements Listener {
                     inventory.setItem(slot, getArtifactBaseItemIcons(baseItem));
                 }
             });
-
+        
         }
     }
 
     @EventHandler
     public void menuInteract (InventoryClickEvent event) {
-        final String title = event.getView().getTitle();
-        if (title.contains(this.title)) {
+        if (event.getView().getTitle().equals(this.title)) {
+            event.setCancelled(true);
             final Player player = (Player) event.getWhoClicked();
             final Inventory inventory = event.getClickedInventory();
             final ItemStack currentItem = event.getCurrentItem();
             final int slot = event.getSlot();
             if (inventory != null) {
                 if (inventory.equals(event.getView().getTopInventory())) {
-                    event.setCancelled(true);
-
+                    final Menu menuType = getMenuType(inventory);
                     //home button
                     if (currentItem != null && currentItem.isSimilar(homeButton)) {
-                        saveSettings(player, inventory);
-                        changeMenu(player, inventory, Menu.MAIN_MENU);
+                        if (menuType.equals(Menu.ARTIFACTS)) {
+                            final ItemStack middle = inventory.getItem(22);
+                            if (middle != null && !middle.isSimilar(emptyBlack) && artifactManager.isArtifact(middle)) {
+                                if (player.getInventory().firstEmpty() == -1) {
+                                    player.getWorld().dropItemNaturally(player.getLocation(), middle);
+                                }
+                                else {
+                                    player.getInventory().addItem(middle);
+                                }
+                            }
+                        }
+
+                        changeMenu(player, inventory, Menu.MAIN_MENU, true);
                     }
 
-                    else if (getMenuType(inventory).equals(Menu.MAIN_MENU)) {
+                    else if (menuType.equals(Menu.MAIN_MENU)) {
                         if (currentItem != null) {
                             if (currentItem.isSimilar(orderChangeExplanation)) {
-                                changeMenu(player, inventory, Menu.SWAP_ORDER);
+                                changeMenu(player, inventory, Menu.SWAP_ORDER, false);
                             }
                             else if (currentItem.isSimilar(optionsExplanation)) {
-                                changeMenu(player, inventory, Menu.OTHER_OPTIONS);
+                                changeMenu(player, inventory, Menu.OTHER_OPTIONS, false);
                             }
                             else if (currentItem.isSimilar(getArtifactsIcon(true))) {
-                                changeMenu(player, inventory, Menu.ARTIFACTS);
+                                changeMenu(player, inventory, Menu.ARTIFACTS, false);
                             }
                         }
                     }
-                    else if (getMenuType(inventory).equals(Menu.SWAP_ORDER)) {
+                    else if (menuType.equals(Menu.SWAP_ORDER)) {
                         //Select Spells
                         if (currentItem != null) {
                             if (isSpellItem(currentItem)) {
@@ -209,7 +214,7 @@ public class SoulCampfire implements Listener {
                             }
                         }
                     }
-                    else if (getMenuType(inventory).equals(Menu.OTHER_OPTIONS)) {
+                    else if (menuType.equals(Menu.OTHER_OPTIONS)) {
                         if (currentItem != null) {
                             //Double Shift Option
                             if (currentItem.isSimilar(doubleShiftIconOn)) {
@@ -228,8 +233,71 @@ public class SoulCampfire implements Listener {
                             }
                         }
                     }
-                    else if (getMenuType(inventory).equals(Menu.ARTIFACTS)) {
-                        // TODO: 7/28/2020
+                    else if (menuType.equals(Menu.ARTIFACTS)) {
+                        if (currentItem != null) {
+                            for (Integer value : artifactSlots.values()) {
+                                if (slot == value) {
+                                    final ItemStack testAvailable1 = inventory.getItem(slot - 1);
+                                    final ItemStack testAvailable2 = inventory.getItem(slot + 1);
+                                    if (testAvailable1 != null && testAvailable2 != null && testAvailable1.isSimilar(artifactAvailable) && testAvailable2.isSimilar(artifactAvailable)) {
+                                        inventory.setItem(slot, inventory.getItem(22));
+                                        inventory.setItem(22, emptyBlack);
+
+                                        changeMenu(player, inventory, Menu.ARTIFACTS, true);
+                                    }
+                                }
+                            }
+
+
+
+
+
+                            if (artifactManager.isArtifact(currentItem)) {
+                                if (player.getInventory().firstEmpty() != -1) {
+                                    player.getInventory().addItem(currentItem.clone());
+                                    if (slot == 22) {
+                                        changeMenu(player, inventory, Menu.ARTIFACTS, true);
+                                    }
+                                    else {
+                                        artifactSlots.forEach((baseItem, artifactSlot) -> {
+                                            if (slot == artifactSlot) {
+                                                inventory.setItem(slot, getArtifactBaseItemIcons(baseItem));
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+                //Bottom Inventory
+                else {
+                    final Inventory topInventory = event.getView().getTopInventory();
+                    if (getMenuType(topInventory).equals(Menu.ARTIFACTS)) {
+                        if (currentItem != null && artifactManager.isArtifact(currentItem)) {
+                            final Artifact artifact = artifactManager.toArtifact(currentItem);
+                            final ArtifactBaseItem[] baseItems = artifact.getArtifactBaseItems();
+                            if (baseItems.length > 1) {
+                                topInventory.setItem(22, currentItem);
+                                currentItem.setAmount(0);
+
+                                for (ArtifactBaseItem baseItem : baseItems) {
+                                    final int placeSlot = artifactSlots.get(baseItem);
+                                    topInventory.setItem(placeSlot - 1, artifactAvailable);
+                                    topInventory.setItem(placeSlot + 1, artifactAvailable);
+                                }
+                            }
+                            else {
+                                final int artifactSlot = this.artifactSlots.get(baseItems[0]);
+                                final ItemStack alreadyEquipped = topInventory.getItem(artifactSlot);
+                                if (alreadyEquipped != null && artifactManager.isArtifact(alreadyEquipped)) {
+                                    inventory.setItem(slot, alreadyEquipped);
+                                }
+                                topInventory.setItem(artifactSlot, currentItem.clone());
+                                currentItem.setAmount(currentItem.getAmount() - 1);
+                            }
+                        }
                     }
                 }
             }
@@ -241,6 +309,19 @@ public class SoulCampfire implements Listener {
         if (event.getView().getTitle().equals(title)) {
             final Inventory inventory = event.getInventory();
             final Player player = (Player) event.getPlayer();
+
+            final Menu menuType = getMenuType(inventory);
+            if (menuType.equals(Menu.ARTIFACTS)) {
+                final ItemStack middle = inventory.getItem(22);
+                if (middle != null && !middle.isSimilar(emptyBlack) && artifactManager.isArtifact(middle)) {
+                    if (player.getInventory().firstEmpty() == -1) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), middle);
+                    }
+                    else {
+                        player.getInventory().addItem(middle);
+                    }
+                }
+            }
 
             saveSettings(player, inventory);
         }
@@ -294,7 +375,7 @@ public class SoulCampfire implements Listener {
         else if (type.equals(Menu.ARTIFACTS)) {
             final Map<ArtifactBaseItem, Artifact> artifactMap = new HashMap<>();
 
-            artifactSlots.forEach((slot, baseItem) -> {
+            artifactSlots.forEach((baseItem, slot) -> {
                 final ItemStack item = inventory.getItem(slot);
                 if (item != null && artifactManager.isArtifact(item)) {
                     artifactMap.put(baseItem, artifactManager.toArtifact(item));
@@ -363,13 +444,13 @@ public class SoulCampfire implements Listener {
         final ItemStack item = new ItemStack(Material.COMMAND_BLOCK);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.GRAY.toString() + ChatColor.BOLD + "Artifacts For " + builder.toString());
-        meta.setCustomModelData(Math.min(artifactBaseItem.ordinal() + 223, 228));
+        meta.setCustomModelData(Math.min(artifactBaseItem.ordinal() + 224, 228));
 
         item.setItemMeta(meta);
         return item;
     }
 
-    public ItemStack getSelectedIndicator () {
+    public ItemStack getPowerSelectedIndicator() {
         final ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
         final ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Selected");
@@ -377,6 +458,19 @@ public class SoulCampfire implements Listener {
         final ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "This power has been selected.");
         lore.add(ChatColor.GRAY + "Select another power to swap places.");
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack getArtifactAvailableIndicator() {
+        final ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+        final ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Available");
+
+        final ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "You can add the Artifact here.");
         meta.setLore(lore);
 
         item.setItemMeta(meta);

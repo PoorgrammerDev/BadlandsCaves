@@ -3,7 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 
 public enum Artifact {
-    TENACIOUS_TRICKERY(CustomItem.ARTIFACT_TENACIOUS_TRICKERY, ArtifactBaseItem.ALL_VOIDMATTER),
+    TENACIOUS_TRICKERY(CustomItem.ARTIFACT_TENACIOUS_TRICKERY, ArtifactBaseItem.VOIDMATTER_ARMOR, ArtifactBaseItem.VOIDMATTER_BLADE, ArtifactBaseItem.VOIDMATTER_BOW, ArtifactBaseItem.VOIDMATTER_TOOLS),
 
     ECLIPSED_SHADOWS(CustomItem.ARTIFACT_ECLIPSED_SHADOWS, ArtifactBaseItem.VOIDMATTER_ARMOR),
     MANA_WARDING(CustomItem.ARTIFACT_MANA_WARDING, ArtifactBaseItem.VOIDMATTER_ARMOR),
@@ -45,18 +45,18 @@ public enum Artifact {
     METAPHYSICAL_NOURISHMENT(CustomItem.ARTIFACT_METAPHYSICAL_NOURISHMENT, ArtifactBaseItem.ENDURANCE);
 
     private final CustomItem artifactItem;
-    private final ArtifactBaseItem artifactBaseItem;
+    private final ArtifactBaseItem[] artifactBaseItems;
 
-    Artifact(CustomItem artifactItem, ArtifactBaseItem artifactBaseItem) {
+    Artifact(CustomItem artifactItem, ArtifactBaseItem... artifactBaseItems) {
         this.artifactItem = artifactItem;
-        this.artifactBaseItem = artifactBaseItem;
+        this.artifactBaseItems = artifactBaseItems;
     }
 
     public CustomItem getArtifactItem() {
         return artifactItem;
     }
 
-    public ArtifactBaseItem getArtifactBaseItem() {
-        return artifactBaseItem;
+    public ArtifactBaseItem[] getArtifactBaseItems() {
+        return artifactBaseItems;
     }
 }

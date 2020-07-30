@@ -51,6 +51,15 @@ public class ArtifactManager {
         return map;
     }
 
+    public boolean hasArtifact(Player player, Artifact artifact) {
+        for (ArtifactBaseItem artifactBaseItem : artifact.getArtifactBaseItems()) {
+            if (getArtifacts(player).get(artifactBaseItem).equals(artifact)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isArtifact (ItemStack item) {
         if (item != null) {
             if (item.hasItemMeta()) {

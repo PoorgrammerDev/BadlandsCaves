@@ -2090,6 +2090,8 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Armor");
             lore.add(ChatColor.GRAY + "Become invisible and fast when sneaking. Hides armor.");
+            lore.add(ChatColor.GRAY + "Mobs can't see you unless you hold out items or get too close.");
+            lore.add(ChatColor.GRAY + "You can't mine or attack when invisible.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);

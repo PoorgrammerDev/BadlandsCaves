@@ -25,6 +25,8 @@ import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AugmentedDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
+import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadowsNMS;
+import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadows_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
@@ -34,6 +36,8 @@ import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R1;
 import me.fullpotato.badlandscaves.Other.*;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactEclipsedShadows;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactTenaciousTrickery;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.*;
@@ -84,10 +88,11 @@ public final class BadlandsCaves extends JavaPlugin {
     private FakePlayerNMS fakePlayerNMS;
     private LineOfSightNMS lineOfSightNMS;
     private PossessionNMS possessionNMS;
+    private EclipsedShadowsNMS eclipsedShadowsNMS;
 
     @Override
     public void onEnable() {
-        getServerVersion();
+        loadNMS();
         createOptionsConfig();
         createSystemConfig();
         loadWorldNames();
@@ -290,6 +295,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new NebuliteShieldThruster(this),
                 new NebuliteCounterattack(this),
                 new SoulCampfire(this),
+                new ArtifactTenaciousTrickery(this),
+                new ArtifactEclipsedShadows(this),
         };
 
         for (Listener event : events) {
@@ -512,7 +519,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.dimensionPrefixName = this.getMainWorldName() + "_dim_";
     }
 
-    public void getServerVersion() {
+    public void loadNMS() {
         String version = this.getServer().getClass().getPackage().getName();
         version = version.substring(version.lastIndexOf('.') + 2);
 
@@ -521,6 +528,8 @@ public final class BadlandsCaves extends JavaPlugin {
             fakePlayerNMS = new FakePlayer_1_16_R1(this);
             lineOfSightNMS = new LineOfSight_1_16_R1();
             possessionNMS = new Possession_1_16_R1();
+            eclipsedShadowsNMS = new EclipsedShadows_1_16_R1(this);
+
         } else {
             this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
             this.getServer().getPluginManager().disablePlugin(this);
@@ -578,5 +587,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
     public FileConfiguration getSystemConfig() {
         return systemConfig;
+    }
+
+    public EclipsedShadowsNMS getEclipsedShadowsNMS() {
+        return eclipsedShadowsNMS;
     }
 }
