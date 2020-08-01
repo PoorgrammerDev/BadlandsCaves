@@ -8,7 +8,6 @@ import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,13 +21,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 
 public class EnhancedEyes extends UsePowers implements Listener {
+    private final List<Material> mineralsTier1 = Arrays.asList(Material.COAL_ORE, Material.IRON_ORE, Material.COAL_BLOCK, Material.IRON_BLOCK);
+    private final List<Material> mineralsTier2 = Arrays.asList(Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.GOLD_ORE, Material.NETHER_GOLD_ORE, Material.GILDED_BLACKSTONE, Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.NETHER_QUARTZ_ORE, Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK, Material.GOLD_BLOCK, Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.DEAD_TUBE_CORAL_BLOCK, Material.ANCIENT_DEBRIS);
+    private final List<Material> storage = Arrays.asList(Material.CHEST, Material.BARREL, Material.SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.LIME_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.RED_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.SPAWNER);
+    private final EnhancedEyesNMS nms;
+    private final int initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
+    private final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
+    private final Map<Integer, Integer> levelRangeMap;
     public EnhancedEyes(BadlandsCaves plugin) {
         super(plugin);
+        nms = plugin.getEnhancedEyesNMS();
+
+        levelRangeMap = new HashMap<>();
+        levelRangeMap.put(1, 5);
+        levelRangeMap.put(2, 10);
     }
 
     @EventHandler
@@ -61,146 +71,9 @@ public class EnhancedEyes extends UsePowers implements Listener {
                         PlayerScore.USING_EYES.setScore(plugin, player, 0);
                     }
                     else {
-                        final int initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
-                        final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-
                         if (mana >= initial_mana_cost) {
-                            player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.5F, 1);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1)) {
-                                        player.stopSound("custom.supernatural.enhanced_eyes.ambience");
-                                        player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.ambience", 0.4F, 1);
-                                    }
-                                    else {
-                                        this.cancel();
-                                    }
-                                }
-                            }.runTaskTimerAsynchronously(plugin, 5, 330);
-
-                            ArrayList<Material> minerals_tier1 = new ArrayList<>();
-                            minerals_tier1.add(Material.COAL_ORE);
-                            minerals_tier1.add(Material.IRON_ORE);
-                            minerals_tier1.add(Material.COAL_BLOCK);
-                            minerals_tier1.add(Material.IRON_BLOCK);
-
-                            ArrayList<Material> minerals_tier2 = new ArrayList<>();
-
-                            minerals_tier2.add(Material.DIAMOND_ORE);
-                            minerals_tier2.add(Material.EMERALD_ORE);
-                            minerals_tier2.add(Material.GOLD_ORE);
-                            minerals_tier2.add(Material.NETHER_GOLD_ORE);
-                            minerals_tier2.add(Material.GILDED_BLACKSTONE);
-                            minerals_tier2.add(Material.LAPIS_ORE);
-                            minerals_tier2.add(Material.REDSTONE_ORE);
-                            minerals_tier2.add(Material.NETHER_QUARTZ_ORE);
-                            minerals_tier2.add(Material.DIAMOND_BLOCK);
-                            minerals_tier2.add(Material.EMERALD_BLOCK);
-                            minerals_tier2.add(Material.GOLD_BLOCK);
-                            minerals_tier2.add(Material.LAPIS_BLOCK);
-                            minerals_tier2.add(Material.REDSTONE_BLOCK);
-                            minerals_tier2.add(Material.DEAD_TUBE_CORAL_BLOCK);
-                            minerals_tier2.add(Material.ANCIENT_DEBRIS);
-
-                            ArrayList<Material> storage = new ArrayList<>();
-                            storage.add(Material.CHEST);
-                            storage.add(Material.BARREL);
-                            storage.add(Material.SHULKER_BOX);
-                            storage.add(Material.BLACK_SHULKER_BOX);
-                            storage.add(Material.BLUE_SHULKER_BOX);
-                            storage.add(Material.BROWN_SHULKER_BOX);
-                            storage.add(Material.CYAN_SHULKER_BOX);
-                            storage.add(Material.GRAY_SHULKER_BOX);
-                            storage.add(Material.GREEN_SHULKER_BOX);
-                            storage.add(Material.LIGHT_BLUE_SHULKER_BOX);
-                            storage.add(Material.LIGHT_GRAY_SHULKER_BOX);
-                            storage.add(Material.LIME_SHULKER_BOX);
-                            storage.add(Material.MAGENTA_SHULKER_BOX);
-                            storage.add(Material.ORANGE_SHULKER_BOX);
-                            storage.add(Material.PINK_SHULKER_BOX);
-                            storage.add(Material.PURPLE_SHULKER_BOX);
-                            storage.add(Material.YELLOW_SHULKER_BOX);
-                            storage.add(Material.RED_SHULKER_BOX);
-                            storage.add(Material.WHITE_SHULKER_BOX);
-                            storage.add(Material.SPAWNER);
-
-                            ArrayList<Integer> ids = new ArrayList<>();
-                            StringBuilder builder = new StringBuilder();
-                            EnhancedEyesNMS nms = plugin.getEnhancedEyesNMS();
-                            Location location = player.getLocation();
-                            final double x = location.getX();
-                            final double y = location.getY();
-                            final double z = location.getZ();
-                            final int block_range = (eyes_level >= 2) ? 10 : 5;
-                            final double dist_range = Math.pow(block_range - 1, 2);
-
-                            //highlights important blocks
-                            for (int x_offset = -block_range; x_offset <= block_range; x_offset++) {
-                                for (int y_offset = -block_range; y_offset <= block_range; y_offset++) {
-                                    for (int z_offset = -block_range; z_offset <= block_range; z_offset++) {
-                                        Location blockReplaceLoc = new Location(location.getWorld(), x + x_offset, y + y_offset, z + z_offset);
-
-                                        if (location.distanceSquared(blockReplaceLoc) < dist_range) {
-                                            Block block = blockReplaceLoc.getBlock();
-                                            Material blockMat = block.getType();
-
-                                            if (blockMat.isSolid() || (block.isLiquid() && ((Levelled) block.getBlockData()).getLevel() == 0)) {
-                                                if (eyes_level > 1) {
-                                                    if (minerals_tier1.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc, ChatColor.GRAY);
-                                                        ids.add(nms_id);
-                                                        builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
-                                                    }
-                                                    else if (minerals_tier2.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc, ChatColor.BLUE);
-                                                        ids.add(nms_id);
-                                                        builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
-                                                    }
-                                                    else if (storage.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc, ChatColor.GREEN);
-                                                        ids.add(nms_id);
-                                                        builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
-                                                    }
-                                                }
-                                                else {
-                                                    if (minerals_tier1.contains(blockMat) || minerals_tier2.contains(blockMat) || storage.contains(blockMat)) {
-                                                        int nms_id = nms.spawnIndicator(player, blockReplaceLoc);
-                                                        ids.add(nms_id);
-                                                        builder.append(blockReplaceLoc.getBlockX()).append(",").append(blockReplaceLoc.getBlockY()).append(",").append(blockReplaceLoc.getBlockZ()).append(":").append(nms_id).append("_");
-                                                    }
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            String eyes_map = builder.toString();
-                            plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".eyes_map", eyes_map);
-                            plugin.saveSystemConfig();
-
-                            mana -= (initial_mana_cost - (constant_mana_drain / 20.0));
-                            PlayerScore.MANA.setScore(plugin, player, mana);
-                            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
-                            PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-                            PlayerScore.USING_EYES.setScore(plugin, player, 1);
-
-                            ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), block_range - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
-                            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                                if (entity instanceof Player) {
-                                    Player powered = (Player) entity;
-                                    if (!(powered.equals(player)) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1 && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                                        powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.3F, 1);
-                                        powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
-                                    }
-                                }
-                            }
-
-
-                            new EyesRunnable(plugin, player, location, ids, player.hasPotionEffect(PotionEffectType.NIGHT_VISION)).runTaskTimer(plugin, 0, 0);
+                            enableEnhancedEyes(player, getNearbyBlocks(player.getLocation(), levelRangeMap.get(eyes_level)));
                         }
                         else {
                             notEnoughMana(player);
@@ -209,6 +82,107 @@ public class EnhancedEyes extends UsePowers implements Listener {
                 }
             }
         }
+    }
+
+    public void enableEnhancedEyes (Player player, Set<Block> blocks) {
+        final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
+        final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
+        final Location location = player.getLocation();
+
+        //EFFECTS-------------------------------------------------------------------
+        //Sound Effects
+        player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.5F, 1);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1)) {
+                    player.stopSound("custom.supernatural.enhanced_eyes.ambience");
+                    player.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.ambience", 0.4F, 1);
+                }
+                else {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimerAsynchronously(plugin, 5, 330);
+
+        //Particle effects
+        ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), levelRangeMap.get(eyes_level) - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
+        //Effects for nearby magic players
+        for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+            if (entity instanceof Player) {
+                Player powered = (Player) entity;
+                if (!(powered.equals(player)) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1 && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                    powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.3F, 1);
+                    powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
+                }
+            }
+        }
+
+        //SPAWN BLOCK INDICATORS------------------------------------------------
+        final ArrayList<Integer> ids = new ArrayList<>();
+        final StringBuilder builder = new StringBuilder();
+        blocks.forEach(block -> {
+            final Location blockLoc = block.getLocation();
+            int nmsID;
+
+            if (eyes_level > 1) {
+                //spawns colored indicator
+                final ChatColor color = getColor(block.getType());
+                nmsID = nms.spawnIndicator(player, blockLoc, color);
+            }
+            else {
+                //spawns white indicator
+                nmsID = nms.spawnIndicator(player, blockLoc);
+            }
+
+            //adds ids to list and appends to eyes map
+            ids.add(nmsID);
+            builder.append(blockLoc.getBlockX()).append(",").append(blockLoc.getBlockY()).append(",").append(blockLoc.getBlockZ()).append(":").append(nmsID).append("_");
+        });
+
+        plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".eyes_map", builder.toString());
+        plugin.saveSystemConfig();
+
+        PlayerScore.MANA.setScore(plugin, player, mana - (initial_mana_cost - (constant_mana_drain / 20.0)));
+        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+        PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+        PlayerScore.USING_EYES.setScore(plugin, player, 1);
+
+        new EyesRunnable(plugin, player, location, ids, player.hasPotionEffect(PotionEffectType.NIGHT_VISION)).runTaskTimer(plugin, 0, 0);
+    }
+
+    public Set<Block> getNearbyBlocks(Location location, int blockRange) {
+        final Set<Block> output = new HashSet<>();
+        final double distSqRange = Math.pow(blockRange - 1, 2);
+
+        for (int x = -blockRange; x < blockRange; x++) {
+            for (int y = -blockRange; y < blockRange; y++) {
+                for (int z = -blockRange; z < blockRange; z++) {
+                    final Location clone = location.clone().add(x, y, z);
+                    if (location.distanceSquared(clone) < distSqRange) {
+                        final Block block = clone.getBlock();
+                        final Material type = block.getType();
+                        if (mineralsTier1.contains(type) || mineralsTier2.contains(type) || storage.contains(type)) {
+                            output.add(block);
+                        }
+                    }
+                }
+            }
+        }
+        return output;
+    }
+
+    public ChatColor getColor (Material material) {
+        if (mineralsTier1.contains(material)) {
+            return ChatColor.GRAY;
+        }
+        else if (mineralsTier2.contains(material)) {
+            return ChatColor.BLUE;
+        }
+        else if (storage.contains(material)) {
+            return ChatColor.GREEN;
+        }
+        return ChatColor.WHITE;
     }
 
     @EventHandler
@@ -286,6 +260,10 @@ public class EnhancedEyes extends UsePowers implements Listener {
         }
 
         return output;
+    }
+
+    public boolean isOre (Material material) {
+        return mineralsTier1.contains(material) || mineralsTier2.contains(material) || storage.contains(material);
     }
 
 }

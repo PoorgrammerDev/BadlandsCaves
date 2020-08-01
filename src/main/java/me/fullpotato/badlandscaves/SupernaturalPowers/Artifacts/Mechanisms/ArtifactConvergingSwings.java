@@ -23,19 +23,21 @@ public class ArtifactConvergingSwings extends ArtifactMechanisms implements List
 
     @EventHandler
     public void attack (PlayerInteractEvent event) {
-        final Action action = event.getAction();
-        if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
+            final Action action = event.getAction();
+            if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
 
-            final Player player = event.getPlayer();
-            if (player.getAttackCooldown() >= 1) {
-                final ItemStack item = event.getItem();
-                if (item != null && voidmatter.isVoidmatterBlade(item) && artifactManager.hasArtifact(player, Artifact.CONVERGING_SWINGS)) {
-                    final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
-                    if (mana >= cost) {
-                        final TargetEntity targetEntityFinder = new TargetEntity();
-                        final LivingEntity entity = targetEntityFinder.findTargetLivingEntity(player.getLocation(), 5, 0.2, 3, false, player);
-                        if (entity == null) {
-                            attemptConverge(player);
+                final Player player = event.getPlayer();
+                if (player.getAttackCooldown() >= 1) {
+                    final ItemStack item = event.getItem();
+                    if (item != null && voidmatter.isVoidmatterBlade(item) && artifactManager.hasArtifact(player, Artifact.CONVERGING_SWINGS)) {
+                        final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
+                        if (mana >= cost) {
+                            final TargetEntity targetEntityFinder = new TargetEntity();
+                            final LivingEntity entity = targetEntityFinder.findTargetLivingEntity(player.getLocation(), 5, 0.2, 3, false, player);
+                            if (entity == null) {
+                                attemptConverge(player);
+                            }
                         }
                     }
                 }

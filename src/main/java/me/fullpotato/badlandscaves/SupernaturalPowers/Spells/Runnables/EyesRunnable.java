@@ -18,19 +18,21 @@ public class EyesRunnable extends BukkitRunnable {
     private final Location origin;
     private final ArrayList<Integer> shulker_ids;
     private final boolean hasNightVision;
+    private EnhancedEyesNMS nms;
 
-    public EyesRunnable (BadlandsCaves bcav, Player ply, Location og, ArrayList<Integer> ids, boolean hasNightVision) {
-        plugin = bcav;
-        player = ply;
+    public EyesRunnable (BadlandsCaves plugin, Player player, Location origin, ArrayList<Integer> ids, boolean hasNightVision) {
+        this.plugin = plugin;
+        this.player = player;
         shulker_ids = ids;
-        origin = og;
+        this.origin = origin;
         this.hasNightVision = hasNightVision;
+        nms = plugin.getEnhancedEyesNMS();
     }
 
 
     @Override
     public void run() {
-        EnhancedEyesNMS nms = plugin.getEnhancedEyesNMS();
+
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;

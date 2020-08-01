@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -52,55 +53,57 @@ public class ArtifactFleetingSpirits extends ArtifactMechanisms implements Liste
 
     @EventHandler
     public void playerDamage (EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            final Player player = (Player) event.getEntity();
-            final EntityDamageEvent.DamageCause cause = event.getCause();
-            for (EntityDamageEvent.DamageCause blacklistedCause : blacklistedCauses) {
-                if (cause.equals(blacklistedCause)) return;
-            }
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
+            if (event.getEntity() instanceof Player) {
+                final Player player = (Player) event.getEntity();
+                final EntityDamageEvent.DamageCause cause = event.getCause();
+                for (EntityDamageEvent.DamageCause blacklistedCause : blacklistedCauses) {
+                    if (cause.equals(blacklistedCause)) return;
+                }
 
-            final double finalDamage = event.getFinalDamage();
-            if (finalDamage > player.getHealth() || finalDamage / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > 0.5D) {
-                final int level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
-                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1 && level > 0) {
-                    final EntityEquipment equipment = player.getEquipment();
-                    if (equipment != null) {
-                        for (ItemStack armor : equipment.getArmorContents()) {
-                            if (armor != null && voidmatter.isVoidmatterArmor(armor)) {
-                                if (artifactManager.hasArtifact(player, Artifact.FLEETING_SPIRITS)) {
-                                    final Location location = player.getLocation();
-                                    Location source = null;
-                                    Entity damager = null;
-                                    if (event instanceof EntityDamageByEntityEvent) {
-                                        EntityDamageByEntityEvent byEntityEvent = (EntityDamageByEntityEvent) event;
-                                        damager = byEntityEvent.getDamager();
-                                        source = damager.getLocation();
+                final double finalDamage = event.getFinalDamage();
+                if (finalDamage > player.getHealth() || finalDamage / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > 0.5D) {
+                    final int level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
+                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1 && level > 0) {
+                        final EntityEquipment equipment = player.getEquipment();
+                        if (equipment != null) {
+                            for (ItemStack armor : equipment.getArmorContents()) {
+                                if (armor != null && voidmatter.isVoidmatterArmor(armor)) {
+                                    if (artifactManager.hasArtifact(player, Artifact.FLEETING_SPIRITS)) {
+                                        final Location location = player.getLocation();
+                                        Location source = null;
+                                        Entity damager = null;
+                                        if (event instanceof EntityDamageByEntityEvent) {
+                                            EntityDamageByEntityEvent byEntityEvent = (EntityDamageByEntityEvent) event;
+                                            damager = byEntityEvent.getDamager();
+                                            source = damager.getLocation();
 
-                                        if (damager instanceof Projectile) {
-                                            Projectile projectile = (Projectile) damager;
-                                            ProjectileSource shooter = projectile.getShooter();
-                                            if (shooter instanceof Entity) {
-                                                damager = (Entity) shooter;
+                                            if (damager instanceof Projectile) {
+                                                Projectile projectile = (Projectile) damager;
+                                                ProjectileSource shooter = projectile.getShooter();
+                                                if (shooter instanceof Entity) {
+                                                    damager = (Entity) shooter;
+                                                }
+                                            }
+
+                                        }
+                                        else if (event instanceof EntityDamageByBlockEvent) {
+                                            EntityDamageByBlockEvent byBlockEvent = (EntityDamageByBlockEvent) event;
+                                            Block block = byBlockEvent.getDamager();
+                                            if (block != null) {
+                                                source = block.getLocation();
                                             }
                                         }
+                                        if (attemptWarp(player, source)) {
+                                            event.setCancelled(true);
 
-                                    }
-                                    else if (event instanceof EntityDamageByBlockEvent) {
-                                        EntityDamageByBlockEvent byBlockEvent = (EntityDamageByBlockEvent) event;
-                                        Block block = byBlockEvent.getDamager();
-                                        if (block != null) {
-                                            source = block.getLocation();
+                                            if (damager instanceof LivingEntity) {
+                                                spawnVindicator(player, (LivingEntity) damager, location, true);
+                                            }
                                         }
                                     }
-                                    if (attemptWarp(player, source)) {
-                                        event.setCancelled(true);
-
-                                        if (damager instanceof LivingEntity) {
-                                            spawnVindicator(player, (LivingEntity) damager, location, true);
-                                        }
-                                    }
+                                    return;
                                 }
-                                return;
                             }
                         }
                     }
@@ -169,6 +172,8 @@ public class ArtifactFleetingSpirits extends ArtifactMechanisms implements Liste
         vindicator.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20);
         vindicator.getEquipment().setItemInMainHandDropChance(-999.99F);
         vindicator.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_AXE));
+        vindicator.getPersistentDataContainer().set(new NamespacedKey(plugin, "minion"), PersistentDataType.BYTE, (byte) 1);
+        vindicator.getPersistentDataContainer().set(new NamespacedKey(plugin, "owner"), PersistentDataType.STRING, player.getUniqueId().toString());
 
         vindicator.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 3, true, true));
         vindicator.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 3, true, true));

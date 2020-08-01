@@ -2092,7 +2092,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "Become invisible and fast when sneaking. Hides armor.");
             lore.add(ChatColor.GRAY + "Mobs can't see you unless you hold out items or get too close.");
             lore.add(ChatColor.GRAY + "You can't mine or attack when invisible.");
-            lore.add(ChatColor.GRAY + "Costs " + plugin.getOptionsConfig().getDouble("hardmode_values.artifact_costs.eclipsed_shadows") + " Mana per use.");
+            lore.add(ChatColor.GRAY + "Costs " + plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.eclipsed_shadows") + " Mana per use.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2150,7 +2150,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
             lore.add(ChatColor.GRAY + "Missed swings send out a particle that warps entities to you.");
             lore.add(ChatColor.GRAY + "You can control this particle slightly by moving around your cursor.");
-            lore.add(ChatColor.GRAY + "Costs 25 Mana.");
+            lore.add(ChatColor.GRAY + "Costs " + plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.converging_swings") + " Mana.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2169,7 +2169,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
             lore.add(ChatColor.GRAY + "Swings send out slashes and further damage entities.");
-            lore.add(ChatColor.GRAY + "Costs 5 Mana.");
+            lore.add(ChatColor.GRAY + "Costs " + plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.travelling_blades") + " Mana.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2187,8 +2187,8 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
-            lore.add(ChatColor.GRAY + "Removes attack cooldown.");
-            lore.add(ChatColor.GRAY + "-5 Sharpness, +1 Knockback");
+            lore.add(ChatColor.GRAY + "Removes attack cooldown, reduces damage.");
+            lore.add(ChatColor.GRAY + "Enemies are knocked back further.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2206,7 +2206,8 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
-            lore.add(ChatColor.GRAY + "Heal 25% of the damage you deal.");
+            lore.add(ChatColor.GRAY + "Heal some of the damage you deal.");
+            lore.add(ChatColor.GRAY + "If paired with the Bloodsapping Bow, doubles the yield.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2219,7 +2220,7 @@ public class LoadCustomItems {
             ItemStack sight_stealing = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = sight_stealing.getItemMeta();
 
-            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#1b0073") + "Sight Stealing");
+            meta.setDisplayName(ChatColor.BLUE + "Sight Stealing");
             meta.setCustomModelData(223);
 
             ArrayList<String> lore = new ArrayList<>();
@@ -2242,8 +2243,8 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Bow");
-            lore.add(ChatColor.GRAY + "Arrows no longer deal damage, but suck health directly from entities.");
-            lore.add(ChatColor.GRAY + "This health is turned into Mana and returned to you.");
+            lore.add(ChatColor.GRAY + "Arrows convert damage into Mana and returns it to you.");
+            lore.add(ChatColor.GRAY + "If paired with the Bloodsapping Bayonet, it doubles the Mana yield.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);

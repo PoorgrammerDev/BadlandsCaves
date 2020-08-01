@@ -299,6 +299,13 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ArtifactManaWarding(this),
                 new ArtifactFleetingSpirits(this),
                 new ArtifactConvergingSwings(this),
+                new ArtifactTravellingBlades(this),
+                new ArtifactHasteWind(this),
+                new ArtifactBloodsappingBayonet(this),
+                new ArtifactSightStealing(this),
+                new ArtifactBloodsappingBow(this),
+                new ArtifactSummonersRift(this),
+                new ArtifactEmancipatedEyes(this),
         };
 
         for (Listener event : events) {
@@ -381,6 +388,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new PreventNonPoweredUsage(this).runTaskTimerAsynchronously(this, 0, 0);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
         new NebuliteCounterattack(this).runTaskTimer(this, 0, 0);
+        new ArtifactHasteWind(this).runTaskTimer(this, 0, 0);
 
 
         WitherBossFight witherFight = new WitherBossFight(this);

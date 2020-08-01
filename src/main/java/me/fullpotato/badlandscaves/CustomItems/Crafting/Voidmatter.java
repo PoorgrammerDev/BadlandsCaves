@@ -16,7 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-
 import java.util.ArrayList;
 
 public class Voidmatter extends MatchCrafting implements Listener {
@@ -198,7 +197,7 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public boolean isVoidmatter (ItemStack item) {
-        return isVoidmatterArmor(item) || isVoidmatterTool(item);
+        return isVoidmatterArmor(item) || isVoidmatterBow(item) || isVoidmatterBlade(item) || isVoidmatterTool(item);
     }
 
     public boolean isVoidmatterArmor (ItemStack item) {
@@ -224,9 +223,42 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
+    public boolean isVoidmatterBlade (ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_BLADE.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_blade");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isBlade = container.get(key, PersistentDataType.BYTE);
+                    if (isBlade != null) {
+                        return isBlade == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isVoidmatterBow (ItemStack item) {
+        if (item.getType().equals(CustomItem.VOIDMATTER_BOW.getItem().getType())) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_bow");
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte isBow = container.get(key, PersistentDataType.BYTE);
+                    if (isBow != null) {
+                        return isBow == (byte) 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isVoidmatterTool (ItemStack item) {
-        return isVoidmatterPickaxe(item) || isVoidmatterBlade(item) ||
-                isVoidmatterShovel(item) || isVoidmatterAxe(item) || isVoidmatterBow(item);
+        return isVoidmatterPickaxe(item) || isVoidmatterShovel(item) || isVoidmatterAxe(item);
     }
 
     public boolean isVoidmatterPickaxe (ItemStack item) {
@@ -239,23 +271,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
                     Byte isPick = container.get(key, PersistentDataType.BYTE);
                     if (isPick != null) {
                         return isPick == (byte) 1;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean isVoidmatterBlade (ItemStack item) {
-        if (item.getType().equals(CustomItem.VOIDMATTER_BLADE.getItem().getType())) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                PersistentDataContainer container = meta.getPersistentDataContainer();
-                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_blade");
-                if (container.has(key, PersistentDataType.BYTE)) {
-                    Byte isBlade = container.get(key, PersistentDataType.BYTE);
-                    if (isBlade != null) {
-                        return isBlade == (byte) 1;
                     }
                 }
             }
@@ -297,20 +312,5 @@ public class Voidmatter extends MatchCrafting implements Listener {
         return false;
     }
 
-    public boolean isVoidmatterBow (ItemStack item) {
-        if (item.getType().equals(CustomItem.VOIDMATTER_BOW.getItem().getType())) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                PersistentDataContainer container = meta.getPersistentDataContainer();
-                NamespacedKey key = new NamespacedKey(plugin, "is_voidmatter_bow");
-                if (container.has(key, PersistentDataType.BYTE)) {
-                    Byte isBow = container.get(key, PersistentDataType.BYTE);
-                    if (isBow != null) {
-                        return isBow == (byte) 1;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+
 }

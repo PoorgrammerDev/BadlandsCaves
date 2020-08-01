@@ -133,4 +133,8 @@ hardmode_values:
   #Mana costs for certain Artifacts' abilities
   artifact_costs:
     eclipsed_shadows: 25
-    converging_swings: 25
+    converging_swings: 20
+    travelling_blades: 40
+
+    #Cost Per arrow fired (arrow count based on Chaos)
+    summoners_rift: 5
