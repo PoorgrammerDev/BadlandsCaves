@@ -2,7 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public enum ActivePowers {
     DISPLACE(CustomItem.DISPLACE, PlayerScore.DISPLACE_LEVEL, ChatColor.BOLD.toString() + ChatColor.LIGHT_PURPLE + "Displace"),

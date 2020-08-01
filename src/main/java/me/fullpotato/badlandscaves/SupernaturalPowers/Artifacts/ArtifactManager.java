@@ -53,8 +53,9 @@ public class ArtifactManager {
 
     public boolean hasArtifact(Player player, Artifact artifact) {
         for (ArtifactBaseItem artifactBaseItem : artifact.getArtifactBaseItems()) {
-            if (getArtifacts(player).get(artifactBaseItem).equals(artifact)) {
-                return true;
+            final Artifact test = getArtifacts(player).get(artifactBaseItem);
+            if (test != null) {
+                return test.equals(artifact);
             }
         }
         return false;

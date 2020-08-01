@@ -36,8 +36,7 @@ import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R1;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R1;
 import me.fullpotato.badlandscaves.Other.*;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactEclipsedShadows;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactTenaciousTrickery;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.*;
@@ -297,6 +296,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 new SoulCampfire(this),
                 new ArtifactTenaciousTrickery(this),
                 new ArtifactEclipsedShadows(this),
+                new ArtifactManaWarding(this),
+                new ArtifactFleetingSpirits(this),
+                new ArtifactConvergingSwings(this),
         };
 
         for (Listener event : events) {

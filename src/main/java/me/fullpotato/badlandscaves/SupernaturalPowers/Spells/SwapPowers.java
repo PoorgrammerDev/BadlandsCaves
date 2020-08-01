@@ -1,8 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +18,9 @@ import java.util.IllegalFormatException;
 public class SwapPowers implements Listener {
     private final BadlandsCaves plugin;
     private final ManaBarManager manaBarManager;
+    private final ItemStack[] blacklisted = {
+            CustomItem.ECLIPSED_SHADOWS.getItem(),
+    };
 
     public SwapPowers(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -80,16 +85,19 @@ public class SwapPowers implements Listener {
         if (!player.isSneaking()) return;
         if (!PlayerScore.SWAP_WINDOW.hasScore(plugin, player) || (byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 0) return;
         if ((int) PlayerScore.SWAP_COOLDOWN.getScore(plugin, player) > 0) return;
-
-        final ItemStack offhandItem = player.getInventory().getItemInOffHand();
-        final ActivePowers[] order = getSwapOrder(player);
-        int swapSlot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
+        event.setCancelled(true);
 
         final int newSlot = event.getNewSlot();
         final int oldSlot = event.getPreviousSlot();
         boolean reverse = ((newSlot < oldSlot) || (newSlot == 8 && oldSlot == 0)) && (newSlot != 0 && oldSlot != 8);
+        attemptSwap(player, reverse);
+    }
 
-        event.setCancelled(true);
+    public void attemptSwap (Player player, boolean reverse) {
+        final ItemStack offhandItem = player.getInventory().getItemInOffHand();
+        final ActivePowers[] order = getSwapOrder(player);
+        int swapSlot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
+
         for (int tries = 0; tries < order.length * 2; tries++) {
             if (reverse) swapSlot--;
             else swapSlot++;
@@ -115,19 +123,31 @@ public class SwapPowers implements Listener {
                 //If the next spell in the list is unlocked
                 if ((int) order[swapSlot].getLevelScore().getScore(plugin, player) > 0) {
 
-                    //Checks if current offhand item is spell
-                    boolean offHandIsSpell = false;
-                    for (ActivePowers check : ActivePowers.values()) {
-                        if (offhandItem.isSimilar(check.getItem().getItem())) {
-                            offHandIsSpell = true;
-                            break;
-                        }
-                    }
+                    if (!offhandItem.getType().equals(Material.AIR)) {
+                        //Checks if current offhand item is spell
+                        boolean offHandIsSpell = false;
 
-                    //Saves item if not spell
-                    if (!offHandIsSpell) {
-                        plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", offhandItem);
-                        plugin.saveSystemConfig();
+                        //check if special blacklisted item
+                        for (ItemStack itemStack : blacklisted) {
+                            if (offhandItem.isSimilar(itemStack)) {
+                                offHandIsSpell = true;
+                                break;
+                            }
+                        }
+
+                        //check if another spell
+                        for (ActivePowers check : ActivePowers.values()) {
+                            if (offhandItem.isSimilar(check.getItem().getItem())) {
+                                offHandIsSpell = true;
+                                break;
+                            }
+                        }
+
+                        //Saves item if not spell
+                        if (!offHandIsSpell) {
+                            plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", offhandItem);
+                            plugin.saveSystemConfig();
+                        }
                     }
 
                     player.getInventory().setItemInOffHand(order[swapSlot].getItem().getItem());
@@ -141,6 +161,7 @@ public class SwapPowers implements Listener {
             }
         }
     }
+
 
     public void successfulSwap (Player player, int swap_slot) {
         PlayerScore.SWAP_SLOT.setScore(plugin, player, swap_slot);

@@ -2084,7 +2084,7 @@ public class LoadCustomItems {
             ItemStack eclipsed_shadows = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = eclipsed_shadows.getItemMeta();
 
-            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#1e0c45") + "Eclipsed Shadows");
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#5109eb") + "Eclipsed Shadows");
             meta.setCustomModelData(223);
 
             ArrayList<String> lore = new ArrayList<>();
@@ -2092,6 +2092,7 @@ public class LoadCustomItems {
             lore.add(ChatColor.GRAY + "Become invisible and fast when sneaking. Hides armor.");
             lore.add(ChatColor.GRAY + "Mobs can't see you unless you hold out items or get too close.");
             lore.add(ChatColor.GRAY + "You can't mine or attack when invisible.");
+            lore.add(ChatColor.GRAY + "Costs " + plugin.getOptionsConfig().getDouble("hardmode_values.artifact_costs.eclipsed_shadows") + " Mana per use.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2109,7 +2110,7 @@ public class LoadCustomItems {
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Armor");
-            lore.add(ChatColor.GRAY + "75% of all damage is inflicted onto Mana.");
+            lore.add(ChatColor.GRAY + "75% of all damage is absorbed by Mana at a 10x rate.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2128,7 +2129,8 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Armor");
             lore.add(ChatColor.GRAY + "Fatal or powerful hits can trigger Displace to bring you to safety.");
-            lore.add(ChatColor.GRAY + "Spawns a Vindicator in your place.");
+            lore.add(ChatColor.GRAY + "If you are hit by a mob, it spawns a Vindicator in your place.");
+            lore.add(ChatColor.GRAY + "Costs " + (plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost") * 4) + " Mana.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2147,6 +2149,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.DARK_PURPLE + "Void Blade");
             lore.add(ChatColor.GRAY + "Missed swings send out a particle that warps entities to you.");
+            lore.add(ChatColor.GRAY + "You can control this particle slightly by moving around your cursor.");
             lore.add(ChatColor.GRAY + "Costs 25 Mana.");
             meta.setLore(lore);
 
@@ -2619,7 +2622,15 @@ public class LoadCustomItems {
             metaphysical_nourishment.setItemMeta(meta);
             return metaphysical_nourishment;
         }
+        else if (item.equals(CustomItem.ECLIPSED_SHADOWS)) {
+            ItemStack eclipsed_shadows = new ItemStack(Material.KNOWLEDGE_BOOK);
+            ItemMeta displace_meta = eclipsed_shadows.getItemMeta();
+            displace_meta.setDisplayName(ChatColor.of("#5109eb") + "Eclipsed Shadows");
+            displace_meta.setCustomModelData(229);
+            eclipsed_shadows.setItemMeta(displace_meta);
 
+            return eclipsed_shadows;
+        }
 
 
         return null;

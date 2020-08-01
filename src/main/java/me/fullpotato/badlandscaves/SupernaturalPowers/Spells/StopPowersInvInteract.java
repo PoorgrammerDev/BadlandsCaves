@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,13 +12,20 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StopPowersInvInteract implements Listener {
     private final BadlandsCaves plugin;
-    private final ActivePowers[] activePowers = ActivePowers.values();
+    private final List<ItemStack> activePowers;
     public StopPowersInvInteract(BadlandsCaves bcav) {
         plugin = bcav;
+
+        activePowers = new ArrayList<>();
+        for (ActivePowers value : ActivePowers.values()) {
+            activePowers.add(value.getItem().getItem());
+        }
+        activePowers.add(CustomItem.ECLIPSED_SHADOWS.getItem());
     }
 
     @EventHandler
@@ -25,8 +33,8 @@ public class StopPowersInvInteract implements Listener {
         final ItemStack item = event.getCurrentItem();
         if (item == null) return;
 
-        for (ActivePowers activePower : activePowers) {
-            if (item.isSimilar(activePower.getItem().getItem())) {
+        for (ItemStack activePower : activePowers) {
+            if (item.isSimilar(activePower)) {
                 event.setCancelled(true);
                 return;
             }
@@ -42,8 +50,8 @@ public class StopPowersInvInteract implements Listener {
         final ItemStack offhand = event.getOffHandItem();
         final ItemStack mainhand = event.getMainHandItem();
 
-        for (ActivePowers activePower : activePowers) {
-            if ((offhand != null && offhand.isSimilar(activePower.getItem().getItem())) || (mainhand != null && mainhand.isSimilar(activePower.getItem().getItem()))) {
+        for (ItemStack activePower : activePowers) {
+            if ((offhand != null && offhand.isSimilar(activePower)) || (mainhand != null && mainhand.isSimilar(activePower))) {
                 event.setCancelled(true);
                 return;
             }
@@ -57,8 +65,8 @@ public class StopPowersInvInteract implements Listener {
         if (!has_powers) return;
 
         final ItemStack item = event.getItemDrop().getItemStack();
-        for (ActivePowers activePower : activePowers) {
-            if (item.isSimilar(activePower.getItem().getItem())) {
+        for (ItemStack activePower : activePowers) {
+            if (item.isSimilar(activePower)) {
                 event.setCancelled(true);
                 return;
             }
@@ -73,8 +81,8 @@ public class StopPowersInvInteract implements Listener {
 
         List<ItemStack> items = event.getDrops();
         for (int a = items.size() - 1; a >= 0; a--) {
-            for (ActivePowers activePower : activePowers) {
-                if (items.get(a).isSimilar(activePower.getItem().getItem())) {
+            for (ItemStack activePower : activePowers) {
+                if (items.get(a).isSimilar(activePower)) {
                     event.getDrops().remove(a);
                 }
             }

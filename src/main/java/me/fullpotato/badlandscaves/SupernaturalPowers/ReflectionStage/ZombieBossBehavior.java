@@ -114,7 +114,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
         }
         //if zombie is near player
         else if (random.nextBoolean()) {
-            Location tele = getAdvanceLocation(player, zombie, 5);
+            Location tele = getAdvanceLocation(player, zombie.getLocation(), 5);
             if (tele == null) return;
 
             skipTimeBase(zombie, player, tele, random, false);
@@ -549,12 +549,11 @@ public class ZombieBossBehavior extends BukkitRunnable {
         return null;
     }
 
-    public Location getAdvanceLocation (final Player player, final Zombie zombie, final int range) {
-        return getFarthestLocation(player, zombie, range, true);
+    public Location getAdvanceLocation (final Player player, final Location zombie_location, final int range) {
+        return getFarthestLocation(player, zombie_location, range, true);
     }
 
-    public Location getFarthestLocation (final Player player, final Zombie zombie, final int range, final boolean reverse) {
-        final Location zombie_location = zombie.getLocation();
+    public Location getFarthestLocation (final Player player, final Location zombie_location, final int range, final boolean reverse) {
         final Location player_location = player.getLocation();
 
         final double distance_range = Math.pow(range - 1, 2);
@@ -566,7 +565,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
             for (int x = -range; x <= range; x++) {
                 for (int y = -range; y <= range; y++) {
                     for (int z = -range; z <= range; z++) {
-                        Location test_loc = new Location(zombie.getWorld(), zombie_location.getX() + x, zombie_location.getY() + y, zombie_location.getZ() + z);
+                        Location test_loc = new Location(zombie_location.getWorld(), zombie_location.getX() + x, zombie_location.getY() + y, zombie_location.getZ() + z);
                         if (test_loc.distanceSquared(zombie_location) < distance_range) {
                             if ((test_loc.distanceSquared(player_location) < farthest_distance && reverse) || (test_loc.distanceSquared(player_location) > farthest_distance && !reverse)) {
                                 if (locationViable(test_loc)) {

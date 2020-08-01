@@ -4,8 +4,12 @@ import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHaza
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactFleetingSpirits;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -28,12 +32,18 @@ public class IncreaseToxInWater implements Listener {
     private final StarlightArmor starlightArmor;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
+    private final Voidmatter voidmatter;
+    private final ArtifactManager artifactManager;
+    private final ArtifactFleetingSpirits artifactFleetingSpirits;
 
     public IncreaseToxInWater(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.starlightArmor = new StarlightArmor(plugin);
         this.starlightCharge = new StarlightCharge(plugin);
         this.nebuliteManager = new NebuliteManager(plugin);
+        voidmatter = new Voidmatter(plugin);
+        artifactManager = new ArtifactManager(plugin);
+        artifactFleetingSpirits = new ArtifactFleetingSpirits(plugin);
     }
 
 
@@ -63,16 +73,28 @@ public class IncreaseToxInWater implements Listener {
                  * */
                 if (!player.isDead() && (double) PlayerScore.TOXICITY.getScore(plugin, player) <= 100) {
                     if (plugin.getSystemConfig().getBoolean("hardmode")) {
-                        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
-                            final EntityEquipment equipment = player.getEquipment();
-                            if (equipment != null) {
+                        final EntityEquipment equipment = player.getEquipment();
+                        if (equipment != null) {
+                            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
                                 for (ItemStack armor : equipment.getArmorContents()) {
                                     if (armor != null && starlightArmor.isStarlightArmor(armor) && starlightCharge.getCharge(armor) > 0) {
                                         final Nebulite[] nebulites = nebuliteManager.getNebulites(armor);
                                         for (Nebulite nebulite : nebulites) {
                                             if (nebulite != null && nebulite.equals(Nebulite.TOXIN_EXPELLER)) {
-                                                if (random.nextInt(100) < 5) starlightCharge.setCharge(armor, starlightCharge.getCharge(armor) - 1);
+                                                if (random.nextInt(100) < 5)
+                                                    starlightCharge.setCharge(armor, starlightCharge.getCharge(armor) - 1);
                                                 return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
+                                    for (ItemStack armor : equipment.getArmorContents()) {
+                                        if (armor != null && voidmatter.isVoidmatterArmor(armor)) {
+                                            if (artifactManager.hasArtifact(player, Artifact.FLEETING_SPIRITS)) {
+                                                if (artifactFleetingSpirits.attemptWarp(player, block.getLocation())) return;
                                             }
                                         }
                                     }

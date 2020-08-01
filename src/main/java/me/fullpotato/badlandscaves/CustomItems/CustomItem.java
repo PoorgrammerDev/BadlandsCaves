@@ -161,7 +161,9 @@ public enum CustomItem {
     ARTIFACT_TRIPLE_JUMP(true),
     ARTIFACT_RECOVERY_ROLL(true),
     ARTIFACT_SHADOWSTEP(true),
-    ARTIFACT_METAPHYSICAL_NOURISHMENT(true);
+    ARTIFACT_METAPHYSICAL_NOURISHMENT(true),
+
+    ECLIPSED_SHADOWS(false);
 
     private final boolean preventUse;
 

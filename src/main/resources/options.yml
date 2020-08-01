@@ -129,3 +129,8 @@ hardmode_values:
   #The Nebulite "Decisive Disintegration" for the Starlight Paxel gives it Vein Miner and Tree Feller capabilities.
   #This is the limit of blocks it can mine before it stops (as an anti-crash mechanism). Set to -1 to disable, but this is not recommended.
   decisive_disintegration_limit: 100
+
+  #Mana costs for certain Artifacts' abilities
+  artifact_costs:
+    eclipsed_shadows: 25
+    converging_swings: 25
