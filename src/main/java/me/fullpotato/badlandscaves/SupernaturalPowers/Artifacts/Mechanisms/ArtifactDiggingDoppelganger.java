@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
@@ -24,15 +25,28 @@ import java.util.Map;
 import java.util.Set;
 
 public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements Listener {
-    private final FakePlayerNMS nms;
+    private final FakePlayerNMS fakePlayerNMS;
+    private final EnhancedEyesNMS enhancedEyesNMS;
     private final int cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost") * 3;
     private final int drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain") * 5;
     private final Map<BlockFace, Integer> faceYawMap;
     private final Set<Material> blacklisted;
+    private final Map<Material, Integer> lightLevelMap;
+    private final Material[] bridgingBlocks = {
+            Material.DIORITE,
+            Material.ANDESITE,
+            Material.GRANITE,
+            Material.COBBLESTONE,
+            Material.DIRT,
+            Material.NETHERRACK,
+            Material.BASALT,
+            Material.BLACKSTONE
+    };
 
     public ArtifactDiggingDoppelganger(BadlandsCaves plugin) {
         super(plugin);
-        nms = plugin.getFakePlayerNMS();
+        fakePlayerNMS = plugin.getFakePlayerNMS();
+        enhancedEyesNMS = plugin.getEnhancedEyesNMS();
 
         this.faceYawMap = new HashMap<>();
         this.faceYawMap.put(BlockFace.SOUTH, 0);
@@ -43,6 +57,10 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
         this.blacklisted = new HashSet<>();
         blacklisted.add(Material.LAVA);
         blacklisted.add(Material.WATER);
+
+        this.lightLevelMap = new HashMap<>();
+        lightLevelMap.put(Material.TORCH, 1);
+        lightLevelMap.put(Material.SOUL_TORCH, 5);
     }
 
     @EventHandler
@@ -74,9 +92,9 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                                                 //Spawn in clone
                                                 final Location location = player.getLocation();
                                                 final Location spawn = new Location(player.getWorld(), location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5, faceYawMap.get(opposite), 0);
-                                                final Player clone = nms.summonFakePlayer(spawn, player, null, null);
-                                                nms.move(spawn, clone, null, true);
-                                                nms.giveHandItem(clone, null, mainhand);
+                                                final Player clone = fakePlayerNMS.summonFakePlayer(spawn, player, null, null);
+                                                fakePlayerNMS.move(spawn, clone, null, true);
+                                                fakePlayerNMS.giveHandItem(clone, null, mainhand);
 
                                                 //Runnable mechanism
                                                 cloneMechanism(player, clone, spawn, mainhand);
@@ -119,7 +137,59 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                     return;
                 }
                 timer[0]++;
+                enhancedEyesNMS.highlightEntity(original, clone);
 
+                // TODO: 8/1/2020 make sure pickaxe still exists, and also subtract durability
+
+                //PLACE BLOCKS------------------------------------------------------------------------------------------
+                final Block platform = spawnClone[0].getBlock().getRelative(BlockFace.DOWN);
+                if (platform.isPassable()) {
+                    for (Material bridgeType : bridgingBlocks) {
+                        final int bridgeSlot = original.getInventory().first(bridgeType);
+                        if (bridgeSlot != -1) {
+                            final ItemStack bridgeItem = original.getInventory().getItem(bridgeSlot);
+                            if (bridgeItem != null) {
+                                fakePlayerNMS.giveHandItem(clone, null, bridgeItem.clone());
+                                bridgeItem.setAmount(bridgeItem.getAmount() - 1);
+                                platform.setType(bridgeType);
+                                spawnClone[0].setPitch(90);
+
+                                fakePlayerNMS.move(spawnClone[0], clone, null, true);
+                                fakePlayerNMS.damage(clone, null, false);
+                                return;
+                            }
+                        }
+                    }
+                    this.cancel();
+                    return;
+                }
+
+                //PLACE TORCHES-----------------------------------------------------------------------------------------
+                final int lightLevel = spawnClone[0].getBlock().getLightLevel();
+                if (lightLevel < 8) {
+                    for (final Material lightType : lightLevelMap.keySet()) {
+                        final int lightSlot = original.getInventory().first(lightType);
+                        if (lightSlot != -1) {
+                            final ItemStack light = original.getInventory().getItem(lightSlot);
+                            if (light != null) {
+                                if (lightLevel <= lightLevelMap.get(lightType)) {
+                                    fakePlayerNMS.giveHandItem(clone, null, light.clone());
+                                    light.setAmount(light.getAmount() - 1);
+                                    spawnClone[0].getBlock().setType(lightType);
+                                    spawnClone[0].setPitch(90);
+
+                                    fakePlayerNMS.move(spawnClone[0], clone, null, true);
+                                    fakePlayerNMS.damage(clone, null, false);
+                                    return;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
+                //MINE BLOCKS-------------------------------------------------------------------------------------------
                 final Location doubleCloneLoc = spawnClone[0].clone();
                 doubleCloneLoc.setPitch(0);
                 final BlockIterator blockIterator = new BlockIterator(doubleCloneLoc, 1, 1);
@@ -148,9 +218,11 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                     }
                 }
 
+                //MOVE FORWARD------------------------------------------------------------------------------------------
                 spawnClone[0] = spawnClone[0].add(doubleCloneLoc.getDirection().normalize().multiply(0.2));
-                nms.move(spawnClone[0], clone, null, true);
+                fakePlayerNMS.move(spawnClone[0], clone, null, true);
 
+                //MANA DRAIN
                 PlayerScore.MANA.setScore(plugin, original, mana - (drain / 20.0));
                 PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, original, 300);
                 PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, original, 60);
@@ -160,7 +232,7 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
             public synchronized void cancel() throws IllegalStateException {
                 super.cancel();
                 PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.setScore(plugin, original, 0);
-                nms.remove(clone);
+                fakePlayerNMS.remove(clone);
 
                 original.playSound(original.getLocation(), "custom.supernatural.possession.leave", SoundCategory.PLAYERS, 0.5F, 1);
                 original.spawnParticle(Particle.REDSTONE, clone.getLocation(), 20, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GREEN, 1));
@@ -177,13 +249,13 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
 
             public void destroyBlock (Block block) {
                 if (hasFailed(block.getLocation())) return;
-
-                nms.move(spawnClone[0], clone, null, true);
+                fakePlayerNMS.giveHandItem(clone, null, tool);
+                fakePlayerNMS.move(spawnClone[0], clone, null, true);
 
                 world.spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5, 0.5, 0.5), 20, 0.1, 0.1, 0.1, 0, block.getType().createBlockData());
                 world.playSound(block.getLocation(), Sound.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1, 1);
                 block.breakNaturally(tool);
-                nms.damage(clone, null, false);
+                fakePlayerNMS.damage(clone, null, false);
             }
 
             public boolean hasFailed (Location location) {
@@ -192,6 +264,7 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                     this.cancel();
                     return true;
                 }
+
                 return false;
             }
         }.runTaskTimer(plugin, 0, 0);
