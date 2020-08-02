@@ -33,6 +33,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
             if (has_powers) {
                 if (player.getInventory().getItemInOffHand().isSimilar(CustomItem.POSSESS.getItem())) {
                     if (((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) != 1)
+                            && ((byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) != 1)
                             && ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0)) {
                         final LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, 0.2, false, player);
                         if (target != null && !(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) &&

@@ -47,9 +47,14 @@ public class Possession extends UsePowers implements Listener {
                     if (attemptSilence(player)) return;
 
                     boolean in_possession = (PlayerScore.IN_POSSESSION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
+                    boolean has_doppelganger = (PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.hasScore(plugin, player)) && ((byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) == 1);
                     if (in_possession) {
                         PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
-                    } else {
+                    }
+                    else if (has_doppelganger) {
+                        PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.setScore(plugin, player, 0);
+                    }
+                    else {
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
                         int possession_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost");
                         int possession_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain");
@@ -161,13 +166,14 @@ public class Possession extends UsePowers implements Listener {
     public void forceExit (PlayerSwapHandItemsEvent event) {
         final Player player = event.getPlayer();
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
-            if ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1) {
+            if ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1 || (byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) == 1) {
                 final ItemStack item = event.getMainHandItem();
                 if (item != null) {
                     for (ActivePowers value : ActivePowers.values()) {
                         if (item.isSimilar(value.getItem().getItem())) {
                             event.setCancelled(true);
                             PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
+                            PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.setScore(plugin, player, 0);
                             return;
                         }
                     }

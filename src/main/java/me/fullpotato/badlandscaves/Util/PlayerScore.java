@@ -71,7 +71,8 @@ public enum PlayerScore {
     PROPULSION_COOLDOWN(PersistentDataType.BYTE),
     COUNTERATTACK_TRACKER(PersistentDataType.BYTE),
     ARTIFACTS(PersistentDataType.STRING, ""),
-    ECLIPSED_SHADOWS_ACTIVE(PersistentDataType.BYTE);
+    ECLIPSED_SHADOWS_ACTIVE(PersistentDataType.BYTE),
+    DIGGING_DOPPELGANGER_ACTIVE(PersistentDataType.BYTE);
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

@@ -306,6 +306,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ArtifactBloodsappingBow(this),
                 new ArtifactSummonersRift(this),
                 new ArtifactEmancipatedEyes(this),
+                new ArtifactDiggingDoppelganger(this),
         };
 
         for (Listener event : events) {
