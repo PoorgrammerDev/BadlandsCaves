@@ -84,10 +84,14 @@ public class FakePlayer_1_16_R1 implements FakePlayerNMS{
     }
 
     public void giveHandItem (Player player, Player sendTo, ItemStack item) {
+        giveHandItem(player, sendTo, item, false);
+    }
+
+    public void giveHandItem (Player player, Player sendTo, ItemStack item, boolean offHand) {
         EntityPlayer clone = ((CraftPlayer) player).getHandle();
 
         List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R1.ItemStack>> list = new ArrayList<>();
-        list.add(new Pair<>(EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(item)));
+        list.add(new Pair<>(offHand ? EnumItemSlot.OFFHAND : EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(item)));
 
         PacketPlayOutEntityEquipment handItemPacket = new PacketPlayOutEntityEquipment(clone.getId(), list);
 

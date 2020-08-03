@@ -29,8 +29,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
     private final List<Material> mineralsTier2 = Arrays.asList(Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.GOLD_ORE, Material.NETHER_GOLD_ORE, Material.GILDED_BLACKSTONE, Material.LAPIS_ORE, Material.REDSTONE_ORE, Material.NETHER_QUARTZ_ORE, Material.DIAMOND_BLOCK, Material.EMERALD_BLOCK, Material.GOLD_BLOCK, Material.LAPIS_BLOCK, Material.REDSTONE_BLOCK, Material.DEAD_TUBE_CORAL_BLOCK, Material.ANCIENT_DEBRIS);
     private final List<Material> storage = Arrays.asList(Material.CHEST, Material.BARREL, Material.SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.LIME_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.RED_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.SPAWNER);
     private final EnhancedEyesNMS nms;
-    private final int initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
-    private final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
+    private final int initial_mana_cost;
+    private final int constant_mana_drain;
     private final Map<Integer, Integer> levelRangeMap;
     public EnhancedEyes(BadlandsCaves plugin) {
         super(plugin);
@@ -39,6 +39,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
         levelRangeMap = new HashMap<>();
         levelRangeMap.put(1, 5);
         levelRangeMap.put(2, 10);
+        initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
+        constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
     }
 
     @EventHandler

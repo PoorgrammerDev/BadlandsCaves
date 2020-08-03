@@ -94,6 +94,7 @@ public class DeathHandler implements Listener {
         PlayerScore.TOXICITY.setScore(plugin, player, 0.0);
         PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, 0.0);
         PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0.0);
+        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, -255);
 
         boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
@@ -103,7 +104,6 @@ public class DeathHandler implements Listener {
             PlayerScore.POSSESS_ORIG_WORLD.setScore(plugin, player, "__REMOVED__");
             player.setMetadata("agility_jump_id", new FixedMetadataValue(plugin, 0));
             player.setMetadata("agility_jump_timer", new FixedMetadataValue(plugin, 0));
-            PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, -255);
         }
 
         final int in_descension = (int) PlayerScore.IN_DESCENSION.getScore(plugin, player);

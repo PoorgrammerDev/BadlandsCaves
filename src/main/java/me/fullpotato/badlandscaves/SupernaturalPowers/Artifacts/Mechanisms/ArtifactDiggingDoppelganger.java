@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
@@ -9,26 +10,28 @@ import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.RayTraceResult;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements Listener {
+    private final Random random = new Random();
+    private final StarlightPaxelMechanism paxelMechanism;
     private final FakePlayerNMS fakePlayerNMS;
     private final EnhancedEyesNMS enhancedEyesNMS;
-    private final int cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost") * 3;
-    private final int drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain") * 5;
+    private final int cost;
+    private final int drain;
     private final Map<BlockFace, Integer> faceYawMap;
     private final Set<Material> blacklisted;
     private final Map<Material, Integer> lightLevelMap;
@@ -61,6 +64,9 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
         this.lightLevelMap = new HashMap<>();
         lightLevelMap.put(Material.TORCH, 1);
         lightLevelMap.put(Material.SOUL_TORCH, 5);
+        paxelMechanism = new StarlightPaxelMechanism(plugin);
+        cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost") * 3;
+        drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain") * 5;
     }
 
     @EventHandler
@@ -69,7 +75,7 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
             final Player player = event.getPlayer();
             if (player.isSneaking()) {
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
-                    final ItemStack mainhand = player.getInventory().getItemInMainHand().clone();
+                    final ItemStack mainhand = player.getInventory().getItemInMainHand();
                     if (voidmatter.isVoidmatterTool(mainhand) && artifactManager.hasArtifact(player, Artifact.DIGGING_DOPPELGANGER)) {
                         final ItemStack offhand = player.getInventory().getItemInOffHand();
                         if (offhand.isSimilar(CustomItem.POSSESS.getItem())) {
@@ -138,8 +144,6 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                 }
                 timer[0]++;
                 enhancedEyesNMS.highlightEntity(original, clone);
-
-                // TODO: 8/1/2020 make sure pickaxe still exists, and also subtract durability
 
                 //PLACE BLOCKS------------------------------------------------------------------------------------------
                 final Block platform = spawnClone[0].getBlock().getRelative(BlockFace.DOWN);
@@ -248,14 +252,45 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
             }
 
             public void destroyBlock (Block block) {
+                boolean pick = paxelMechanism.pickaxeBlocks.contains(block.getType());
+                boolean axe = paxelMechanism.axeBlocks.contains(block.getType());
+                boolean shovel = paxelMechanism.shovelBlocks.contains(block.getType());
+                boolean rightTool = (voidmatter.isVoidmatterPickaxe(tool) && pick) || (voidmatter.isVoidmatterAxe(tool) && axe) || (voidmatter.isVoidmatterShovel(tool) && shovel);
+                if (!rightTool && random.nextBoolean()) {
+                    fakePlayerNMS.damage(clone, null, false);
+                    return;
+                }
+
                 if (hasFailed(block.getLocation())) return;
                 fakePlayerNMS.giveHandItem(clone, null, tool);
                 fakePlayerNMS.move(spawnClone[0], clone, null, true);
 
+                Sound sound = null;
+                if (pick) sound = Sound.BLOCK_STONE_BREAK;
+                else if (axe) sound = Sound.BLOCK_WOOD_BREAK;
+                else if (shovel) sound = Sound.BLOCK_GRAVEL_BREAK;
+                if (sound != null) world.playSound(block.getLocation(), sound, SoundCategory.BLOCKS, 1, 1);
+
                 world.spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5, 0.5, 0.5), 20, 0.1, 0.1, 0.1, 0, block.getType().createBlockData());
-                world.playSound(block.getLocation(), Sound.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1, 1);
                 block.breakNaturally(tool);
                 fakePlayerNMS.damage(clone, null, false);
+
+                if (original.getInventory().first(tool) != -1) {
+                    final ItemMeta meta = tool.getItemMeta();
+                    if (meta != null) {
+                        if (random.nextInt(100) < (200 / (meta.getEnchantLevel(Enchantment.DURABILITY) + 1))) {
+                            final Damageable damageable = (Damageable) meta;
+                            final int durability = damageable.getDamage();
+                            if (durability < tool.getType().getMaxDurability() - 1) {
+                                damageable.setDamage(durability + 1);
+                                tool.setItemMeta((ItemMeta) damageable);
+                                return;
+                            }
+                        }
+                        else return;
+                    }
+                }
+                this.cancel();
             }
 
             public boolean hasFailed (Location location) {

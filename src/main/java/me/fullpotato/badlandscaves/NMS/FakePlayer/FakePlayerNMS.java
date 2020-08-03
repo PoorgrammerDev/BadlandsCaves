@@ -8,6 +8,7 @@ public interface FakePlayerNMS {
     Player summonFakePlayer(Location location, Player player, Player sendTo, String name);
     Player summonFakePlayer(Location location, Player player, Player sendTo, String name, boolean copyArmor);
     void giveHandItem (Player player, Player sendTo, ItemStack item);
+    void giveHandItem (Player player, Player sendTo, ItemStack item, boolean offhand);
     void move (Location location, Player player, Player sendTo, boolean rotation);
     void damage (Player player, Player sendTo, boolean damaged);
     void remove (Player player);

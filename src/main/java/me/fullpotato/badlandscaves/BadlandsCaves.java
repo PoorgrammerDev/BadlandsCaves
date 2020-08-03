@@ -307,6 +307,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ArtifactSummonersRift(this),
                 new ArtifactEmancipatedEyes(this),
                 new ArtifactDiggingDoppelganger(this),
+                new ArtifactMomentousMomentum(this),
         };
 
         for (Listener event : events) {
@@ -390,6 +391,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
         new NebuliteCounterattack(this).runTaskTimer(this, 0, 0);
         new ArtifactHasteWind(this).runTaskTimer(this, 0, 0);
+        new ArtifactMomentousMomentum(this).runTaskTimer(this, 0, 0);
 
 
         WitherBossFight witherFight = new WitherBossFight(this);

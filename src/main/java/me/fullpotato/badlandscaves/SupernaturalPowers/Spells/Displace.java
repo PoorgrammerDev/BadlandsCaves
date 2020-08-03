@@ -3,12 +3,14 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactDistractingDoppelganger;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,19 +25,27 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockIterator;
 
 public class Displace extends UsePowers implements Listener {
-    public Displace(BadlandsCaves bcav) {
-        super(bcav);
+    private final LineOfSightNMS nms;
+    private final ManaBarManager manaBar;
+    private final ArtifactManager artifactManager;
+    private final ArtifactDistractingDoppelganger artifactDistractingDoppelganger;
+    private final int cost;
+    public Displace(BadlandsCaves plugin) {
+        super(plugin);
+        nms = plugin.getLineOfSightNMS();
+        manaBar = new ManaBarManager(plugin);
+        artifactManager = new ArtifactManager(plugin);
+        artifactDistractingDoppelganger = new ArtifactDistractingDoppelganger(plugin);
+        cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
     }
 
     @EventHandler
-    public void use_displace(PlayerInteractEvent event) {
+    public void useDisplace(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        World world = player.getWorld();
-        ItemStack displace = CustomItem.DISPLACE.getItem();
-        if (player.getInventory().getItemInOffHand().isSimilar(displace)) {
+        if (player.getInventory().getItemInOffHand().isSimilar(CustomItem.DISPLACE.getItem())) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
                 EquipmentSlot e = event.getHand();
@@ -46,80 +56,19 @@ public class Displace extends UsePowers implements Listener {
                     if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
                     if (attemptSilence(player)) return;
 
-                    final ManaBarManager manaBar = new ManaBarManager(plugin);
-                    int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
-                    int place_range, warp_range;
-                    boolean cancel_fall;
-
-                    if (displace_level == 1) {
-                        place_range = 10;
-                        warp_range = 15;
-                        cancel_fall = false;
-                    }
-                    else {
-                        place_range = 20;
-                        warp_range = 30;
-                        cancel_fall = true;
-                    }
-
                     boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
                     if (has_displace_marker) {
-                        double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-                        int displace_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
-
-                        double x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
-                        double y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);
-                        double z = (double) PlayerScore.DISPLACE_Z.getScore(plugin, player);
-                        float current_yaw = player.getLocation().getYaw();
-                        float current_pitch = player.getLocation().getPitch();
-                        Location displace_marker = new Location(world, x, y, z, current_yaw, current_pitch);
-
-                        if (player.getLocation().distance(displace_marker) <= warp_range) {
-                            LineOfSightNMS nms = plugin.getLineOfSightNMS();
-                            if (nms.hasLineOfSight(player, displace_marker)) {
-                                if (mana >= displace_mana_cost) {
-                                    preventDoubleClick(player);
-                                    if (cancel_fall) player.setFallDistance(0);
-                                    player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                                    PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
-
-                                    player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
-                                    for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                                        if (entity instanceof Player) {
-                                            Player powered = (Player) entity;
-                                            if (!powered.equals(player) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                                                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) {
-                                                    powered.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.3F, 1);
-                                                    powered.spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 5, 0.1, 0.1, 0.1, 1);
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    double new_mana = mana - (double) (displace_mana_cost);
-                                    PlayerScore.MANA.setScore(plugin, player, new_mana);
-                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
-                                }
-                                else {
-                                    notEnoughMana(player);
-                                }
-                            }
-                            else {
-                                manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
-                            }
-                        }
-                        else if (player.getLocation().distance(displace_marker) > (warp_range * 1.5)) {
-                            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
-                        }
+                        attemptTeleport(player);
                     }
                     else {
                         preventDoubleClick(player);
-                        BlockIterator iter = new BlockIterator(player, place_range);
+                        final int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
+                        final int place_range = displace_level > 1 ? 20 : 10;
+                        final BlockIterator iter = new BlockIterator(player, place_range);
+
                         Location lastLastBlockLoc = null;
                         Block lastBlock = iter.next();
                         Location lastBlockLocation = lastBlock.getLocation().add(0.5, 0.5, 0.5);
-                        LineOfSightNMS nms = plugin.getLineOfSightNMS();
-
                         while (iter.hasNext()) {
                             lastLastBlockLoc = lastBlockLocation;
                             lastBlockLocation = lastBlock.getLocation().add(0.5, 0.5, 0.5);
@@ -130,19 +79,7 @@ public class Displace extends UsePowers implements Listener {
                         }
 
                         assert lastLastBlockLoc != null;
-                        Location location = lastLastBlockLoc.clone();
-                        if (nms.hasLineOfSight(player, location)) {
-                            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 1);
-                            player.playSound(player.getLocation(), "custom.supernatural.displace.place_marker", SoundCategory.PLAYERS, 0.5F, 1);
-
-                            PlayerScore.DISPLACE_X.setScore(plugin, player, location.getX());
-                            PlayerScore.DISPLACE_Y.setScore(plugin, player, location.getY());
-                            PlayerScore.DISPLACE_Z.setScore(plugin, player, location.getZ());
-                        }
-                        else {
-                            manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
-                        }
-                        PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+                        attemptPlaceDisplaceMarker(player, lastLastBlockLoc, false);
                     }
                 }
             }
@@ -157,6 +94,105 @@ public class Displace extends UsePowers implements Listener {
             if (item != null && item.isSimilar(CustomItem.DISPLACE.getItem())) {
                 event.setCancelled(true);
                 PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
+            }
+        }
+    }
+
+    public void attemptPlaceDisplaceMarker (Player player, Location location, boolean force) {
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            if ((int) ActivePowers.DISPLACE.getLevelScore().getScore(plugin, player) > 0) {
+                if (force || (byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 0) {
+                    if (force || nms.hasLineOfSight(player, location)) {
+                        PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 1);
+                        player.playSound(player.getLocation(), "custom.supernatural.displace.place_marker", SoundCategory.PLAYERS, 0.5F, 1);
+
+                        PlayerScore.DISPLACE_X.setScore(plugin, player, location.getX());
+                        PlayerScore.DISPLACE_Y.setScore(plugin, player, location.getY());
+                        PlayerScore.DISPLACE_Z.setScore(plugin, player, location.getZ());
+
+                    }
+                    else {
+                        manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
+                    }
+                    PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+                }
+            }
+        }
+    }
+
+    public void attemptTeleport (Player player) {
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            final int displaceLevel = (int) ActivePowers.DISPLACE.getLevelScore().getScore(plugin, player);
+            if (displaceLevel > 0) {
+                if ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1) {
+                    final int warp_range = displaceLevel > 1 ? 30 : 15;
+                    final boolean cancel_fall = displaceLevel > 1;
+                    final double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
+
+                    final double x = (double) PlayerScore.DISPLACE_X.getScore(plugin, player);
+                    final double y = (double) PlayerScore.DISPLACE_Y.getScore(plugin, player);
+                    final double z = (double) PlayerScore.DISPLACE_Z.getScore(plugin, player);
+                    final float current_yaw = player.getLocation().getYaw();
+                    final float current_pitch = player.getLocation().getPitch();
+                    final Location displace_marker = new Location(player.getWorld(), x, y, z, current_yaw, current_pitch);
+
+                    if (player.getLocation().distance(displace_marker) <= warp_range) {
+                        if (nms.hasLineOfSight(player, displace_marker)) {
+                            if (mana >= cost) {
+                                preventDoubleClick(player);
+                                if (cancel_fall) player.setFallDistance(0);
+                                final Location originalLoc = player.getLocation();
+                                player.teleport(displace_marker, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
+
+                                player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.5F, 1);
+                                for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                                    if (entity instanceof Player) {
+                                        Player powered = (Player) entity;
+                                        if (!powered.equals(player) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                                            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) {
+                                                powered.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 0.3F, 1);
+                                                powered.spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 5, 0.1, 0.1, 0.1, 1);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                double new_mana = mana - (double) (cost);
+                                PlayerScore.MANA.setScore(plugin, player, new_mana);
+                                PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
+                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+
+                                if (plugin.getSystemConfig().getBoolean("hardmode")) {
+                                    //Undisplace Artifact
+                                    if (artifactManager.hasArtifact(player, Artifact.UNDISPLACE)) {
+                                        attemptPlaceDisplaceMarker(player, originalLoc, false);
+                                    }
+
+                                    //Momentous Momentum
+                                    else if (artifactManager.hasArtifact(player, Artifact.MOMENTOUS_MOMENTUM)) {
+                                        PlayerScore.MOMENTOUS_MOMENTUM_TIMER.setScore(plugin, player, 10);
+                                    }
+
+                                    //Distraction Clone
+                                    else if (artifactManager.hasArtifact(player, Artifact.DISTRACTING_DOPPELGANGER)) {
+                                        artifactDistractingDoppelganger.summonDistractionClone(player, originalLoc);
+                                    }
+                                }
+
+                            }
+                            else {
+                                notEnoughMana(player);
+                            }
+                        }
+                        else {
+                            manaBar.displayMessage(player, "§cLine of Sight required!", 2, false);
+                        }
+                    }
+                    else if (player.getLocation().distance(displace_marker) > (warp_range * 1.5)) {
+                        PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
+                    }
+                }
             }
         }
     }

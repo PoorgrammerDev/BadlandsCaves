@@ -2320,7 +2320,6 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
             lore.add(ChatColor.GRAY + "Put down a Displace marker where you were when you teleport.");
-            lore.add(ChatColor.GRAY + "For a short period of time, you can teleport back to this marker without using Mana.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2339,7 +2338,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
             lore.add(ChatColor.GRAY + "For a very short period of time after using Displace,");
-            lore.add(ChatColor.GRAY + "hit at full attack charge to deal 3-5x damage and send target flying.");
+            lore.add(ChatColor.GRAY + "hit at full attack charge to deal extra damage and send target flying.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2348,17 +2347,17 @@ public class LoadCustomItems {
             return momentous_momentum;
         }
 
-        else if (item.equals(CustomItem.ARTIFACT_DISTRACTION_CLONE)) {
+        else if (item.equals(CustomItem.ARTIFACT_DISTRACTING_DOPPELGANGER)) {
             ItemStack distraction_clone = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = distraction_clone.getItemMeta();
 
-            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#60009c") + "Distraction Clone");
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#60009c") + "Distracting Doppelganger");
             meta.setCustomModelData(223);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
             lore.add(ChatColor.GRAY + "After teleporting, put down a clone where you were.");
-            lore.add(ChatColor.GRAY + "This clone distracts enemies.");
+            lore.add(ChatColor.GRAY + "This clone hits and distracts enemies.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
@@ -2367,35 +2366,17 @@ public class LoadCustomItems {
             return distraction_clone;
         }
 
-        else if (item.equals(CustomItem.ARTIFACT_COMBAT_CLONE)) {
-            ItemStack combat_clone = new ItemStack(Material.KNOWLEDGE_BOOK);
-            ItemMeta meta = combat_clone.getItemMeta();
-
-            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#c41a00") + "Combat Clone");
-            meta.setCustomModelData(223);
-
-            ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.LIGHT_PURPLE + "Displace");
-            lore.add(ChatColor.GRAY + "Placing a Displace Marker now summons a Clone there.");
-            lore.add(ChatColor.GRAY + "This clone will shoot nearby enemies and drain Mana while active.");
-            meta.setLore(lore);
-
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);
-
-            combat_clone.setItemMeta(meta);
-            return combat_clone;
-        }
-
-        else if (item.equals(CustomItem.ARTIFACT_DIMENSIONAL_CAPTURING)) {
+        else if (item.equals(CustomItem.ARTIFACT_SOUL_HEIST)) {
             ItemStack dimensional_capturing = new ItemStack(Material.KNOWLEDGE_BOOK);
             ItemMeta meta = dimensional_capturing.getItemMeta();
 
-            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#8b00c7") + "Dimensional Capturing");
+            meta.setDisplayName(ChatColor.RESET.toString() + ChatColor.of("#8b00c7") + "Soul Heist");
             meta.setCustomModelData(223);
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "Withdraw");
             lore.add(ChatColor.GRAY + "Aim at entities to pull them into the Withdraw world.");
+            lore.add(ChatColor.GRAY + "Other players with access to Withdraw are immune to this.");
             meta.setLore(lore);
 
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_artifact"), PersistentDataType.BYTE, (byte) 1);

@@ -72,7 +72,9 @@ public enum PlayerScore {
     COUNTERATTACK_TRACKER(PersistentDataType.BYTE),
     ARTIFACTS(PersistentDataType.STRING, ""),
     ECLIPSED_SHADOWS_ACTIVE(PersistentDataType.BYTE),
-    DIGGING_DOPPELGANGER_ACTIVE(PersistentDataType.BYTE);
+    DIGGING_DOPPELGANGER_ACTIVE(PersistentDataType.BYTE),
+    MOMENTOUS_MOMENTUM_TIMER(PersistentDataType.INTEGER);
+
 
     private final PersistentDataType<?, ?> type;
     private final Object defaultScore;

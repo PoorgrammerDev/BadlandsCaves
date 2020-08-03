@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Listener {
     private final EnhancedEyes enhancedEyes;
-    private final int initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
-    private final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
+    private final int initial_mana_cost;
+    private final int constant_mana_drain;
     private final BlockFace[] blockFaces = {
             BlockFace.UP,
             BlockFace.DOWN,
@@ -32,6 +32,8 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
     public ArtifactEmancipatedEyes(BadlandsCaves plugin) {
         super(plugin);
         enhancedEyes = new EnhancedEyes(plugin);
+        initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
+        constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
     }
 
     @EventHandler

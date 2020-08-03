@@ -16,9 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ArtifactConvergingSwings extends ArtifactMechanisms implements Listener {
-    private final int cost = plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.converging_swings");
+    private final int cost;
     public ArtifactConvergingSwings(BadlandsCaves plugin) {
         super(plugin);
+        cost = plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.converging_swings");
     }
 
     @EventHandler
