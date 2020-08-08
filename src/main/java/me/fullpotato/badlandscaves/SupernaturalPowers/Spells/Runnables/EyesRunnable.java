@@ -10,70 +10,75 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class EyesRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final Player player;
     private final Location origin;
-    private final ArrayList<Integer> shulker_ids;
+    private final ArrayList<Integer> shulkerIDs;
+    private final Set<Entity> entities;
     private final boolean hasNightVision;
-    private EnhancedEyesNMS nms;
+    private final EnhancedEyesNMS nms;
+    private final int drain;
 
-    public EyesRunnable (BadlandsCaves plugin, Player player, Location origin, ArrayList<Integer> ids, boolean hasNightVision) {
+    public EyesRunnable(BadlandsCaves plugin, Player player, Location origin, ArrayList<Integer> ids, @Nullable Set<Entity> entities) {
         this.plugin = plugin;
         this.player = player;
-        shulker_ids = ids;
+        this.shulkerIDs = ids;
+        this.entities = entities;
         this.origin = origin;
-        this.hasNightVision = hasNightVision;
-        nms = plugin.getEnhancedEyesNMS();
+        this.hasNightVision = player.hasPotionEffect(PotionEffectType.NIGHT_VISION);
+        this.nms = plugin.getEnhancedEyesNMS();
+        this.drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
     }
 
 
     @Override
     public void run() {
-
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
-        final int constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
         final int block_range = (eyes_level >= 2) ? 15 : 7;
         final double dist_range = Math.pow(block_range - 1, 2);
         final boolean using_eyes = ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 1);
-        double drain_per_tick = constant_mana_drain / 20.0;
         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
 
-        if (using_eyes && mana >= drain_per_tick) {
+        if (using_eyes && mana >= (drain / 20.0)) {
             //night vision
             if (!hasNightVision) {
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 300, 0, true, false));
             }
 
             //highlights living entities
-            for (Entity entity : origin.getWorld().getNearbyEntities(origin, block_range, block_range, block_range)) {
-                if (entity instanceof LivingEntity) {
-                    if (origin.distanceSquared(entity.getLocation()) < dist_range) {
-                        if (eyes_level > 1) {
-                            if (entity instanceof Player) {
-                                nms.highlightEntity(player, entity, ChatColor.GOLD);
-                            }
-                            else if (entity instanceof Monster) {
-                                nms.highlightEntity(player, entity, ChatColor.RED);
-                            }
-                            else if (entity instanceof Animals) {
-                                nms.highlightEntity(player, entity, ChatColor.GREEN);
+            if (entities != null) {
+                for (Entity entity : entities) {
+                    if (entity instanceof LivingEntity) {
+                        if (origin.distanceSquared(entity.getLocation()) < dist_range) {
+                            if (eyes_level > 1) {
+                                if (entity instanceof Player) {
+                                    nms.highlightEntity(player, entity, ChatColor.GOLD);
+                                }
+                                else if (entity instanceof Monster) {
+                                    nms.highlightEntity(player, entity, ChatColor.RED);
+                                }
+                                else if (entity instanceof Animals) {
+                                    nms.highlightEntity(player, entity, ChatColor.GREEN);
+                                }
+                                else {
+                                    nms.highlightEntity(player, entity, ChatColor.GRAY);
+                                }
                             }
                             else {
-                                nms.highlightEntity(player, entity, ChatColor.GRAY);
+                                nms.highlightEntity(player, entity);
                             }
-                        }
-                        else {
-                            nms.highlightEntity(player, entity);
                         }
                     }
                 }
             }
 
             //mana stuffs
-            mana -= drain_per_tick;
+            mana -= (drain / 20.0);
             PlayerScore.MANA.setScore(plugin, player, mana);
             PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
@@ -94,7 +99,7 @@ public class EyesRunnable extends BukkitRunnable {
             }
 
             //removing indicators
-            for (int id : shulker_ids) {
+            for (int id : shulkerIDs) {
                 nms.removeIndicator(player, id);
             }
 

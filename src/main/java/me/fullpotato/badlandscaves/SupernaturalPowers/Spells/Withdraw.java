@@ -32,10 +32,12 @@ public class Withdraw extends UsePowers implements Listener {
     final int cost = plugin.getOptionsConfig().getInt("spell_costs.withdraw_mana_cost");
     private final World void_world;
     private final ArtifactManager artifactManager;
+    private final ArtifactSoulHeist artifactSoulHeist;
     public Withdraw(BadlandsCaves plugin) {
         super(plugin);
         void_world = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
         artifactManager = new ArtifactManager(plugin);
+        artifactSoulHeist = new ArtifactSoulHeist(plugin, this);
     }
 
     @EventHandler
@@ -71,8 +73,6 @@ public class Withdraw extends UsePowers implements Listener {
             if (!in_possession) {
                 if (checkOtherPlayers(player)) {
                     if (artifactManager.hasArtifact(player, Artifact.SOUL_HEIST)) {
-                        //this cannot be an instance variable, causes infinite loop
-                        final ArtifactSoulHeist artifactSoulHeist = new ArtifactSoulHeist(plugin);
                         PlayerScore.MANA.setScore(plugin, player, mana - cost);
 
 
@@ -101,13 +101,15 @@ public class Withdraw extends UsePowers implements Listener {
         voidLoc.setWorld(void_world);
 
         final Chunk voidChunk = voidLoc.getChunk();
+        final int duration = random.nextInt(200) + 500;
+
         PlayerScore.WITHDRAW_X.setScore(plugin, player, voidLoc.getX());
         PlayerScore.WITHDRAW_Y.setScore(plugin, player, voidLoc.getY());
         PlayerScore.WITHDRAW_Z.setScore(plugin, player, voidLoc.getZ());
         PlayerScore.WITHDRAW_CHUNK_X.setScore(plugin, player, voidChunk.getX());
         PlayerScore.WITHDRAW_CHUNK_Z.setScore(plugin, player, voidChunk.getZ());
 
-        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, random.nextInt(200) + 500);
+        PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, duration);
 
         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
@@ -125,11 +127,11 @@ public class Withdraw extends UsePowers implements Listener {
         player.playSound(player.getLocation(), "custom.supernatural.withdraw.enter", SoundCategory.PLAYERS, 0.5F, 1);
 
         if (supernatural) {
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, duration, 0));
         }
         else {
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.BLINDNESS, 100, 0));
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, 100, 2));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.BLINDNESS, duration, 0));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, duration, 2));
         }
 
 
@@ -149,14 +151,6 @@ public class Withdraw extends UsePowers implements Listener {
                     }
                     player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidLoc, 10, 0, 1, 0);
                     PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, timer - 1);
-
-                    if (supernatural) {
-                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0));
-                    }
-                    else {
-                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.BLINDNESS, 100, 0));
-                        AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, 100, 2));
-                    }
 
                     PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
                 }

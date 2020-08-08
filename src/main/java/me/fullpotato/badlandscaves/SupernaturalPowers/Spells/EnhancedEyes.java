@@ -3,6 +3,9 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactDirectionalVision;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.EyesRunnable;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
@@ -18,7 +21,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -32,6 +34,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
     private final int initial_mana_cost;
     private final int constant_mana_drain;
     private final Map<Integer, Integer> levelRangeMap;
+    private final ArtifactManager artifactManager;
+    private final ArtifactDirectionalVision artifactDirectionalVision;
     public EnhancedEyes(BadlandsCaves plugin) {
         super(plugin);
         nms = plugin.getEnhancedEyesNMS();
@@ -41,6 +45,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
         levelRangeMap.put(2, 10);
         initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
         constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
+        artifactManager = new ArtifactManager(plugin);
+        artifactDirectionalVision = new ArtifactDirectionalVision(plugin, this);
     }
 
     @EventHandler
@@ -57,6 +63,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                 EquipmentSlot e = event.getHand();
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
+                    final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
                     event.setCancelled(true);
 
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
@@ -74,8 +81,26 @@ public class EnhancedEyes extends UsePowers implements Listener {
                     }
                     else {
                         double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
-                        if (mana >= initial_mana_cost) {
-                            enableEnhancedEyes(player, getNearbyBlocks(player.getLocation(), levelRangeMap.get(eyes_level)));
+
+                        boolean waive = false;
+                        if (hardmode) {
+                            if (artifactManager.hasArtifact(player, Artifact.CHEAP_SIGHT)) {
+                                waive = true;
+                            }
+                        }
+
+
+                        if ((waive && mana >= constant_mana_drain) || mana >= (initial_mana_cost + constant_mana_drain)) {
+                            final int radius = levelRangeMap.get(eyes_level);
+
+                            if (hardmode) {
+                                if (artifactManager.hasArtifact(player, Artifact.DIRECTIONAL_VISION)) {
+                                    enableEnhancedEyes(player, artifactDirectionalVision.getDirectionalBlocks(player, radius * 3, radius / 3), artifactDirectionalVision.getDirectionalEntities(player, radius * 3, radius / 3), false);
+                                    return;
+                                }
+                            }
+
+                            enableEnhancedEyes(player, getNearbyBlocks(player.getLocation(), radius), player.getNearbyEntities(), true); // FIXME: 8/8/2020
                         }
                         else {
                             notEnoughMana(player);
@@ -86,7 +111,8 @@ public class EnhancedEyes extends UsePowers implements Listener {
         }
     }
 
-    public void enableEnhancedEyes (Player player, Set<Block> blocks) {
+    public void enableEnhancedEyes (Player player, Set<Block> blocks, Set<Entity> entities, boolean particle) {
+        final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
         final Location location = player.getLocation();
@@ -107,15 +133,17 @@ public class EnhancedEyes extends UsePowers implements Listener {
             }
         }.runTaskTimerAsynchronously(plugin, 5, 330);
 
-        //Particle effects
-        ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), levelRangeMap.get(eyes_level) - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
-        //Effects for nearby magic players
-        for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-            if (entity instanceof Player) {
-                Player powered = (Player) entity;
-                if (!(powered.equals(player)) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1 && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                    powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.3F, 1);
-                    powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
+        if (particle) {
+            //Particle effects
+            ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), levelRangeMap.get(eyes_level) - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
+            //Effects for nearby magic players
+            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
+                if (entity instanceof Player) {
+                    Player powered = (Player) entity;
+                    if (!(powered.equals(player)) && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1 && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
+                        powered.playSound(player.getLocation(), "custom.supernatural.enhanced_eyes.start", SoundCategory.PLAYERS, 0.3F, 1);
+                        powered.spawnParticle(Particle.REDSTONE, player.getEyeLocation(), 5, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(Color.BLUE, 1));
+                    }
                 }
             }
         }
@@ -145,12 +173,19 @@ public class EnhancedEyes extends UsePowers implements Listener {
         plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".eyes_map", builder.toString());
         plugin.saveSystemConfig();
 
-        PlayerScore.MANA.setScore(plugin, player, mana - (initial_mana_cost - (constant_mana_drain / 20.0)));
+        boolean waive = false;
+        if (hardmode) {
+            if (artifactManager.hasArtifact(player, Artifact.CHEAP_SIGHT)) {
+                waive = true;
+            }
+        }
+
+        PlayerScore.MANA.setScore(plugin, player, mana - ((waive ? 0 : initial_mana_cost) - (constant_mana_drain / 20.0)));
         PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         PlayerScore.USING_EYES.setScore(plugin, player, 1);
 
-        new EyesRunnable(plugin, player, location, ids, player.hasPotionEffect(PotionEffectType.NIGHT_VISION)).runTaskTimer(plugin, 0, 0);
+        new EyesRunnable(plugin, player, location, ids, entities).runTaskTimer(plugin, 0, 0);
     }
 
     public Set<Block> getNearbyBlocks(Location location, int blockRange) {

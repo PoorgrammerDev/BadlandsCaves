@@ -32,8 +32,8 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
     public ArtifactEmancipatedEyes(BadlandsCaves plugin) {
         super(plugin);
         enhancedEyes = new EnhancedEyes(plugin);
-        initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
-        constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
+        initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost") / 3;
+        constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain") / 2;
     }
 
     @EventHandler
@@ -65,7 +65,7 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
                                             final Set<Block> ores = blocks.stream().filter(test -> enhancedEyes.isOre(test.getType())).collect(Collectors.toSet());
                                             if (!ores.isEmpty()) {
                                                 if ((byte) PlayerScore.USING_EYES.getScore(plugin, player) == 0) {
-                                                    enhancedEyes.enableEnhancedEyes(player, ores);
+                                                    enhancedEyes.enableEnhancedEyes(player, ores, null, false);
                                                 }
                                             }
                                         }

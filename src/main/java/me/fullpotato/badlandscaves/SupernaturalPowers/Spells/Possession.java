@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -62,9 +63,9 @@ public class Possession extends UsePowers implements Listener {
                         if (mana >= (pos_drain_tick + possession_mana_cost)) {
                             preventDoubleClick(player);
                             TargetEntity targetEntity = new TargetEntity();
-                            LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, 0.2, false, player);
+                            final LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, 0.2, false, player);
                             if (target != null && player.hasLineOfSight(target)) {
-                                if (!(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) && !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
+                                if (canPossess(target)) {
                                     boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
 
                                     if (!target_already_pos) {
@@ -180,5 +181,20 @@ public class Possession extends UsePowers implements Listener {
                 }
             }
         }
+    }
+
+    public boolean canPossess (LivingEntity entity) {
+        if (entity instanceof Player || entity instanceof EnderDragon || entity instanceof Wither) return false;
+
+        final PersistentDataContainer container = entity.getPersistentDataContainer();
+        final NamespacedKey augmented = new NamespacedKey(plugin, "augmented");
+        if (container.has(augmented, PersistentDataType.BYTE)) {
+            final Byte result = container.get(augmented, PersistentDataType.BYTE);
+            if (result != null) {
+                return result == 0;
+            }
+        }
+
+        return true;
     }
 }

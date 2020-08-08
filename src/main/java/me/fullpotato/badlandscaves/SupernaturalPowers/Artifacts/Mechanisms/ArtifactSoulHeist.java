@@ -1,22 +1,24 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Possession;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Withdraw;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Random;
-
 public class ArtifactSoulHeist extends ArtifactMechanisms {
-    private final Random random = new Random();
+    private final Possession possession;
     private final Withdraw withdraw;
-    public ArtifactSoulHeist(BadlandsCaves plugin) {
+    public ArtifactSoulHeist(BadlandsCaves plugin, Withdraw withdraw) {
         super(plugin);
-        withdraw = new Withdraw(plugin);
+        possession = new Possession(plugin);
+        this.withdraw = withdraw;
     }
 
     public void launchProjectile(Player player) {
@@ -34,6 +36,7 @@ public class ArtifactSoulHeist extends ArtifactMechanisms {
                 final Chunk scoutChunk = scout[0].getChunk();
 
                 if (ran[0] > times || !scout[0].getBlock().isPassable() || (playerChunk.getX() != scoutChunk.getX() || playerChunk.getZ() != scoutChunk.getZ())) {
+                    withdraw.enterWithdraw(player, false);
                     this.cancel();
                     return;
                 }
@@ -62,17 +65,28 @@ public class ArtifactSoulHeist extends ArtifactMechanisms {
                                     withdraw.enterWithdraw(player, false);
 
                                     final Location voidLoc = targetLoc.clone();
+                                    final int duration = 500;
+
                                     voidLoc.setWorld(player.getWorld());
                                     livingTarget.teleport(voidLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+                                    if (possession.canPossess(livingTarget)) {
+                                        livingTarget.setAI(false);
+                                    }
+                                    else {
+                                        livingTarget.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 0));
+                                        livingTarget.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 2));
+                                    }
 
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
                                             if (!livingTarget.isDead()) {
                                                 livingTarget.teleport(targetLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                                                livingTarget.setAI(true);
                                             }
                                         }
-                                    }.runTaskLater(plugin, random.nextInt(200) + 500);
+                                    }.runTaskLater(plugin, duration);
 
                                 }
                             }

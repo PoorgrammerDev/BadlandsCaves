@@ -3,17 +3,14 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Possession;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TargetEntity;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wither;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -21,9 +18,11 @@ import java.util.Random;
 public class PossessionIndicatorRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final TargetEntity targetEntity = new TargetEntity();
+    final Possession possession;
 
-    public PossessionIndicatorRunnable(BadlandsCaves bcav) {
-        plugin = bcav;
+    public PossessionIndicatorRunnable(BadlandsCaves plugin) {
+        this.plugin = plugin;
+        possession = new Possession(plugin);
     }
 
     @Override
@@ -36,9 +35,8 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
                             && ((byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) != 1)
                             && ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0)) {
                         final LivingEntity target = targetEntity.findTargetLivingEntity(player.getEyeLocation(), 15, 0.2, 0.2, false, player);
-                        if (target != null && !(target instanceof Player) && !(target instanceof EnderDragon) && !(target instanceof Wither) &&
-                                !(target.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) &&
-                                        target.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1)) {
+
+                        if (target != null && possession.canPossess(target)) {
                             if (player.hasLineOfSight(target)) {
                                 boolean target_already_pos = target.hasMetadata("possessed") && target.getMetadata("possessed").get(0).asBoolean();
                                 if (!target_already_pos) {

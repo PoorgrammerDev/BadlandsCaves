@@ -2376,6 +2376,7 @@ public class LoadCustomItems {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.RESET.toString() + ChatColor.of("#6b03fc") + "Artifact" + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "Withdraw");
             lore.add(ChatColor.GRAY + "Aim at entities to pull them into the Withdraw world.");
+            lore.add(ChatColor.GRAY + "Non-boss entities cannot move.");
             lore.add(ChatColor.GRAY + "Other players with access to Withdraw are immune to this.");
             meta.setLore(lore);
 
