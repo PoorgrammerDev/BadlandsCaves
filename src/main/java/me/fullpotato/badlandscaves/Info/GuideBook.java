@@ -4,6 +4,8 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Content;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -24,27 +26,30 @@ public class GuideBook {
 
         TextComponent quickLinks = new TextComponent("§lExternal Links\n");
         TextComponent craftGuideLink = new TextComponent("§9Crafting Guide");
+
         TextComponent[] craftHover = new TextComponent[1];
         craftHover[0] = new TextComponent("Click to go to the Crafting Guide.");
-        craftGuideLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, craftHover));
+        final Content hoverContent = new Text(craftHover);
+        craftGuideLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverContent));
+
         craftGuideLink.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/craftguide"));
         TextComponent[] craftGuidePage = {quickLinks, craftGuideLink};
         meta.spigot().addPage(craftGuidePage);
 
 
         final String[] entries_page_1 = {
-                "§0Introduction§0\n",
-                "§0Getting Started§0\n",
-                "§9Thirst§0\n",
-                "§2Toxicity§0\n",
-                "§6Deaths§0\n",
-                "§3Purifying Water§0\n",
-                "§1Fishing§0\n",
-                "§0Classes§0\n",
-                "§3Puresoul§0\n",
-                "§5Heretic§0\n",
-                "§2Dungeons §0\n",
-                "§4Chaos§0\n",
+                "§0Introduction§0",
+                "§0Getting Started§0",
+                "§9Thirst§0",
+                "§2Toxicity§0",
+                "§6Deaths§0",
+                "§3Purifying Water§0",
+                "§1Fishing§0",
+                "§0Classes§0",
+                "§3Puresoul§0",
+                "§5Heretic§0",
+                "§2Dungeons §0",
+                "§4Chaos§0",
                 "§cHallowed Chambers§0",
         };
         final String[] pages_page_1 = {
@@ -65,7 +70,7 @@ public class GuideBook {
         meta.spigot().addPage(getTOCEntries(entries_page_1, pages_page_1, false));
 
 
-        final String[] entries_page_2 = {"§4Hardmode§0\n", "§9Augmented Mobs"};
+        final String[] entries_page_2 = {"§4Hardmode§0", "§9Augmented Mobs"};
         final String[] pages_page_2 = {"26", "28"};
         meta.spigot().addPage(getTOCEntries(entries_page_2, pages_page_2, true));
 
@@ -108,10 +113,10 @@ public class GuideBook {
             TextComponent component = new TextComponent(entries[i]);
             component.setClickEvent(new ClickEvent(ClickEvent.Action.CHANGE_PAGE, pages[i]));
 
-            TextComponent[] hover = new TextComponent[1];
-            hover[0] = new TextComponent("Click to skip to " + ChatColor.stripColor(entries[i]));
-            component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
+            final Content hoverContent = new Text("Click to skip to " + ChatColor.stripColor(entries[i]));
+            component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverContent));
 
+            component.addExtra("\n");
             tableComponents.add(component);
         }
 

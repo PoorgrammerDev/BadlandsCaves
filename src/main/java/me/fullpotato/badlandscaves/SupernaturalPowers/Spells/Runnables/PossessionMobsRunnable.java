@@ -20,20 +20,21 @@ public class PossessionMobsRunnable extends BukkitRunnable {
     private final Player player;
     private final LivingEntity target;
     private final Team team;
+    final int drain;
 
     public PossessionMobsRunnable(BadlandsCaves bcav, Player ply, LivingEntity trg, Team tm) {
         plugin = bcav;
         player = ply;
         target = trg;
         team = tm;
+        drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain");
     }
 
     @Override
     public void run() {
         final boolean in_possession = (byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1;
         double mana = (double) PlayerScore.MANA.getScore(plugin, player);
-        final int possession_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain");
-        final double possession_mana_drain_tick = possession_mana_drain / 20.0;
+        final double possession_mana_drain_tick = drain / 20.0;
         PossessionNMS nms = plugin.getPossessionNMS();
 
         if (in_possession && mana > possession_mana_drain_tick) {

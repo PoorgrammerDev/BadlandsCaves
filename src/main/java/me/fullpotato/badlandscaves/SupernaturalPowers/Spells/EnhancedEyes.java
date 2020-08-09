@@ -100,7 +100,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                                 }
                             }
 
-                            enableEnhancedEyes(player, getNearbyBlocks(player.getLocation(), radius), player.getNearbyEntities(), true); // FIXME: 8/8/2020
+                            enableEnhancedEyes(player, getNearbyBlocks(player.getLocation(), radius), player.getNearbyEntities(radius, radius, radius), true);
                         }
                         else {
                             notEnoughMana(player);
@@ -111,7 +111,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
         }
     }
 
-    public void enableEnhancedEyes (Player player, Set<Block> blocks, Set<Entity> entities, boolean particle) {
+    public void enableEnhancedEyes (Player player, Set<Block> blocks, Collection<Entity> entities, boolean particle) {
         final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
         final double mana = (double) PlayerScore.MANA.getScore(plugin, player);

@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 public class EyesRunnable extends BukkitRunnable {
@@ -19,12 +20,12 @@ public class EyesRunnable extends BukkitRunnable {
     private final Player player;
     private final Location origin;
     private final ArrayList<Integer> shulkerIDs;
-    private final Set<Entity> entities;
+    private final Collection<Entity> entities;
     private final boolean hasNightVision;
     private final EnhancedEyesNMS nms;
     private final int drain;
 
-    public EyesRunnable(BadlandsCaves plugin, Player player, Location origin, ArrayList<Integer> ids, @Nullable Set<Entity> entities) {
+    public EyesRunnable(BadlandsCaves plugin, Player player, Location origin, ArrayList<Integer> ids, @Nullable Collection<Entity> entities) {
         this.plugin = plugin;
         this.player = player;
         this.shulkerIDs = ids;
