@@ -13,7 +13,6 @@ public enum PlayerScore {
     TOXICITY(PersistentDataType.DOUBLE),
     THIRST_SYS_VAR(PersistentDataType.DOUBLE),
     TOX_SLOW_INCR_VAR(PersistentDataType.INTEGER),
-    OPENED_CAULDRON(PersistentDataType.BYTE),
     HAS_SUPERNATURAL_POWERS(PersistentDataType.BYTE),
     IN_DESCENSION(PersistentDataType.INTEGER),
     IN_REFLECTION(PersistentDataType.BYTE),

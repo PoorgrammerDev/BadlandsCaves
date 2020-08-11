@@ -4,9 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.LocationSave;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
@@ -34,7 +32,7 @@ public class CauldronMenu implements Listener {
     private final ItemStack gray = EmptyItem.getEmptyItem(Material.GRAY_STAINED_GLASS_PANE);
     private final ItemStack black = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
     private final ItemStack notReadyButton = getNotReadyButton();
-    private final int[] blackBarSlots = {1, 7, 10, 16, 19, 25};
+    private final int[] blackBarSlots = {7, 10, 16, 19, 25};
     private final int[][] levelIndicatorSlots = {{18, 26}, {9, 17}, {0, 8}};
     private final int MAX_LEVEL = ((Levelled) (Material.CAULDRON.createBlockData())).getMaximumLevel();
     private final NamespacedKey waterLevelKey;
@@ -70,7 +68,8 @@ public class CauldronMenu implements Listener {
                                     || (level < MAX_LEVEL && (handMat.equals(Material.WATER_BUCKET) || handMat.equals(Material.POTION)));
 
                             if (!cancel) {
-                                openInventory(player, level);
+                                final Inventory inventory = openInventory(player, block.getLocation(), level);
+                                new CauldronRunnable(plugin, player, block.getLocation(), inventory, this).runTaskTimer(plugin, 0, 10);
                             }
                         }
                     }
@@ -82,7 +81,7 @@ public class CauldronMenu implements Listener {
         }
     }
 
-    public void openInventory (Player player, int level) {
+    public Inventory openInventory (Player player, Location cauldronLocation, int level) {
         final Inventory inventory = plugin.getServer().createInventory(player, 27, title);
 
         //background
@@ -95,10 +94,25 @@ public class CauldronMenu implements Listener {
             inventory.setItem(blackBarSlot, black);
         }
 
+        updateWaterLevel(inventory, level);
+
         //slots
         inventory.setItem(11, null);
         inventory.setItem(15, null);
 
+        //craft button
+        inventory.setItem(13, notReadyButton);
+
+        //location save item
+        final ItemStack locationSave = black.clone();
+        saveLocationInsideItem(locationSave, cauldronLocation);
+        inventory.setItem(1, locationSave);
+
+        player.openInventory(inventory);
+        return inventory;
+    }
+
+    public void updateWaterLevel(Inventory inventory, int level) {
         //water level indicator
         final ItemStack waterIndicator = getWaterIndicator(level, false);
         final ItemStack waterIndicatorClear = getWaterIndicator(level, true);
@@ -107,10 +121,6 @@ public class CauldronMenu implements Listener {
                 inventory.setItem(slot, i < level ? waterIndicator : waterIndicatorClear);
             }
         }
-
-        //craft button
-        inventory.setItem(13, notReadyButton);
-        player.openInventory(inventory);
     }
 
     public ItemStack getWaterIndicator(int level, boolean empty) {
@@ -180,22 +190,26 @@ public class CauldronMenu implements Listener {
         slots.add(inventory.getItem(11));
         slots.add(inventory.getItem(15));
 
-        boolean ready = false;
         if (slots.get(0) != null && slots.get(1) != null) {
             final int waterLevel = getWaterLevel(inventory);
             if (waterLevel >= MAX_LEVEL) {
+                final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
                 final ArrayList<ItemStack> slotsClone = cloneItemList(slots);
                 for (CauldronRecipe recipe : CauldronRecipe.values()) {
-                    final Set<ItemStack> ingredients = recipe.getIngredients();
-                    if (ingredients.containsAll(slotsClone)) {
-                        ready = true;
-                        inventory.setItem(13, getReadyButton(recipe));
+                    final RecipeAvailability availability = recipe.getRecipeAvailability();
+                    if (availability.equals(RecipeAvailability.ALWAYS) ||
+                            (availability.equals(RecipeAvailability.PREHARDMODE_ONLY) && !hardmode) ||
+                            (availability.equals(RecipeAvailability.HARDMODE_ONLY) && hardmode)) {
+                        final Set<ItemStack> ingredients = recipe.getIngredients();
+                        if (ingredients.containsAll(slotsClone)) {
+                            inventory.setItem(13, getReadyButton(recipe));
+                            return;
+                        }
                     }
                 }
             }
         }
-
-        if (!ready) inventory.setItem(13, notReadyButton);
+        inventory.setItem(13, notReadyButton);
     }
 
     public int getWaterLevel (Inventory inventory) {
@@ -260,22 +274,47 @@ public class CauldronMenu implements Listener {
         if (craftButton != null && craftButton.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
             final CauldronRecipe recipe = getRecipeFromCraftButton(craftButton);
             if (recipe != null) {
-                final ItemStack[] slots = {
-                        inventory.getItem(11),
-                        inventory.getItem(15),
-                };
 
-                for (ItemStack slot : slots) {
-                    if (slot != null) {
-                        slot.setAmount(slot.getAmount() - 1);
+                //check water level of cauldron block
+                final Location cauldronLocation = getCauldronLocation(inventory);
+                if (cauldronLocation != null) {
+                    final Block block = cauldronLocation.getBlock();
+                    if (block.getType().equals(Material.CAULDRON) && block.getBlockData() instanceof Levelled) {
+                        final Levelled data = (Levelled) block.getBlockData();
+                        if (data.getLevel() >= data.getMaximumLevel()) {
+                            //CRAFT--------------------------------------
+
+                            //set water level to 0
+                            data.setLevel(0);
+                            block.setBlockData(data);
+                            updateWaterLevel(inventory, 0);
+
+                            //deplete ingredients
+                            final ItemStack[] slots = {
+                                    inventory.getItem(11),
+                                    inventory.getItem(15),
+                            };
+
+                            for (ItemStack slot : slots) {
+                                if (slot != null) {
+                                    slot.setAmount(slot.getAmount() - 1);
+                                }
+                            }
+
+                            //give item
+                            if (player.getInventory().firstEmpty() == -1) {
+                                player.getWorld().dropItemNaturally(player.getLocation(), recipe.getResult().getItem());
+                            }
+                            else {
+                                player.getInventory().addItem(recipe.getResult().getItem());
+                            }
+
+                            //sfx
+                            World world = cauldronLocation.getWorld();
+                            if (world == null) world = player.getWorld();
+                            world.playSound(cauldronLocation, Sound.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1, 1);
+                        }
                     }
-                }
-
-                if (player.getInventory().firstEmpty() == -1) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), recipe.getResult().getItem());
-                }
-                else {
-                    player.getInventory().addItem(recipe.getResult().getItem());
                 }
             }
         }
@@ -329,5 +368,24 @@ public class CauldronMenu implements Listener {
             meta.getPersistentDataContainer().set(locationKey, PersistentDataType.STRING, locationSave.getStringFromLocation(location));
             item.setItemMeta(meta);
         }
+    }
+
+    public Location getCauldronLocation (Inventory inventory) {
+        return getCauldronLocation(inventory.getItem(1));
+    }
+
+    public Location getCauldronLocation (ItemStack tagItem) {
+        if (tagItem != null) {
+            final ItemMeta meta = tagItem.getItemMeta();
+            if (meta != null) {
+                if (meta.getPersistentDataContainer().has(locationKey, PersistentDataType.STRING)) {
+                    final String saved = meta.getPersistentDataContainer().get(locationKey, PersistentDataType.STRING);
+                    if (saved != null && !saved.isEmpty()) {
+                        return locationSave.getLocationFromString(saved);
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
