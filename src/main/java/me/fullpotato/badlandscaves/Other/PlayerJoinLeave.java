@@ -13,15 +13,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerJoinLeave implements Listener {
 
     private final BadlandsCaves plugin;
+    private final GuideBook guideBook;
     public PlayerJoinLeave(BadlandsCaves bcav) {
         plugin = bcav;
+        guideBook = new GuideBook(plugin);
     }
 
     @EventHandler
@@ -35,12 +36,8 @@ public class PlayerJoinLeave implements Listener {
             data.initializePlayer(player);
 
             if (!player.hasPlayedBefore()) {
-                ItemStack starter_sapling = CustomItem.STARTER_SAPLING.getItem();
-                ItemStack starter_bone_meal = CustomItem.STARTER_BONE_MEAL.getItem();
-                player.getInventory().addItem(starter_sapling);
-                player.getInventory().addItem(starter_bone_meal);
-                player.getInventory().addItem(GuideBook.getGuideBook(plugin));
-
+                player.getInventory().addItem(CustomItem.STARTER_SAPLING.getItem());
+                player.getInventory().addItem(guideBook.getGuideBook());
 
                 new BukkitRunnable() {
                     @Override

@@ -7,24 +7,36 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 
 public class GuideCommand extends Commands implements CommandExecutor {
     private final BadlandsCaves plugin;
+    private final GuideBook guideBook;
 
     public GuideCommand(BadlandsCaves plugin) {
         this.plugin = plugin;
+        guideBook = new GuideBook(plugin);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String s, String[] strings) {
         if (command.getName().equals("guide")) {
             if (commandSender instanceof Player) {
-                Player player = (Player) commandSender;
-                int slot = player.getInventory().firstEmpty();
+                final Player player = (Player) commandSender;
+                final PlayerInventory inventory = player.getInventory();
+
+                //remove any existing guide books
+                inventory.forEach(item -> {
+                    if (item != null && guideBook.isGuideBook(item)) {
+                        inventory.remove(item);
+                    }
+                });
+
+                int slot = inventory.firstEmpty();
                 if (slot != -1) {
-                    player.getInventory().addItem(GuideBook.getGuideBook(plugin));
+                    inventory.addItem(guideBook.getGuideBook());
                 }
                 else {
                     commandSender.sendMessage(ChatColor.RED + "You must have an open space in your inventory!");

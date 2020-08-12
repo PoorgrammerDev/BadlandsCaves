@@ -14,11 +14,21 @@ import org.bukkit.inventory.meta.BookMeta;
 import java.util.ArrayList;
 
 public class GuideBook {
-    public static ItemStack getGuideBook (BadlandsCaves plugin) {
-        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-        BookMeta meta = (BookMeta) book.getItemMeta();
-        meta.setTitle("Guide");
-        meta.setAuthor("FullPotato");
+    private final BadlandsCaves plugin;
+    private final ItemStack guideBook;
+    private final String title = "Guide";
+    private final String author = "FullPotato";
+
+    public GuideBook(BadlandsCaves plugin) {
+        this.plugin = plugin;
+        guideBook = createGuideBook();
+    }
+
+    private ItemStack createGuideBook() {
+        final ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+        final BookMeta meta = (BookMeta) book.getItemMeta();
+        meta.setTitle(title);
+        meta.setAuthor(author);
         meta.setGeneration(BookMeta.Generation.ORIGINAL);
 
         String version = plugin.getDescription().getVersion();
@@ -105,7 +115,7 @@ public class GuideBook {
         return book;
     }
 
-    public static TextComponent[] getTOCEntries(String[] entries, String[] pages, boolean cont) {
+    private TextComponent[] getTOCEntries(String[] entries, String[] pages, boolean cont) {
         ArrayList<TextComponent> tableComponents = new ArrayList<>();
         tableComponents.add(new TextComponent(cont ? "§lTable of Contents (cont.)§0\n" : "§lTable of Contents§0\n"));
 
@@ -122,5 +132,21 @@ public class GuideBook {
 
         TextComponent[] a = new TextComponent[0];
         return tableComponents.toArray(a);
+    }
+
+    public ItemStack getGuideBook() {
+        return this.guideBook;
+    }
+
+    public boolean isGuideBook (ItemStack item) {
+        if (item.getType().equals(Material.WRITTEN_BOOK)) {
+            if (item.getItemMeta() instanceof BookMeta) {
+                final BookMeta bookMeta = (BookMeta) item.getItemMeta();
+                final String title = bookMeta.getTitle();
+                final String author = bookMeta.getAuthor();
+                return title != null && title.equals(this.title) && author != null && author.equals(this.author);
+            }
+        }
+        return false;
     }
 }

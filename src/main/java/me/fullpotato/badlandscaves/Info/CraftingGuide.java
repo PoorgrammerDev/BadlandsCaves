@@ -646,7 +646,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack shock_sword = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
         ItemMeta shock_sword_meta = shock_sword.getItemMeta();
-        shock_sword_meta.setDisplayName(ChatColor.WHITE + "Iron / Gold Sword");
+        shock_sword_meta.setDisplayName(ChatColor.WHITE + "Iron, Gold, or Netherite Sword");
         shock_sword.setItemMeta(shock_sword_meta);
 
         ItemStack[] voltshock_placeholder_recipe = {

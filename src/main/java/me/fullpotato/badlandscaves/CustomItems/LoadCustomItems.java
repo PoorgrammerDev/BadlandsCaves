@@ -75,7 +75,7 @@ public class LoadCustomItems {
     // TODO: 7/28/2020 make an item builder and clean up this garbag
     @SuppressWarnings("ConstantConditions")
     public ItemStack getItem(@NotNull CustomItem item) {
-        if (item.equals(CustomItem.STARTER_SAPLING)){
+        if (item.equals(CustomItem.STARTER_SAPLING)) {
             ItemStack starter_sapling = new ItemStack(Material.OAK_SAPLING);
             ItemMeta starter_sapling_meta = starter_sapling.getItemMeta();
             starter_sapling_meta.setDisplayName("§8[§aStarter Sapling§8]");
@@ -84,17 +84,6 @@ public class LoadCustomItems {
             starter_sapling.setItemMeta(starter_sapling_meta);
 
             return starter_sapling;
-        }
-
-        else if (item.equals(CustomItem.STARTER_BONE_MEAL)){
-            ItemStack starter_bone_meal = new ItemStack(Material.BONE_MEAL, 3);
-            ItemMeta starter_bone_meal_meta = starter_bone_meal.getItemMeta();
-            starter_bone_meal_meta.setDisplayName("§8[§fStarter Bone Meal§8]");
-            starter_bone_meal_meta.addEnchant(Enchantment.DURABILITY, 1, false);
-            starter_bone_meal_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            starter_bone_meal.setItemMeta(starter_bone_meal_meta);
-
-            return starter_bone_meal;
         }
 
         else if (item.equals(CustomItem.TOXIC_WATER)){
@@ -665,8 +654,8 @@ public class LoadCustomItems {
             ItemMeta stone_shield_meta = stone_shield.getItemMeta();
             stone_shield_meta.setDisplayName(ChatColor.WHITE + "Stone Shield");
             stone_shield_meta.setCustomModelData(141);
-            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[0]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[1]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[0]), "Shield Speed Modifier", -0.1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            stone_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[1]), "Shield Speed Modifier", -0.1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             stone_shield_meta.addEnchant(Enchantment.DURABILITY, 4, true);
             stone_shield.setItemMeta(stone_shield_meta);
 
@@ -678,8 +667,8 @@ public class LoadCustomItems {
             ItemMeta iron_shield_meta = iron_shield.getItemMeta();
             iron_shield_meta.setDisplayName(ChatColor.WHITE + "Iron Shield");
             iron_shield_meta.setCustomModelData(142);
-            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[2]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[3]), "Shield Speed Modifier", -0.3, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[2]), "Shield Speed Modifier", -0.15, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            iron_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[3]), "Shield Speed Modifier", -0.15, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             iron_shield_meta.addEnchant(Enchantment.DURABILITY, 5, true);
             iron_shield.setItemMeta(iron_shield_meta);
 
@@ -691,8 +680,8 @@ public class LoadCustomItems {
             ItemMeta diamond_shield_meta = diamond_shield.getItemMeta();
             diamond_shield_meta.setDisplayName(ChatColor.WHITE + "Diamond Shield");
             diamond_shield_meta.setCustomModelData(144);
-            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[4]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[5]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[4]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            diamond_shield_meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[5]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             diamond_shield_meta.addEnchant(Enchantment.DURABILITY, 6, true);
             diamond_shield.setItemMeta(diamond_shield_meta);
 
@@ -704,8 +693,8 @@ public class LoadCustomItems {
             ItemMeta meta = netherite_shield.getItemMeta();
             meta.setDisplayName(ChatColor.WHITE + "Netherite Shield");
             meta.setCustomModelData(178);
-            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.4, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
             meta.addEnchant(Enchantment.DURABILITY, 7, true);
             netherite_shield.setItemMeta(meta);
 
@@ -1044,8 +1033,8 @@ public class LoadCustomItems {
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 2000);
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nebulites"), PersistentDataType.STRING, "");
 
-            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[16]), "Shield Speed Modifier", -0.1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(uuids[17]), "Shield Speed Modifier", -0.1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
 
             meta.addEnchant(Enchantment.DURABILITY, 5, true);
 

@@ -26,6 +26,7 @@ import java.util.Random;
 
 public class DestroySpawner implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random = new Random();
     private final HashMap<Material, Material> matMap = new HashMap<>();
     private static Location newLoc;
     private final ArrayList<Material> pickaxes = new ArrayList<>();
@@ -59,13 +60,9 @@ public class DestroySpawner implements Listener {
             final Player player = event.getPlayer();
             if (pickaxes.contains(player.getInventory().getItemInMainHand().getType())) {
                 incrementChaos(false);
-
-
-                Random random = new Random();
-                CreatureSpawner spawner = (CreatureSpawner) event.getBlock().getState();
-
-                Location location = block.getLocation().add(0.5, 0.5, 0.5);
-                World world = location.getWorld();
+                final CreatureSpawner spawner = (CreatureSpawner) event.getBlock().getState();
+                final Location location = block.getLocation().add(0.5, 0.5, 0.5);
+                final World world = location.getWorld();
                 world.spawnParticle(Particle.FLAME, location, 50, 0.1, 0.1, 0.1, 1);
                 world.playSound(location, Sound.ENTITY_BLAZE_HURT, SoundCategory.BLOCKS, 0.5F, 0.4F);
                 world.playSound(location, Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.BLOCKS, 1, 1);
@@ -75,8 +72,8 @@ public class DestroySpawner implements Listener {
                 if (!spawner.getSpawnedType().equals(EntityType.BLAZE)) {
                     ParticleShapes.particleLine(null, Particle.FLASH, location.clone().add(0, 1, 0), location.clone().add(0, 255, 0), 0, null, 1);
                     for (Player online : plugin.getServer().getOnlinePlayers()) {
-                        online.playSound(online.getLocation(), "custom.darkrooms_whispers", SoundCategory.BLOCKS, 0.5F, 0.7F);
-                        online.playSound(online.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 1, 0.5F);
+                        online.playSound(online.getLocation(), "custom.darkrooms_whispers", SoundCategory.BLOCKS, 0.4F, 0.7F);
+                        online.playSound(online.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 0.6F, 0.5F);
                     }
 
                     getNewLocation(block.getLocation(), random, 500);

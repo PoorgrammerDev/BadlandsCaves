@@ -124,6 +124,7 @@ public class UseVoltshock implements Listener {
                 if (equipment.getHelmet().getType().equals(Material.IRON_HELMET)) output++;
                 else if (equipment.getHelmet().getType().equals(Material.GOLDEN_HELMET)) output++;
                 else if (equipment.getHelmet().getType().equals(Material.CHAINMAIL_HELMET)) output++;
+                else if (equipment.getHelmet().getType().equals(Material.DIAMOND_HELMET)) output++;
                 else if (equipment.getHelmet().getType().equals(Material.NETHERITE_HELMET)) output++;
             }
 
@@ -131,6 +132,7 @@ public class UseVoltshock implements Listener {
                 if (equipment.getChestplate().getType().equals(Material.IRON_CHESTPLATE)) output++;
                 else if (equipment.getChestplate().getType().equals(Material.GOLDEN_CHESTPLATE)) output++;
                 else if (equipment.getChestplate().getType().equals(Material.CHAINMAIL_CHESTPLATE)) output++;
+                else if (equipment.getChestplate().getType().equals(Material.DIAMOND_CHESTPLATE)) output++;
                 else if (equipment.getChestplate().getType().equals(Material.NETHERITE_CHESTPLATE)) output++;
             }
 
@@ -138,6 +140,7 @@ public class UseVoltshock implements Listener {
                 if (equipment.getLeggings().getType().equals(Material.IRON_LEGGINGS)) output++;
                 else if (equipment.getLeggings().getType().equals(Material.GOLDEN_LEGGINGS)) output++;
                 else if (equipment.getLeggings().getType().equals(Material.CHAINMAIL_LEGGINGS)) output++;
+                else if (equipment.getLeggings().getType().equals(Material.DIAMOND_LEGGINGS)) output++;
                 else if (equipment.getLeggings().getType().equals(Material.NETHERITE_LEGGINGS)) output++;
             }
 
@@ -145,6 +148,7 @@ public class UseVoltshock implements Listener {
                 if (equipment.getBoots().getType().equals(Material.IRON_BOOTS)) output++;
                 else if (equipment.getBoots().getType().equals(Material.GOLDEN_BOOTS)) output++;
                 else if (equipment.getBoots().getType().equals(Material.CHAINMAIL_BOOTS)) output++;
+                else if (equipment.getBoots().getType().equals(Material.DIAMOND_BOOTS)) output++;
                 else if (equipment.getBoots().getType().equals(Material.NETHERITE_BOOTS)) output++;
             }
         }

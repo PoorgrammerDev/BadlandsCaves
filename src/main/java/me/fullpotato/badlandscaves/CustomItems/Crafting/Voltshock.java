@@ -26,8 +26,11 @@ public class Voltshock extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
     private final String shock_lore = "§3Voltshock";
     private final Material[] swords = {
+            Material.WOODEN_SWORD,
+            Material.STONE_SWORD,
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
+            Material.DIAMOND_SWORD,
             Material.NETHERITE_SWORD,
     };
 
@@ -84,7 +87,7 @@ public class Voltshock extends MatchCrafting implements Listener {
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
         recipe.setIngredient('*', Material.REDSTONE);
         recipe.setIngredient('|', Material.COMMAND_BLOCK);
-        recipe.setIngredient('&', new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.NETHERITE_SWORD));
+        recipe.setIngredient('&', new RecipeChoice.MaterialChoice(swords));
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -93,7 +96,7 @@ public class Voltshock extends MatchCrafting implements Listener {
         final ItemStack voltshock_sword_charge_placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "charge_voltshock_sword"), voltshock_sword_charge_placeholder);
         recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
-        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.NETHERITE_SWORD));
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(swords));
 
         plugin.getServer().addRecipe(recipe);
 

@@ -13,7 +13,6 @@ import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,7 +52,7 @@ public class SpawnerTable implements LootTable {
     public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, LootContext context) {
         final double luck = context.getLuck();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-        final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 5);
+        final int count = Math.max(Math.min(random.nextInt((int) Math.floor(Math.pow((luck + 10.0) / 4.0, 1.79) + 3.0 + (chaos / 10.0))) + fortune, 50), 10);
         final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
 
@@ -63,14 +62,14 @@ public class SpawnerTable implements LootTable {
         ArrayList<ItemStack> specific = new ArrayList<>();
         if (hardmode) {
             //HARDMODE NONSPECIFIC-----------------------------------------------------------------------------
-            generic.add(new ItemStack(Material.IRON_BLOCK, 4));
-            generic.add(new ItemStack(Material.REDSTONE_BLOCK, 16));
-            generic.add(new ItemStack(Material.LAPIS_BLOCK, 8));
-            generic.add(new ItemStack(Material.GOLD_BLOCK, 4));
-            generic.add(new ItemStack(Material.DIAMOND_BLOCK, 2));
-            generic.add(new ItemStack(Material.EMERALD_BLOCK, 2));
-            generic.add(new ItemStack(Material.QUARTZ_BLOCK, 8));
-            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 16));
+            generic.add(new ItemStack(Material.IRON_BLOCK, 16));
+            generic.add(new ItemStack(Material.REDSTONE_BLOCK, 32));
+            generic.add(new ItemStack(Material.LAPIS_BLOCK, 32));
+            generic.add(new ItemStack(Material.GOLD_BLOCK, 16));
+            generic.add(new ItemStack(Material.DIAMOND_BLOCK, 4));
+            generic.add(new ItemStack(Material.EMERALD_BLOCK, 4));
+            generic.add(new ItemStack(Material.QUARTZ_BLOCK, 16));
+            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 8));
             generic.add(new ItemStack(Material.TOTEM_OF_UNDYING));
             generic.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
             generic.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
@@ -100,18 +99,22 @@ public class SpawnerTable implements LootTable {
         }
         else {
             //PREHARDMODE NONSPECIFIC--------------------------------------------------------------------------
-            generic.add(new ItemStack(Material.IRON_INGOT, 4));
-            generic.add(new ItemStack(Material.REDSTONE, 16));
-            generic.add(new ItemStack(Material.LAPIS_LAZULI, 8));
-            generic.add(new ItemStack(Material.GOLD_INGOT, 4));
-            generic.add(new ItemStack(Material.DIAMOND, 2));
-            generic.add(new ItemStack(Material.EMERALD, 2));
-            generic.add(new ItemStack(Material.QUARTZ, 8));
+            generic.add(new ItemStack(Material.IRON_INGOT, 16));
+            generic.add(new ItemStack(Material.REDSTONE, 32));
+            generic.add(new ItemStack(Material.LAPIS_LAZULI, 32));
+            generic.add(new ItemStack(Material.GOLD_INGOT, 16));
+            generic.add(new ItemStack(Material.DIAMOND, 4));
+            generic.add(new ItemStack(Material.EMERALD, 4));
+            generic.add(new ItemStack(Material.QUARTZ, 16));
             generic.add(new ItemStack(Material.NETHER_WART, 8));
-            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 4));
+            generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 8));
             generic.add(new ItemStack(Material.TOTEM_OF_UNDYING));
+            generic.add(new ItemStack(Material.ACACIA_SAPLING));
+            generic.add(new ItemStack(Material.BIRCH_SAPLING));
+            generic.add(new ItemStack(Material.SPRUCE_SAPLING));
+            generic.add(new ItemStack(Material.JUNGLE_SAPLING));
+            generic.add(new ItemStack(Material.DARK_OAK_SAPLING));
             generic.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-            generic.add(CustomItem.FISHING_CRATE.getItem());
             generic.add(CustomItem.RECALL_POTION.getItem());
 
             if (supernatural) {
@@ -120,11 +123,10 @@ public class SpawnerTable implements LootTable {
                 specific.addAll(matchSoul.values());
 
                 if (matchSoul.containsKey(spawnerType)) {
-                    ItemStack soul = matchSoul.get(spawnerType);
+                    final ItemStack soul = matchSoul.get(spawnerType);
                     soul.setAmount(16);
                     specific.add(soul);
                 }
-
             }
             else {
                 //PREHARDMODE PURESOUL---------------------------------------------------------------------------

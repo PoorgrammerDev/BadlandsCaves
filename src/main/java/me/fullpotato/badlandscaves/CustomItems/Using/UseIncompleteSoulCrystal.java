@@ -23,8 +23,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listener {
     private final BadlandsCaves plugin;
-    public UseIncompleteSoulCrystal (BadlandsCaves bcav) {
-        plugin = bcav;
+    private final InventorySerialize inventorySerialize;
+    private final World descension;
+    private final World reflection;
+    public UseIncompleteSoulCrystal (BadlandsCaves plugin) {
+        this.plugin = plugin;
+        inventorySerialize = new InventorySerialize(plugin);
+        descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
     @EventHandler
@@ -43,10 +49,10 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;
 
-        final World descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
-        final World reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) return;
+
+        if (!descension.getEntitiesByClass(Player.class).isEmpty()) return;
 
         //removes a use
         depleteUse(current, 2);
@@ -54,10 +60,8 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         //adds a death
         PlayerScore.DEATHS.setScore(plugin, player, (int) PlayerScore.DEATHS.getScore(plugin, player) + 1);
 
-
         //save inventory, then disenchant all items
-        InventorySerialize saveInv = new InventorySerialize(plugin);
-        saveInv.saveInventory(player, "reflection_inv");
+        inventorySerialize.saveInventory(player, "reflection_inv");
         disenchantInventory(player);
 
         Location worldspawn = reflection.getSpawnLocation();

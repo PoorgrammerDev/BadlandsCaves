@@ -36,7 +36,7 @@ public class FishingCrateTreasureTable implements LootTable {
     public @NotNull Collection<ItemStack> populateLoot(Random random, LootContext context) {
         final double luck = context.getLuck();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-        final int count = random.nextInt(Math.max(Math.min((int) (Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0 + (chaos / 25.0)), 10), 3));
+        final int count = random.nextInt(Math.max(Math.min((int) (Math.pow((luck + 10.0) / 7.0, 1.65) + 3.0 + (chaos / 25.0)), 10), 3)) + 1;
         final int tier_upgrade = plugin.getOptionsConfig().getInt("fishing_crate_tier_upgrade") + (int) (Math.pow(chaos / 35.0, 3.25));
         int tier;
         final TreasureGear treasureGear = new TreasureGear();
@@ -50,7 +50,7 @@ public class FishingCrateTreasureTable implements LootTable {
         //HARDMODE-------------------------------------
 
             tier1.add(new ItemStack(Material.IRON_BLOCK, randomCount(random, 1, 8)));
-            tier1.add(new ItemStack(Material.DIAMOND_BLOCK, randomCount(random, 1, 8)));
+            tier1.add(new ItemStack(Material.IRON_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.EMERALD_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.QUARTZ_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.EXPERIENCE_BOTTLE, randomCount(random, 1, 16)));
@@ -70,11 +70,6 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.PIG_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.SHEEP_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.GRASS_BLOCK, randomCount(random, 1, 4)));
-            tier2.add(new ItemStack(Material.ACACIA_SAPLING, randomCount(random, 1, 4)));
-            tier2.add(new ItemStack(Material.BIRCH_SAPLING, randomCount(random, 1, 4)));
-            tier2.add(new ItemStack(Material.SPRUCE_SAPLING, randomCount(random, 1, 4)));
-            tier2.add(new ItemStack(Material.JUNGLE_SAPLING, randomCount(random, 1, 4)));
-            tier2.add(new ItemStack(Material.DARK_OAK_SAPLING, randomCount(random, 1, 4)));
             if (heretic) {
                 tier2.add(CustomItem.MANA_POTION.getItem());
                 tier2.add(new ItemStack(Material.WITCH_SPAWN_EGG, randomCount(random, 1, 4)));
@@ -105,14 +100,14 @@ public class FishingCrateTreasureTable implements LootTable {
             tier1.add(new ItemStack(Material.NETHER_WART, randomCount(random, 1, 16)));
             tier1.add(new ItemStack(Material.GOLD_INGOT, randomCount(random, 1, 16)));
 
-            tier2.add(new ItemStack(Material.DIAMOND_HELMET));
-            tier2.add(new ItemStack(Material.DIAMOND_CHESTPLATE));
-            tier2.add(new ItemStack(Material.DIAMOND_LEGGINGS));
-            tier2.add(new ItemStack(Material.DIAMOND_BOOTS));
-            tier2.add(new ItemStack(Material.DIAMOND_SWORD));
-            tier2.add(new ItemStack(Material.DIAMOND_SHOVEL));
-            tier2.add(new ItemStack(Material.DIAMOND_PICKAXE));
-            tier2.add(new ItemStack(Material.DIAMOND_AXE));
+            tier2.add(new ItemStack(Material.IRON_HELMET));
+            tier2.add(new ItemStack(Material.IRON_CHESTPLATE));
+            tier2.add(new ItemStack(Material.IRON_LEGGINGS));
+            tier2.add(new ItemStack(Material.IRON_BOOTS));
+            tier2.add(new ItemStack(Material.IRON_SWORD));
+            tier2.add(new ItemStack(Material.IRON_SHOVEL));
+            tier2.add(new ItemStack(Material.IRON_PICKAXE));
+            tier2.add(new ItemStack(Material.IRON_AXE));
             tier2.add(new ItemStack(Material.DIAMOND, randomCount(random, 1, 8)));
             tier2.add(new ItemStack(Material.BLAZE_POWDER, randomCount(random, 1, 8)));
             tier2.add(CustomItem.PURIFIED_WATER.getItem());
@@ -122,14 +117,14 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(CustomItem.RECALL_POTION.getItem());
 
             tier3.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
-            tier3.add(getDiamondGear(Material.DIAMOND_HELMET, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_CHESTPLATE, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_LEGGINGS, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_BOOTS, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_SWORD, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_SHOVEL, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_PICKAXE, random));
-            tier3.add(getDiamondGear(Material.DIAMOND_AXE, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_HELMET, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_CHESTPLATE, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_LEGGINGS, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_BOOTS, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_SWORD, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_SHOVEL, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_PICKAXE, random));
+            tier3.add(getRandomlyEnchantedGear(Material.IRON_AXE, random));
 
             tier4.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 2)));
             tier4.add(new ItemStack(Material.TOTEM_OF_UNDYING));
@@ -175,34 +170,34 @@ public class FishingCrateTreasureTable implements LootTable {
         }
     }
 
-    private ItemStack getDiamondGear (Material material, Random random) {
+    private ItemStack getRandomlyEnchantedGear (Material material, Random random) {
         ItemStack output = new ItemStack(material);
         ItemMeta meta = output.getItemMeta();
         RandomlyEnchantedGear ench = new RandomlyEnchantedGear();
 
-        if (material.equals(Material.DIAMOND_HELMET) || material.equals(Material.DIAMOND_CHESTPLATE) || material.equals(Material.DIAMOND_LEGGINGS) || material.equals(Material.DIAMOND_BOOTS)) {
+        if (material.equals(Material.IRON_HELMET) || material.equals(Material.IRON_CHESTPLATE) || material.equals(Material.IRON_LEGGINGS) || material.equals(Material.IRON_BOOTS)) {
             ench.randomlyEnchant(meta, Enchantment.PROTECTION_ENVIRONMENTAL, random, 1);
-            if (material.equals(Material.DIAMOND_HELMET)) {
+            if (material.equals(Material.IRON_HELMET)) {
                 ench.randomlyEnchant(meta, Enchantment.WATER_WORKER, random, 0);
                 ench.randomlyEnchant(meta, Enchantment.OXYGEN, random, 0);
             }
-            else if (material.equals(Material.DIAMOND_CHESTPLATE)) {
+            else if (material.equals(Material.IRON_CHESTPLATE)) {
                 ench.randomlyEnchant(meta, Enchantment.THORNS, random, 0);
             }
-            else if (material.equals(Material.DIAMOND_BOOTS)) {
+            else if (material.equals(Material.IRON_BOOTS)) {
                 ench.randomlyEnchant(meta, Enchantment.DEPTH_STRIDER, random, 0);
                 ench.randomlyEnchant(meta, Enchantment.PROTECTION_FALL, random, 0);
             }
         }
 
-        else if (material.equals(Material.DIAMOND_SWORD)) {
+        else if (material.equals(Material.IRON_SWORD)) {
             ench.randomlyEnchant(meta, Enchantment.DAMAGE_ALL, random, 1);
             ench.randomlyEnchant(meta, Enchantment.FIRE_ASPECT, random, 0);
             ench.randomlyEnchant(meta, Enchantment.KNOCKBACK, random, 0);
             ench.randomlyEnchant(meta, Enchantment.LOOT_BONUS_MOBS, random, 0);
             ench.randomlyEnchant(meta, Enchantment.SWEEPING_EDGE, random, 0);
         }
-        else if (material.equals(Material.DIAMOND_SHOVEL) || material.equals(Material.DIAMOND_PICKAXE) || material.equals(Material.DIAMOND_AXE)) {
+        else if (material.equals(Material.IRON_SHOVEL) || material.equals(Material.IRON_PICKAXE) || material.equals(Material.IRON_AXE)) {
             ench.randomlyEnchant(meta, Enchantment.DIG_SPEED, random, 1);
             if (random.nextBoolean()) {
                 ench.randomlyEnchant(meta, Enchantment.LOOT_BONUS_BLOCKS, random, 0);

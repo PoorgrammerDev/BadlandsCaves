@@ -4,7 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 public enum CustomItem {
     STARTER_SAPLING(false),
-    STARTER_BONE_MEAL(false),
     TOXIC_WATER(false),
     PURIFIED_WATER(false),
     CANTEEN(false),

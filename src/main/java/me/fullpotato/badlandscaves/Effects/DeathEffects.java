@@ -151,31 +151,26 @@ public class DeathEffects {
 
         //1+ DEATHS-----------------------------------------------
         else if (deaths >= 1) {
-            if (supernatural) {
-                walk_speed = 1;
-                mine_speed = 1;
-            }
-            else {
-                walk_speed = 1;
-                mine_speed = 1;
+            walk_speed = 1;
+            mine_speed = 1;
+            if (!supernatural) {
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false));
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 0, true, false));
             }
         }
 
         //NO DEATHS-----------------------------------------------
         else if (deaths == 0) {
+            walk_speed = 2;
+            mine_speed = 1;
             if (supernatural) {
-                walk_speed = 2;
-                mine_speed = 1;
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 0, true, false));
             }
             else {
-                walk_speed = 2;
-                mine_speed = 1;
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
                 AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));
-                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 4, true, false));
+                AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 1, true, false));
             }
 
             health = 40;

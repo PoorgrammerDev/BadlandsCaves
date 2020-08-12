@@ -13,8 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,18 +50,8 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void give_starter_on_spawn (PlayerRespawnEvent event) {
-        boolean active = plugin.getOptionsConfig().getBoolean("give_new_starter_on_spawn");
-
-        if (!active) return;
-
-        Player player = event.getPlayer();
-        Inventory inventory = player.getInventory();
-
-        ItemStack starter_sapling = CustomItem.STARTER_SAPLING.getItem();
-        ItemStack starter_bone_meal = CustomItem.STARTER_BONE_MEAL.getItem();
-
-        inventory.addItem(starter_sapling);
-        inventory.addItem(starter_bone_meal);
+        if (plugin.getOptionsConfig().getBoolean("give_new_starter_on_spawn"))
+            event.getPlayer().getInventory().addItem(CustomItem.STARTER_SAPLING.getItem());
     }
 
     @EventHandler
