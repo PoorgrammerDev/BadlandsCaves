@@ -20,7 +20,9 @@ public class EnhancedEyes_1_16_R1 implements EnhancedEyesNMS {
         World world = ((CraftWorld)(location.getWorld())).getHandle();
         EntityShulker shulker = new EntityShulker(EntityTypes.SHULKER, world);
         CraftPlayer ply = (CraftPlayer) player;
-        shulker.setPosition(location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5);
+        shulker.setPositionRotation(new BlockPosition(location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5), 0, 0);
+        // FIXME: 8/12/2020 shulkers are slightly rotated
+
         shulker.setFlag(6, true); //glowing
         shulker.setInvisible(true);
         shulker.setInvulnerable(true);

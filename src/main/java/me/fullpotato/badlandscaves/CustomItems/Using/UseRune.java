@@ -102,24 +102,24 @@ public class UseRune implements Listener {
                     int souls_level = Integer.parseInt(current.getItemMeta().getLore().get(2).substring(2).split(" ")[0]);
                     int magic_essence_level = Integer.parseInt(current.getItemMeta().getLore().get(3).substring(2).split(" ")[0]);
 
-                    if (souls_level < 8 || magic_essence_level < 8) {
+                    if (souls_level < 1 || magic_essence_level < 9) {
                         ItemStack offering = inventory.getItem(2);
                         if (offering != null) {
-                            if (magic_essence_level < 8 && offering.isSimilar(magic_essence)) {
-                                magic_essence_level++;
+                            if (souls_level < 1 && offering.isSimilar(merged_souls)) {
+                                souls_level++;
                                 ItemMeta current_meta = current.getItemMeta();
                                 List<String> current_lore = current_meta.getLore();
-                                current_lore.set(3, "§7" + magic_essence_level + " / 8 §9Essences of Magic");
+                                current_lore.set(2, "§7" + souls_level + " / 1 §dMerged Souls");
                                 current_meta.setLore(current_lore);
                                 current.setItemMeta(current_meta);
                                 offering.setAmount(offering.getAmount() - 1);
                                 player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, SoundCategory.PLAYERS, 0.5F, 1);
                             }
-                            else if (souls_level < 8 && offering.isSimilar(merged_souls)) {
-                                souls_level++;
+                            else if (magic_essence_level < 9 && offering.isSimilar(magic_essence)) {
+                                magic_essence_level++;
                                 ItemMeta current_meta = current.getItemMeta();
                                 List<String> current_lore = current_meta.getLore();
-                                current_lore.set(2, "§7" + souls_level + " / 8 §dMerged Souls");
+                                current_lore.set(3, "§7" + magic_essence_level + " / 9 §9Essences of Magic");
                                 current_meta.setLore(current_lore);
                                 current.setItemMeta(current_meta);
                                 offering.setAmount(offering.getAmount() - 1);

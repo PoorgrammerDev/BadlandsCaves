@@ -24,19 +24,17 @@ public class PreservationTotem implements Listener {
 
     @EventHandler
     public void playerDie(PlayerDeathEvent event) {
-        final ItemStack totem = CustomItem.TOTEM_OF_PRESERVATION.getItem();
         final Player player = event.getEntity();
 
-        final int slot = player.getInventory().first(totem);
-        if (slot != -1) {
-            final ItemStack item = player.getInventory().getItem(slot);
-            if (item != null) {
-                item.setAmount(item.getAmount() - 1);
+        for (ItemStack item : player.getInventory()) {
+            if (item != null && item.isSimilar(CustomItem.TOTEM_OF_PRESERVATION.getItem())) {
                 event.setKeepInventory(true);
                 event.getDrops().clear();
                 event.setDroppedExp(0);
                 event.setKeepLevel(true);
+                item.setAmount(item.getAmount() - 1);
                 PlayerScore.USED_PRESERVE_TOTEM.setScore(plugin, player, (byte) 1);
+                return;
             }
         }
     }

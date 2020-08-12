@@ -63,8 +63,7 @@ public class GuideBook {
                 "§cHallowed Chambers§0",
         };
         final String[] pages_page_1 = {
-                "4",
-                "6",
+                "5",
                 "7",
                 "8",
                 "9",
@@ -72,16 +71,17 @@ public class GuideBook {
                 "11",
                 "12",
                 "13",
-                "16",
-                "21",
+                "14",
+                "17",
                 "22",
                 "23",
+                "24",
         };
         meta.spigot().addPage(getTOCEntries(entries_page_1, pages_page_1, false));
 
 
         final String[] entries_page_2 = {"§4Hardmode§0", "§9Augmented Mobs"};
-        final String[] pages_page_2 = {"26", "28"};
+        final String[] pages_page_2 = {"27", "29"};
         meta.spigot().addPage(getTOCEntries(entries_page_2, pages_page_2, true));
 
         meta.addPage("§lIntroduction§0\n" + "§0You awaken in a mysterious underground cave that seems to never stop. There are no signs of life around you, and all you have are tools to make a tree.");

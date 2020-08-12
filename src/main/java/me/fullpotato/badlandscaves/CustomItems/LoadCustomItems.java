@@ -491,8 +491,8 @@ public class LoadCustomItems {
 
             rune_lore.add("§9§lRight Click§r§7 to use.");
             rune_lore.add("§7Used to upgrade Supernatural Abilities.");
-            rune_lore.add("§70 / 8 §dMerged Souls");
-            rune_lore.add("§70 / 8 §9Essences of Magic");
+            rune_lore.add("§70 / 1 §dMerged Souls");
+            rune_lore.add("§70 / 9 §9Essences of Magic");
 
             rune_meta.setLore(rune_lore);
 
