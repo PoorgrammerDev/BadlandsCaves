@@ -6,7 +6,7 @@
 
     <groupId>me.FullPotato.BadlandsCaves</groupId>
     <artifactId>BadlandsCaves</artifactId>
-    <version>BETA 1.0.3</version>
+    <version>BETA 1.1.0</version>
     <packaging>jar</packaging>
 
     <name>BadlandsCaves</name>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>1.16.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
