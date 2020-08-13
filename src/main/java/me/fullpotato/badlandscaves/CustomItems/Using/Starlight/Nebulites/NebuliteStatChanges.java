@@ -5,7 +5,7 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import me.fullpotato.badlandscaves.CustomItems.LoadCustomItems;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -240,8 +240,8 @@ public class NebuliteStatChanges {
         final ItemMeta meta = item.getItemMeta();
         meta.removeAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED);
         if (speedMod != 0) {
-            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(LoadCustomItems.uuids[16]), "Shield Speed Modifier", speedMod, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
-            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(LoadCustomItems.uuids[17]), "Shield Speed Modifier", speedMod, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(CustomItemManager.uuids[16]), "Shield Speed Modifier", speedMod, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.OFF_HAND));
+            meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.fromString(CustomItemManager.uuids[17]), "Shield Speed Modifier", speedMod, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HAND));
         }
         item.setItemMeta(meta);
     }

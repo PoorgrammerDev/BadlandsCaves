@@ -10,6 +10,7 @@ import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.*;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
@@ -89,8 +90,13 @@ public final class BadlandsCaves extends JavaPlugin {
     private PossessionNMS possessionNMS;
     private EclipsedShadowsNMS eclipsedShadowsNMS;
 
+    //CUSTOM ITEMS
+    private CustomItemManager customItemManager;
+
     @Override
     public void onEnable() {
+        customItemManager = new CustomItemManager(this);
+
         loadNMS();
         createOptionsConfig();
         createSystemConfig();
@@ -606,5 +612,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
     public EclipsedShadowsNMS getEclipsedShadowsNMS() {
         return eclipsedShadowsNMS;
+    }
+
+    public CustomItemManager getCustomItemManager() {
+        return customItemManager;
     }
 }
