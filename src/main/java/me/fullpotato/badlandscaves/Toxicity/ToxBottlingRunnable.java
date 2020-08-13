@@ -10,9 +10,11 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ToxBottlingRunnable extends BukkitRunnable {
+    private final BadlandsCaves plugin;
     private final Player player;
 
-    public ToxBottlingRunnable(Player ply){
+    public ToxBottlingRunnable(BadlandsCaves plugin, Player ply){
+        this.plugin = plugin;
         player = ply;
     }
 
@@ -25,7 +27,7 @@ public class ToxBottlingRunnable extends BukkitRunnable {
                 if (item.getType().equals(Material.POTION)) {
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
                     if (potionMeta.getBasePotionData().getType().equals(PotionType.WATER)) {
-                        ItemStack toxic_water = CustomItem.TOXIC_WATER.getItem();
+                        ItemStack toxic_water = plugin.getCustomItemManager().getItem(CustomItem.TOXIC_WATER);
                         player.getInventory().setItem(a, toxic_water);
                     }
                 }

@@ -20,7 +20,7 @@ public class WithdrawIndicatorRunnable extends BukkitRunnable {
         plugin.getServer().getOnlinePlayers().forEach(player -> {
             final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (has_powers) {
-                if (player.getInventory().getItemInOffHand().isSimilar(CustomItem.WITHDRAW.getItem())) {
+                if (player.getInventory().getItemInOffHand().isSimilar(plugin.getCustomItemManager().getItem(CustomItem.WITHDRAW))) {
                     if (!player.getWorld().equals(empty) && ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0)) {
                         Location location = player.getEyeLocation();
                         if (location.getBlockY() < location.getWorld().getMaxHeight()) {

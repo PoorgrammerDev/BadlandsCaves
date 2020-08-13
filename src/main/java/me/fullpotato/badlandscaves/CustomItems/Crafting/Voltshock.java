@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ import java.util.List;
 
 public class Voltshock extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final String shock_lore = "§3Voltshock";
     private final Material[] swords = {
             Material.WOODEN_SWORD,
@@ -36,10 +38,11 @@ public class Voltshock extends MatchCrafting implements Listener {
 
     public Voltshock(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void craft_battery() {
-        final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
+        final ItemStack battery = customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "battery"), battery);
         /*
          *  %
@@ -57,7 +60,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     }
 
     public void craft_shocker() {
-        final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
+        final ItemStack shocker = customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER);
         shocker.setAmount(3);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "shocker"), shocker);
         /*
@@ -74,7 +77,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     }
 
     public void modify_sword() {
-        final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
+        final ItemStack placeholder = customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_sword"), placeholder);
 
         /*
@@ -93,7 +96,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     }
 
     public void charge_sword() {
-        final ItemStack voltshock_sword_charge_placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
+        final ItemStack voltshock_sword_charge_placeholder = customItemManager.getItem(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER);
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "charge_voltshock_sword"), voltshock_sword_charge_placeholder);
         recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
         recipe.addIngredient(new RecipeChoice.MaterialChoice(swords));
@@ -103,7 +106,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     }
 
     public void craft_arrow() {
-        final ItemStack voltshock_arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
+        final ItemStack voltshock_arrow = customItemManager.getItem(CustomItem.VOLTSHOCK_ARROW);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_arrow"), voltshock_arrow);
 
         /*
@@ -126,8 +129,8 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void batteryAndShock (PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
-            final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
+            final ItemStack battery = customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY);
+            final ItemStack shocker = customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER);
             if (result.isSimilar(battery) || result.isSimilar(shocker)) {
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) == 1) {
                     event.getInventory().setResult(null);
@@ -141,12 +144,12 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void applyToSword(PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack placeholder = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
+            final ItemStack placeholder = customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER);
             if (result.isSimilar(placeholder)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 if (matrix != null && matrix.length == 9) {
-                    final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
-                    final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
+                    final ItemStack battery = customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY);
+                    final ItemStack shocker = customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER);
 
                     if (battery != null && shocker != null) {
                         if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2, 5)) {
@@ -189,7 +192,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void chargeSword(PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack placeholder = CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem();
+            final ItemStack placeholder = customItemManager.getItem(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER);
             if (result.isSimilar(placeholder)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 ItemStack sword = null;
@@ -240,11 +243,11 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void craftArrow (PrepareItemCraftEvent event) {
         if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
             final ItemStack result = event.getRecipe().getResult();
-            final ItemStack arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
+            final ItemStack arrow = customItemManager.getItem(CustomItem.VOLTSHOCK_ARROW);
             if (result.isSimilar(arrow)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
-                final ItemStack battery = CustomItem.VOLTSHOCK_BATTERY.getItem();
-                final ItemStack shocker = CustomItem.VOLTSHOCK_SHOCKER.getItem();
+                final ItemStack battery = customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY);
+                final ItemStack shocker = customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER);
 
                 if (!isMatching(matrix, shocker, 2) || !isMatching(matrix, battery, 6)) {
                     event.getInventory().setResult(null);

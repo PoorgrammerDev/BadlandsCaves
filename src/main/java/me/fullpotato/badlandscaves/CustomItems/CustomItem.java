@@ -1,7 +1,5 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
-import org.bukkit.inventory.ItemStack;
-
 public enum CustomItem {
     STARTER_SAPLING(false),
     TOXIC_WATER(false),
@@ -164,14 +162,8 @@ public enum CustomItem {
     ECLIPSED_SHADOWS(false);
 
     private final boolean preventUse;
-
     CustomItem(boolean preventUse) {
         this.preventUse = preventUse;
-    }
-
-    public ItemStack getItem() {
-        LoadCustomItems customItemManager = new LoadCustomItems();
-        return customItemManager.getItem(this);
     }
 
     public boolean getPreventUse() {

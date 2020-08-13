@@ -22,7 +22,7 @@ public class StarterSapling implements Listener {
     @EventHandler
     public void useSapling (BlockPlaceEvent event) {
         final ItemStack item = event.getItemInHand();
-        if (item.isSimilar(sapling.getItem())) {
+        if (item.isSimilar(plugin.getCustomItemManager().getItem(sapling))) {
             event.setCancelled(true);
             final Location location = event.getBlockPlaced().getLocation();
             final World world = location.getWorld();

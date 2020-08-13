@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -12,13 +13,15 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class Silencer extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public Silencer(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void wavelengthDisruptorRecipe () {
-        final ItemStack disruptor = CustomItem.WAVELENGTH_DISRUPTOR.getItem();
+        final ItemStack disruptor = customItemManager.getItem(CustomItem.WAVELENGTH_DISRUPTOR);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "wavelength_disruptor"), disruptor);
         recipe.shape("#*#", "#@#", "#*#");
@@ -30,7 +33,7 @@ public class Silencer extends MatchCrafting implements Listener {
     }
 
     public void silencerRecipe () {
-        final ItemStack silencer = CustomItem.SILENCER.getItem();
+        final ItemStack silencer = customItemManager.getItem(CustomItem.SILENCER);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "silencer"), silencer);
         recipe.shape("#@#", "#%#", "###");
@@ -47,13 +50,13 @@ public class Silencer extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack disruptor = CustomItem.WAVELENGTH_DISRUPTOR.getItem();
+        final ItemStack disruptor = customItemManager.getItem(CustomItem.WAVELENGTH_DISRUPTOR);
         if (!result.isSimilar(disruptor)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack witch_soul = CustomItem.WITCH_SOUL.getItem();
-        final ItemStack voidmatter = CustomItem.VOIDMATTER.getItem();
-        final ItemStack photon_emitter = CustomItem.PHOTON_EMITTER.getItem();
+        final ItemStack witch_soul = customItemManager.getItem(CustomItem.WITCH_SOUL);
+        final ItemStack voidmatter = customItemManager.getItem(CustomItem.VOIDMATTER);
+        final ItemStack photon_emitter = customItemManager.getItem(CustomItem.PHOTON_EMITTER);
 
         if (!isMatching(matrix, photon_emitter, 4) ||
                 !isMatching(matrix, witch_soul, 0, 2, 3, 5, 6, 8) ||
@@ -67,13 +70,13 @@ public class Silencer extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack silencer = CustomItem.SILENCER.getItem();
+        final ItemStack silencer = customItemManager.getItem(CustomItem.SILENCER);
         if (!result.isSimilar(silencer)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium = CustomItem.TITANIUM_INGOT.getItem();
-        final ItemStack battery = CustomItem.STARLIGHT_BATTERY.getItem();
-        final ItemStack wavelength_disruptor = CustomItem.WAVELENGTH_DISRUPTOR.getItem();
+        final ItemStack titanium = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
+        final ItemStack battery = customItemManager.getItem(CustomItem.STARLIGHT_BATTERY);
+        final ItemStack wavelength_disruptor = customItemManager.getItem(CustomItem.WAVELENGTH_DISRUPTOR);
 
         if (!isMatching(matrix, wavelength_disruptor, 1) ||
                 !isMatching(matrix, titanium) ||

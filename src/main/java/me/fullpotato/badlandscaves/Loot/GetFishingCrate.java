@@ -2,7 +2,6 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
@@ -47,7 +46,7 @@ public class GetFishingCrate implements Listener {
 
                 if (chance > 0 && random.nextInt(100) < chance) {
                     final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
-                    final ItemStack crate = hardmode ? CustomItem.FISHING_CRATE_HARDMODE.getItem() : CustomItem.FISHING_CRATE.getItem();
+                    final ItemStack crate = hardmode ? plugin.getCustomItemManager().getItem(CustomItem.FISHING_CRATE_HARDMODE) : plugin.getCustomItemManager().getItem(CustomItem.FISHING_CRATE);
                     item.setItemStack(crate);
                 }
             }

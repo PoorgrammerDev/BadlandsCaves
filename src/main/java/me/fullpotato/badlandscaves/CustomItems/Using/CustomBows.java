@@ -21,9 +21,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CustomBows implements Listener {
     private final BadlandsCaves plugin;
-
+    final ItemStack corrosiveArrow;
+    final ItemStack voltshockArrow;
     public CustomBows(BadlandsCaves plugin) {
         this.plugin = plugin;
+        corrosiveArrow = plugin.getCustomItemManager().getItem(CustomItem.CORROSIVE_ARROW);
+        voltshockArrow = plugin.getCustomItemManager().getItem(CustomItem.VOLTSHOCK_ARROW);
     }
 
     @EventHandler
@@ -41,16 +44,15 @@ public class CustomBows implements Listener {
                 boolean inOffHand = inventory.getItemInOffHand().getType().equals(Material.ARROW);
                 if (reg_slot != -1 || inOffHand) {
                     ItemStack arrowItem = inOffHand ? inventory.getItemInOffHand() : inventory.getItem(reg_slot);
-                    final ItemStack corrosive_arrow = CustomItem.CORROSIVE_ARROW.getItem();
-                    final ItemStack voltshock_arrow = CustomItem.VOLTSHOCK_ARROW.getItem();
 
-                    if (arrowItem != null && (arrowItem.isSimilar(corrosive_arrow) || arrowItem.isSimilar(voltshock_arrow))) {
+
+                    if (arrowItem != null && (arrowItem.isSimilar(corrosiveArrow) || arrowItem.isSimilar(voltshockArrow))) {
                         boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
                         if (!supernatural) {
-                            if (arrowItem.isSimilar(corrosive_arrow)) {
+                            if (arrowItem.isSimilar(corrosiveArrow)) {
                                 makeCorrosive(arrow, event.getForce() >= 1);
                             }
-                            else if (arrowItem.isSimilar(voltshock_arrow)) {
+                            else if (arrowItem.isSimilar(voltshockArrow)) {
                                 makeVoltshock(arrow, event.getForce() >= 1);
                             }
                         }
@@ -68,10 +70,10 @@ public class CustomBows implements Listener {
     public void pickupItem (PlayerPickupArrowEvent event) {
         AbstractArrow arrow = event.getArrow();
         if (arrow.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE) && arrow.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_arrow"), PersistentDataType.BYTE) == (byte) 1) {
-            event.getItem().setItemStack(CustomItem.CORROSIVE_ARROW.getItem());
+            event.getItem().setItemStack(corrosiveArrow);
         }
         else if (arrow.getPersistentDataContainer().has(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE) && arrow.getPersistentDataContainer().get(new NamespacedKey(plugin, "voltshock_arrow"), PersistentDataType.BYTE) == (byte) 1) {
-            event.getItem().setItemStack(CustomItem.VOLTSHOCK_ARROW.getItem());
+            event.getItem().setItemStack(voltshockArrow);
         }
     }
 

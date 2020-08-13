@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -11,13 +12,13 @@ import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
 public class DimensionStructureTable implements LootTable {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final NamespacedKey key;
     private final DimensionsWorlds.Habitation habitation;
 
@@ -25,6 +26,7 @@ public class DimensionStructureTable implements LootTable {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "dimension_structure_table");
         this.habitation = habitation;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     @Override
@@ -59,34 +61,34 @@ public class DimensionStructureTable implements LootTable {
         items.add(new ItemStack(Material.LEAD, randomCount(random, 1, 2)));
 
         items.add(new ItemStack(Material.TOTEM_OF_UNDYING));
-        items.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-        items.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
-        items.add(CustomItem.RECALL_POTION.getItem());
-        items.add(CustomItem.MANA_POTION.getItem());
-        items.add(CustomItem.ANTIDOTE.getItem());
-        items.add(CustomItem.PURIFIED_WATER.getItem());
-        items.add(CustomItem.DIMENSIONAL_ANCHOR.getItem());
-        items.add(CustomItem.MERGED_SOULS.getItem());
-        items.add(CustomItem.ENERGIUM.getItem());
-        items.add(CustomItem.VOIDMATTER.getItem());
+        items.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
+        items.add(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE));
+        items.add(customItemManager.getItem(CustomItem.RECALL_POTION));
+        items.add(customItemManager.getItem(CustomItem.MANA_POTION));
+        items.add(customItemManager.getItem(CustomItem.ANTIDOTE));
+        items.add(customItemManager.getItem(CustomItem.PURIFIED_WATER));
+        items.add(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR));
+        items.add(customItemManager.getItem(CustomItem.MERGED_SOULS));
+        items.add(customItemManager.getItem(CustomItem.ENERGIUM));
+        items.add(customItemManager.getItem(CustomItem.VOIDMATTER));
 
-        ItemStack taintedPowder = CustomItem.TAINTED_POWDER.getItem();
+        ItemStack taintedPowder = customItemManager.getItem(CustomItem.TAINTED_POWDER);
         taintedPowder.setAmount(randomCount(random, 1, 8));
         items.add(taintedPowder);
 
-        ItemStack titaniumFragment = CustomItem.TITANIUM_FRAGMENT.getItem();
+        ItemStack titaniumFragment = customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT);
         titaniumFragment.setAmount(randomCount(random, 1, 4));
         items.add(titaniumFragment);
 
-        ItemStack blessedApple = CustomItem.BLESSED_APPLE.getItem();
+        ItemStack blessedApple = customItemManager.getItem(CustomItem.BLESSED_APPLE);
         blessedApple.setAmount(randomCount(random, 1, 4));
         items.add(blessedApple);
 
-        ItemStack enchantedBlessedApple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
+        ItemStack enchantedBlessedApple = customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE);
         enchantedBlessedApple.setAmount(randomCount(random, 1, 2));
         items.add(enchantedBlessedApple);
 
-        items.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
+        items.add(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER));
 
         TreasureGear treasureGear = new TreasureGear();
         Collection<ItemStack> output = new ArrayList<>();
@@ -97,7 +99,7 @@ public class DimensionStructureTable implements LootTable {
             if (failed > 100) break;
             ItemStack item = habitation.equals(DimensionsWorlds.Habitation.INHABITED) || random.nextBoolean() ? items.get(random.nextInt(items.size())) : trash.get(random.nextInt(trash.size()));
 
-            if (item.isSimilar(CustomItem.TREASURE_GEAR_VOUCHER.getItem())) {
+            if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
                 output.add(treasureGear.getTreasureGear(true, random));
             }
             else {

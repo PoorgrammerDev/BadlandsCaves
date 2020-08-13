@@ -31,7 +31,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         if (event.getItem() == null) return;
 
         final ItemStack current = event.getItem();
-        final ItemStack soul_crystal = CustomItem.SOUL_CRYSTAL.getItem();
+        final ItemStack soul_crystal = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL);
         if (!checkMatchIgnoreUses(current, soul_crystal, 2)) return;
 
         final Player player = event.getPlayer();

@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,13 +21,15 @@ import java.util.ArrayList;
 
 public class StarlightArmor extends MatchCrafting implements Listener {
     protected final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public StarlightArmor(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void helmetRecipe() {
-        final ItemStack item = CustomItem.STARLIGHT_HELMET.getItem();
+        final ItemStack item = customItemManager.getItem(CustomItem.STARLIGHT_HELMET);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_helmet"), item);
         recipe.shape("#@#", "# #");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -36,7 +39,7 @@ public class StarlightArmor extends MatchCrafting implements Listener {
     }
 
     public void chestplateRecipe() {
-        final ItemStack item = CustomItem.STARLIGHT_CHESTPLATE.getItem();
+        final ItemStack item = customItemManager.getItem(CustomItem.STARLIGHT_CHESTPLATE);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_chestplate"), item);
         recipe.shape("# #", "#@#", "###");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -46,7 +49,7 @@ public class StarlightArmor extends MatchCrafting implements Listener {
     }
 
     public void leggingsRecipe() {
-        final ItemStack item = CustomItem.STARLIGHT_LEGGINGS.getItem();
+        final ItemStack item = customItemManager.getItem(CustomItem.STARLIGHT_LEGGINGS);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_leggings"), item);
         recipe.shape("#@#", "# #", "# #");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -56,7 +59,7 @@ public class StarlightArmor extends MatchCrafting implements Listener {
     }
 
     public void bootsRecipe() {
-        final ItemStack item = CustomItem.STARLIGHT_BOOTS.getItem();
+        final ItemStack item = customItemManager.getItem(CustomItem.STARLIGHT_BOOTS);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_boots"), item);
         recipe.shape("# #", "#@#");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -70,10 +73,10 @@ public class StarlightArmor extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_helmet = CustomItem.STARLIGHT_HELMET.getItem();
-        final ItemStack starlight_chestplate = CustomItem.STARLIGHT_CHESTPLATE.getItem();
-        final ItemStack starlight_leggings = CustomItem.STARLIGHT_LEGGINGS.getItem();
-        final ItemStack starlight_boots = CustomItem.STARLIGHT_BOOTS.getItem();
+        final ItemStack starlight_helmet = customItemManager.getItem(CustomItem.STARLIGHT_HELMET);
+        final ItemStack starlight_chestplate = customItemManager.getItem(CustomItem.STARLIGHT_CHESTPLATE);
+        final ItemStack starlight_leggings = customItemManager.getItem(CustomItem.STARLIGHT_LEGGINGS);
+        final ItemStack starlight_boots = customItemManager.getItem(CustomItem.STARLIGHT_BOOTS);
 
         if (!result.isSimilar(starlight_helmet) &&
                 !result.isSimilar(starlight_chestplate) &&
@@ -89,8 +92,8 @@ public class StarlightArmor extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.REINFORCED_TITANIUM.getItem();
-        final ItemStack module = CustomItem.STARLIGHT_MODULE.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
+        final ItemStack module = customItemManager.getItem(CustomItem.STARLIGHT_MODULE);
         if (!isMatching(matrix, titanium_ingot) || !isMatching(matrix, module)) {
             event.getInventory().setResult(null);
         }
@@ -98,10 +101,10 @@ public class StarlightArmor extends MatchCrafting implements Listener {
 
     public boolean isStarlightArmor(ItemStack item) {
         ArrayList<Material> armorTypes = new ArrayList<>();
-        armorTypes.add(CustomItem.STARLIGHT_HELMET.getItem().getType());
-        armorTypes.add(CustomItem.STARLIGHT_CHESTPLATE.getItem().getType());
-        armorTypes.add(CustomItem.STARLIGHT_LEGGINGS.getItem().getType());
-        armorTypes.add(CustomItem.STARLIGHT_BOOTS.getItem().getType());
+        armorTypes.add(customItemManager.getItem(CustomItem.STARLIGHT_HELMET).getType());
+        armorTypes.add(customItemManager.getItem(CustomItem.STARLIGHT_CHESTPLATE).getType());
+        armorTypes.add(customItemManager.getItem(CustomItem.STARLIGHT_LEGGINGS).getType());
+        armorTypes.add(customItemManager.getItem(CustomItem.STARLIGHT_BOOTS).getType());
 
         if (armorTypes.contains(item.getType())) {
             ItemMeta meta = item.getItemMeta();

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,6 +23,9 @@ import java.util.List;
 
 public class Canteen extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
+    final ItemStack canteen;
+    final ItemStack placeholder;
     private final HashMap<CustomItem, String> liquidTypes = new HashMap<>();
 
     public Canteen(BadlandsCaves plugin) {
@@ -31,10 +35,12 @@ public class Canteen extends MatchCrafting implements Listener {
         liquidTypes.put(CustomItem.PURIFIED_WATER, ChatColor.DARK_AQUA + "Purified Water");
         liquidTypes.put(CustomItem.ANTIDOTE, ChatColor.LIGHT_PURPLE + "Antidote");
         liquidTypes.put(CustomItem.MANA_POTION, ChatColor.BLUE + "Mana Potion");
+        customItemManager = plugin.getCustomItemManager();
+        canteen = customItemManager.getItem(CustomItem.CANTEEN);
+        placeholder = customItemManager.getItem(CustomItem.CANTEEN_FILL_PLACEHOLDER);
     }
 
     public void canteenRecipe() {
-        final ItemStack canteen = CustomItem.CANTEEN.getItem();
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "canteen"), canteen);
         recipe.shape(" @ ", "# #", "@#@");
         recipe.setIngredient('@', Material.IRON_NUGGET);
@@ -44,7 +50,6 @@ public class Canteen extends MatchCrafting implements Listener {
     }
 
     public void fillCanteen() {
-        final ItemStack placeholder = CustomItem.CANTEEN_FILL_PLACEHOLDER.getItem();
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "canteen_fill"), placeholder);
 
         recipe.addIngredient(Material.POTION);
@@ -58,7 +63,6 @@ public class Canteen extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack placeholder = CustomItem.CANTEEN_FILL_PLACEHOLDER.getItem();
         if (!result.isSimilar(placeholder)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
@@ -81,7 +85,7 @@ public class Canteen extends MatchCrafting implements Listener {
             if (getAmount(canteenItem) < limit) {
                 final ItemStack canteenResult = canteenItem.clone();
                 for (CustomItem type : liquidTypes.keySet()) {
-                    if (type.getItem().isSimilar(otherPotion)) {
+                    if (customItemManager.getItem(type).isSimilar(otherPotion)) {
                         String canteenType = getType(canteenResult);
                         if (canteenType != null && (canteenType.equals("EMPTY") || canteenType.equals(type.name()))) {
                             setType(canteenResult, type);
@@ -100,7 +104,7 @@ public class Canteen extends MatchCrafting implements Listener {
     @EventHandler
     public void returnGlassBottle (CraftItemEvent event) {
         final ItemStack result = event.getRecipe().getResult();
-        if (!result.isSimilar(CustomItem.CANTEEN_FILL_PLACEHOLDER.getItem())) return;
+        if (!result.isSimilar(placeholder)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         int slot = -1;
@@ -137,7 +141,7 @@ public class Canteen extends MatchCrafting implements Listener {
 
     public boolean isCanteen (ItemStack item) {
         if (item != null) {
-            if (item.getType().equals(CustomItem.CANTEEN.getItem().getType())) {
+            if (item.getType().equals(canteen.getType())) {
                 if (item.hasItemMeta()) {
                     ItemMeta meta = item.getItemMeta();
                     if (meta != null) {

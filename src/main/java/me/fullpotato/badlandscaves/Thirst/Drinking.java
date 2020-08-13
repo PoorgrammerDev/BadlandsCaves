@@ -45,16 +45,16 @@ public class Drinking implements Listener {
             //either purified or antidote
             else if (potionMeta.getBasePotionData().getType().equals(PotionType.UNCRAFTABLE)) {
                 //testing if purified
-                if (item.isSimilar(CustomItem.PURIFIED_WATER.getItem())) {
+                if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.PURIFIED_WATER))) {
                     drinkPurifiedWater(player);
                 }
-                else if (item.isSimilar(CustomItem.ANTIDOTE.getItem())) {
+                else if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.ANTIDOTE))) {
                     drinkAntidote(player);
                 }
-                else if (item.isSimilar(CustomItem.MANA_POTION.getItem())) {
+                else if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.MANA_POTION))) {
                     drinkManaPotion(player);
                 }
-                else if (item.isSimilar(CustomItem.RECALL_POTION.getItem())) {
+                else if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.RECALL_POTION))) {
                     drinkRecall(player, event);
                 }
             }

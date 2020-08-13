@@ -1,14 +1,13 @@
 package me.fullpotato.badlandscaves.Thirst;
 
-import me.fullpotato.badlandscaves.Toxicity.ToxBottlingRunnable;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Toxicity.ToxBottlingRunnable;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.scheduler.BukkitTask;
 
 public class ToxicWaterBottling implements Listener {
     private final BadlandsCaves plugin;
@@ -23,7 +22,7 @@ public class ToxicWaterBottling implements Listener {
                 if (event.getHand().equals(EquipmentSlot.HAND)) {
                     if (event.getItem() != null) {
                         if (event.getItem().getType().equals(Material.GLASS_BOTTLE)) {
-                            new ToxBottlingRunnable(event.getPlayer()).runTaskLaterAsynchronously(plugin, 1);
+                            new ToxBottlingRunnable(plugin, event.getPlayer()).runTaskLaterAsynchronously(plugin, 1);
                         }
                     }
                 }

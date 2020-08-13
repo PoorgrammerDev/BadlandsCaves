@@ -10,6 +10,7 @@ import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.*;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.*;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
@@ -89,10 +90,14 @@ public final class BadlandsCaves extends JavaPlugin {
     private PossessionNMS possessionNMS;
     private EclipsedShadowsNMS eclipsedShadowsNMS;
 
+    //CUSTOM ITEMS
+    private CustomItemManager customItemManager;
+
     @Override
     public void onEnable() {
         loadNMS();
         createOptionsConfig();
+        customItemManager = new CustomItemManager(this);
         createSystemConfig();
         loadWorldNames();
         loadCustomWorlds();
@@ -194,7 +199,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ToxicWaterBottling(this),
                 new BlazePowder(this),
                 new PurgeEssence(this),
-                new StopCustomItemsInteract(),
+                new StopCustomItemsInteract(this.getCustomItemManager()),
                 new UseTaintPowder(this),
                 new ZombieDeathLoot(),
                 new GetFishingCrate(this),
@@ -254,7 +259,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new TitaniumOre(this),
                 new TitaniumBar(this),
                 new StarlightComponents(this),
-                new UseForeverFish(),
+                new UseForeverFish(this),
                 new StarlightArmor(this),
                 new EnergyCore(this),
                 new Voidmatter(this),
@@ -606,5 +611,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
     public EclipsedShadowsNMS getEclipsedShadowsNMS() {
         return eclipsedShadowsNMS;
+    }
+
+    public CustomItemManager getCustomItemManager() {
+        return customItemManager;
     }
 }

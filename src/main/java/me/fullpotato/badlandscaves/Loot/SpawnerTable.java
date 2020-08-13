@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,6 +21,7 @@ import java.util.Random;
 
 public class SpawnerTable implements LootTable {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final NamespacedKey key;
     private final Player player;
     private final EntityType spawnerType;
@@ -33,18 +35,19 @@ public class SpawnerTable implements LootTable {
 
         key = new NamespacedKey(plugin, "mob_spawner_treasure");
         this.fortune = fortune;
+        customItemManager = plugin.getCustomItemManager();
 
-        matchSoul.put(EntityType.ZOMBIE, CustomItem.ZOMBIE_SOUL.getItem());
-        matchSoul.put(EntityType.CREEPER, CustomItem.CREEPER_SOUL.getItem());
-        matchSoul.put(EntityType.SKELETON, CustomItem.SKELETON_SOUL.getItem());
-        matchSoul.put(EntityType.WITHER_SKELETON, CustomItem.SKELETON_SOUL.getItem());
-        matchSoul.put(EntityType.SPIDER, CustomItem.SPIDER_SOUL.getItem());
-        matchSoul.put(EntityType.CAVE_SPIDER, CustomItem.SPIDER_SOUL.getItem());
-        matchSoul.put(EntityType.SILVERFISH, CustomItem.SILVERFISH_SOUL.getItem());
-        matchSoul.put(EntityType.GHAST, CustomItem.GHAST_SOUL.getItem());
-        matchSoul.put(EntityType.ZOMBIFIED_PIGLIN, CustomItem.PIGZOMBIE_SOUL.getItem());
-        matchSoul.put(EntityType.PHANTOM, CustomItem.PHANTOM_SOUL.getItem());
-        matchSoul.put(EntityType.WITCH, CustomItem.WITCH_SOUL.getItem());
+        matchSoul.put(EntityType.ZOMBIE, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+        matchSoul.put(EntityType.CREEPER, customItemManager.getItem(CustomItem.CREEPER_SOUL));
+        matchSoul.put(EntityType.SKELETON, customItemManager.getItem(CustomItem.SKELETON_SOUL));
+        matchSoul.put(EntityType.WITHER_SKELETON, customItemManager.getItem(CustomItem.SKELETON_SOUL));
+        matchSoul.put(EntityType.SPIDER, customItemManager.getItem(CustomItem.SPIDER_SOUL));
+        matchSoul.put(EntityType.CAVE_SPIDER, customItemManager.getItem(CustomItem.SPIDER_SOUL));
+        matchSoul.put(EntityType.SILVERFISH, customItemManager.getItem(CustomItem.SILVERFISH_SOUL));
+        matchSoul.put(EntityType.GHAST, customItemManager.getItem(CustomItem.GHAST_SOUL));
+        matchSoul.put(EntityType.ZOMBIFIED_PIGLIN, customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL));
+        matchSoul.put(EntityType.PHANTOM, customItemManager.getItem(CustomItem.PHANTOM_SOUL));
+        matchSoul.put(EntityType.WITCH, customItemManager.getItem(CustomItem.WITCH_SOUL));
     }
 
 
@@ -57,7 +60,7 @@ public class SpawnerTable implements LootTable {
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
 
 
-        final ItemStack rune = CustomItem.RUNE.getItem();
+        final ItemStack rune = customItemManager.getItem(CustomItem.RUNE);
         ArrayList<ItemStack> generic = new ArrayList<>();
         ArrayList<ItemStack> specific = new ArrayList<>();
         if (hardmode) {
@@ -71,30 +74,30 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.QUARTZ_BLOCK, 16));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 8));
             generic.add(new ItemStack(Material.TOTEM_OF_UNDYING));
-            generic.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-            generic.add(CustomItem.FISHING_CRATE_HARDMODE.getItem());
-            generic.add(CustomItem.RECALL_POTION.getItem());
-            generic.add(CustomItem.DIMENSIONAL_ANCHOR.getItem());
+            generic.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
+            generic.add(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE));
+            generic.add(customItemManager.getItem(CustomItem.RECALL_POTION));
+            generic.add(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR));
 
             if (supernatural) {
                 //HARDMODE SUPERNATURAL------------------------------------------------------------------------
                 specific.add(rune);
                 specific.add(new ItemStack(Material.LAPIS_BLOCK, 32));
-                specific.add(CustomItem.ZOMBIE_SOUL.getItem());
-                specific.add(CustomItem.CREEPER_SOUL.getItem());
-                specific.add(CustomItem.SILVERFISH_SOUL.getItem());
-                specific.add(CustomItem.SKELETON_SOUL.getItem());
-                specific.add(CustomItem.SPIDER_SOUL.getItem());
-                specific.add(CustomItem.SILVERFISH_SOUL.getItem());
-                specific.add(CustomItem.GHAST_SOUL.getItem());
-                specific.add(CustomItem.PIGZOMBIE_SOUL.getItem());
-                specific.add(CustomItem.PHANTOM_SOUL.getItem());
-                specific.add(CustomItem.WITCH_SOUL.getItem());
+                specific.add(customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.CREEPER_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.SILVERFISH_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.SKELETON_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.SPIDER_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.SILVERFISH_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.GHAST_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.PHANTOM_SOUL));
+                specific.add(customItemManager.getItem(CustomItem.WITCH_SOUL));
 
             }
             else {
                 //HARDMODE PURESOUL------------------------------------------------------------------------------
-                specific.add(CustomItem.TITANIUM_FRAGMENT.getItem());
+                specific.add(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT));
             }
         }
         else {
@@ -114,8 +117,8 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.SPRUCE_SAPLING));
             generic.add(new ItemStack(Material.JUNGLE_SAPLING));
             generic.add(new ItemStack(Material.DARK_OAK_SAPLING));
-            generic.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-            generic.add(CustomItem.RECALL_POTION.getItem());
+            generic.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
+            generic.add(customItemManager.getItem(CustomItem.RECALL_POTION));
 
             if (supernatural) {
                 //PREHARDMODE SUPERNATURAL---------------------------------------------------------------------
@@ -130,9 +133,9 @@ public class SpawnerTable implements LootTable {
             }
             else {
                 //PREHARDMODE PURESOUL---------------------------------------------------------------------------
-                specific.add(CustomItem.VOLTSHOCK_BATTERY.getItem());
-                specific.add(CustomItem.VOLTSHOCK_SHOCKER.getItem());
-                specific.add(CustomItem.CORROSIVE_SUBSTANCE.getItem());
+                specific.add(customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY));
+                specific.add(customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER));
+                specific.add(customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE));
                 specific.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 32));
             }
         }

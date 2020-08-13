@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
@@ -23,6 +24,7 @@ import java.util.Random;
 
 public class ShieldBlocking implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final StarlightTools starlightTools;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
@@ -32,6 +34,7 @@ public class ShieldBlocking implements Listener {
         this.starlightTools = new StarlightTools(plugin);
         this.nebuliteManager = new NebuliteManager(plugin);
         this.starlightCharge = new StarlightCharge(plugin);
+        customItemManager = plugin.getCustomItemManager();
     }
 
     @EventHandler
@@ -42,10 +45,10 @@ public class ShieldBlocking implements Listener {
             if (player.isBlocking() && damage > 0 && event.getFinalDamage() <= 0) {
                 ItemStack playersShield = player.getInventory().getItemInMainHand().getType().equals(Material.SHIELD) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
 
-                final ItemStack stoneShield = CustomItem.STONE_SHIELD.getItem();
-                final ItemStack ironShield = CustomItem.IRON_SHIELD.getItem();
-                final ItemStack diamondShield = CustomItem.DIAMOND_SHIELD.getItem();
-                final ItemStack netheriteShield = CustomItem.NETHERITE_SHIELD.getItem();
+                final ItemStack stoneShield = customItemManager.getItem(CustomItem.STONE_SHIELD);
+                final ItemStack ironShield = customItemManager.getItem(CustomItem.IRON_SHIELD);
+                final ItemStack diamondShield = customItemManager.getItem(CustomItem.DIAMOND_SHIELD);
+                final ItemStack netheriteShield = customItemManager.getItem(CustomItem.NETHERITE_SHIELD);
                 final Random random = new Random();
 
                 double modifier = 2;

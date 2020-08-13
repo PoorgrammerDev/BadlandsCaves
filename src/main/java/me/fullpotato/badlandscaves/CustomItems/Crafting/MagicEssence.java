@@ -17,7 +17,7 @@ public class MagicEssence extends MatchCrafting implements Listener {
     }
 
     public void magic_essence_craft () {
-        final ItemStack magic_essence = CustomItem.MAGIC_ESSENCE.getItem();
+        final ItemStack magic_essence = plugin.getCustomItemManager().getItem(CustomItem.MAGIC_ESSENCE);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "magic_essence"), magic_essence);
 
         /* SHAPE:
@@ -38,10 +38,10 @@ public class MagicEssence extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack magic_essence = CustomItem.MAGIC_ESSENCE.getItem();
+        final ItemStack magic_essence = plugin.getCustomItemManager().getItem(CustomItem.MAGIC_ESSENCE);
         if (!result.isSimilar(magic_essence)) return;
 
-        final ItemStack witch_soul = CustomItem.WITCH_SOUL.getItem();
+        final ItemStack witch_soul = plugin.getCustomItemManager().getItem(CustomItem.WITCH_SOUL);
 
         if (!isMatching(event.getInventory().getMatrix(), witch_soul)) {
             event.getInventory().setResult(null);

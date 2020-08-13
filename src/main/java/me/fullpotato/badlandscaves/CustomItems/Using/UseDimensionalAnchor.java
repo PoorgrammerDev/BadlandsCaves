@@ -428,7 +428,7 @@ public class UseDimensionalAnchor implements Listener {
     }
 
     public boolean isAnchor (ItemStack item) {
-        final ItemStack anchor = CustomItem.DIMENSIONAL_ANCHOR.getItem();
+        final ItemStack anchor = plugin.getCustomItemManager().getItem(CustomItem.DIMENSIONAL_ANCHOR);
         if (item.getType().equals(anchor.getType())) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
@@ -448,7 +448,7 @@ public class UseDimensionalAnchor implements Listener {
     }
 
     public ItemStack getSpecificAnchor(String str) {
-        ItemStack item = CustomItem.DIMENSIONAL_ANCHOR.getItem();
+        ItemStack item = plugin.getCustomItemManager().getItem(CustomItem.DIMENSIONAL_ANCHOR);
         ItemMeta meta = item.getItemMeta();
 
         ArrayList<String> lore = new ArrayList<>();

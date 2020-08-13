@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -12,13 +13,15 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class TitaniumBar extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public TitaniumBar(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void fragmentIntoBar() {
-        ItemStack bar = CustomItem.TITANIUM_INGOT.getItem();
+        ItemStack bar = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "titanium_ingot"), bar);
 
         recipe.shape("##", "##");
@@ -28,7 +31,7 @@ public class TitaniumBar extends MatchCrafting implements Listener {
     }
 
     public void reinforceBarRecipe() {
-        ItemStack bar = CustomItem.REINFORCED_TITANIUM.getItem();
+        ItemStack bar = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "reinforced_titanium"), bar);
 
         recipe.shape("###", "*@*", "###");
@@ -40,7 +43,7 @@ public class TitaniumBar extends MatchCrafting implements Listener {
     }
 
     public void craftTitaniumRod() {
-        final ItemStack rod = CustomItem.TITANIUM_ROD.getItem();
+        final ItemStack rod = customItemManager.getItem(CustomItem.TITANIUM_ROD);
         rod.setAmount(4);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "titanium_rod"), rod);
@@ -55,11 +58,11 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack bar = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack bar = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
         if (!result.isSimilar(bar)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack fragment = CustomItem.TITANIUM_FRAGMENT.getItem();
+        final ItemStack fragment = customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT);
         if (!isMatching(matrix, fragment)) {
             event.getInventory().setResult(null);
         }
@@ -70,11 +73,11 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack bar = CustomItem.REINFORCED_TITANIUM.getItem();
+        final ItemStack bar = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
         if (!result.isSimilar(bar)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack fragment = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack fragment = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
         if (!isMatching(matrix, fragment)) {
             event.getInventory().setResult(null);
         }
@@ -85,11 +88,11 @@ public class TitaniumBar extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack rod = CustomItem.TITANIUM_ROD.getItem();
+        final ItemStack rod = customItemManager.getItem(CustomItem.TITANIUM_ROD);
         if (!result.isSimilar(rod)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack bar = CustomItem.TITANIUM_INGOT.getItem();
+        final ItemStack bar = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
         if (!isMatching(matrix, bar)) {
             event.getInventory().setResult(null);
         }

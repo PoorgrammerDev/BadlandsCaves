@@ -51,7 +51,7 @@ public class DeathHandler implements Listener {
     @EventHandler
     public void give_starter_on_spawn (PlayerRespawnEvent event) {
         if (plugin.getOptionsConfig().getBoolean("give_new_starter_on_spawn"))
-            event.getPlayer().getInventory().addItem(CustomItem.STARTER_SAPLING.getItem());
+            event.getPlayer().getInventory().addItem(plugin.getCustomItemManager().getItem(CustomItem.STARTER_SAPLING));
     }
 
     @EventHandler

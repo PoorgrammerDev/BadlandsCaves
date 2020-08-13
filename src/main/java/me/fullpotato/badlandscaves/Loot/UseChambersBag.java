@@ -26,7 +26,7 @@ public class UseChambersBag implements Listener {
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             final ItemStack item = event.getItem();
             if (item != null) {
-                if (item.isSimilar(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.getItem())) {
+                if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG))) {
                     event.setCancelled(true);
                     final Player player = event.getPlayer();
                     final WitherFightLootTable lootTable = new WitherFightLootTable(plugin);

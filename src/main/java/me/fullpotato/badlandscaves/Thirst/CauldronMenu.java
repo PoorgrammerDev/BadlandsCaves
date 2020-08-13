@@ -303,10 +303,10 @@ public class CauldronMenu implements Listener {
 
                             //give item
                             if (player.getInventory().firstEmpty() == -1) {
-                                player.getWorld().dropItemNaturally(player.getLocation(), recipe.getResult().getItem());
+                                player.getWorld().dropItemNaturally(player.getLocation(), plugin.getCustomItemManager().getItem(recipe.getResult()));
                             }
                             else {
-                                player.getInventory().addItem(recipe.getResult().getItem());
+                                player.getInventory().addItem(plugin.getCustomItemManager().getItem(recipe.getResult()));
                             }
 
                             //sfx

@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,14 +20,16 @@ import java.util.List;
 
 public class EnergyCore extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
+    private final ItemStack energyCore;
 
     public EnergyCore(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
+        energyCore = customItemManager.getItem(CustomItem.ENERGY_CORE);
     }
 
     public void energyCoreRecipe() {
-        ItemStack energyCore = CustomItem.ENERGY_CORE.getItem();
-
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "energy_core"), energyCore);
         recipe.addIngredient(Material.COMMAND_BLOCK);
         recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
@@ -35,7 +38,6 @@ public class EnergyCore extends MatchCrafting implements Listener {
     }
 
     public boolean isEnergyCore(ItemStack item) {
-        ItemStack energyCore = CustomItem.ENERGY_CORE.getItem();
         if (item.getType().equals(energyCore.getType())) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
@@ -81,7 +83,6 @@ public class EnergyCore extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack energyCore = CustomItem.ENERGY_CORE.getItem();
         if (!result.isSimilar(energyCore)) return;
 
         if (event.getViewers().isEmpty() || event.getViewers().size() < 1) {
@@ -98,8 +99,8 @@ public class EnergyCore extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack energium = CustomItem.ENERGIUM.getItem();
-        final ItemStack starFragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
+        final ItemStack energium = customItemManager.getItem(CustomItem.ENERGIUM);
+        final ItemStack starFragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
 
         if (isMatching(matrix, energium) || isMatching(matrix, starFragment)) {
             ItemStack exp_bottle = null;

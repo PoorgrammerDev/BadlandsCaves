@@ -17,7 +17,7 @@ public class PurgeEssence extends MatchCrafting implements Listener {
     }
 
     public void purge_essence_craft () {
-        final ItemStack purge_essence = CustomItem.PURGE_ESSENCE.getItem();
+        final ItemStack purge_essence = plugin.getCustomItemManager().getItem(CustomItem.PURGE_ESSENCE);
         ShapedRecipe purge_ess_craft = new ShapedRecipe(new NamespacedKey(plugin, "purge_essence"), purge_essence);
         purge_ess_craft.shape("###","#@#","###");
 
@@ -45,10 +45,10 @@ public class PurgeEssence extends MatchCrafting implements Listener {
         if (plugin.getSystemConfig().getBoolean("hardmode")) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack purge_essence = CustomItem.PURGE_ESSENCE.getItem();
+        final ItemStack purge_essence = plugin.getCustomItemManager().getItem(CustomItem.PURGE_ESSENCE);
 
         if (result.isSimilar(purge_essence)) {
-            final ItemStack tiny_blz = CustomItem.TINY_BLAZE_POWDER.getItem();
+            final ItemStack tiny_blz = plugin.getCustomItemManager().getItem(CustomItem.TINY_BLAZE_POWDER);
 
             if (!isMatching(event.getInventory().getMatrix(), tiny_blz)) {
                 event.getInventory().setResult(null);

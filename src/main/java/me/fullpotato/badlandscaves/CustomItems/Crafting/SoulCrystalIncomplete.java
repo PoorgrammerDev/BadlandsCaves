@@ -17,7 +17,7 @@ public class SoulCrystalIncomplete extends MatchCrafting implements Listener {
     }
 
     public void soul_crystal_incomplete() {
-        final ItemStack soul_crystal_incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
+        final ItemStack soul_crystal_incomplete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE);
 
         ShapelessRecipe soul_crystal_incomplete_recipe = new ShapelessRecipe(new NamespacedKey(plugin, "soul_crystal_incomplete"), soul_crystal_incomplete);
         soul_crystal_incomplete_recipe.addIngredient(Material.DIAMOND);
@@ -31,10 +31,10 @@ public class SoulCrystalIncomplete extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack soul_crystal_incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
+        final ItemStack soul_crystal_incomplete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE);
 
         if (result.isSimilar(soul_crystal_incomplete)) {
-            final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
+            final ItemStack merged_souls = plugin.getCustomItemManager().getItem(CustomItem.MERGED_SOULS);
 
             if (!isMatching(event.getInventory().getMatrix(), merged_souls)) {
                 event.getInventory().setResult(null);

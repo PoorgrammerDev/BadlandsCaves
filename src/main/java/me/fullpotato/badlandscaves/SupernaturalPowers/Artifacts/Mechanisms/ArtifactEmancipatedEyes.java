@@ -45,7 +45,7 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
                     final ItemStack mainhand = player.getInventory().getItemInMainHand();
                     if (voidmatter.isVoidmatterTool(mainhand) && artifactManager.hasArtifact(player, Artifact.EMANCIPATED_EYES)) {
                         final ItemStack offhand = player.getInventory().getItemInOffHand();
-                        if (offhand.isSimilar(CustomItem.ENHANCED_EYES.getItem())) {
+                        if (offhand.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.ENHANCED_EYES))) {
                             final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
                             if (mana >= initial_mana_cost + (constant_mana_drain / 20.0)) {
                                 final Block block = event.getBlock();
