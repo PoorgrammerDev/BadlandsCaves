@@ -191,7 +191,7 @@ public class DescensionPlayerMove implements Listener {
 
         if (win) {
             UseIncompleteSoulCrystal tester = new UseIncompleteSoulCrystal(plugin);
-            final ItemStack soul_crystal = CustomItem.SOUL_CRYSTAL.getItem();
+            final ItemStack soul_crystal = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL);
             for (ItemStack item : player.getInventory()) {
                 if (item != null) {
                     if (tester.checkMatchIgnoreUses(item, soul_crystal, 2)) {

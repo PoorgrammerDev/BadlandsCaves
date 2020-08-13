@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -17,13 +18,15 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 public class StarlightComponents extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public StarlightComponents(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void craftBinding () {
-        ItemStack binding = CustomItem.BINDING.getItem();
+        ItemStack binding = customItemManager.getItem(CustomItem.BINDING);
         binding.setAmount(8);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "raw_binding"), binding);
@@ -36,7 +39,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftGoldCable () {
-        ItemStack cable = CustomItem.GOLDEN_CABLE.getItem();
+        ItemStack cable = customItemManager.getItem(CustomItem.GOLDEN_CABLE);
         cable.setAmount(6);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "golden_cable"), cable);
@@ -48,7 +51,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftNetherStarFragment() {
-        ItemStack fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
+        ItemStack fragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
         fragment.setAmount(4);
 
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "nether_star_fragment"), fragment);
@@ -58,7 +61,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftStarlightCircuit () {
-        ItemStack circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
+        ItemStack circuit = customItemManager.getItem(CustomItem.STARLIGHT_CIRCUIT);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_circuit"), circuit);
         recipe.shape("---", "#@#", "---");
@@ -71,7 +74,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftStarlightBattery() {
-        ItemStack battery = CustomItem.STARLIGHT_BATTERY.getItem();
+        ItemStack battery = customItemManager.getItem(CustomItem.STARLIGHT_BATTERY);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_battery"), battery);
         recipe.shape(" % ", "#@#", "#@#");
@@ -84,7 +87,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftStarlightModule() {
-        ItemStack module = CustomItem.STARLIGHT_MODULE.getItem();
+        ItemStack module = customItemManager.getItem(CustomItem.STARLIGHT_MODULE);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_module"), module);
         recipe.shape("###", "#%#", "#@#");
@@ -96,7 +99,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftEnergium() {
-        ItemStack energium = CustomItem.ENERGIUM.getItem();
+        ItemStack energium = customItemManager.getItem(CustomItem.ENERGIUM);
         energium.setAmount(4);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "energium"), energium);
@@ -109,7 +112,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     public void craftPhotonEmitter() {
-        ItemStack photonEmitter = CustomItem.PHOTON_EMITTER.getItem();
+        ItemStack photonEmitter = customItemManager.getItem(CustomItem.PHOTON_EMITTER);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "photon_emitter"), photonEmitter);
         recipe.shape("#-#", "#@#", "#*#");
@@ -126,7 +129,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
+        final ItemStack golden_cable = customItemManager.getItem(CustomItem.GOLDEN_CABLE);
         if (!result.isSimilar(golden_cable)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -138,7 +141,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack binding = CustomItem.BINDING.getItem();
+        final ItemStack binding = customItemManager.getItem(CustomItem.BINDING);
         if (!isMatching(matrix, binding)) event.getInventory().setResult(null);
     }
 
@@ -147,7 +150,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
+        final ItemStack starlight_circuit = customItemManager.getItem(CustomItem.STARLIGHT_CIRCUIT);
         if (!result.isSimilar(starlight_circuit)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -159,8 +162,8 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
-        final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
+        final ItemStack golden_cable = customItemManager.getItem(CustomItem.GOLDEN_CABLE);
+        final ItemStack nether_star_fragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
 
         boolean matches = true;
         final int[] slots = {0, 1, 2, 6, 7, 8};
@@ -186,7 +189,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
+        final ItemStack starlight_battery = customItemManager.getItem(CustomItem.STARLIGHT_BATTERY);
         if (!result.isSimilar(starlight_battery)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -198,9 +201,9 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
-        final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
-        final ItemStack golden_cable = CustomItem.GOLDEN_CABLE.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
+        final ItemStack nether_star_fragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
+        final ItemStack golden_cable = customItemManager.getItem(CustomItem.GOLDEN_CABLE);
 
         if (isMatching(matrix, titanium_ingot, 3, 5, 6, 8)) {
             if (isMatching(matrix, nether_star_fragment, 4, 7)) {
@@ -218,7 +221,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
+        final ItemStack starlight_module = customItemManager.getItem(CustomItem.STARLIGHT_MODULE);
         if (!result.isSimilar(starlight_module)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -230,9 +233,9 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
-        final ItemStack starlight_battery = CustomItem.STARLIGHT_BATTERY.getItem();
-        final ItemStack starlight_circuit = CustomItem.STARLIGHT_CIRCUIT.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
+        final ItemStack starlight_battery = customItemManager.getItem(CustomItem.STARLIGHT_BATTERY);
+        final ItemStack starlight_circuit = customItemManager.getItem(CustomItem.STARLIGHT_CIRCUIT);
 
         if (isMatching(matrix, titanium_ingot)) {
             if (isMatching(matrix, starlight_circuit, 4)) {
@@ -249,7 +252,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack photonEmitter = CustomItem.PHOTON_EMITTER.getItem();
+        final ItemStack photonEmitter = customItemManager.getItem(CustomItem.PHOTON_EMITTER);
         if (!result.isSimilar(photonEmitter)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -261,9 +264,9 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.TITANIUM_INGOT.getItem();
-        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
-        final ItemStack nether_star_fragment = CustomItem.NETHER_STAR_FRAGMENT.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.TITANIUM_INGOT);
+        final ItemStack starlight_module = customItemManager.getItem(CustomItem.STARLIGHT_MODULE);
+        final ItemStack nether_star_fragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
 
         boolean matches = true;
         if (!isMatching(matrix, starlight_module) || !isMatching(matrix, nether_star_fragment, 4)) {
@@ -290,8 +293,8 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack binding = CustomItem.BINDING.getItem();
-        final ItemStack energium = CustomItem.ENERGIUM.getItem();
+        final ItemStack binding = customItemManager.getItem(CustomItem.BINDING);
+        final ItemStack energium = customItemManager.getItem(CustomItem.ENERGIUM);
         if (!result.isSimilar(binding) && !result.isSimilar(energium)) return;
 
         if (event.getViewers().get(0) instanceof Player) {

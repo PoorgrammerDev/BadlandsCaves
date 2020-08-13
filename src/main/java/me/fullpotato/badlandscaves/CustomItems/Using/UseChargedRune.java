@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 
 public class UseChargedRune implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final String title = "§8Upgrade Supernatural Abilities";
     private String confirm_title;
     private final ItemStack empty = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
@@ -40,6 +42,7 @@ public class UseChargedRune implements Listener {
 
     public UseChargedRune(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
     
     @EventHandler
@@ -49,7 +52,7 @@ public class UseChargedRune implements Listener {
         if (event.getItem() == null) return;
 
         final ItemStack current = event.getItem();
-        final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
+        final ItemStack charged_rune = customItemManager.getItem(CustomItem.CHARGED_RUNE);
         if (!current.isSimilar(charged_rune)) return;
 
         final Player player = event.getPlayer();
@@ -115,7 +118,7 @@ public class UseChargedRune implements Listener {
                 final Inventory player_inv = event.getView().getBottomInventory();
                 final Player player = (Player) event.getWhoClicked();
                 final ItemStack current = event.getCurrentItem();
-                final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
+                final ItemStack charged_rune = customItemManager.getItem(CustomItem.CHARGED_RUNE);
 
                 if (clicked_inv.equals(target_inv)) {
                     if (current == null || current.getType().equals(Material.BARRIER) || current.getType().equals(Material.BLACK_STAINED_GLASS_PANE)) {
@@ -219,7 +222,7 @@ public class UseChargedRune implements Listener {
             return displace_cancel;
         }
         else {
-            ItemStack displace = CustomItem.DISPLACE.getItem();
+            ItemStack displace = customItemManager.getItem(CustomItem.DISPLACE);
             ItemMeta displace_meta = displace.getItemMeta();
             displace_meta.setDisplayName("§dDisplace §8| §7Upgrade to Level §a" + (displace_level + 1));
 
@@ -264,7 +267,7 @@ public class UseChargedRune implements Listener {
             return withdraw_cancel;
         }
         else {
-            ItemStack withdraw = CustomItem.WITHDRAW.getItem();
+            final ItemStack withdraw = customItemManager.getItem(CustomItem.WITHDRAW);
             ItemMeta withdraw_meta = withdraw.getItemMeta();
             withdraw_meta.setDisplayName("§8Withdraw §8| §7Upgrade to Level §a" + (withdraw_level + 1));
 
@@ -310,7 +313,7 @@ public class UseChargedRune implements Listener {
             return eyes_cancel;
         }
         else {
-            ItemStack eyes = CustomItem.ENHANCED_EYES.getItem();
+            ItemStack eyes = customItemManager.getItem(CustomItem.ENHANCED_EYES);
             ItemMeta eyes_meta = eyes.getItemMeta();
             eyes_meta.setDisplayName("§9Enhanced Eyes §8| §7Upgrade to Level §a" + (eyes_level + 1));
 
@@ -363,7 +366,7 @@ public class UseChargedRune implements Listener {
             return possess_cancel;
         }
         else {
-            ItemStack possess = CustomItem.POSSESS.getItem();
+            ItemStack possess = customItemManager.getItem(CustomItem.POSSESS);
             ItemMeta possess_meta = possess.getItemMeta();
             possess_meta.setDisplayName("§2Possession §8| §7Upgrade to Level §a" + (possess_level + 1));
 
@@ -487,7 +490,7 @@ public class UseChargedRune implements Listener {
             return max_mana_cancel;
         }
         else {
-            ItemStack icon = CustomItem.MAGIC_ESSENCE.getItem();
+            ItemStack icon = customItemManager.getItem(CustomItem.MAGIC_ESSENCE);
             ItemMeta meta = icon.getItemMeta();
             meta.setDisplayName("§3Max Mana §8| §7Increase to §a" + (max_mana + 10));
 

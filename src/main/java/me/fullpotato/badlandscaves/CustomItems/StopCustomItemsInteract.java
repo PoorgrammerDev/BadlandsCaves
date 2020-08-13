@@ -1,6 +1,5 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
-import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -11,6 +10,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class StopCustomItemsInteract implements Listener {
+    private final CustomItemManager customItemManager;
+
+    public StopCustomItemsInteract(CustomItemManager customItemManager) {
+        this.customItemManager = customItemManager;
+    }
 
     @EventHandler
     public void preventRightClick (PlayerInteractEvent event) {
@@ -25,7 +29,7 @@ public class StopCustomItemsInteract implements Listener {
                 }
 
                 for (CustomItem customItem : CustomItem.values()) {
-                    if (item.isSimilar(customItem.getItem()) && customItem.getPreventUse()) {
+                    if (item.isSimilar(customItemManager.getItem(customItem)) && customItem.getPreventUse()) {
                         event.setCancelled(true);
                         return;
                     }
@@ -41,7 +45,7 @@ public class StopCustomItemsInteract implements Listener {
         for (ItemStack item : event.getInventory()) {
             if (item != null) {
                 for (CustomItem customItem : CustomItem.values()) {
-                    if (item.isSimilar(customItem.getItem()) || treasureGear.isTreasureGear(item)) {
+                    if (item.isSimilar(customItemManager.getItem(customItem)) || treasureGear.isTreasureGear(item)) {
                         event.setResult(null);
                         return;
                     }

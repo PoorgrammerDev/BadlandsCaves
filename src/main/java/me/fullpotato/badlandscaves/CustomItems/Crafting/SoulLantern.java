@@ -14,13 +14,13 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class SoulLantern implements Listener {
     private final BadlandsCaves plugin;
-
+    final ItemStack lantern;
     public SoulLantern(BadlandsCaves plugin) {
         this.plugin = plugin;
+        lantern = plugin.getCustomItemManager().getItem(CustomItem.SOUL_LANTERN);
     }
 
     public void soulLanternRecipe () {
-        final ItemStack lantern = CustomItem.SOUL_LANTERN.getItem();
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "soul_lantern"), lantern);
         recipe.addIngredient(Material.SOUL_LANTERN);
 
@@ -31,9 +31,8 @@ public class SoulLantern implements Listener {
     public void preventReCrafting (PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
-        final ItemStack soul_lantern = CustomItem.SOUL_LANTERN.getItem();
         final ItemStack result = event.getRecipe().getResult();
-        if (!result.isSimilar(soul_lantern)) return;
+        if (!result.isSimilar(lantern)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         for (ItemStack item : matrix) {
@@ -46,7 +45,7 @@ public class SoulLantern implements Listener {
 
     public boolean isSoulLantern (ItemStack item) {
         if (item != null) {
-            if (item.getType().equals(CustomItem.SOUL_LANTERN.getItem().getType())) {
+            if (item.getType().equals((lantern).getType())) {
                 if (item.hasItemMeta()) {
                     ItemMeta meta = item.getItemMeta();
                     if (meta != null) {

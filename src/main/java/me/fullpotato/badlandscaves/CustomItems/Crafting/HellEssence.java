@@ -20,7 +20,7 @@ public class HellEssence extends MatchCrafting implements Listener {
         boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
 
-        final ItemStack hell_essence = CustomItem.HELL_ESSENCE.getItem();
+        final ItemStack hell_essence = plugin.getCustomItemManager().getItem(CustomItem.HELL_ESSENCE);
 
         ShapelessRecipe hell_ess_craft = new ShapelessRecipe(new NamespacedKey(plugin, "hell_essence"), hell_essence);
         hell_ess_craft.addIngredient(Material.BLAZE_POWDER);
@@ -37,10 +37,10 @@ public class HellEssence extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack hell_essence = CustomItem.HELL_ESSENCE.getItem();
+        final ItemStack hell_essence = plugin.getCustomItemManager().getItem(CustomItem.HELL_ESSENCE);
         if (!result.isSimilar(hell_essence)) return;
 
-        final ItemStack pigzombie_soul = CustomItem.PIGZOMBIE_SOUL.getItem();
+        final ItemStack pigzombie_soul = plugin.getCustomItemManager().getItem(CustomItem.PIGZOMBIE_SOUL);
 
         if (!isMatching(event.getInventory().getMatrix(), pigzombie_soul)) {
             event.getInventory().setResult(null);

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,9 +19,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Shield implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public Shield(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     @SuppressWarnings("deprecation")
@@ -40,7 +43,7 @@ public class Shield implements Listener {
     }
 
     public void craftStoneShield() {
-        final ItemStack shield = CustomItem.STONE_SHIELD.getItem();
+        final ItemStack shield = customItemManager.getItem(CustomItem.STONE_SHIELD);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "stone_shield"), shield);
         recipe.shape("# #", "###", " # ");
@@ -50,7 +53,7 @@ public class Shield implements Listener {
     }
 
     public void craftIronShield() {
-        final ItemStack shield = CustomItem.IRON_SHIELD.getItem();
+        final ItemStack shield = customItemManager.getItem(CustomItem.IRON_SHIELD);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "iron_shield"), shield);
         recipe.shape("# #", "###", " # ");
@@ -60,7 +63,7 @@ public class Shield implements Listener {
     }
 
     public void craftDiamondShield() {
-        final ItemStack shield = CustomItem.DIAMOND_SHIELD.getItem();
+        final ItemStack shield = customItemManager.getItem(CustomItem.DIAMOND_SHIELD);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "diamond_shield"), shield);
         recipe.shape("# #", "###", " # ");
@@ -70,7 +73,7 @@ public class Shield implements Listener {
     }
 
     public void craftNetheriteShield() {
-        final ItemStack shield = CustomItem.NETHERITE_SHIELD.getItem();
+        final ItemStack shield = customItemManager.getItem(CustomItem.NETHERITE_SHIELD);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "netherite_shield"), shield);
         recipe.shape("# #", "###", " # ");
@@ -84,10 +87,10 @@ public class Shield implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack stoneShield = CustomItem.STONE_SHIELD.getItem();
-        final ItemStack ironShield = CustomItem.IRON_SHIELD.getItem();
-        final ItemStack diamondShield = CustomItem.DIAMOND_SHIELD.getItem();
-        final ItemStack netheriteShield = CustomItem.NETHERITE_SHIELD.getItem();
+        final ItemStack stoneShield = customItemManager.getItem(CustomItem.STONE_SHIELD);
+        final ItemStack ironShield = customItemManager.getItem(CustomItem.IRON_SHIELD);
+        final ItemStack diamondShield = customItemManager.getItem(CustomItem.DIAMOND_SHIELD);
+        final ItemStack netheriteShield = customItemManager.getItem(CustomItem.NETHERITE_SHIELD);
 
         if (result.isSimilar(stoneShield) || result.isSimilar(ironShield) || result.isSimilar(diamondShield) || result.isSimilar(netheriteShield)) {
             for (HumanEntity humanEntity : event.getViewers()) {

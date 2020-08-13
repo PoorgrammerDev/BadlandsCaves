@@ -56,7 +56,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        final ItemStack eyes = CustomItem.ENHANCED_EYES.getItem();
+        final ItemStack eyes = plugin.getCustomItemManager().getItem(CustomItem.ENHANCED_EYES);
         if (player.getInventory().getItemInOffHand().isSimilar(eyes)) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
@@ -253,7 +253,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                 final ItemStack item = event.getMainHandItem();
                 if (item != null) {
                     for (ActivePowers value : ActivePowers.values()) {
-                        if (item.isSimilar(value.getItem().getItem())) {
+                        if (item.isSimilar(plugin.getCustomItemManager().getItem(value.getItem()))) {
                             event.setCancelled(true);
                             PlayerScore.USING_EYES.setScore(plugin, player, 0);
                             return;

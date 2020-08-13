@@ -185,7 +185,7 @@ public class UseSoulLantern implements Listener {
             try {
                 final int slot = Integer.parseInt(slotStr);
                 final int amount = Integer.parseInt(amountStr);
-                output[slot] = CustomItem.valueOf(name).getItem();
+                output[slot] = plugin.getCustomItemManager().getItem(CustomItem.valueOf(name));
                 output[slot].setAmount(amount);
             }
             catch (IllegalArgumentException e) {
@@ -199,7 +199,7 @@ public class UseSoulLantern implements Listener {
 
     public CustomItem getCustomItemFromSoulItemStack(ItemStack item) {
         for (CustomItem soul : souls) {
-            if (item.isSimilar(soul.getItem())) {
+            if (item.isSimilar(plugin.getCustomItemManager().getItem(soul))) {
                 return soul;
             }
         }

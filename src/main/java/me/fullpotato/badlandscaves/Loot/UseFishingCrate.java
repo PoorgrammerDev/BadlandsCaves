@@ -30,8 +30,8 @@ public class UseFishingCrate implements Listener {
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack item = event.getItem();
             if (item != null) {
-                final ItemStack fishing_crate = CustomItem.FISHING_CRATE.getItem();
-                final ItemStack fishing_crate_hm = CustomItem.FISHING_CRATE_HARDMODE.getItem();
+                final ItemStack fishing_crate = plugin.getCustomItemManager().getItem(CustomItem.FISHING_CRATE);
+                final ItemStack fishing_crate_hm = plugin.getCustomItemManager().getItem(CustomItem.FISHING_CRATE_HARDMODE);
 
                 if (item.isSimilar(fishing_crate) || item.isSimilar(fishing_crate_hm)) {
                     event.setCancelled(true);

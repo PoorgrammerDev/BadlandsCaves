@@ -19,10 +19,12 @@ import java.util.*;
 
 public class NebuliteStatChanges {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final NebuliteManager nebuliteManager;
     private final StarlightCharge starlightCharge;
     private final StarlightArmor starlightArmor;
     private final StarlightTools starlightTools;
+
     private final EnchantmentStorage enchantmentStorage;
     private final Map<Material, EquipmentSlot> slotMap;
 
@@ -39,6 +41,7 @@ public class NebuliteStatChanges {
         slotMap.put(Material.NETHERITE_CHESTPLATE, EquipmentSlot.CHEST);
         slotMap.put(Material.NETHERITE_LEGGINGS, EquipmentSlot.LEGS);
         slotMap.put(Material.NETHERITE_BOOTS, EquipmentSlot.FEET);
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void updateStats(ItemStack item) {
@@ -69,7 +72,7 @@ public class NebuliteStatChanges {
     }
 
     public void updateAllStats (ItemStack item, CustomItem starlightType) {
-        int defaultCharge = starlightCharge.getMaxCharge(starlightType.getItem());
+        int defaultCharge = starlightCharge.getMaxCharge(customItemManager.getItem(starlightType));
         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
         for (Nebulite nebulite : nebulites) {
             if (nebulite.equals(Nebulite.ENERGY_STORAGE)) {
@@ -81,7 +84,7 @@ public class NebuliteStatChanges {
     }
 
     public void updateArmorStats (ItemStack item) {
-        final Map<Enchantment, Integer> defaultEnchantments = CustomItem.STARLIGHT_CHESTPLATE.getItem().getEnchantments();
+        final Map<Enchantment, Integer> defaultEnchantments = customItemManager.getItem(CustomItem.STARLIGHT_CHESTPLATE).getEnchantments();
         final List<Nebulite> nebulites = Arrays.asList(nebuliteManager.getNebulites(item));
 
         int protection = defaultEnchantments.getOrDefault(Enchantment.PROTECTION_ENVIRONMENTAL, 7);
@@ -142,7 +145,7 @@ public class NebuliteStatChanges {
     }
 
     public void updateSaberStats (ItemStack item) {
-        final Map<Enchantment, Integer> defaultEnchantments = CustomItem.STARLIGHT_SABER.getItem().getEnchantments();
+        final Map<Enchantment, Integer> defaultEnchantments = customItemManager.getItem(CustomItem.STARLIGHT_SABER).getEnchantments();
         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
 
         int sharpness = defaultEnchantments.getOrDefault(Enchantment.DAMAGE_ALL, 10);
@@ -189,7 +192,7 @@ public class NebuliteStatChanges {
     }
 
     public void updatePaxelStats (ItemStack item) {
-        final Map<Enchantment, Integer> defaultEnchantments = CustomItem.STARLIGHT_PAXEL.getItem().getEnchantments();
+        final Map<Enchantment, Integer> defaultEnchantments = customItemManager.getItem(CustomItem.STARLIGHT_PAXEL).getEnchantments();
         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
 
         int efficiency = defaultEnchantments.getOrDefault(Enchantment.DIG_SPEED, 5);
@@ -227,7 +230,7 @@ public class NebuliteStatChanges {
     public void updateShieldStats (ItemStack item) {
         final List<Nebulite> nebulites = Arrays.asList(nebuliteManager.getNebulites(item));
 
-        double speedMod = CustomItem.STARLIGHT_SHIELD.getItem().getItemMeta().getAttributeModifiers(Attribute.GENERIC_MOVEMENT_SPEED).iterator().next().getAmount();
+        double speedMod = customItemManager.getItem(CustomItem.STARLIGHT_SHIELD).getItemMeta().getAttributeModifiers(Attribute.GENERIC_MOVEMENT_SPEED).iterator().next().getAmount();
 
         //SPEED MODS
         if (nebulites.contains(Nebulite.SHIELD_THRUSTER)) {

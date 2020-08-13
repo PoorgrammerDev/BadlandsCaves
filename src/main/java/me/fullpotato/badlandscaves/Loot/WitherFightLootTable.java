@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
@@ -16,29 +17,31 @@ import java.util.Random;
 
 public class WitherFightLootTable implements LootTable {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final NamespacedKey key;
     public WitherFightLootTable(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "wither_fight_table");
+        customItemManager = plugin.getCustomItemManager();
     }
 
     @Override
     public @NotNull Collection<ItemStack> populateLoot(Random random, LootContext lootContext) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
-        items.add(CustomItem.BLESSED_APPLE.getItem());
-        items.add(CustomItem.ENCHANTED_BLESSED_APPLE.getItem());
+        items.add(customItemManager.getItem(CustomItem.BLESSED_APPLE));
+        items.add(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE));
         items.add(new ItemStack(Material.GOLDEN_APPLE, 2));
         items.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE));
         items.add(new ItemStack(Material.TOTEM_OF_UNDYING));
-        items.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-        items.add(CustomItem.RECALL_POTION.getItem());
+        items.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
+        items.add(customItemManager.getItem(CustomItem.RECALL_POTION));
         items.add(new ItemStack(Material.SHULKER_SHELL, 2));
         items.add(new ItemStack(Material.DIAMOND_BLOCK, 2));
         items.add(new ItemStack(Material.NETHERITE_SCRAP));
-        items.add(CustomItem.TITANIUM_FRAGMENT.getItem());
-        items.add(CustomItem.VOIDMATTER.getItem());
-        items.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
+        items.add(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT));
+        items.add(customItemManager.getItem(CustomItem.VOIDMATTER));
+        items.add(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER));
 
         TreasureGear treasureGear = new TreasureGear();
         Collection<ItemStack> output = new ArrayList<>();
@@ -50,7 +53,7 @@ public class WitherFightLootTable implements LootTable {
             if (failed > 100) break;
             final ItemStack item = items.get(random.nextInt(items.size()));
 
-            if (item.isSimilar(CustomItem.TREASURE_GEAR_VOUCHER.getItem())) {
+            if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
                 output.add(treasureGear.getTreasureGear(true, random));
             }
             else {

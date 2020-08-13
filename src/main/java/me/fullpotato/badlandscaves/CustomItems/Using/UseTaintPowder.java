@@ -27,7 +27,7 @@ public class UseTaintPowder implements Listener {
             ItemStack item = event.getItem();
             if (item != null) {
 
-                ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
+                ItemStack tainted_powder = plugin.getCustomItemManager().getItem(CustomItem.TAINTED_POWDER);
 
                 if (item.isSimilar(tainted_powder)) {
                     event.setCancelled(true);

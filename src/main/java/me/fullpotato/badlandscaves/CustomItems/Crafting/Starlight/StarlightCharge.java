@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-
 import java.util.List;
 
 public class StarlightCharge implements Listener {
@@ -32,7 +31,7 @@ public class StarlightCharge implements Listener {
     }
 
     public void chargeRecipe() {
-        final ItemStack item = CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem();
+        final ItemStack item = plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER);
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "starlight_helmet_charge"), item);
         recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS, Material.NETHERITE_SWORD, Material.NETHERITE_SHOVEL, Material.NETHERITE_PICKAXE, Material.NETHERITE_AXE, Material.CROSSBOW, Material.SHIELD, Material.FISHING_ROD));
         recipe.addIngredient(Material.KNOWLEDGE_BOOK);
@@ -45,7 +44,7 @@ public class StarlightCharge implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack placeholder = CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem();
+        final ItemStack placeholder = plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER);
         if (!result.isSimilar(placeholder)) return;
 
         if (event.getViewers().get(0) instanceof Player) {

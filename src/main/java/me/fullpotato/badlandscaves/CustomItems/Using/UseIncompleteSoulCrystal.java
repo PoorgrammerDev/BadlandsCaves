@@ -40,7 +40,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         if (event.getItem() == null) return;
 
         final ItemStack current = event.getItem();
-        final ItemStack soul_crystal_incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
+        final ItemStack soul_crystal_incomplete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE);
         if (!checkMatchIgnoreUses(current, soul_crystal_incomplete, 2)) return;
 
         final Player player = event.getPlayer();

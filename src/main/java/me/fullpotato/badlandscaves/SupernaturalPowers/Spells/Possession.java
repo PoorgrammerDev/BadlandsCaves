@@ -38,7 +38,7 @@ public class Possession extends UsePowers implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        ItemStack possess = CustomItem.POSSESS.getItem();
+        ItemStack possess = plugin.getCustomItemManager().getItem(CustomItem.POSSESS);
         if (player.getInventory().getItemInOffHand().isSimilar(possess)) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
@@ -174,7 +174,7 @@ public class Possession extends UsePowers implements Listener {
                 final ItemStack item = event.getMainHandItem();
                 if (item != null) {
                     for (ActivePowers value : ActivePowers.values()) {
-                        if (item.isSimilar(value.getItem().getItem())) {
+                        if (item.isSimilar(plugin.getCustomItemManager().getItem(value.getItem()))) {
                             event.setCancelled(true);
                             PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
                             PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.setScore(plugin, player, 0);

@@ -27,7 +27,7 @@ public class PreservationTotem implements Listener {
         final Player player = event.getEntity();
 
         for (ItemStack item : player.getInventory()) {
-            if (item != null && item.isSimilar(CustomItem.TOTEM_OF_PRESERVATION.getItem())) {
+            if (item != null && item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.TOTEM_OF_PRESERVATION))) {
                 event.setKeepInventory(true);
                 event.getDrops().clear();
                 event.setDroppedExp(0);

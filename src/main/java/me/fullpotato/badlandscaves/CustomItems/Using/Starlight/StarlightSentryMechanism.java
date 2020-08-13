@@ -5,7 +5,6 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharg
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
-import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.EnhancedEyes;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -264,7 +263,7 @@ public class StarlightSentryMechanism implements Listener {
             int charge = getCharge(armorStand);
             final Player player = getOwner(armorStand);
             if (player != null) {
-                final ItemStack item = CustomItem.STARLIGHT_SENTRY.getItem();
+                final ItemStack item = plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_SENTRY);
                 chargeManager.setCharge(item, charge);
 
                 for (Entity entity : slime.getNearbyEntities(10, 10, 10)) {

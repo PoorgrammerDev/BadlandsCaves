@@ -78,7 +78,7 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                     final ItemStack mainhand = player.getInventory().getItemInMainHand();
                     if (voidmatter.isVoidmatterTool(mainhand) && artifactManager.hasArtifact(player, Artifact.DIGGING_DOPPELGANGER)) {
                         final ItemStack offhand = player.getInventory().getItemInOffHand();
-                        if (offhand.isSimilar(CustomItem.POSSESS.getItem())) {
+                        if (offhand.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.POSSESS))) {
                             if ((byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) == 0) {
                                 final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
                                 if (mana >= cost + (drain / 20.0)) {

@@ -119,8 +119,8 @@ public class EndGame implements Listener {
 
     public void completeSoul (final Player player) {
         UseIncompleteSoulCrystal usecrystal = new UseIncompleteSoulCrystal(plugin);
-        final ItemStack incomplete = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
-        final ItemStack complete = CustomItem.SOUL_CRYSTAL.getItem();
+        final ItemStack incomplete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE);
+        final ItemStack complete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL);
         for (ItemStack item : player.getInventory()) {
             if (item == null) continue;
             if (usecrystal.checkMatchIgnoreUses(item, incomplete, 2)) {

@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -14,9 +15,11 @@ import java.util.ArrayList;
 
 public class Apples extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public Apples(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void craftNotchApple() {
@@ -39,7 +42,7 @@ public class Apples extends MatchCrafting implements Listener {
     }
 
     public void craftBlessedApple() {
-        final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
+        final ItemStack blessed_apple = customItemManager.getItem(CustomItem.BLESSED_APPLE);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "blessed_apple"), blessed_apple);
         recipe.shape("###", "#@#", "###");
@@ -50,7 +53,7 @@ public class Apples extends MatchCrafting implements Listener {
     }
 
     public void craftEnchantedBlessedApple() {
-        final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
+        final ItemStack enchanted_blessed_apple = customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE);
 
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "enchanted_blessed_apple"), enchanted_blessed_apple);
 
@@ -67,8 +70,8 @@ public class Apples extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
-        final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
+        final ItemStack blessed_apple = customItemManager.getItem(CustomItem.BLESSED_APPLE);
+        final ItemStack enchanted_blessed_apple = customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE);
         if (!result.isSimilar(blessed_apple) && !result.isSimilar(enchanted_blessed_apple)) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
@@ -77,22 +80,22 @@ public class Apples extends MatchCrafting implements Listener {
             return;
         }
 
-        final ItemStack purge_essence = CustomItem.PURGE_ESSENCE.getItem();
+        final ItemStack purge_essence = customItemManager.getItem(CustomItem.PURGE_ESSENCE);
         if (!isMatching(matrix, purge_essence, 3, 5)) {
             event.getInventory().setResult(null);
             return;
         }
 
         ArrayList<ItemStack> souls = new ArrayList<>();
-        souls.add(CustomItem.ZOMBIE_SOUL.getItem());
-        souls.add(CustomItem.CREEPER_SOUL.getItem());
-        souls.add(CustomItem.SPIDER_SOUL.getItem());
-        souls.add(CustomItem.SKELETON_SOUL.getItem());
-        souls.add(CustomItem.GHAST_SOUL.getItem());
-        souls.add(CustomItem.SILVERFISH_SOUL.getItem());
-        souls.add(CustomItem.PHANTOM_SOUL.getItem());
-        souls.add(CustomItem.PIGZOMBIE_SOUL.getItem());
-        souls.add(CustomItem.WITCH_SOUL.getItem());
+        souls.add(customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.CREEPER_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.SPIDER_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.SKELETON_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.GHAST_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.SILVERFISH_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.PHANTOM_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL));
+        souls.add(customItemManager.getItem(CustomItem.WITCH_SOUL));
 
         int[] slots = {0,1,2,6,7,8};
         for (int slot : slots) {

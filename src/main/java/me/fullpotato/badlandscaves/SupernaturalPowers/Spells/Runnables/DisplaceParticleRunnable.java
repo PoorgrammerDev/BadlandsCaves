@@ -28,7 +28,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
         plugin.getServer().getOnlinePlayers().forEach(player -> {
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
                 final ItemStack item = player.getInventory().getItemInOffHand();
-                if (item.isSimilar(CustomItem.DISPLACE.getItem())) {
+                if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.DISPLACE))) {
                     if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0)) {
                         int displace_level = (int) PlayerScore.DISPLACE_LEVEL.getScore(plugin, player);
                         int place_range, warp_range;

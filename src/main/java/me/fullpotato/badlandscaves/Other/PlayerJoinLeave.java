@@ -36,7 +36,7 @@ public class PlayerJoinLeave implements Listener {
             data.initializePlayer(player);
 
             if (!player.hasPlayedBefore()) {
-                player.getInventory().addItem(CustomItem.STARTER_SAPLING.getItem());
+                player.getInventory().addItem(plugin.getCustomItemManager().getItem(CustomItem.STARTER_SAPLING));
                 player.getInventory().addItem(guideBook.getGuideBook());
 
                 new BukkitRunnable() {

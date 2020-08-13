@@ -81,7 +81,7 @@ public class ArtifactManager {
     public Artifact toArtifact(ItemStack item) {
         if (isArtifact(item)) {
             for (Artifact value : Artifact.values()) {
-                if (value.getArtifactItem().getItem().isSimilar(item)) {
+                if (plugin.getCustomItemManager().getItem(value.getArtifactItem()).isSimilar(item)) {
                     return value;
                 }
             }

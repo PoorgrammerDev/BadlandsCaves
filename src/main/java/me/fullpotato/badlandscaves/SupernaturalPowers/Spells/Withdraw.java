@@ -46,7 +46,7 @@ public class Withdraw extends UsePowers implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        if (player.getInventory().getItemInOffHand().isSimilar(CustomItem.WITHDRAW.getItem())) {
+        if (player.getInventory().getItemInOffHand().isSimilar(plugin.getCustomItemManager().getItem(CustomItem.WITHDRAW))) {
             Action action = event.getAction();
             if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
                 EquipmentSlot e = event.getHand();

@@ -6,7 +6,6 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -42,7 +41,7 @@ public class NebuliteInstaller implements Listener {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
             final ItemStack item = event.getItem();
             if (item != null) {
-                if (item.isSimilar(CustomItem.NEBULITE_INSTALLER.getItem())) {
+                if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.NEBULITE_INSTALLER))) {
                     event.setCancelled(true);
                     if (plugin.getSystemConfig().getBoolean("hardmode")) {
                         final Player player = event.getPlayer();
@@ -172,7 +171,7 @@ public class NebuliteInstaller implements Listener {
                 else {
                    if (item != null) {
                        //PREVENT INTERACT WITH INSTALLER
-                       if (item.isSimilar(CustomItem.NEBULITE_INSTALLER.getItem())) {
+                       if (item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.NEBULITE_INSTALLER))) {
                            event.setCancelled(true);
                        }
                        else if (action.equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
@@ -235,7 +234,7 @@ public class NebuliteInstaller implements Listener {
                     else {
                         for (int i = 0; i < 3; i++) {
                             if (nebulites.length > i && nebulites[i] != null) {
-                                inventory.setItem(14 + i, nebulites[i].getNebuliteItem().getItem());
+                                inventory.setItem(14 + i, plugin.getCustomItemManager().getItem(nebulites[i].getNebuliteItem()));
                             }
                             else {
                                 inventory.setItem(14 + i, null);

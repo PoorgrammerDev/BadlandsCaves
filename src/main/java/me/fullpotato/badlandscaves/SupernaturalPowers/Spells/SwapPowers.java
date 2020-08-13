@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
@@ -17,14 +18,18 @@ import java.util.IllegalFormatException;
 
 public class SwapPowers implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final ManaBarManager manaBarManager;
-    private final ItemStack[] blacklisted = {
-            CustomItem.ECLIPSED_SHADOWS.getItem(),
-    };
+    private final ItemStack[] blacklisted;
 
     public SwapPowers(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.manaBarManager = new ManaBarManager(plugin);
+        customItemManager = plugin.getCustomItemManager();
+
+        blacklisted = new ItemStack[]{
+                customItemManager.getItem(CustomItem.ECLIPSED_SHADOWS),
+        };
     }
 
     @EventHandler
@@ -137,7 +142,7 @@ public class SwapPowers implements Listener {
 
                         //check if another spell
                         for (ActivePowers check : ActivePowers.values()) {
-                            if (offhandItem.isSimilar(check.getItem().getItem())) {
+                            if (offhandItem.isSimilar(customItemManager.getItem(check.getItem()))) {
                                 offHandIsSpell = true;
                                 break;
                             }
@@ -150,7 +155,7 @@ public class SwapPowers implements Listener {
                         }
                     }
 
-                    player.getInventory().setItemInOffHand(order[swapSlot].getItem().getItem());
+                    player.getInventory().setItemInOffHand(customItemManager.getItem(order[swapSlot].getItem()));
 
                     if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
                         manaBarManager.displayMessage(player, order[swapSlot].getDisplayName(), 2, true);

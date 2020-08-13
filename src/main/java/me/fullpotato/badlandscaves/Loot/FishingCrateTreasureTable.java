@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,6 +22,7 @@ import java.util.Random;
 public class FishingCrateTreasureTable implements LootTable {
 
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final Player player;
     private final boolean hardmode;
     private final NamespacedKey key;
@@ -30,6 +32,7 @@ public class FishingCrateTreasureTable implements LootTable {
         this.player = player;
         this.hardmode = hardmode;
         key = new NamespacedKey(plugin, "fishing_crate_treasure");
+        customItemManager = plugin.getCustomItemManager();
     }
 
     @Override
@@ -57,21 +60,21 @@ public class FishingCrateTreasureTable implements LootTable {
             tier1.add(new ItemStack(Material.BLAZE_ROD, randomCount(random, 1, 16)));
             tier1.add(new ItemStack(Material.GOLD_BLOCK, randomCount(random, 1, 8)));
             tier1.add(new ItemStack(Material.GOLDEN_APPLE, randomCount(random, 1, 16)));
-            tier1.add(CustomItem.PURGE_ESSENCE.getItem());
-            tier1.add(CustomItem.ANTIDOTE.getItem());
-            tier1.add(CustomItem.TAINTED_POWDER.getItem());
-            tier1.add(CustomItem.RECALL_POTION.getItem());
+            tier1.add(customItemManager.getItem(CustomItem.PURGE_ESSENCE));
+            tier1.add(customItemManager.getItem(CustomItem.ANTIDOTE));
+            tier1.add(customItemManager.getItem(CustomItem.TAINTED_POWDER));
+            tier1.add(customItemManager.getItem(CustomItem.RECALL_POTION));
 
             tier2.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.TOTEM_OF_UNDYING));
-            tier2.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
+            tier2.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
             tier2.add(new ItemStack(Material.COW_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.PIG_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.SHEEP_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.GRASS_BLOCK, randomCount(random, 1, 4)));
             if (heretic) {
-                tier2.add(CustomItem.MANA_POTION.getItem());
+                tier2.add(customItemManager.getItem(CustomItem.MANA_POTION));
                 tier2.add(new ItemStack(Material.WITCH_SPAWN_EGG, randomCount(random, 1, 4)));
                 tier2.add(new ItemStack(Material.LAPIS_BLOCK, randomCount(random, 8, 32)));
             }
@@ -80,12 +83,12 @@ public class FishingCrateTreasureTable implements LootTable {
                 tier2.add(new ItemStack(Material.REDSTONE_BLOCK, randomCount(random, 8, 32)));
             }
 
-            tier3.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
+            tier3.add(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER));
             if (!heretic) {
-                tier3.add(CustomItem.TITANIUM_FRAGMENT.getItem());
+                tier3.add(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT));
             }
 
-            tier4.add(CustomItem.FOREVER_FISH.getItem());
+            tier4.add(customItemManager.getItem(CustomItem.FOREVER_FISH));
         }
         else {
         //PREHARDMODE----------------------------------
@@ -110,11 +113,11 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.IRON_AXE));
             tier2.add(new ItemStack(Material.DIAMOND, randomCount(random, 1, 8)));
             tier2.add(new ItemStack(Material.BLAZE_POWDER, randomCount(random, 1, 8)));
-            tier2.add(CustomItem.PURIFIED_WATER.getItem());
-            tier2.add(CustomItem.ANTIDOTE.getItem());
+            tier2.add(customItemManager.getItem(CustomItem.PURIFIED_WATER));
+            tier2.add(customItemManager.getItem(CustomItem.ANTIDOTE));
             tier2.add(new ItemStack(Material.GOLDEN_APPLE, randomCount(random, 1, 8)));
-            tier2.add(CustomItem.TAINTED_POWDER.getItem());
-            tier2.add(CustomItem.RECALL_POTION.getItem());
+            tier2.add(customItemManager.getItem(CustomItem.TAINTED_POWDER));
+            tier2.add(customItemManager.getItem(CustomItem.RECALL_POTION));
 
             tier3.add(new ItemStack(Material.SHULKER_SHELL, randomCount(random, 1, 4)));
             tier3.add(getRandomlyEnchantedGear(Material.IRON_HELMET, random));
@@ -128,8 +131,8 @@ public class FishingCrateTreasureTable implements LootTable {
 
             tier4.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, randomCount(random, 1, 2)));
             tier4.add(new ItemStack(Material.TOTEM_OF_UNDYING));
-            tier4.add(CustomItem.TOTEM_OF_PRESERVATION.getItem());
-            tier4.add(CustomItem.TREASURE_GEAR_VOUCHER.getItem());
+            tier4.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
+            tier4.add(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER));
         }
 
         ArrayList<ArrayList<ItemStack>> items = new ArrayList<>();
@@ -142,7 +145,7 @@ public class FishingCrateTreasureTable implements LootTable {
         for (int i = 0; i < count; i++) {
             tier = getTier(random, tier_upgrade, 1);
             ItemStack item = items.get(tier - 1).get(random.nextInt(items.get(tier - 1).size()));
-            if (item.isSimilar(CustomItem.TREASURE_GEAR_VOUCHER.getItem())) {
+            if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
                 output.add(treasureGear.getTreasureGear(hardmode, random));
             }
             else {

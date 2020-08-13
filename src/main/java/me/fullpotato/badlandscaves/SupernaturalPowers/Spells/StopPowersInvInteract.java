@@ -23,9 +23,9 @@ public class StopPowersInvInteract implements Listener {
 
         activePowers = new ArrayList<>();
         for (ActivePowers value : ActivePowers.values()) {
-            activePowers.add(value.getItem().getItem());
+            activePowers.add(plugin.getCustomItemManager().getItem(value.getItem()));
         }
-        activePowers.add(CustomItem.ECLIPSED_SHADOWS.getItem());
+        activePowers.add(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS));
     }
 
     @EventHandler

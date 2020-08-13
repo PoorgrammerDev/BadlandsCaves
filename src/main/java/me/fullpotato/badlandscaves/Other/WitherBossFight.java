@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Other;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
 import me.fullpotato.badlandscaves.Util.TitleEffects;
@@ -35,6 +36,7 @@ import java.util.Random;
 
 public class WitherBossFight implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final World world;
     private final BlockFace[] adjacent = {
             BlockFace.NORTH,
@@ -48,6 +50,7 @@ public class WitherBossFight implements Listener {
     public WitherBossFight(BadlandsCaves plugin) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getChambersWorldName());
+        customItemManager = plugin.getCustomItemManager();
     }
 
     //--------------------------------------------------
@@ -402,7 +405,7 @@ public class WitherBossFight implements Listener {
             }
 
             if (customItem != null) {
-                chosen.getEquipment().setChestplate(customItem.getItem());
+                chosen.getEquipment().setChestplate(customItemManager.getItem(customItem));
                 chosen.getEquipment().setChestplateDropChance(1);
             }
         }
@@ -499,7 +502,7 @@ public class WitherBossFight implements Listener {
                 }
                 else return;
 
-                final ItemStack key = keyType.getItem();
+                final ItemStack key = customItemManager.getItem(keyType);
 
                 if (item.isSimilar(key)) {
                     player.playSound(block.getLocation(), Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1, 1);
@@ -971,7 +974,7 @@ public class WitherBossFight implements Listener {
     }
 
     public void giveLoot (boolean hardmode) {
-        ItemStack loot_bag = CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.getItem();
+        ItemStack loot_bag = customItemManager.getItem(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG);
         for (Player player : players) {
             player.giveExp(hardmode ? 50 : 100);
 

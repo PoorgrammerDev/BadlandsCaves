@@ -1,7 +1,8 @@
 package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.SoundCategory;
@@ -18,12 +19,14 @@ import java.util.HashMap;
 
 public class MergedSouls extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     public MergedSouls(BadlandsCaves bcav) {
         plugin = bcav;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void merge_souls() {
-        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
+        final ItemStack merged_souls = customItemManager.getItem(CustomItem.MERGED_SOULS);
 
         ShapelessRecipe merged_souls_recipe = new ShapelessRecipe(new NamespacedKey(plugin, "merged_souls"), merged_souls);
         for (int a = 0; a < 9; a++) {
@@ -38,20 +41,20 @@ public class MergedSouls extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
+        final ItemStack merged_souls = customItemManager.getItem(CustomItem.MERGED_SOULS);
 
         if (!result.isSimilar(merged_souls)) return;
 
         HashMap<ItemStack, Integer> souls = new HashMap<>();
-        souls.put(CustomItem.ZOMBIE_SOUL.getItem(), 1);
-        souls.put(CustomItem.CREEPER_SOUL.getItem(), 1);
-        souls.put(CustomItem.SPIDER_SOUL.getItem(), 1);
-        souls.put(CustomItem.SKELETON_SOUL.getItem(), 1);
-        souls.put(CustomItem.GHAST_SOUL.getItem(), 1);
-        souls.put(CustomItem.SILVERFISH_SOUL.getItem(), 1);
-        souls.put(CustomItem.PHANTOM_SOUL.getItem(), 1);
-        souls.put(CustomItem.PIGZOMBIE_SOUL.getItem(), 1);
-        souls.put(CustomItem.WITCH_SOUL.getItem(), 1);
+        souls.put(customItemManager.getItem(CustomItem.ZOMBIE_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.CREEPER_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.SPIDER_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.SKELETON_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.GHAST_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.SILVERFISH_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.PHANTOM_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL), 1);
+        souls.put(customItemManager.getItem(CustomItem.WITCH_SOUL), 1);
 
 
         if (!isMatching(event.getInventory().getMatrix(), souls)) {
@@ -61,7 +64,7 @@ public class MergedSouls extends MatchCrafting implements Listener {
 
     @EventHandler
     public void craftSound (CraftItemEvent event) {
-        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
+        final ItemStack merged_souls = customItemManager.getItem(CustomItem.MERGED_SOULS);
         if (event.getRecipe().getResult().isSimilar(merged_souls)) {
             for (HumanEntity human : event.getViewers()) {
                 if (human instanceof Player) {

@@ -26,7 +26,7 @@ public class CustomItemManager {
     private final EnchantmentStorage enchantmentStorage;
     private final Map<CustomItem, ItemStack> itemMap = new HashMap<>();
 
-    public final String[] uuids = {
+    public static final String[] uuids = {
             "2018ae4d-9bf8-47b9-8c1f-3107007afeab",
             "a552bcbf-413c-493d-a2c2-cbcbd0f008cb",
             "f3eadd40-8340-4263-ae9e-0227caa026a8",

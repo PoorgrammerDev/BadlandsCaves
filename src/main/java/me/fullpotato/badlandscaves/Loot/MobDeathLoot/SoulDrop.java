@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Loot.MobDeathLoot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,22 +21,23 @@ public class SoulDrop implements Listener {
 
     public SoulDrop (BadlandsCaves bcav) {
         plugin = bcav;
+        final CustomItemManager customItemManager = plugin.getCustomItemManager();
 
-        souls.put(EntityType.ZOMBIE, CustomItem.ZOMBIE_SOUL.getItem());
-        souls.put(EntityType.ZOMBIE_VILLAGER, CustomItem.ZOMBIE_SOUL.getItem());
-        souls.put(EntityType.DROWNED, CustomItem.ZOMBIE_SOUL.getItem());
-        souls.put(EntityType.HUSK, CustomItem.ZOMBIE_SOUL.getItem());
-        souls.put(EntityType.CREEPER, CustomItem.CREEPER_SOUL.getItem());
-        souls.put(EntityType.SKELETON, CustomItem.SKELETON_SOUL.getItem());
-        souls.put(EntityType.STRAY, CustomItem.SKELETON_SOUL.getItem());
-        souls.put(EntityType.WITHER_SKELETON, CustomItem.SKELETON_SOUL.getItem());
-        souls.put(EntityType.SPIDER, CustomItem.SPIDER_SOUL.getItem());
-        souls.put(EntityType.CAVE_SPIDER, CustomItem.SPIDER_SOUL.getItem());
-        souls.put(EntityType.ZOMBIFIED_PIGLIN, CustomItem.PIGZOMBIE_SOUL.getItem());
-        souls.put(EntityType.GHAST, CustomItem.GHAST_SOUL.getItem());
-        souls.put(EntityType.SILVERFISH, CustomItem.SILVERFISH_SOUL.getItem());
-        souls.put(EntityType.WITCH, CustomItem.WITCH_SOUL.getItem());
-        souls.put(EntityType.PHANTOM, CustomItem.PHANTOM_SOUL.getItem());
+        souls.put(EntityType.ZOMBIE, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+        souls.put(EntityType.ZOMBIE_VILLAGER, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+        souls.put(EntityType.DROWNED, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+        souls.put(EntityType.HUSK, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
+        souls.put(EntityType.CREEPER, customItemManager.getItem(CustomItem.CREEPER_SOUL));
+        souls.put(EntityType.SKELETON, customItemManager.getItem(CustomItem.SKELETON_SOUL));
+        souls.put(EntityType.STRAY, customItemManager.getItem(CustomItem.SKELETON_SOUL));
+        souls.put(EntityType.WITHER_SKELETON, customItemManager.getItem(CustomItem.SKELETON_SOUL));
+        souls.put(EntityType.SPIDER, customItemManager.getItem(CustomItem.SPIDER_SOUL));
+        souls.put(EntityType.CAVE_SPIDER, customItemManager.getItem(CustomItem.SPIDER_SOUL));
+        souls.put(EntityType.ZOMBIFIED_PIGLIN, customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL));
+        souls.put(EntityType.GHAST, customItemManager.getItem(CustomItem.GHAST_SOUL));
+        souls.put(EntityType.SILVERFISH, customItemManager.getItem(CustomItem.SILVERFISH_SOUL));
+        souls.put(EntityType.WITCH, customItemManager.getItem(CustomItem.WITCH_SOUL));
+        souls.put(EntityType.PHANTOM, customItemManager.getItem(CustomItem.PHANTOM_SOUL));
     }
 
     @EventHandler

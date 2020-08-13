@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.MatchCrafting;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,13 +19,15 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class StarlightTools extends MatchCrafting implements Listener {
     protected final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
 
     public StarlightTools(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     public void saberRecipe() {
-        final ItemStack saber = CustomItem.STARLIGHT_SABER.getItem();
+        final ItemStack saber = customItemManager.getItem(CustomItem.STARLIGHT_SABER);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_saber"), saber);
         recipe.shape(" # ", "@# ", " | ");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -35,7 +38,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public void shieldRecipe() {
-        final ItemStack shield = CustomItem.STARLIGHT_SHIELD.getItem();
+        final ItemStack shield = customItemManager.getItem(CustomItem.STARLIGHT_SHIELD);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_shield"), shield);
         recipe.shape("#@#", "###", " # ");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -45,7 +48,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public void blasterRecipe() {
-        final ItemStack blaster = CustomItem.STARLIGHT_BLASTER.getItem();
+        final ItemStack blaster = customItemManager.getItem(CustomItem.STARLIGHT_BLASTER);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_blaster"), blaster);
         recipe.shape("--@", "##%", " ##");
         recipe.setIngredient('-', Material.REDSTONE);
@@ -57,7 +60,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public void paxelRecipe() {
-        final ItemStack paxel = CustomItem.STARLIGHT_PAXEL.getItem();
+        final ItemStack paxel = customItemManager.getItem(CustomItem.STARLIGHT_PAXEL);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_paxel"), paxel);
         recipe.shape("#@#", "#| ", " | ");
 
@@ -69,7 +72,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public void sentryRecipe() {
-        final ItemStack sentry = CustomItem.STARLIGHT_SENTRY.getItem();
+        final ItemStack sentry = customItemManager.getItem(CustomItem.STARLIGHT_SENTRY);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "starlight_sentry"), sentry);
         recipe.shape("#@#", "#%#", "###");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
@@ -84,7 +87,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack saber = CustomItem.STARLIGHT_SABER.getItem();
+        final ItemStack saber = customItemManager.getItem(CustomItem.STARLIGHT_SABER);
         if (!result.isSimilar(saber)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -96,9 +99,9 @@ public class StarlightTools extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.REINFORCED_TITANIUM.getItem();
-        final ItemStack titanium_rod = CustomItem.TITANIUM_ROD.getItem();
-        final ItemStack photon_emitter = CustomItem.PHOTON_EMITTER.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
+        final ItemStack titanium_rod = customItemManager.getItem(CustomItem.TITANIUM_ROD);
+        final ItemStack photon_emitter = customItemManager.getItem(CustomItem.PHOTON_EMITTER);
 
         if (!isMatching(matrix, photon_emitter) || !isMatching(matrix, titanium_ingot, 1, 4) || !isMatching(matrix, titanium_rod, 7)) {
             event.getInventory().setResult(null);
@@ -110,7 +113,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack shield = CustomItem.STARLIGHT_SHIELD.getItem();
+        final ItemStack shield = customItemManager.getItem(CustomItem.STARLIGHT_SHIELD);
         if (!result.isSimilar(shield)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -122,8 +125,8 @@ public class StarlightTools extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.REINFORCED_TITANIUM.getItem();
-        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
+        final ItemStack starlight_module = customItemManager.getItem(CustomItem.STARLIGHT_MODULE);
 
         if (!isMatching(matrix, starlight_module) && !isMatching(matrix, titanium_ingot)) {
             event.getInventory().setResult(null);
@@ -135,7 +138,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack blaster = CustomItem.STARLIGHT_BLASTER.getItem();
+        final ItemStack blaster = customItemManager.getItem(CustomItem.STARLIGHT_BLASTER);
         if (!result.isSimilar(blaster)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -147,8 +150,8 @@ public class StarlightTools extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.REINFORCED_TITANIUM.getItem();
-        final ItemStack photon_emitter = CustomItem.PHOTON_EMITTER.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
+        final ItemStack photon_emitter = customItemManager.getItem(CustomItem.PHOTON_EMITTER);
 
         if (!isMatching(matrix, photon_emitter) || !isMatching(matrix, titanium_ingot)) {
             event.getInventory().setResult(null);
@@ -160,7 +163,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack paxel = CustomItem.STARLIGHT_PAXEL.getItem();
+        final ItemStack paxel = customItemManager.getItem(CustomItem.STARLIGHT_PAXEL);
         if (!result.isSimilar(paxel)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -172,9 +175,9 @@ public class StarlightTools extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium_ingot = CustomItem.REINFORCED_TITANIUM.getItem();
-        final ItemStack titanium_rod = CustomItem.TITANIUM_ROD.getItem();
-        final ItemStack starlight_module = CustomItem.STARLIGHT_MODULE.getItem();
+        final ItemStack titanium_ingot = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
+        final ItemStack titanium_rod = customItemManager.getItem(CustomItem.TITANIUM_ROD);
+        final ItemStack starlight_module = customItemManager.getItem(CustomItem.STARLIGHT_MODULE);
 
         if (!isMatching(matrix, starlight_module) || !isMatching(matrix, titanium_ingot, 0, 2, 3) || !isMatching(matrix, titanium_rod, 4, 7)) {
             event.getInventory().setResult(null);
@@ -186,7 +189,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();
-        final ItemStack sentry = CustomItem.STARLIGHT_SENTRY.getItem();
+        final ItemStack sentry = customItemManager.getItem(CustomItem.STARLIGHT_SENTRY);
         if (!result.isSimilar(sentry)) return;
 
         if (event.getViewers().get(0) instanceof Player) {
@@ -198,7 +201,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack titanium = CustomItem.REINFORCED_TITANIUM.getItem();
+        final ItemStack titanium = customItemManager.getItem(CustomItem.REINFORCED_TITANIUM);
 
         if (isMatching(matrix, titanium)) {
             for (ItemStack item : matrix) {
@@ -217,7 +220,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
 
 
     public boolean isStarlightSaber (ItemStack item) {
-        if (item.getType().equals(CustomItem.STARLIGHT_SABER.getItem().getType())) {
+        if (item.getType().equals(customItemManager.getItem(CustomItem.STARLIGHT_SABER).getType())) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
@@ -236,7 +239,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public boolean isStarlightShield (ItemStack item) {
-        if (item.getType().equals(CustomItem.STARLIGHT_SHIELD.getItem().getType())) {
+        if (item.getType().equals(customItemManager.getItem(CustomItem.STARLIGHT_SHIELD).getType())) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
@@ -255,7 +258,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public boolean isStarlightBlaster (ItemStack item) {
-        if (item.getType().equals(CustomItem.STARLIGHT_BLASTER.getItem().getType())) {
+        if (item.getType().equals(customItemManager.getItem(CustomItem.STARLIGHT_BLASTER).getType())) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
@@ -295,7 +298,7 @@ public class StarlightTools extends MatchCrafting implements Listener {
     }
 
     public boolean isStarlightSentry (ItemStack item) {
-        if (item.getType().equals(CustomItem.STARLIGHT_SENTRY.getItem().getType())) {
+        if (item.getType().equals(customItemManager.getItem(CustomItem.STARLIGHT_SENTRY).getType())) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {

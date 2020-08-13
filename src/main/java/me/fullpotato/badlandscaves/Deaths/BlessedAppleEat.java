@@ -24,8 +24,8 @@ public class BlessedAppleEat implements Listener {
         ItemStack item = event.getItem();
         int death_count = (int) PlayerScore.DEATHS.getScore(plugin, player);
 
-        final ItemStack blessed_apple = CustomItem.BLESSED_APPLE.getItem();
-        final ItemStack enchanted_blessed_apple = CustomItem.ENCHANTED_BLESSED_APPLE.getItem();
+        final ItemStack blessed_apple = plugin.getCustomItemManager().getItem(CustomItem.BLESSED_APPLE);
+        final ItemStack enchanted_blessed_apple = plugin.getCustomItemManager().getItem(CustomItem.ENCHANTED_BLESSED_APPLE);
 
         if (item.isSimilar(blessed_apple) || item.isSimilar(enchanted_blessed_apple)) {
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getReflectionWorldName()))) {

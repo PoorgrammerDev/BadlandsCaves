@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactBaseItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 public class SoulCampfire implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final SwapPowers swapPowers;
     private final ArtifactManager artifactManager;
     private final Map<ArtifactBaseItem, Integer> artifactSlots;
@@ -55,6 +57,7 @@ public class SoulCampfire implements Listener {
 
     public SoulCampfire(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.customItemManager = plugin.getCustomItemManager();
         this.swapPowers = new SwapPowers(plugin);
         this.artifactManager = new ArtifactManager(plugin);
 
@@ -125,7 +128,7 @@ public class SoulCampfire implements Listener {
 
             final ActivePowers[] order = swapPowers.getSwapOrder(player);
             for (int i = 0; i < order.length; i++) {
-                inventory.setItem(28 + (2 * i), order[i].getItem().getItem());
+                inventory.setItem(28 + (2 * i), customItemManager.getItem(order[i].getItem()));
             }
         }
         else if (menu.equals(Menu.OTHER_OPTIONS)) {
@@ -139,7 +142,7 @@ public class SoulCampfire implements Listener {
             final Map<ArtifactBaseItem, Artifact> artifactMap = artifactManager.getArtifacts(player);
             artifactSlots.forEach((baseItem, slot) -> {
                 if (artifactMap.containsKey(baseItem)) {
-                    inventory.setItem(slot, artifactMap.get(baseItem).getArtifactItem().getItem());
+                    inventory.setItem(slot, customItemManager.getItem(artifactMap.get(baseItem).getArtifactItem()));
                 }
                 else {
                     inventory.setItem(slot, getArtifactBaseItemIcons(baseItem));
@@ -343,7 +346,7 @@ public class SoulCampfire implements Listener {
             final ActivePowers[] powerOrder = new ActivePowers[4];
             for (int i = 0; i < powerItemOrder.length; i++) {
                 for (ActivePowers value : values) {
-                    if (powerItemOrder[i] != null && powerItemOrder[i].isSimilar(value.getItem().getItem())) {
+                    if (powerItemOrder[i] != null && powerItemOrder[i].isSimilar(customItemManager.getItem(value.getItem()))) {
                         powerOrder[i] = value;
                     }
                 }
@@ -388,7 +391,7 @@ public class SoulCampfire implements Listener {
 
     public boolean isSpellItem (ItemStack item) {
         for (ActivePowers value : ActivePowers.values()) {
-            if (item.isSimilar(value.getItem().getItem())) return true;
+            if (item.isSimilar(customItemManager.getItem(value.getItem()))) return true;
         }
         return false;
     }

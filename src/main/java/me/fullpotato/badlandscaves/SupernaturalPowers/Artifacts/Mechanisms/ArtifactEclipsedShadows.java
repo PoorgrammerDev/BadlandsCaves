@@ -50,7 +50,7 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
         if (plugin.getSystemConfig().getBoolean("hardmode")) {
             if (player.isSneaking()) {
                 final ItemStack offhand = player.getInventory().getItemInOffHand();
-                if (offhand.isSimilar(CustomItem.ECLIPSED_SHADOWS.getItem())) {
+                if (offhand.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS))) {
                     player.getInventory().setItemInOffHand(null);
                     swapPowers.attemptSwap(player, false);
                     swapPowers.attemptSwap(player, true);
@@ -72,7 +72,7 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
                                         if (armor != null && voidmatter.isVoidmatterArmor(armor)) {
                                             if (artifactManager.hasArtifact(player, Artifact.ECLIPSED_SHADOWS)) {
                                                 manaBarManager.displayMessage(player, ChatColor.of("#5109eb") + "Eclipsed Shadows", 2, true);
-                                                equipment.setItemInOffHand(CustomItem.ECLIPSED_SHADOWS.getItem());
+                                                equipment.setItemInOffHand(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS));
                                             }
                                             return;
                                         }
@@ -92,7 +92,7 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
             final Player player = event.getPlayer();
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
                 final ItemStack offhand = player.getInventory().getItemInOffHand();
-                if (offhand.isSimilar(CustomItem.ECLIPSED_SHADOWS.getItem())) {
+                if (offhand.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS))) {
                     final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
                     if (mana >= cost) {
                         PlayerScore.MANA.setScore(plugin, player, mana - cost);

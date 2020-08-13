@@ -1,7 +1,7 @@
 package me.fullpotato.badlandscaves.Commands;
 
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,7 +29,7 @@ public class CustomItemCommand extends Commands implements CommandExecutor {
                     if (target != null) {
                         if (args.length > 1) {
                             try {
-                                ItemStack item = CustomItem.valueOf(args[1].toUpperCase()).getItem();
+                                final ItemStack item = plugin.getCustomItemManager().getItem(CustomItem.valueOf(args[1].toUpperCase()));
                                 int amount = 1;
                                 if (args.length >= 3) {
                                     try {

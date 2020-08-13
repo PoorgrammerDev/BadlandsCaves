@@ -44,7 +44,7 @@ public class SilencerBlock implements Listener {
     public void placeSilencer (PlayerInteractEvent event) {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             final ItemStack item = event.getItem();
-            if (item != null && item.isSimilar(CustomItem.SILENCER.getItem())) {
+            if (item != null && item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.SILENCER))) {
                 event.setCancelled(true);
 
                 Player player = event.getPlayer();
@@ -271,7 +271,7 @@ public class SilencerBlock implements Listener {
                     if (uuid != null) {
                         destroySilencerIcon(block.getLocation().add(0.5, 1, 0.5));
                         block.breakNaturally();
-                        block.getWorld().dropItemNaturally(block.getLocation(), CustomItem.SILENCER.getItem());
+                        block.getWorld().dropItemNaturally(block.getLocation(), plugin.getCustomItemManager().getItem(CustomItem.SILENCER));
 
                         event.getWhoClicked().closeInventory();
                         plugin.getSystemConfig().set("silencer_locations." + uuid, null);

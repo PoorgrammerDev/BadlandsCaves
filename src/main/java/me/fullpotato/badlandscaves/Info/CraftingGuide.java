@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Info;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ import java.util.Objects;
 
 public class CraftingGuide implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final String title = "§8Crafting Guide";
     final ItemStack blackGlass = EmptyItem.getEmptyItem(Material.BLACK_STAINED_GLASS_PANE);
     final ItemStack whiteGlass = EmptyItem.getEmptyItem(Material.WHITE_STAINED_GLASS_PANE);
@@ -140,6 +142,7 @@ public class CraftingGuide implements Listener {
 
     public CraftingGuide(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
         fillCraftingRecipes(craftingRecipes);
         fillCauldronRecipes(cauldronRecipes);
         fillOtherDescs(otherDescription);
@@ -286,7 +289,7 @@ public class CraftingGuide implements Listener {
 
         for (int i = 0; i + start < custom_items.length && i < 45; i++) {
             try {
-                ItemStack item = CustomItem.valueOf(custom_items[i + start]).getItem();
+                ItemStack item = customItemManager.getItem(CustomItem.valueOf(custom_items[i + start]));
                 item.setAmount(1);
 
                 inventory.setItem(i, item);
@@ -503,7 +506,7 @@ public class CraftingGuide implements Listener {
     }
 
     public void fillCraftingRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
-        ItemStack any_soul = CustomItem.ZOMBIE_SOUL.getItem();
+        ItemStack any_soul = customItemManager.getItem(CustomItem.ZOMBIE_SOUL);
         ItemMeta zombie_soul_meta = any_soul.getItemMeta();
         zombie_soul_meta.setDisplayName(ChatColor.WHITE + "Any Soul");
         any_soul.setItemMeta(zombie_soul_meta);
@@ -511,31 +514,31 @@ public class CraftingGuide implements Listener {
                 any_soul,
                 any_soul,
                 any_soul,
-                CustomItem.PURGE_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.PURGE_ESSENCE),
                 new ItemStack(Material.GOLDEN_APPLE),
-                CustomItem.PURGE_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.PURGE_ESSENCE),
                 any_soul,
                 any_soul,
                 any_soul,
         };
-        recipes.put(CustomItem.BLESSED_APPLE.getItem(), blessed_apple_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.BLESSED_APPLE), blessed_apple_recipe);
 
 
         ItemStack[] enchanted_blessed_apple_recipe = {
                 any_soul,
                 any_soul,
                 any_soul,
-                CustomItem.PURGE_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.PURGE_ESSENCE),
                 new ItemStack(Material.ENCHANTED_GOLDEN_APPLE),
-                CustomItem.PURGE_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.PURGE_ESSENCE),
                 any_soul,
                 any_soul,
                 any_soul,
         };
-        recipes.put(CustomItem.ENCHANTED_BLESSED_APPLE.getItem(), enchanted_blessed_apple_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), enchanted_blessed_apple_recipe);
 
 
-        ItemStack tiny_blaze = CustomItem.TINY_BLAZE_POWDER.getItem();
+        ItemStack tiny_blaze = customItemManager.getItem(CustomItem.TINY_BLAZE_POWDER);
         tiny_blaze.setAmount(1);
         ItemStack[] purge_essence_recipe = {
                 tiny_blaze,
@@ -557,7 +560,7 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.BLAZE_POWDER),
         };
-        recipes.put(CustomItem.PURGE_ESSENCE.getItem(), purge_essence_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.PURGE_ESSENCE), purge_essence_recipe);
 
 
         ItemStack[] hell_essence_recipe = {
@@ -573,7 +576,7 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.MAGMA_CREAM),
         };
-        recipes.put(CustomItem.HELL_ESSENCE.getItem(), hell_essence_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.HELL_ESSENCE), hell_essence_recipe);
 
 
         ItemStack[] magic_essence_recipe = {
@@ -581,39 +584,39 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
-                CustomItem.WITCH_SOUL.getItem(),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
                 new ItemStack(Material.LAPIS_LAZULI),
         };
-        recipes.put(CustomItem.MAGIC_ESSENCE.getItem(), magic_essence_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.MAGIC_ESSENCE), magic_essence_recipe);
 
         ItemStack[] tiny_blaze_powder_recipe = {
                 new ItemStack(Material.BLAZE_POWDER)
         };
-        recipes.put(CustomItem.TINY_BLAZE_POWDER.getItem(), tiny_blaze_powder_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.TINY_BLAZE_POWDER), tiny_blaze_powder_recipe);
 
 
         ItemStack[] merged_souls_recipe = {
-                CustomItem.ZOMBIE_SOUL.getItem(),
-                CustomItem.CREEPER_SOUL.getItem(),
-                CustomItem.SPIDER_SOUL.getItem(),
-                CustomItem.SKELETON_SOUL.getItem(),
-                CustomItem.GHAST_SOUL.getItem(),
-                CustomItem.SILVERFISH_SOUL.getItem(),
-                CustomItem.PHANTOM_SOUL.getItem(),
-                CustomItem.PIGZOMBIE_SOUL.getItem(),
-                CustomItem.WITCH_SOUL.getItem(),
+                customItemManager.getItem(CustomItem.ZOMBIE_SOUL),
+                customItemManager.getItem(CustomItem.CREEPER_SOUL),
+                customItemManager.getItem(CustomItem.SPIDER_SOUL),
+                customItemManager.getItem(CustomItem.SKELETON_SOUL),
+                customItemManager.getItem(CustomItem.GHAST_SOUL),
+                customItemManager.getItem(CustomItem.SILVERFISH_SOUL),
+                customItemManager.getItem(CustomItem.PHANTOM_SOUL),
+                customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
         };
-        recipes.put(CustomItem.MERGED_SOULS.getItem(), merged_souls_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.MERGED_SOULS), merged_souls_recipe);
 
 
         ItemStack[] soul_crystal_incomplete_recipe = {
-                CustomItem.MERGED_SOULS.getItem(),
+                customItemManager.getItem(CustomItem.MERGED_SOULS),
                 new ItemStack(Material.DIAMOND)
         };
-        recipes.put(CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem(), soul_crystal_incomplete_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE), soul_crystal_incomplete_recipe);
 
 
         ItemStack[] voltshock_battery_recipe = {
@@ -627,7 +630,7 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.IRON_INGOT),
         };
-        recipes.put(CustomItem.VOLTSHOCK_BATTERY.getItem(), voltshock_battery_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY), voltshock_battery_recipe);
 
 
         ItemStack[] voltshock_shocker_recipe = {
@@ -641,10 +644,10 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.CHAIN),
                 new ItemStack(Material.REDSTONE),
         };
-        recipes.put(CustomItem.VOLTSHOCK_SHOCKER.getItem(), voltshock_shocker_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER), voltshock_shocker_recipe);
 
 
-        ItemStack shock_sword = CustomItem.VOLTSHOCK_PLACEHOLDER.getItem();
+        ItemStack shock_sword = customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER);
         ItemMeta shock_sword_meta = shock_sword.getItemMeta();
         shock_sword_meta.setDisplayName(ChatColor.WHITE + "Iron, Gold, or Netherite Sword");
         shock_sword.setItemMeta(shock_sword_meta);
@@ -652,37 +655,37 @@ public class CraftingGuide implements Listener {
         ItemStack[] voltshock_placeholder_recipe = {
                 null,
                 new ItemStack(Material.REDSTONE),
-                CustomItem.VOLTSHOCK_SHOCKER.getItem(),
+                customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER),
                 null,
                 new ItemStack(Material.REDSTONE),
-                CustomItem.VOLTSHOCK_SHOCKER.getItem(),
-                CustomItem.VOLTSHOCK_BATTERY.getItem(),
+                customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER),
+                customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY),
                 shock_sword,
         };
-        recipes.put(CustomItem.VOLTSHOCK_PLACEHOLDER.getItem(), voltshock_placeholder_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER), voltshock_placeholder_recipe);
 
 
         ItemStack[] voltshock_sword_charge_placeholder_recipe = {
                 new ItemStack(Material.EXPERIENCE_BOTTLE),
-                CustomItem.VOLTSHOCK_PLACEHOLDER.getItem(),
+                customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER),
         };
-        recipes.put(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.getItem(), voltshock_sword_charge_placeholder_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER), voltshock_sword_charge_placeholder_recipe);
 
 
         ItemStack[] voltshock_arrow_recipe = {
                 null,
                 null,
-                CustomItem.VOLTSHOCK_SHOCKER.getItem(),
+                customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER),
                 null,
                 new ItemStack(Material.REDSTONE),
                 null,
-                CustomItem.VOLTSHOCK_BATTERY.getItem(),
+                customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY),
                 new ItemStack(Material.ARROW),
                 null,
         };
-        recipes.put(CustomItem.VOLTSHOCK_ARROW.getItem(), voltshock_arrow_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_ARROW), voltshock_arrow_recipe);
 
-        ItemStack tainted_powder = CustomItem.TAINTED_POWDER.getItem();
+        ItemStack tainted_powder = customItemManager.getItem(CustomItem.TAINTED_POWDER);
         tainted_powder.setAmount(1);
         ItemStack poison_potion = new ItemStack(Material.POTION);
         PotionMeta poison_potion_meta = (PotionMeta) poison_potion.getItemMeta();
@@ -700,25 +703,25 @@ public class CraftingGuide implements Listener {
                 tainted_powder,
                 new ItemStack(Material.SPIDER_EYE),
         };
-        recipes.put(CustomItem.CORROSIVE_SUBSTANCE.getItem(), corrosive_substance_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE), corrosive_substance_recipe);
 
-        ItemStack corrosive_sword = CustomItem.CORROSIVE_PLACEHOLDER.getItem();
+        ItemStack corrosive_sword = customItemManager.getItem(CustomItem.CORROSIVE_PLACEHOLDER);
         ItemMeta corrosive_sword_meta = corrosive_sword.getItemMeta();
         corrosive_sword_meta.setDisplayName(ChatColor.WHITE + "Any Sword");
         corrosive_sword.setItemMeta(corrosive_sword_meta);
 
         ItemStack[] corrosive_placeholder_recipe = {
-                CustomItem.CORROSIVE_SUBSTANCE.getItem(),
+                customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE),
                 corrosive_sword,
         };
-        recipes.put(CustomItem.CORROSIVE_PLACEHOLDER.getItem(), corrosive_placeholder_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.CORROSIVE_PLACEHOLDER), corrosive_placeholder_recipe);
 
 
         ItemStack[] corrosive_arrow_recipe = {
-                CustomItem.CORROSIVE_SUBSTANCE.getItem(),
+                customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE),
                 new ItemStack(Material.ARROW)
         };
-        recipes.put(CustomItem.CORROSIVE_ARROW.getItem(), corrosive_arrow_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.CORROSIVE_ARROW), corrosive_arrow_recipe);
 
 
         ItemStack cobble = new ItemStack(Material.COBBLESTONE);
@@ -732,7 +735,7 @@ public class CraftingGuide implements Listener {
                 null,
                 cobble,
         };
-        recipes.put(CustomItem.STONE_SHIELD.getItem(), stone_shield_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STONE_SHIELD), stone_shield_recipe);
 
         ItemStack iron = new ItemStack(Material.IRON_INGOT);
         ItemStack[] iron_shield_recipe = {
@@ -745,7 +748,7 @@ public class CraftingGuide implements Listener {
                 null,
                 iron,
         };
-        recipes.put(CustomItem.IRON_SHIELD.getItem(), iron_shield_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.IRON_SHIELD), iron_shield_recipe);
 
         ItemStack diamond = new ItemStack(Material.DIAMOND);
         ItemStack[] diamond_shield_recipe = {
@@ -758,7 +761,7 @@ public class CraftingGuide implements Listener {
                 null,
                 diamond,
         };
-        recipes.put(CustomItem.DIAMOND_SHIELD.getItem(), diamond_shield_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.DIAMOND_SHIELD), diamond_shield_recipe);
 
         ItemStack netherite_scrap = new ItemStack(Material.NETHERITE_SCRAP);
         ItemStack[] netherite_shield_recipe = {
@@ -771,7 +774,7 @@ public class CraftingGuide implements Listener {
                 null,
                 netherite_scrap,
         };
-        recipes.put(CustomItem.NETHERITE_SHIELD.getItem(), netherite_shield_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.NETHERITE_SHIELD), netherite_shield_recipe);
 
         ItemStack planks = new ItemStack(Material.OAK_PLANKS);
         ItemMeta planks_meta = planks.getItemMeta();
@@ -828,13 +831,13 @@ public class CraftingGuide implements Listener {
         recipes.put(new ItemStack(Material.QUARTZ), quartz_recipe);
 
         ItemStack[] titanium_ingot_recipe = {
-                CustomItem.TITANIUM_FRAGMENT.getItem(),
-                CustomItem.TITANIUM_FRAGMENT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
+                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
                 null,
-                CustomItem.TITANIUM_FRAGMENT.getItem(),
-                CustomItem.TITANIUM_FRAGMENT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
+                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
         };
-        recipes.put(CustomItem.TITANIUM_INGOT.getItem(), titanium_ingot_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.TITANIUM_INGOT), titanium_ingot_recipe);
 
         final ItemStack goldNugget = new ItemStack(Material.GOLD_NUGGET);
         final ItemStack netheriteScrap = new ItemStack(Material.NETHERITE_SCRAP);
@@ -843,13 +846,13 @@ public class CraftingGuide implements Listener {
                 goldNugget,
                 goldNugget,
                 netheriteScrap,
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
                 netheriteScrap,
                 goldNugget,
                 goldNugget,
                 goldNugget,
         };
-        recipes.put(CustomItem.REINFORCED_TITANIUM.getItem(), reinforced_titanium_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.REINFORCED_TITANIUM), reinforced_titanium_recipe);
 
         ItemStack[] binding_recipe = {
                 new ItemStack(Material.RED_SAND),
@@ -858,86 +861,86 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.GRAVEL),
                 new ItemStack(Material.RED_SAND),
         };
-        recipes.put(CustomItem.BINDING.getItem(), binding_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.BINDING), binding_recipe);
 
         ItemStack[] golden_cable_recipe = {
-            CustomItem.BINDING.getItem(),
-                CustomItem.BINDING.getItem(),
-                CustomItem.BINDING.getItem(),
+            customItemManager.getItem(CustomItem.BINDING),
+                customItemManager.getItem(CustomItem.BINDING),
+                customItemManager.getItem(CustomItem.BINDING),
                 new ItemStack(Material.GOLD_INGOT),
                 new ItemStack(Material.GOLD_INGOT),
                 new ItemStack(Material.GOLD_INGOT),
-                CustomItem.BINDING.getItem(),
-                CustomItem.BINDING.getItem(),
-                CustomItem.BINDING.getItem(),
+                customItemManager.getItem(CustomItem.BINDING),
+                customItemManager.getItem(CustomItem.BINDING),
+                customItemManager.getItem(CustomItem.BINDING),
         };
-        recipes.put(CustomItem.GOLDEN_CABLE.getItem(), golden_cable_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.GOLDEN_CABLE), golden_cable_recipe);
 
         ItemStack[] nether_star_fragment_recipe = {
             new ItemStack(Material.NETHER_STAR)
         };
-        recipes.put(CustomItem.NETHER_STAR_FRAGMENT.getItem(), nether_star_fragment_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT), nether_star_fragment_recipe);
 
         ItemStack[] starlight_circuit_recipe = {
-                CustomItem.GOLDEN_CABLE.getItem(),
-                CustomItem.GOLDEN_CABLE.getItem(),
-                CustomItem.GOLDEN_CABLE.getItem(),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
                 new ItemStack(Material.REDSTONE),
-                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
+                customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT),
                 new ItemStack(Material.REDSTONE),
-                CustomItem.GOLDEN_CABLE.getItem(),
-                CustomItem.GOLDEN_CABLE.getItem(),
-                CustomItem.GOLDEN_CABLE.getItem(),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
         };
-        recipes.put(CustomItem.STARLIGHT_CIRCUIT.getItem(), starlight_circuit_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_CIRCUIT), starlight_circuit_recipe);
 
         ItemStack[] starlight_battery_recipe = {
                 null,
-                CustomItem.GOLDEN_CABLE.getItem(),
+                customItemManager.getItem(CustomItem.GOLDEN_CABLE),
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
         };
-        recipes.put(CustomItem.STARLIGHT_BATTERY.getItem(), starlight_battery_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_BATTERY), starlight_battery_recipe);
 
         ItemStack[] starlight_module_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.STARLIGHT_CIRCUIT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.STARLIGHT_BATTERY.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.STARLIGHT_CIRCUIT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.STARLIGHT_BATTERY),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
         };
-        recipes.put(CustomItem.STARLIGHT_MODULE.getItem(), starlight_module_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_MODULE), starlight_module_recipe);
 
         ItemStack[] titanium_rod_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
                 null,
                 null,
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
         };
-        recipes.put(CustomItem.TITANIUM_ROD.getItem(), titanium_rod_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.TITANIUM_ROD), titanium_rod_recipe);
 
 
         ItemStack[] photon_emitter_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
                 new ItemStack(Material.ENDER_PEARL),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.NETHER_STAR_FRAGMENT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
         };
-        recipes.put(CustomItem.PHOTON_EMITTER.getItem(), photon_emitter_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.PHOTON_EMITTER), photon_emitter_recipe);
 
 
         ItemStack[] energium_recipe = {
@@ -947,288 +950,288 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.DIAMOND),
                 new ItemStack(Material.REDSTONE),
         };
-        recipes.put(CustomItem.ENERGIUM.getItem(), energium_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.ENERGIUM), energium_recipe);
 
         ItemStack[] energy_core_recipe = {
-               CustomItem.ENERGIUM.getItem(),
+               customItemManager.getItem(CustomItem.ENERGIUM),
                 new ItemStack(Material.EXPERIENCE_BOTTLE),
         };
-        recipes.put(CustomItem.ENERGY_CORE.getItem(), energy_core_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.ENERGY_CORE), energy_core_recipe);
 
 
         ItemStack[] starlight_helmet_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_HELMET.getItem(), starlight_helmet_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_HELMET), starlight_helmet_recipe);
 
 
         ItemStack[] starlight_chestplate_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_CHESTPLATE.getItem(), starlight_chestplate_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_CHESTPLATE), starlight_chestplate_recipe);
 
 
         ItemStack[] starlight_leggings_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_LEGGINGS.getItem(), starlight_leggings_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_LEGGINGS), starlight_leggings_recipe);
 
 
         ItemStack[] starlight_boots_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_BOOTS.getItem(), starlight_boots_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_BOOTS), starlight_boots_recipe);
 
 
         ItemStack[] starlight_saber_recipe = {
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.PHOTON_EMITTER.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.PHOTON_EMITTER),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
                 null,
-                CustomItem.TITANIUM_ROD.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_ROD),
                 null,
         };
-        recipes.put(CustomItem.STARLIGHT_SABER.getItem(), starlight_saber_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_SABER), starlight_saber_recipe);
 
         ItemStack[] starlight_shield_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_SHIELD.getItem(), starlight_shield_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_SHIELD), starlight_shield_recipe);
 
         ItemStack[] starlight_blaster_recipe = {
                 new ItemStack(Material.REDSTONE),
                 new ItemStack(Material.REDSTONE),
-                CustomItem.PHOTON_EMITTER.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.PHOTON_EMITTER),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 new ItemStack(Material.COMPARATOR),
                 null,
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_BLASTER.getItem(), starlight_blaster_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_BLASTER), starlight_blaster_recipe);
 
 
         ItemStack[] starlight_paxel_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_MODULE.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.TITANIUM_ROD.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_MODULE),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.TITANIUM_ROD),
                 null,
                 null,
-                CustomItem.TITANIUM_ROD.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_ROD),
         };
-        recipes.put(CustomItem.STARLIGHT_PAXEL.getItem(), starlight_paxel_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_PAXEL), starlight_paxel_recipe);
 
 
         ItemStack[] starlight_sentry_recipe = {
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
                 new ItemStack(Material.ENDER_EYE),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.STARLIGHT_BLASTER.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
-                CustomItem.REINFORCED_TITANIUM.getItem(),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.STARLIGHT_BLASTER),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
+                customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
         };
-        recipes.put(CustomItem.STARLIGHT_SENTRY.getItem(), starlight_sentry_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_SENTRY), starlight_sentry_recipe);
 
 
-        ItemStack starlight_icon = CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem();
+        ItemStack starlight_icon = customItemManager.getItem(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER);
         ItemMeta starlight_icon_meta = starlight_icon.getItemMeta();
         starlight_icon_meta.setDisplayName("§eAny Starlight Armor / Tool");
         starlight_icon.setItemMeta(starlight_icon_meta);
 
         ItemStack[] starlight_charge_placeholder_recipe = {
-                CustomItem.ENERGY_CORE.getItem(),
+                customItemManager.getItem(CustomItem.ENERGY_CORE),
                 starlight_icon,
         };
-        recipes.put(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.getItem(), starlight_charge_placeholder_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER), starlight_charge_placeholder_recipe);
 
 
         ItemStack[] wavelength_disruptor_recipe = {
-                CustomItem.WITCH_SOUL.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.WITCH_SOUL.getItem(),
-                CustomItem.WITCH_SOUL.getItem(),
-                CustomItem.PHOTON_EMITTER.getItem(),
-                CustomItem.WITCH_SOUL.getItem(),
-                CustomItem.WITCH_SOUL.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.WITCH_SOUL.getItem(),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
+                customItemManager.getItem(CustomItem.PHOTON_EMITTER),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.WITCH_SOUL),
         };
-        recipes.put(CustomItem.WAVELENGTH_DISRUPTOR.getItem(), wavelength_disruptor_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.WAVELENGTH_DISRUPTOR), wavelength_disruptor_recipe);
 
         ItemStack[] silencer_recipe = {
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.WAVELENGTH_DISRUPTOR.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.STARLIGHT_BATTERY.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
-                CustomItem.TITANIUM_INGOT.getItem(),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.WAVELENGTH_DISRUPTOR),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.STARLIGHT_BATTERY),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
+                customItemManager.getItem(CustomItem.TITANIUM_INGOT),
         };
-        recipes.put(CustomItem.SILENCER.getItem(), silencer_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.SILENCER), silencer_recipe);
 
 
         ItemStack[] voidmatter_stick_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
         };
-        recipes.put(CustomItem.VOIDMATTER_STICK.getItem(), voidmatter_stick_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_STICK), voidmatter_stick_recipe);
 
         ItemStack[] voidmatter_string_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
         };
-        recipes.put(CustomItem.VOIDMATTER_STRING.getItem(), voidmatter_string_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_STRING), voidmatter_string_recipe);
 
         ItemStack[] voidmatter_helmet_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
         };
-        recipes.put(CustomItem.VOIDMATTER_HELMET.getItem(), voidmatter_helmet_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_HELMET), voidmatter_helmet_recipe);
 
         ItemStack[] voidmatter_chestplate_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
         };
-        recipes.put(CustomItem.VOIDMATTER_CHESTPLATE.getItem(), voidmatter_chestplate_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_CHESTPLATE), voidmatter_chestplate_recipe);
 
         ItemStack[] voidmatter_leggings_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
         };
-        recipes.put(CustomItem.VOIDMATTER_LEGGINGS.getItem(), voidmatter_leggings_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_LEGGINGS), voidmatter_leggings_recipe);
 
         ItemStack[] voidmatter_boots_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
         };
-        recipes.put(CustomItem.VOIDMATTER_BOOTS.getItem(), voidmatter_boots_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_BOOTS), voidmatter_boots_recipe);
 
         ItemStack[] voidmatter_blade_recipe = {
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
         };
-        recipes.put(CustomItem.VOIDMATTER_BLADE.getItem(), voidmatter_blade_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_BLADE), voidmatter_blade_recipe);
 
         ItemStack[] voidmatter_bow_recipe = {
-                CustomItem.VOIDMATTER_STRING.getItem(),
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STRING),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
                 null,
-                CustomItem.VOIDMATTER_STRING.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STRING),
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
-                CustomItem.VOIDMATTER_STRING.getItem(),
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STRING),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
         };
-        recipes.put(CustomItem.VOIDMATTER_BOW.getItem(), voidmatter_bow_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_BOW), voidmatter_bow_recipe);
 
         ItemStack[] voidmatter_pickaxe_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
                 null,
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
         };
-        recipes.put(CustomItem.VOIDMATTER_PICKAXE.getItem(), voidmatter_pickaxe_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_PICKAXE), voidmatter_pickaxe_recipe);
 
         ItemStack[] voidmatter_shovel_recipe = {
                 null,
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
                 null,
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
         };
-        recipes.put(CustomItem.VOIDMATTER_SHOVEL.getItem(), voidmatter_shovel_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_SHOVEL), voidmatter_shovel_recipe);
 
         ItemStack[] voidmatter_axe_recipe = {
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
                 null,
-                CustomItem.VOIDMATTER.getItem(),
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
                 null,
                 null,
-                CustomItem.VOIDMATTER_STICK.getItem(),
+                customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
         };
-        recipes.put(CustomItem.VOIDMATTER_AXE.getItem(), voidmatter_axe_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_AXE), voidmatter_axe_recipe);
     }
 
     public void fillCauldronRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
@@ -1236,30 +1239,30 @@ public class CraftingGuide implements Listener {
                 new ItemStack(Material.GLASS_BOTTLE),
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.GLASS_BOTTLE),
-                CustomItem.HELL_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.HELL_ESSENCE),
         };
-        recipes.put(CustomItem.PURIFIED_WATER.getItem(), purified_water_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.PURIFIED_WATER), purified_water_recipe);
 
 
         ItemStack[] antidote_recipe = {
                 new ItemStack(Material.GLASS_BOTTLE),
-                CustomItem.PURGE_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.PURGE_ESSENCE),
         };
-        recipes.put(CustomItem.ANTIDOTE.getItem(), antidote_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.ANTIDOTE), antidote_recipe);
 
 
         ItemStack[] mana_potion_recipe = {
                 new ItemStack(Material.GLASS_BOTTLE),
-                CustomItem.MAGIC_ESSENCE.getItem(),
+                customItemManager.getItem(CustomItem.MAGIC_ESSENCE),
         };
-        recipes.put(CustomItem.MANA_POTION.getItem(), mana_potion_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.MANA_POTION), mana_potion_recipe);
 
 
         ItemStack[] tainted_powder_recipe = {
                 new ItemStack(Material.BONE_MEAL),
                 new ItemStack(Material.SUGAR),
         };
-        recipes.put(CustomItem.TAINTED_POWDER.getItem(), tainted_powder_recipe);
+        recipes.put(customItemManager.getItem(CustomItem.TAINTED_POWDER), tainted_powder_recipe);
 
 
     }
@@ -1272,7 +1275,7 @@ public class CraftingGuide implements Listener {
         fishing_crate_lore.add("§7This item can be obtained by fishing in Prehardmode.");
         fishing_crate_meta.setLore(fishing_crate_lore);
         fishing_crate_desc.setItemMeta(fishing_crate_meta);
-        descs.put(CustomItem.FISHING_CRATE.getItem(), fishing_crate_desc);
+        descs.put(customItemManager.getItem(CustomItem.FISHING_CRATE), fishing_crate_desc);
 
 
         ItemStack fishing_crate_hardmode_desc = new ItemStack(Material.FISHING_ROD);
@@ -1282,7 +1285,7 @@ public class CraftingGuide implements Listener {
         fishing_crate_hardmode_lore.add("§7This item can be obtained by fishing in Hardmode.");
         fishing_crate_hardmode_meta.setLore(fishing_crate_hardmode_lore);
         fishing_crate_hardmode_desc.setItemMeta(fishing_crate_hardmode_meta);
-        descs.put(CustomItem.FISHING_CRATE_HARDMODE.getItem(), fishing_crate_hardmode_desc);
+        descs.put(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE), fishing_crate_hardmode_desc);
 
 
         ItemStack zombie_soul_desc = new ItemStack(Material.ZOMBIE_SPAWN_EGG);
@@ -1292,7 +1295,7 @@ public class CraftingGuide implements Listener {
         zombie_soul_lore.add("§7This item can be obtained by killing Zombies.");
         zombie_soul_meta.setLore(zombie_soul_lore);
         zombie_soul_desc.setItemMeta(zombie_soul_meta);
-        descs.put(CustomItem.ZOMBIE_SOUL.getItem(), zombie_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.ZOMBIE_SOUL), zombie_soul_desc);
 
 
         ItemStack creeper_soul_desc = new ItemStack(Material.CREEPER_SPAWN_EGG);
@@ -1302,7 +1305,7 @@ public class CraftingGuide implements Listener {
         creeper_soul_lore.add("§7This item can be obtained by killing Creepers.");
         creeper_soul_meta.setLore(creeper_soul_lore);
         creeper_soul_desc.setItemMeta(creeper_soul_meta);
-        descs.put(CustomItem.CREEPER_SOUL.getItem(), creeper_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.CREEPER_SOUL), creeper_soul_desc);
 
 
         ItemStack skeleton_soul_desc = new ItemStack(Material.SKELETON_SPAWN_EGG);
@@ -1312,7 +1315,7 @@ public class CraftingGuide implements Listener {
         skeleton_soul_lore.add("§7This item can be obtained by killing Skeletons.");
         skeleton_soul_meta.setLore(skeleton_soul_lore);
         skeleton_soul_desc.setItemMeta(skeleton_soul_meta);
-        descs.put(CustomItem.SKELETON_SOUL.getItem(), skeleton_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.SKELETON_SOUL), skeleton_soul_desc);
 
 
         ItemStack spider_soul_desc = new ItemStack(Material.SPIDER_SPAWN_EGG);
@@ -1322,7 +1325,7 @@ public class CraftingGuide implements Listener {
         spider_soul_lore.add("§7This item can be obtained by killing Spiders.");
         spider_soul_meta.setLore(spider_soul_lore);
         spider_soul_desc.setItemMeta(spider_soul_meta);
-        descs.put(CustomItem.SPIDER_SOUL.getItem(), spider_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.SPIDER_SOUL), spider_soul_desc);
 
 
         ItemStack pigzombie_soul_desc = new ItemStack(Material.ZOMBIFIED_PIGLIN_SPAWN_EGG);
@@ -1332,7 +1335,7 @@ public class CraftingGuide implements Listener {
         pigzombie_soul_lore.add("§7This item can be obtained by killing Zombified Piglins.");
         pigzombie_soul_meta.setLore(pigzombie_soul_lore);
         pigzombie_soul_desc.setItemMeta(pigzombie_soul_meta);
-        descs.put(CustomItem.PIGZOMBIE_SOUL.getItem(), pigzombie_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL), pigzombie_soul_desc);
 
 
         ItemStack ghast_soul_desc = new ItemStack(Material.GHAST_SPAWN_EGG);
@@ -1342,7 +1345,7 @@ public class CraftingGuide implements Listener {
         ghast_soul_lore.add("§7This item can be obtained by killing Ghasts.");
         ghast_soul_meta.setLore(ghast_soul_lore);
         ghast_soul_desc.setItemMeta(ghast_soul_meta);
-        descs.put(CustomItem.GHAST_SOUL.getItem(), ghast_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.GHAST_SOUL), ghast_soul_desc);
 
 
         ItemStack silverfish_soul_desc = new ItemStack(Material.SILVERFISH_SPAWN_EGG);
@@ -1352,7 +1355,7 @@ public class CraftingGuide implements Listener {
         silverfish_soul_lore.add("§7This item can be obtained by killing Silverfish.");
         silverfish_soul_meta.setLore(silverfish_soul_lore);
         silverfish_soul_desc.setItemMeta(silverfish_soul_meta);
-        descs.put(CustomItem.SILVERFISH_SOUL.getItem(), silverfish_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.SILVERFISH_SOUL), silverfish_soul_desc);
 
 
         ItemStack witch_soul_desc = new ItemStack(Material.WITCH_SPAWN_EGG);
@@ -1362,7 +1365,7 @@ public class CraftingGuide implements Listener {
         witch_soul_lore.add("§7This item can be obtained by killing Witches.");
         witch_soul_meta.setLore(witch_soul_lore);
         witch_soul_desc.setItemMeta(witch_soul_meta);
-        descs.put(CustomItem.WITCH_SOUL.getItem(), witch_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.WITCH_SOUL), witch_soul_desc);
 
 
         ItemStack phantom_soul_desc = new ItemStack(Material.PHANTOM_SPAWN_EGG);
@@ -1372,17 +1375,17 @@ public class CraftingGuide implements Listener {
         phantom_soul_lore.add("§7This item can be obtained by killing Phantoms.");
         phantom_soul_meta.setLore(phantom_soul_lore);
         phantom_soul_desc.setItemMeta(phantom_soul_meta);
-        descs.put(CustomItem.PHANTOM_SOUL.getItem(), phantom_soul_desc);
+        descs.put(customItemManager.getItem(CustomItem.PHANTOM_SOUL), phantom_soul_desc);
 
 
-        ItemStack soul_crystal_desc = CustomItem.SOUL_CRYSTAL_INCOMPLETE.getItem();
+        ItemStack soul_crystal_desc = customItemManager.getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE);
         ItemMeta soul_crystal_meta = soul_crystal_desc.getItemMeta();
         soul_crystal_meta.setDisplayName("§7Complete Soul Crystal");
         ArrayList<String> soul_crystal_lore = new ArrayList<>();
         soul_crystal_lore.add("§7This item is obtained by defeating yourself in the World of Reflection.");
         soul_crystal_meta.setLore(soul_crystal_lore);
         soul_crystal_desc.setItemMeta(soul_crystal_meta);
-        descs.put(CustomItem.SOUL_CRYSTAL.getItem(), soul_crystal_desc);
+        descs.put(customItemManager.getItem(CustomItem.SOUL_CRYSTAL), soul_crystal_desc);
 
 
         ItemStack spawner_loot = new ItemStack(Material.SPAWNER);
@@ -1392,26 +1395,26 @@ public class CraftingGuide implements Listener {
         rune_lore.add("§7This item is obtained by destroying spawners.");
         spawner_loot_meta.setLore(rune_lore);
         spawner_loot.setItemMeta(spawner_loot_meta);
-        descs.put(CustomItem.RUNE.getItem(), spawner_loot);
-        descs.put(CustomItem.RECALL_POTION.getItem(), spawner_loot);
-        descs.put(CustomItem.TOTEM_OF_PRESERVATION.getItem(), spawner_loot);
-        descs.put(CustomItem.DIMENSIONAL_ANCHOR.getItem(), spawner_loot);
+        descs.put(customItemManager.getItem(CustomItem.RUNE), spawner_loot);
+        descs.put(customItemManager.getItem(CustomItem.RECALL_POTION), spawner_loot);
+        descs.put(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION), spawner_loot);
+        descs.put(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR), spawner_loot);
 
 
-        ItemStack charged_rune_desc = CustomItem.RUNE.getItem();
+        ItemStack charged_rune_desc = customItemManager.getItem(CustomItem.RUNE);
         ItemMeta charged_rune_meta = charged_rune_desc.getItemMeta();
         charged_rune_meta.setDisplayName("§dCharge Rune");
         ArrayList<String> charged_rune_lore = new ArrayList<>();
         charged_rune_lore.add("§7This item is obtained by charging the Rune with Merged Souls and Essences of Magic.");
         charged_rune_meta.setLore(charged_rune_lore);
         charged_rune_desc.setItemMeta(charged_rune_meta);
-        descs.put(CustomItem.CHARGED_RUNE.getItem(), charged_rune_desc);
+        descs.put(customItemManager.getItem(CustomItem.CHARGED_RUNE), charged_rune_desc);
 
         ItemStack hallowed_chambers_treasure_bag_desc = new ItemStack(Material.WITHER_SKELETON_SKULL);
         ItemMeta hallowed_chambers_treasure_bag_meta = hallowed_chambers_treasure_bag_desc.getItemMeta();
         hallowed_chambers_treasure_bag_meta.setDisplayName(ChatColor.DARK_PURPLE + "Kill The Wither.");
         hallowed_chambers_treasure_bag_desc.setItemMeta(hallowed_chambers_treasure_bag_meta);
-        descs.put(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.getItem(), hallowed_chambers_treasure_bag_desc);
+        descs.put(customItemManager.getItem(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG), hallowed_chambers_treasure_bag_desc);
 
         ItemStack titanium_fragment_desc = new ItemStack(Material.DEAD_TUBE_CORAL_BLOCK);
         ItemMeta titanium_fragment_meta = titanium_fragment_desc.getItemMeta();
@@ -1421,15 +1424,15 @@ public class CraftingGuide implements Listener {
         titanium_fragment_lore.add("§7which generates right above The Void.");
         titanium_fragment_meta.setLore(titanium_fragment_lore);
         titanium_fragment_desc.setItemMeta(titanium_fragment_meta);
-        descs.put(CustomItem.TITANIUM_FRAGMENT.getItem(), titanium_fragment_desc);
+        descs.put(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT), titanium_fragment_desc);
 
-        ItemStack forever_fish_desc = CustomItem.FISHING_CRATE_HARDMODE.getItem();
+        ItemStack forever_fish_desc = customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE);
         ItemMeta forever_fish_meta = forever_fish_desc.getItemMeta();
         ArrayList<String> forever_fish_lore = new ArrayList<>();
         forever_fish_lore.add("§7This item is Tier 4 Hardmode Fishing Crate loot.");
         forever_fish_meta.setLore(forever_fish_lore);
         forever_fish_desc.setItemMeta(forever_fish_meta);
-        descs.put(CustomItem.FOREVER_FISH.getItem(), forever_fish_desc);
+        descs.put(customItemManager.getItem(CustomItem.FOREVER_FISH), forever_fish_desc);
 
         ItemStack voidmatter_desc = new ItemStack(Material.ENDER_PEARL);
         ItemMeta voidmatter_meta = voidmatter_desc.getItemMeta();
@@ -1438,7 +1441,7 @@ public class CraftingGuide implements Listener {
         voidmatter_lore.add("§7This item is obtained by raiding other dimensions.");
         voidmatter_meta.setLore(voidmatter_lore);
         voidmatter_desc.setItemMeta(voidmatter_meta);
-        descs.put(CustomItem.VOIDMATTER.getItem(), voidmatter_desc);
+        descs.put(customItemManager.getItem(CustomItem.VOIDMATTER), voidmatter_desc);
 
     }
 }

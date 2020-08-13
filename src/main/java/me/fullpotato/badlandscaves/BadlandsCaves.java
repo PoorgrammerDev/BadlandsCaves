@@ -95,10 +95,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        customItemManager = new CustomItemManager(this);
-
         loadNMS();
         createOptionsConfig();
+        customItemManager = new CustomItemManager(this);
         createSystemConfig();
         loadWorldNames();
         loadCustomWorlds();
@@ -200,7 +199,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ToxicWaterBottling(this),
                 new BlazePowder(this),
                 new PurgeEssence(this),
-                new StopCustomItemsInteract(),
+                new StopCustomItemsInteract(this.getCustomItemManager()),
                 new UseTaintPowder(this),
                 new ZombieDeathLoot(),
                 new GetFishingCrate(this),
@@ -260,7 +259,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new TitaniumOre(this),
                 new TitaniumBar(this),
                 new StarlightComponents(this),
-                new UseForeverFish(),
+                new UseForeverFish(this),
                 new StarlightArmor(this),
                 new EnergyCore(this),
                 new Voidmatter(this),

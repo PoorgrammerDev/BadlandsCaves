@@ -30,7 +30,7 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
         plugin.getServer().getOnlinePlayers().forEach(player -> {
             final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (has_powers) {
-                if (player.getInventory().getItemInOffHand().isSimilar(CustomItem.POSSESS.getItem())) {
+                if (player.getInventory().getItemInOffHand().isSimilar(plugin.getCustomItemManager().getItem(CustomItem.POSSESS))) {
                     if (((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) != 1)
                             && ((byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) != 1)
                             && ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0)) {

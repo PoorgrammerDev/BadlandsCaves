@@ -18,7 +18,7 @@ public class BlazePowder extends MatchCrafting implements Listener {
     }
 
     public void tiny_blaze_powder_craft () {
-        ItemStack tiny_blz = CustomItem.TINY_BLAZE_POWDER.getItem();
+        ItemStack tiny_blz = plugin.getCustomItemManager().getItem(CustomItem.TINY_BLAZE_POWDER);
 
         ShapelessRecipe blz_pd_to_small = new ShapelessRecipe(new NamespacedKey(plugin, "tiny_blaze_powder"), tiny_blz);
         blz_pd_to_small.addIngredient(Material.BLAZE_POWDER);
@@ -39,7 +39,7 @@ public class BlazePowder extends MatchCrafting implements Listener {
 
         final Material result = event.getRecipe().getResult().getType();
         if (result.equals(Material.BLAZE_POWDER)) {
-            final ItemStack tiny_blz = CustomItem.TINY_BLAZE_POWDER.getItem();
+            final ItemStack tiny_blz = plugin.getCustomItemManager().getItem(CustomItem.TINY_BLAZE_POWDER);
             if (!isMatching(event.getInventory().getMatrix(), tiny_blz)) {
                 event.getInventory().setResult(null);
             }

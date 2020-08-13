@@ -2,9 +2,13 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +18,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,11 +29,13 @@ import java.util.List;
 
 public class UseRune implements Listener {
     private final BadlandsCaves plugin;
+    private final CustomItemManager customItemManager;
     private final String title = "§8Rune";
     private int task_id;
 
     public UseRune(BadlandsCaves plugin) {
         this.plugin = plugin;
+        customItemManager = plugin.getCustomItemManager();
     }
 
     @EventHandler
@@ -53,7 +62,7 @@ public class UseRune implements Listener {
 
     public boolean checkRuneItem(final ItemStack input) {
         final ItemStack current = input.clone();
-        final ItemStack rune = CustomItem.RUNE.getItem();
+        final ItemStack rune = customItemManager.getItem(CustomItem.RUNE);
 
         if (current.hasItemMeta()) {
             ItemMeta current_meta = current.getItemMeta();
@@ -92,8 +101,8 @@ public class UseRune implements Listener {
         player.openInventory(inventory);
 
         ItemStack current = player.getInventory().getItemInMainHand();
-        final ItemStack magic_essence = CustomItem.MAGIC_ESSENCE.getItem();
-        final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
+        final ItemStack magic_essence = customItemManager.getItem(CustomItem.MAGIC_ESSENCE);
+        final ItemStack merged_souls = customItemManager.getItem(CustomItem.MERGED_SOULS);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -128,7 +137,7 @@ public class UseRune implements Listener {
                         }
                     }
                     else {
-                        final ItemStack charged_rune = CustomItem.CHARGED_RUNE.getItem();
+                        final ItemStack charged_rune = customItemManager.getItem(CustomItem.CHARGED_RUNE);
                         player.getInventory().setItemInMainHand(charged_rune);
                         player.closeInventory();
                         player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, SoundCategory.PLAYERS, 0.5F, 1);
@@ -149,8 +158,8 @@ public class UseRune implements Listener {
                 final Inventory target_inv = event.getView().getTopInventory();
                 final Inventory player_inv = event.getView().getBottomInventory();
                 final InventoryAction action = event.getAction();
-                final ItemStack magic_essence = CustomItem.MAGIC_ESSENCE.getItem();
-                final ItemStack merged_souls = CustomItem.MERGED_SOULS.getItem();
+                final ItemStack magic_essence = customItemManager.getItem(CustomItem.MAGIC_ESSENCE);
+                final ItemStack merged_souls = customItemManager.getItem(CustomItem.MERGED_SOULS);
                 final int slot = event.getSlot();
 
                 if (clicked_inv.equals(target_inv)) {
