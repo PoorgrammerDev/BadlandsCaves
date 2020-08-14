@@ -36,8 +36,11 @@ public class EnhancedEyes extends UsePowers implements Listener {
     private final Map<Integer, Integer> levelRangeMap;
     private final ArtifactManager artifactManager;
     private final ArtifactDirectionalVision artifactDirectionalVision;
+    private final World backrooms;
+
     public EnhancedEyes(BadlandsCaves plugin) {
         super(plugin);
+        this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         nms = plugin.getEnhancedEyesNMS();
 
         levelRangeMap = new HashMap<>();
@@ -69,6 +72,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
                     if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
                     if (attemptSilence(player)) return;
+                    if (player.getWorld().equals(backrooms)) return;
 
                     final int eyes_level = (PlayerScore.EYES_LEVEL.hasScore(plugin, player)) ? (int) PlayerScore.EYES_LEVEL.getScore(plugin, player) : 0;
                     if (eyes_level < 1) return;

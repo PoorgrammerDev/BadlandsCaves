@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.SpawnBoss;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
@@ -20,17 +21,37 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listener {
     private final BadlandsCaves plugin;
     private final InventorySerialize inventorySerialize;
     private final World descension;
     private final World reflection;
+    private final Set<Material> blacklisted;
+
+
     public UseIncompleteSoulCrystal (BadlandsCaves plugin) {
         this.plugin = plugin;
         inventorySerialize = new InventorySerialize(plugin);
         descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
+
+        blacklisted = new HashSet<>();
+        blacklisted.add(Material.CRAFTING_TABLE);
+        blacklisted.add(Material.STICK);
+        blacklisted.add(Material.TOTEM_OF_UNDYING);
+        blacklisted.add(Material.WATER_BUCKET);
+        blacklisted.add(Material.LAVA_BUCKET);
+        blacklisted.add(Material.TNT);
+        blacklisted.add(Material.CHEST);
+        blacklisted.add(Material.ENDER_CHEST);
+        blacklisted.add(Material.BARREL);
+        blacklisted.add(Material.SHULKER_BOX);
+        blacklisted.add(Material.REDSTONE);
+        blacklisted.add(Material.DISPENSER);
     }
 
     @EventHandler
@@ -63,6 +84,13 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         //save inventory, then disenchant all items
         inventorySerialize.saveInventory(player, "reflection_inv");
         disenchantInventory(player);
+
+        //remove blacklisted items
+        player.getInventory().forEach(itemStack -> {
+            if (blacklisted.contains(itemStack.getType())) {
+                itemStack.setAmount(0);
+            }
+        });
 
         Location worldspawn = reflection.getSpawnLocation();
         worldspawn.setY(255);

@@ -4,7 +4,9 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
+import me.fullpotato.badlandscaves.Util.ItemBuilder;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -12,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -33,6 +36,8 @@ public class CraftingGuide implements Listener {
             CustomItem.PURIFIED_WATER.toString(),
             CustomItem.ANTIDOTE.toString(),
             CustomItem.MANA_POTION.toString(),
+            CustomItem.CANTEEN.toString(),
+            CustomItem.CANTEEN_FILL_PLACEHOLDER.toString(),
 
             CustomItem.BLESSED_APPLE.toString(),
             Material.ENCHANTED_GOLDEN_APPLE.toString(),
@@ -506,6 +511,27 @@ public class CraftingGuide implements Listener {
     }
 
     public void fillCraftingRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
+        ItemStack[] canteen_recipe = {
+                null,
+                new ItemStack(Material.IRON_NUGGET),
+                null,
+                new ItemStack(Material.IRON_INGOT),
+                null,
+                new ItemStack(Material.IRON_INGOT),
+                new ItemStack(Material.IRON_NUGGET),
+                new ItemStack(Material.IRON_INGOT),
+                new ItemStack(Material.IRON_NUGGET),
+        };
+        recipes.put(customItemManager.getItem(CustomItem.CANTEEN), canteen_recipe);
+
+        final ItemStack drink = new ItemBuilder(Material.POTION).setName(ChatColor.WHITE + "Any Drink").setPotionColor(Color.fromRGB(52, 161, 235)).addItemFlags(ItemFlag.HIDE_POTION_EFFECTS).build();
+        ItemStack[] canteen_fill_recipe = {
+                customItemManager.getItem(CustomItem.CANTEEN),
+                drink,
+        };
+        recipes.put(customItemManager.getItem(CustomItem.CANTEEN_FILL_PLACEHOLDER), canteen_fill_recipe);
+
+
         ItemStack any_soul = customItemManager.getItem(CustomItem.ZOMBIE_SOUL);
         ItemMeta zombie_soul_meta = any_soul.getItemMeta();
         zombie_soul_meta.setDisplayName(ChatColor.WHITE + "Any Soul");
@@ -536,7 +562,6 @@ public class CraftingGuide implements Listener {
                 any_soul,
         };
         recipes.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), enchanted_blessed_apple_recipe);
-
 
         ItemStack tiny_blaze = customItemManager.getItem(CustomItem.TINY_BLAZE_POWDER);
         tiny_blaze.setAmount(1);

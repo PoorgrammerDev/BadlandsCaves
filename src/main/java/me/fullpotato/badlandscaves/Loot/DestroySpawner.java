@@ -116,17 +116,21 @@ public class DestroySpawner implements Listener {
                 };
 
                 //getting location
-                int[] spread = new int[2];
+                final int[] spread = new int[2];
                 while (Math.abs(spread[0]) < 50 || Math.abs(spread[1]) < 50) {
                     spread[0] = random.ints(1, x_bounds[0], x_bounds[1]).toArray()[0];
                     spread[1] = random.ints(1, z_bounds[0], z_bounds[1]).toArray()[0];
                 }
-                int y = random.nextInt(48) + 7;
+                final int y = random.nextInt(120) + 7;
                 Location output = new Location(oldSpawnerLocation.getWorld(), spread[0], y, spread[1]);
 
                 //test if viable
                 if (isViable(output)) {
-                    newLoc = output;
+                    do {
+                        output.subtract(0, 1, 0);
+                    } while (isViable(output));
+
+                    newLoc = output.add(0, 1, 0);
                     this.cancel();
                 }
             }

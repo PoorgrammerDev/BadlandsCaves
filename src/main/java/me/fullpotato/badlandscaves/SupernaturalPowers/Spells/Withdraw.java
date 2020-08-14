@@ -33,8 +33,10 @@ public class Withdraw extends UsePowers implements Listener {
     private final World void_world;
     private final ArtifactManager artifactManager;
     private final ArtifactSoulHeist artifactSoulHeist;
+    private final World backrooms;
     public Withdraw(BadlandsCaves plugin) {
         super(plugin);
+        this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         void_world = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
         artifactManager = new ArtifactManager(plugin);
         artifactSoulHeist = new ArtifactSoulHeist(plugin, this);
@@ -55,6 +57,7 @@ public class Withdraw extends UsePowers implements Listener {
                     event.setCancelled(true);
                     if (player.getWorld().equals(void_world) || (byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1
                      || ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0) || attemptSilence(player)) return;
+                    if (player.getWorld().equals(backrooms)) return;
                         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                         if (withdraw_level > 0) {
                             attemptEnterWithdraw(player);

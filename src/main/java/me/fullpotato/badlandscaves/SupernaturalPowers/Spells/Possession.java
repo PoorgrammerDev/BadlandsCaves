@@ -25,11 +25,13 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
 public class Possession extends UsePowers implements Listener {
+    private final World backrooms;
     private final int cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost");
     private final int drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain");
 
     public Possession(BadlandsCaves bcav) {
         super(bcav);
+        this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
     }
 
     @EventHandler
@@ -49,6 +51,7 @@ public class Possession extends UsePowers implements Listener {
                     if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1) return;
                     if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
                     if (attemptSilence(player)) return;
+                    if (player.getWorld().equals(backrooms)) return;
 
                     boolean in_possession = (PlayerScore.IN_POSSESSION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1);
                     boolean has_doppelganger = (PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.hasScore(plugin, player)) && ((byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) == 1);

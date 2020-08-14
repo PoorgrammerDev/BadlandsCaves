@@ -11,6 +11,7 @@ import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -30,8 +31,11 @@ public class Displace extends UsePowers implements Listener {
     private final ArtifactManager artifactManager;
     private final ArtifactDistractingDoppelganger artifactDistractingDoppelganger;
     private final int cost;
+    private final World backrooms;
+
     public Displace(BadlandsCaves plugin) {
         super(plugin);
+        this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         nms = plugin.getLineOfSightNMS();
         manaBar = new ManaBarManager(plugin);
         artifactManager = new ArtifactManager(plugin);
@@ -55,6 +59,7 @@ public class Displace extends UsePowers implements Listener {
                     if (((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1)) return;
                     if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
                     if (attemptSilence(player)) return;
+                    if (player.getWorld().equals(backrooms)) return;
 
                     boolean has_displace_marker = ((byte) PlayerScore.HAS_DISPLACE_MARKER.getScore(plugin, player) == 1);
                     if (has_displace_marker) {

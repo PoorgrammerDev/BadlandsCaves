@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.Loot;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
+import me.fullpotato.badlandscaves.Util.ItemBuilder;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -27,6 +28,14 @@ public class SpawnerTable implements LootTable {
     private final EntityType spawnerType;
     private final int fortune;
     private final HashMap<EntityType, ItemStack> matchSoul = new HashMap<>();
+    private final ItemStack saplingVoucher = new ItemBuilder(Material.PAPER).setName("Sapling Voucher").setCustomModelData(0).build();
+    private final Material[] saplings = {
+            Material.ACACIA_SAPLING,
+            Material.BIRCH_SAPLING,
+            Material.SPRUCE_SAPLING,
+            Material.JUNGLE_SAPLING,
+            Material.DARK_OAK_SAPLING,
+    };
 
     public SpawnerTable(BadlandsCaves plugin, Player player, EntityType spawnerType, int fortune) {
         this.plugin = plugin;
@@ -112,11 +121,7 @@ public class SpawnerTable implements LootTable {
             generic.add(new ItemStack(Material.NETHER_WART, 8));
             generic.add(new ItemStack(Material.EXPERIENCE_BOTTLE, 8));
             generic.add(new ItemStack(Material.TOTEM_OF_UNDYING));
-            generic.add(new ItemStack(Material.ACACIA_SAPLING));
-            generic.add(new ItemStack(Material.BIRCH_SAPLING));
-            generic.add(new ItemStack(Material.SPRUCE_SAPLING));
-            generic.add(new ItemStack(Material.JUNGLE_SAPLING));
-            generic.add(new ItemStack(Material.DARK_OAK_SAPLING));
+            generic.add(saplingVoucher);
             generic.add(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION));
             generic.add(customItemManager.getItem(CustomItem.RECALL_POTION));
 
@@ -155,6 +160,11 @@ public class SpawnerTable implements LootTable {
             }
             else {
                 item = generic.get(random.nextInt(generic.size()));
+            }
+
+            //special items
+            if (item.isSimilar(saplingVoucher)) {
+                item = new ItemStack(saplings[random.nextInt(saplings.length)]);
             }
 
             if (output.contains(item)) {

@@ -2,20 +2,21 @@ package me.fullpotato.badlandscaves.Loot;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class TreasureGear extends RandomlyEnchantedGear implements Listener {
     private final String prehardmode_label = "§2Prehardmode Treasure Gear";
     private final String hardmode_label = "§6Hardmode Treasure Gear";
+    private final String[] adjectives;
+    private final String[] nouns;
     private final Material[] armor = {
             Material.DIAMOND_HELMET,
             Material.DIAMOND_CHESTPLATE,
@@ -26,6 +27,11 @@ public class TreasureGear extends RandomlyEnchantedGear implements Listener {
             Material.DIAMOND_PICKAXE,
             Material.DIAMOND_AXE,
     };
+
+    public TreasureGear() {
+        adjectives = new String[]{"minor", "maniacal", "ruthless", "abounding", "hilarious", "sneaky", "rightful", "careless", "outrageous", "secret", "hypnotic", "picayune", "intelligent", "pale", "polite", "free", "habitual", "sore", "luxuriant", "unhappy", "real", "old", "alleged", "ready", "tall", "administrative", "guiltless", "abject", "regular", "sable", "efficacious", "absent", "barbarous", "giddy", "zany", "wild", "unfair", "nasty", "descriptive", "slippery", "next", "naughty", "incompetent", "successful", "critical", "tacit", "expensive", "paltry", "wicked", "wonderful", "slimy", "husky", "optimal", "abiding", "shaky", "far", "coordinated", "obvious", "profuse", "sleepy", "tough", "shrill", "abstracted", "pink", "unable", "longing", "lyrical", "decent", "spiteful", "financial", "nervous", "waiting", "informal", "didactic", "shallow", "soft", "understood", "selfish", "learned", "political", "disillusioned", "unequal", "aback", "muddled", "chief", "gigantic", "elastic", "pathetic", "bustling", "remarkable", "ultra", "eight", "immediate", "poor", "splendid"};
+        nouns = new String[]{"operation", "police", "personality", "pollution", "comparison", "affair", "teaching", "bonus", "measurement", "committee", "goal", "basket", "industry", "promotion", "examination", "reflection", "internet", "accident", "knowledge", "scene", "perspective", "bedroom", "singer", "variety", "highway", "contract", "revolution", "height", "message", "heart", "assumption", "tea", "permission", "people", "intention", "length", "energy", "significance", "town", "player", "bath", "computer", "article", "fishing", "ear", "trainer", "apartment", "analyst", "relationship", "appearance", "republic", "aspect", "quality", "anxiety", "reality", "argument", "entertainment", "woman", "river", "unit", "map", "combination", "dad", "emotion", "law", "introduction", "delivery", "passion", "assistant", "opinion", "drawer", "foundation", "lake", "satisfaction", "instance", "tradition", "percentage", "wood", "ad", "storage", "leader", "conclusion", "investment", "technology", "ambition", "mud", "user", "shirt", "hearing", "bird", "department", "sir", "payment", "ability", "equipment", "imagination", "penalty"};
+    }
 
     public ItemStack getTreasureGear (boolean hardmode, Random random) {
         return getTreasureGear(hardmode, armor[random.nextInt(armor.length)], random);
@@ -89,265 +95,31 @@ public class TreasureGear extends RandomlyEnchantedGear implements Listener {
     }
 
     private String getRandomName(Random random) {
-        HashSet<String> adjectives = new HashSet<>();
-        {
-            adjectives.add("minor");
-            adjectives.add("maniacal");
-            adjectives.add("ruthless");
-            adjectives.add("abounding");
-            adjectives.add("hilarious");
-            adjectives.add("sneaky");
-            adjectives.add("rightful");
-            adjectives.add("careless");
-            adjectives.add("outrageous");
-            adjectives.add("secret");
-            adjectives.add("hypnotic");
-            adjectives.add("picayune");
-            adjectives.add("intelligent");
-            adjectives.add("pale");
-            adjectives.add("polite");
-            adjectives.add("free");
-            adjectives.add("habitual");
-            adjectives.add("sore");
-            adjectives.add("luxuriant");
-            adjectives.add("unhappy");
-            adjectives.add("real");
-            adjectives.add("old");
-            adjectives.add("alleged");
-            adjectives.add("ready");
-            adjectives.add("tall");
-            adjectives.add("administrative");
-            adjectives.add("guiltless");
-            adjectives.add("abject");
-            adjectives.add("regular");
-            adjectives.add("sable");
-            adjectives.add("efficacious");
-            adjectives.add("absent");
-            adjectives.add("barbarous");
-            adjectives.add("giddy");
-            adjectives.add("zany");
-            adjectives.add("wild");
-            adjectives.add("unfair");
-            adjectives.add("nasty");
-            adjectives.add("descriptive");
-            adjectives.add("slippery");
-            adjectives.add("next");
-            adjectives.add("naughty");
-            adjectives.add("incompetent");
-            adjectives.add("successful");
-            adjectives.add("critical");
-            adjectives.add("tacit");
-            adjectives.add("expensive");
-            adjectives.add("paltry");
-            adjectives.add("wicked");
-            adjectives.add("wonderful");
-            adjectives.add("slimy");
-            adjectives.add("husky");
-            adjectives.add("optimal");
-            adjectives.add("abiding");
-            adjectives.add("shaky");
-            adjectives.add("far");
-            adjectives.add("coordinated");
-            adjectives.add("obvious");
-            adjectives.add("profuse");
-            adjectives.add("sleepy");
-            adjectives.add("tough");
-            adjectives.add("shrill");
-            adjectives.add("abstracted");
-            adjectives.add("pink");
-            adjectives.add("unable");
-            adjectives.add("longing");
-            adjectives.add("lyrical");
-            adjectives.add("decent");
-            adjectives.add("spiteful");
-            adjectives.add("financial");
-            adjectives.add("nervous");
-            adjectives.add("waiting");
-            adjectives.add("informal");
-            adjectives.add("didactic");
-            adjectives.add("shallow");
-            adjectives.add("soft");
-            adjectives.add("understood");
-            adjectives.add("selfish");
-            adjectives.add("learned");
-            adjectives.add("political");
-            adjectives.add("disillusioned");
-            adjectives.add("unequal");
-            adjectives.add("aback");
-            adjectives.add("muddled");
-            adjectives.add("chief");
-            adjectives.add("gigantic");
-            adjectives.add("elastic");
-            adjectives.add("pathetic");
-            adjectives.add("bustling");
-            adjectives.add("remarkable");
-            adjectives.add("ultra");
-            adjectives.add("eight");
-            adjectives.add("immediate");
-            adjectives.add("poor");
-            adjectives.add("splendid");
-        }
+        String adjective = adjectives[random.nextInt(adjectives.length)];
+        adjective = adjective.substring(0, 1).toUpperCase() + adjective.substring(1).toLowerCase();
 
-        HashSet<String> nouns = new HashSet<>();
-        {
-            nouns.add("operation");
-            nouns.add("police");
-            nouns.add("personality");
-            nouns.add("pollution");
-            nouns.add("comparison");
-            nouns.add("affair");
-            nouns.add("teaching");
-            nouns.add("bonus");
-            nouns.add("measurement");
-            nouns.add("committee");
-            nouns.add("goal");
-            nouns.add("basket");
-            nouns.add("industry");
-            nouns.add("promotion");
-            nouns.add("examination");
-            nouns.add("reflection");
-            nouns.add("internet");
-            nouns.add("accident");
-            nouns.add("knowledge");
-            nouns.add("scene");
-            nouns.add("perspective");
-            nouns.add("bedroom");
-            nouns.add("singer");
-            nouns.add("variety");
-            nouns.add("highway");
-            nouns.add("contract");
-            nouns.add("revolution");
-            nouns.add("height");
-            nouns.add("message");
-            nouns.add("heart");
-            nouns.add("assumption");
-            nouns.add("tea");
-            nouns.add("permission");
-            nouns.add("people");
-            nouns.add("intention");
-            nouns.add("length");
-            nouns.add("energy");
-            nouns.add("significance");
-            nouns.add("town");
-            nouns.add("player");
-            nouns.add("bath");
-            nouns.add("computer");
-            nouns.add("article");
-            nouns.add("fishing");
-            nouns.add("ear");
-            nouns.add("trainer");
-            nouns.add("apartment");
-            nouns.add("analyst");
-            nouns.add("relationship");
-            nouns.add("appearance");
-            nouns.add("republic");
-            nouns.add("aspect");
-            nouns.add("quality");
-            nouns.add("anxiety");
-            nouns.add("reality");
-            nouns.add("argument");
-            nouns.add("entertainment");
-            nouns.add("woman");
-            nouns.add("river");
-            nouns.add("unit");
-            nouns.add("map");
-            nouns.add("combination");
-            nouns.add("dad");
-            nouns.add("emotion");
-            nouns.add("law");
-            nouns.add("introduction");
-            nouns.add("delivery");
-            nouns.add("passion");
-            nouns.add("assistant");
-            nouns.add("opinion");
-            nouns.add("drawer");
-            nouns.add("foundation");
-            nouns.add("lake");
-            nouns.add("satisfaction");
-            nouns.add("instance");
-            nouns.add("tradition");
-            nouns.add("percentage");
-            nouns.add("wood");
-            nouns.add("ad");
-            nouns.add("storage");
-            nouns.add("leader");
-            nouns.add("conclusion");
-            nouns.add("investment");
-            nouns.add("technology");
-            nouns.add("ambition");
-            nouns.add("mud");
-            nouns.add("user");
-            nouns.add("shirt");
-            nouns.add("hearing");
-            nouns.add("bird");
-            nouns.add("department");
-            nouns.add("sir");
-            nouns.add("payment");
-            nouns.add("ability");
-            nouns.add("equipment");
-            nouns.add("imagination");
-            nouns.add("penalty");
-        }
-
-        int adjective_index = random.nextInt(adjectives.size());
-        int noun_index = random.nextInt(nouns.size());
-
-        Iterator<String> adjective_iterator = adjectives.iterator();
-        Iterator<String> noun_iterator = nouns.iterator();
-
-        for (int i = 0; i < adjective_index; i++) {
-            adjective_iterator.next();
-        }
-
-        for (int i = 0; i < noun_index; i++) {
-            noun_iterator.next();
-        }
-
-        String adjective = adjective_iterator.next();
-        String noun = noun_iterator.next();
-
-        adjective = adjective.substring(0, 1).toUpperCase() + adjective.substring(1);
-        noun = noun.substring(0, 1).toUpperCase() + noun.substring(1);
+        String noun = nouns[random.nextInt(nouns.length)];
+        noun = noun.substring(0, 1).toUpperCase() + noun.substring(1).toLowerCase();
 
         return adjective + " " + noun;
     }
 
     public boolean isTreasureGear (ItemStack item) {
-        ArrayList<Material> treasure_gear_materials = new ArrayList<>();
-        treasure_gear_materials.add(Material.DIAMOND_HELMET);
-        treasure_gear_materials.add(Material.DIAMOND_CHESTPLATE);
-        treasure_gear_materials.add(Material.DIAMOND_LEGGINGS);
-        treasure_gear_materials.add(Material.DIAMOND_BOOTS);
-        treasure_gear_materials.add(Material.DIAMOND_SWORD);
-        treasure_gear_materials.add(Material.DIAMOND_SHOVEL);
-        treasure_gear_materials.add(Material.DIAMOND_PICKAXE);
-        treasure_gear_materials.add(Material.DIAMOND_AXE);
-
-        if (treasure_gear_materials.contains(item.getType())) {
-            if (item.hasItemMeta()) {
-                if (item.getItemMeta().hasLore()) {
-                    List<String> lore = item.getItemMeta().getLore();
-                    if (lore != null && lore.size() >= 1) {
-                        return lore.get(0).equalsIgnoreCase(prehardmode_label) || lore.get(0).equalsIgnoreCase(hardmode_label);
+        final Material type = item.getType();
+        for (Material material : armor) {
+            if (type.equals(material)) {
+                if (item.hasItemMeta()) {
+                    final ItemMeta meta = item.getItemMeta();
+                    if (meta != null && meta.hasLore()) {
+                        final List<String> lore = item.getItemMeta().getLore();
+                        if (lore != null && lore.size() >= 1) {
+                            return lore.get(0).equalsIgnoreCase(prehardmode_label) || lore.get(0).equalsIgnoreCase(hardmode_label);
+                        }
                     }
                 }
+                break;
             }
         }
         return false;
-    }
-
-
-    @EventHandler
-    public void preventGrindstone (InventoryClickEvent event) {
-        final Inventory inventory = event.getClickedInventory();
-        if (inventory != null && inventory.getLocation() != null && inventory.getLocation().getBlock().getType().equals(Material.GRINDSTONE) && event.getSlot() == 2) {
-            final ItemStack item = event.getCurrentItem();
-            if (item != null) {
-                TreasureGear treasureGear = new TreasureGear();
-                if (treasureGear.isTreasureGear(item)) {
-                    event.setCancelled(true);
-                }
-            }
-        }
     }
 }

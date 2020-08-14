@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,9 +22,11 @@ public class SwapPowers implements Listener {
     private final CustomItemManager customItemManager;
     private final ManaBarManager manaBarManager;
     private final ItemStack[] blacklisted;
+    private final World backrooms;
 
     public SwapPowers(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         this.manaBarManager = new ManaBarManager(plugin);
         customItemManager = plugin.getCustomItemManager();
 
@@ -38,14 +41,12 @@ public class SwapPowers implements Listener {
         final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (!has_powers) return;
 
-        ManaBarManager bar = new ManaBarManager(plugin);
-
         boolean doubleShiftOption = (byte) PlayerScore.SWAP_DOUBLESHIFT_OPTION.getScore(plugin, player) == 1;
         if (doubleShiftOption) {
             if (player.isSneaking()) {
                 PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
                 if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                    bar.clearMessage(player);
+                    manaBarManager.clearMessage(player);
                 }
             }
             else {
@@ -54,7 +55,7 @@ public class SwapPowers implements Listener {
                     PlayerScore.SWAP_WINDOW.setScore(plugin, player, 1);
 
                     if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                        bar.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
+                        manaBarManager.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
                     }
                 }
                 else {
@@ -72,12 +73,12 @@ public class SwapPowers implements Listener {
             if (player.isSneaking()) {
                 PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
                 if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                    bar.clearMessage(player);
+                    manaBarManager.clearMessage(player);
                 }
             }
             else {
                 PlayerScore.SWAP_WINDOW.setScore(plugin, player, 1);
-                bar.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
+                manaBarManager.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
             }
         }
     }
@@ -85,11 +86,12 @@ public class SwapPowers implements Listener {
 
     @EventHandler
     public void swapPowers(PlayerItemHeldEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 0) return;
         if (!player.isSneaking()) return;
         if (!PlayerScore.SWAP_WINDOW.hasScore(plugin, player) || (byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 0) return;
         if ((int) PlayerScore.SWAP_COOLDOWN.getScore(plugin, player) > 0) return;
+        if (player.getWorld().equals(backrooms)) return;
         event.setCancelled(true);
 
         final int newSlot = event.getNewSlot();

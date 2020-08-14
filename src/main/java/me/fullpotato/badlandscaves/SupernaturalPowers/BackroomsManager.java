@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
@@ -22,16 +21,19 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class BackroomsManager implements Listener {
     private final BadlandsCaves plugin;
     private final World backrooms;
+    private final InventorySerialize inventoryManager;
+    private final FakePlayerNMS fakePlayerManager;
 
     public BackroomsManager(BadlandsCaves plugin) {
         this.plugin = plugin;
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
+        inventoryManager = new InventorySerialize(plugin);
+        fakePlayerManager = plugin.getFakePlayerNMS();
     }
 
     public enum BackroomsType {
@@ -47,12 +49,9 @@ public class BackroomsManager implements Listener {
         if (player.getWorld().equals(backrooms)) return;
 
         plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
+        inventoryManager.saveInventory(player, "backrooms");
+        player.getInventory().clear();
 
-        InventorySerialize serialize = new InventorySerialize(plugin);
-        serialize.saveInventory(player, "backrooms");
-
-        DeathHandler resetter = new DeathHandler(plugin);
-        resetter.resetPlayer(player, true, false, false);
         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 0, false, false));
@@ -185,7 +184,6 @@ public class BackroomsManager implements Listener {
         player.removePotionEffect(PotionEffectType.WEAKNESS);
         if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
 
-        InventorySerialize inventoryManager = new InventorySerialize(plugin);
         inventoryManager.loadInventory(player, "backrooms", true, true);
 
         Location location = Location.deserialize(plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
@@ -199,7 +197,6 @@ public class BackroomsManager implements Listener {
         final Player fake = online.get(random.nextInt(online.size()));
 
         Location spawnLoc = getNearbyLocation(player.getLocation(), random, 10, 5);
-        FakePlayerNMS fakePlayerManager = plugin.getFakePlayerNMS();
         final Player cloned = fakePlayerManager.summonFakePlayer(spawnLoc, fake, player, null);
 
         new BukkitRunnable() {
@@ -227,49 +224,55 @@ public class BackroomsManager implements Listener {
     }
 
     public void cursedModels (Player player, Random random) {
-        ArrayList<Player> all_online = new ArrayList<>(plugin.getServer().getOnlinePlayers());
-        FakePlayerNMS fakePlayerManager = plugin.getFakePlayerNMS();
+        final ArrayList<Player> all_online = new ArrayList<>(plugin.getServer().getOnlinePlayers());
         final int clone_count = 100;
-        ArrayList<Player> clones = new ArrayList<>();
+        final Map<Player, Boolean> clones = new HashMap<>();
 
         for (int i = 0; i < clone_count; i++) {
-            Location spawnLoc = enforceCursedLocationViable(player, random, clones);
+            Location spawnLoc = enforceCursedLocationViable(player, random, clones.keySet());
 
             randomRotation(spawnLoc, random);
-            clones.add(fakePlayerManager.summonFakePlayer(spawnLoc, all_online.get(random.nextInt(all_online.size())), player, "§r"));
+            clones.put(fakePlayerManager.summonFakePlayer(spawnLoc, all_online.get(random.nextInt(all_online.size())), player, "§r"),
+                    random.nextInt(100) < 1);
         }
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (player.isOnline() && player.getWorld().equals(backrooms)) {
-                    for (Player clone : clones) {
-                        Location clone_location = clone.getLocation();
-                        clone_location.setWorld(backrooms);
+                    for (Player clone : clones.keySet()) {
+                        Location cloneCurrentLoc = clone.getLocation();
+                        cloneCurrentLoc.setWorld(backrooms);
 
-                        if (clone_location.distanceSquared(player.getLocation()) > 1225) {
-                            Location move_loc = enforceCursedLocationViable(player, random, clones);
-                            move_loc.setY(player.getLocation().getY());
-                            randomRotation(move_loc, random);
+                        final double dist = cloneCurrentLoc.distanceSquared(player.getLocation());
+                        if (dist > 1225) {
+                            Location cloneMoveLoc = enforceCursedLocationViable(player, random, clones.keySet());
+                            cloneMoveLoc.setY(player.getLocation().getY());
+                            randomRotation(cloneMoveLoc, random);
 
                             fakePlayerManager.move(clone.getLocation().add(0, 10, 0), clone, player, true);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    fakePlayerManager.move(move_loc.clone().add(0, 10, 0), clone, player, true);
+                                    fakePlayerManager.move(cloneMoveLoc.clone().add(0, 10, 0), clone, player, true);
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
-                                            fakePlayerManager.move(move_loc, clone, player, true);
+                                            fakePlayerManager.move(cloneMoveLoc, clone, player, true);
                                         }
                                     }.runTaskLater(plugin, 5);
                                 }
                             }.runTaskLater(plugin, 5);
                         }
+                        else if (dist < 25 && clones.get(clone)) {
+                            cloneCurrentLoc = clone.getLocation();
+                            cloneCurrentLoc.setDirection(player.getLocation().subtract(cloneCurrentLoc.clone()).toVector());
+                            fakePlayerManager.move(cloneCurrentLoc, clone, player, true);
+                        }
                     }
                 }
                 else {
-                    for (Player clone : clones) {
+                    for (Player clone : clones.keySet()) {
                         fakePlayerManager.remove(clone);
                         this.cancel();
                     }
@@ -309,7 +312,7 @@ public class BackroomsManager implements Listener {
         return null;
     }
 
-    private Location enforceCursedLocationViable (Player player, Random random, ArrayList<Player> clones) {
+    private Location enforceCursedLocationViable (Player player, Random random, Collection<Player> clones) {
         Location location;
         boolean isSpacedOut;
         int tries = 0;
@@ -323,7 +326,7 @@ public class BackroomsManager implements Listener {
         return location;
     }
 
-    private boolean isSpacedOut(Location location, ArrayList<Player> clones) {
+    private boolean isSpacedOut(Location location, Collection<Player> clones) {
         for (Player clone : clones) {
             Location clone_loc = clone.getLocation();
             clone_loc.setWorld(backrooms);
@@ -340,7 +343,7 @@ public class BackroomsManager implements Listener {
     @EventHandler
     public void betweenDimensions(PlayerChangedWorldEvent event) {
         final Random random = new Random();
-        if (random.nextInt(100) < 1) {
+        if (random.nextInt(1000) < 5) {
             final Player player = event.getPlayer();
             final World from = event.getFrom();
             final World to = player.getWorld();

@@ -199,7 +199,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ToxicWaterBottling(this),
                 new BlazePowder(this),
                 new PurgeEssence(this),
-                new StopCustomItemsInteract(this.getCustomItemManager()),
+                new StopCustomItemsInteract(this),
                 new UseTaintPowder(this),
                 new ZombieDeathLoot(),
                 new GetFishingCrate(this),
@@ -315,6 +315,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ArtifactMomentousMomentum(this),
                 new PreventWaterBucketPVP(),
                 new StarterSapling(this),
+                new AnvilRepair(this),
+                new FishWater(this),
         };
 
         for (Listener event : events) {
