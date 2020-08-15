@@ -37,6 +37,7 @@ import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R2;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R2;
 import me.fullpotato.badlandscaves.Other.*;
+import me.fullpotato.badlandscaves.Research.UseResearchTable;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
@@ -252,7 +253,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new CustomBows(this),
                 new WitherBossFight(this),
                 new Apples(this),
-                new NoMending(),
+                new NoMending(this),
                 new ShieldBlocking(this),
                 new Shield(this),
                 new CraftingGuide(this),
@@ -317,6 +318,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarterSapling(this),
                 new AnvilRepair(this),
                 new FishWater(this),
+                new ResearchTableItems(this),
+                new UseResearchTable(this),
         };
 
         for (Listener event : events) {
@@ -522,6 +525,11 @@ public final class BadlandsCaves extends JavaPlugin {
 
         SoulLantern soulLantern = new SoulLantern(this);
         soulLantern.soulLanternRecipe();
+
+        ResearchTableItems researchTableItems = new ResearchTableItems(this);
+        researchTableItems.convexLensRecipe();
+        researchTableItems.magnifyingGlassRecipe();
+        researchTableItems.researchTableRecipe();
     }
 
     public void loadWorldNames() {

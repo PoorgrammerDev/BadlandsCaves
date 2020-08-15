@@ -3,7 +3,6 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,7 +15,7 @@ public class ManaRegen extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        plugin.getServer().getOnlinePlayers().forEach(player -> {
             final boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
             if (!has_powers) return;
 
@@ -82,6 +81,8 @@ public class ManaRegen extends BukkitRunnable {
             PlayerScore.MANA.setScore(plugin, player, Math.min(Mana + mana_regen_per_second, max_mana));
             PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, thirst_sys_var);
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-        }
+
+
+        });
     }
 }

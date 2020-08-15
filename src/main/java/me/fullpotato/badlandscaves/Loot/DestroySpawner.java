@@ -3,11 +3,15 @@ package me.fullpotato.badlandscaves.Loot;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Slab;
+import org.bukkit.block.data.type.Stairs;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,20 +20,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
+import org.bukkit.loot.LootTables;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class DestroySpawner implements Listener {
     private final BadlandsCaves plugin;
     private final Random random = new Random();
-    private final HashMap<Material, Material> matMap = new HashMap<>();
+    private final Map<Material, Material> mossMap = new HashMap<>();
     private static Location newLoc;
     private final ArrayList<Material> pickaxes = new ArrayList<>();
+    private final Map<Integer[], BlockFace> chestInfo = new HashMap<>();
+    private final String chestName = ChatColor.RESET.toString() + ChatColor.of("#8f8f8f") + "Dungeon Chest";
+    private final NamespacedKey key;
     private final EntityType[] mobTypes = {
             EntityType.ZOMBIE,
             EntityType.SKELETON,
@@ -41,9 +48,10 @@ public class DestroySpawner implements Listener {
 
     public DestroySpawner(BadlandsCaves plugin) {
         this.plugin = plugin;
-        matMap.put(Material.COBBLESTONE , Material.MOSSY_COBBLESTONE);
-        matMap.put(Material.COBBLESTONE_SLAB , Material.MOSSY_COBBLESTONE_SLAB);
-        matMap.put(Material.COBBLESTONE_WALL , Material.MOSSY_COBBLESTONE_WALL);
+        this.key = new NamespacedKey(plugin, "spawner_id");
+        mossMap.put(Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS);
+        mossMap.put(Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB);
+        mossMap.put(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS);
 
         pickaxes.add(Material.WOODEN_PICKAXE);
         pickaxes.add(Material.STONE_PICKAXE);
@@ -51,6 +59,15 @@ public class DestroySpawner implements Listener {
         pickaxes.add(Material.GOLDEN_PICKAXE);
         pickaxes.add(Material.DIAMOND_PICKAXE);
         pickaxes.add(Material.NETHERITE_PICKAXE);
+
+        chestInfo.put(new Integer[]{5, -9, 4}, BlockFace.NORTH);
+        chestInfo.put(new Integer[]{4, -9, 5}, BlockFace.WEST);
+        chestInfo.put(new Integer[]{-5, -9, 4}, BlockFace.NORTH);
+        chestInfo.put(new Integer[]{-4, -9, 5}, BlockFace.EAST);
+        chestInfo.put(new Integer[]{-5, -9, -4}, BlockFace.SOUTH);
+        chestInfo.put(new Integer[]{-4, -9, -5}, BlockFace.EAST);
+        chestInfo.put(new Integer[]{5, -9, -4}, BlockFace.SOUTH);
+        chestInfo.put(new Integer[]{4, -9, -5}, BlockFace.WEST);
     }
 
     @EventHandler
@@ -84,7 +101,21 @@ public class DestroySpawner implements Listener {
             }
             else if (!player.getGameMode().equals(GameMode.CREATIVE)) {
                 event.setCancelled(true);
+                return;
             }
+
+            if (!event.isCancelled() && block.getState() instanceof CreatureSpawner) {
+                final CreatureSpawner state = (CreatureSpawner) block.getState();
+                final PersistentDataContainer container = state.getPersistentDataContainer();
+                if (container.has(key, PersistentDataType.STRING)) {
+                    final String uuid = container.get(key, PersistentDataType.STRING);
+                    if (uuid != null && !uuid.isEmpty()) {
+                        plugin.getSystemConfig().set("dungeons." + uuid, null);
+                        plugin.saveSystemConfig();
+                    }
+                }
+            }
+
         }
     }
 
@@ -140,10 +171,10 @@ public class DestroySpawner implements Listener {
     public boolean isViable (Location location) {
         if (location.getWorld() != null && location.getWorld().getWorldBorder().isInside(location)) {
             Location[] doors = {
-                    location.clone().add(5, 0, 0),
-                    location.clone().add(-5, 0, 0),
-                    location.clone().add(0, 0, 5),
-                    location.clone().add(0, 0, -5),
+                    location.clone().add(8, -9, 0),
+                    location.clone().add(-8, -9, 0),
+                    location.clone().add(0, -9, 8),
+                    location.clone().add(0, -9, -8),
             };
             for (Location door : doors) {
                 if (door.getBlock().isPassable() && !door.getBlock().isLiquid()) {
@@ -162,39 +193,98 @@ public class DestroySpawner implements Listener {
             @Override
             public void run() {
                 if (newLoc == null) return;
-
                 final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-                for (int x = -4; x <= 4; x++) {
-                    for (int z = -4; z <= 4; z++) {
-                        for (int y = -1; y <= 4; y++) {
-                            Location parse = newLoc.clone().add(x, y, z);
-                            parse.getBlock().setType(Material.CAVE_AIR);
+
+                //spawn in structure
+                final StructureTrack track = new StructureTrack(plugin, newLoc.clone(), -7, -10, -7, 0, 0, 0, "badlandscaves:dungeon", BlockFace.DOWN);
+                track.load();
+
+                //replace with mossy and add holes based on chaos
+                for (int x = -7; x <= 7; x++) {
+                    for (int z = -7; z <= 7; z++) {
+                        for (int y = -11; y <= 8; y++) {
+                            if (random.nextInt(100) < ((0.65 * chaos) + 10)) {
+                                Location parse = newLoc.clone().add(x, y, z);
+                                if (mossMap.containsKey(parse.getBlock().getType())) {
+                                    if (random.nextInt(100) < 75) {
+                                        final Block block = parse.getBlock();
+                                        if (block.getBlockData() instanceof Slab) {
+                                            Slab slab = (Slab) block.getBlockData();
+                                            block.setType(mossMap.get(block.getType()));
+
+                                            if (block.getBlockData() instanceof Slab) {
+                                                Slab newSlab = (Slab) block.getBlockData();
+                                                newSlab.setType(slab.getType());
+                                                block.setBlockData(newSlab);
+                                            }
+                                        }
+                                        else if (block.getBlockData() instanceof Stairs) {
+                                            Stairs stairs = (Stairs) block.getBlockData();
+                                            block.setType(mossMap.get(block.getType()));
+                                            block.setBlockData(stairs);
+
+                                            if (block.getBlockData() instanceof Stairs) {
+                                                Stairs newStairs = (Stairs) block.getBlockData();
+                                                newStairs.setShape(stairs.getShape());
+                                                block.setBlockData(newStairs);
+                                            }
+                                        }
+                                        else {
+                                            block.setType(mossMap.get(block.getType()));
+                                        }
+                                    }
+                                    else if (chaos > 0) {
+                                        parse.getBlock().setType(Material.CAVE_AIR);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
-                Location cloned = newLoc.clone();
-                StructureTrack track = new StructureTrack(plugin, cloned, -4, -1, -4, 0, 0, 0, 1 - (0.003 * chaos), "badlandscaves:dungeon", BlockFace.DOWN);
-                track.load();
-
+                //put in spawner
                 newLoc.getBlock().setType(Material.SPAWNER);
                 CreatureSpawner spawner = (CreatureSpawner) newLoc.getBlock().getState();
                 spawner.setSpawnedType(finalType);
                 spawner.setMinSpawnDelay(200 - chaos);
                 spawner.setMaxSpawnDelay(800 - (5 * chaos));
                 spawner.setMaxNearbyEntities((int) (6 + (0.1 * chaos)));
+
+                final UUID uuid = UUID.randomUUID();
+                spawner.getPersistentDataContainer().set(key, PersistentDataType.STRING, uuid.toString());
+
+                plugin.getSystemConfig().set("dungeons." + uuid + ".location", newLoc);
+                plugin.getSystemConfig().set("dungeons." + uuid + ".type", finalType.name());
+                plugin.getSystemConfig().set("dungeons." + uuid + ".chaos_spawned", chaos);
+                plugin.saveSystemConfig();
+
                 spawner.update();
 
-                for (int x = -4; x <= 4; x++) {
-                    for (int z = -4; z <= 4; z++) {
-                        for (int y = -1; y <= 4; y++) {
-                            if (random.nextInt(100) < ((0.65 * chaos) + 10)) {
-                                Location parse = newLoc.clone().add(x, y, z);
-                                if (matMap.containsKey(parse.getBlock().getType())) {
-                                    parse.getBlock().setType(matMap.get(parse.getBlock().getType()));
+                //put in chests
+                for (Integer[] offset : chestInfo.keySet()) {
+                    if (random.nextInt(100) < (chaos / 1.5)) {
+                        final Location location = newLoc.clone().add(offset[0], offset[1], offset[2]);
+                        location.getBlock().setType(Material.CHEST);
+
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                final Block block = location.getBlock();
+                                //set facing
+                                if (block.getBlockData() instanceof Chest) {
+                                    Chest chestData = (Chest) block.getBlockData();
+                                    chestData.setFacing(chestInfo.get(offset));
+                                    block.setBlockData(chestData);
+                                }
+
+                                if (block.getState() instanceof org.bukkit.block.Chest) {
+                                    org.bukkit.block.Chest chestBlock = (org.bukkit.block.Chest) block.getState();
+                                    chestBlock.setCustomName(chestName);
+                                    chestBlock.setLootTable(LootTables.SIMPLE_DUNGEON.getLootTable());
+                                    chestBlock.update(true);
                                 }
                             }
-                        }
+                        }.runTaskLater(plugin, 1);
                     }
                 }
 

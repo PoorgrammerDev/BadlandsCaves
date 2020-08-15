@@ -159,7 +159,23 @@ public enum CustomItem {
     ARTIFACT_SHADOWSTEP(true),
     ARTIFACT_METAPHYSICAL_NOURISHMENT(true),
 
-    ECLIPSED_SHADOWS(false);
+    ECLIPSED_SHADOWS(false),
+
+    CONVEX_LENS(true),
+    MAGNIFYING_GLASS(true),
+    RESEARCH_TABLE(false),
+
+    BLUEPRINTS_VOLTSHOCK(true),
+    BLUEPRINTS_TAINTED_POWDER(true),
+    BLUEPRINTS_CORROSIVE(true),
+    BLUEPRINTS_RAIN_RESISTANCE(true),
+    BLUEPRINTS_DUNGEON_COMPASS(true),
+    BLUEPRINTS_STIM_PACK(true),
+
+
+
+
+    ;
 
     private final boolean preventUse;
     CustomItem(boolean preventUse) {

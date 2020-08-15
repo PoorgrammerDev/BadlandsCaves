@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.Other;
 
+import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
@@ -15,10 +16,16 @@ import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
 public class NoMending implements Listener {
+    private final BadlandsCaves plugin;
+
+    public NoMending(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void villagerTrade (VillagerAcquireTradeEvent event) {
@@ -46,7 +53,12 @@ public class NoMending implements Listener {
     public void cancelLoot (LootGenerateEvent event) {
         final List<ItemStack> loot = event.getLoot();
         loot.forEach(this::checkForMending);
-        event.setLoot(loot);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                event.setLoot(loot);
+            }
+        }.runTaskLater(plugin, 1);
     }
 
     @EventHandler

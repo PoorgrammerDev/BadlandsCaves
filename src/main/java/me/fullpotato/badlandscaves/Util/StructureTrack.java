@@ -81,17 +81,18 @@ public class StructureTrack {
         this.redstoneBlockRelative = redstoneBlockRelative;
     }
 
-    public void load () {
+    public Structure load () {
         if (origin != null) {
-            load(this.origin);
+            return load(this.origin);
         }
+        return null;
     }
 
-    public void load(Location origin) {
-        load(origin, false);
+    public Structure load(Location origin) {
+        return load(origin, false);
     }
 
-    public void load(Location origin, boolean keepStructureBlock) {
+    public Structure load(Location origin, boolean keepStructureBlock) {
         Location clone = origin.clone().add(blockXOffset, blockYOffset, blockZOffset);
         Block block = clone.getBlock();
         BlockData savedPreStrucData = block.getBlockData();
@@ -117,6 +118,7 @@ public class StructureTrack {
             }
         }.runTaskLater(plugin, 1);
 
+        return structureBlock;
     }
 
     public String getStructureName() {
