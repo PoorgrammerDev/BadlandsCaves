@@ -59,7 +59,7 @@ public class SpawnInhabitants implements Listener {
                     if (habitationType != null) {
                         final Random random = new Random();
                         final Location location = event.getLocation();
-                        if (habitationType.equals(DimensionsWorlds.NativeLife.PILLAGERS)) {
+                        if (habitationType.equals(DimensionsWorlds.NativeLife.ILLAGERS)) {
                             event.setCancelled(true);
                             entity.remove();
 

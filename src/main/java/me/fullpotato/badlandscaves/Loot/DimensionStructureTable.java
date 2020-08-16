@@ -97,7 +97,7 @@ public class DimensionStructureTable implements LootTable {
         int failed = 0;
         for (int i = 0; i < count; i++) {
             if (failed > 100) break;
-            ItemStack item = habitation.equals(DimensionsWorlds.NativeLife.PILLAGERS) || random.nextBoolean() ? items.get(random.nextInt(items.size())) : trash.get(random.nextInt(trash.size()));
+            ItemStack item = habitation.equals(DimensionsWorlds.NativeLife.ILLAGERS) || random.nextBoolean() ? items.get(random.nextInt(items.size())) : trash.get(random.nextInt(trash.size()));
 
             if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
                 output.add(treasureGear.getTreasureGear(true, random));

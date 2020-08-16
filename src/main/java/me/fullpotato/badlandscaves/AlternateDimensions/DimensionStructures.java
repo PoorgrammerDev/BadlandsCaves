@@ -84,7 +84,7 @@ public class DimensionStructures {
 
             if (structure == null) {
                 structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
-                if (habitation.equals(DimensionsWorlds.NativeLife.PILLAGERS)) {
+                if (habitation.equals(DimensionsWorlds.NativeLife.ILLAGERS)) {
                     while (!structure.getInhabited()) {
                         structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
                     }

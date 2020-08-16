@@ -21,10 +21,12 @@ public class DimensionsWorlds {
     private final BadlandsCaves plugin;
     private final Random random = new Random();
     private final EnvironmentalHazards hazards;
+    private final DimensionStructures structures;
 
     public DimensionsWorlds(BadlandsCaves plugin) {
         this.plugin = plugin;
         hazards = new EnvironmentalHazards(plugin);
+        structures = new DimensionStructures(plugin);
     }
 
     private static final Biome[] allBiomes = {
@@ -52,13 +54,14 @@ public class DimensionsWorlds {
     };
 
     public enum NativeLife {
-        PILLAGERS,
+        ILLAGERS,
         UNDEAD,
     }
 
     public World generate(String name) {
-        UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.getDimensionPrefixName() + name);
-        World alreadyExisting = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + name);
+        final String fullName = plugin.getDimensionPrefixName() + name;
+        final UnloadedWorld unloadedWorld = new UnloadedWorld(fullName);
+        World alreadyExisting = plugin.getServer().getWorld(fullName);
         if (plugin.getServer().getWorlds().contains(alreadyExisting)) {
             if (alreadyExisting != null) {
                 new GravityRunnable(plugin, alreadyExisting).runTaskTimerAsynchronously(plugin, 0, 0);
@@ -66,8 +69,7 @@ public class DimensionsWorlds {
             return alreadyExisting;
         }
         else if (unloadedWorld.exists()) {
-            unloadedWorld.load(plugin);
-            alreadyExisting = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + name);
+            alreadyExisting = loadWorld(fullName);
 
             if (alreadyExisting != null) {
                 new GravityRunnable(plugin, alreadyExisting).runTaskTimerAsynchronously(plugin, 0, 0);
@@ -81,7 +83,7 @@ public class DimensionsWorlds {
 
         final WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
         creator.environment(World.Environment.NORMAL);
-        creator.generator(new DimensionsGen(biome));
+        creator.generator(new DimensionsGen(plugin, biome));
 
         final World world = plugin.getServer().createWorld(creator);
         assert world != null;
@@ -97,9 +99,9 @@ public class DimensionsWorlds {
         world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
         world.setKeepSpawnInMemory(false);
 
-        WorldBorder border = world.getWorldBorder();
+        final WorldBorder border = world.getWorldBorder();
         border.setCenter(0, 0);
-        border.setWarningDistance(0);
+        border.setWarningDistance(25);
         border.setSize(random.nextInt(4000) + 1000);
 
         genGravity(world);
@@ -111,7 +113,6 @@ public class DimensionsWorlds {
 
         genSpawnCage(world);
 
-        DimensionStructures structures = new DimensionStructures(plugin);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -121,7 +122,6 @@ public class DimensionsWorlds {
 
 
         new GravityRunnable(plugin, world).runTaskTimerAsynchronously(plugin, 0, 0);
-
         return world;
     }
 
@@ -131,6 +131,8 @@ public class DimensionsWorlds {
 
         StructureTrack track = new StructureTrack(plugin, location, -4, -1, -4, 0, 0, 0, "badlandscaves:dungeon", BlockFace.DOWN);
         track.load();
+
+        // TODO: 8/16/2020 adapt for new dungeon
 
         Block campfire = location.getBlock();
         campfire.setType(Material.CAMPFIRE);
@@ -156,7 +158,7 @@ public class DimensionsWorlds {
         }
 
         //UNINHABITABLE-------------------------------------------
-        if (!habitation.equals(NativeLife.PILLAGERS)) {
+        if (!habitation.equals(NativeLife.ILLAGERS)) {
             list.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
             list.add(EnvironmentalHazards.Hazard.LAVA_FLOOR);
             list.add(EnvironmentalHazards.Hazard.NO_OXYGEN);
@@ -209,7 +211,7 @@ public class DimensionsWorlds {
     }
 
     public NativeLife getRandomHabitation () {
-        if (random.nextBoolean()) return NativeLife.PILLAGERS;
+        if (random.nextBoolean()) return NativeLife.ILLAGERS;
         return NativeLife.UNDEAD;
     }
 
@@ -218,5 +220,28 @@ public class DimensionsWorlds {
         plugin.saveSystemConfig();
     }
 
+    public World loadWorld (String name) {
+        final String scaleRandStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.scale_rand");
+        final String freqStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.frequency");
+        final String amplitudeStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.amplitude");
+        final String biomeStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.biome");
+
+        if (scaleRandStr != null && freqStr != null && amplitudeStr != null && biomeStr != null) {
+            try {
+                final double scaleRand = Double.parseDouble(scaleRandStr);
+                final double frequency = Double.parseDouble(freqStr);
+                final double amplitude = Double.parseDouble(amplitudeStr);
+                final Biome biome = Biome.valueOf(biomeStr);
+
+                final WorldCreator worldCreator = new WorldCreator(name);
+                worldCreator.environment(World.Environment.NORMAL).generator(new DimensionsGen(plugin, biome, scaleRand, frequency, amplitude));
+
+                return worldCreator.createWorld();
+            }
+            catch (IllegalArgumentException ignored) {
+            }
+        }
+        return null;
+    }
 
 }
