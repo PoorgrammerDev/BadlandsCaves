@@ -68,12 +68,18 @@ public class UseResearchTable implements Listener {
 
                 if (event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
                     final Player player = event.getPlayer();
+                    player.sendMessage(ChatColor.RED + "This block has yet to be implemented."); // TODO: 8/15/2020
+
+                    /*
+
                     if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 0) {
-                        openInventory(player);
+                        //openInventory(player);
                     }
                     else {
                         player.sendMessage(ChatColor.RED + "This block cannot be used by Heretics.");
                     }
+
+                     */
                 }
             }
         }

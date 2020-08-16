@@ -20,9 +20,9 @@ public class DimensionStructureTable implements LootTable {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final NamespacedKey key;
-    private final DimensionsWorlds.Habitation habitation;
+    private final DimensionsWorlds.NativeLife habitation;
 
-    public DimensionStructureTable(BadlandsCaves plugin, DimensionsWorlds.Habitation habitation) {
+    public DimensionStructureTable(BadlandsCaves plugin, DimensionsWorlds.NativeLife habitation) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "dimension_structure_table");
         this.habitation = habitation;
@@ -97,7 +97,7 @@ public class DimensionStructureTable implements LootTable {
         int failed = 0;
         for (int i = 0; i < count; i++) {
             if (failed > 100) break;
-            ItemStack item = habitation.equals(DimensionsWorlds.Habitation.INHABITED) || random.nextBoolean() ? items.get(random.nextInt(items.size())) : trash.get(random.nextInt(trash.size()));
+            ItemStack item = habitation.equals(DimensionsWorlds.NativeLife.PILLAGERS) || random.nextBoolean() ? items.get(random.nextInt(items.size())) : trash.get(random.nextInt(trash.size()));
 
             if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
                 output.add(treasureGear.getTreasureGear(true, random));

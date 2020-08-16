@@ -18,12 +18,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class DimensionsWorlds {
-
     private final BadlandsCaves plugin;
     private final Random random = new Random();
+    private final EnvironmentalHazards hazards;
 
     public DimensionsWorlds(BadlandsCaves plugin) {
         this.plugin = plugin;
+        hazards = new EnvironmentalHazards(plugin);
     }
 
     private static final Biome[] allBiomes = {
@@ -50,40 +51,9 @@ public class DimensionsWorlds {
             Biome.ICE_SPIKES
     };
 
-    private static final Biome[] habitableBiomes = {
-            Biome.PLAINS,
-            Biome.FOREST,
-            Biome.TAIGA,
-            Biome.SWAMP,
-            Biome.WOODED_HILLS,
-            Biome.MOUNTAIN_EDGE,
-            Biome.JUNGLE,
-            Biome.JUNGLE_EDGE,
-            Biome.BIRCH_FOREST,
-            Biome.DARK_FOREST,
-            Biome.SNOWY_TAIGA,
-            Biome.GIANT_TREE_TAIGA,
-            Biome.SAVANNA,
-            Biome.SUNFLOWER_PLAINS,
-            Biome.FLOWER_FOREST,
-            Biome.GIANT_SPRUCE_TAIGA,
-            Biome.BAMBOO_JUNGLE,
-            Biome.MUSHROOM_FIELD_SHORE,
-    };
-
-    public enum Habitation {
-        INHABITED(true),
-        UNINHABITED(false),
-        REINHABITED(true);
-
-        private final boolean mobSpawn;
-        Habitation(boolean mobSpawn) {
-            this.mobSpawn = mobSpawn;
-        }
-
-        public boolean getMobSpawn() {
-            return this.mobSpawn;
-        }
+    public enum NativeLife {
+        PILLAGERS,
+        UNDEAD,
     }
 
     public World generate(String name) {
@@ -106,23 +76,14 @@ public class DimensionsWorlds {
             return alreadyExisting;
         }
 
-        Habitation habitation = Habitation.INHABITED; //getRandomHabitation(); TODO: 7/6/2020 change
-        Biome biome;
-        if (habitation.equals(Habitation.UNINHABITED)) {
-            biome = habitableBiomes[random.nextInt(habitableBiomes.length)];
-        }
-        else {
-            biome = allBiomes[random.nextInt(allBiomes.length)];
-        }
-        biome = Biome.JUNGLE; // TODO: 7/6/2020 remove
+        final NativeLife habitation = getRandomHabitation();
+        final Biome biome = allBiomes[random.nextInt(allBiomes.length)];
 
-        WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
-
-        World.Environment environment = World.Environment.THE_END; //getEnvironment(); TODO revert
-        creator.environment(environment);
+        final WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
+        creator.environment(World.Environment.NORMAL);
         creator.generator(new DimensionsGen(biome));
 
-        World world = plugin.getServer().createWorld(creator);
+        final World world = plugin.getServer().createWorld(creator);
         assert world != null;
         world.setTime(random.nextInt(24000));
         world.setGameRule(GameRule.DO_INSOMNIA, false);
@@ -139,16 +100,14 @@ public class DimensionsWorlds {
         WorldBorder border = world.getWorldBorder();
         border.setCenter(0, 0);
         border.setWarningDistance(0);
-        border.setSize(1000);
-
-        if (environment.equals(World.Environment.THE_END)) PreventDragon.preventDragonSpawn(world);
+        border.setSize(random.nextInt(4000) + 1000);
 
         genGravity(world);
         addHabitation(world, habitation);
 
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
-        addHazards(world, habitation, environment, biome, amount);
+        addHazards(world, habitation, biome, amount);
 
         genSpawnCage(world);
 
@@ -163,9 +122,6 @@ public class DimensionsWorlds {
 
         new GravityRunnable(plugin, world).runTaskTimerAsynchronously(plugin, 0, 0);
 
-
-        Bukkit.broadcastMessage(environment.name());
-        Bukkit.broadcastMessage(habitation.name());
         return world;
     }
 
@@ -187,44 +143,23 @@ public class DimensionsWorlds {
         }
     }
 
-    public void addHazards (World world, Habitation habitation, World.Environment environment, Biome biome, int amount) {
-        ArrayList<EnvironmentalHazards.Hazard> list = new ArrayList<>();
-        ArrayList<EnvironmentalHazards.Hazard> priority = new ArrayList<>();
+    public void addHazards (World world, NativeLife habitation, Biome biome, int amount) {
+        final ArrayList<EnvironmentalHazards.Hazard> list = new ArrayList<>();
 
         //EXCLUSIVE-----------------------------------------------
-        if (environment.equals(World.Environment.NORMAL)) list.add(EnvironmentalHazards.Hazard.ACID_RAIN);
-        if (biome.equals(Biome.SNOWY_BEACH) || biome.equals(Biome.SNOWY_TAIGA) || biome.equals(Biome.ICE_SPIKES))
+        if (biome.equals(Biome.SNOWY_BEACH) || biome.equals(Biome.SNOWY_TAIGA) || biome.equals(Biome.ICE_SPIKES)) {
             list.add(EnvironmentalHazards.Hazard.FREEZING);
-
-        //SWAMP----------------------------------------------------
-        if (biome.equals(Biome.SWAMP)) {
-            priority.add(EnvironmentalHazards.Hazard.TOXIC_WATER);
-        } else {
+        }
+        else if (biome.equals(Biome.SWAMP)) {
+            list.add(EnvironmentalHazards.Hazard.ACID_RAIN);
             list.add(EnvironmentalHazards.Hazard.TOXIC_WATER);
         }
 
-        //NETHER---------------------------------------------------
-        if (!habitation.equals(Habitation.INHABITED)) {
-            if (environment.equals(World.Environment.NETHER)) {
-                priority.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
-                priority.add(EnvironmentalHazards.Hazard.LAVA_FLOOR);
-            } else {
-                list.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
-                list.add(EnvironmentalHazards.Hazard.LAVA_FLOOR);
-            }
-        }
-
-        //END-------------------------------------------------------
-        if (!habitation.equals(Habitation.INHABITED)) {
-            if (environment.equals(World.Environment.THE_END)) {
-                priority.add(EnvironmentalHazards.Hazard.NO_OXYGEN);
-            } else {
-                list.add(EnvironmentalHazards.Hazard.NO_OXYGEN);
-            }
-        }
-
-        //OTHER UNINHABITABLE
-        if (!habitation.equals(Habitation.INHABITED)) {
+        //UNINHABITABLE-------------------------------------------
+        if (!habitation.equals(NativeLife.PILLAGERS)) {
+            list.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
+            list.add(EnvironmentalHazards.Hazard.LAVA_FLOOR);
+            list.add(EnvironmentalHazards.Hazard.NO_OXYGEN);
             list.add(EnvironmentalHazards.Hazard.NO_FLOOR);
             list.add(EnvironmentalHazards.Hazard.NO_FOOD);
         }
@@ -236,21 +171,19 @@ public class DimensionsWorlds {
 
 
         //RETURNING----------------------------------------------------------------------------
-        EnvironmentalHazards hazards = new EnvironmentalHazards(plugin);
         hazards.addHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN);
 
         for (int i = 0; i < amount; i++) {
             EnvironmentalHazards.Hazard hazard;
-            int count = 0;
+            int tries = 0;
             do {
-                if (!priority.isEmpty() && random.nextInt(100) < 60) {
-                    hazard = priority.get(random.nextInt(priority.size()));
-                } else {
-                    hazard = list.get(random.nextInt(list.size()));
-                }
-                count++;
-            } while ((hazard == null || hazards.hasHazard(world, hazard)) && count < 100);
-            hazards.addHazard(world, hazard);
+                hazard = list.get(random.nextInt(list.size()));
+                tries++;
+            } while ((hazard == null || hazards.hasHazard(world, hazard)) && tries < 100);
+
+            if (!hazards.hasHazard(world, hazard)) {
+                hazards.addHazard(world, hazard);
+            }
         }
     }
 
@@ -275,35 +208,12 @@ public class DimensionsWorlds {
         plugin.saveSystemConfig();
     }
 
-    public World.Environment getEnvironment() {
-        if (random.nextBoolean()) {
-            return World.Environment.NORMAL;
-        }
-        else {
-            if (random.nextBoolean()) {
-                return World.Environment.NETHER;
-            }
-            else {
-                return World.Environment.THE_END;
-            }
-        }
+    public NativeLife getRandomHabitation () {
+        if (random.nextBoolean()) return NativeLife.PILLAGERS;
+        return NativeLife.UNDEAD;
     }
 
-    public Habitation getRandomHabitation () {
-        int rand = random.nextInt(3);
-        if (rand == 0) {
-            return Habitation.INHABITED;
-        }
-        else if (rand == 1) {
-            return Habitation.UNINHABITED;
-        }
-        else {
-            return Habitation.REINHABITED;
-        }
-    }
-
-    public void addHabitation(World world, Habitation habitation) {
-        world.setGameRule(GameRule.DO_MOB_SPAWNING, habitation.getMobSpawn());
+    public void addHabitation(World world, NativeLife habitation) {
         plugin.getSystemConfig().set("dim_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
         plugin.saveSystemConfig();
     }

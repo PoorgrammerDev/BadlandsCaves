@@ -63,7 +63,7 @@ public class DimensionStructures {
         this.plugin = plugin;
     }
 
-    public void generateStructure (World world, DimensionsWorlds.Habitation habitation, @Nullable Location origin, @Nullable PlanetStructure structure) {
+    public void generateStructure (World world, DimensionsWorlds.NativeLife habitation, @Nullable Location origin, @Nullable PlanetStructure structure) {
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
             if (origin == null || origin.getWorld() == null || !origin.getWorld().equals(world)) {
                 int y_start = 200;
@@ -84,7 +84,7 @@ public class DimensionStructures {
 
             if (structure == null) {
                 structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
-                if (habitation.equals(DimensionsWorlds.Habitation.INHABITED)) {
+                if (habitation.equals(DimensionsWorlds.NativeLife.PILLAGERS)) {
                     while (!structure.getInhabited()) {
                         structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
                     }
@@ -140,7 +140,7 @@ public class DimensionStructures {
         return Material.STONE;
     }
 
-    public void loadStructure(PlanetStructure queried, Location origin, DimensionsWorlds.Habitation habitation) {
+    public void loadStructure(PlanetStructure queried, Location origin, DimensionsWorlds.NativeLife habitation) {
         //center ground level world origin ~(0, 60, 0)
 
         //multistructures
@@ -223,7 +223,7 @@ public class DimensionStructures {
         }
     }
 
-    public void fillBarrels(StructureTrack track, Location origin, DimensionsWorlds.Habitation habitation) {
+    public void fillBarrels(StructureTrack track, Location origin, DimensionsWorlds.NativeLife habitation) {
         final Location clone = origin.clone();
         clone.add(track.getBlockXOffset(), track.getBlockYOffset(), track.getBlockZOffset());
 
