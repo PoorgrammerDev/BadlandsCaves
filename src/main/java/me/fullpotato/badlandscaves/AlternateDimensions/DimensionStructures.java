@@ -11,7 +11,6 @@ import org.bukkit.World;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Structure;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
@@ -23,32 +22,26 @@ import java.util.Random;
 
 
 public class DimensionStructures {
-    public enum PlanetStructure {
-        MANABAR(15, true),
-        LAB(15, true),
-        LAB_ABANDONED(15, false),
-        LAB_DESTROYED(0, false),
-        JAIL(7, true),
-        JAIL_ABANDONED(7, false),
-        SHRINE(7, true),
-        SHRINE_DESTROYED(7, false),
-        CURSED_HOUSE(15, false),
-        TENT(7, true),
-        HOUSE(9, true),
-        HOUSE_ABANDONED(10, false),
-        HOUSE_DESTROYED(10, false),
-        BUNKER(16, true),
-        BUNKER_AB(16, false);
+    public enum Structure {
+        MANABAR(true),
+        LAB(true),
+        LAB_ABANDONED(false),
+        LAB_DESTROYED(false),
+        JAIL(true),
+        JAIL_ABANDONED(false),
+        SHRINE(true),
+        SHRINE_DESTROYED(false),
+        CURSED_HOUSE(false),
+        TENT(true),
+        HOUSE(true),
+        HOUSE_ABANDONED(false),
+        HOUSE_DESTROYED(false),
+        BUNKER(true),
+        BUNKER_AB(false);
 
-        private final int clearRadius;
         private final boolean inhabited;
-        PlanetStructure(int clearRadius, boolean inhabited) {
-            this.clearRadius = clearRadius;
+        Structure(boolean inhabited) {
             this.inhabited = inhabited;
-        }
-
-        public int getClearRadius() {
-            return this.clearRadius;
         }
 
         public boolean getInhabited() {
@@ -63,88 +56,65 @@ public class DimensionStructures {
         this.plugin = plugin;
     }
 
-    public void generateStructure (World world, DimensionsWorlds.NativeLife habitation, @Nullable Location origin, @Nullable PlanetStructure structure) {
+    public void generateStructures (World world, DimensionsWorlds.NativeLife habitation, @Nullable Location origin, int radius, int count) {
+        if (origin == null) origin = new Location(world, 0, 256, 0);
+
+        final int x = origin.getBlockX();
+        final int z = origin.getBlockZ();
+        final int[] ticker = {0};
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (ticker[0] > count) {
+                    this.cancel();
+                    return;
+                }
+                final Location location = new Location(world, x + (random.nextInt(radius * 2) - radius), 256, z + (random.nextInt(radius * 2) - radius));
+                generateStructure(world, habitation, location, null);
+                ticker[0]++;
+            }
+        }.runTaskTimer(plugin, 0, 20);
+    }
+
+    public void generateStructure (World world, DimensionsWorlds.NativeLife habitation, Location origin, @Nullable Structure structure) {
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
-            if (origin == null || origin.getWorld() == null || !origin.getWorld().equals(world)) {
-                int y_start = 200;
+            for (int y = world.getMaxHeight(); y > 0; y--) {
+                Location iterate = origin.clone();
+                iterate.setY(y);
 
-                origin = new Location(world, 0, y_start, 0);
-
-                for (int y = y_start; y > 0; y--) {
-                    Location iterate = origin.clone();
-                    iterate.setY(y);
-
-                    Material type = iterate.getBlock().getType();
-                    if (type.isSolid() && !type.name().toUpperCase().contains("LOG") && !type.name().toUpperCase().contains("LEAVES")) {
-                        origin.setY(y);
-                        break;
-                    }
+                final Material type = iterate.getBlock().getType();
+                final String name = type.name().toUpperCase();
+                if (type.isSolid() && !name.contains("LOG") && !name.contains("LEAVES") && !name.contains("MUSHROOM")) {
+                    origin.setY(y);
+                    break;
                 }
             }
 
             if (structure == null) {
-                structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
+                structure = Structure.values()[random.nextInt(Structure.values().length)];
                 if (habitation.equals(DimensionsWorlds.NativeLife.ILLAGERS)) {
                     while (!structure.getInhabited()) {
-                        structure = PlanetStructure.values()[random.nextInt(PlanetStructure.values().length)];
+                        structure = Structure.values()[random.nextInt(Structure.values().length)];
                     }
                 }
             }
 
-            clearArea(origin, structure.getClearRadius());
-            loadStructure(structure, origin, habitation);
+            world.loadChunk(origin.getChunk());
+            final Structure finalStructure = structure;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    loadStructure(finalStructure, origin, habitation);
+                }
+            }.runTaskLater(plugin, 20);
         }
     }
 
-    public void clearArea(Location location, int radius) {
-        Material groundType = getGroundMaterial(location);
-
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                for (int y = location.getBlockY() + 1; y < 200; y++) {
-                    Location clone = location.clone().add(x, 0, z);
-                    clone.setY(y);
-
-                    Block block = clone.getBlock();
-                    if (block.getType().name().toUpperCase().contains("LOG") || block.getType().name().toUpperCase().contains("LEAVES") || !block.getType().isSolid() || block.isLiquid()) {
-                        block.setType(Material.AIR);
-                    }
-
-                }
-
-                for (int y = location.getBlockY() - 4; y <= location.getBlockY(); y++) {
-                    Location clone = location.clone().add(x, 0, z);
-                    clone.setY(y);
-
-                    Block block = clone.getBlock();
-                    if (block.isLiquid() || block.isPassable() || !block.getType().isSolid()) {
-                        block.setType(groundType);
-                    }
-                }
-            }
-        }
-
-    }
-
-    public Material getGroundMaterial (Location location) {
-        for (int x = -10; x <= 10; x++) {
-            for (int z = -10; z <= 10; z++) {
-                Location clone = location.clone().add(x, 0, z);
-                Material type = clone.getBlock().getType();
-
-                if (type.isSolid() && !type.name().toUpperCase().contains("LOG") && !type.name().toUpperCase().contains("LEAVES")) {
-                    return type;
-                }
-            }
-        }
-        return Material.STONE;
-    }
-
-    public void loadStructure(PlanetStructure queried, Location origin, DimensionsWorlds.NativeLife habitation) {
+    public void loadStructure(Structure queried, Location origin, DimensionsWorlds.NativeLife habitation) {
         //center ground level world origin ~(0, 60, 0)
 
         //multistructures
-        if (queried.equals(PlanetStructure.BUNKER)) {
+        if (queried.equals(Structure.BUNKER)) {
             final StructureTrack[] bunker = {
                     new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "badlandscaves:bunker_tophouse", BlockFace.DOWN),
                     new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "badlandscaves:bunker_intertube", BlockFace.DOWN),
@@ -155,7 +125,7 @@ public class DimensionStructures {
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker);
-            loader.loadAll(origin, true);
+            loader.loadAll(origin, false);
 
             new BukkitRunnable() {
                 @Override
@@ -166,7 +136,7 @@ public class DimensionStructures {
                 }
             }.runTaskLater(plugin, 5);
         }
-        else if (queried.equals(PlanetStructure.BUNKER_AB)) {
+        else if (queried.equals(Structure.BUNKER_AB)) {
             final StructureTrack[] bunker_ab = {
                     new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "badlandscaves:bunker_tophouse_ab", BlockFace.DOWN),
                     new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "badlandscaves:bunker_intertube_ab", BlockFace.DOWN),
@@ -177,7 +147,7 @@ public class DimensionStructures {
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker_ab);
-            loader.loadAll(origin, true);
+            loader.loadAll(origin, false);
 
             new BukkitRunnable() {
                 @Override
@@ -191,25 +161,25 @@ public class DimensionStructures {
         //single structures
         else {
             final StructureTrack[] structures = {
-                    new StructureTrack(plugin, 11, 0, 10, -21, 0, -19, "badlandscaves:" + PlanetStructure.MANABAR.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + PlanetStructure.LAB.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + PlanetStructure.LAB_ABANDONED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + PlanetStructure.LAB_DESTROYED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + PlanetStructure.JAIL.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + PlanetStructure.JAIL_ABANDONED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + PlanetStructure.SHRINE.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + PlanetStructure.SHRINE_DESTROYED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 10, -1, -11, -19, 0, 1, "badlandscaves:" + PlanetStructure.CURSED_HOUSE.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + PlanetStructure.TENT.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + PlanetStructure.HOUSE.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + PlanetStructure.HOUSE_ABANDONED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + PlanetStructure.HOUSE_DESTROYED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, 10, -21, 0, -19, "badlandscaves:" + Structure.MANABAR.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_ABANDONED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_DESTROYED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL_ABANDONED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.SHRINE.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.SHRINE_DESTROYED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 10, -1, -11, -19, 0, 1, "badlandscaves:" + Structure.CURSED_HOUSE.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.TENT.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_ABANDONED.name().toLowerCase(), BlockFace.UP),
+                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_DESTROYED.name().toLowerCase(), BlockFace.UP),
 
             };
 
             for (StructureTrack structure : structures) {
                 if (queried.name().equalsIgnoreCase(structure.getStructureName().split(":")[1])) {
-                    structure.load(origin, true);
+                    structure.load(origin, false);
 
                     new BukkitRunnable() {
                         @Override
@@ -230,8 +200,8 @@ public class DimensionStructures {
         Block block = clone.getBlock();
 
         if (block.getType().equals(Material.STRUCTURE_BLOCK)) {
-            if (block.getState() instanceof Structure) {
-                Structure state = (Structure) block.getState();
+            if (block.getState() instanceof org.bukkit.block.Structure) {
+                org.bukkit.block.Structure state = (org.bukkit.block.Structure) block.getState();
 
                 BlockVector size = state.getStructureSize();
                 BlockVector offset = state.getRelativePosition();

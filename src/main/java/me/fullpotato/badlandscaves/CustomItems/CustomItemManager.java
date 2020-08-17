@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
+import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import me.fullpotato.badlandscaves.Util.ItemBuilder;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class CustomItemManager {
     private final BadlandsCaves plugin;
     private final EnchantmentStorage enchantmentStorage;
+    private final PregenerateDimensions pregenerateDimensions;
     private final Map<CustomItem, ItemStack> itemMap = new HashMap<>();
 
     public static final String[] uuids = {
@@ -75,6 +77,7 @@ public class CustomItemManager {
         this.plugin = plugin;
         enchantmentStorage = new EnchantmentStorage(plugin);
         fillMap();
+        pregenerateDimensions = new PregenerateDimensions(plugin);
     }
 
     private void fillMap() {
@@ -153,6 +156,7 @@ public class CustomItemManager {
         itemMap.put(CustomItem.TREASURE_GEAR_VOUCHER, new ItemBuilder(Material.PAPER).setName(ChatColor.WHITE + "Treasure Gear Voucher").build());
         itemMap.put(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.RED + "Hallowed Chambers Treasure Bag").setCustomModelData(191).build());
         itemMap.put(CustomItem.NEBULITE_INSTALLER, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.WHITE.toString() + ChatColor.of("#0081fa") + "Nebulite Installer").setCustomModelData(192).build());
+        itemMap.put(CustomItem.NEBULITE_CRATE, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.RESET.toString() + ChatColor.of("#0081fa") + "Nebulite Crate").setCustomModelData(233).build());
         itemMap.put(CustomItem.NEBULITE_ENERGY_STORAGE, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.WHITE.toString() + ChatColor.of("#ffe62b") + "Energy Storage").setLore(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite", ChatColor.GRAY + "+100% Max Charge", ChatColor.GRAY + "Can be used on All Starlight Items.").setCustomModelData(193).setPersistentData(new NamespacedKey(this.plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1).build());
         itemMap.put(CustomItem.NEBULITE_CORRODING_LIGHTS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.DARK_GREEN + "Corroding Lights").setLore(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite", ChatColor.GRAY + "Hits inflict Corrosion.", ChatColor.GRAY + "Can be used on Starlight Saber.", ChatColor.RED + "Mutually Exclusive with Jagged Lights.").setCustomModelData(194).setPersistentData(new NamespacedKey(this.plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1).build());
         itemMap.put(CustomItem.NEBULITE_JAGGED_LIGHTS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RED + "Jagged Lights").setLore(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "Nebulite", ChatColor.GRAY + "Hits inflict Bleeding.", ChatColor.GRAY + "Can be used on Starlight Saber.", ChatColor.RED + "Mutually Exclusive with Corroding Lights.").setCustomModelData(195).setPersistentData(new NamespacedKey(this.plugin, "is_nebulite"), PersistentDataType.BYTE, (byte) 1).build());
@@ -222,7 +226,7 @@ public class CustomItemManager {
         itemMap.put(CustomItem.BLUEPRINTS_RAIN_RESISTANCE, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RESET.toString() + ChatColor.of("#03a1fc") + "Blueprints").setLore(ChatColor.GRAY + "Rain Resistance").setCustomModelData(232).build());
         itemMap.put(CustomItem.BLUEPRINTS_DUNGEON_COMPASS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RESET.toString() + ChatColor.of("#03a1fc") + "Blueprints").setLore(ChatColor.GRAY + "Dungeon Compass").setCustomModelData(232).build());
         itemMap.put(CustomItem.BLUEPRINTS_STIM_PACK, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RESET.toString() + ChatColor.of("#03a1fc") + "Blueprints").setLore(ChatColor.GRAY + "Stim Pack").setCustomModelData(232).build());
-
+        itemMap.put(CustomItem.ARTIFACT_VOUCHER, new ItemBuilder(Material.PAPER).setName(ChatColor.WHITE + "Artifact Voucher").build());
 
         //starlight armor/tools
         final ItemStack starlight_helmet = new ItemBuilder(Material.NETHERITE_HELMET).setName("§eStarlight Helmet").setLore("§7Charge: 0 / 1000").setCustomModelData(151).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true).addEnchant(Enchantment.DURABILITY, 5, true).setDurabilityDamage(Material.NETHERITE_HELMET.getMaxDurability() - 1).setRepairCost(999999).setPersistentData(new NamespacedKey(this.plugin, "starlight_charge"), PersistentDataType.INTEGER, 0).setPersistentData(new NamespacedKey(this.plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0).setPersistentData(new NamespacedKey(this.plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000).setPersistentData(new NamespacedKey(this.plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1).setPersistentData(new NamespacedKey(this.plugin, "nebulites"), PersistentDataType.STRING, "").addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD)).addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD)).build();
@@ -304,8 +308,7 @@ public class CustomItemManager {
     public ItemStack getItem(CustomItem item) {
         //special items
         if (item.equals(CustomItem.DIMENSIONAL_ANCHOR)) {
-            final String uuid = UUID.randomUUID().toString();
-            return new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Dimensional Anchor").setLore("§7" + uuid).setCustomModelData(175).setPersistentData(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING, uuid).setPersistentData(new NamespacedKey(plugin, "is_dim_anchor"), PersistentDataType.BYTE, (byte) 1).build();
+            return pregenerateDimensions.getDimensionalAnchor();
         }
 
         //regular

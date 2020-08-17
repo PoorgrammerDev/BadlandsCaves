@@ -94,9 +94,12 @@ public enum CustomItem {
     TOTEM_OF_PRESERVATION(true),
     TREASURE_GEAR_VOUCHER(true),
     HALLOWED_CHAMBERS_TREASURE_BAG(false),
-    NEBULITE_INSTALLER(false),
+
 
     //nebulites
+    NEBULITE_INSTALLER(false),
+    NEBULITE_CRATE(false),
+
     NEBULITE_ENERGY_STORAGE(true),
     NEBULITE_CORRODING_LIGHTS(true),
     NEBULITE_JAGGED_LIGHTS(true),
@@ -129,6 +132,7 @@ public enum CustomItem {
     NEBULITE_SHIELD_THRUSTER(true),
 
     //artifacts
+    ARTIFACT_VOUCHER(true),
     ARTIFACT_TENACIOUS_TRICKERY(true),
     ARTIFACT_ECLIPSED_SHADOWS(true),
     ARTIFACT_MANA_WARDING(true),

@@ -1,9 +1,10 @@
 package me.fullpotato.badlandscaves;
 
 import com.google.common.base.Charsets;
-import me.fullpotato.badlandscaves.AlternateDimensions.GravityFallDamage;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
+import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
+import me.fullpotato.badlandscaves.AlternateDimensions.UseDimensionalAnchor;
 import me.fullpotato.badlandscaves.Blocks.SilencerBlock;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
@@ -36,6 +37,8 @@ import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R2;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
+import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter_1_16_R2;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.Research.UseResearchTable;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.*;
@@ -90,6 +93,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private LineOfSightNMS lineOfSightNMS;
     private PossessionNMS possessionNMS;
     private EclipsedShadowsNMS eclipsedShadowsNMS;
+    private TPSGetter tpsGetterNMS;
 
     //CUSTOM ITEMS
     private CustomItemManager customItemManager;
@@ -267,7 +271,6 @@ public final class BadlandsCaves extends JavaPlugin {
                 new StarlightTools(this),
                 new StarlightCharge(this),
                 new StarlightBlasterMechanism(this),
-                new GravityFallDamage(this),
                 new SpawnInhabitants(this),
                 new NoOxygen(this),
                 new NoFood(this),
@@ -320,6 +323,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new FishWater(this),
                 new ResearchTableItems(this),
                 new UseResearchTable(this),
+                new PregenerateDimensions(this),
         };
 
         for (Listener event : events) {
@@ -404,6 +408,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new NebuliteCounterattack(this).runTaskTimer(this, 0, 0);
         new ArtifactHasteWind(this).runTaskTimer(this, 0, 0);
         new ArtifactMomentousMomentum(this).runTaskTimer(this, 0, 0);
+        new PregenerateDimensions(this).runTaskTimer(this, 20, 2000);
 
 
         WitherBossFight witherFight = new WitherBossFight(this);
@@ -559,6 +564,7 @@ public final class BadlandsCaves extends JavaPlugin {
             lineOfSightNMS = new LineOfSight_1_16_R2();
             possessionNMS = new Possession_1_16_R2();
             eclipsedShadowsNMS = new EclipsedShadows_1_16_R2(this);
+            tpsGetterNMS = new TPSGetter_1_16_R2(this);
 
         } else {
             this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
@@ -625,5 +631,9 @@ public final class BadlandsCaves extends JavaPlugin {
 
     public CustomItemManager getCustomItemManager() {
         return customItemManager;
+    }
+
+    public TPSGetter getTpsGetterNMS() {
+        return tpsGetterNMS;
     }
 }

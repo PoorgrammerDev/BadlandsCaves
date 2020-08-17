@@ -1,4 +1,4 @@
-package me.fullpotato.badlandscaves.CustomItems.Using;
+package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
@@ -81,9 +81,9 @@ public class UseDimensionalAnchor implements Listener {
         Block middle = bottom.getRelative(BlockFace.UP);
         Block top = middle.getRelative(BlockFace.UP);
 
-        top.setType(Material.SMOOTH_STONE_SLAB);
-        bottom.setType(Material.SMOOTH_STONE_SLAB);
-        Slab bottomSlabData = (Slab) Material.SMOOTH_STONE_SLAB.createBlockData();
+        top.setType(Material.BLACKSTONE_SLAB);
+        bottom.setType(Material.BLACKSTONE_SLAB);
+        Slab bottomSlabData = (Slab) Material.BLACKSTONE_SLAB.createBlockData();
         bottomSlabData.setType(Slab.Type.TOP);
         bottom.setBlockData(bottomSlabData);
 
@@ -304,7 +304,7 @@ public class UseDimensionalAnchor implements Listener {
     @EventHandler
     public void preventBreak (BlockBreakEvent event) {
         final Block block = event.getBlock();
-        if (block.getType().equals(Material.SMOOTH_STONE_SLAB)) {
+        if (block.getType().equals(Material.BLACKSTONE_SLAB)) {
             final Player player = event.getPlayer();
 
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {

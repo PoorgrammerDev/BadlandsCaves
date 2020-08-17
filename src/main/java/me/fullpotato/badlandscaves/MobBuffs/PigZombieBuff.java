@@ -48,7 +48,7 @@ public class PigZombieBuff implements Listener {
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, random.nextInt(4), false, true));
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999, random.nextInt(2), false, true));
 
-        pigZombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(random.nextInt(100));
+        pigZombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(999);
         pigZombie.setAnger(999);
 
         if (random.nextBoolean()) {

@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
 import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
-import me.fullpotato.badlandscaves.AlternateDimensions.GravityRunnable;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
@@ -63,18 +62,10 @@ public class DimensionsWorlds {
         final UnloadedWorld unloadedWorld = new UnloadedWorld(fullName);
         World alreadyExisting = plugin.getServer().getWorld(fullName);
         if (plugin.getServer().getWorlds().contains(alreadyExisting)) {
-            if (alreadyExisting != null) {
-                new GravityRunnable(plugin, alreadyExisting).runTaskTimerAsynchronously(plugin, 0, 0);
-            }
             return alreadyExisting;
         }
         else if (unloadedWorld.exists()) {
             alreadyExisting = loadWorld(fullName);
-
-            if (alreadyExisting != null) {
-                new GravityRunnable(plugin, alreadyExisting).runTaskTimerAsynchronously(plugin, 0, 0);
-            }
-
             return alreadyExisting;
         }
 
@@ -102,37 +93,33 @@ public class DimensionsWorlds {
         final WorldBorder border = world.getWorldBorder();
         border.setCenter(0, 0);
         border.setWarningDistance(25);
-        border.setSize(random.nextInt(4000) + 1000);
 
-        genGravity(world);
+        final int worldBorderSize = random.nextInt(4000) + 1000;
+        border.setSize(worldBorderSize);
+
         addHabitation(world, habitation);
 
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
         addHazards(world, habitation, biome, amount);
-
         genSpawnCage(world);
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                structures.generateStructure(world, habitation, null, null);
+                structures.generateStructures(world, habitation, null, worldBorderSize / 2, random.nextInt((chaos / 5) + 20) + 5);
             }
         }.runTaskLater(plugin, 5);
 
-
-        new GravityRunnable(plugin, world).runTaskTimerAsynchronously(plugin, 0, 0);
         return world;
     }
 
     public void genSpawnCage (World world) {
-        Location location = new Location(world, random.nextInt(200) - 100, random.nextInt(100) + 20, random.nextInt(200) - 100);
+        final Location location = new Location(world, random.nextInt(200) - 100, random.nextInt(100) + 20, random.nextInt(200) - 100);
         world.setSpawnLocation(location);
 
-        StructureTrack track = new StructureTrack(plugin, location, -4, -1, -4, 0, 0, 0, "badlandscaves:dungeon", BlockFace.DOWN);
+        final StructureTrack track = new StructureTrack(plugin, location, -7, -1, -7, 0, 0, 0, "badlandscaves:dungeon", BlockFace.DOWN);
         track.load();
-
-        // TODO: 8/16/2020 adapt for new dungeon
 
         Block campfire = location.getBlock();
         campfire.setType(Material.CAMPFIRE);
@@ -173,8 +160,6 @@ public class DimensionsWorlds {
 
 
         //RETURNING----------------------------------------------------------------------------
-        hazards.addHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN);
-
         for (int i = 0; i < amount; i++) {
             EnvironmentalHazards.Hazard hazard;
             int tries = 0;
@@ -189,27 +174,6 @@ public class DimensionsWorlds {
         }
     }
 
-    public void genGravity(World world) {
-        int rand = random.nextInt(3);
-
-        double gravityModifier;
-        if (rand == 0) {
-            //high gravity (2 - 5)
-            gravityModifier = random.doubles(1, 2, 5).toArray()[0];
-        }
-        else if (rand == 1) {
-            //normal gravity (1)
-            gravityModifier = 1;
-        }
-        else {
-            //low gravity (0.1 - 0.9)
-            gravityModifier = random.doubles(1, 0.1, 0.9).toArray()[0];
-        }
-
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".gravity", gravityModifier);
-        plugin.saveSystemConfig();
-    }
-
     public NativeLife getRandomHabitation () {
         if (random.nextBoolean()) return NativeLife.ILLAGERS;
         return NativeLife.UNDEAD;
@@ -221,20 +185,22 @@ public class DimensionsWorlds {
     }
 
     public World loadWorld (String name) {
-        final String scaleRandStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.scale_rand");
+        final String scaleRandStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.scale");
         final String freqStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.frequency");
         final String amplitudeStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.amplitude");
         final String biomeStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.biome");
+        final String storedChaosStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.chaos");
 
         if (scaleRandStr != null && freqStr != null && amplitudeStr != null && biomeStr != null) {
             try {
                 final double scaleRand = Double.parseDouble(scaleRandStr);
                 final double frequency = Double.parseDouble(freqStr);
                 final double amplitude = Double.parseDouble(amplitudeStr);
+                final int storedChaos = Integer.parseInt(storedChaosStr);
                 final Biome biome = Biome.valueOf(biomeStr);
 
                 final WorldCreator worldCreator = new WorldCreator(name);
-                worldCreator.environment(World.Environment.NORMAL).generator(new DimensionsGen(plugin, biome, scaleRand, frequency, amplitude));
+                worldCreator.environment(World.Environment.NORMAL).generator(new DimensionsGen(plugin, biome, scaleRand, frequency, amplitude, storedChaos));
 
                 return worldCreator.createWorld();
             }
