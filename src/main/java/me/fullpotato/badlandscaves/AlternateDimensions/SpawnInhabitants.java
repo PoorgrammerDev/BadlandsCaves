@@ -45,12 +45,12 @@ public class SpawnInhabitants implements Listener {
                 }
 
                 if (entity instanceof Monster) {
-                    DimensionsWorlds.NativeLife habitationType = null;
+                    DimensionsWorlds.Habitation habitationType = null;
 
-                    String savedHabitatType = plugin.getSystemConfig().getString("dim_stats." + world.getName() + ".habitation");
+                    String savedHabitatType = plugin.getSystemConfig().getString("alternate_dimensions." + world.getName() + ".habitation");
                     if (savedHabitatType != null) {
                         try {
-                            habitationType = DimensionsWorlds.NativeLife.valueOf(savedHabitatType.toUpperCase());
+                            habitationType = DimensionsWorlds.Habitation.valueOf(savedHabitatType.toUpperCase());
                         } catch (IllegalArgumentException e) {
                             return;
                         }
@@ -59,7 +59,7 @@ public class SpawnInhabitants implements Listener {
                     if (habitationType != null) {
                         final Random random = new Random();
                         final Location location = event.getLocation();
-                        if (habitationType.equals(DimensionsWorlds.NativeLife.ILLAGERS)) {
+                        if (habitationType.equals(DimensionsWorlds.Habitation.ILLAGERS)) {
                             event.setCancelled(true);
                             entity.remove();
 

@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -113,12 +114,13 @@ public class StopCustomItemsInteract implements Listener {
     @EventHandler
     public void preventGrindstone (InventoryClickEvent event) {
         final Inventory inventory = event.getClickedInventory();
-        if (inventory != null) {
-            final Location location = inventory.getLocation();
+        if (inventory instanceof GrindstoneInventory) {
+            final GrindstoneInventory grindstoneInventory = (GrindstoneInventory) inventory;
+            final Location location = grindstoneInventory.getLocation();
             if (location != null && location.getBlock().getType().equals(Material.GRINDSTONE) && event.getSlot() == 2) {
                 final ItemStack[] items = {
-                        inventory.getItem(0),
-                        inventory.getItem(1),
+                        grindstoneInventory.getItem(0),
+                        grindstoneInventory.getItem(1),
                 };
 
                 for (ItemStack item : items) {

@@ -56,7 +56,7 @@ public class DimensionStructures {
         this.plugin = plugin;
     }
 
-    public void generateStructures (World world, DimensionsWorlds.NativeLife habitation, @Nullable Location origin, int radius, int count) {
+    public void generateStructures (World world, DimensionsWorlds.Habitation habitation, @Nullable Location origin, int radius, int count) {
         if (origin == null) origin = new Location(world, 0, 256, 0);
 
         final int x = origin.getBlockX();
@@ -76,7 +76,7 @@ public class DimensionStructures {
         }.runTaskTimer(plugin, 0, 20);
     }
 
-    public void generateStructure (World world, DimensionsWorlds.NativeLife habitation, Location origin, @Nullable Structure structure) {
+    public void generateStructure (World world, DimensionsWorlds.Habitation habitation, Location origin, @Nullable Structure structure) {
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
             for (int y = world.getMaxHeight(); y > 0; y--) {
                 Location iterate = origin.clone();
@@ -92,7 +92,7 @@ public class DimensionStructures {
 
             if (structure == null) {
                 structure = Structure.values()[random.nextInt(Structure.values().length)];
-                if (habitation.equals(DimensionsWorlds.NativeLife.ILLAGERS)) {
+                if (habitation.equals(DimensionsWorlds.Habitation.ILLAGERS)) {
                     while (!structure.getInhabited()) {
                         structure = Structure.values()[random.nextInt(Structure.values().length)];
                     }
@@ -104,13 +104,13 @@ public class DimensionStructures {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    loadStructure(finalStructure, origin, habitation);
+                    loadStructure(finalStructure, origin);
                 }
             }.runTaskLater(plugin, 20);
         }
     }
 
-    public void loadStructure(Structure queried, Location origin, DimensionsWorlds.NativeLife habitation) {
+    public void loadStructure(Structure queried, Location origin) {
         //center ground level world origin ~(0, 60, 0)
 
         //multistructures
@@ -131,7 +131,7 @@ public class DimensionStructures {
                 @Override
                 public void run() {
                     for (StructureTrack track : bunker) {
-                        fillBarrels(track, origin, habitation);
+                        fillBarrels(track, origin);
                     }
                 }
             }.runTaskLater(plugin, 5);
@@ -153,7 +153,7 @@ public class DimensionStructures {
                 @Override
                 public void run() {
                     for (StructureTrack track : bunker_ab) {
-                        fillBarrels(track, origin, habitation);
+                        fillBarrels(track, origin);
                     }
                 }
             }.runTaskLater(plugin, 5);
@@ -184,7 +184,7 @@ public class DimensionStructures {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            fillBarrels(structure, origin, habitation);
+                            fillBarrels(structure, origin);
                         }
                     }.runTaskLater(plugin, 5);
                     return;
@@ -193,7 +193,7 @@ public class DimensionStructures {
         }
     }
 
-    public void fillBarrels(StructureTrack track, Location origin, DimensionsWorlds.NativeLife habitation) {
+    public void fillBarrels(StructureTrack track, Location origin) {
         final Location clone = origin.clone();
         clone.add(track.getBlockXOffset(), track.getBlockYOffset(), track.getBlockZOffset());
 
@@ -220,7 +220,7 @@ public class DimensionStructures {
                                     Barrel barrelState = (Barrel) barrel.getState();
                                     Inventory inventory = barrelState.getInventory();
 
-                                    DimensionStructureTable loot = new DimensionStructureTable(plugin, habitation);
+                                    DimensionStructureTable loot = new DimensionStructureTable(plugin);
                                     LootContext.Builder builder = new LootContext.Builder(block.getLocation());
 
                                     for (ItemStack item : loot.populateLoot(random, builder.build())) {

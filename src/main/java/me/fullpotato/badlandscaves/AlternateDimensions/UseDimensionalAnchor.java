@@ -5,14 +5,17 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Loot.DestroySpawner;
+import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
+import me.fullpotato.badlandscaves.Util.ItemBuilder;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -41,10 +44,23 @@ import java.util.Random;
 public class UseDimensionalAnchor implements Listener {
     private final BadlandsCaves plugin;
     private final HashMap<String, String> nameFromCode = new HashMap<>();
+    private final DimensionsWorlds dimensions;
+    private final EnvironmentalHazards hazards;
+    private final DestroySpawner dungeonMaker;
+    private final Random random = new Random();
     private final String title = "§9Dimensional Doorway";
+    private final NamespacedKey dimPortalKey;
+    private final NamespacedKey usableKey;
+    private final TPSGetter tpsGetter;
+    private final double tpsThreshold;
 
     public UseDimensionalAnchor(BadlandsCaves plugin) {
         this.plugin = plugin;
+        dimensions = new DimensionsWorlds(plugin);
+        hazards = new EnvironmentalHazards(plugin);
+        dungeonMaker = new DestroySpawner(plugin);
+        tpsGetter = plugin.getTpsGetterNMS();
+        tpsThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
 
         nameFromCode.put(EnvironmentalHazards.Hazard.ACID_RAIN.name(), "Acid Rain");
         nameFromCode.put(EnvironmentalHazards.Hazard.TOXIC_WATER.name(), "Toxic Water");
@@ -57,7 +73,8 @@ public class UseDimensionalAnchor implements Listener {
         nameFromCode.put(EnvironmentalHazards.Hazard.NO_FOOD.name(), "Famine");
         nameFromCode.put(EnvironmentalHazards.Hazard.PARANOIA.name(), "Paranoia");
         nameFromCode.put(EnvironmentalHazards.Hazard.FREEZING.name(), "Cryogenic");
-
+        dimPortalKey = new NamespacedKey(this.plugin, "is_dim_portal");
+        usableKey = new NamespacedKey(this.plugin, "usable");
     }
 
     @EventHandler
@@ -68,7 +85,30 @@ public class UseDimensionalAnchor implements Listener {
                 if (block != null && block.getType().equals(Material.SPAWNER)) {
                     final ItemStack item = event.getItem();
                     if (item != null && isAnchor(item)) {
-                        initiate(item, block);
+                        event.setUseItemInHand(Event.Result.DENY);
+                        final Player player = event.getPlayer();
+                        for (double recentTPS : tpsGetter.getRecentTPS()) {
+                            if (recentTPS < tpsThreshold) {
+                                player.sendMessage(ChatColor.RED + "You can't do that right now.");
+                                return;
+                            }
+                        }
+
+                        // TODO: 8/17/2020 fix the crashing and remove this
+                        final ItemMeta meta = item.getItemMeta();
+                        if (meta != null) {
+                            final List<String> lore = meta.getLore();
+                            if (lore != null && lore.size() >= 2) {
+                                final String tag = lore.get(1);
+                                if (!tag.toUpperCase().contains("NOT")) {
+                                    initiate(item, block);
+                                }
+                                else {
+                                    player.sendMessage(ChatColor.RED + "Unfortunately this isn't supported right now. You can only load pre-generated worlds at this time.");
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -93,9 +133,7 @@ public class UseDimensionalAnchor implements Listener {
                 CreatureSpawner state = (CreatureSpawner) middle.getState();
                 entityType = state.getSpawnedType();
             }
-
         }
-
 
         middle.setType(Material.END_GATEWAY);
 
@@ -104,23 +142,39 @@ public class UseDimensionalAnchor implements Listener {
 
             gatewayData.setExitLocation(middle.getLocation());
             gatewayData.setExactTeleport(true);
-
-            gatewayData.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_dim_portal"), PersistentDataType.BYTE, (byte) 1);
+            gatewayData.getPersistentDataContainer().set(dimPortalKey, PersistentDataType.BYTE, (byte) 1);
+            gatewayData.getPersistentDataContainer().set(usableKey, PersistentDataType.BYTE, (byte) 0);
             gatewayData.getPersistentDataContainer().set(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING, worldName);
             gatewayData.update(true);
 
-            DimensionsWorlds dimensions = new DimensionsWorlds(plugin);
-            dimensions.generate(worldName);
-
             item.setAmount(item.getAmount() - 1);
+            final EntityType finalEntityType = entityType;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    final World world = dimensions.generate(worldName, false);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            final String fullName = plugin.getDimensionPrefixName() + worldName;
+                            if (!plugin.getSystemConfig().getBoolean("alternate_dimensions." + fullName + ".accessed") && !hazards.hasHazards(world)) {
+                                dimensions.addHazards(world);
 
-            final DestroySpawner dungeonMaker = new DestroySpawner(plugin);
-            final Random random = new Random();
-            dungeonMaker.incrementChaos(true);
-            dungeonMaker.getNewLocation(middle.getLocation(), random, 500);
-            dungeonMaker.makeDungeon(entityType, random, true, false);
+                                plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".accessed", true);
+                                plugin.saveSystemConfig();
+                            }
 
-            plugin.getServer().broadcastMessage("§9A Dimensional Doorway has opened!");
+                            dungeonMaker.incrementChaos(true);
+                            dungeonMaker.getNewLocation(middle.getLocation(), random, 500);
+                            dungeonMaker.makeDungeon(finalEntityType, random, true, false);
+
+                            plugin.getServer().broadcastMessage("§9A Dimensional Doorway has opened!");
+                            gatewayData.getPersistentDataContainer().set(usableKey, PersistentDataType.BYTE, (byte) 1);
+                            gatewayData.update(true);
+                        }
+                    }.runTaskLater(plugin, 5);
+                }
+            }.runTaskLater(plugin, 5);
         }
     }
 
@@ -135,17 +189,22 @@ public class UseDimensionalAnchor implements Listener {
                 if (block.getType().equals(Material.END_GATEWAY)) {
                     if (block.getState() instanceof EndGateway) {
                         EndGateway state = (EndGateway) block.getState();
-                        NamespacedKey key = new NamespacedKey(plugin, "is_dim_portal");
-                        if (state.getPersistentDataContainer().has(key, PersistentDataType.BYTE)) {
-                            Byte result = state.getPersistentDataContainer().get(key, PersistentDataType.BYTE);
-                            if (result != null && result == (byte) 1) {
-                                String worldName = state.getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
-                                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                                    event.setCancelled(true);
-                                    openWarpMenu(player, block, worldName, MenuType.WARP);
-                                } else if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-                                    event.setCancelled(true);
-                                    openWarpMenu(player, block, worldName, MenuType.BREAK);
+                        if (state.getPersistentDataContainer().has(dimPortalKey, PersistentDataType.BYTE)) {
+                            final Byte portalResult = state.getPersistentDataContainer().get(dimPortalKey, PersistentDataType.BYTE);
+                            if (portalResult != null && portalResult == (byte) 1) {
+                                if (state.getPersistentDataContainer().has(usableKey, PersistentDataType.BYTE)) {
+                                    final Byte usableResult = state.getPersistentDataContainer().get(usableKey, PersistentDataType.BYTE);
+                                    if (usableResult != null && usableResult == (byte) 1) {
+                                        String worldName = state.getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
+                                        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                                            event.setCancelled(true);
+                                            openWarpMenu(player, block, worldName, MenuType.WARP);
+                                        }
+                                        else if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+                                            event.setCancelled(true);
+                                            openWarpMenu(player, block, worldName, MenuType.BREAK);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -203,10 +262,10 @@ public class UseDimensionalAnchor implements Listener {
             World world = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + worldName);
             if (world == null) {
                 DimensionsWorlds dimensions = new DimensionsWorlds(plugin);
-                world = dimensions.generate(worldName);
+                world = dimensions.generate(worldName, false);
             }
 
-            icon = new ItemStack(Material.ENDER_PEARL);
+            icon = new ItemBuilder(Material.KNOWLEDGE_BOOK).setCustomModelData(175).build();
             ItemMeta icon_meta = icon.getItemMeta();
             icon_meta.setDisplayName("§9Warp to Alternate Dimension");
 
@@ -215,7 +274,7 @@ public class UseDimensionalAnchor implements Listener {
             icon_lore.add("§r");
             icon_lore.add("§7Hazards:");
 
-            List<String> hazards = plugin.getSystemConfig().getStringList("dim_stats." + world.getName() + ".hazards");
+            List<String> hazards = plugin.getSystemConfig().getStringList("alternate_dimensions." + world.getName() + ".hazards");
             for (String code : hazards) {
                 icon_lore.add("§7 - " + nameFromCode.get(code));
             }
@@ -245,7 +304,7 @@ public class UseDimensionalAnchor implements Listener {
             ItemStack item = event.getCurrentItem();
             if (item != null) {
                 Player player = (Player) event.getWhoClicked();
-                if (item.getType().equals(Material.ENDER_PEARL)) {
+                if (item.getType().equals(Material.KNOWLEDGE_BOOK)) {
                     ItemMeta meta = item.getItemMeta();
                     if (meta != null && meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING)) {
                         String worldName = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
@@ -348,9 +407,8 @@ public class UseDimensionalAnchor implements Listener {
             if (block.getType().equals(Material.END_GATEWAY)) {
                 if (block.getState() instanceof EndGateway) {
                     EndGateway state = (EndGateway) block.getState();
-                    final NamespacedKey key = new NamespacedKey(plugin, "is_dim_portal");
-                    if (state.getPersistentDataContainer().has(key, PersistentDataType.BYTE)) {
-                        Byte result = state.getPersistentDataContainer().get(key, PersistentDataType.BYTE);
+                    if (state.getPersistentDataContainer().has(dimPortalKey, PersistentDataType.BYTE)) {
+                        Byte result = state.getPersistentDataContainer().get(dimPortalKey, PersistentDataType.BYTE);
                         if (result != null && result == (byte) 1) {
                             Player player = event.getPlayer();
                             ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin);
@@ -364,39 +422,6 @@ public class UseDimensionalAnchor implements Listener {
             }
         }
     }
-
-    // FIXME: 6/18/2020 find out the criteria name
-    /* disabled until fixed
-    public void preventAdvancement (PlayerAdvancementDoneEvent event) {
-        if (event.getAdvancement().getKey().getKey().equalsIgnoreCase("end/enter_end_gateway")) {
-            Player player = event.getPlayer();
-            Block currentBlock = player.getLocation().getBlock();
-
-            ArrayList<Block> nearbyBlocks = new ArrayList<>();
-            nearbyBlocks.add(currentBlock);
-            for (BlockFace face : BlockFace.values()) {
-                nearbyBlocks.add(currentBlock.getRelative(face));
-            }
-
-            for (Block block : nearbyBlocks) {
-                if (block.getType().equals(Material.END_GATEWAY)) {
-                    if (block.getState() instanceof EndGateway) {
-                        EndGateway state = (EndGateway) block.getState();
-                        NamespacedKey key = new NamespacedKey(plugin, "is_dim_portal");
-                        if (state.getPersistentDataContainer().has(key, PersistentDataType.BYTE)) {
-                            Byte result = state.getPersistentDataContainer().get(key, PersistentDataType.BYTE);
-                            if (result != null && result == (byte) 1) {
-                                player.getAdvancementProgress(event.getAdvancement()).revokeCriteria("enter_end_gateway");
-                                return;
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-     */
 
     public boolean isAnchorSlab (Block block) {
         final Block top = block.getRelative(BlockFace.UP);
@@ -428,18 +453,15 @@ public class UseDimensionalAnchor implements Listener {
     }
 
     public boolean isAnchor (ItemStack item) {
-        final ItemStack anchor = plugin.getCustomItemManager().getItem(CustomItem.DIMENSIONAL_ANCHOR);
-        if (item.getType().equals(anchor.getType())) {
-            if (item.hasItemMeta()) {
-                ItemMeta meta = item.getItemMeta();
-                if (meta != null) {
-                    NamespacedKey key = new NamespacedKey(plugin, "is_dim_anchor");
-                    PersistentDataContainer container = meta.getPersistentDataContainer();
-                    if (container.has(key, PersistentDataType.BYTE)) {
-                        Byte result = container.get(key, PersistentDataType.BYTE);
-                        if (result != null) {
-                            return (result == (byte) 1);
-                        }
+        if (item.getType().equals(Material.KNOWLEDGE_BOOK) && item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                NamespacedKey key = new NamespacedKey(plugin, "is_dim_anchor");
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                if (container.has(key, PersistentDataType.BYTE)) {
+                    Byte result = container.get(key, PersistentDataType.BYTE);
+                    if (result != null) {
+                        return (result == (byte) 1);
                     }
                 }
             }

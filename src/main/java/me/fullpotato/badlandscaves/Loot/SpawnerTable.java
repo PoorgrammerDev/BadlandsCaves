@@ -1,5 +1,6 @@
 package me.fullpotato.badlandscaves.Loot;
 
+import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
@@ -27,6 +28,7 @@ public class SpawnerTable implements LootTable {
     private final Player player;
     private final EntityType spawnerType;
     private final int fortune;
+    private final PregenerateDimensions pregenerateDimensions;
     private final HashMap<EntityType, ItemStack> matchSoul = new HashMap<>();
     private final ItemStack saplingVoucher = new ItemBuilder(Material.PAPER).setName("Sapling Voucher").setCustomModelData(0).build();
     private final Material[] saplings = {
@@ -41,6 +43,7 @@ public class SpawnerTable implements LootTable {
         this.plugin = plugin;
         this.player = player;
         this.spawnerType = spawnerType;
+        pregenerateDimensions = new PregenerateDimensions(plugin);
 
         key = new NamespacedKey(plugin, "mob_spawner_treasure");
         this.fortune = fortune;
@@ -57,6 +60,7 @@ public class SpawnerTable implements LootTable {
         matchSoul.put(EntityType.ZOMBIFIED_PIGLIN, customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL));
         matchSoul.put(EntityType.PHANTOM, customItemManager.getItem(CustomItem.PHANTOM_SOUL));
         matchSoul.put(EntityType.WITCH, customItemManager.getItem(CustomItem.WITCH_SOUL));
+
     }
 
 
@@ -162,7 +166,7 @@ public class SpawnerTable implements LootTable {
                 item = generic.get(random.nextInt(generic.size()));
             }
 
-            //special items
+            //special item replacement
             if (item.isSimilar(saplingVoucher)) {
                 item = new ItemStack(saplings[random.nextInt(saplings.length)]);
             }
@@ -172,6 +176,11 @@ public class SpawnerTable implements LootTable {
                 failed++;
             }
             else {
+                //dimensional anchor replacement
+                if (item.isSimilar(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR))) {
+                    item = pregenerateDimensions.getDimensionalAnchor();
+                }
+
                 output.add(item);
             }
 

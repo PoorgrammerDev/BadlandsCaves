@@ -31,6 +31,14 @@ public class ItemBuilder {
         container = meta.getPersistentDataContainer();
     }
 
+    public ItemBuilder (ItemStack item) throws IllegalArgumentException {
+        this.item = item;
+        if (item.getItemMeta() == null) throw new IllegalArgumentException("ItemMeta is null");
+
+        meta = item.getItemMeta();
+        container = meta.getPersistentDataContainer();
+    }
+
     public ItemBuilder(Material material, int count) throws IllegalArgumentException {
         item = new ItemStack(material, count);
         if (item.getItemMeta() == null) throw new IllegalArgumentException("ItemMeta is null");

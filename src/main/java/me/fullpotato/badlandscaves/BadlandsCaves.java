@@ -324,6 +324,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 new ResearchTableItems(this),
                 new UseResearchTable(this),
                 new PregenerateDimensions(this),
+                new UseNebuliteCrate(this),
         };
 
         for (Listener event : events) {

@@ -1,10 +1,11 @@
 package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
 import me.fullpotato.badlandscaves.Util.ItemBuilder;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
-import org.bukkit.Material;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -19,39 +20,49 @@ public class PregenerateDimensions extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
     private final TPSGetter tpsGetter;
     private final DimensionsWorlds dimensionsWorlds;
-    private final double TPS_THRESHOLD = 18.0;
-    private final int WORLDS_LIMIT = 5;
+    private final double TPSThreshold;
+    private final int worldsLimit;
 
     public PregenerateDimensions(BadlandsCaves plugin) {
         this.plugin = plugin;
+        worldsLimit = plugin.getOptionsConfig().getInt("hardmode_values.alternate_dimensions_pregenerate_limit");
+        TPSThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
         tpsGetter = plugin.getTpsGetterNMS();
         dimensionsWorlds = new DimensionsWorlds(plugin);
     }
 
     @Override
     public void run() {
-        if (plugin.getServer().getOnlinePlayers().isEmpty()) {
-            final double[] recentTPSArr = tpsGetter.getRecentTPS();
-            for (double recentTPS : recentTPSArr) {
-                if (recentTPS < TPS_THRESHOLD) {
-                    return;
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
+            if (plugin.getServer().getOnlinePlayers().isEmpty()) {
+                final double[] recentTPSArr = tpsGetter.getRecentTPS();
+                for (double recentTPS : recentTPSArr) {
+                    if (recentTPS < TPSThreshold) {
+                        return;
+                    }
                 }
-            }
 
-            if (plugin.getSystemConfig().getStringList("pregenerated_dimensions").size() <= WORLDS_LIMIT) {
-                generateNewDimension();
+                if (plugin.getSystemConfig().getStringList("pregenerated_dimensions").size() <= worldsLimit) {
+                    generateNewDimension();
+                }
             }
         }
     }
 
     public void generateNewDimension () {
         final String uuid = UUID.randomUUID().toString();
-        dimensionsWorlds.generate(uuid);
+        dimensionsWorlds.generate(uuid, true);
 
         final List<String> list = plugin.getSystemConfig().getStringList("pregenerated_dimensions");
         list.add(uuid);
-        plugin.getSystemConfig().set("pregenerated_dimensions", list);
-        plugin.saveSystemConfig();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                plugin.getSystemConfig().set("pregenerated_dimensions", list);
+                plugin.saveSystemConfig();
+            }
+        }.runTaskLater(plugin, 5);
     }
 
     public @Nullable String getPregeneratedDimension() {
@@ -70,14 +81,19 @@ public class PregenerateDimensions extends BukkitRunnable implements Listener {
     }
 
     public ItemStack getDimensionalAnchor() {
+        final ItemBuilder item = new ItemBuilder(plugin.getCustomItemManager().getItem(CustomItem.DIMENSIONAL_ANCHOR));
         String uuid = getPregeneratedDimension();
+
+        final boolean pregenerated;
         if (uuid != null && !uuid.isEmpty()) {
+            pregenerated = true;
             removePregneratedDimensionFromList(uuid);
         }
         else {
+            pregenerated = false;
             uuid = UUID.randomUUID().toString();
         }
 
-        return new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Dimensional Anchor").setLore("§7" + uuid).setCustomModelData(175).setPersistentData(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING, uuid).setPersistentData(new NamespacedKey(plugin, "is_dim_anchor"), PersistentDataType.BYTE, (byte) 1).build();
+        return item.setLore(ChatColor.GRAY + uuid, pregenerated ? ChatColor.DARK_AQUA + "Pre-generated" : ChatColor.RED + "Not Pre-generated").setPersistentData(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING, uuid).build();
     }
 }

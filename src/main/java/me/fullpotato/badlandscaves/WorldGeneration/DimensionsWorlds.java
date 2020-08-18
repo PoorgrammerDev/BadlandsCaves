@@ -52,12 +52,12 @@ public class DimensionsWorlds {
             Biome.ICE_SPIKES
     };
 
-    public enum NativeLife {
+    public enum Habitation {
         ILLAGERS,
         UNDEAD,
     }
 
-    public World generate(String name) {
+    public World generate(String name, boolean pregenerate) {
         final String fullName = plugin.getDimensionPrefixName() + name;
         final UnloadedWorld unloadedWorld = new UnloadedWorld(fullName);
         World alreadyExisting = plugin.getServer().getWorld(fullName);
@@ -69,7 +69,7 @@ public class DimensionsWorlds {
             return alreadyExisting;
         }
 
-        final NativeLife habitation = getRandomHabitation();
+        final Habitation habitation = getRandomHabitation();
         final Biome biome = allBiomes[random.nextInt(allBiomes.length)];
 
         final WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
@@ -97,20 +97,28 @@ public class DimensionsWorlds {
         final int worldBorderSize = random.nextInt(4000) + 1000;
         border.setSize(worldBorderSize);
 
-        addHabitation(world, habitation);
-
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-        final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
-        addHazards(world, habitation, biome, amount);
-        genSpawnCage(world);
-
         new BukkitRunnable() {
             @Override
             public void run() {
+                genSpawnCage(world);
                 structures.generateStructures(world, habitation, null, worldBorderSize / 2, random.nextInt((chaos / 5) + 20) + 5);
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".accessed", false);
+                        plugin.saveSystemConfig();
+                        addHabitation(world, habitation);
+
+                        if (!pregenerate) {
+                            final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
+                            addHazards(world, habitation, biome, amount);
+                        }
+                    }
+                }.runTaskLater(plugin, 5);
             }
         }.runTaskLater(plugin, 5);
-
         return world;
     }
 
@@ -132,7 +140,27 @@ public class DimensionsWorlds {
         }
     }
 
-    public void addHazards (World world, NativeLife habitation, Biome biome, int amount) {
+    public void addHazards (World world) {
+        final String name = world.getName();
+        final String habitationStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".habitation");
+        final String biomeStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.biome");
+
+        if (habitationStr != null && !habitationStr.isEmpty() && biomeStr != null && !biomeStr.isEmpty()) {
+            try {
+                final Habitation habitation = Habitation.valueOf(habitationStr.toUpperCase());
+                final Biome biome = Biome.valueOf(biomeStr.toUpperCase());
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+                final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
+
+                addHazards(world, habitation, biome, amount);
+            }
+            catch (IllegalArgumentException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void addHazards (World world, Habitation habitation, Biome biome, int amount) {
         final ArrayList<EnvironmentalHazards.Hazard> list = new ArrayList<>();
 
         //EXCLUSIVE-----------------------------------------------
@@ -145,7 +173,7 @@ public class DimensionsWorlds {
         }
 
         //UNINHABITABLE-------------------------------------------
-        if (!habitation.equals(NativeLife.ILLAGERS)) {
+        if (!habitation.equals(Habitation.ILLAGERS)) {
             list.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
             list.add(EnvironmentalHazards.Hazard.LAVA_FLOOR);
             list.add(EnvironmentalHazards.Hazard.NO_OXYGEN);
@@ -174,22 +202,22 @@ public class DimensionsWorlds {
         }
     }
 
-    public NativeLife getRandomHabitation () {
-        if (random.nextBoolean()) return NativeLife.ILLAGERS;
-        return NativeLife.UNDEAD;
+    public Habitation getRandomHabitation () {
+        if (random.nextBoolean()) return Habitation.ILLAGERS;
+        return Habitation.UNDEAD;
     }
 
-    public void addHabitation(World world, NativeLife habitation) {
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".habitation", habitation.name().toLowerCase());
+    public void addHabitation(World world, Habitation habitation) {
+        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".habitation", habitation.name().toLowerCase());
         plugin.saveSystemConfig();
     }
 
     public World loadWorld (String name) {
-        final String scaleRandStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.scale");
-        final String freqStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.frequency");
-        final String amplitudeStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.amplitude");
-        final String biomeStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.biome");
-        final String storedChaosStr = plugin.getSystemConfig().getString("dim_stats." + name + ".generator.chaos");
+        final String scaleRandStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.scale");
+        final String freqStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.frequency");
+        final String amplitudeStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.amplitude");
+        final String biomeStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.biome");
+        final String storedChaosStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.chaos");
 
         if (scaleRandStr != null && freqStr != null && amplitudeStr != null && biomeStr != null) {
             try {

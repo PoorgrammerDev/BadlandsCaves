@@ -227,6 +227,7 @@ public class CustomItemManager {
         itemMap.put(CustomItem.BLUEPRINTS_DUNGEON_COMPASS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RESET.toString() + ChatColor.of("#03a1fc") + "Blueprints").setLore(ChatColor.GRAY + "Dungeon Compass").setCustomModelData(232).build());
         itemMap.put(CustomItem.BLUEPRINTS_STIM_PACK, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RESET.toString() + ChatColor.of("#03a1fc") + "Blueprints").setLore(ChatColor.GRAY + "Stim Pack").setCustomModelData(232).build());
         itemMap.put(CustomItem.ARTIFACT_VOUCHER, new ItemBuilder(Material.PAPER).setName(ChatColor.WHITE + "Artifact Voucher").build());
+        itemMap.put(CustomItem.DIMENSIONAL_ANCHOR, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Dimensional Anchor").setCustomModelData(175).setPersistentData(new NamespacedKey(plugin, "is_dim_anchor"), PersistentDataType.BYTE, (byte) 1).build());
 
         //starlight armor/tools
         final ItemStack starlight_helmet = new ItemBuilder(Material.NETHERITE_HELMET).setName("§eStarlight Helmet").setLore("§7Charge: 0 / 1000").setCustomModelData(151).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true).addEnchant(Enchantment.DURABILITY, 5, true).setDurabilityDamage(Material.NETHERITE_HELMET.getMaxDurability() - 1).setRepairCost(999999).setPersistentData(new NamespacedKey(this.plugin, "starlight_charge"), PersistentDataType.INTEGER, 0).setPersistentData(new NamespacedKey(this.plugin, "starlight_plating"), PersistentDataType.SHORT, (short) 0).setPersistentData(new NamespacedKey(this.plugin, "starlight_max_charge"), PersistentDataType.INTEGER, 1000).setPersistentData(new NamespacedKey(this.plugin, "is_starlight_armor"), PersistentDataType.BYTE, (byte) 1).setPersistentData(new NamespacedKey(this.plugin, "nebulites"), PersistentDataType.STRING, "").addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.fromString(uuids[6]), "Starlight Base Armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD)).addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.fromString(uuids[7]), "Starlight Base Armor Toughness", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD)).build();
@@ -306,12 +307,6 @@ public class CustomItemManager {
     }
 
     public ItemStack getItem(CustomItem item) {
-        //special items
-        if (item.equals(CustomItem.DIMENSIONAL_ANCHOR)) {
-            return pregenerateDimensions.getDimensionalAnchor();
-        }
-
-        //regular
-        return itemMap.get(item);
+        return itemMap.get(item).clone();
     }
 }

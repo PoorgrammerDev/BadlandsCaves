@@ -99,26 +99,29 @@ public class StructureTrack {
 
         block.setType(Material.STRUCTURE_BLOCK);
 
-        Structure structureBlock = (Structure) block.getState();
-        structureBlock.setUsageMode(UsageMode.LOAD);
-        structureBlock.setRelativePosition(new BlockVector(settingXOffset, settingYOffset, settingZOffset));
-        structureBlock.setStructureName(structureName);
-        structureBlock.setIntegrity((float) integrity);
-        structureBlock.update();
+        if (block.getState() instanceof Structure) {
+            Structure state = (Structure) block.getState();
+            state.setUsageMode(UsageMode.LOAD);
+            state.setRelativePosition(new BlockVector(settingXOffset, settingYOffset, settingZOffset));
+            state.setStructureName(structureName);
+            state.setIntegrity((float) integrity);
+            state.update();
 
-        Block relative = block.getRelative(redstoneBlockRelative);
-        BlockData savedPreRSData = relative.getBlockData();
-        relative.setType(Material.REDSTONE_BLOCK);
+            Block relative = block.getRelative(redstoneBlockRelative);
+            BlockData savedPreRSData = relative.getBlockData();
+            relative.setType(Material.REDSTONE_BLOCK);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!keepStructureBlock && block.getType().equals(Material.STRUCTURE_BLOCK)) block.setBlockData(savedPreStrucData);
-                if (relative.getType().equals(Material.REDSTONE_BLOCK)) relative.setBlockData(savedPreRSData);
-            }
-        }.runTaskLater(plugin, 1);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!keepStructureBlock && block.getType().equals(Material.STRUCTURE_BLOCK)) block.setBlockData(savedPreStrucData);
+                    if (relative.getType().equals(Material.REDSTONE_BLOCK)) relative.setBlockData(savedPreRSData);
+                }
+            }.runTaskLater(plugin, 1);
 
-        return structureBlock;
+            return state;
+        }
+        return null;
     }
 
     public String getStructureName() {

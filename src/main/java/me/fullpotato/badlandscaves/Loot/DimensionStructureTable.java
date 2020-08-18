@@ -1,10 +1,10 @@
 package me.fullpotato.badlandscaves.Loot;
 
+import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
-import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
@@ -20,14 +20,14 @@ public class DimensionStructureTable implements LootTable {
     private final CustomItemManager customItemManager;
     private final NamespacedKey key;
     private final Artifact[] artifacts = Artifact.values();
-    private final DimensionsWorlds.NativeLife habitation;
+    private final PregenerateDimensions pregenerateDimensions;
     private final Map<ItemStack, Integer> itemMap = new HashMap<>();
     private final TreasureGear treasureGear = new TreasureGear();
 
-    public DimensionStructureTable(BadlandsCaves plugin, DimensionsWorlds.NativeLife habitation) {
+    public DimensionStructureTable(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "dimension_structure_table");
-        this.habitation = habitation;
+        pregenerateDimensions = new PregenerateDimensions(plugin);
         customItemManager = plugin.getCustomItemManager();
 
         itemMap.put(new ItemStack(Material.IRON_BLOCK), 2);
@@ -69,23 +69,34 @@ public class DimensionStructureTable implements LootTable {
         for (int i = 0; i < count; i++) {
             if (failed > 100) break;
             final ItemStack item = list.get(random.nextInt(list.size()));
-            final int amount = itemMap.get(item);
-            item.setAmount(amount > 1 ? randomCount(random, 1, amount) : 1);
+            if (itemMap.containsKey(item)) {
+                final int amount = itemMap.get(item);
+                item.setAmount(amount > 1 ? randomCount(random, 1, amount) : 1);
 
-            if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
-                output.add(treasureGear.getTreasureGear(true, random));
-            }
-            else if (item.isSimilar(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER))) {
-                output.add(customItemManager.getItem(artifacts[random.nextInt(artifacts.length)].getArtifactItem()));
-            }
-            else {
-                if (!output.contains(item)) {
-                    output.add(item);
+                if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
+                    output.add(treasureGear.getTreasureGear(true, random));
+                }
+                else if (item.isSimilar(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER))) {
+                    output.add(customItemManager.getItem(artifacts[random.nextInt(artifacts.length)].getArtifactItem()));
                 }
                 else {
-                    i--;
-                    failed++;
+                    if (!output.contains(item)) {
+                        if (item.isSimilar(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR))) {
+                            output.add(pregenerateDimensions.getDimensionalAnchor());
+                        }
+                        else {
+                            output.add(item);
+                        }
+                    }
+                    else {
+                        i--;
+                        failed++;
+                    }
                 }
+            }
+            else {
+                i--;
+                failed++;
             }
         }
 

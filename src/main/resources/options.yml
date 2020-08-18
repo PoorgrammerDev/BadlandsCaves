@@ -126,16 +126,24 @@ hardmode_values:
   # Everytime a Silencer cancels a Heretic's powers from being used, it uses up this much energy.
   silencer_cost: 10
 
-  #The Nebulite "Decisive Disintegration" for the Starlight Paxel gives it Vein Miner and Tree Feller capabilities.
-  #This is the limit of blocks it can mine before it stops (as an anti-crash mechanism). Set to -1 to disable, but this is not recommended.
+  # The Nebulite "Decisive Disintegration" for the Starlight Paxel gives it Vein Miner and Tree Feller capabilities.
+  # This is the limit of blocks it can mine before it stops (as an anti-crash mechanism). Set to -1 to disable, but this is not recommended.
   decisive_disintegration_limit: 100
 
-  #Mana costs for certain Artifacts' abilities
+  # Mana costs for certain Artifacts' abilities
   artifact_costs:
     eclipsed_shadows: 25
     converging_swings: 20
     travelling_blades: 40
     distraction_clone: 10
 
-    #Cost Per arrow fired (arrow count based on Chaos)
+    # Cost Per arrow fired (arrow count based on Chaos)
     summoners_rift: 5
+
+  # In Hardmode, Alternate Dimensions are accessible. Since generating on-the-fly is
+  # quite resource demanding, the plugin pre-generates some when players aren't online and keeps them in a "buffer".
+  # This is the limit of how many can be in the "buffer" before it stops.
+  alternate_dimensions_pregenerate_limit: 5
+
+  #Alternate Dimensions will only generate when recent TPS is above this number. Set to 20.0 to always allow.
+  alternate_dimensions_tps_threshold: 18.0

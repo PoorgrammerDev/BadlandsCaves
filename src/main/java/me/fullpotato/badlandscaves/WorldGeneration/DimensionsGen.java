@@ -120,11 +120,11 @@ public class DimensionsGen extends ChunkGenerator {
     }
 
     public void saveStats(World world) {
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".generator.scale", scale);
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".generator.frequency", frequency);
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".generator.amplitude", amplitude);
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".generator.biome", biome.name());
-        plugin.getSystemConfig().set("dim_stats." + world.getName() + ".generator.chaos", chaos);
+        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.scale", scale);
+        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.frequency", frequency);
+        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.amplitude", amplitude);
+        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.biome", biome.name());
+        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.chaos", chaos);
         plugin.saveSystemConfig();
     }
 }
