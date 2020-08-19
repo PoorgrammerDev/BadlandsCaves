@@ -52,6 +52,7 @@ public class UseDimensionalAnchor implements Listener {
     private final NamespacedKey dimPortalKey;
     private final NamespacedKey usableKey;
     private final TPSGetter tpsGetter;
+    private final DimensionStructures structures;
     private final double tpsThreshold;
 
     public UseDimensionalAnchor(BadlandsCaves plugin) {
@@ -61,6 +62,7 @@ public class UseDimensionalAnchor implements Listener {
         dungeonMaker = new DestroySpawner(plugin);
         tpsGetter = plugin.getTpsGetterNMS();
         tpsThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
+        structures = new DimensionStructures(plugin);
 
         nameFromCode.put(EnvironmentalHazards.Hazard.ACID_RAIN.name(), "Acid Rain");
         nameFromCode.put(EnvironmentalHazards.Hazard.TOXIC_WATER.name(), "Toxic Water");
@@ -314,6 +316,8 @@ public class UseDimensionalAnchor implements Listener {
                                 player.closeInventory();
                                 player.teleport(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                                 player.playSound(player.getLocation(), "custom.supernatural.displace.warp", SoundCategory.BLOCKS, 0.5F, 1);
+
+                                attemptGenerateStructures(world);
                             }
                         }
                     }
@@ -482,6 +486,22 @@ public class UseDimensionalAnchor implements Listener {
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    public void attemptGenerateStructures(World world) {
+        final boolean generated = plugin.getSystemConfig().getBoolean("alternate_dimensions." + world.getName() + ".structures_generated");
+        if (!generated) {
+            final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+            structures.generateStructures(world, null, (int) (world.getWorldBorder().getSize() / 2), random.nextInt((chaos / 5) + 20) + 5);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".structures_generated", true);
+                    plugin.saveSystemConfig();
+                }
+            }.runTaskLater(plugin, 1);
+        }
     }
 
 }

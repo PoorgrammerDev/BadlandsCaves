@@ -289,13 +289,22 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void setOnCooldown(ItemStack item, boolean onCooldown) {
         if (isVoltshock(item)) {
             ItemMeta meta = item.getItemMeta();
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "isOnCooldown"), PersistentDataType.STRING, Boolean.toString(onCooldown));
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "on_cooldown"), PersistentDataType.BYTE, onCooldown ? (byte) 1 : (byte) 0);
             meta.setCustomModelData(128); // TODO: 4/20/2020
             item.setItemMeta(meta);
         }
     }
 
     public boolean getOnCooldown(ItemStack item) {
-        return !isVoltshock(item) || Boolean.parseBoolean(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "isOnCooldown"), PersistentDataType.STRING));
+        final ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            if (isVoltshock(item)) {
+                if (meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "on_cooldown"), PersistentDataType.BYTE)) {
+                    final Byte result = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "on_cooldown"), PersistentDataType.BYTE);
+                    return (result != null && result == 1);
+                }
+            }
+        }
+        return false;
     }
 }

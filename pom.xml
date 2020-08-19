@@ -6,7 +6,7 @@
 
     <groupId>me.FullPotato.BadlandsCaves</groupId>
     <artifactId>BadlandsCaves</artifactId>
-    <version>BETA 1.1.0</version>
+    <version>BETA 1.1.1</version>
     <packaging>jar</packaging>
 
     <name>BadlandsCaves</name>

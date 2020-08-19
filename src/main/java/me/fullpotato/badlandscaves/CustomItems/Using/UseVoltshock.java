@@ -24,9 +24,10 @@ import java.util.Random;
 
 public class UseVoltshock implements Listener {
     private final BadlandsCaves plugin;
-
+    private final Voltshock voltshock;
     public UseVoltshock(BadlandsCaves plugin) {
         this.plugin = plugin;
+        voltshock = new Voltshock(plugin);
     }
 
     @EventHandler
@@ -36,7 +37,6 @@ public class UseVoltshock implements Listener {
             LivingEntity entity = (LivingEntity) event.getEntity();
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                 if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                    Voltshock voltshock = new Voltshock(plugin);
                     ItemStack item = player.getInventory().getItemInMainHand();
                     if (voltshock.isVoltshock(item)) {
                         if (!voltshock.getOnCooldown(item) && voltshock.getCharge(item) > 0) {

@@ -7,15 +7,22 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Barrel;
+import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class DimensionStructureTable implements LootTable {
+public class DimensionStructureTable implements LootTable, Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final NamespacedKey key;
@@ -23,6 +30,7 @@ public class DimensionStructureTable implements LootTable {
     private final PregenerateDimensions pregenerateDimensions;
     private final Map<ItemStack, Integer> itemMap = new HashMap<>();
     private final TreasureGear treasureGear = new TreasureGear();
+    private final Random random = new Random();
 
     public DimensionStructureTable(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -52,6 +60,7 @@ public class DimensionStructureTable implements LootTable {
         itemMap.put(customItemManager.getItem(CustomItem.VOIDMATTER), 1);
         itemMap.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), 1);
         itemMap.put(customItemManager.getItem(CustomItem.NEBULITE_CRATE), 1);
+        itemMap.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), 1);
         itemMap.put(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER), 1);
         itemMap.put(customItemManager.getItem(CustomItem.TAINTED_POWDER), 8);
         itemMap.put(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT), 4);
@@ -105,6 +114,16 @@ public class DimensionStructureTable implements LootTable {
 
     @Override
     public void fillInventory(@NotNull Inventory inventory, @NotNull Random random, @NotNull LootContext lootContext) {
+        for (ItemStack item : populateLoot(random, lootContext)) {
+            final int slot = random.nextInt(inventory.getSize());
+            final ItemStack current = inventory.getItem(slot);
+            if (current == null || current.getType().isAir()) {
+                inventory.setItem(slot, item);
+            }
+            else {
+                inventory.addItem(item);
+            }
+        }
     }
 
     @Override
@@ -115,5 +134,37 @@ public class DimensionStructureTable implements LootTable {
     /**Returns a random integer between min and max, inclusive. */
     private int randomCount (Random random, int min, int max) {
         return random.nextInt(max - min + 1) + min;
+    }
+
+    @EventHandler
+    public void openBarrel(LootGenerateEvent event) {
+        if (event.getInventoryHolder() instanceof Barrel) {
+            Barrel barrel = (Barrel) event.getInventoryHolder();
+            if (attemptGenerateLoot(barrel, event.getLootContext())) event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void breakBarrel (BlockBreakEvent event) {
+        final Block block = event.getBlock();
+        if (block.getType().equals(Material.BARREL)) {
+            if (block.getState() instanceof Barrel) {
+                Barrel state = (Barrel) block.getState();
+                attemptGenerateLoot(state, new LootContext.Builder(block.getLocation()).build());
+            }
+        }
+    }
+
+    public boolean attemptGenerateLoot(Barrel barrel, LootContext lootContext) {
+        if (barrel.getPersistentDataContainer().has(key, PersistentDataType.BYTE)) {
+            final Byte result = barrel.getPersistentDataContainer().get(key, PersistentDataType.BYTE);
+            if (result != null && result == 1) {
+                barrel.getPersistentDataContainer().remove(key);
+                barrel.update(true);
+                fillInventory(barrel.getInventory(), random, lootContext);
+                return true;
+            }
+        }
+        return false;
     }
 }

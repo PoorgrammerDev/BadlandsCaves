@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -93,6 +94,20 @@ public class PlayerJoinLeave implements Listener {
             PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
             PlayerScore.SWAP_COOLDOWN.setScore(plugin, player, 0);
             PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 0);
+        }
+    }
+
+    // TODO: 8/18/2020 somehow find a better way than this
+    @EventHandler
+    public void playerLeaveInDimension (PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        final World world = player.getWorld();
+
+        if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
+            Location location = player.getBedSpawnLocation();
+            if (location == null) location = plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation();
+
+            player.teleport(location);
         }
     }
 }

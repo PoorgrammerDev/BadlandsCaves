@@ -33,7 +33,7 @@ public class ParanoiaRunnable extends BukkitRunnable {
             World world = player.getWorld();
             if (hazards.isDimension(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.PARANOIA)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 80, 0, false, false));
                     if (random.nextInt(100) < 25) {
                         player.playSound(locationFinder.getNearbyLocation(player.getLocation(), random, 5), Sound.values()[random.nextInt(Sound.values().length)], SoundCategory.AMBIENT, 0.7F, 1);
                     }

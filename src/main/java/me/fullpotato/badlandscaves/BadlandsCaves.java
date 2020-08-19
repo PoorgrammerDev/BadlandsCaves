@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
 import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
+import me.fullpotato.badlandscaves.AlternateDimensions.UnloadDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.UseDimensionalAnchor;
 import me.fullpotato.badlandscaves.Blocks.SilencerBlock;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
@@ -325,6 +326,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 new UseResearchTable(this),
                 new PregenerateDimensions(this),
                 new UseNebuliteCrate(this),
+                new DimensionStructureTable(this),
+                new UnloadDimensions(this),
         };
 
         for (Listener event : events) {
@@ -402,14 +405,14 @@ public final class BadlandsCaves extends JavaPlugin {
         new NoOxygen(this).runTaskTimer(this, 0, 0);
         new LavaFloorRunnable(this).runTaskTimer(this, 0, 20);
         new NoFloorRunnable(this).runTaskTimer(this, 0, 10);
-        new ParanoiaRunnable(this).runTaskTimer(this, 0, 20);
+        new ParanoiaRunnable(this).runTaskTimer(this, 0, 80);
         new Freezing(this).runTaskTimer(this, 0, 5);
         new PreventNonPoweredUsage(this).runTaskTimerAsynchronously(this, 0, 0);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
         new NebuliteCounterattack(this).runTaskTimer(this, 0, 0);
         new ArtifactHasteWind(this).runTaskTimer(this, 0, 0);
         new ArtifactMomentousMomentum(this).runTaskTimer(this, 0, 0);
-        new PregenerateDimensions(this).runTaskTimer(this, 20, 2000);
+        new PregenerateDimensions(this).runTaskTimer(this, 600, 2000);
 
 
         WitherBossFight witherFight = new WitherBossFight(this);
@@ -544,7 +547,7 @@ public final class BadlandsCaves extends JavaPlugin {
             this.mainWorldName = ServerProperties.getSetting(properties, "level-name");
         }
         catch (IOException e) {
-            this.getLogger().warning("[BadlandsCaves] No default world found, defaulting to \"world\"");
+            this.getLogger().warning("No default world found, defaulting to \"world\"");
             this.mainWorldName = "world";
         }
         this.descensionWorldName = this.getMainWorldName() + "_descension";
@@ -568,7 +571,7 @@ public final class BadlandsCaves extends JavaPlugin {
             tpsGetterNMS = new TPSGetter_1_16_R2(this);
 
         } else {
-            this.getServer().getLogger().severe("[BadlandsCaves] Invalid server version " + version + ". Disabling plugin.");
+            this.getServer().getLogger().severe("Invalid server version " + version + ". Disabling plugin.");
             this.getServer().getPluginManager().disablePlugin(this);
         }
     }

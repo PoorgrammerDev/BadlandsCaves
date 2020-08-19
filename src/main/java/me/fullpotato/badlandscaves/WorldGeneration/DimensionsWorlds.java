@@ -1,6 +1,5 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
-import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.EnvironmentalHazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
@@ -20,12 +19,10 @@ public class DimensionsWorlds {
     private final BadlandsCaves plugin;
     private final Random random = new Random();
     private final EnvironmentalHazards hazards;
-    private final DimensionStructures structures;
 
     public DimensionsWorlds(BadlandsCaves plugin) {
         this.plugin = plugin;
         hazards = new EnvironmentalHazards(plugin);
-        structures = new DimensionStructures(plugin);
     }
 
     private static final Biome[] allBiomes = {
@@ -102,12 +99,11 @@ public class DimensionsWorlds {
             @Override
             public void run() {
                 genSpawnCage(world);
-                structures.generateStructures(world, habitation, null, worldBorderSize / 2, random.nextInt((chaos / 5) + 20) + 5);
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".accessed", false);
+                        plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".structures_generated", false);
                         plugin.saveSystemConfig();
                         addHabitation(world, habitation);
 
