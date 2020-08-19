@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Thirst;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -16,13 +17,15 @@ public class NaturalThirstDecrease implements Listener {
     private final Random random = new Random();
     private final BadlandsCaves plugin;
     private final World descension;
-            private final World reflection;
-            private final World backrooms;
+    private final World reflection;
+    private final World backrooms;
+    private final PlayerEffects playerEffects;
     public NaturalThirstDecrease(BadlandsCaves plugin) {
         this.plugin = plugin;
         descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
+        playerEffects = new PlayerEffects(plugin);
     }
 
 
@@ -86,6 +89,8 @@ public class NaturalThirstDecrease implements Listener {
 
             double current_thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
             PlayerScore.THIRST.setScore(plugin, player, current_thirst - 0.1);
+            playerEffects.applyEffects(player, true);
+
         }
     }
 

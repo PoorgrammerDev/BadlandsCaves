@@ -60,3 +60,11 @@ commands:
     description: Teleport between worlds.
     alises:
       - worldtp
+  pregenerate:
+    usage: /pregenerate
+    description: Pregenerate Alternate Dimensions
+    aliases:
+      - dimensiongen
+      - generate
+      - worldgenerate
+      - worldgen

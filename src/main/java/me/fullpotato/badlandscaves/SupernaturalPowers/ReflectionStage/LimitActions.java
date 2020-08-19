@@ -138,8 +138,9 @@ public class LimitActions extends BukkitRunnable implements Listener {
         }
     }
 
+    // TODO: 8/18/2020 call this from incomplete soul crystal
     /**
-     * In case they bypass the system somehow and equip armor anyway, it'll test every 10 seconds and revert their armor back to what it was before.
+     * In case they bypass the system somehow and equip armor anyway, it'll test and revert their armor back to what it was before.
      * */
     @Override
     public void run() {

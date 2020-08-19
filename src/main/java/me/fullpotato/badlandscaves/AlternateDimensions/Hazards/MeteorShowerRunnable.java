@@ -29,7 +29,7 @@ public class MeteorShowerRunnable extends BukkitRunnable{
     public void run() {
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            World world = player.getWorld();
+            final World world = player.getWorld();
             if (dims.isDimension(world) && dims.hasHazard(world, EnvironmentalHazards.Hazard.METEOR_SHOWERS)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     for (int i = 0; i < (chaos / 10) + 1; i++) {

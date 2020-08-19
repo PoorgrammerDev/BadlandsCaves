@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Thirst;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
@@ -24,8 +25,10 @@ import java.util.Random;
 
 public class Drinking implements Listener {
     private final BadlandsCaves plugin;
+    private final PlayerEffects playerEffects;
     public Drinking(BadlandsCaves bcav) {
         plugin = bcav;
+        playerEffects = new PlayerEffects(plugin);
     }
     @EventHandler
     public void drink (PlayerItemConsumeEvent event) {
@@ -70,6 +73,7 @@ public class Drinking implements Listener {
         double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
         int tox_add = plugin.getOptionsConfig().getInt(hardmode ? "hardmode_values.tox_drink_tox_incr" : "pre_hardmode_values.tox_drink_tox_incr");
         PlayerScore.TOXICITY.setScore(plugin, player, current_tox + tox_add);
+        playerEffects.applyEffects(player, true);
     }
 
     public void drinkPurifiedWater (Player player) {
@@ -82,6 +86,7 @@ public class Drinking implements Listener {
 
         PlayerScore.THIRST.setScore(plugin, player, Math.min(current_thirst + thirst_add, 100));
         PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, Math.min((int) ((double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player)), buffer));
+        playerEffects.applyEffects(player, true);
     }
 
     public void drinkAntidote (Player player) {
@@ -103,6 +108,7 @@ public class Drinking implements Listener {
         }
 
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE, (byte) 0);
+        playerEffects.applyEffects(player, true);
     }
 
     public void drinkManaPotion (Player player) {

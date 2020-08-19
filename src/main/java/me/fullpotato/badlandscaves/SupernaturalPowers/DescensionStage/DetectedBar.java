@@ -13,33 +13,33 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class DetectedBar extends BukkitRunnable {
     private final BadlandsCaves plugin;
-    public DetectedBar(BadlandsCaves bcav) {
-        plugin = bcav;
+    private final NamespacedKey key;
+    private final World world;
+    public DetectedBar(BadlandsCaves plugin) {
+        this.plugin = plugin;
+        key = new NamespacedKey(plugin, "descension_detected_bar");
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
     }
 
     @Override
     public void run() {
         //making the bossbar
-        NamespacedKey key = new NamespacedKey(plugin, "descension_detected_bar");
         KeyedBossBar detected_bar = plugin.getServer().getBossBar(key);
         if (detected_bar == null) {
             String title = ChatColor.RED + "Detection";
             detected_bar = plugin.getServer().createBossBar(key, title, BarColor.RED, BarStyle.SEGMENTED_6);
         }
 
-        World world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+
+        for (Player player : world.getEntitiesByClass(Player.class)) {
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
-            if (in_descension == 2 && player.getWorld().equals(world)) {
+            if (in_descension == 2) {
                 if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);
                 double detect = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
                 double detect_max = plugin.getOptionsConfig().getDouble("descension_max_detect");
                 double detect_percentage = Math.min(Math.max(detect / detect_max, 0.0), 1.0);
 
                 detected_bar.setProgress(detect_percentage);
-            }
-            else {
-                detected_bar.removePlayer(player);
             }
         }
     }

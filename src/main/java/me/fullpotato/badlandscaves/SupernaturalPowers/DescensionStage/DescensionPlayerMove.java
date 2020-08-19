@@ -9,6 +9,7 @@ import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TitleEffects;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,9 +28,17 @@ import java.util.List;
 public class DescensionPlayerMove implements Listener {
     private final World world;
     private final BadlandsCaves plugin;
+    private final NamespacedKey key;
+    private final DeathHandler reset;
+    private final UseIncompleteSoulCrystal tester;
+    private final InventorySerialize invser;
     public DescensionPlayerMove(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        key = new NamespacedKey(plugin, "descension_detected_bar");
+        reset = new DeathHandler(plugin);
+        tester = new UseIncompleteSoulCrystal(plugin);
+        invser = new InventorySerialize(plugin);
     }
 
     @EventHandler
@@ -38,7 +47,6 @@ public class DescensionPlayerMove implements Listener {
         if (!player.getWorld().equals(world)) return;
 
         Location player_location = player.getLocation();
-
         //leaving descension stage (quitting)
         if (player_location.getY() < 0) {
             if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
@@ -183,14 +191,15 @@ public class DescensionPlayerMove implements Listener {
     }
 
     public void resetPlayer (Player player, boolean win) {
-        DeathHandler reset = new DeathHandler(plugin);
         reset.resetPlayer(player, true, true, false);
-
-        InventorySerialize invser = new InventorySerialize(plugin);
         invser.loadInventory(player, "descension_inv", true, true);
 
+        final KeyedBossBar bossBar = plugin.getServer().getBossBar(key);
+        if (bossBar != null) {
+            bossBar.removePlayer(player);
+        }
+
         if (win) {
-            UseIncompleteSoulCrystal tester = new UseIncompleteSoulCrystal(plugin);
             final ItemStack soul_crystal = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL);
             for (ItemStack item : player.getInventory()) {
                 if (item != null) {

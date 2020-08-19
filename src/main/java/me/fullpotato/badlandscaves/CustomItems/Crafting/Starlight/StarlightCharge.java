@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,11 +24,15 @@ public class StarlightCharge implements Listener {
     private final BadlandsCaves plugin;
     private final StarlightArmor armor;
     private final StarlightTools tools;
+    private final EnchantmentStorage enchantmentStorage;
+    private final EnergyCore coreChecker;
 
     public StarlightCharge(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.armor = new StarlightArmor(plugin);
         this.tools = new StarlightTools(plugin);
+        enchantmentStorage = new EnchantmentStorage(plugin);
+        coreChecker = new EnergyCore(plugin);
     }
 
     public void chargeRecipe() {
@@ -56,7 +61,6 @@ public class StarlightCharge implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        EnergyCore coreChecker = new EnergyCore(plugin);
 
         ItemStack starlight = null;
         ItemStack energyCore = null;
@@ -151,6 +155,14 @@ public class StarlightCharge implements Listener {
                     durabilityMeta.setDamage(Math.max(Math.min(max - (int) ((1.0 * newCharge / maxCharge) * max), max - 1), 1));
 
                     item.setItemMeta((ItemMeta) durabilityMeta);
+
+                    //Update enchantments
+                    if (newCharge <= 0) {
+                        enchantmentStorage.disenchantItem(item);
+                    }
+                    else if (!meta.hasEnchants()) {
+                        enchantmentStorage.loadEnchantments(item);
+                    }
                 }
             }
         }

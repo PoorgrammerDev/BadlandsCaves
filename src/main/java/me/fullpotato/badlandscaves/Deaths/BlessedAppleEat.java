@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Deaths;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -14,8 +15,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlessedAppleEat implements Listener {
     private final BadlandsCaves plugin;
+    private final PlayerEffects playerEffects;
     public BlessedAppleEat(BadlandsCaves bcav) {
         plugin = bcav;
+        playerEffects = new PlayerEffects(plugin);
     }
 
     @EventHandler
@@ -58,6 +61,8 @@ public class BlessedAppleEat implements Listener {
                 player.spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 0.5, 0), 50, 1, 1, 1, 0);
                 player.playSound(player.getLocation(), "custom.reverse_deaths", SoundCategory.PLAYERS, 0.5F, 1);
                 PlayerScore.DEATHS.setScore(plugin, player, remove_deaths(death_count, decr_by));
+
+                playerEffects.applyEffects(player, true);
             }
         }
     }

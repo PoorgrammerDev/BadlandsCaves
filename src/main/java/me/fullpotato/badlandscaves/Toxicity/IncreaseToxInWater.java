@@ -35,6 +35,7 @@ public class IncreaseToxInWater implements Listener {
     private final Voidmatter voidmatter;
     private final ArtifactManager artifactManager;
     private final ArtifactFleetingSpirits artifactFleetingSpirits;
+    private final EnvironmentalHazards dims;
 
     public IncreaseToxInWater(BadlandsCaves plugin) {
         this.plugin = plugin;
@@ -44,6 +45,7 @@ public class IncreaseToxInWater implements Listener {
         voidmatter = new Voidmatter(plugin);
         artifactManager = new ArtifactManager(plugin);
         artifactFleetingSpirits = new ArtifactFleetingSpirits(plugin);
+        dims = new EnvironmentalHazards(plugin);
     }
 
 
@@ -54,7 +56,6 @@ public class IncreaseToxInWater implements Listener {
         Block block = player.getLocation().getBlock();
 
         World world = player.getWorld();
-        EnvironmentalHazards dims = new EnvironmentalHazards(plugin);
         if (dims.isDimension(world) && !dims.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
 
         final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);

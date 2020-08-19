@@ -21,9 +21,11 @@ import java.util.Random;
 public class DescensionReset extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
+    private final MakeDescensionStage mkDscStg;
     public DescensionReset(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        mkDscStg = new MakeDescensionStage(plugin);
     }
 
     @Override
@@ -34,8 +36,8 @@ public class DescensionReset extends BukkitRunnable {
 
         Player waiting = null;
         Player running = null;
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (player.getWorld().equals(world) && !player.isDead() && (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL))) {
+        for (Player player : world.getEntitiesByClass(Player.class)) {
+            if (!player.isDead() && (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL))) {
                 int state = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
                 //state 1: waiting in box
                 if (state == 1) {
@@ -59,14 +61,7 @@ public class DescensionReset extends BukkitRunnable {
                 }
             }
 
-            //regenerating the world has been disabled - it doesn't seem to do much and causes too much lag
-            /*
-            //regenerate the world
-            new makeDescensionStage(plugin, world).run();
-             */
-
             //instead, we're just regenning the pillars / shrines.
-            MakeDescensionStage mkDscStg = new MakeDescensionStage(plugin, world);
             mkDscStg.genDefaultShrines();
 
             //removing bridges, if any

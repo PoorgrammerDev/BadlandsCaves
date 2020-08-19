@@ -11,18 +11,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ExitPortal extends BukkitRunnable {
     private final BadlandsCaves plugin;
+    private final World world;
     private final Location location;
 
     public ExitPortal(BadlandsCaves plugin) {
         this.plugin = plugin;
-        World world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        this.world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         location = new Location(world, 0.5, 82, 0.5);
     }
 
 
     @Override
     public void run() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : world.getEntitiesByClass(Player.class)) {
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2) {
                 int capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));

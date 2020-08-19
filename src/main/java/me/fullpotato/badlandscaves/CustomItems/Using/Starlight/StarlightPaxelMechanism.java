@@ -5,16 +5,16 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharg
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class StarlightPaxelMechanism extends BukkitRunnable {
+public class StarlightPaxelMechanism implements Listener {
     private final BadlandsCaves plugin;
     private final StarlightTools toolManager;
     private final StarlightCharge chargeManager;
@@ -33,40 +33,26 @@ public class StarlightPaxelMechanism extends BukkitRunnable {
         shovelBlocks = Arrays.asList(Material.BLACK_CONCRETE_POWDER, Material.BLUE_CONCRETE_POWDER, Material.BROWN_CONCRETE_POWDER, Material.CLAY, Material.COARSE_DIRT, Material.CYAN_CONCRETE_POWDER, Material.DIRT, Material.FARMLAND, Material.GRASS_BLOCK, Material.GRASS_PATH, Material.GRAVEL, Material.GRAY_CONCRETE_POWDER, Material.GREEN_CONCRETE_POWDER, Material.LIGHT_BLUE_CONCRETE_POWDER, Material.LIGHT_GRAY_CONCRETE_POWDER, Material.LIME_CONCRETE_POWDER, Material.MAGENTA_CONCRETE_POWDER, Material.MYCELIUM, Material.ORANGE_CONCRETE_POWDER, Material.PINK_CONCRETE_POWDER, Material.PODZOL, Material.PURPLE_CONCRETE_POWDER, Material.RED_CONCRETE_POWDER, Material.RED_SAND, Material.SAND, Material.SNOW, Material.SNOW_BLOCK, Material.SOUL_SAND, Material.SOUL_SOIL, Material.WHITE_CONCRETE_POWDER, Material.YELLOW_CONCRETE_POWDER);
     }
 
-    @Override
-    public void run() {
-        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
-        if (hardmode) {
-            for (Player player : plugin.getServer().getOnlinePlayers()) {
-                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
-                    EntityEquipment equipment = player.getEquipment();
-                    if (equipment != null) {
-                        ItemStack paxel = equipment.getItemInMainHand();
-                        if (paxel != null) {
-                            if (toolManager.isStarlightPaxel(paxel) && chargeManager.getCharge(paxel) > 0) {
-                                Block block = player.getTargetBlockExact(5);
-                                if (block != null) {
-                                    Material material = block.getType();
+    @EventHandler
+    public void blockDamage (BlockDamageEvent event) {
+        if (plugin.getSystemConfig().getBoolean("hardmode")) {
+            final Player player = event.getPlayer();
+            if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
+                final ItemStack item = event.getItemInHand();
+                if (toolManager.isStarlightPaxel(item) && chargeManager.getCharge(item) > 0) {
+                    final Material type = event.getBlock().getType();
 
-                                    if (pickaxeBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_PICKAXE)) {
-                                        paxel.setType(Material.NETHERITE_PICKAXE);
-                                    }
-                                    else if (axeBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_AXE)) {
-                                        paxel.setType(Material.NETHERITE_AXE);
-                                    }
-                                    else if (shovelBlocks.contains(material) && !paxel.getType().equals(Material.NETHERITE_SHOVEL)) {
-                                        paxel.setType(Material.NETHERITE_SHOVEL);
-                                    }
-                                    else return;
-
-                                    equipment.setItemInMainHand(paxel);
-                                }
-                            }
-                        }
+                    if (pickaxeBlocks.contains(type) && !item.getType().equals(Material.NETHERITE_PICKAXE)) {
+                        item.setType(Material.NETHERITE_PICKAXE);
+                    }
+                    else if (axeBlocks.contains(type) && !item.getType().equals(Material.NETHERITE_AXE)) {
+                        item.setType(Material.NETHERITE_AXE);
+                    }
+                    else if (shovelBlocks.contains(type) && !item.getType().equals(Material.NETHERITE_SHOVEL)) {
+                        item.setType(Material.NETHERITE_SHOVEL);
                     }
                 }
             }
         }
     }
-
 }

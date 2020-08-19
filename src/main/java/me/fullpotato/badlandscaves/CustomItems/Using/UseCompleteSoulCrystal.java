@@ -15,13 +15,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener {
     private final BadlandsCaves plugin;
+    private final InventorySerialize invser;
+    private final DeathHandler reset;
 
     public UseCompleteSoulCrystal(BadlandsCaves plugin) {
         this.plugin = plugin;
+        invser = new InventorySerialize(plugin);
+        reset = new DeathHandler(plugin);
     }
 
     @EventHandler
@@ -48,13 +53,16 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         depleteUse(current, 2);
 
         //save inventory
-        InventorySerialize invser = new InventorySerialize(plugin);
         invser.saveInventory(player, "descension_inv");
 
         //clear it
-        DeathHandler reset = new DeathHandler(plugin);
         reset.resetPlayer(player);
         player.getInventory().clear();
+
+        //remove potion effects
+        for (PotionEffectType value : PotionEffectType.values()) {
+            player.removePotionEffect(value);
+        }
 
         //put you into the descension stage
         new StageEnter(plugin, player).runTask(plugin);

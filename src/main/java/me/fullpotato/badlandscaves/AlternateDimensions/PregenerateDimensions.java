@@ -34,6 +34,10 @@ public class PregenerateDimensions extends BukkitRunnable implements Listener {
 
     @Override
     public void run() {
+        attemptPregenerate();
+    }
+
+    public boolean attemptPregenerate () {
         if (plugin.getSystemConfig().getBoolean("hardmode")) {
             if (plugin.getServer().getOnlinePlayers().isEmpty()) {
                 plugin.getLogger().info("Attempting dimension pre-generation...");
@@ -41,19 +45,21 @@ public class PregenerateDimensions extends BukkitRunnable implements Listener {
                 for (double recentTPS : recentTPSArr) {
                     if (recentTPS < TPSThreshold) {
                         plugin.getLogger().info("Server TPS is too low to pre-generate.");
-                        return;
+                        return false;
                     }
                 }
 
                 if (plugin.getSystemConfig().getStringList("pregenerated_dimensions").size() <= worldsLimit) {
                     plugin.getLogger().info("Pre-generating new dimension.");
                     generateNewDimension();
+                    return true;
                 }
                 else {
                     plugin.getLogger().info("Max amount of pre-generated dimensions reached.");
                 }
             }
         }
+        return false;
     }
 
     public void generateNewDimension () {

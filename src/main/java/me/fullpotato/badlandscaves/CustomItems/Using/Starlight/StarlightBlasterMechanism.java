@@ -222,7 +222,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                         chargeManager.setCharge(item, charge - cost);
                     }
 
-                    setCooldown(item, (short) 20);
+                    setCooldown(item, (short) 2);
                 }
             }
         }

@@ -27,6 +27,7 @@ public class ZombieBossBehavior extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private Zombie zombie;
     private final World world;
+    private final Random random = new Random();
     public static Player fakePlayer = null;
 
     public ZombieBossBehavior(BadlandsCaves bcav) {
@@ -34,10 +35,11 @@ public class ZombieBossBehavior extends BukkitRunnable {
         world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
+    // TODO: 8/18/2020 only have this run when someone uses incomplete soul crystal
     @Override
     public void run () {
         healthBarVisibility();
-        final Random random = new Random();
+
         //get zombie
         ArrayList<Zombie> zombie_list = (ArrayList<Zombie>) (world.getEntitiesByClass(Zombie.class));
         if (zombie_list.isEmpty()) return;

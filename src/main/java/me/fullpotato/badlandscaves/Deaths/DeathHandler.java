@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Deaths;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -20,12 +21,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Objects;
 
 public class DeathHandler implements Listener {
-
     private final BadlandsCaves plugin;
     private final World world;
+    private final PlayerEffects playerEffects;
+    
     public DeathHandler(BadlandsCaves bcav) {
         plugin = bcav;
         world = plugin.getServer().getWorld(plugin.getMainWorldName());
+        playerEffects = new PlayerEffects(plugin);
     }
 
     @EventHandler
@@ -146,5 +149,6 @@ public class DeathHandler implements Listener {
             else player.teleport(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
 
+        playerEffects.applyEffects(player, true);
     }
 }

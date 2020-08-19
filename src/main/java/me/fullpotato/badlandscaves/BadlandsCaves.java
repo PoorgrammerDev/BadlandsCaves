@@ -15,13 +15,17 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.*;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteInstaller;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightBlasterMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSaberMechanism;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSentryMechanism;
 import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
-import me.fullpotato.badlandscaves.Effects.PlayerEffectsRunnable;
+import me.fullpotato.badlandscaves.Effects.HungerLimit;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Loot.*;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AugmentedDrops;
@@ -328,6 +332,10 @@ public final class BadlandsCaves extends JavaPlugin {
                 new UseNebuliteCrate(this),
                 new DimensionStructureTable(this),
                 new UnloadDimensions(this),
+                new PlayerEffects(this),
+                new HungerLimit(),
+                new StarlightPaxelMechanism(this),
+                new SlowBreak(this),
         };
 
         for (Listener event : events) {
@@ -370,39 +378,36 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
 
         this.getCommand("world").setExecutor(new WorldCommand(this));
+
+        this.getCommand("pregenerate").setExecutor(new PregenerateCommand(this));
     }
 
     //RUNNABLES
     public void loadRunnables() {
-        new ActionbarRunnable(this).runTaskTimer(this, 0 ,0);
-        new PlayerEffectsRunnable(this).runTaskTimer(this,0,0);
+        new ActionbarRunnable(this).runTaskTimer(this, 0, 5);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
-        new DisplaceParticleRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
-        new WithdrawIndicatorRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
-        new PossessionIndicatorRunnable(this).runTaskTimer(this, 0, 0);
+        new DisplaceParticleRunnable(this).runTaskTimerAsynchronously(this, 0, 2);
+        new WithdrawIndicatorRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
+        new PossessionIndicatorRunnable(this).runTaskTimer(this, 0, 1);
         new ManaBarManager(this).runTaskTimer(this, 0, 5);
-        new ManaRegen(this).runTaskTimer(this, 0, 0);
-        new AgilitySpeedRunnable(this).runTaskTimer(this, 0, 15);
+        new ManaRegen(this).runTaskTimer(this, 0, 5);
         new DescensionReset(this).runTaskTimer(this, 0, 60);
         new LostSoulParticle(this).runTaskTimer(this, 0, 3);
         new DetectedBar(this).runTaskTimer(this, 0, 3);
-        new ShrineCapture(this).runTaskTimer(this, 0 ,0);
+        new ShrineCapture(this).runTaskTimer(this, 0 ,5);
         new DescensionTimeLimit(this).runTaskTimer(this, 0, 20);
         new DetectionDecrease(this).runTaskTimer(this, 0, 20);
-        new ExitPortal(this).runTaskTimer(this, 0, 3);
+        new ExitPortal(this).runTaskTimer(this, 0, 5);
         new ZombieBossBehavior(this).runTaskTimer(this, 0, 0);
         new LimitActions(this).runTaskTimer(this, 0, 20);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
         new Surface(this).runTaskTimer(this, 0, 100);
-        new ChargeRunnable(this).runTaskTimer(this, 0, 0);
-        new StarlightPaxelMechanism(this).runTaskTimer(this, 0, 0);
-        new StarlightBlasterMechanism(this).runTaskTimer(this, 0, 0);
-        new SlowBreakRunnable(this).runTaskTimer(this, 0, 20);
+        new StarlightBlasterMechanism(this).runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this).runTaskTimer(this, 0, 20);
         new BewildermentRunnable(this).runTaskTimer(this, 0, 100);
-        new NoOxygen(this).runTaskTimer(this, 0, 0);
+        new NoOxygen(this).runTaskTimer(this, 0, 10);
         new LavaFloorRunnable(this).runTaskTimer(this, 0, 20);
         new NoFloorRunnable(this).runTaskTimer(this, 0, 10);
         new ParanoiaRunnable(this).runTaskTimer(this, 0, 80);

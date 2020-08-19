@@ -72,7 +72,7 @@ public class ManaRegen extends BukkitRunnable {
             }
 
             if (fullSetVoidmatter) mana_regen_per_second *= 2;
-            mana_regen_per_second /= 20.0;
+            mana_regen_per_second /= 4.0;
             thirst_penalty /= 20.0;
 
 

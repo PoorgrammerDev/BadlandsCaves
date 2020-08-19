@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,8 +13,10 @@ import org.jetbrains.annotations.NotNull;
 public class ToxicityCommand extends Commands implements CommandExecutor {
 
     private final BadlandsCaves plugin;
+    private final PlayerEffects playerEffects;
     public ToxicityCommand (BadlandsCaves bcav) {
         plugin = bcav;
+        playerEffects = new PlayerEffects(plugin);
     }
 
     @Override
@@ -54,6 +57,7 @@ public class ToxicityCommand extends Commands implements CommandExecutor {
                                         double change = Double.parseDouble(args[2]);
                                         PlayerScore.TOXICITY.setScore(plugin, targets, change);
                                         sender.sendMessage(ChatColor.GOLD + "The Toxicity count of " + ChatColor.RED + targets.getDisplayName() + ChatColor.GOLD + " has been set to " + ChatColor.RED + change + ChatColor.GOLD + ".");
+                                        playerEffects.applyEffects(targets, true);
                                         return true;
                                     }
                                     catch (NumberFormatException e) {

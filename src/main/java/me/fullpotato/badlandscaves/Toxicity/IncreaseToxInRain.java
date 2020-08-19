@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -26,12 +27,14 @@ public class IncreaseToxInRain implements Listener {
     private final StarlightArmor starlightArmor;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
+    private final PlayerEffects playerEffects;
 
     public IncreaseToxInRain(BadlandsCaves plugin) {
         this.plugin = plugin;
         this.starlightArmor = new StarlightArmor(plugin);
         this.starlightCharge = new StarlightCharge(plugin);
         this.nebuliteManager = new NebuliteManager(plugin);
+        playerEffects = new PlayerEffects(plugin);
     }
 
     @EventHandler
@@ -74,10 +77,6 @@ public class IncreaseToxInRain implements Listener {
             }
         }
 
-
-
-
-
         boolean waterBreathing = (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER));
 
         final int toxic_sys_var = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
@@ -97,6 +96,7 @@ public class IncreaseToxInRain implements Listener {
         if (current_tox_slow >= 100) {
             PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0);
             PlayerScore.TOXICITY.setScore(plugin, player, current_tox + 0.1);
+            playerEffects.applyEffects(player, true);
         }
 
 

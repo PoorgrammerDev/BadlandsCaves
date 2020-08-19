@@ -42,12 +42,12 @@ public class ShrineCapture extends BukkitRunnable {
                     final short charge = (short) (crystal.getPersistentDataContainer().getOrDefault(chargeKey, PersistentDataType.SHORT, (short) 0) + 1);
                     crystal.getPersistentDataContainer().set(chargeKey, PersistentDataType.SHORT, charge);
 
-                    if (charge % 50 == 1) {
+                    if (charge % 25 == 1) {
                         player.playSound(playerLocation, Sound.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 1, 0.3f);
                     }
 
                     //done charging
-                    if (charge >= 400) {
+                    if (charge >= 100) {
                         //crystal
                         crystal.getPersistentDataContainer().set(chargedKey, PersistentDataType.BYTE, (byte) 1);
 

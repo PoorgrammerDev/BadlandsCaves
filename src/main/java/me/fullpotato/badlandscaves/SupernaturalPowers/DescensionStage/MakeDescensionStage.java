@@ -14,9 +14,10 @@ import java.util.Random;
 public class MakeDescensionStage extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
-    public MakeDescensionStage(BadlandsCaves bcav, World wrld) {
-        plugin = bcav;
-        world = wrld;
+    private final Random random = new Random();
+    public MakeDescensionStage(BadlandsCaves plugin) {
+        this.plugin = plugin;
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
     }
 
     @Override
@@ -45,7 +46,6 @@ public class MakeDescensionStage extends BukkitRunnable {
             }
         }
 
-        Random random = new Random();
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(random, 8);
         generator.setScale(0.1D);
         Location origin = new Location(world, 0, 64, 0);

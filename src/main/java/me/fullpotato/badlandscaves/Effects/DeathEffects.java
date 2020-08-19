@@ -153,18 +153,18 @@ public class DeathEffects {
         else if (deaths >= 1) {
             walk_speed = 1;
             mine_speed = 1;
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 0, true, false));
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 0, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, Integer.MAX_VALUE, 0, true, false));
         }
 
         //NO DEATHS-----------------------------------------------
         else if (deaths == 0) {
             walk_speed = 2;
             mine_speed = 1;
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 90, 0, true, false));
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, 90, 1, true, false));
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 90, 1, true, false));
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, 90, 1, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.LUCK, Integer.MAX_VALUE, 1, true, false));
 
             health = 40;
         }
@@ -174,11 +174,11 @@ public class DeathEffects {
         }
 
         if (unluck_lvl > 0) {
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.UNLUCK, 90, unluck_lvl - 1, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.UNLUCK, Integer.MAX_VALUE, unluck_lvl - 1, true, false));
         }
 
         if (weakness_lvl > 0) {
-            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.WEAKNESS, 90, weakness_lvl - 1, true, false));
+            AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, weakness_lvl - 1, true, false));
         }
 
         HashMap<String, Integer> output = new HashMap<>();
