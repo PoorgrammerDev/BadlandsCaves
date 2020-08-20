@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.EnergyCore;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
@@ -26,7 +27,9 @@ import java.util.List;
 public class Voltshock extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
+    private final EnergyCore energyCore;
     private final String shock_lore = "§3Voltshock";
+    private final TreasureGear treasureGear = new TreasureGear();
     private final Material[] swords = {
             Material.WOODEN_SWORD,
             Material.STONE_SWORD,
@@ -36,9 +39,10 @@ public class Voltshock extends MatchCrafting implements Listener {
             Material.NETHERITE_SWORD,
     };
 
-    public Voltshock(BadlandsCaves plugin) {
+    public Voltshock(BadlandsCaves plugin, EnergyCore energyCore) {
         this.plugin = plugin;
         customItemManager = plugin.getCustomItemManager();
+        this.energyCore = energyCore;
     }
 
     public void craft_battery() {
@@ -98,7 +102,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     public void charge_sword() {
         final ItemStack voltshock_sword_charge_placeholder = customItemManager.getItem(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER);
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "charge_voltshock_sword"), voltshock_sword_charge_placeholder);
-        recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
+        recipe.addIngredient(Material.KNOWLEDGE_BOOK);
         recipe.addIngredient(new RecipeChoice.MaterialChoice(swords));
 
         plugin.getServer().addRecipe(recipe);
@@ -154,9 +158,8 @@ public class Voltshock extends MatchCrafting implements Listener {
                     if (battery != null && shocker != null) {
                         if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2, 5)) {
                             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
-                                SerratedSwords serrated = new SerratedSwords(plugin);
-                                Corrosive corrosive = new Corrosive(plugin);
-                                TreasureGear treasureGear = new TreasureGear();
+                                SerratedSwords serrated = new SerratedSwords(plugin, energyCore);
+                                Corrosive corrosive = new Corrosive(plugin, energyCore);
                                 for (ItemStack item : matrix) {
                                     if (item != null && Arrays.asList(swords).contains(item.getType())) {
                                         boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item);
@@ -196,7 +199,7 @@ public class Voltshock extends MatchCrafting implements Listener {
             if (result.isSimilar(placeholder)) {
                 final ItemStack[] matrix = event.getInventory().getMatrix();
                 ItemStack sword = null;
-                ItemStack exp_bottle = null;
+                ItemStack energyCore = null;
 
                 for (ItemStack ingredient : matrix) {
                     if (ingredient != null) {
@@ -204,33 +207,22 @@ public class Voltshock extends MatchCrafting implements Listener {
                             if (isVoltshock(ingredient)) {
                                 sword = ingredient;
                             }
-                        } else if (ingredient.getType().equals(Material.EXPERIENCE_BOTTLE))
-                            exp_bottle = ingredient;
+                        } else if (this.energyCore.isEnergyCore(ingredient))
+                            energyCore = ingredient;
                     }
                 }
 
-                if (sword != null && exp_bottle != null) {
+                if (sword != null && energyCore != null) {
                     final int current_charge = getCharge(sword);
                     if (current_charge < 50) {
-                        int exp_stored = 0;
-                        final ItemMeta xp_meta = exp_bottle.getItemMeta();
-                        if (xp_meta.hasLore()) {
-                            List<String> lore = xp_meta.getLore();
-                            try {
-                                exp_stored = Integer.parseInt(lore.get(0).split(" ")[0].substring(2));
-                            } catch (NumberFormatException ignored) {
-                            }
+                        final int addedCharge = this.energyCore.getCharge(energyCore);
 
-                            int added_charge = exp_stored / 20;
-                            if (added_charge > 0) {
-                                final int new_charge = Math.min(50, current_charge + added_charge);
-
-                                ItemStack new_result = sword.clone();
-                                setCharge(new_result, new_charge);
-
-                                event.getInventory().setResult(new_result);
-                                return;
-                            }
+                        if (addedCharge > 0) {
+                            final int new_charge = Math.min(50, current_charge + addedCharge);
+                            ItemStack new_result = sword.clone();
+                            setCharge(new_result, new_charge);
+                            event.getInventory().setResult(new_result);
+                            return;
                         }
                     }
                 }

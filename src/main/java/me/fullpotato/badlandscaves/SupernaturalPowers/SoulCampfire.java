@@ -55,11 +55,11 @@ public class SoulCampfire implements Listener {
         OTHER_OPTIONS,
     }
 
-    public SoulCampfire(BadlandsCaves plugin) {
+    public SoulCampfire(BadlandsCaves plugin, SwapPowers swapPowers, ArtifactManager artifactManager) {
         this.plugin = plugin;
         this.customItemManager = plugin.getCustomItemManager();
-        this.swapPowers = new SwapPowers(plugin);
-        this.artifactManager = new ArtifactManager(plugin);
+        this.swapPowers = swapPowers;
+        this.artifactManager = artifactManager;
 
         this.artifactSlots = new HashMap<>();
         artifactSlots.put(ArtifactBaseItem.VOIDMATTER_ARMOR, 11);

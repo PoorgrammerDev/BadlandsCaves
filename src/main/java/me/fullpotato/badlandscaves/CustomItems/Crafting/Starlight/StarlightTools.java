@@ -207,8 +207,6 @@ public class StarlightTools extends MatchCrafting implements Listener {
             for (ItemStack item : matrix) {
                 if (item != null && item.getType().equals(Material.CROSSBOW)) {
                     if (isStarlightBlaster(item)) {
-                        StarlightCharge charge = new StarlightCharge(plugin);
-                        charge.setCharge(sentry, charge.getCharge(item));
                         event.getInventory().setResult(sentry);
                         return;
                     }

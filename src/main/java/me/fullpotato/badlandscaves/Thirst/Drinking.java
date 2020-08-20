@@ -26,9 +26,11 @@ import java.util.Random;
 public class Drinking implements Listener {
     private final BadlandsCaves plugin;
     private final PlayerEffects playerEffects;
-    public Drinking(BadlandsCaves bcav) {
+    private final BackroomsManager backroomsManager;
+    public Drinking(BadlandsCaves bcav, PlayerEffects playerEffects, BackroomsManager backroomsManager) {
         plugin = bcav;
-        playerEffects = new PlayerEffects(plugin);
+        this.playerEffects = playerEffects;
+        this.backroomsManager = backroomsManager;
     }
     @EventHandler
     public void drink (PlayerItemConsumeEvent event) {
@@ -158,8 +160,7 @@ public class Drinking implements Listener {
                     warp.getWorld().playSound(warp, "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 1, 1);
 
                     if (updated.distanceSquared(location) > 0 && random.nextInt(1000) < updated.distanceSquared(location)) {
-                        BackroomsManager backrooms = new BackroomsManager(plugin);
-                        backrooms.enterBackRooms(player, random);
+                        backroomsManager.enterBackRooms(player, random);
                     }
                 }
                 else {

@@ -27,12 +27,12 @@ public class StarlightCharge implements Listener {
     private final EnchantmentStorage enchantmentStorage;
     private final EnergyCore coreChecker;
 
-    public StarlightCharge(BadlandsCaves plugin) {
+    public StarlightCharge(BadlandsCaves plugin, StarlightArmor armor, StarlightTools tools, EnchantmentStorage enchantmentStorage, EnergyCore coreChecker) {
         this.plugin = plugin;
-        this.armor = new StarlightArmor(plugin);
-        this.tools = new StarlightTools(plugin);
-        enchantmentStorage = new EnchantmentStorage(plugin);
-        coreChecker = new EnergyCore(plugin);
+        this.armor = armor;
+        this.tools = tools;
+        this.enchantmentStorage = enchantmentStorage;
+        this.coreChecker = coreChecker;
     }
 
     public void chargeRecipe() {

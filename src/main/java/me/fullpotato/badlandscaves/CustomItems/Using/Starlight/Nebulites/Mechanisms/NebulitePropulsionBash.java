@@ -1,7 +1,11 @@
 package me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -19,8 +23,8 @@ import java.util.Set;
 
 public class NebulitePropulsionBash extends NebuliteMechanisms implements Listener {
     private final Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 30), 1);
-    public NebulitePropulsionBash(BadlandsCaves plugin) {
-        super(plugin);
+    public NebulitePropulsionBash(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

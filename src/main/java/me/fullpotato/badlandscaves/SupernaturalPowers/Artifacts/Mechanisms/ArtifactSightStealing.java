@@ -1,8 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -23,8 +25,8 @@ public class ArtifactSightStealing extends ArtifactMechanisms implements Listene
     private final NamespacedKey key;
     private final EnhancedEyesNMS nms;
 
-    public ArtifactSightStealing(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactSightStealing(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
         this.key = new NamespacedKey(plugin, "sight_stealing");
         this.nms = plugin.getEnhancedEyesNMS();
     }

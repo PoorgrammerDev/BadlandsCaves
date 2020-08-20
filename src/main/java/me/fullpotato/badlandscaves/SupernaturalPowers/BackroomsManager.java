@@ -26,14 +26,14 @@ import java.util.*;
 public class BackroomsManager implements Listener {
     private final BadlandsCaves plugin;
     private final World backrooms;
-    private final InventorySerialize inventoryManager;
+    private final InventorySerialize inventorySerialize;
     private final FakePlayerNMS fakePlayerManager;
 
-    public BackroomsManager(BadlandsCaves plugin) {
+    public BackroomsManager(BadlandsCaves plugin, InventorySerialize inventorySerialize) {
         this.plugin = plugin;
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
-        inventoryManager = new InventorySerialize(plugin);
         fakePlayerManager = plugin.getFakePlayerNMS();
+        this.inventorySerialize = inventorySerialize;
     }
 
     public enum BackroomsType {
@@ -49,7 +49,7 @@ public class BackroomsManager implements Listener {
         if (player.getWorld().equals(backrooms)) return;
 
         plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".backrooms_saved_location", player.getLocation().serialize());
-        inventoryManager.saveInventory(player, "backrooms");
+        inventorySerialize.saveInventory(player, "backrooms");
         player.getInventory().clear();
 
         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
@@ -184,7 +184,7 @@ public class BackroomsManager implements Listener {
         player.removePotionEffect(PotionEffectType.WEAKNESS);
         if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
 
-        inventoryManager.loadInventory(player, "backrooms", true, true);
+        inventorySerialize.loadInventory(player, "backrooms", true, true);
 
         Location location = Location.deserialize(plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".backrooms_saved_location").getValues(true));
         player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);

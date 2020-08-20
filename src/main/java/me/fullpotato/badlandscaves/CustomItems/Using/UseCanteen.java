@@ -13,9 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class UseCanteen implements Listener {
     private final BadlandsCaves plugin;
+    private final Drinking drinking;
 
-    public UseCanteen(BadlandsCaves plugin) {
+    public UseCanteen(BadlandsCaves plugin, Drinking drinking) {
         this.plugin = plugin;
+        this.drinking = drinking;
     }
 
     @EventHandler
@@ -24,7 +26,6 @@ public class UseCanteen implements Listener {
         final Canteen canteen = new Canteen(plugin);
         if (canteen.isCanteen(item)) {
             final Player player = event.getPlayer();
-            final Drinking drinking = new Drinking(plugin);
             final String type = canteen.getType(item);
 
             event.setCancelled(true);

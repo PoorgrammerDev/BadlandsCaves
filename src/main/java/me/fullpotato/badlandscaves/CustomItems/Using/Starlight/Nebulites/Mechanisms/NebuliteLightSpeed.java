@@ -1,7 +1,11 @@
 package me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,8 +23,8 @@ public class NebuliteLightSpeed extends NebuliteMechanisms implements Listener {
     private final List<Material> ores = Arrays.asList(Material.COAL_ORE, Material.IRON_ORE, Material.LAPIS_ORE, Material.GOLD_ORE, Material.REDSTONE_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.NETHER_QUARTZ_ORE, Material.NETHER_GOLD_ORE, Material.ANCIENT_DEBRIS, Material.GILDED_BLACKSTONE);
 
 
-    public NebuliteLightSpeed(BadlandsCaves plugin) {
-        super(plugin);
+    public NebuliteLightSpeed(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

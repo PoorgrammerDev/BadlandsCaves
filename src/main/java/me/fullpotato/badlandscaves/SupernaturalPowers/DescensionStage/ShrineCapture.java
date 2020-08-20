@@ -30,6 +30,11 @@ public class ShrineCapture extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (world.getEntitiesByClass(Player.class).isEmpty()) {
+            this.cancel();
+            return;
+        }
+
         world.getEntitiesByClass(EnderCrystal.class).forEach(crystal -> {
             boolean charged = crystal.getPersistentDataContainer().has(chargedKey, PersistentDataType.BYTE) && crystal.getPersistentDataContainer().get(chargedKey, PersistentDataType.BYTE) == (byte) 1;
             if (!charged) {

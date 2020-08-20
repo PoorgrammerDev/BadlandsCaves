@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
@@ -23,12 +25,12 @@ import java.util.Random;
 public class ArtifactSummonersRift extends ArtifactMechanisms implements Listener {
     private final NamespacedKey key;
     private final ZombieBossBehavior locationFinder;
-    private final ArtifactFleetingSpirits vindicatorSpawner;
-    public ArtifactSummonersRift(BadlandsCaves plugin) {
-        super(plugin);
+    private final ArtifactFleetingSpirits fleetingSpirits;
+    public ArtifactSummonersRift(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, ArtifactFleetingSpirits fleetingSpirits) {
+        super(plugin, voidmatter, artifactManager);
         this.key = new NamespacedKey(plugin, "summoner");
         locationFinder = new ZombieBossBehavior(plugin);
-        vindicatorSpawner = new ArtifactFleetingSpirits(plugin);
+        this.fleetingSpirits = fleetingSpirits;
     }
 
     @EventHandler
@@ -129,7 +131,7 @@ public class ArtifactSummonersRift extends ArtifactMechanisms implements Listene
                                         @Override
                                         public void run() {
                                             arrow.getWorld().spawnParticle(Particle.FLASH, spawnLoc.clone().add(0, 0.5, 0), 1, 0, 0, 0, 0);
-                                            vindicatorSpawner.spawnVindicator(player, entity, spawnLoc, false);
+                                            fleetingSpirits.spawnVindicator(player, entity, spawnLoc, false);
                                         }
                                     }.runTaskLater(plugin, 20);
                                 }

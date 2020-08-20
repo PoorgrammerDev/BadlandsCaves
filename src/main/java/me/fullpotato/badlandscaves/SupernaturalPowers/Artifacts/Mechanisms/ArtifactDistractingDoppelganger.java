@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -21,8 +23,8 @@ public class ArtifactDistractingDoppelganger extends ArtifactMechanisms {
     private final int cost;
     private final int range = 10;
     private final int limit = 50;
-    public ArtifactDistractingDoppelganger(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactDistractingDoppelganger(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
         this.nms = plugin.getFakePlayerNMS();
         this.cost = plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.distraction_clone");
     }

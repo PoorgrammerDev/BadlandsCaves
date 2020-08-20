@@ -20,10 +20,10 @@ public class ArtifactHasteWind extends BukkitRunnable implements Listener {
     private final Voidmatter voidmatter;
     private final ArtifactManager artifactManager;
 
-    public ArtifactHasteWind(BadlandsCaves plugin) {
+    public ArtifactHasteWind(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
         this.plugin = plugin;
-        voidmatter = new Voidmatter(plugin);
-        artifactManager = new ArtifactManager(plugin);
+        this.voidmatter = voidmatter;
+        this.artifactManager = artifactManager;
     }
 
     @Override

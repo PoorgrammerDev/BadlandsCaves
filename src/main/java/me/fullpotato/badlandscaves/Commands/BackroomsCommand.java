@@ -11,24 +11,24 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.Random;
 
 public class BackroomsCommand extends Commands implements CommandExecutor {
     private final BadlandsCaves plugin;
+    private final BackroomsManager backroomsManager;
+    private final World backrooms;
+    private final Random random = new Random();
 
-    public BackroomsCommand(BadlandsCaves plugin) {
+    public BackroomsCommand(BadlandsCaves plugin, BackroomsManager backroomsManager) {
         this.plugin = plugin;
+        this.backroomsManager = backroomsManager;
+        backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String s, String[] args) {
         if (command.getName().equalsIgnoreCase("backrooms")) {
             if (commandSender.isOp()) {
-                BackroomsManager backroomsManager = new BackroomsManager(plugin);
-                World backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
-                Random random = new Random();
-
                 if (args.length < 1) {
                     tooFewArgs(commandSender);
                     return true;

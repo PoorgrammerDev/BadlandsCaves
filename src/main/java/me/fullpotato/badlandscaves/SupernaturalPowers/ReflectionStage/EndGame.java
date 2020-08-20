@@ -26,10 +26,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class EndGame implements Listener {
     private final BadlandsCaves plugin;
     private final World world;
+    private final DeathHandler deathHandler;
+    private final UseIncompleteSoulCrystal useIncompleteSoulCrystal;
 
-    public EndGame(BadlandsCaves plugin) {
+    public EndGame(BadlandsCaves plugin, DeathHandler deathHandler, UseIncompleteSoulCrystal useIncompleteSoulCrystal) {
         this.plugin = plugin;
         this.world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
+        this.deathHandler = deathHandler;
+        this.useIncompleteSoulCrystal = useIncompleteSoulCrystal;
     }
 
     @EventHandler
@@ -64,7 +68,6 @@ public class EndGame implements Listener {
             }
 
             if (player != null) {
-                DeathHandler resetter = new DeathHandler(plugin);
                 resetWorld();
 
                 final Player ply = player;
@@ -72,7 +75,7 @@ public class EndGame implements Listener {
                     @Override
                     public void run() {
                         ply.setHealth(20);
-                        resetter.resetPlayer(ply, false, true, false);
+                        deathHandler.resetPlayer(ply, false, true, false);
                         restoreInventory(ply);
                         completeSoul(ply);
                     }
@@ -118,12 +121,11 @@ public class EndGame implements Listener {
     }
 
     public void completeSoul (final Player player) {
-        UseIncompleteSoulCrystal usecrystal = new UseIncompleteSoulCrystal(plugin);
         final ItemStack incomplete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL_INCOMPLETE);
         final ItemStack complete = plugin.getCustomItemManager().getItem(CustomItem.SOUL_CRYSTAL);
         for (ItemStack item : player.getInventory()) {
             if (item == null) continue;
-            if (usecrystal.checkMatchIgnoreUses(item, incomplete, 2)) {
+            if (useIncompleteSoulCrystal.checkMatchIgnoreUses(item, incomplete, 2)) {
                 item.setAmount(item.getAmount() - 1);
                 break;
             }

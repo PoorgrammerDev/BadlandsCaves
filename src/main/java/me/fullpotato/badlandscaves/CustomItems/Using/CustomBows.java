@@ -21,8 +21,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CustomBows implements Listener {
     private final BadlandsCaves plugin;
-    final ItemStack corrosiveArrow;
-    final ItemStack voltshockArrow;
+    private final ItemStack corrosiveArrow;
+    private final ItemStack voltshockArrow;
     public CustomBows(BadlandsCaves plugin) {
         this.plugin = plugin;
         corrosiveArrow = plugin.getCustomItemManager().getItem(CustomItem.CORROSIVE_ARROW);

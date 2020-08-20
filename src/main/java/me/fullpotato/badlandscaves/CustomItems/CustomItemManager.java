@@ -73,11 +73,11 @@ public class CustomItemManager {
             "f332ed08-1974-4dd3-9a0f-d7a6c1edbf06",
     };
 
-    public CustomItemManager(BadlandsCaves plugin) {
+    public CustomItemManager(BadlandsCaves plugin, EnchantmentStorage enchantmentStorage, PregenerateDimensions pregenerateDimensions) {
         this.plugin = plugin;
-        enchantmentStorage = new EnchantmentStorage(plugin);
+        this.enchantmentStorage = enchantmentStorage;
+        this.pregenerateDimensions = pregenerateDimensions;
         fillMap();
-        pregenerateDimensions = new PregenerateDimensions(plugin);
     }
 
     private void fillMap() {

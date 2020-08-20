@@ -1,7 +1,11 @@
 package me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class NebuliteOxygenator extends NebuliteMechanisms implements Listener {
 
-    public NebuliteOxygenator(BadlandsCaves plugin) {
-        super(plugin);
+    public NebuliteOxygenator(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

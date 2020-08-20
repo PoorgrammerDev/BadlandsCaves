@@ -1,9 +1,11 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -44,8 +46,8 @@ public class ArtifactFleetingSpirits extends ArtifactMechanisms implements Liste
             EntityDamageEvent.DamageCause.VOID,
     };
 
-    public ArtifactFleetingSpirits(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactFleetingSpirits(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
         zombieBossBehavior = new ZombieBossBehavior(plugin);
         lineOfSightNMS = plugin.getLineOfSightNMS();
         enhancedEyesNMS = plugin.getEnhancedEyesNMS();

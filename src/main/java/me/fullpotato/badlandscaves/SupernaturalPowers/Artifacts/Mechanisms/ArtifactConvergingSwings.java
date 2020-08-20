@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TargetEntity;
 import org.bukkit.*;
@@ -17,8 +19,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ArtifactConvergingSwings extends ArtifactMechanisms implements Listener {
     private final int cost;
-    public ArtifactConvergingSwings(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactConvergingSwings(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
         cost = plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.converging_swings");
     }
 

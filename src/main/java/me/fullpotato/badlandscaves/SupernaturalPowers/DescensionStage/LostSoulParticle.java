@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class LostSoulParticle extends BukkitRunnable {
@@ -23,7 +24,13 @@ public class LostSoulParticle extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : world.getEntitiesByClass(Player.class)) {
+        final Collection<? extends Player> players = world.getEntitiesByClass(Player.class);
+        if (players.isEmpty()) {
+            this.cancel();
+            return;
+        }
+
+        for (Player player : players) {
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2) {
                 final List<Entity> entities = player.getNearbyEntities(20, 20, 20);

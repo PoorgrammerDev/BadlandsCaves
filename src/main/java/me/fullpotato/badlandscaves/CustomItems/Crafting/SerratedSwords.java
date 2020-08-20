@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.EnergyCore;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
@@ -22,6 +23,8 @@ import java.util.List;
 public class SerratedSwords implements Listener {
     private final BadlandsCaves plugin;
     private final String serrated_lore = "§cSerrated";
+    private final EnergyCore energyCore;
+    private final TreasureGear treasureGear = new TreasureGear();
     private final Material[] swords = {
             Material.WOODEN_SWORD,
             Material.STONE_SWORD,
@@ -31,8 +34,9 @@ public class SerratedSwords implements Listener {
             Material.NETHERITE_SWORD,
     };
 
-    public SerratedSwords(BadlandsCaves plugin) {
+    public SerratedSwords(BadlandsCaves plugin, EnergyCore energyCore) {
         this.plugin = plugin;
+        this.energyCore = energyCore;
     }
 
     @EventHandler
@@ -44,9 +48,8 @@ public class SerratedSwords implements Listener {
                     if (event.getItem() != null) {
                         final ItemStack item = event.getItem();
                         if (Arrays.asList(swords).contains(item.getType())) {
-                            Voltshock voltshock = new Voltshock(plugin);
-                            Corrosive corrosive = new Corrosive(plugin);
-                            TreasureGear treasureGear = new TreasureGear();
+                            Voltshock voltshock = new Voltshock(plugin, energyCore);
+                            Corrosive corrosive = new Corrosive(plugin, energyCore);
                             if (!isSerrated(item) && !voltshock.isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item)) {
                                 Damageable damageable_meta = (Damageable) item.getItemMeta();
                                 int max_durability = item.getType().getMaxDurability();

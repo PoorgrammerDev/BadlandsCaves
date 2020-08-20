@@ -28,13 +28,15 @@ public class IncreaseToxInRain implements Listener {
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
     private final PlayerEffects playerEffects;
+    private final EnvironmentalHazards environmentalHazards;
 
-    public IncreaseToxInRain(BadlandsCaves plugin) {
+    public IncreaseToxInRain(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, PlayerEffects playerEffects, EnvironmentalHazards environmentalHazards) {
         this.plugin = plugin;
-        this.starlightArmor = new StarlightArmor(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
-        playerEffects = new PlayerEffects(plugin);
+        this.starlightArmor = starlightArmor;
+        this.starlightCharge = starlightCharge;
+        this.nebuliteManager = nebuliteManager;
+        this.playerEffects = playerEffects;
+        this.environmentalHazards = environmentalHazards;
     }
 
     @EventHandler
@@ -43,8 +45,7 @@ public class IncreaseToxInRain implements Listener {
         World world = player.getWorld();
         if (!world.hasStorm()) return;
 
-        EnvironmentalHazards dims = new EnvironmentalHazards(plugin);
-        if (dims.isDimension(world) && !dims.hasHazard(world, EnvironmentalHazards.Hazard.ACID_RAIN)) return;
+        if (environmentalHazards.isDimension(world) && !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.ACID_RAIN)) return;
 
         Location location = player.getLocation();
         double temp = world.getTemperature(location.getBlockX(), location.getBlockY(), location.getBlockZ());

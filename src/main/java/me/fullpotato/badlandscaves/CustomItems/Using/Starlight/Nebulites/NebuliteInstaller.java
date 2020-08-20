@@ -29,11 +29,11 @@ public class NebuliteInstaller implements Listener {
     final ItemStack emptyNebuliteFiller = EmptyItem.getEmptyItem(Material.GRAY_STAINED_GLASS_PANE);
     private final String title = ChatColor.of("#0081fa") + "Nebulite Installer";
 
-    public NebuliteInstaller(BadlandsCaves plugin) {
+    public NebuliteInstaller(BadlandsCaves plugin, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, NebuliteStatChanges statChanger) {
         this.plugin = plugin;
-        starlightCharge = new StarlightCharge(plugin);
-        nebuliteManager = new NebuliteManager(plugin);
-        statChanger = new NebuliteStatChanges(plugin);
+        this.starlightCharge = starlightCharge;
+        this.nebuliteManager = nebuliteManager;
+        this.statChanger = statChanger;
     }
 
     @EventHandler

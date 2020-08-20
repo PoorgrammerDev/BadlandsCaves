@@ -2,7 +2,9 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.LimitActions;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.SpawnBoss;
+import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
@@ -33,11 +35,11 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
     private final Set<Material> blacklisted;
 
 
-    public UseIncompleteSoulCrystal (BadlandsCaves plugin) {
+    public UseIncompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize) {
         this.plugin = plugin;
-        inventorySerialize = new InventorySerialize(plugin);
         descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
+        this.inventorySerialize = inventorySerialize;
 
         blacklisted = new HashSet<>();
         blacklisted.add(Material.CRAFTING_TABLE);
@@ -87,7 +89,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
 
         //remove blacklisted items
         player.getInventory().forEach(itemStack -> {
-            if (blacklisted.contains(itemStack.getType())) {
+            if (itemStack != null && blacklisted.contains(itemStack.getType())) {
                 itemStack.setAmount(0);
             }
         });
@@ -116,8 +118,10 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         }.runTaskLaterAsynchronously(plugin, 1);
 
 
-        //spawning the boss, delay of 10 seconds
+        //runnables
         new SpawnBoss(plugin, player).runTaskLater(plugin, 200);
+        new ZombieBossBehavior(plugin).runTaskTimer(plugin, 0, 0);
+        new LimitActions(plugin, this).runTaskTimer(plugin, 0, 20);
     }
 
     public void disenchantInventory (final Player player) {

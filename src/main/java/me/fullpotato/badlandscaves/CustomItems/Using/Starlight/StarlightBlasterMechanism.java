@@ -40,12 +40,12 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
             new Particle.DustOptions(Color.fromRGB(0, 180, 255), 1), // hunters blue
     };
 
-    public StarlightBlasterMechanism(BadlandsCaves plugin) {
+    public StarlightBlasterMechanism(BadlandsCaves plugin, StarlightCharge chargeManager, StarlightTools toolManager, NebuliteManager nebuliteManager) {
         this.plugin = plugin;
-        this.chargeManager = new StarlightCharge(plugin);
-        this.toolManager = new StarlightTools(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
         this.nms = plugin.getEnhancedEyesNMS();
+        this.chargeManager = chargeManager;
+        this.toolManager = toolManager;
+        this.nebuliteManager = nebuliteManager;
     }
 
     @EventHandler

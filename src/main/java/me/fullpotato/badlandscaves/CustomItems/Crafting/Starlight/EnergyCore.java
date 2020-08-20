@@ -12,29 +12,47 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EnergyCore extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final ItemStack energyCore;
+    private final ItemStack energium;
+    private final ItemStack starFragment;
+    private final Map<ItemStack, Double> chargeMultiplierMap;
+
 
     public EnergyCore(BadlandsCaves plugin) {
         this.plugin = plugin;
         customItemManager = plugin.getCustomItemManager();
         energyCore = customItemManager.getItem(CustomItem.ENERGY_CORE);
+        energium = customItemManager.getItem(CustomItem.ENERGIUM);
+        starFragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
+
+        chargeMultiplierMap = new HashMap<>();
+        chargeMultiplierMap.put(new ItemStack(Material.REDSTONE), plugin.getOptionsConfig().getDouble("energy_core_mult.redstone"));
+        chargeMultiplierMap.put(new ItemStack(Material.GLOWSTONE_DUST), plugin.getOptionsConfig().getDouble("energy_core_mult.glowstone"));
+        chargeMultiplierMap.put(energium, plugin.getOptionsConfig().getDouble("energy_core_mult.energium"));
+        chargeMultiplierMap.put(starFragment, plugin.getOptionsConfig().getDouble("energy_core_mult.nether_star_fragment"));
     }
 
-    public void energyCoreRecipe() {
-        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "energy_core"), energyCore);
-        recipe.addIngredient(Material.COMMAND_BLOCK);
-        recipe.addIngredient(Material.EXPERIENCE_BOTTLE);
+    public void energyCoreRecipes() {
+        ShapelessRecipe withModifier = new ShapelessRecipe(new NamespacedKey(plugin, "energy_core_modifier"), energyCore);
+        withModifier.addIngredient(new RecipeChoice.MaterialChoice(Material.COMMAND_BLOCK, Material.GLOWSTONE_DUST, Material.REDSTONE));
+        withModifier.addIngredient(Material.EXPERIENCE_BOTTLE);
+        plugin.getServer().addRecipe(withModifier);
 
-        plugin.getServer().addRecipe(recipe);
+        ShapelessRecipe noModifier = new ShapelessRecipe(new NamespacedKey(plugin, "energy_core_no_modifier"), energyCore);
+        noModifier.addIngredient(Material.EXPERIENCE_BOTTLE);
+        plugin.getServer().addRecipe(noModifier);
     }
 
     public boolean isEnergyCore(ItemStack item) {
@@ -99,38 +117,50 @@ public class EnergyCore extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack energium = customItemManager.getItem(CustomItem.ENERGIUM);
-        final ItemStack starFragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
 
-        if (isMatching(matrix, energium) || isMatching(matrix, starFragment)) {
             ItemStack exp_bottle = null;
+            ItemStack multiplier = null;
             for (ItemStack ingredient : matrix) {
-                if (ingredient != null && ingredient.getType().equals(Material.EXPERIENCE_BOTTLE)) {
-                    exp_bottle = ingredient;
-                    break;
+                if (ingredient != null) {
+                    if (ingredient.getType().equals(Material.EXPERIENCE_BOTTLE)) {
+                        exp_bottle = ingredient;
+                    }
+                    else {
+                        multiplier = ingredient;
+                    }
                 }
             }
 
             if (exp_bottle != null) {
-                int exp_stored = 0;
+                int charge = 0;
                 final ItemMeta xp_meta = exp_bottle.getItemMeta();
                 if (xp_meta.hasLore()) {
                     List<String> lore = xp_meta.getLore();
                     try {
-                        exp_stored = Integer.parseInt(lore.get(0).split(" ")[0].substring(2));
+                        charge = Integer.parseInt(lore.get(0).split(" ")[0].substring(2));
                     }
                     catch (NumberFormatException ignored) {
                     }
 
-                    int addCharge = isMatching(matrix, starFragment) ? exp_stored / 5 : exp_stored / 10;
-                    if (addCharge > 0) {
-                        setCharge(result, addCharge);
+                    final double chargeReduction = plugin.getOptionsConfig().getDouble("energy_core_charge_reduce");
+                    charge *= chargeReduction;
+
+                    if (multiplier != null) {
+                        final ItemStack multiplierClone = multiplier.clone();
+                        multiplierClone.setAmount(1);
+
+                        if (chargeMultiplierMap.containsKey(multiplierClone)) {
+                            charge *= chargeMultiplierMap.get(multiplierClone);
+                        }
+                    }
+
+                    if (charge > 0) {
+                        setCharge(result, charge);
                         event.getInventory().setResult(result);
                         return;
                     }
                 }
             }
-        }
         event.getInventory().setResult(null);
     }
 }

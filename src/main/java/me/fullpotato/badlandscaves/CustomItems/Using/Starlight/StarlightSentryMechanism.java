@@ -40,12 +40,14 @@ public class StarlightSentryMechanism implements Listener {
     private final StarlightTools toolManager;
     private final StarlightCharge chargeManager;
     private final EnhancedEyesNMS nms;
+    private final StarlightBlasterMechanism starlightBlasterMechanism;
 
-    public StarlightSentryMechanism(BadlandsCaves plugin) {
+    public StarlightSentryMechanism(BadlandsCaves plugin, StarlightTools toolManager, StarlightCharge chargeManager, StarlightBlasterMechanism starlightBlasterMechanism) {
         this.plugin = plugin;
-        this.toolManager = new StarlightTools(plugin);
-        this.chargeManager = new StarlightCharge(plugin);
         this.nms = plugin.getEnhancedEyesNMS();
+        this.toolManager = toolManager;
+        this.chargeManager = chargeManager;
+        this.starlightBlasterMechanism = starlightBlasterMechanism;
     }
 
     @EventHandler
@@ -312,10 +314,9 @@ public class StarlightSentryMechanism implements Listener {
     }
 
     public void armorStandSys (ArmorStand armorStand, Slime slime) {
-        final StarlightBlasterMechanism blasterMechanism = new StarlightBlasterMechanism(plugin);
         final Location location = armorStand.getLocation();
         final int range = 20;
-        final int damage = blasterMechanism.getDamage();
+        final int damage = starlightBlasterMechanism.getDamage();
 
         new BukkitRunnable() {
             @Override

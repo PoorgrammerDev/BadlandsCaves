@@ -11,6 +11,8 @@ import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
+
 public class DetectedBar extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final NamespacedKey key;
@@ -23,6 +25,12 @@ public class DetectedBar extends BukkitRunnable {
 
     @Override
     public void run() {
+        final Collection<? extends Player> players = world.getEntitiesByClass(Player.class);
+        if (players.isEmpty()) {
+            this.cancel();
+            return;
+        }
+
         //making the bossbar
         KeyedBossBar detected_bar = plugin.getServer().getBossBar(key);
         if (detected_bar == null) {
@@ -30,8 +38,7 @@ public class DetectedBar extends BukkitRunnable {
             detected_bar = plugin.getServer().createBossBar(key, title, BarColor.RED, BarStyle.SEGMENTED_6);
         }
 
-
-        for (Player player : world.getEntitiesByClass(Player.class)) {
+        for (Player player : players) {
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2) {
                 if (!detected_bar.getPlayers().contains(player)) detected_bar.addPlayer(player);

@@ -28,10 +28,10 @@ public class StopCustomItemsInteract implements Listener {
     private final StarlightCharge starlightCharge;
     private final Voidmatter voidmatter;
 
-    public StopCustomItemsInteract(BadlandsCaves plugin) {
+    public StopCustomItemsInteract(BadlandsCaves plugin, StarlightCharge starlightCharge, Voidmatter voidmatter) {
         this.customItemManager = plugin.getCustomItemManager();
-        starlightCharge = new StarlightCharge(plugin);
-        voidmatter = new Voidmatter(plugin);
+        this.starlightCharge = starlightCharge;
+        this.voidmatter = voidmatter;
     }
 
     @EventHandler

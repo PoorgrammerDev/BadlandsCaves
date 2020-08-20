@@ -31,14 +31,14 @@ public class DescensionPlayerMove implements Listener {
     private final NamespacedKey key;
     private final DeathHandler reset;
     private final UseIncompleteSoulCrystal tester;
-    private final InventorySerialize invser;
-    public DescensionPlayerMove(BadlandsCaves bcav) {
+    private final InventorySerialize inventorySerialize;
+    public DescensionPlayerMove(BadlandsCaves bcav, DeathHandler reset, UseIncompleteSoulCrystal tester, InventorySerialize inventorySerialize) {
         plugin = bcav;
+        this.reset = reset;
+        this.tester = tester;
+        this.inventorySerialize = inventorySerialize;
         world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         key = new NamespacedKey(plugin, "descension_detected_bar");
-        reset = new DeathHandler(plugin);
-        tester = new UseIncompleteSoulCrystal(plugin);
-        invser = new InventorySerialize(plugin);
     }
 
     @EventHandler
@@ -192,7 +192,7 @@ public class DescensionPlayerMove implements Listener {
 
     public void resetPlayer (Player player, boolean win) {
         reset.resetPlayer(player, true, true, false);
-        invser.loadInventory(player, "descension_inv", true, true);
+        inventorySerialize.loadInventory(player, "descension_inv", true, true);
 
         final KeyedBossBar bossBar = plugin.getServer().getBossBar(key);
         if (bossBar != null) {

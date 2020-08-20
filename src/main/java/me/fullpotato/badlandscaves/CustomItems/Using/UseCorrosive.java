@@ -32,12 +32,14 @@ public class UseCorrosive implements Listener {
     private final StarlightArmor starlightArmor;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
+    private final Corrosive corrosive;
 
-    public UseCorrosive(BadlandsCaves plugin) {
+    public UseCorrosive(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, Corrosive corrosive) {
         this.plugin = plugin;
-        this.starlightArmor = new StarlightArmor(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
+        this.starlightArmor = starlightArmor;
+        this.starlightCharge = starlightCharge;
+        this.nebuliteManager = nebuliteManager;
+        this.corrosive = corrosive;
     }
 
     @EventHandler
@@ -48,7 +50,6 @@ public class UseCorrosive implements Listener {
 
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                 if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                    Corrosive corrosive = new Corrosive(plugin);
                     ItemStack item = player.getInventory().getItemInMainHand();
                     if (corrosive.isCorrosive(item)) {
                         if (corrosive.getHitsLeft(item) > 0) {
@@ -56,7 +57,7 @@ public class UseCorrosive implements Listener {
                             if (event.getDamage() >= player_dmg) {
                                 Random random = new Random();
                                 boolean critical = event.getDamage() > player_dmg;
-                                if ((critical && random.nextInt(100) < 80) || (!critical && random.nextInt(100) < 40)) {
+                                if ((critical) || (random.nextBoolean())) {
                                     if (applyCorrosion(entity, random, random.nextInt(5) + 10,false)) {
                                         if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                                             corrosive.setHitsLeft(item, corrosive.getHitsLeft(item) - 1);

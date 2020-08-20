@@ -29,12 +29,12 @@ public class ShieldBlocking implements Listener {
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
 
-    public ShieldBlocking(BadlandsCaves plugin) {
+    public ShieldBlocking(BadlandsCaves plugin, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         this.plugin = plugin;
-        this.starlightTools = new StarlightTools(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
         customItemManager = plugin.getCustomItemManager();
+        this.starlightTools = starlightTools;
+        this.starlightCharge = starlightCharge;
+        this.nebuliteManager = nebuliteManager;
     }
 
     @EventHandler

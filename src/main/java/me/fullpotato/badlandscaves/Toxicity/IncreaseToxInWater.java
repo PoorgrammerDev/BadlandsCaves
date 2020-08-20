@@ -35,17 +35,17 @@ public class IncreaseToxInWater implements Listener {
     private final Voidmatter voidmatter;
     private final ArtifactManager artifactManager;
     private final ArtifactFleetingSpirits artifactFleetingSpirits;
-    private final EnvironmentalHazards dims;
+    private final EnvironmentalHazards environmentalHazards;
 
-    public IncreaseToxInWater(BadlandsCaves plugin) {
+    public IncreaseToxInWater(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, ArtifactManager artifactManager, Voidmatter voidmatter, ArtifactFleetingSpirits artifactFleetingSpirits, NebuliteManager nebuliteManager, EnvironmentalHazards environmentalHazards) {
         this.plugin = plugin;
-        this.starlightArmor = new StarlightArmor(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
-        voidmatter = new Voidmatter(plugin);
-        artifactManager = new ArtifactManager(plugin);
-        artifactFleetingSpirits = new ArtifactFleetingSpirits(plugin);
-        dims = new EnvironmentalHazards(plugin);
+        this.starlightArmor = starlightArmor;
+        this.starlightCharge = starlightCharge;
+        this.voidmatter = voidmatter;
+        this.artifactManager = artifactManager;
+        this.artifactFleetingSpirits = artifactFleetingSpirits;
+        this.nebuliteManager = nebuliteManager;
+        this.environmentalHazards = environmentalHazards;
     }
 
 
@@ -56,7 +56,7 @@ public class IncreaseToxInWater implements Listener {
         Block block = player.getLocation().getBlock();
 
         World world = player.getWorld();
-        if (dims.isDimension(world) && !dims.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
+        if (environmentalHazards.isDimension(world) && !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
 
         final boolean in_reflection = (PlayerScore.IN_REFLECTION.hasScore(plugin, player)) && ((byte) PlayerScore.IN_REFLECTION.getScore(plugin, player) == 1);
         if (in_reflection) return;

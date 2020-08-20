@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.EnergyCore;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
@@ -31,6 +32,8 @@ public class Corrosive extends MatchCrafting implements Listener {
     private final CustomItemManager customItemManager;
     private final String corrosiveLore = "§2Corrosive";
     private final NamespacedKey hitsLeftKey;
+    private final EnergyCore energyCore;
+    private final TreasureGear treasureGear = new TreasureGear();
     private final Material[] swords = {
             Material.WOODEN_SWORD,
             Material.STONE_SWORD,
@@ -40,10 +43,11 @@ public class Corrosive extends MatchCrafting implements Listener {
             Material.NETHERITE_SWORD,
     };
 
-    public Corrosive(BadlandsCaves plugin) {
+    public Corrosive(BadlandsCaves plugin, EnergyCore energyCore) {
         this.plugin = plugin;
         this.hitsLeftKey = new NamespacedKey(plugin, "corrosiveHitsLeft");
         customItemManager = plugin.getCustomItemManager();
+        this.energyCore = energyCore;
     }
 
     public void craftCorrosiveSubstance() {
@@ -139,9 +143,8 @@ public class Corrosive extends MatchCrafting implements Listener {
                 }
                 if (sword != null) {
                     if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
-                    Voltshock voltshock = new Voltshock(plugin);
-                    SerratedSwords serrated = new SerratedSwords(plugin);
-                    TreasureGear treasureGear = new TreasureGear();
+                    Voltshock voltshock = new Voltshock(plugin, energyCore);
+                    SerratedSwords serrated = new SerratedSwords(plugin, energyCore);
                     if (!voltshock.isVoltshock(sword) && !serrated.isSerrated(sword) && !treasureGear.isTreasureGear(sword)) {
                         if (isCorrosive(sword)) {
                             ItemStack output = sword.clone();

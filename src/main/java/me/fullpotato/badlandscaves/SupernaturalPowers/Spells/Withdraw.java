@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
@@ -34,12 +35,12 @@ public class Withdraw extends UsePowers implements Listener {
     private final ArtifactManager artifactManager;
     private final ArtifactSoulHeist artifactSoulHeist;
     private final World backrooms;
-    public Withdraw(BadlandsCaves plugin) {
+    public Withdraw(BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter) {
         super(plugin);
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         void_world = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
-        artifactManager = new ArtifactManager(plugin);
-        artifactSoulHeist = new ArtifactSoulHeist(plugin, this);
+        artifactSoulHeist = new ArtifactSoulHeist(plugin, this, possession, voidmatter, artifactManager);
+        this.artifactManager = artifactManager;
     }
 
     @EventHandler

@@ -20,12 +20,12 @@ public class NaturalThirstDecrease implements Listener {
     private final World reflection;
     private final World backrooms;
     private final PlayerEffects playerEffects;
-    public NaturalThirstDecrease(BadlandsCaves plugin) {
+    public NaturalThirstDecrease(BadlandsCaves plugin, PlayerEffects playerEffects) {
         this.plugin = plugin;
         descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
-        playerEffects = new PlayerEffects(plugin);
+        this.playerEffects = playerEffects;
     }
 
 

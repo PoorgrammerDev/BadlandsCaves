@@ -1,8 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactBaseItem;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 
 public class ArtifactTenaciousTrickery extends ArtifactMechanisms implements Listener {
-    public ArtifactTenaciousTrickery(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactTenaciousTrickery(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
     }
 
     @EventHandler

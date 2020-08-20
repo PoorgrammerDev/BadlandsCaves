@@ -17,16 +17,16 @@ import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteInstaller;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightBlasterMechanism;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSaberMechanism;
-import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightSentryMechanism;
-import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventNonPoweredUsage;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteStatChanges;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.*;
+import me.fullpotato.badlandscaves.CustomItems.Using.Voidmatter.PreventTechUse;
 import me.fullpotato.badlandscaves.Deaths.BlessedAppleEat;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.Effects.HungerLimit;
 import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
+import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.Loot.*;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AugmentedDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
@@ -46,9 +46,12 @@ import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
 import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter_1_16_R2;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.Research.UseResearchTable;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.BackroomsManager;
-import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.DescensionPlayerMove;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.DescensionReset;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.ForceFixDescensionValues;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.*;
 import me.fullpotato.badlandscaves.SupernaturalPowers.SoulCampfire;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.*;
@@ -60,6 +63,8 @@ import me.fullpotato.badlandscaves.Thirst.ToxicWaterBottling;
 import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInRain;
 import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInWater;
 import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
+import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
+import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
@@ -75,10 +80,148 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public final class BadlandsCaves extends JavaPlugin {
+    private PlayerJoinLeave playerJoinLeave;
+    private NaturalThirstDecrease naturalThirstDecrease;
+    private IncreaseToxInWater increaseToxInWater;
+    private DeathHandler deathHandler;
+    private BlessedAppleEat blessedAppleEat;
+    private CauldronMenu cauldronMenu;
+    private ToxicWaterBottling toxicWaterBottling;
+    private Drinking drinking;
+    private BlazePowder blazePowder;
+    private PurgeEssence purgeEssence;
+    private StopCustomItemsInteract stopCustomItemsInteract;
+    private UseTaintPowder useTaintPowder;
+    private ZombieDeathLoot zombieDeathLoot;
+    private GetFishingCrate getFishingCrate;
+    private UseFishingCrate useFishingCrate;
+    private SkeleBuff skeleBuff;
+    private ZombieBuff zombieBuff;
+    private CreeperBuff creeperBuff;
+    private SpiderBuff spiderBuff;
+    private PigZombieBuff pigZombieBuff;
+    private SilverfishBuff silverfishBuff;
+    private BlazeBuff blazeBuff;
+    private GhastBuff ghastBuff;
+    private PhantomBuff phantomBuff;
+    private WitchBuff witchBuff;
+    private SwapPowers swapPowers;
+    private Displace displace;
+    private StopPowersInvInteract stopPowersInvInteract;
+    private Withdraw withdraw;
+    private EnhancedEyes enhancedEyes;
+    private Possession possession;
+    private IncreaseToxInRain increaseToxInRain;
+    private EnduranceCancelHunger enduranceCancelHunger;
+    private Agility agility;
+    private DescensionPlayerMove descensionPlayerMove;
+    private SoulDrop soulDrop;
+    private HellEssence hellEssence;
+    private MagicEssence magicEssence;
+    private MergedSouls mergedSouls;
+    private SoulCrystalIncomplete soulCrystalIncomplete;
+    private UseIncompleteSoulCrystal useIncompleteSoulCrystal;
+    private ReflectionBuild reflectionBuild;
+    private ReflectionZombie reflectionZombie;
+    private PlayerUnderSht playerUnderSht;
+    private EndGame endGame;
+    private LimitActions limitActions;
+    private UseCompleteSoulCrystal useCompleteSoulCrystal;
+    private MushroomStew mushroomStew;
+    private DestroySpawner destroySpawner;
+    private UseRune useRune;
+    private UseChargedRune useChargedRune;
+    private BackroomsManager backroomsManager;
+    private TreasureGear treasureGear;
+    private EXPBottle eXPBottle;
+    private SerratedSwords serratedSwords;
+    private UseSerrated useSerrated;
+    private Voltshock voltshock;
+    private UseVoltshock useVoltshock;
+    private Corrosive corrosive;
+    private UseCorrosive useCorrosive;
+    private CustomBows customBows;
+    private WitherBossFight witherBossFight;
+    private Apples apples;
+    private NoMending noMending;
+    private ShieldBlocking shieldBlocking;
+    private Shield shield;
+    private CraftingGuide craftingGuide;
+    private TitaniumOre titaniumOre;
+    private TitaniumBar titaniumBar;
+    private StarlightComponents starlightComponents;
+    private UseForeverFish useForeverFish;
+    private StarlightArmor starlightArmor;
+    private EnergyCore energyCore;
+    private Voidmatter voidmatter;
+    private StarlightTools starlightTools;
+    private StarlightCharge starlightCharge;
+    private StarlightBlasterMechanism starlightBlasterMechanism;
+    private SpawnInhabitants spawnInhabitants;
+    private NoOxygen noOxygen;
+    private NoFood noFood;
+    private Freezing freezing;
+    private UseDimensionalAnchor useDimensionalAnchor;
+    private PiglinBuff piglinBuff;
+    private HoglinBuff hoglinBuff;
+    private Silencer silencer;
+    private SilencerBlock silencerBlock;
+    private Canteen canteen;
+    private UseCanteen useCanteen;
+    private SoulLantern soulLantern;
+    private UseSoulLantern useSoulLantern;
+    private PreservationTotem preservationTotem;
+    private StarlightSentryMechanism starlightSentryMechanism;
+    private UseChambersBag useChambersBag;
+    private AugmentedDrops augmentedDrops;
+    private NebuliteInstaller nebuliteInstaller;
+    private StarlightSaberMechanism starlightSaberMechanism;
+    private NebuliteThruster nebuliteThruster;
+    private NebuliteOxygenator nebuliteOxygenator;
+    private NebuliteSmolderingFlames nebuliteSmolderingFlames;
+    private NebuliteShockAbsorber nebuliteShockAbsorber;
+    private NebuliteForcefield nebuliteForcefield;
+    private NebuliteLightSpeed nebuliteLightSpeed;
+    private NebuliteBigSmash nebuliteBigSmash;
+    private NebuliteDecisiveDisintegration nebuliteDecisiveDisintegration;
+    private NebulitePropulsionBash nebulitePropulsionBash;
+    private NebuliteShieldThruster nebuliteShieldThruster;
+    private NebuliteCounterattack nebuliteCounterattack;
+    private SoulCampfire soulCampfire;
+    private ArtifactTenaciousTrickery artifactTenaciousTrickery;
+    private ArtifactEclipsedShadows artifactEclipsedShadows;
+    private ArtifactManaWarding artifactManaWarding;
+    private ArtifactFleetingSpirits artifactFleetingSpirits;
+    private ArtifactConvergingSwings artifactConvergingSwings;
+    private ArtifactTravellingBlades artifactTravellingBlades;
+    private ArtifactHasteWind artifactHasteWind;
+    private ArtifactBloodsappingBayonet artifactBloodsappingBayonet;
+    private ArtifactSightStealing artifactSightStealing;
+    private ArtifactBloodsappingBow artifactBloodsappingBow;
+    private ArtifactSummonersRift artifactSummonersRift;
+    private ArtifactEmancipatedEyes artifactEmancipatedEyes;
+    private ArtifactDiggingDoppelganger artifactDiggingDoppelganger;
+    private ArtifactMomentousMomentum artifactMomentousMomentum;
+    private PreventWaterBucketPVP preventWaterBucketPVP;
+    private StarterSapling starterSapling;
+    private AnvilRepair anvilRepair;
+    private FishWater fishWater;
+    private ResearchTableItems researchTableItems;
+    private UseResearchTable useResearchTable;
+    private PregenerateDimensions pregenerateDimensions;
+    private UseNebuliteCrate useNebuliteCrate;
+    private DimensionStructureTable dimensionStructureTable;
+    private UnloadDimensions unloadDimensions;
+    private PlayerEffects playerEffects;
+    private HungerLimit hungerLimit;
+    private StarlightPaxelMechanism starlightPaxelMechanism;
+    private SlowBreak slowBreak;
+    private PreventTechUse preventTechUse;
+    private ManaBarManager manaBarManager;
+    private PreventMagicUse preventMagicUse;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
-    private File optionsFile;
 
     private FileConfiguration systemConfig;
     private File systemFile;
@@ -105,11 +248,11 @@ public final class BadlandsCaves extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        loadWorldNames();
         loadNMS();
         createOptionsConfig();
-        customItemManager = new CustomItemManager(this);
         createSystemConfig();
-        loadWorldNames();
+        initializeFields();
         loadCustomWorlds();
         registerEvents();
         loadCommands();
@@ -123,9 +266,160 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getServer().getScheduler().cancelTasks(this);
     }
 
+    public void initializeFields() {
+        EnchantmentStorage enchantmentStorage = new EnchantmentStorage(this);
+        pregenerateDimensions = new PregenerateDimensions(this);
+        customItemManager = new CustomItemManager(this, enchantmentStorage, pregenerateDimensions);
+        GuideBook guideBook = new GuideBook(this);
+        playerEffects = new PlayerEffects(this);
+        naturalThirstDecrease = new NaturalThirstDecrease(this, playerEffects);
+        starlightArmor = new StarlightArmor(this);
+        starlightTools = new StarlightTools(this);
+        energyCore = new EnergyCore(this);
+        starlightCharge = new StarlightCharge(this, starlightArmor, starlightTools, enchantmentStorage, energyCore);
+        voidmatter = new Voidmatter(this);
+        ArtifactManager artifactManager = new ArtifactManager(this);
+        artifactFleetingSpirits = new ArtifactFleetingSpirits(this, voidmatter, artifactManager);
+        NebuliteManager nebuliteManager = new NebuliteManager(this, starlightCharge, starlightArmor, starlightTools);
+        EnvironmentalHazards environmentalHazards = new EnvironmentalHazards(this);
+        increaseToxInWater = new IncreaseToxInWater(this, starlightArmor, starlightCharge, artifactManager, voidmatter, artifactFleetingSpirits, nebuliteManager, environmentalHazards);
+        deathHandler = new DeathHandler(this, playerEffects);
+        blessedAppleEat = new BlessedAppleEat(this, playerEffects);
+        cauldronMenu = new CauldronMenu(this);
+        toxicWaterBottling = new ToxicWaterBottling(this);
+        blazePowder = new BlazePowder(this);
+        purgeEssence = new PurgeEssence(this);
+        stopCustomItemsInteract = new StopCustomItemsInteract(this, starlightCharge, voidmatter);
+        useTaintPowder = new UseTaintPowder(this);
+        zombieDeathLoot = new ZombieDeathLoot();
+        getFishingCrate = new GetFishingCrate(this);
+        useFishingCrate = new UseFishingCrate(this);
+        skeleBuff = new SkeleBuff(this);
+        zombieBuff = new ZombieBuff(this);
+        creeperBuff = new CreeperBuff(this);
+        spiderBuff = new SpiderBuff(this);
+        pigZombieBuff = new PigZombieBuff(this);
+        silverfishBuff = new SilverfishBuff(this);
+        blazeBuff = new BlazeBuff(this);
+        ghastBuff = new GhastBuff(this);
+        phantomBuff = new PhantomBuff(this);
+        witchBuff = new WitchBuff(this);
+        swapPowers = new SwapPowers(this);
+        manaBarManager = new ManaBarManager(this);
+        ArtifactDistractingDoppelganger artifactDistractingDoppelganger = new ArtifactDistractingDoppelganger(this, voidmatter, artifactManager);
+        displace = new Displace(this, artifactManager, manaBarManager, artifactDistractingDoppelganger);
+        stopPowersInvInteract = new StopPowersInvInteract(this);
+        enhancedEyes = new EnhancedEyes(this, artifactManager);
+        possession = new Possession(this);
+        withdraw = new Withdraw(this, artifactManager, possession, voidmatter);
+        playerJoinLeave = new PlayerJoinLeave(this, guideBook, withdraw);
+        increaseToxInRain = new IncreaseToxInRain(this, starlightArmor, starlightCharge, nebuliteManager, playerEffects, environmentalHazards);
+        enduranceCancelHunger = new EnduranceCancelHunger(this);
+        agility = new Agility(this);
+        InventorySerialize inventorySerialize = new InventorySerialize(this);
+        useIncompleteSoulCrystal = new UseIncompleteSoulCrystal(this, inventorySerialize);
+        descensionPlayerMove = new DescensionPlayerMove(this, deathHandler, useIncompleteSoulCrystal, inventorySerialize);
+        soulDrop = new SoulDrop(this);
+        hellEssence = new HellEssence(this);
+        magicEssence = new MagicEssence(this);
+        mergedSouls = new MergedSouls(this);
+        soulCrystalIncomplete = new SoulCrystalIncomplete(this);
+        reflectionBuild = new ReflectionBuild(this);
+        reflectionZombie = new ReflectionZombie(this);
+        playerUnderSht = new PlayerUnderSht(this);
+        endGame = new EndGame(this, deathHandler, useIncompleteSoulCrystal);
+        limitActions = new LimitActions(this, useIncompleteSoulCrystal);
+        useCompleteSoulCrystal = new UseCompleteSoulCrystal(this, inventorySerialize, deathHandler, descensionPlayerMove);
+        mushroomStew = new MushroomStew();
+        destroySpawner = new DestroySpawner(this);
+        useRune = new UseRune(this);
+        useChargedRune = new UseChargedRune(this);
+        backroomsManager = new BackroomsManager(this, inventorySerialize);
+        drinking = new Drinking(this, playerEffects, backroomsManager);
+        treasureGear = new TreasureGear();
+        eXPBottle = new EXPBottle();
+        serratedSwords = new SerratedSwords(this, energyCore);
+        useSerrated = new UseSerrated(this, serratedSwords);
+        voltshock = new Voltshock(this, energyCore);
+        useVoltshock = new UseVoltshock(this, voltshock);
+        corrosive = new Corrosive(this, energyCore);
+        useCorrosive = new UseCorrosive(this, starlightArmor, starlightCharge, nebuliteManager, corrosive);
+        customBows = new CustomBows(this);
+        witherBossFight = new WitherBossFight(this);
+        apples = new Apples(this);
+        noMending = new NoMending(this);
+        shieldBlocking = new ShieldBlocking(this, starlightTools, starlightCharge, nebuliteManager);
+        shield = new Shield(this);
+        craftingGuide = new CraftingGuide(this);
+        titaniumOre = new TitaniumOre(this);
+        titaniumBar = new TitaniumBar(this);
+        starlightComponents = new StarlightComponents(this);
+        useForeverFish = new UseForeverFish(this);
+        starlightBlasterMechanism = new StarlightBlasterMechanism(this, starlightCharge, starlightTools, nebuliteManager);
+        spawnInhabitants = new SpawnInhabitants(this);
+        noOxygen = new NoOxygen(this, environmentalHazards);
+        noFood = new NoFood(environmentalHazards);
+        freezing = new Freezing(this, environmentalHazards);
+        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler);
+        piglinBuff = new PiglinBuff(this);
+        hoglinBuff = new HoglinBuff(this);
+        silencer = new Silencer(this);
+        silencerBlock = new SilencerBlock(this);
+        canteen = new Canteen(this);
+        useCanteen = new UseCanteen(this, drinking);
+        soulLantern = new SoulLantern(this);
+        useSoulLantern = new UseSoulLantern(this);
+        preservationTotem = new PreservationTotem(this);
+        starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism);
+        useChambersBag = new UseChambersBag(this);
+        augmentedDrops = new AugmentedDrops(this);
+        NebuliteStatChanges nebuliteStatChanges = new NebuliteStatChanges(this, nebuliteManager, starlightCharge, starlightArmor, starlightTools, enchantmentStorage);
+        nebuliteInstaller = new NebuliteInstaller(this, starlightCharge, nebuliteManager, nebuliteStatChanges);
+        starlightSaberMechanism = new StarlightSaberMechanism(this, starlightTools, starlightCharge, nebuliteManager, useVoltshock, useCorrosive, useSerrated);
+        nebuliteThruster = new NebuliteThruster(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteOxygenator = new NebuliteOxygenator(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteSmolderingFlames = new NebuliteSmolderingFlames(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteShockAbsorber = new NebuliteShockAbsorber(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteForcefield = new NebuliteForcefield(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteLightSpeed = new NebuliteLightSpeed(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteBigSmash = new NebuliteBigSmash(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteDecisiveDisintegration = new NebuliteDecisiveDisintegration(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebulitePropulsionBash = new NebulitePropulsionBash(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteShieldThruster = new NebuliteShieldThruster(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteCounterattack = new NebuliteCounterattack(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        soulCampfire = new SoulCampfire(this, swapPowers, artifactManager);
+        artifactTenaciousTrickery = new ArtifactTenaciousTrickery(this, voidmatter, artifactManager);
+        artifactEclipsedShadows = new ArtifactEclipsedShadows(this, voidmatter, artifactManager, soulCampfire, manaBarManager, swapPowers);
+        artifactManaWarding = new ArtifactManaWarding(this, voidmatter, artifactManager);
+        artifactConvergingSwings = new ArtifactConvergingSwings(this, voidmatter, artifactManager);
+        artifactTravellingBlades = new ArtifactTravellingBlades(this, voidmatter, artifactManager);
+        artifactHasteWind = new ArtifactHasteWind(this, voidmatter, artifactManager);
+        artifactBloodsappingBayonet = new ArtifactBloodsappingBayonet(this, voidmatter, artifactManager);
+        artifactSightStealing = new ArtifactSightStealing(this, voidmatter, artifactManager);
+        artifactBloodsappingBow = new ArtifactBloodsappingBow(this, voidmatter, artifactManager);
+        artifactSummonersRift = new ArtifactSummonersRift(this, voidmatter, artifactManager, artifactFleetingSpirits);
+        artifactEmancipatedEyes = new ArtifactEmancipatedEyes(this, voidmatter, artifactManager, enhancedEyes);
+        starlightPaxelMechanism = new StarlightPaxelMechanism(this, starlightTools, starlightCharge);
+        artifactDiggingDoppelganger = new ArtifactDiggingDoppelganger(this, voidmatter, artifactManager, starlightPaxelMechanism);
+        artifactMomentousMomentum = new ArtifactMomentousMomentum(this);
+        preventWaterBucketPVP = new PreventWaterBucketPVP();
+        starterSapling = new StarterSapling(this);
+        anvilRepair = new AnvilRepair(this);
+        fishWater = new FishWater(this);
+        researchTableItems = new ResearchTableItems(this);
+        useResearchTable = new UseResearchTable(this);
+        useNebuliteCrate = new UseNebuliteCrate(this);
+        dimensionStructureTable = new DimensionStructureTable(this);
+        unloadDimensions = new UnloadDimensions(this);
+        hungerLimit = new HungerLimit();
+        slowBreak = new SlowBreak(this);
+        preventTechUse = new PreventTechUse(this, voidmatter, enchantmentStorage);
+        preventMagicUse = new PreventMagicUse(this, starlightCharge, enchantmentStorage);
+    }
+
     //CONFIG
     private void createOptionsConfig() {
-        optionsFile = new File(getDataFolder(), "options.yml");
+        File optionsFile = new File(getDataFolder(), "options.yml");
         if (!optionsFile.exists()) {
             optionsFile.getParentFile().mkdirs();
             saveResource("options.yml", false);
@@ -198,144 +492,144 @@ public final class BadlandsCaves extends JavaPlugin {
     //EVENTS
     public void registerEvents() {
         final Listener[] events = {
-                new PlayerJoinLeave(this),
-                new NaturalThirstDecrease(this),
-                new IncreaseToxInWater(this),
-                new DeathHandler(this),
-                new BlessedAppleEat(this),
-                new CauldronMenu(this),
-                new ToxicWaterBottling(this),
-                new Drinking(this),
-                new ToxicWaterBottling(this),
-                new BlazePowder(this),
-                new PurgeEssence(this),
-                new StopCustomItemsInteract(this),
-                new UseTaintPowder(this),
-                new ZombieDeathLoot(),
-                new GetFishingCrate(this),
-                new UseFishingCrate(this),
-                new SkeleBuff(this),
-                new ZombieBuff(this),
-                new CreeperBuff(this),
-                new SpiderBuff(this),
-                new PigZombieBuff(this),
-                new SilverfishBuff(this),
-                new BlazeBuff(this),
-                new GhastBuff(this),
-                new PhantomBuff(this),
-                new WitchBuff(this),
-                new SwapPowers(this),
-                new Displace(this),
-                new StopPowersInvInteract(this),
-                new Withdraw(this),
-                new EnhancedEyes(this),
-                new Possession(this),
-                new IncreaseToxInRain(this),
-                new EnduranceCancelHunger(this),
-                new Agility(this),
-                new DescensionPlayerMove(this),
-                new SoulDrop(this),
-                new HellEssence(this),
-                new MagicEssence(this),
-                new MergedSouls(this),
-                new SoulCrystalIncomplete(this),
-                new UseIncompleteSoulCrystal(this),
-                new ReflectionBuild(this),
-                new ReflectionZombie(this),
-                new PlayerUnderSht(this),
-                new EndGame(this),
-                new LimitActions(this),
-                new UseCompleteSoulCrystal(this),
-                new MushroomStew(),
-                new DestroySpawner(this),
-                new UseRune(this),
-                new UseChargedRune(this),
-                new BackroomsManager(this),
-                new TreasureGear(),
-                new EXPBottle(),
-                new SerratedSwords(this),
-                new UseSerrated(this),
-                new Voltshock(this),
-                new UseVoltshock(this),
-                new Corrosive(this),
-                new UseCorrosive(this),
-                new CustomBows(this),
-                new WitherBossFight(this),
-                new Apples(this),
-                new NoMending(this),
-                new ShieldBlocking(this),
-                new Shield(this),
-                new CraftingGuide(this),
-                new TitaniumOre(this),
-                new TitaniumBar(this),
-                new StarlightComponents(this),
-                new UseForeverFish(this),
-                new StarlightArmor(this),
-                new EnergyCore(this),
-                new Voidmatter(this),
-                new StarlightTools(this),
-                new StarlightCharge(this),
-                new StarlightBlasterMechanism(this),
-                new SpawnInhabitants(this),
-                new NoOxygen(this),
-                new NoFood(this),
-                new Freezing(this),
-                new UseDimensionalAnchor(this),
-                new PiglinBuff(this),
-                new HoglinBuff(this),
-                new Silencer(this),
-                new SilencerBlock(this),
-                new Canteen(this),
-                new UseCanteen(this),
-                new SoulLantern(this),
-                new UseSoulLantern(this),
-                new PreservationTotem(this),
-                new StarlightSentryMechanism(this),
-                new UseChambersBag(this),
-                new AugmentedDrops(this),
-                //new RestlessNight(this),
-                new NebuliteInstaller(this),
-                new StarlightSaberMechanism(this),
-                new NebuliteThruster(this),
-                new NebuliteOxygenator(this),
-                new NebuliteSmolderingFlames(this),
-                new NebuliteShockAbsorber(this),
-                new NebuliteForcefield(this),
-                new NebuliteLightSpeed(this),
-                new NebuliteBigSmash(this),
-                new NebuliteDecisiveDisintegration(this),
-                new NebulitePropulsionBash(this),
-                new NebuliteShieldThruster(this),
-                new NebuliteCounterattack(this),
-                new SoulCampfire(this),
-                new ArtifactTenaciousTrickery(this),
-                new ArtifactEclipsedShadows(this),
-                new ArtifactManaWarding(this),
-                new ArtifactFleetingSpirits(this),
-                new ArtifactConvergingSwings(this),
-                new ArtifactTravellingBlades(this),
-                new ArtifactHasteWind(this),
-                new ArtifactBloodsappingBayonet(this),
-                new ArtifactSightStealing(this),
-                new ArtifactBloodsappingBow(this),
-                new ArtifactSummonersRift(this),
-                new ArtifactEmancipatedEyes(this),
-                new ArtifactDiggingDoppelganger(this),
-                new ArtifactMomentousMomentum(this),
-                new PreventWaterBucketPVP(),
-                new StarterSapling(this),
-                new AnvilRepair(this),
-                new FishWater(this),
-                new ResearchTableItems(this),
-                new UseResearchTable(this),
-                new PregenerateDimensions(this),
-                new UseNebuliteCrate(this),
-                new DimensionStructureTable(this),
-                new UnloadDimensions(this),
-                new PlayerEffects(this),
-                new HungerLimit(),
-                new StarlightPaxelMechanism(this),
-                new SlowBreak(this),
+                playerJoinLeave,
+                naturalThirstDecrease,
+                increaseToxInWater,
+                deathHandler,
+                blessedAppleEat,
+                cauldronMenu,
+                toxicWaterBottling,
+                drinking,
+                blazePowder,
+                purgeEssence,
+                stopCustomItemsInteract,
+                useTaintPowder,
+                zombieDeathLoot,
+                getFishingCrate,
+                useFishingCrate,
+                skeleBuff,
+                zombieBuff,
+                creeperBuff,
+                spiderBuff,
+                pigZombieBuff,
+                silverfishBuff,
+                blazeBuff,
+                ghastBuff,
+                phantomBuff,
+                witchBuff,
+                swapPowers,
+                displace,
+                stopPowersInvInteract,
+                withdraw,
+                enhancedEyes,
+                possession,
+                increaseToxInRain,
+                enduranceCancelHunger,
+                agility,
+                descensionPlayerMove,
+                soulDrop,
+                hellEssence,
+                magicEssence,
+                mergedSouls,
+                soulCrystalIncomplete,
+                useIncompleteSoulCrystal,
+                reflectionBuild,
+                reflectionZombie,
+                playerUnderSht,
+                endGame,
+                limitActions,
+                useCompleteSoulCrystal,
+                mushroomStew,
+                destroySpawner,
+                useRune,
+                useChargedRune,
+                backroomsManager,
+                treasureGear,
+                eXPBottle,
+                serratedSwords,
+                useSerrated,
+                voltshock,
+                useVoltshock,
+                corrosive,
+                useCorrosive,
+                customBows,
+                witherBossFight,
+                apples,
+                noMending,
+                shieldBlocking,
+                shield,
+                craftingGuide,
+                titaniumOre,
+                titaniumBar,
+                starlightComponents,
+                useForeverFish,
+                starlightArmor,
+                energyCore,
+                voidmatter,
+                starlightTools,
+                starlightCharge,
+                starlightBlasterMechanism,
+                spawnInhabitants,
+                noOxygen,
+                noFood,
+                freezing,
+                useDimensionalAnchor,
+                piglinBuff,
+                hoglinBuff,
+                silencer,
+                silencerBlock,
+                canteen,
+                useCanteen,
+                soulLantern,
+                useSoulLantern,
+                preservationTotem,
+                starlightSentryMechanism,
+                useChambersBag,
+                augmentedDrops,
+                nebuliteInstaller,
+                starlightSaberMechanism,
+                nebuliteThruster,
+                nebuliteOxygenator,
+                nebuliteSmolderingFlames,
+                nebuliteShockAbsorber,
+                nebuliteForcefield,
+                nebuliteLightSpeed,
+                nebuliteBigSmash,
+                nebuliteDecisiveDisintegration,
+                nebulitePropulsionBash,
+                nebuliteShieldThruster,
+                nebuliteCounterattack,
+                soulCampfire,
+                artifactTenaciousTrickery,
+                artifactEclipsedShadows,
+                artifactManaWarding,
+                artifactFleetingSpirits,
+                artifactConvergingSwings,
+                artifactTravellingBlades,
+                artifactHasteWind,
+                artifactBloodsappingBayonet,
+                artifactSightStealing,
+                artifactBloodsappingBow,
+                artifactSummonersRift,
+                artifactEmancipatedEyes,
+                artifactDiggingDoppelganger,
+                artifactMomentousMomentum,
+                preventWaterBucketPVP,
+                starterSapling,
+                anvilRepair,
+                fishWater,
+                researchTableItems,
+                useResearchTable,
+                pregenerateDimensions,
+                useNebuliteCrate,
+                dimensionStructureTable,
+                unloadDimensions,
+                playerEffects,
+                hungerLimit,
+                starlightPaxelMechanism,
+                slowBreak,
+                preventTechUse,
+                preventMagicUse,
         };
 
         for (Listener event : events) {
@@ -374,7 +668,7 @@ public final class BadlandsCaves extends JavaPlugin {
 
         this.getCommand("craftguide").setExecutor(new CraftingGuideCommand(this));
 
-        this.getCommand("backrooms").setExecutor(new BackroomsCommand(this));
+        this.getCommand("backrooms").setExecutor(new BackroomsCommand(this, backroomsManager));
         this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
 
         this.getCommand("world").setExecutor(new WorldCommand(this));
@@ -389,55 +683,41 @@ public final class BadlandsCaves extends JavaPlugin {
         new DisplaceParticleRunnable(this).runTaskTimerAsynchronously(this, 0, 2);
         new WithdrawIndicatorRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
         new PossessionIndicatorRunnable(this).runTaskTimer(this, 0, 1);
-        new ManaBarManager(this).runTaskTimer(this, 0, 5);
+        manaBarManager.runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 5);
-        new DescensionReset(this).runTaskTimer(this, 0, 60);
-        new LostSoulParticle(this).runTaskTimer(this, 0, 3);
-        new DetectedBar(this).runTaskTimer(this, 0, 3);
-        new ShrineCapture(this).runTaskTimer(this, 0 ,5);
-        new DescensionTimeLimit(this).runTaskTimer(this, 0, 20);
-        new DetectionDecrease(this).runTaskTimer(this, 0, 20);
-        new ExitPortal(this).runTaskTimer(this, 0, 5);
-        new ZombieBossBehavior(this).runTaskTimer(this, 0, 0);
-        new LimitActions(this).runTaskTimer(this, 0, 20);
+        new DescensionReset(this).runTaskTimer(this, 0, 120);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
         new AugmentedSpider(this).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this).runTaskTimer(this, 0, 10);
         new Surface(this).runTaskTimer(this, 0, 100);
-        new StarlightBlasterMechanism(this).runTaskTimer(this, 0, 20);
+        starlightBlasterMechanism.runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this).runTaskTimer(this, 0, 20);
         new BewildermentRunnable(this).runTaskTimer(this, 0, 100);
-        new NoOxygen(this).runTaskTimer(this, 0, 10);
+        noOxygen.runTaskTimer(this, 0, 10);
         new LavaFloorRunnable(this).runTaskTimer(this, 0, 20);
         new NoFloorRunnable(this).runTaskTimer(this, 0, 10);
         new ParanoiaRunnable(this).runTaskTimer(this, 0, 80);
-        new Freezing(this).runTaskTimer(this, 0, 5);
-        new PreventNonPoweredUsage(this).runTaskTimerAsynchronously(this, 0, 0);
+        freezing.runTaskTimer(this, 0, 5);
+        preventTechUse.runTaskTimer(this, 0, 200);
+        preventMagicUse.runTaskTimer(this, 0, 200);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
-        new NebuliteCounterattack(this).runTaskTimer(this, 0, 0);
-        new ArtifactHasteWind(this).runTaskTimer(this, 0, 0);
+        nebuliteCounterattack.runTaskTimer(this, 0, 0);
+        artifactHasteWind.runTaskTimer(this, 0, 0);
         new ArtifactMomentousMomentum(this).runTaskTimer(this, 0, 0);
         new PregenerateDimensions(this).runTaskTimer(this, 600, 2000);
 
-
-        WitherBossFight witherFight = new WitherBossFight(this);
-        witherFight.checkIfEnded();
-        witherFight.portalDestroyTimer();
-
-        NebulitePropulsionBash propulsionBash = new NebulitePropulsionBash(this);
-        propulsionBash.cooldownMechanism();
+        witherBossFight.checkIfEnded();
+        witherBossFight.portalDestroyTimer();
+        nebulitePropulsionBash.cooldownMechanism();
     }
 
     //RECIPES
     public void loadCraftingRecipes() {
-        BlazePowder blazePowder = new BlazePowder(this);
         blazePowder.tiny_blaze_powder_craft();
         blazePowder.back_to_large();
 
-        PurgeEssence purgeEssence = new PurgeEssence(this);
         purgeEssence.purge_essence_craft();
 
-        Apples apples = new Apples(this);
         apples.craftNotchApple();
         apples.craftBlessedApple();
         apples.craftEnchantedBlessedApple();
@@ -448,26 +728,20 @@ public final class BadlandsCaves extends JavaPlugin {
         Sand sand = new Sand(this);
         sand.craft_sand();
 
-        HellEssence hellEssence = new HellEssence(this);
         hellEssence.craft_hell_essence();
 
-        MagicEssence magicEssence = new MagicEssence(this);
         magicEssence.magic_essence_craft();
 
-        MergedSouls mergedSouls = new MergedSouls(this);
         mergedSouls.merge_souls();
 
-        SoulCrystalIncomplete soulCrystalIncomplete = new SoulCrystalIncomplete(this);
         soulCrystalIncomplete.soul_crystal_incomplete();
 
-        Voltshock voltshock = new Voltshock(this);
         voltshock.craft_battery();
         voltshock.craft_shocker();
         voltshock.modify_sword();
         voltshock.charge_sword();
         voltshock.craft_arrow();
 
-        Corrosive corrosive = new Corrosive(this);
         corrosive.craftCorrosiveSubstance();
         corrosive.craftCorrosiveSword();
         corrosive.craftCorrosiveArrow();
@@ -475,19 +749,17 @@ public final class BadlandsCaves extends JavaPlugin {
         Quartz quartz = new Quartz(this);
         quartz.craft();
 
-        Shield shield = new Shield(this);
         shield.craftRegularShield();
         shield.craftStoneShield();
         shield.craftIronShield();
         shield.craftDiamondShield();
         shield.craftNetheriteShield();
 
-        TitaniumBar titaniumBar = new TitaniumBar(this);
+
         titaniumBar.fragmentIntoBar();
         titaniumBar.craftTitaniumRod();
         titaniumBar.reinforceBarRecipe();
 
-        StarlightComponents starlightComponents = new StarlightComponents(this);
         starlightComponents.craftBinding();
         starlightComponents.craftGoldCable();
         starlightComponents.craftNetherStarFragment();
@@ -497,30 +769,24 @@ public final class BadlandsCaves extends JavaPlugin {
         starlightComponents.craftEnergium();
         starlightComponents.craftPhotonEmitter();
 
-        StarlightCharge starlightCharge = new StarlightCharge(this);
         starlightCharge.chargeRecipe();
 
-        StarlightArmor starlightArmor = new StarlightArmor(this);
         starlightArmor.helmetRecipe();
         starlightArmor.chestplateRecipe();
         starlightArmor.leggingsRecipe();
         starlightArmor.bootsRecipe();
 
-        StarlightTools starlightTools = new StarlightTools(this);
         starlightTools.saberRecipe();
         starlightTools.shieldRecipe();
         starlightTools.blasterRecipe();
         starlightTools.paxelRecipe();
         starlightTools.sentryRecipe();
 
-        Silencer silencer = new Silencer(this);
         silencer.wavelengthDisruptorRecipe();
         silencer.silencerRecipe();
 
-        EnergyCore energyCore = new EnergyCore(this);
-        energyCore.energyCoreRecipe();
+        energyCore.energyCoreRecipes();
 
-        Voidmatter voidmatter = new Voidmatter(this);
         voidmatter.stickRecipe();
         voidmatter.stringRecipe();
         voidmatter.helmetRecipe();
@@ -533,14 +799,11 @@ public final class BadlandsCaves extends JavaPlugin {
         voidmatter.shovelRecipe();
         voidmatter.axeRecipe();
 
-        Canteen canteen = new Canteen(this);
         canteen.canteenRecipe();
         canteen.fillCanteen();
 
-        SoulLantern soulLantern = new SoulLantern(this);
         soulLantern.soulLanternRecipe();
 
-        ResearchTableItems researchTableItems = new ResearchTableItems(this);
         researchTableItems.convexLensRecipe();
         researchTableItems.magnifyingGlassRecipe();
         researchTableItems.researchTableRecipe();

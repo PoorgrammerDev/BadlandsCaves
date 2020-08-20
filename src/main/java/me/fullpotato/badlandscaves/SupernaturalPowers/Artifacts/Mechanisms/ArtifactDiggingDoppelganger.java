@@ -1,11 +1,13 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.StarlightPaxelMechanism;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -46,10 +48,11 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
             Material.BLACKSTONE
     };
 
-    public ArtifactDiggingDoppelganger(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactDiggingDoppelganger(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, StarlightPaxelMechanism paxelMechanism) {
+        super(plugin, voidmatter, artifactManager);
         fakePlayerNMS = plugin.getFakePlayerNMS();
         enhancedEyesNMS = plugin.getEnhancedEyesNMS();
+        this.paxelMechanism = paxelMechanism;
 
         this.faceYawMap = new HashMap<>();
         this.faceYawMap.put(BlockFace.SOUTH, 0);
@@ -64,7 +67,6 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
         this.lightLevelMap = new HashMap<>();
         lightLevelMap.put(Material.TORCH, 1);
         lightLevelMap.put(Material.SOUL_TORCH, 5);
-        paxelMechanism = new StarlightPaxelMechanism(plugin);
         cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost") * 3;
         drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain") * 5;
     }

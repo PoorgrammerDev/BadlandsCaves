@@ -16,11 +16,11 @@ public abstract class NebuliteMechanisms {
     protected final StarlightCharge starlightCharge;
     protected final NebuliteManager nebuliteManager;
 
-    public NebuliteMechanisms(BadlandsCaves plugin) {
+    public NebuliteMechanisms(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         this.plugin = plugin;
-        this.starlightArmor = new StarlightArmor(plugin);
-        this.starlightTools = new StarlightTools(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
+        this.starlightArmor = starlightArmor;
+        this.starlightTools = starlightTools;
+        this.starlightCharge = starlightCharge;
+        this.nebuliteManager = nebuliteManager;
     }
 }

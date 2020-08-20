@@ -16,9 +16,9 @@ import org.bukkit.inventory.ItemStack;
 public class BlessedAppleEat implements Listener {
     private final BadlandsCaves plugin;
     private final PlayerEffects playerEffects;
-    public BlessedAppleEat(BadlandsCaves bcav) {
+    public BlessedAppleEat(BadlandsCaves bcav, PlayerEffects playerEffects) {
         plugin = bcav;
-        playerEffects = new PlayerEffects(plugin);
+        this.playerEffects = playerEffects;
     }
 
     @EventHandler

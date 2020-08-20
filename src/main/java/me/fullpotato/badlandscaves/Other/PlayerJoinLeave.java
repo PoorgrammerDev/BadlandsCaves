@@ -21,9 +21,13 @@ public class PlayerJoinLeave implements Listener {
 
     private final BadlandsCaves plugin;
     private final GuideBook guideBook;
-    public PlayerJoinLeave(BadlandsCaves bcav) {
+    private final Withdraw withdraw;
+    private final InitializePlayer data;
+    public PlayerJoinLeave(BadlandsCaves bcav, GuideBook guideBook, Withdraw withdraw) {
         plugin = bcav;
-        guideBook = new GuideBook(plugin);
+        this.guideBook = guideBook;
+        this.withdraw = withdraw;
+        data = new InitializePlayer(plugin);
     }
 
     @EventHandler
@@ -33,7 +37,6 @@ public class PlayerJoinLeave implements Listener {
 
         //NEW PLAYER--------------------------------
         if (!player.hasPlayedBefore() || (!(PlayerScore.INITIALIZED.hasScore(plugin, player))) || (byte) PlayerScore.INITIALIZED.getScore(plugin, player) == (byte) 0) {
-            InitializePlayer data = new InitializePlayer(plugin);
             data.initializePlayer(player);
 
             if (!player.hasPlayedBefore()) {
@@ -80,8 +83,7 @@ public class PlayerJoinLeave implements Listener {
                     final double z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
 
                     final Location location = new Location(origworld, x, y, z);
-                    Withdraw sendback = new Withdraw(plugin);
-                    sendback.exitWithdraw(player, location, player.getLocation());
+                    withdraw.exitWithdraw(player, location, player.getLocation());
                 }
             }
 

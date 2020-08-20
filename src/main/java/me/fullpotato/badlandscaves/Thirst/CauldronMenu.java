@@ -46,7 +46,6 @@ public class CauldronMenu implements Listener {
         recipeKey = new NamespacedKey(plugin, "recipe");
         locationKey = new NamespacedKey(plugin, "location");
         locationSave = new LocationSave(plugin);
-
     }
 
     @EventHandler

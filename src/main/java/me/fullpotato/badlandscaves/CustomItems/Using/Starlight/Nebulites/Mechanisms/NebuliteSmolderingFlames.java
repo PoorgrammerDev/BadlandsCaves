@@ -1,7 +1,11 @@
 package me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightArmor;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -14,8 +18,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class NebuliteSmolderingFlames extends NebuliteMechanisms implements Listener {
-    public NebuliteSmolderingFlames(BadlandsCaves plugin) {
-        super(plugin);
+    public NebuliteSmolderingFlames(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

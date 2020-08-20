@@ -19,29 +19,30 @@ public class NebuliteManager {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final StarlightCharge chargeManager;
+    private final StarlightArmor starlightArmor;
+    private final StarlightTools starlightTools;
     private final NamespacedKey key;
 
-    public NebuliteManager(BadlandsCaves plugin) {
+    public NebuliteManager(BadlandsCaves plugin, StarlightCharge chargeManager, StarlightArmor starlightArmor, StarlightTools starlightTools) {
         this.plugin = plugin;
-        this.chargeManager = new StarlightCharge(plugin);
         this.key = new NamespacedKey(plugin, "nebulites");
         customItemManager = plugin.getCustomItemManager();
+        this.chargeManager = chargeManager;
+        this.starlightArmor = starlightArmor;
+        this.starlightTools = starlightTools;
     }
 
     public boolean isSuitable (ItemStack starlight, Nebulite nebulite) {
-        final StarlightArmor armor = new StarlightArmor(plugin);
-        final StarlightTools tools = new StarlightTools(plugin);
-
         for (CustomItem baseItem : nebulite.getBaseItems()) {
-            if (baseItem.equals(CustomItem.STARLIGHT_HELMET) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_HELMET).getType()) && armor.isStarlightArmor(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_CHESTPLATE) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_CHESTPLATE).getType()) && armor.isStarlightArmor(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_LEGGINGS) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_LEGGINGS).getType()) && armor.isStarlightArmor(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_BOOTS) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_BOOTS).getType()) && armor.isStarlightArmor(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_SABER) && tools.isStarlightSaber(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_BLASTER) && tools.isStarlightBlaster(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_SHIELD) && tools.isStarlightShield(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_SENTRY) && tools.isStarlightSentry(starlight)) return true;
-            if (baseItem.equals(CustomItem.STARLIGHT_PAXEL) && tools.isStarlightPaxel(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_HELMET) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_HELMET).getType()) && starlightArmor.isStarlightArmor(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_CHESTPLATE) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_CHESTPLATE).getType()) && starlightArmor.isStarlightArmor(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_LEGGINGS) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_LEGGINGS).getType()) && starlightArmor.isStarlightArmor(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_BOOTS) && starlight.getType().equals(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_BOOTS).getType()) && starlightArmor.isStarlightArmor(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_SABER) && starlightTools.isStarlightSaber(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_BLASTER) && starlightTools.isStarlightBlaster(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_SHIELD) && starlightTools.isStarlightShield(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_SENTRY) && starlightTools.isStarlightSentry(starlight)) return true;
+            if (baseItem.equals(CustomItem.STARLIGHT_PAXEL) && starlightTools.isStarlightPaxel(starlight)) return true;
         }
         return false;
     }

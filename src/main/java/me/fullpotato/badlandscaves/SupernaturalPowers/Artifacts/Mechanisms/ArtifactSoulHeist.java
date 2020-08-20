@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Possession;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Withdraw;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
@@ -15,10 +17,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ArtifactSoulHeist extends ArtifactMechanisms {
     private final Possession possession;
     private final Withdraw withdraw;
-    public ArtifactSoulHeist(BadlandsCaves plugin, Withdraw withdraw) {
-        super(plugin);
-        possession = new Possession(plugin);
+    public ArtifactSoulHeist(BadlandsCaves plugin, Withdraw withdraw, Possession possession, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
         this.withdraw = withdraw;
+        this.possession = possession;
     }
 
     public void launchProjectile(Player player) {

@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -35,9 +36,14 @@ public class ZombieBossBehavior extends BukkitRunnable {
         world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 
-    // TODO: 8/18/2020 only have this run when someone uses incomplete soul crystal
     @Override
     public void run () {
+        final Collection<? extends Player> players = world.getEntitiesByClass(Player.class);
+        if (players.isEmpty()) {
+            this.cancel();
+            return;
+        }
+
         healthBarVisibility();
 
         //get zombie
@@ -49,13 +55,16 @@ public class ZombieBossBehavior extends BukkitRunnable {
 
         //get player
         Player player = null;
-        for (Player ply : world.getEntitiesByClass(Player.class)) {
+        for (Player ply : players) {
             if (ply.getGameMode().equals(GameMode.SURVIVAL) || ply.getGameMode().equals(GameMode.ADVENTURE)) {
                 player = ply;
                 break;
             }
         }
-        if (player == null) return;
+        if (player == null) {
+            this.cancel();
+            return;
+        }
 
 
         //NOT RELATED TO ABILITY----------------------------------------------------------------------------------------

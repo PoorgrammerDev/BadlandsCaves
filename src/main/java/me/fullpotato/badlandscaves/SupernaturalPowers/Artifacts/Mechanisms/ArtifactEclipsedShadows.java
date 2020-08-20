@@ -1,9 +1,11 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadowsNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.SoulCampfire;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.SwapPowers;
@@ -36,12 +38,12 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
     private final Random random = new Random();
     private final EclipsedShadowsNMS nms;
     final double cost = plugin.getOptionsConfig().getDouble("hardmode_values.artifact_costs.eclipsed_shadows");
-    public ArtifactEclipsedShadows(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactEclipsedShadows(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, SoulCampfire soulCampfire, ManaBarManager manaBarManager, SwapPowers swapPowers) {
+        super(plugin, voidmatter, artifactManager);
         nms = plugin.getEclipsedShadowsNMS();
-        soulCampfire = new SoulCampfire(plugin);
-        swapPowers = new SwapPowers(plugin);
-        manaBarManager = new ManaBarManager(plugin);
+        this.soulCampfire = soulCampfire;
+        this.manaBarManager = manaBarManager;
+        this.swapPowers = swapPowers;
     }
 
     @EventHandler

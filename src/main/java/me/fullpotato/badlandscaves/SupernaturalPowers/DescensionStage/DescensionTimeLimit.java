@@ -7,18 +7,33 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
+
 public class DescensionTimeLimit extends BukkitRunnable {
     private final BadlandsCaves plugin;
-    public DescensionTimeLimit(BadlandsCaves bcav) {
+    private final DescensionPlayerMove descensionPlayerMove;
+    private final TitleEffects titleEffects;
+    private final World world;
+    public DescensionTimeLimit(BadlandsCaves bcav, DescensionPlayerMove descensionPlayerMove) {
         plugin = bcav;
+        this.descensionPlayerMove = descensionPlayerMove;
+        titleEffects = new TitleEffects(plugin);
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
     }
 
     @Override
     public void run() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        final Collection<? extends Player> players = world.getEntitiesByClass(Player.class);
+        if (players.isEmpty()) {
+            this.cancel();
+            return;
+        }
+
+        for (Player player : players) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
                 if (in_descension == 2) {
@@ -30,14 +45,12 @@ public class DescensionTimeLimit extends BukkitRunnable {
                             PlayerScore.DESCENSION_TIMER.setScore(plugin, player, descension_timer);
                         }
                         else {
-                            DescensionPlayerMove kicker = new DescensionPlayerMove(plugin);
-                            kicker.playerLost(player);
+                            descensionPlayerMove.playerLost(player);
 
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    TitleEffects titleEffects = new TitleEffects(plugin);
-                                    titleEffects.sendDecodingTitle(player, "TIME'S UP!", ChatColor.DARK_RED.toString(), "", "", 0, 20, 10, 2, false);
+                                    titleEffects.sendDecodingTitle(player, "TIME'S UP!", ChatColor.RESET.toString() + ChatColor.of("#ff0000") + ChatColor.BOLD, "", "", 0, 20, 10, 2, false);
                                 }
                             }.runTaskLaterAsynchronously(plugin, 5);
                         }

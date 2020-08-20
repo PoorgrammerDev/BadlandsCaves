@@ -38,17 +38,17 @@ public class EnhancedEyes extends UsePowers implements Listener {
     private final ArtifactDirectionalVision artifactDirectionalVision;
     private final World backrooms;
 
-    public EnhancedEyes(BadlandsCaves plugin) {
+    public EnhancedEyes(BadlandsCaves plugin, ArtifactManager artifactManager) {
         super(plugin);
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         nms = plugin.getEnhancedEyesNMS();
+        this.artifactManager = artifactManager;
 
         levelRangeMap = new HashMap<>();
         levelRangeMap.put(1, 5);
         levelRangeMap.put(2, 10);
         initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
         constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
-        artifactManager = new ArtifactManager(plugin);
         artifactDirectionalVision = new ArtifactDirectionalVision(plugin, this);
     }
 

@@ -33,14 +33,14 @@ public class Displace extends UsePowers implements Listener {
     private final int cost;
     private final World backrooms;
 
-    public Displace(BadlandsCaves plugin) {
+    public Displace(BadlandsCaves plugin, ArtifactManager artifactManager, ManaBarManager manaBar, ArtifactDistractingDoppelganger artifactDistractingDoppelganger) {
         super(plugin);
+        this.artifactManager = artifactManager;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         nms = plugin.getLineOfSightNMS();
-        manaBar = new ManaBarManager(plugin);
-        artifactManager = new ArtifactManager(plugin);
-        artifactDistractingDoppelganger = new ArtifactDistractingDoppelganger(plugin);
         cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
+        this.manaBar = manaBar;
+        this.artifactDistractingDoppelganger = artifactDistractingDoppelganger;
     }
 
     @EventHandler

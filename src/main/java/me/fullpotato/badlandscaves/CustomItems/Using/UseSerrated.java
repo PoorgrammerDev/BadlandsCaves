@@ -21,9 +21,10 @@ import java.util.Random;
 
 public class UseSerrated implements Listener {
     private final BadlandsCaves plugin;
-
-    public UseSerrated(BadlandsCaves plugin) {
+    private final SerratedSwords serratedSwords;
+    public UseSerrated(BadlandsCaves plugin, SerratedSwords serratedSwords) {
         this.plugin = plugin;
+        this.serratedSwords = serratedSwords;
     }
 
     @EventHandler
@@ -33,14 +34,13 @@ public class UseSerrated implements Listener {
             LivingEntity entity = (LivingEntity) event.getEntity();
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
                 if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                    SerratedSwords serratedSwords = new SerratedSwords(plugin);
                     ItemStack item = player.getInventory().getItemInMainHand();
                     if (serratedSwords.isSerrated(item)) {
                         double player_dmg = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
                         if (event.getDamage() >= player_dmg) {
                             Random random = new Random();
                             boolean critical = event.getDamage() > player_dmg;
-                            if (((critical && random.nextInt(100) < 80)) || (!critical && random.nextInt(100) < 40)) {
+                            if ((critical) || (random.nextBoolean())) {
                                 if (applyBleeding(player, entity, event.getDamage(), random.nextInt(5) + 5, false)) {
                                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                                         Damageable meta = (Damageable) item.getItemMeta();

@@ -5,6 +5,8 @@ import org.bukkit.GameRule;
 import org.bukkit.World;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -50,17 +52,33 @@ public class EnvironmentalHazards {
         return (world.getName().startsWith(plugin.getDimensionPrefixName()));
     }
 
-    public boolean hasHazard(World world, Hazard hazard) throws IllegalArgumentException {
+    public Collection<Hazard> getHazards (World world) {
         if (isDimension(world)) {
-            List<String> hazards = plugin.getSystemConfig().getStringList("alternate_dimensions." + world.getName() + ".hazards");
-            return !hazards.isEmpty() && hazards.contains(hazard.name());
+            final List<String> hazards = plugin.getSystemConfig().getStringList("alternate_dimensions." + world.getName() + ".hazards");
+            final Collection<Hazard> output = new HashSet<>();
+
+            for (String hazard : hazards) {
+                try {
+                    output.add(Hazard.valueOf(hazard.toUpperCase()));
+                }
+                catch (IllegalArgumentException ignored){
+                }
+            }
+            return output;
         }
-        throw new IllegalArgumentException("World is not a planet.");
+        return null;
+    }
+
+    public boolean hasHazard(World world, Hazard hazard) {
+        if (isDimension(world)) {
+            return getHazards(world).contains(hazard);
+        }
+        return false;
     }
 
     public boolean hasHazards (World world) {
         if (isDimension(world)) {
-            List<String> hazards = plugin.getSystemConfig().getStringList("alternate_dimensions." + world.getName() + ".hazards");
+            final List<String> hazards = plugin.getSystemConfig().getStringList("alternate_dimensions." + world.getName() + ".hazards");
             return !hazards.isEmpty();
         }
         return false;

@@ -1,7 +1,9 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -11,8 +13,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ArtifactBloodsappingBayonet extends ArtifactMechanisms implements Listener {
-    public ArtifactBloodsappingBayonet(BadlandsCaves plugin) {
-        super(plugin);
+    public ArtifactBloodsappingBayonet(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+        super(plugin, voidmatter, artifactManager);
     }
 
     @EventHandler

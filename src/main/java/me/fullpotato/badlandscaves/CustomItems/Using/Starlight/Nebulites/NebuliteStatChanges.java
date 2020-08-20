@@ -28,13 +28,13 @@ public class NebuliteStatChanges {
     private final EnchantmentStorage enchantmentStorage;
     private final Map<Material, EquipmentSlot> slotMap;
 
-    public NebuliteStatChanges(BadlandsCaves plugin) {
+    public NebuliteStatChanges(BadlandsCaves plugin, NebuliteManager nebuliteManager, StarlightCharge starlightCharge, StarlightArmor starlightArmor, StarlightTools starlightTools, EnchantmentStorage enchantmentStorage) {
         this.plugin = plugin;
-        this.nebuliteManager = new NebuliteManager(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
-        this.starlightArmor = new StarlightArmor(plugin);
-        this.starlightTools = new StarlightTools(plugin);
-        this.enchantmentStorage = new EnchantmentStorage(plugin);
+        this.nebuliteManager = nebuliteManager;
+        this.starlightCharge = starlightCharge;
+        this.starlightArmor = starlightArmor;
+        this.starlightTools = starlightTools;
+        this.enchantmentStorage = enchantmentStorage;
 
         this.slotMap = new HashMap<>();
         slotMap.put(Material.NETHERITE_HELMET, EquipmentSlot.HEAD);

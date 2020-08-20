@@ -1,8 +1,10 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.EnhancedEyes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.block.Block;
@@ -29,9 +31,9 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
             BlockFace.WEST,
     };
 
-    public ArtifactEmancipatedEyes(BadlandsCaves plugin) {
-        super(plugin);
-        enhancedEyes = new EnhancedEyes(plugin);
+    public ArtifactEmancipatedEyes(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, EnhancedEyes enhancedEyes) {
+        super(plugin, voidmatter, artifactManager);
+        this.enhancedEyes = enhancedEyes;
         initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost") / 3;
         constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain") / 2;
     }

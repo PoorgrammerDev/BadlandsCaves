@@ -24,7 +24,7 @@ public class StageEnter extends BukkitRunnable {
         PlayerScore.IN_DESCENSION.setScore(plugin, player, 1);
         if (descension_world != null && descension_world.isChunkLoaded(0, 0)) {
             if (!player.getWorld().equals(descension_world)) {
-                Location descension_spawn = new Location(descension_world, 0, 197, 0);
+                final Location descension_spawn = new Location(descension_world, 0, 197, 0);
                 try {
                     if (descension_spawn.isWorldLoaded()) player.teleport(descension_spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }

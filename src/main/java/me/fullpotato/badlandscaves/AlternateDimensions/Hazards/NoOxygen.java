@@ -18,11 +18,11 @@ import java.util.Random;
 
 public class NoOxygen extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
-    private final EnvironmentalHazards dims;
+    private final EnvironmentalHazards environmentalHazards;
 
-    public NoOxygen(BadlandsCaves plugin) {
+    public NoOxygen(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards) {
         this.plugin = plugin;
-        this.dims = new EnvironmentalHazards(plugin);
+        this.environmentalHazards = environmentalHazards;
     }
 
     @EventHandler
@@ -30,7 +30,7 @@ public class NoOxygen extends BukkitRunnable implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             World world = player.getWorld();
-            if (dims.isDimension(world) && dims.hasHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN)) {
+            if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     if (event.getAmount() > player.getRemainingAir()) {
                         if (event.getAmount() < 0 && event.getAmount() % 10 == 0) {
@@ -65,7 +65,7 @@ public class NoOxygen extends BukkitRunnable implements Listener {
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             World world = player.getWorld();
-            if (dims.isDimension(world) && dims.hasHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN)) {
+            if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.NO_OXYGEN)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     if (player.getRemainingAir() == 300) {
                         player.setRemainingAir(299);

@@ -29,12 +29,12 @@ public class NebuliteCounterattack extends BukkitRunnable implements Listener {
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
 
-    public NebuliteCounterattack(BadlandsCaves plugin) {
+    public NebuliteCounterattack(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         this.plugin = plugin;
-        this.starlightArmor = new StarlightArmor(plugin);
-        this.starlightTools = new StarlightTools(plugin);
-        this.starlightCharge = new StarlightCharge(plugin);
-        this.nebuliteManager = new NebuliteManager(plugin);
+        this.starlightArmor = starlightArmor;
+        this.starlightTools = starlightTools;
+        this.starlightCharge = starlightCharge;
+        this.nebuliteManager = nebuliteManager;
     }
 
 

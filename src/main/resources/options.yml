@@ -55,6 +55,16 @@ soul_drop_chance: 25
 # Maximum bottles of liquid a canteen can hold
 canteen_limit: 5
 
+# XP -> Energy Core Charge Reduction
+energy_core_charge_reduce: 0.25
+
+# Energy Core Booster Items Multipliers
+energy_core_mult:
+  redstone: 1.5
+  glowstone: 3.0
+  energium: 7.5
+  nether_star_fragment: 15.0
+
 pre_hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Pre-hardmode
   death_reverse_gapple: 1
@@ -145,5 +155,5 @@ hardmode_values:
   # This is the limit of how many can be in the "buffer" before it stops.
   alternate_dimensions_pregenerate_limit: 5
 
-  #Alternate Dimensions will only generate when recent TPS is above this number. Set to 20.0 to always allow.
+  # Alternate Dimensions will only generate when recent TPS is above this number. Set to 20.0 to always allow.
   alternate_dimensions_tps_threshold: 18.0

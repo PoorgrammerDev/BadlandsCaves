@@ -20,10 +20,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class LimitActions extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
+    private final UseIncompleteSoulCrystal useIncompleteSoulCrystal;
     private final Material[] armor = {
             Material.LEATHER_HELMET,
             Material.LEATHER_CHESTPLATE,
@@ -49,9 +51,10 @@ public class LimitActions extends BukkitRunnable implements Listener {
 
     private final World reflection_world;
 
-    public LimitActions(BadlandsCaves plugin) {
+    public LimitActions(BadlandsCaves plugin, UseIncompleteSoulCrystal useIncompleteSoulCrystal) {
         this.plugin = plugin;
         reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
+        this.useIncompleteSoulCrystal = useIncompleteSoulCrystal;
     }
 
     /**
@@ -138,40 +141,42 @@ public class LimitActions extends BukkitRunnable implements Listener {
         }
     }
 
-    // TODO: 8/18/2020 call this from incomplete soul crystal
     /**
      * In case they bypass the system somehow and equip armor anyway, it'll test and revert their armor back to what it was before.
      * */
     @Override
     public void run() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (player.getWorld().equals(reflection_world)) {
-                if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                    final EntityEquipment eq = player.getEquipment();
-                    if (eq != null) {
-                        final ItemStack[] current_armor = {
-                                eq.getBoots(),
-                                eq.getLeggings(),
-                                eq.getChestplate(),
-                                eq.getHelmet(),
-                        };
+        final Collection<? extends Player> players = reflection_world.getEntitiesByClass(Player.class);
+        if (players.isEmpty()) {
+            this.cancel();
+            return;
+        }
 
-                        final ItemStack[] saved_armor = {
-                                plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.36") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.36").getValues(true)) : null,
-                                plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.37") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.37").getValues(true)) : null,
-                                plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.38") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.38").getValues(true)) : null,
-                                plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.39") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection( "player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.39").getValues(true)) : null,
-                        };
+        for (Player player : players) {
+            if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                final EntityEquipment eq = player.getEquipment();
+                if (eq != null) {
+                    final ItemStack[] current_armor = {
+                            eq.getBoots(),
+                            eq.getLeggings(),
+                            eq.getChestplate(),
+                            eq.getHelmet(),
+                    };
 
-                        UseIncompleteSoulCrystal crystal = new UseIncompleteSoulCrystal(plugin);
-                        crystal.disenchantItems(saved_armor);
+                    final ItemStack[] saved_armor = {
+                            plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.36") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.36").getValues(true)) : null,
+                            plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.37") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.37").getValues(true)) : null,
+                            plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.38") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.38").getValues(true)) : null,
+                            plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.39") != null ? ItemStack.deserialize(plugin.getSystemConfig().getConfigurationSection("player_info." + player.getUniqueId() + ".saved_inventories.reflection_inv.39").getValues(true)) : null,
+                    };
 
-                        for (int i = 0; i < 4; i++) {
-                            if (current_armor[i] != null) {
-                                if (!(current_armor[i].isSimilar(saved_armor[i]))) {
-                                    player.getInventory().addItem(current_armor[i]);
-                                    player.getInventory().setItem(36 + i, saved_armor[i]);
-                                }
+                    useIncompleteSoulCrystal.disenchantItems(saved_armor);
+
+                    for (int i = 0; i < 4; i++) {
+                        if (current_armor[i] != null) {
+                            if (!(current_armor[i].isSimilar(saved_armor[i]))) {
+                                player.getInventory().addItem(current_armor[i]);
+                                player.getInventory().setItem(36 + i, saved_armor[i]);
                             }
                         }
                     }

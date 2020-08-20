@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Freezing extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
-    private final EnvironmentalHazards hazards;
+    private final EnvironmentalHazards environmentalHazards;
     private final static String title = "Temperature";
 
     private final Material[] warmBlocks = {
@@ -32,16 +32,16 @@ public class Freezing extends BukkitRunnable implements Listener {
             Material.TORCH,
     };
 
-    public Freezing(BadlandsCaves plugin) {
+    public Freezing(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards) {
         this.plugin = plugin;
-        this.hazards = new EnvironmentalHazards(plugin);
+        this.environmentalHazards = environmentalHazards;
     }
 
     @EventHandler
     public void stopFrozenMove (PlayerMoveEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        if (hazards.isDimension(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
+        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 if ((int) PlayerScore.TEMPERATURE.getScore(plugin, player) <= 0) {
                     if (event.getTo() != null && event.getTo().distanceSquared(event.getFrom()) > 0) {
@@ -56,7 +56,7 @@ public class Freezing extends BukkitRunnable implements Listener {
     public void stopFrozenBreak (BlockBreakEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        if (hazards.isDimension(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
+        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 if ((int) PlayerScore.TEMPERATURE.getScore(plugin, player) <= 0) {
                     event.setCancelled(true);
@@ -69,7 +69,7 @@ public class Freezing extends BukkitRunnable implements Listener {
     public void stopFrozenPlace (BlockPlaceEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        if (hazards.isDimension(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
+        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                 if ((int) PlayerScore.TEMPERATURE.getScore(plugin, player) <= 0) {
                     event.setCancelled(true);
@@ -84,7 +84,7 @@ public class Freezing extends BukkitRunnable implements Listener {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             World world = player.getWorld();
             int temp = (int) PlayerScore.TEMPERATURE.getScore(plugin, player);
-            if (hazards.isDimension(world) && hazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
+            if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     world.spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 0.5, 0), 50, 5, 5, 5, 0, new Particle.DustOptions(Color.fromRGB(203, 239, 245), 1));
 

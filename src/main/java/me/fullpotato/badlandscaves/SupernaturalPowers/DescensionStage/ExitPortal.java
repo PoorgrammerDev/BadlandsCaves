@@ -9,6 +9,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
+
 public class ExitPortal extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
@@ -23,7 +25,13 @@ public class ExitPortal extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : world.getEntitiesByClass(Player.class)) {
+        final Collection<? extends Player> players = world.getEntitiesByClass(Player.class);
+        if (players.isEmpty()) {
+            this.cancel();
+            return;
+        }
+
+        for (Player player : players) {
             int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
             if (in_descension == 2) {
                 int capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));

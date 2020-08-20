@@ -45,8 +45,9 @@ public class UseDimensionalAnchor implements Listener {
     private final BadlandsCaves plugin;
     private final HashMap<String, String> nameFromCode = new HashMap<>();
     private final DimensionsWorlds dimensions;
-    private final EnvironmentalHazards hazards;
-    private final DestroySpawner dungeonMaker;
+    private final EnvironmentalHazards environmentalHazards;
+    private final DestroySpawner destroySpawner;
+    private final DeathHandler deathHandler;
     private final Random random = new Random();
     private final String title = "§9Dimensional Doorway";
     private final NamespacedKey dimPortalKey;
@@ -55,14 +56,15 @@ public class UseDimensionalAnchor implements Listener {
     private final DimensionStructures structures;
     private final double tpsThreshold;
 
-    public UseDimensionalAnchor(BadlandsCaves plugin) {
+    public UseDimensionalAnchor(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards, DestroySpawner destroySpawner, DeathHandler deathHandler) {
         this.plugin = plugin;
         dimensions = new DimensionsWorlds(plugin);
-        hazards = new EnvironmentalHazards(plugin);
-        dungeonMaker = new DestroySpawner(plugin);
         tpsGetter = plugin.getTpsGetterNMS();
         tpsThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
         structures = new DimensionStructures(plugin);
+        this.environmentalHazards = environmentalHazards;
+        this.destroySpawner = destroySpawner;
+        this.deathHandler = deathHandler;
 
         nameFromCode.put(EnvironmentalHazards.Hazard.ACID_RAIN.name(), "Acid Rain");
         nameFromCode.put(EnvironmentalHazards.Hazard.TOXIC_WATER.name(), "Toxic Water");
@@ -159,16 +161,16 @@ public class UseDimensionalAnchor implements Listener {
                         @Override
                         public void run() {
                             final String fullName = plugin.getDimensionPrefixName() + worldName;
-                            if (!plugin.getSystemConfig().getBoolean("alternate_dimensions." + fullName + ".accessed") && !hazards.hasHazards(world)) {
+                            if (!plugin.getSystemConfig().getBoolean("alternate_dimensions." + fullName + ".accessed") && !environmentalHazards.hasHazards(world)) {
                                 dimensions.addHazards(world);
 
                                 plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".accessed", true);
                                 plugin.saveSystemConfig();
                             }
 
-                            dungeonMaker.incrementChaos(true);
-                            dungeonMaker.getNewLocation(middle.getLocation(), random, 500);
-                            dungeonMaker.makeDungeon(finalEntityType, random, true, false);
+                            destroySpawner.incrementChaos(true);
+                            destroySpawner.getNewLocation(middle.getLocation(), random, 500);
+                            destroySpawner.makeDungeon(finalEntityType, random, true, false);
 
                             plugin.getServer().broadcastMessage("§9A Dimensional Doorway has opened!");
                             gatewayData.getPersistentDataContainer().set(usableKey, PersistentDataType.BYTE, (byte) 1);
@@ -356,7 +358,6 @@ public class UseDimensionalAnchor implements Listener {
                     }
                 }
                 else if (item.getType().equals(Material.ORANGE_TERRACOTTA)) {
-                    DeathHandler deathHandler = new DeathHandler(plugin);
                     deathHandler.resetPlayer(player, false, true, false);
                 }
             }

@@ -3,10 +3,10 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
-import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.StageEnter;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -20,13 +20,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener {
     private final BadlandsCaves plugin;
-    private final InventorySerialize invser;
-    private final DeathHandler reset;
+    private final InventorySerialize inventorySerialize;
+    private final DeathHandler deathHandler;
+    private final DescensionPlayerMove descensionPlayerMove;
 
-    public UseCompleteSoulCrystal(BadlandsCaves plugin) {
+    public UseCompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize, DeathHandler deathHandler, DescensionPlayerMove descensionPlayerMove) {
         this.plugin = plugin;
-        invser = new InventorySerialize(plugin);
-        reset = new DeathHandler(plugin);
+        this.inventorySerialize = inventorySerialize;
+        this.deathHandler = deathHandler;
+        this.descensionPlayerMove = descensionPlayerMove;
     }
 
     @EventHandler
@@ -53,10 +55,10 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         depleteUse(current, 2);
 
         //save inventory
-        invser.saveInventory(player, "descension_inv");
+        inventorySerialize.saveInventory(player, "descension_inv");
 
         //clear it
-        reset.resetPlayer(player);
+        deathHandler.resetPlayer(player);
         player.getInventory().clear();
 
         //remove potion effects
@@ -64,18 +66,26 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
             player.removePotionEffect(value);
         }
 
-        //put you into the descension stage
+        //readying descension stage
         new StageEnter(plugin, player).runTask(plugin);
-        player.sendTitle(ChatColor.DARK_PURPLE + "Capture the Four Shrines.", net.md_5.bungee.api.ChatColor.of("#6c2b9e") + "Stand under each one for a while to capture them.", 20, 60, 20);
+        new ShrineCapture(plugin).runTaskTimer(plugin, 0 ,5);
+        new DescensionTimeLimit(plugin, descensionPlayerMove).runTaskTimer(plugin, 0, 20);
+        new DetectedBar(plugin).runTaskTimer(plugin, 0, 3);
+        new LostSoulParticle(plugin).runTaskTimer(plugin, 0, 3);
+        new DetectionDecrease(plugin).runTaskTimer(plugin, 0, 20);
+        new ExitPortal(plugin).runTaskTimer(plugin, 0, 5);
+
+        //tutorial text
+        player.sendTitle(ChatColor.DARK_PURPLE + "Capture the Four Shrines.", ChatColor.of("#6c2b9e") + "Stand under each one for a while to capture them.", 20, 60, 20);
         player.sendMessage(ChatColor.DARK_PURPLE + "Capture the Four Shrines.");
         player.sendMessage(net.md_5.bungee.api.ChatColor.of("#6c2b9e") + "Stand under each one for a while to capture them.");
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.sendTitle(ChatColor.GOLD + "Don't let the Lost Souls find you.", net.md_5.bungee.api.ChatColor.of("#ff6a00") + "Moving near any of them will raise Detection.", 20, 60, 20);
+                player.sendTitle(ChatColor.GOLD + "Don't let the Lost Souls find you.", ChatColor.of("#ff6a00") + "Moving near any of them will raise Detection.", 20, 60, 20);
                 player.sendMessage(ChatColor.GOLD + "Don't let the Lost Souls find you.");
-                player.sendMessage(net.md_5.bungee.api.ChatColor.of("#ff6a00") + "Moving near any of them will raise Detection.");
+                player.sendMessage(ChatColor.of("#ff6a00") + "Moving near any of them will raise Detection.");
             }
         }.runTaskLaterAsynchronously(plugin, 100);
 

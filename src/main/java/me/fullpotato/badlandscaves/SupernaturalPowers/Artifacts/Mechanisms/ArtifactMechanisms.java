@@ -9,9 +9,9 @@ public abstract class ArtifactMechanisms {
     protected final Voidmatter voidmatter;
     protected final ArtifactManager artifactManager;
 
-    protected ArtifactMechanisms(BadlandsCaves plugin) {
+    protected ArtifactMechanisms(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
         this.plugin = plugin;
-        voidmatter = new Voidmatter(plugin);
-        artifactManager = new ArtifactManager(plugin);
+        this.voidmatter = voidmatter;
+        this.artifactManager = artifactManager;
     }
 }

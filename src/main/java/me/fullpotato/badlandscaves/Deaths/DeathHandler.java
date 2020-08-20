@@ -25,10 +25,10 @@ public class DeathHandler implements Listener {
     private final World world;
     private final PlayerEffects playerEffects;
     
-    public DeathHandler(BadlandsCaves bcav) {
+    public DeathHandler(BadlandsCaves bcav, PlayerEffects playerEffects) {
         plugin = bcav;
+        this.playerEffects = playerEffects;
         world = plugin.getServer().getWorld(plugin.getMainWorldName());
-        playerEffects = new PlayerEffects(plugin);
     }
 
     @EventHandler
