@@ -24,25 +24,25 @@ public class ThirstEffects {
         if (thirst <= 0) {
             player.setHealth(0);
         }
-        else if (thirst <= 10) {
+        else if (thirst <= 5) {
             blindness = 1;
             poison_lvl = 1;
             hunger_lvl = 2;
             walk_speed = -3;
             mine_speed = -3;
         }
-        else if (thirst <= 30) {
+        else if (thirst <= 10) {
             poison_lvl = 1;
             hunger_lvl = 2;
             walk_speed = -3;
             mine_speed = -3;
         }
-        else if (thirst <= 40) {
+        else if (thirst <= 20) {
             hunger_lvl = 1;
             walk_speed = -2;
             mine_speed = -2;
         }
-        else if (thirst <= 50) {
+        else if (thirst <= 30) {
             walk_speed = -1;
             mine_speed = -1;
         }

@@ -312,7 +312,7 @@ public final class BadlandsCaves extends JavaPlugin {
         enhancedEyes = new EnhancedEyes(this, artifactManager);
         possession = new Possession(this);
         withdraw = new Withdraw(this, artifactManager, possession, voidmatter);
-        playerJoinLeave = new PlayerJoinLeave(this, guideBook, withdraw);
+        playerJoinLeave = new PlayerJoinLeave(this, guideBook, withdraw, playerEffects);
         increaseToxInRain = new IncreaseToxInRain(this, starlightArmor, starlightCharge, nebuliteManager, playerEffects, environmentalHazards);
         enduranceCancelHunger = new EnduranceCancelHunger(this);
         agility = new Agility(this);

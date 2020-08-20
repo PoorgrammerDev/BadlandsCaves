@@ -79,7 +79,6 @@ public class Withdraw extends UsePowers implements Listener {
                     if (artifactManager.hasArtifact(player, Artifact.SOUL_HEIST)) {
                         PlayerScore.MANA.setScore(plugin, player, mana - cost);
 
-
                         artifactSoulHeist.launchProjectile(player);
                         return;
                     }
@@ -94,7 +93,6 @@ public class Withdraw extends UsePowers implements Listener {
 
     public void enterWithdraw(Player player, boolean subtractCost) {
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
-
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         generateVoidChunk(player);
 

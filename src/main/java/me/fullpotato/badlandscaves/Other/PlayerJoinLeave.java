@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.Other;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Withdraw;
 import me.fullpotato.badlandscaves.Util.InitializePlayer;
@@ -18,15 +19,16 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerJoinLeave implements Listener {
-
     private final BadlandsCaves plugin;
     private final GuideBook guideBook;
     private final Withdraw withdraw;
     private final InitializePlayer data;
-    public PlayerJoinLeave(BadlandsCaves bcav, GuideBook guideBook, Withdraw withdraw) {
+    private final PlayerEffects playerEffects;
+    public PlayerJoinLeave(BadlandsCaves bcav, GuideBook guideBook, Withdraw withdraw, PlayerEffects playerEffects) {
         plugin = bcav;
         this.guideBook = guideBook;
         this.withdraw = withdraw;
+        this.playerEffects = playerEffects;
         data = new InitializePlayer(plugin);
     }
 
@@ -65,6 +67,9 @@ public class PlayerJoinLeave implements Listener {
                 player.teleport(warp, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }
+
+        //reload effects
+        playerEffects.applyEffects(player, true);
 
 
         //REGARDING SUPERNATURAL POWERS----------------------------------
