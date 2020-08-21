@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ public class Voltshock extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final EnergyCore energyCore;
+    private final StarlightTools starlightsword;
     private final String shock_lore = "§3Voltshock";
     private final TreasureGear treasureGear = new TreasureGear();
     private final Material[] swords = {
@@ -39,10 +41,11 @@ public class Voltshock extends MatchCrafting implements Listener {
             Material.NETHERITE_SWORD,
     };
 
-    public Voltshock(BadlandsCaves plugin, EnergyCore energyCore) {
+    public Voltshock(BadlandsCaves plugin, EnergyCore energyCore, StarlightTools starlightsword) {
         this.plugin = plugin;
         customItemManager = plugin.getCustomItemManager();
         this.energyCore = energyCore;
+        this.starlightsword = starlightsword;
     }
 
     public void craft_battery() {
@@ -158,11 +161,13 @@ public class Voltshock extends MatchCrafting implements Listener {
                     if (battery != null && shocker != null) {
                         if (isMatching(matrix, battery, 6) && isMatching(matrix, shocker, 2, 5)) {
                             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
-                                SerratedSwords serrated = new SerratedSwords(plugin, energyCore);
-                                Corrosive corrosive = new Corrosive(plugin, energyCore);
+                                SerratedSwords serrated = new SerratedSwords(plugin, energyCore, starlightsword);
+                                Corrosive corrosive = new Corrosive(plugin, starlightsword, energyCore);
                                 for (ItemStack item : matrix) {
                                     if (item != null && Arrays.asList(swords).contains(item.getType())) {
-                                        boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item);
+                                        boolean sword_ready = !serrated.isSerrated(item) && !isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item) &&
+                                                !starlightsword.isStarlightSaber(item);
+
                                         if (sword_ready) {
                                             ItemStack modified_sword = item.clone();
                                             ItemMeta meta = modified_sword.getItemMeta();

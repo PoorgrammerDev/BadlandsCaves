@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.EnergyCore;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -24,6 +25,7 @@ public class SerratedSwords implements Listener {
     private final BadlandsCaves plugin;
     private final String serrated_lore = "§cSerrated";
     private final EnergyCore energyCore;
+    private final StarlightTools starlightsword;
     private final TreasureGear treasureGear = new TreasureGear();
     private final Material[] swords = {
             Material.WOODEN_SWORD,
@@ -34,9 +36,10 @@ public class SerratedSwords implements Listener {
             Material.NETHERITE_SWORD,
     };
 
-    public SerratedSwords(BadlandsCaves plugin, EnergyCore energyCore) {
+    public SerratedSwords(BadlandsCaves plugin, EnergyCore energyCore, StarlightTools starlightsword) {
         this.plugin = plugin;
         this.energyCore = energyCore;
+        this.starlightsword = starlightsword;
     }
 
     @EventHandler
@@ -48,9 +51,9 @@ public class SerratedSwords implements Listener {
                     if (event.getItem() != null) {
                         final ItemStack item = event.getItem();
                         if (Arrays.asList(swords).contains(item.getType())) {
-                            Voltshock voltshock = new Voltshock(plugin, energyCore);
-                            Corrosive corrosive = new Corrosive(plugin, energyCore);
-                            if (!isSerrated(item) && !voltshock.isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item)) {
+                            Voltshock voltshock = new Voltshock(plugin, energyCore, starlightsword);
+                            Corrosive corrosive = new Corrosive(plugin, starlightsword, energyCore);
+                            if (!isSerrated(item) && !voltshock.isVoltshock(item) && !corrosive.isCorrosive(item) && !treasureGear.isTreasureGear(item)&&!starlightsword.isStarlightSaber(item)) {
                                 Damageable damageable_meta = (Damageable) item.getItemMeta();
                                 int max_durability = item.getType().getMaxDurability();
                                 if (damageable_meta != null && damageable_meta.getDamage() < max_durability * 0.75) {
