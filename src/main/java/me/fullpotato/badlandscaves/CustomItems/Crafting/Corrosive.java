@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.EnergyCore;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Material;
@@ -32,6 +33,7 @@ public class Corrosive extends MatchCrafting implements Listener {
     private final CustomItemManager customItemManager;
     private final String corrosiveLore = "§2Corrosive";
     private final NamespacedKey hitsLeftKey;
+    private final StarlightTools starlightsword;
     private final EnergyCore energyCore;
     private final TreasureGear treasureGear = new TreasureGear();
     private final Material[] swords = {
@@ -43,10 +45,11 @@ public class Corrosive extends MatchCrafting implements Listener {
             Material.NETHERITE_SWORD,
     };
 
-    public Corrosive(BadlandsCaves plugin, EnergyCore energyCore) {
+    public Corrosive(BadlandsCaves plugin, StarlightTools starlightsword, EnergyCore energyCore) {
         this.plugin = plugin;
         this.hitsLeftKey = new NamespacedKey(plugin, "corrosiveHitsLeft");
         customItemManager = plugin.getCustomItemManager();
+        this.starlightsword = starlightsword;
         this.energyCore = energyCore;
     }
 
@@ -134,18 +137,18 @@ public class Corrosive extends MatchCrafting implements Listener {
         final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack corrosive_substance = customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE);
         if (isMatching(matrix, corrosive_substance)) {
-                ItemStack sword = null;
-                for (ItemStack item : matrix) {
-                    if (item != null && Arrays.asList(swords).contains(item.getType())) {
-                        sword = item;
-                        break;
-                    }
+            ItemStack sword = null;
+            for (ItemStack item : matrix) {
+                if (item != null && Arrays.asList(swords).contains(item.getType())) {
+                    sword = item;
+                    break;
                 }
-                if (sword != null) {
-                    if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
-                    Voltshock voltshock = new Voltshock(plugin, energyCore);
-                    SerratedSwords serrated = new SerratedSwords(plugin, energyCore);
-                    if (!voltshock.isVoltshock(sword) && !serrated.isSerrated(sword) && !treasureGear.isTreasureGear(sword)) {
+            }
+            if (sword != null) {
+                if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, (Player) event.getViewers().get(0)) != 1) {
+                    Voltshock voltshock = new Voltshock(plugin, energyCore, starlightsword);
+                    SerratedSwords serrated = new SerratedSwords(plugin, energyCore, starlightsword);
+                    if (!voltshock.isVoltshock(sword) && !serrated.isSerrated(sword) && !treasureGear.isTreasureGear(sword)&& !starlightsword.isStarlightSaber(sword)) {
                         if (isCorrosive(sword)) {
                             ItemStack output = sword.clone();
                             setHitsLeft(output, 10);

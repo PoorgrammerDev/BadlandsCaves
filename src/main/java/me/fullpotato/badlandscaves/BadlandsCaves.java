@@ -338,11 +338,11 @@ public final class BadlandsCaves extends JavaPlugin {
         drinking = new Drinking(this, playerEffects, backroomsManager);
         treasureGear = new TreasureGear();
         eXPBottle = new EXPBottle();
-        serratedSwords = new SerratedSwords(this, energyCore);
+        serratedSwords = new SerratedSwords(this, energyCore, starlightTools);
         useSerrated = new UseSerrated(this, serratedSwords);
-        voltshock = new Voltshock(this, energyCore);
+        voltshock = new Voltshock(this, energyCore, starlightTools);
         useVoltshock = new UseVoltshock(this, voltshock);
-        corrosive = new Corrosive(this, energyCore);
+        corrosive = new Corrosive(this, starlightTools, energyCore);
         useCorrosive = new UseCorrosive(this, starlightArmor, starlightCharge, nebuliteManager, corrosive);
         customBows = new CustomBows(this);
         witherBossFight = new WitherBossFight(this);
