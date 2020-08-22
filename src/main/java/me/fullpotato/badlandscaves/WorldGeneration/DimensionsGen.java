@@ -21,10 +21,9 @@ public class DimensionsGen extends ChunkGenerator {
     private final int chaos;
     private final int middle = 60;
 
-    public DimensionsGen(BadlandsCaves plugin, Biome biome) {
+    public DimensionsGen(BadlandsCaves plugin, Biome biome, Random random) {
         this.plugin = plugin;
         this.biome = biome;
-        final Random random = new Random();
         this.scale = (random.nextInt(32) + 32);
         this.frequency = (random.nextDouble()) + 0.25;
         this.amplitude = (random.nextDouble()) + 0.25;
@@ -33,7 +32,7 @@ public class DimensionsGen extends ChunkGenerator {
         this.setBlocks();
     }
 
-    public DimensionsGen(BadlandsCaves plugin, Biome biome, double scale, double frequency, double amplitude, int chaos) {
+    public DimensionsGen(BadlandsCaves plugin, Biome biome, double scale, double frequency, double amplitude, int chaos, Random random) {
         this.plugin = plugin;
         this.biome = biome;
         this.scale = scale;

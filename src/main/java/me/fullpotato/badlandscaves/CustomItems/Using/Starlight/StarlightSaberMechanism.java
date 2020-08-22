@@ -33,9 +33,9 @@ public class StarlightSaberMechanism implements Listener {
     private final UseVoltshock useVoltshock;
     private final UseCorrosive useCorrosive;
     private final UseSerrated useSerrated;
-    private final Random random = new Random();
+    private final Random random;
 
-    public StarlightSaberMechanism(BadlandsCaves plugin, StarlightTools starlightTools, StarlightCharge chargeManager, NebuliteManager nebuliteManager, UseVoltshock useVoltshock, UseCorrosive useCorrosive, UseSerrated useSerrated) {
+    public StarlightSaberMechanism(BadlandsCaves plugin, StarlightTools starlightTools, StarlightCharge chargeManager, NebuliteManager nebuliteManager, UseVoltshock useVoltshock, UseCorrosive useCorrosive, UseSerrated useSerrated, Random random) {
         this.plugin = plugin;
         this.starlightTools = starlightTools;
         this.chargeManager = chargeManager;
@@ -43,6 +43,7 @@ public class StarlightSaberMechanism implements Listener {
         this.useVoltshock = useVoltshock;
         this.useCorrosive = useCorrosive;
         this.useSerrated = useSerrated;
+        this.random = random;
     }
 
     @EventHandler

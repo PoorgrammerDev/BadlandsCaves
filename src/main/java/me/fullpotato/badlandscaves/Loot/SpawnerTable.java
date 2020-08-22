@@ -39,11 +39,11 @@ public class SpawnerTable implements LootTable {
             Material.DARK_OAK_SAPLING,
     };
 
-    public SpawnerTable(BadlandsCaves plugin, Player player, EntityType spawnerType, int fortune) {
+    public SpawnerTable(BadlandsCaves plugin, Random random, Player player, EntityType spawnerType, int fortune) {
         this.plugin = plugin;
         this.player = player;
         this.spawnerType = spawnerType;
-        pregenerateDimensions = new PregenerateDimensions(plugin);
+        pregenerateDimensions = new PregenerateDimensions(plugin, random);
 
         key = new NamespacedKey(plugin, "mob_spawner_treasure");
         this.fortune = fortune;

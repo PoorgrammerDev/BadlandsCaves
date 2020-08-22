@@ -13,8 +13,10 @@ import java.util.Random;
 
 public class SilverfishBuff implements Listener {
     private final BadlandsCaves plugin;
-    public SilverfishBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public SilverfishBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
     @EventHandler
@@ -25,7 +27,6 @@ public class SilverfishBuff implements Listener {
 
         Silverfish silverfish = (Silverfish) event.getEntity();
 
-        Random random = new Random();
         silverfish.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, random.nextInt(3) + 1, true, true));
         silverfish.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, random.nextInt(3) + 1, true, true));
 

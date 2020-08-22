@@ -40,8 +40,8 @@ public class NebuliteDecisiveDisintegration extends NebuliteMechanisms implement
     };
 
 
-    public NebuliteDecisiveDisintegration(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
-        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+    public NebuliteDecisiveDisintegration(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

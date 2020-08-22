@@ -12,6 +12,7 @@ import org.bukkit.scoreboard.Team;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Random;
 
 public class ShrineCapture extends BukkitRunnable {
     private final BadlandsCaves plugin;
@@ -19,10 +20,12 @@ public class ShrineCapture extends BukkitRunnable {
     private final Location origin;
     private final NamespacedKey chargedKey;
     private final NamespacedKey chargeKey;
+    private final Random random;
 
-    public ShrineCapture(BadlandsCaves plugin) {
+    public ShrineCapture(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        this.random = random;
         origin = new Location(world, 0, 80, 0);
         chargedKey = new NamespacedKey(plugin, "descension_crystal_charged");
         chargeKey = new NamespacedKey(plugin, "descension_crystal_charge");
@@ -67,7 +70,7 @@ public class ShrineCapture extends BukkitRunnable {
 
                         //spawns more mobs
                         int normal_mob_cap = plugin.getOptionsConfig().getInt("descension_mob_limit");
-                        DescensionReset descReset = new DescensionReset(plugin);
+                        DescensionReset descReset = new DescensionReset(plugin, random);
                         Team desc_team = descReset.getDescensionTeam();
                         descReset.spawnMobs(desc_team, normal_mob_cap / 4);
 

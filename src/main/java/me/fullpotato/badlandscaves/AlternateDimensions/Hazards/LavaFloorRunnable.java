@@ -8,13 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Random;
+
 public class LavaFloorRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards dims;
-
-    public LavaFloorRunnable(BadlandsCaves plugin) {
+    public LavaFloorRunnable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        this.dims = new EnvironmentalHazards(plugin);
+        this.dims = new EnvironmentalHazards(plugin, random);
     }
 
     @Override

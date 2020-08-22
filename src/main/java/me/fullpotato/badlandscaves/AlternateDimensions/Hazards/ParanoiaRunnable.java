@@ -17,12 +17,13 @@ public class ParanoiaRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards hazards;
     private final ZombieBossBehavior locationFinder;
-    private final Random random = new Random();
+    private final Random random;
 
-    public ParanoiaRunnable(BadlandsCaves plugin) {
+    public ParanoiaRunnable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        this.hazards = new EnvironmentalHazards(plugin);
-        this.locationFinder = new ZombieBossBehavior(plugin);
+        this.hazards = new EnvironmentalHazards(plugin, random);
+        this.locationFinder = new ZombieBossBehavior(plugin, random);
+        this.random = random;
     }
 
     @Override

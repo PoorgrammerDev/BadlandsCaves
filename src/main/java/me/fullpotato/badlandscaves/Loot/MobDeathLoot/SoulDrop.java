@@ -17,10 +17,12 @@ import java.util.Random;
 
 public class SoulDrop implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
     private final HashMap<EntityType, ItemStack> souls = new HashMap<>();
 
-    public SoulDrop (BadlandsCaves bcav) {
+    public SoulDrop(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         final CustomItemManager customItemManager = plugin.getCustomItemManager();
 
         souls.put(EntityType.ZOMBIE, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
@@ -48,7 +50,6 @@ public class SoulDrop implements Listener {
         if (souls.containsKey(event.getEntity().getType())) {
             final LivingEntity entity = event.getEntity();
             final Player player = entity.getKiller();
-            final Random random = new Random();
 
             //can drop soul if player killed
             if (player != null) {

@@ -78,8 +78,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 public final class BadlandsCaves extends JavaPlugin {
+    private final Random random = new Random();
     private PlayerJoinLeave playerJoinLeave;
     private NaturalThirstDecrease naturalThirstDecrease;
     private IncreaseToxInWater increaseToxInWater;
@@ -252,8 +254,8 @@ public final class BadlandsCaves extends JavaPlugin {
         loadNMS();
         createOptionsConfig();
         createSystemConfig();
-        initializeFields();
         loadCustomWorlds();
+        initializeFields();
         registerEvents();
         loadCommands();
         loadRunnables();
@@ -268,21 +270,21 @@ public final class BadlandsCaves extends JavaPlugin {
 
     public void initializeFields() {
         EnchantmentStorage enchantmentStorage = new EnchantmentStorage(this);
-        pregenerateDimensions = new PregenerateDimensions(this);
+        pregenerateDimensions = new PregenerateDimensions(this, random);
         customItemManager = new CustomItemManager(this, enchantmentStorage, pregenerateDimensions);
         GuideBook guideBook = new GuideBook(this);
         playerEffects = new PlayerEffects(this);
-        naturalThirstDecrease = new NaturalThirstDecrease(this, playerEffects);
+        naturalThirstDecrease = new NaturalThirstDecrease(this, random, playerEffects);
         starlightArmor = new StarlightArmor(this);
         starlightTools = new StarlightTools(this);
         energyCore = new EnergyCore(this);
         starlightCharge = new StarlightCharge(this, starlightArmor, starlightTools, enchantmentStorage, energyCore);
         voidmatter = new Voidmatter(this);
         ArtifactManager artifactManager = new ArtifactManager(this);
-        artifactFleetingSpirits = new ArtifactFleetingSpirits(this, voidmatter, artifactManager);
+        artifactFleetingSpirits = new ArtifactFleetingSpirits(this, voidmatter, artifactManager, random);
         NebuliteManager nebuliteManager = new NebuliteManager(this, starlightCharge, starlightArmor, starlightTools);
-        EnvironmentalHazards environmentalHazards = new EnvironmentalHazards(this);
-        increaseToxInWater = new IncreaseToxInWater(this, starlightArmor, starlightCharge, artifactManager, voidmatter, artifactFleetingSpirits, nebuliteManager, environmentalHazards);
+        EnvironmentalHazards environmentalHazards = new EnvironmentalHazards(this, random);
+        increaseToxInWater = new IncreaseToxInWater(this, random, starlightArmor, starlightCharge, artifactManager, voidmatter, artifactFleetingSpirits, nebuliteManager, environmentalHazards, playerEffects);
         deathHandler = new DeathHandler(this, playerEffects);
         blessedAppleEat = new BlessedAppleEat(this, playerEffects);
         cauldronMenu = new CauldronMenu(this);
@@ -290,20 +292,20 @@ public final class BadlandsCaves extends JavaPlugin {
         blazePowder = new BlazePowder(this);
         purgeEssence = new PurgeEssence(this);
         stopCustomItemsInteract = new StopCustomItemsInteract(this, starlightCharge, voidmatter);
-        useTaintPowder = new UseTaintPowder(this);
-        zombieDeathLoot = new ZombieDeathLoot();
-        getFishingCrate = new GetFishingCrate(this);
-        useFishingCrate = new UseFishingCrate(this);
-        skeleBuff = new SkeleBuff(this);
-        zombieBuff = new ZombieBuff(this);
-        creeperBuff = new CreeperBuff(this);
-        spiderBuff = new SpiderBuff(this);
-        pigZombieBuff = new PigZombieBuff(this);
-        silverfishBuff = new SilverfishBuff(this);
-        blazeBuff = new BlazeBuff(this);
-        ghastBuff = new GhastBuff(this);
-        phantomBuff = new PhantomBuff(this);
-        witchBuff = new WitchBuff(this);
+        useTaintPowder = new UseTaintPowder(this, random);
+        zombieDeathLoot = new ZombieDeathLoot(random);
+        getFishingCrate = new GetFishingCrate(this, random);
+        useFishingCrate = new UseFishingCrate(this, random);
+        skeleBuff = new SkeleBuff(this, random);
+        zombieBuff = new ZombieBuff(this, random);
+        creeperBuff = new CreeperBuff(this, random);
+        spiderBuff = new SpiderBuff(this, random);
+        pigZombieBuff = new PigZombieBuff(this, random);
+        silverfishBuff = new SilverfishBuff(this, random);
+        blazeBuff = new BlazeBuff(this, random);
+        ghastBuff = new GhastBuff(this, random);
+        phantomBuff = new PhantomBuff(this, random);
+        witchBuff = new WitchBuff(this, random);
         swapPowers = new SwapPowers(this);
         manaBarManager = new ManaBarManager(this);
         ArtifactDistractingDoppelganger artifactDistractingDoppelganger = new ArtifactDistractingDoppelganger(this, voidmatter, artifactManager);
@@ -311,15 +313,15 @@ public final class BadlandsCaves extends JavaPlugin {
         stopPowersInvInteract = new StopPowersInvInteract(this);
         enhancedEyes = new EnhancedEyes(this, artifactManager);
         possession = new Possession(this);
-        withdraw = new Withdraw(this, artifactManager, possession, voidmatter);
+        withdraw = new Withdraw(random, this, artifactManager, possession, voidmatter);
         playerJoinLeave = new PlayerJoinLeave(this, guideBook, withdraw, playerEffects);
-        increaseToxInRain = new IncreaseToxInRain(this, starlightArmor, starlightCharge, nebuliteManager, playerEffects, environmentalHazards);
-        enduranceCancelHunger = new EnduranceCancelHunger(this);
+        increaseToxInRain = new IncreaseToxInRain(this, random, starlightArmor, starlightCharge, nebuliteManager, playerEffects, environmentalHazards);
+        enduranceCancelHunger = new EnduranceCancelHunger(this, random);
         agility = new Agility(this);
         InventorySerialize inventorySerialize = new InventorySerialize(this);
-        useIncompleteSoulCrystal = new UseIncompleteSoulCrystal(this, inventorySerialize);
+        useIncompleteSoulCrystal = new UseIncompleteSoulCrystal(this, inventorySerialize, random);
         descensionPlayerMove = new DescensionPlayerMove(this, deathHandler, useIncompleteSoulCrystal, inventorySerialize);
-        soulDrop = new SoulDrop(this);
+        soulDrop = new SoulDrop(this, random);
         hellEssence = new HellEssence(this);
         magicEssence = new MagicEssence(this);
         mergedSouls = new MergedSouls(this);
@@ -329,40 +331,40 @@ public final class BadlandsCaves extends JavaPlugin {
         playerUnderSht = new PlayerUnderSht(this);
         endGame = new EndGame(this, deathHandler, useIncompleteSoulCrystal);
         limitActions = new LimitActions(this, useIncompleteSoulCrystal);
-        useCompleteSoulCrystal = new UseCompleteSoulCrystal(this, inventorySerialize, deathHandler, descensionPlayerMove);
-        mushroomStew = new MushroomStew();
-        destroySpawner = new DestroySpawner(this);
+        useCompleteSoulCrystal = new UseCompleteSoulCrystal(this, inventorySerialize, deathHandler, descensionPlayerMove, random);
+        mushroomStew = new MushroomStew(random);
+        destroySpawner = new DestroySpawner(this, random);
         useRune = new UseRune(this);
         useChargedRune = new UseChargedRune(this);
-        backroomsManager = new BackroomsManager(this, inventorySerialize);
-        drinking = new Drinking(this, playerEffects, backroomsManager);
+        backroomsManager = new BackroomsManager(this, inventorySerialize, random);
+        drinking = new Drinking(this, playerEffects, backroomsManager, random);
         treasureGear = new TreasureGear();
         eXPBottle = new EXPBottle();
         serratedSwords = new SerratedSwords(this, energyCore, starlightTools);
-        useSerrated = new UseSerrated(this, serratedSwords);
+        useSerrated = new UseSerrated(this, serratedSwords, random);
         voltshock = new Voltshock(this, energyCore, starlightTools);
-        useVoltshock = new UseVoltshock(this, voltshock);
+        useVoltshock = new UseVoltshock(this, voltshock, random);
         corrosive = new Corrosive(this, starlightTools, energyCore);
-        useCorrosive = new UseCorrosive(this, starlightArmor, starlightCharge, nebuliteManager, corrosive);
+        useCorrosive = new UseCorrosive(this, starlightArmor, starlightCharge, nebuliteManager, corrosive, random);
         customBows = new CustomBows(this);
-        witherBossFight = new WitherBossFight(this);
+        witherBossFight = new WitherBossFight(this, random);
         apples = new Apples(this);
         noMending = new NoMending(this);
-        shieldBlocking = new ShieldBlocking(this, starlightTools, starlightCharge, nebuliteManager);
+        shieldBlocking = new ShieldBlocking(this, starlightTools, starlightCharge, nebuliteManager, random);
         shield = new Shield(this);
         craftingGuide = new CraftingGuide(this);
-        titaniumOre = new TitaniumOre(this);
+        titaniumOre = new TitaniumOre(this, random);
         titaniumBar = new TitaniumBar(this);
         starlightComponents = new StarlightComponents(this);
         useForeverFish = new UseForeverFish(this);
         starlightBlasterMechanism = new StarlightBlasterMechanism(this, starlightCharge, starlightTools, nebuliteManager);
-        spawnInhabitants = new SpawnInhabitants(this);
-        noOxygen = new NoOxygen(this, environmentalHazards);
+        spawnInhabitants = new SpawnInhabitants(this, random);
+        noOxygen = new NoOxygen(this, environmentalHazards, random);
         noFood = new NoFood(environmentalHazards);
         freezing = new Freezing(this, environmentalHazards);
-        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler);
-        piglinBuff = new PiglinBuff(this);
-        hoglinBuff = new HoglinBuff(this);
+        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler, random);
+        piglinBuff = new PiglinBuff(this, random);
+        hoglinBuff = new HoglinBuff(this, random);
         silencer = new Silencer(this);
         silencerBlock = new SilencerBlock(this);
         canteen = new Canteen(this);
@@ -371,48 +373,48 @@ public final class BadlandsCaves extends JavaPlugin {
         useSoulLantern = new UseSoulLantern(this);
         preservationTotem = new PreservationTotem(this);
         starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism);
-        useChambersBag = new UseChambersBag(this);
+        useChambersBag = new UseChambersBag(this, random);
         augmentedDrops = new AugmentedDrops(this);
         NebuliteStatChanges nebuliteStatChanges = new NebuliteStatChanges(this, nebuliteManager, starlightCharge, starlightArmor, starlightTools, enchantmentStorage);
         nebuliteInstaller = new NebuliteInstaller(this, starlightCharge, nebuliteManager, nebuliteStatChanges);
-        starlightSaberMechanism = new StarlightSaberMechanism(this, starlightTools, starlightCharge, nebuliteManager, useVoltshock, useCorrosive, useSerrated);
-        nebuliteThruster = new NebuliteThruster(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteOxygenator = new NebuliteOxygenator(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteSmolderingFlames = new NebuliteSmolderingFlames(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteShockAbsorber = new NebuliteShockAbsorber(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteForcefield = new NebuliteForcefield(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteLightSpeed = new NebuliteLightSpeed(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteBigSmash = new NebuliteBigSmash(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteDecisiveDisintegration = new NebuliteDecisiveDisintegration(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebulitePropulsionBash = new NebulitePropulsionBash(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteShieldThruster = new NebuliteShieldThruster(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteCounterattack = new NebuliteCounterattack(this, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        starlightSaberMechanism = new StarlightSaberMechanism(this, starlightTools, starlightCharge, nebuliteManager, useVoltshock, useCorrosive, useSerrated, random);
+        nebuliteThruster = new NebuliteThruster(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteOxygenator = new NebuliteOxygenator(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteSmolderingFlames = new NebuliteSmolderingFlames(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteShockAbsorber = new NebuliteShockAbsorber(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteForcefield = new NebuliteForcefield(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteLightSpeed = new NebuliteLightSpeed(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteBigSmash = new NebuliteBigSmash(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteDecisiveDisintegration = new NebuliteDecisiveDisintegration(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebulitePropulsionBash = new NebulitePropulsionBash(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteShieldThruster = new NebuliteShieldThruster(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteCounterattack = new NebuliteCounterattack(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         soulCampfire = new SoulCampfire(this, swapPowers, artifactManager);
         artifactTenaciousTrickery = new ArtifactTenaciousTrickery(this, voidmatter, artifactManager);
-        artifactEclipsedShadows = new ArtifactEclipsedShadows(this, voidmatter, artifactManager, soulCampfire, manaBarManager, swapPowers);
+        artifactEclipsedShadows = new ArtifactEclipsedShadows(this, voidmatter, artifactManager, soulCampfire, manaBarManager, swapPowers, random);
         artifactManaWarding = new ArtifactManaWarding(this, voidmatter, artifactManager);
         artifactConvergingSwings = new ArtifactConvergingSwings(this, voidmatter, artifactManager);
-        artifactTravellingBlades = new ArtifactTravellingBlades(this, voidmatter, artifactManager);
+        artifactTravellingBlades = new ArtifactTravellingBlades(this, voidmatter, artifactManager, random);
         artifactHasteWind = new ArtifactHasteWind(this, voidmatter, artifactManager);
         artifactBloodsappingBayonet = new ArtifactBloodsappingBayonet(this, voidmatter, artifactManager);
         artifactSightStealing = new ArtifactSightStealing(this, voidmatter, artifactManager);
         artifactBloodsappingBow = new ArtifactBloodsappingBow(this, voidmatter, artifactManager);
-        artifactSummonersRift = new ArtifactSummonersRift(this, voidmatter, artifactManager, artifactFleetingSpirits);
+        artifactSummonersRift = new ArtifactSummonersRift(this, voidmatter, artifactManager, artifactFleetingSpirits, random);
         artifactEmancipatedEyes = new ArtifactEmancipatedEyes(this, voidmatter, artifactManager, enhancedEyes);
         starlightPaxelMechanism = new StarlightPaxelMechanism(this, starlightTools, starlightCharge);
-        artifactDiggingDoppelganger = new ArtifactDiggingDoppelganger(this, voidmatter, artifactManager, starlightPaxelMechanism);
-        artifactMomentousMomentum = new ArtifactMomentousMomentum(this);
+        artifactDiggingDoppelganger = new ArtifactDiggingDoppelganger(this, voidmatter, artifactManager, random, starlightPaxelMechanism);
+        artifactMomentousMomentum = new ArtifactMomentousMomentum(this, random);
         preventWaterBucketPVP = new PreventWaterBucketPVP();
         starterSapling = new StarterSapling(this);
         anvilRepair = new AnvilRepair(this);
         fishWater = new FishWater(this);
         researchTableItems = new ResearchTableItems(this);
         useResearchTable = new UseResearchTable(this);
-        useNebuliteCrate = new UseNebuliteCrate(this);
-        dimensionStructureTable = new DimensionStructureTable(this);
+        useNebuliteCrate = new UseNebuliteCrate(this, random);
+        dimensionStructureTable = new DimensionStructureTable(this, random);
         unloadDimensions = new UnloadDimensions(this);
         hungerLimit = new HungerLimit();
-        slowBreak = new SlowBreak(this);
+        slowBreak = new SlowBreak(this, random);
         preventTechUse = new PreventTechUse(this, voidmatter, enchantmentStorage);
         preventMagicUse = new PreventMagicUse(this, starlightCharge, enchantmentStorage);
     }
@@ -471,21 +473,21 @@ public final class BadlandsCaves extends JavaPlugin {
         WithdrawWorld empty_world = new WithdrawWorld(this);
         empty_world.gen_void_world();
 
-        DescensionWorld desc_world = new DescensionWorld(this);
+        DescensionWorld desc_world = new DescensionWorld(this, random);
         desc_world.gen_descension_world();
 
         ReflectionWorld refl_world = new ReflectionWorld(this);
         refl_world.gen_refl_world();
 
-        Backrooms backrooms = new Backrooms(this);
+        Backrooms backrooms = new Backrooms(this, random);
         backrooms.gen_backrooms();
 
-        HallowedChambersWorld chambers = new HallowedChambersWorld(this);
+        HallowedChambersWorld chambers = new HallowedChambersWorld(this, random);
         chambers.gen_world();
 
         this.getServer().getWorld(getMainWorldName()).setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
 
-        StartingDungeons dungeons = new StartingDungeons(this);
+        StartingDungeons dungeons = new StartingDungeons(this, random);
         dungeons.genSpawnDungeons();
     }
 
@@ -668,43 +670,43 @@ public final class BadlandsCaves extends JavaPlugin {
 
         this.getCommand("craftguide").setExecutor(new CraftingGuideCommand(this));
 
-        this.getCommand("backrooms").setExecutor(new BackroomsCommand(this, backroomsManager));
+        this.getCommand("backrooms").setExecutor(new BackroomsCommand(this, backroomsManager, random));
         this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
 
         this.getCommand("world").setExecutor(new WorldCommand(this));
 
-        this.getCommand("pregenerate").setExecutor(new PregenerateCommand(this));
+        this.getCommand("pregenerate").setExecutor(new PregenerateCommand(this, random));
     }
 
     //RUNNABLES
     public void loadRunnables() {
         new ActionbarRunnable(this).runTaskTimer(this, 0, 5);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
-        new DisplaceParticleRunnable(this).runTaskTimerAsynchronously(this, 0, 2);
+        new DisplaceParticleRunnable(this, random).runTaskTimerAsynchronously(this, 0, 2);
         new WithdrawIndicatorRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
-        new PossessionIndicatorRunnable(this).runTaskTimer(this, 0, 1);
+        new PossessionIndicatorRunnable(this, random).runTaskTimer(this, 0, 1);
         manaBarManager.runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 5);
-        new DescensionReset(this).runTaskTimer(this, 0, 120);
+        new DescensionReset(this, random).runTaskTimer(this, 0, 120);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
-        new AugmentedSpider(this).runTaskTimer(this, 0, 5);
-        new AugmentedZombie(this).runTaskTimer(this, 0, 10);
-        new Surface(this).runTaskTimer(this, 0, 100);
+        new AugmentedSpider(this, random).runTaskTimer(this, 0, 5);
+        new AugmentedZombie(this, random).runTaskTimer(this, 0, 10);
+        new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
-        new MeteorShowerRunnable(this).runTaskTimer(this, 0, 20);
-        new BewildermentRunnable(this).runTaskTimer(this, 0, 100);
+        new MeteorShowerRunnable(this, random).runTaskTimer(this, 0, 20);
+        new BewildermentRunnable(this, random).runTaskTimer(this, 0, 100);
         noOxygen.runTaskTimer(this, 0, 10);
-        new LavaFloorRunnable(this).runTaskTimer(this, 0, 20);
-        new NoFloorRunnable(this).runTaskTimer(this, 0, 10);
-        new ParanoiaRunnable(this).runTaskTimer(this, 0, 80);
+        new LavaFloorRunnable(this, random).runTaskTimer(this, 0, 20);
+        new NoFloorRunnable(this, random).runTaskTimer(this, 0, 10);
+        new ParanoiaRunnable(this, random).runTaskTimer(this, 0, 80);
         freezing.runTaskTimer(this, 0, 5);
         preventTechUse.runTaskTimer(this, 0, 200);
         preventMagicUse.runTaskTimer(this, 0, 200);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
         nebuliteCounterattack.runTaskTimer(this, 0, 0);
         artifactHasteWind.runTaskTimer(this, 0, 0);
-        new ArtifactMomentousMomentum(this).runTaskTimer(this, 0, 0);
-        new PregenerateDimensions(this).runTaskTimer(this, 600, 2000);
+        new ArtifactMomentousMomentum(this, random).runTaskTimer(this, 0, 0);
+        new PregenerateDimensions(this, random).runTaskTimer(this, 600, 2000);
 
         witherBossFight.checkIfEnded();
         witherBossFight.portalDestroyTimer();
@@ -807,6 +809,9 @@ public final class BadlandsCaves extends JavaPlugin {
         researchTableItems.convexLensRecipe();
         researchTableItems.magnifyingGlassRecipe();
         researchTableItems.researchTableRecipe();
+
+        NebuliteInstallerSmelt nebuliteInstallerSmelt = new NebuliteInstallerSmelt(this);
+        nebuliteInstallerSmelt.deconstructRecipe();
     }
 
     public void loadWorldNames() {

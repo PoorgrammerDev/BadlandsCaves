@@ -15,10 +15,11 @@ import java.util.Random;
 
 public class UseChambersBag implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
 
-    public UseChambersBag(BadlandsCaves plugin) {
+    public UseChambersBag(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler

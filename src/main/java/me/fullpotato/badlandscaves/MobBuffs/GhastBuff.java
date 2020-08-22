@@ -13,9 +13,11 @@ import java.util.Random;
 
 public class GhastBuff implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public GhastBuff(BadlandsCaves plugin) {
+    public GhastBuff(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -32,7 +34,6 @@ public class GhastBuff implements Listener {
                         if (fireball.isDead()) return;
 
                         final Ghast ghast = (Ghast) fireball.getShooter();
-                        final Random random = new Random();
                         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                         final double chance = Math.pow(1.045, chaos) - 1;
                         Location location = fireball.getLocation();

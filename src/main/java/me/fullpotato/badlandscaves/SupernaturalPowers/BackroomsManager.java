@@ -28,12 +28,14 @@ public class BackroomsManager implements Listener {
     private final World backrooms;
     private final InventorySerialize inventorySerialize;
     private final FakePlayerNMS fakePlayerManager;
+    private final Random random;
 
-    public BackroomsManager(BadlandsCaves plugin, InventorySerialize inventorySerialize) {
+    public BackroomsManager(BadlandsCaves plugin, InventorySerialize inventorySerialize, Random random) {
         this.plugin = plugin;
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         fakePlayerManager = plugin.getFakePlayerNMS();
         this.inventorySerialize = inventorySerialize;
+        this.random = random;
     }
 
     public enum BackroomsType {
@@ -340,9 +342,8 @@ public class BackroomsManager implements Listener {
         location.setPitch(random.nextInt(180) - 90);
     }
 
-    @EventHandler
+    //Disabled until further notice
     public void betweenDimensions(PlayerChangedWorldEvent event) {
-        final Random random = new Random();
         if (random.nextInt(1000) < 5) {
             final Player player = event.getPlayer();
             final World from = event.getFrom();
@@ -393,10 +394,10 @@ public class BackroomsManager implements Listener {
                     @Override
                     public void run() {
                         if (darkrooms) {
-                            enterBackRooms(player, new Random(), BackroomsType.DARKROOMS);
+                            enterBackRooms(player, random, BackroomsType.DARKROOMS);
                         }
                         else {
-                            enterBackRooms(player, new Random(), BackroomsType.BACKROOMS);
+                            enterBackRooms(player, random, BackroomsType.BACKROOMS);
                         }
                         PlayerScore.BACKROOMS_TIMER.setScore(plugin, player, backrooms_timer);
                     }

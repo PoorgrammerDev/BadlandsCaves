@@ -17,9 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Random;
+
 public class NebuliteSmolderingFlames extends NebuliteMechanisms implements Listener {
-    public NebuliteSmolderingFlames(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
-        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+    public NebuliteSmolderingFlames(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

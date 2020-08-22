@@ -18,15 +18,16 @@ import java.util.Random;
 
 public class CreeperBuff implements Listener {
     private final BadlandsCaves plugin;
-    public CreeperBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public CreeperBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
     @EventHandler
     public void HMcreeper (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Creeper)) return;
         final Creeper creeper = (Creeper) event.getEntity();
-        final Random random = new Random();
 
         boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
@@ -60,7 +61,6 @@ public class CreeperBuff implements Listener {
                     if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                         final Location location = creeper.getLocation();
                         final World world = creeper.getWorld();
-                        final Random random = new Random();
                         final int size = creeper.getExplosionRadius();
                         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
 
@@ -101,7 +101,6 @@ public class CreeperBuff implements Listener {
                     final Creeper source = (Creeper) event.getDamager();
                     final Creeper surrounding = (Creeper) event.getEntity();
                     if (source.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && source.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
-                        Random random = new Random();
                         if (random.nextBoolean()) {
                             Location top = source.getLocation().clone();
                             top.add(0, 5, 0);

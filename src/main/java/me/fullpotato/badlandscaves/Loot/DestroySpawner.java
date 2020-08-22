@@ -30,7 +30,7 @@ import java.util.*;
 
 public class DestroySpawner implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
     private final Map<Material, Material> mossMap = new HashMap<>();
     private static Location newLoc;
     private final ArrayList<Material> pickaxes = new ArrayList<>();
@@ -46,9 +46,10 @@ public class DestroySpawner implements Listener {
     };
 
 
-    public DestroySpawner(BadlandsCaves plugin) {
+    public DestroySpawner(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "spawner_id");
+        this.random = random;
         mossMap.put(Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS);
         mossMap.put(Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB);
         mossMap.put(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS);
@@ -310,7 +311,7 @@ public class DestroySpawner implements Listener {
         builder.killer(player);
         LootContext lootContext = builder.build();
 
-        SpawnerTable spawnerTable = new SpawnerTable(plugin, player, spawnerType, fortune);
+        SpawnerTable spawnerTable = new SpawnerTable(plugin, random, player, spawnerType, fortune);
         Collection<ItemStack> collection = spawnerTable.populateLoot(random, lootContext);
         ArrayList<ItemStack> treasure_list = (ArrayList<ItemStack>) collection;
 

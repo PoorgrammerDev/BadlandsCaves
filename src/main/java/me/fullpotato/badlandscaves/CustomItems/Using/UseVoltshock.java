@@ -25,9 +25,11 @@ import java.util.Random;
 public class UseVoltshock implements Listener {
     private final BadlandsCaves plugin;
     private final Voltshock voltshock;
-    public UseVoltshock(BadlandsCaves plugin, Voltshock voltshock) {
+    private final Random random;
+    public UseVoltshock(BadlandsCaves plugin, Voltshock voltshock, Random random) {
         this.plugin = plugin;
         this.voltshock = voltshock;
+        this.random = random;
     }
 
     @EventHandler
@@ -42,7 +44,6 @@ public class UseVoltshock implements Listener {
                         if (!voltshock.getOnCooldown(item) && voltshock.getCharge(item) > 0) {
                             double player_dmg = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
                             if (event.getDamage() >= player_dmg) {
-                                Random random = new Random();
                                 boolean critical = event.getDamage() > player_dmg;
                                 if ((critical) || (random.nextBoolean())) {
                                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {

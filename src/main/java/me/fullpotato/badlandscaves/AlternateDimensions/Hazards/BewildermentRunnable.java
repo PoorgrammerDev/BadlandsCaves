@@ -18,12 +18,13 @@ public class BewildermentRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards dims;
     private final ZombieBossBehavior locationFinder;
-    private final Random random = new Random();
+    private final Random random;
 
-    public BewildermentRunnable(BadlandsCaves plugin) {
+    public BewildermentRunnable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        this.dims = new EnvironmentalHazards(plugin);
-        this.locationFinder = new ZombieBossBehavior(plugin);
+        this.dims = new EnvironmentalHazards(plugin, random);
+        this.random = random;
+        this.locationFinder = new ZombieBossBehavior(plugin, random);
     }
 
     @Override

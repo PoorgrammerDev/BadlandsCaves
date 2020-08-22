@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Random;
+
 public class TaintedPowderVelCheck extends BukkitRunnable {
 
     private final BadlandsCaves plugin;
@@ -15,14 +17,16 @@ public class TaintedPowderVelCheck extends BukkitRunnable {
     private final double initial_x_vel;
     private final double initial_y_vel;
     private final double initial_z_vel;
+    private final Random random;
 
-    public TaintedPowderVelCheck(BadlandsCaves bcav, Player ply, Item powd, double init_x, double init_y, double init_z) {
+    public TaintedPowderVelCheck(BadlandsCaves bcav, Player ply, Item powd, double init_x, double init_y, double init_z, Random random) {
         plugin = bcav;
         player = ply;
         powder = powd;
         initial_x_vel = init_x;
         initial_y_vel = init_y;
         initial_z_vel = init_z;
+        this.random = random;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class TaintedPowderVelCheck extends BukkitRunnable {
         }
 
         if (ready_to_run) {
-            new TaintedPowderRunnable(plugin, powder, player, this.getTaskId()).runTask(plugin);
+            new TaintedPowderRunnable(plugin, powder, player, this.getTaskId(), random).runTask(plugin);
         }
     }
 }

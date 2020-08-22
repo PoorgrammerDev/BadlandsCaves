@@ -27,10 +27,12 @@ public class Drinking implements Listener {
     private final BadlandsCaves plugin;
     private final PlayerEffects playerEffects;
     private final BackroomsManager backroomsManager;
-    public Drinking(BadlandsCaves bcav, PlayerEffects playerEffects, BackroomsManager backroomsManager) {
+    private final Random random;
+    public Drinking(BadlandsCaves bcav, PlayerEffects playerEffects, BackroomsManager backroomsManager, Random random) {
         plugin = bcav;
         this.playerEffects = playerEffects;
         this.backroomsManager = backroomsManager;
+        this.random = random;
     }
     @EventHandler
     public void drink (PlayerItemConsumeEvent event) {
@@ -84,7 +86,7 @@ public class Drinking implements Listener {
         int thirst_threshold = plugin.getOptionsConfig().getInt(hardmode ? "hardmode_values.threshold_thirst_sys" : "pre_hardmode_values.threshold_thirst_sys");
         double thirst_add = plugin.getOptionsConfig().getInt(hardmode ? "hardmode_values.purified_drink_thirst_incr" : "pre_hardmode_values.purified_drink_thirst_incr");
         int overflow = (int) (Math.max((current_thirst + thirst_add) - 100, 0));
-        int buffer = hardmode ? (thirst_threshold * -50) - (50 * overflow) : (thirst_threshold * -100) - (50 * overflow);
+        int buffer = hardmode ? (thirst_threshold * -100) - (50 * overflow) : (thirst_threshold * -200) - (50 * overflow);
 
         PlayerScore.THIRST.setScore(plugin, player, Math.min(current_thirst + thirst_add, 100));
         PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, Math.min((int) ((double) PlayerScore.THIRST_SYS_VAR.getScore(plugin, player)), buffer));
@@ -139,7 +141,6 @@ public class Drinking implements Listener {
             return;
         }
 
-        Random random = new Random();
         double[] tracker = {0.0};
         new BukkitRunnable() {
             @Override
@@ -154,14 +155,16 @@ public class Drinking implements Listener {
                     updated.getWorld().spawnParticle(Particle.REDSTONE, updated, 100, 1, 1, 1, 1, new Particle.DustOptions(Color.YELLOW, 0.5F));
                     updated.getWorld().playSound(updated, "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 1, 1);
 
+                    player.setFallDistance(0);
                     player.teleport(warp, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
                     warp.getWorld().spawnParticle(Particle.REDSTONE, warp, 100, 1, 1, 1, 1, new Particle.DustOptions(Color.YELLOW, 0.5F));
                     warp.getWorld().playSound(warp, "custom.supernatural.displace.warp", SoundCategory.PLAYERS, 1, 1);
 
-                    if (updated.distanceSquared(location) > 0 && random.nextInt(1000) < updated.distanceSquared(location)) {
-                        backroomsManager.enterBackRooms(player, random);
-                    }
+                    //Disabled until further notice
+                    //if (updated.distanceSquared(location) > 0 && random.nextInt(1000) < updated.distanceSquared(location)) {
+                    //    backroomsManager.enterBackRooms(player, random);
+                    //}
                 }
                 else {
                     ParticleShapes.particleCircle(null, Particle.REDSTONE, location.clone().add(0, tracker[0], 0), 1, 0, new Particle.DustOptions(Color.YELLOW, 0.5F));

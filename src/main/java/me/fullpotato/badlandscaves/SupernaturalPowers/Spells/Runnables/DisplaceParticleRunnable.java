@@ -18,9 +18,11 @@ import java.util.Random;
 
 public class DisplaceParticleRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public DisplaceParticleRunnable (BadlandsCaves plugin) {
+    public DisplaceParticleRunnable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @Override
@@ -93,7 +95,6 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
     }
 
     public void scoutingParticle (Player player, Location location) {
-        Random random = new Random();
         location.add(0, location.getBlock().isPassable() ? 0.5 : 1.1, 0);
         if (random.nextBoolean()) player.spawnParticle(Particle.SPELL_WITCH, location, 1, 0.25, 0.25, 0.25, 1);
         player.spawnParticle(Particle.BLOCK_DUST, location, 5, 0.25, 0.25, 0.25, 0, Material.PURPLE_GLAZED_TERRACOTTA.createBlockData());

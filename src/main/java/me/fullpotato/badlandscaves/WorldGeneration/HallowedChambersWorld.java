@@ -11,8 +11,10 @@ import java.util.Random;
 
 public class HallowedChambersWorld {
     private final BadlandsCaves plugin;
-    public HallowedChambersWorld(BadlandsCaves bcav) {
+    private final Random random;
+    public HallowedChambersWorld(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
     public void gen_world() {
@@ -103,7 +105,6 @@ public class HallowedChambersWorld {
         MultiStructureLoader multiStructureLoader = new MultiStructureLoader(structures);
         multiStructureLoader.loadAll();
 
-        Random random = new Random();
         for (int x = -27; x <= -23; x++) {
             for (int z = -2; z <= 2; z++) {
                 for (int y = 0; y <= 127; y++) {

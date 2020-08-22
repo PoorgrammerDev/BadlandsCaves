@@ -5,10 +5,13 @@ import me.fullpotato.badlandscaves.CustomItems.Using.CustomBows;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Piglin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -18,6 +21,7 @@ import java.util.Random;
 
 public class PiglinBuff implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
     private final Material[] armorTypes = {
             Material.GOLDEN_BOOTS,
             Material.GOLDEN_LEGGINGS,
@@ -25,8 +29,9 @@ public class PiglinBuff implements Listener {
             Material.GOLDEN_HELMET
     };
 
-    public PiglinBuff(BadlandsCaves plugin) {
+    public PiglinBuff(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -37,7 +42,6 @@ public class PiglinBuff implements Listener {
         if (!hardmode) return;
 
         final Piglin piglin = (Piglin) event.getEntity();
-        final Random random = new Random();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
 
         final int[] enchantmentLevels = random.ints(4, 0, (chaos / 20) + 3).toArray();

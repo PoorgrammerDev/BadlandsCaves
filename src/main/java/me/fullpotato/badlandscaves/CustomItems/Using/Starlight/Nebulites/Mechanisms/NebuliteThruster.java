@@ -14,10 +14,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Random;
+
 public class NebuliteThruster extends NebuliteMechanisms implements Listener {
 
-    public NebuliteThruster(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
-        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+    public NebuliteThruster(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

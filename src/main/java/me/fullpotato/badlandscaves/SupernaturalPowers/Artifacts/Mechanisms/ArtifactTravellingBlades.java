@@ -21,10 +21,11 @@ import java.util.Random;
 
 public class ArtifactTravellingBlades extends ArtifactMechanisms implements Listener {
     private final int cost;
-    private final Random random = new Random();
-    public ArtifactTravellingBlades(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+    private final Random random;
+    public ArtifactTravellingBlades(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, Random random) {
         super(plugin, voidmatter, artifactManager);
         cost = plugin.getOptionsConfig().getInt("hardmode_values.artifact_costs.travelling_blades");
+        this.random = random;
     }
 
     @EventHandler

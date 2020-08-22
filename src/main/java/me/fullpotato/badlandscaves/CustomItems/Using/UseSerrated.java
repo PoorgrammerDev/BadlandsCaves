@@ -22,9 +22,11 @@ import java.util.Random;
 public class UseSerrated implements Listener {
     private final BadlandsCaves plugin;
     private final SerratedSwords serratedSwords;
-    public UseSerrated(BadlandsCaves plugin, SerratedSwords serratedSwords) {
+    private final Random random;
+    public UseSerrated(BadlandsCaves plugin, SerratedSwords serratedSwords, Random random) {
         this.plugin = plugin;
         this.serratedSwords = serratedSwords;
+        this.random = random;
     }
 
     @EventHandler
@@ -38,7 +40,6 @@ public class UseSerrated implements Listener {
                     if (serratedSwords.isSerrated(item)) {
                         double player_dmg = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
                         if (event.getDamage() >= player_dmg) {
-                            Random random = new Random();
                             boolean critical = event.getDamage() > player_dmg;
                             if ((critical) || (random.nextBoolean())) {
                                 if (applyBleeding(player, entity, event.getDamage(), random.nextInt(5) + 5, false)) {

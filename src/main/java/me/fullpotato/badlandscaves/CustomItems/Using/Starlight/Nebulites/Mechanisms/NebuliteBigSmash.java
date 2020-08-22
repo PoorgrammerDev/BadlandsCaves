@@ -21,13 +21,14 @@ import org.bukkit.util.RayTraceResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class NebuliteBigSmash extends NebuliteMechanisms implements Listener {
     public Map<BlockFace, int[][]> blockFaceHashMap = new HashMap<>();
 
 
-    public NebuliteBigSmash(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
-        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+    public NebuliteBigSmash(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         initializeHashMap();
     }
 

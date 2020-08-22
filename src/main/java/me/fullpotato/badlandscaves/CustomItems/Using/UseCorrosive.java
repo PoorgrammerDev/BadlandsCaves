@@ -33,13 +33,15 @@ public class UseCorrosive implements Listener {
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
     private final Corrosive corrosive;
+    private final Random random;
 
-    public UseCorrosive(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, Corrosive corrosive) {
+    public UseCorrosive(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, Corrosive corrosive, Random random) {
         this.plugin = plugin;
         this.starlightArmor = starlightArmor;
         this.starlightCharge = starlightCharge;
         this.nebuliteManager = nebuliteManager;
         this.corrosive = corrosive;
+        this.random = random;
     }
 
     @EventHandler
@@ -55,7 +57,6 @@ public class UseCorrosive implements Listener {
                         if (corrosive.getHitsLeft(item) > 0) {
                             double player_dmg = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
                             if (event.getDamage() >= player_dmg) {
-                                Random random = new Random();
                                 boolean critical = event.getDamage() > player_dmg;
                                 if ((critical) || (random.nextBoolean())) {
                                     if (applyCorrosion(entity, random, random.nextInt(5) + 10,false)) {
@@ -86,7 +87,6 @@ public class UseCorrosive implements Listener {
                 if (arrow.isCritical()) {
                     if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event.getHitEntity();
-                        Random random = new Random();
                         applyCorrosion(entity, random, random.nextInt(3) + 2, false);
                     }
                     else {

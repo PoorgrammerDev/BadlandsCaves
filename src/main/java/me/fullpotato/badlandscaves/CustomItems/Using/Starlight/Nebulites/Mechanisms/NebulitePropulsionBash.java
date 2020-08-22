@@ -19,12 +19,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class NebulitePropulsionBash extends NebuliteMechanisms implements Listener {
     private final Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 30), 1);
-    public NebulitePropulsionBash(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
-        super(plugin, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+    public NebulitePropulsionBash(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+        super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
     @EventHandler

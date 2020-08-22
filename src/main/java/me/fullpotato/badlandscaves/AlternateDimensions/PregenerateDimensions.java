@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class PregenerateDimensions extends BukkitRunnable implements Listener {
@@ -24,12 +25,12 @@ public class PregenerateDimensions extends BukkitRunnable implements Listener {
     private final double TPSThreshold;
     private final int worldsLimit;
 
-    public PregenerateDimensions(BadlandsCaves plugin) {
+    public PregenerateDimensions(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         worldsLimit = plugin.getOptionsConfig().getInt("hardmode_values.alternate_dimensions_pregenerate_limit");
         TPSThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
         tpsGetter = plugin.getTpsGetterNMS();
-        dimensionsWorlds = new DimensionsWorlds(plugin);
+        dimensionsWorlds = new DimensionsWorlds(plugin, random);
     }
 
     @Override

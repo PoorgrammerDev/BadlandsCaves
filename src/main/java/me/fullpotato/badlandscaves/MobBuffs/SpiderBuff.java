@@ -22,8 +22,10 @@ import java.util.Random;
 
 public class SpiderBuff implements Listener {
     private final BadlandsCaves plugin;
-    public SpiderBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public SpiderBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
     @EventHandler
@@ -32,7 +34,6 @@ public class SpiderBuff implements Listener {
         boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
 
         final Spider spider = (Spider) event.getEntity();
-        final Random random = new Random();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 

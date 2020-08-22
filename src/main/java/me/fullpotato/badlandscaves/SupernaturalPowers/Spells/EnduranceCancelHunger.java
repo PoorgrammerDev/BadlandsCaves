@@ -12,8 +12,10 @@ import java.util.Random;
 
 public class EnduranceCancelHunger implements Listener {
     private final BadlandsCaves plugin;
-    public EnduranceCancelHunger(BadlandsCaves bcav) {
+    private final Random random;
+    public EnduranceCancelHunger(BadlandsCaves bcav, Random random) {
         this.plugin = bcav;
+        this.random = random;
     }
 
     @EventHandler
@@ -30,7 +32,6 @@ public class EnduranceCancelHunger implements Listener {
         int endurance_level = (int) PlayerScore.ENDURANCE_LEVEL.getScore(plugin, player);
         if (endurance_level < 1) return;
 
-        Random random = new Random();
         int rand = random.nextInt(100);
         if ((endurance_level == 1 && rand < 25) || (endurance_level == 2 && rand < 50)) {
             event.setCancelled(true);

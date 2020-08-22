@@ -28,11 +28,12 @@ public class ZombieBossBehavior extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private Zombie zombie;
     private final World world;
-    private final Random random = new Random();
+    private final Random random;
     public static Player fakePlayer = null;
 
-    public ZombieBossBehavior(BadlandsCaves bcav) {
+    public ZombieBossBehavior(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
 

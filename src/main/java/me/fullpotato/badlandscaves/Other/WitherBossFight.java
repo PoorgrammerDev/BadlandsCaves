@@ -38,6 +38,7 @@ public class WitherBossFight implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final World world;
+    private final Random random;
     private final BlockFace[] adjacent = {
             BlockFace.NORTH,
             BlockFace.EAST,
@@ -47,10 +48,11 @@ public class WitherBossFight implements Listener {
     private static final ArrayList<Player> players = new ArrayList<>();
     private static final ArrayList<Item> droppedKeys = new ArrayList<>();
 
-    public WitherBossFight(BadlandsCaves plugin) {
+    public WitherBossFight(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getChambersWorldName());
         customItemManager = plugin.getCustomItemManager();
+        this.random = random;
     }
 
     //--------------------------------------------------
@@ -73,7 +75,6 @@ public class WitherBossFight implements Listener {
 
                 plugin.saveSystemConfig();
 
-                Random random = new Random();
                 spawnTunnel(spawnLocation, random);
                 destroyAroundPortal(spawnLocation);
                 regenMazesAndKeyHolders();
@@ -134,7 +135,7 @@ public class WitherBossFight implements Listener {
                 new StructureTrack(plugin, new Location(world, -5, 159, 1), 0, 0, 0, 0, -31, -2, "badlandscaves:chambers_start_barrier", BlockFace.UP),
         };
 
-        HallowedChambersWorld hallowedChambersWorld = new HallowedChambersWorld(plugin);
+        HallowedChambersWorld hallowedChambersWorld = new HallowedChambersWorld(plugin, random);
         hallowedChambersWorld.spawnInStructure(structures);
     }
 
@@ -284,11 +285,11 @@ public class WitherBossFight implements Listener {
         final boolean waive = plugin.getOptionsConfig().getBoolean("waive_hardmode_chambers_keys");
 
         if (hardmode && waive) {
-            genMazes(new Random(), false);
+            genMazes(random, false);
             advanceToBoss();
         }
         else {
-            genMazes(new Random(), true);
+            genMazes(random, true);
             plugin.getSystemConfig().set("wither_fight.fight_stage", 2);
         }
 
@@ -629,7 +630,7 @@ public class WitherBossFight implements Listener {
             public void run() {
                 if (time[0] <= 0) {
                     this.cancel();
-                    spawnBoss(new Location(world, 300, 206, 0), new Random(), 45, players.size());
+                    spawnBoss(new Location(world, 300, 206, 0), random, 45, players.size());
                     TitleEffects titleEffects = new TitleEffects(plugin);
                     players.forEach(player -> titleEffects.sendDecodingTitle(player, "FIGHT", ChatColor.of("#ff7f00") + ChatColor.BOLD.toString(), "", "", 0, 30, 10, 2, false));
                 }
@@ -685,7 +686,6 @@ public class WitherBossFight implements Listener {
         if (event.getEntity() instanceof WitherSkull) {
             WitherSkull skull = (WitherSkull) event.getEntity();
             if (skull.getShooter() instanceof Wither) {
-                Random random = new Random();
                 if (!skull.isCharged()) {
                     if (random.nextInt(100) < 10) {
                         skull.setCharged(true);
@@ -743,7 +743,6 @@ public class WitherBossFight implements Listener {
             WitherSkull skull = (WitherSkull) event.getEntity();
             Entity hitEntity = event.getHitEntity();
 
-            Random random = new Random();
             if (skull.isCharged()) {
                 if (hitEntity != null) {
                     if (random.nextBoolean()) {

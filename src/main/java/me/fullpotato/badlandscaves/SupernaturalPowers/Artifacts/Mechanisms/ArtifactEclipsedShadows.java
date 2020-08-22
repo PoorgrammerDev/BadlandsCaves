@@ -35,15 +35,16 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
     private final SoulCampfire soulCampfire;
     private final ManaBarManager manaBarManager;
     private final SwapPowers swapPowers;
-    private final Random random = new Random();
+    private final Random random;
     private final EclipsedShadowsNMS nms;
     final double cost = plugin.getOptionsConfig().getDouble("hardmode_values.artifact_costs.eclipsed_shadows");
-    public ArtifactEclipsedShadows(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, SoulCampfire soulCampfire, ManaBarManager manaBarManager, SwapPowers swapPowers) {
+    public ArtifactEclipsedShadows(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, SoulCampfire soulCampfire, ManaBarManager manaBarManager, SwapPowers swapPowers, Random random) {
         super(plugin, voidmatter, artifactManager);
         nms = plugin.getEclipsedShadowsNMS();
         this.soulCampfire = soulCampfire;
         this.manaBarManager = manaBarManager;
         this.swapPowers = swapPowers;
+        this.random = random;
     }
 
     @EventHandler

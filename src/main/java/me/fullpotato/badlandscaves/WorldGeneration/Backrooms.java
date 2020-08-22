@@ -3,18 +3,22 @@ package me.fullpotato.badlandscaves.WorldGeneration;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.*;
 
+import java.util.Random;
+
 public class Backrooms {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public Backrooms(BadlandsCaves plugin) {
+    public Backrooms(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     public void gen_backrooms() {
         WorldCreator backrooms = new WorldCreator(plugin.getBackroomsWorldName());
         backrooms.environment(World.Environment.NORMAL)
                 .type(WorldType.FLAT)
-                .generator(new BackroomsGen());
+                .generator(new BackroomsGen(random));
         World world_backrooms = plugin.getServer().createWorld(backrooms);
         world_backrooms.setSpawnLocation(3, 64, 3);
         world_backrooms.setGameRule(GameRule.DO_INSOMNIA, false);

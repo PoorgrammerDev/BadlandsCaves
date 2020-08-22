@@ -12,10 +12,11 @@ import java.util.Random;
 
 public class EnvironmentalHazards {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
 
-    public EnvironmentalHazards(BadlandsCaves plugin) {
+    public EnvironmentalHazards(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     public enum Hazard {

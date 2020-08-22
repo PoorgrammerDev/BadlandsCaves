@@ -29,14 +29,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class Withdraw extends UsePowers implements Listener {
-    private final Random random = new Random();
+    private final Random random;
     final int cost = plugin.getOptionsConfig().getInt("spell_costs.withdraw_mana_cost");
     private final World void_world;
     private final ArtifactManager artifactManager;
     private final ArtifactSoulHeist artifactSoulHeist;
     private final World backrooms;
-    public Withdraw(BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter) {
+    public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter) {
         super(plugin);
+        this.random = random;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         void_world = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
         artifactSoulHeist = new ArtifactSoulHeist(plugin, this, possession, voidmatter, artifactManager);

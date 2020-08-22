@@ -15,9 +15,11 @@ import java.util.Random;
 
 public class HoglinBuff implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random ;
 
-    public HoglinBuff(BadlandsCaves plugin) {
+    public HoglinBuff(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -28,7 +30,6 @@ public class HoglinBuff implements Listener {
         if (!hardmode) return;
 
         final Hoglin hoglin = (Hoglin) event.getEntity();
-        final Random random = new Random();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 

@@ -24,6 +24,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -33,13 +34,14 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
     private final World descension;
     private final World reflection;
     private final Set<Material> blacklisted;
+    private final Random random;
 
-
-    public UseIncompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize) {
+    public UseIncompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize, Random random) {
         this.plugin = plugin;
         descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         this.inventorySerialize = inventorySerialize;
+        this.random = random;
 
         blacklisted = new HashSet<>();
         blacklisted.add(Material.CRAFTING_TABLE);
@@ -120,7 +122,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
 
         //runnables
         new SpawnBoss(plugin, player).runTaskLater(plugin, 200);
-        new ZombieBossBehavior(plugin).runTaskTimer(plugin, 0, 0);
+        new ZombieBossBehavior(plugin, random).runTaskTimer(plugin, 0, 0);
         new LimitActions(plugin, this).runTaskTimer(plugin, 0, 20);
     }
 

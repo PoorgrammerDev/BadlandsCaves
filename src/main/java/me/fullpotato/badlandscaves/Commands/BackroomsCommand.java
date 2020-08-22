@@ -17,12 +17,13 @@ public class BackroomsCommand extends Commands implements CommandExecutor {
     private final BadlandsCaves plugin;
     private final BackroomsManager backroomsManager;
     private final World backrooms;
-    private final Random random = new Random();
+    private final Random random;
 
-    public BackroomsCommand(BadlandsCaves plugin, BackroomsManager backroomsManager) {
+    public BackroomsCommand(BadlandsCaves plugin, BackroomsManager backroomsManager, Random random) {
         this.plugin = plugin;
         this.backroomsManager = backroomsManager;
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
+        this.random = random;
     }
 
     @Override

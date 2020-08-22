@@ -26,11 +26,13 @@ public class ArtifactSummonersRift extends ArtifactMechanisms implements Listene
     private final NamespacedKey key;
     private final ZombieBossBehavior locationFinder;
     private final ArtifactFleetingSpirits fleetingSpirits;
-    public ArtifactSummonersRift(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, ArtifactFleetingSpirits fleetingSpirits) {
+    private final Random random;
+    public ArtifactSummonersRift(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, ArtifactFleetingSpirits fleetingSpirits, Random random) {
         super(plugin, voidmatter, artifactManager);
         this.key = new NamespacedKey(plugin, "summoner");
-        locationFinder = new ZombieBossBehavior(plugin);
+        locationFinder = new ZombieBossBehavior(plugin, random);
         this.fleetingSpirits = fleetingSpirits;
+        this.random = random;
     }
 
     @EventHandler
@@ -125,7 +127,7 @@ public class ArtifactSummonersRift extends ArtifactMechanisms implements Listene
 
 
                                 entity.setNoDamageTicks(0);
-                                final Location spawnLoc = locationFinder.getNearbyLocation(arrow.getLocation(), new Random(), 5);
+                                final Location spawnLoc = locationFinder.getNearbyLocation(arrow.getLocation(), random, 5);
                                 if (spawnLoc != null && spawnLoc.distanceSquared(entity.getLocation()) > 2) {
                                     new BukkitRunnable() {
                                         @Override

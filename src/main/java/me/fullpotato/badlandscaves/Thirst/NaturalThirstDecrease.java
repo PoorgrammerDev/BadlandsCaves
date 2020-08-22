@@ -14,17 +14,18 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.Random;
 
 public class NaturalThirstDecrease implements Listener {
-    private final Random random = new Random();
+    private final Random random;
     private final BadlandsCaves plugin;
     private final World descension;
     private final World reflection;
     private final World backrooms;
     private final PlayerEffects playerEffects;
-    public NaturalThirstDecrease(BadlandsCaves plugin, PlayerEffects playerEffects) {
+    public NaturalThirstDecrease(BadlandsCaves plugin, Random random, PlayerEffects playerEffects) {
         this.plugin = plugin;
         descension = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
+        this.random = random;
         this.playerEffects = playerEffects;
     }
 
@@ -76,7 +77,7 @@ public class NaturalThirstDecrease implements Listener {
             }
 
             if (world.getEnvironment().equals(World.Environment.NETHER)) {
-                cost *= 2;
+                cost *= 1.5;
             }
 
             PlayerScore.THIRST_SYS_VAR.setScore(plugin, player, current_thirst_sys + cost);

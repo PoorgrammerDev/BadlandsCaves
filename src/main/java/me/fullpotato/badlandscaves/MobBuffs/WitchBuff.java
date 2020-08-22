@@ -23,9 +23,11 @@ import java.util.Random;
 
 public class WitchBuff implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public WitchBuff(BadlandsCaves plugin) {
+    public WitchBuff(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -50,7 +52,6 @@ public class WitchBuff implements Listener {
             if (target == null) return;
             if (witch.hasMetadata("runnable") && witch.getMetadata("runnable").get(0).asBoolean()) return;
 
-            final Random random = new Random();
             final int chaos = plugin.getSystemConfig().getInt("chaos_level");
             final double chance = Math.pow(1.045, chaos) - 1;
 
@@ -94,7 +95,7 @@ public class WitchBuff implements Listener {
     }
 
     public Location findLocation (Location targetLocation, Random random, int lower_bound, int higher_bound, int range) {
-        ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin);
+        ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin, random);
         Location test;
         for (int i = 0; i < 100; i++) {
             test = locationFinder.getNearbyLocation(targetLocation, random, range);
@@ -131,8 +132,8 @@ public class WitchBuff implements Listener {
                 }
                 else {
                     if (vindicator.getLocation().distanceSquared(target.getLocation()) > 25) {
-                        ZombieBossBehavior teleporter = new ZombieBossBehavior(plugin);
-                        Location nearbyLocation = teleporter.getNearbyLocation(target.getLocation(), new Random(), 2);
+                        ZombieBossBehavior teleporter = new ZombieBossBehavior(plugin, random);
+                        Location nearbyLocation = teleporter.getNearbyLocation(target.getLocation(), random, 2);
                         if (nearbyLocation != null) vindicator.teleport(nearbyLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
                     }
                 }

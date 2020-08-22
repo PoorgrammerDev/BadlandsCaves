@@ -19,10 +19,12 @@ import java.util.Random;
 public class NoOxygen extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards environmentalHazards;
+    private final Random random;
 
-    public NoOxygen(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards) {
+    public NoOxygen(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards, Random random) {
         this.plugin = plugin;
         this.environmentalHazards = environmentalHazards;
+        this.random = random;
     }
 
     @EventHandler
@@ -43,7 +45,6 @@ public class NoOxygen extends BukkitRunnable implements Listener {
                             if (equipment != null) {
                                 final ItemStack helmet = equipment.getHelmet();
                                 if (helmet != null && helmet.containsEnchantment(Enchantment.OXYGEN)) {
-                                    final Random random = new Random();
                                     final int level = helmet.getEnchantmentLevel(Enchantment.OXYGEN);
 
                                     if (random.nextInt(100) < (100.0 * level / (level + 1))) {

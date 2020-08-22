@@ -18,9 +18,11 @@ import java.util.Random;
 
 public class PhantomBuff implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public PhantomBuff(BadlandsCaves plugin) {
+    public PhantomBuff(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -34,7 +36,6 @@ public class PhantomBuff implements Listener {
 
             if (event.getTarget() instanceof Player) {
                 Player player = (Player) event.getTarget();
-                final Random random = new Random();
 
                 final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                 final double chance = Math.pow(1.045, chaos) - 1;

@@ -17,12 +17,13 @@ import java.util.Random;
 
 public class DimensionsWorlds {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
     private final EnvironmentalHazards hazards;
 
-    public DimensionsWorlds(BadlandsCaves plugin) {
+    public DimensionsWorlds(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        hazards = new EnvironmentalHazards(plugin);
+        hazards = new EnvironmentalHazards(plugin, random);
+        this.random = random;
     }
 
     private static final Biome[] allBiomes = {
@@ -71,7 +72,7 @@ public class DimensionsWorlds {
 
         final WorldCreator creator = new WorldCreator(plugin.getDimensionPrefixName() + name);
         creator.environment(World.Environment.NORMAL);
-        creator.generator(new DimensionsGen(plugin, biome));
+        creator.generator(new DimensionsGen(plugin, biome, random));
 
         final World world = plugin.getServer().createWorld(creator);
         assert world != null;
@@ -224,7 +225,7 @@ public class DimensionsWorlds {
                 final Biome biome = Biome.valueOf(biomeStr);
 
                 final WorldCreator worldCreator = new WorldCreator(name);
-                worldCreator.environment(World.Environment.NORMAL).generator(new DimensionsGen(plugin, biome, scaleRand, frequency, amplitude, storedChaos));
+                worldCreator.environment(World.Environment.NORMAL).generator(new DimensionsGen(plugin, biome, scaleRand, frequency, amplitude, storedChaos, random));
 
                 return worldCreator.createWorld();
             }

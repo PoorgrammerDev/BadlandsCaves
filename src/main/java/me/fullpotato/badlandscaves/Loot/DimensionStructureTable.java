@@ -28,15 +28,23 @@ public class DimensionStructureTable implements LootTable, Listener {
     private final NamespacedKey key;
     private final Artifact[] artifacts = Artifact.values();
     private final PregenerateDimensions pregenerateDimensions;
+    private final Map<ItemStack, Integer> priorityMap = new HashMap<>();
     private final Map<ItemStack, Integer> itemMap = new HashMap<>();
     private final TreasureGear treasureGear = new TreasureGear();
-    private final Random random = new Random();
+    private final Random random;
 
-    public DimensionStructureTable(BadlandsCaves plugin) {
+    public DimensionStructureTable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "dimension_structure_table");
-        pregenerateDimensions = new PregenerateDimensions(plugin);
+        pregenerateDimensions = new PregenerateDimensions(plugin, random);
         customItemManager = plugin.getCustomItemManager();
+        this.random = random;
+
+        priorityMap.put(new ItemStack(Material.NETHERITE_SCRAP), 4);
+        priorityMap.put(customItemManager.getItem(CustomItem.VOIDMATTER), 4);
+        priorityMap.put(customItemManager.getItem(CustomItem.TITANIUM_INGOT), 8);
+        priorityMap.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), 1);
+        priorityMap.put(customItemManager.getItem(CustomItem.NEBULITE_CRATE), 1);
 
         itemMap.put(new ItemStack(Material.IRON_BLOCK), 2);
         itemMap.put(new ItemStack(Material.DIAMOND_BLOCK), 2);
@@ -57,27 +65,33 @@ public class DimensionStructureTable implements LootTable, Listener {
         itemMap.put(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR), 1);
         itemMap.put(customItemManager.getItem(CustomItem.MERGED_SOULS), 1);
         itemMap.put(customItemManager.getItem(CustomItem.ENERGIUM), 1);
-        itemMap.put(customItemManager.getItem(CustomItem.VOIDMATTER), 1);
-        itemMap.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), 1);
-        itemMap.put(customItemManager.getItem(CustomItem.NEBULITE_CRATE), 1);
         itemMap.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), 1);
         itemMap.put(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER), 1);
         itemMap.put(customItemManager.getItem(CustomItem.TAINTED_POWDER), 8);
-        itemMap.put(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT), 4);
         itemMap.put(customItemManager.getItem(CustomItem.BLESSED_APPLE), 4);
         itemMap.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), 2);
     }
 
     @Override
     public @NotNull Collection<ItemStack> populateLoot(@NotNull Random random, @NotNull LootContext lootContext) {
+        final ArrayList<ItemStack> priorityList = new ArrayList<>(priorityMap.keySet());
         final ArrayList<ItemStack> list = new ArrayList<>(itemMap.keySet());
+
         final Collection<ItemStack> output = new ArrayList<>();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final int count = Math.min(((chaos / 7) > 0 ? random.nextInt(chaos / 7) : 0) + random.nextInt(5) + 5, 27);
         int failed = 0;
         for (int i = 0; i < count; i++) {
             if (failed > 100) break;
-            final ItemStack item = list.get(random.nextInt(list.size()));
+
+            final ItemStack item;
+            if (random.nextInt(100) < 60) {
+                item = priorityList.get(random.nextInt(priorityList.size()));
+            }
+            else {
+                item = list.get(random.nextInt(list.size()));
+            }
+
             if (itemMap.containsKey(item)) {
                 final int amount = itemMap.get(item);
                 item.setAmount(amount > 1 ? randomCount(random, 1, amount) : 1);

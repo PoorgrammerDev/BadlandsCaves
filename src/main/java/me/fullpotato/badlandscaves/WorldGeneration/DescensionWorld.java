@@ -5,12 +5,14 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescen
 import me.fullpotato.badlandscaves.Util.UnloadedWorld;
 import org.bukkit.*;
 
+import java.util.Random;
+
 public class DescensionWorld {
     private final BadlandsCaves plugin;
     private final MakeDescensionStage makeStage;
-    public DescensionWorld(BadlandsCaves plugin) {
+    public DescensionWorld(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        makeStage = new MakeDescensionStage(plugin);
+        makeStage = new MakeDescensionStage(plugin, random);
     }
 
     public void gen_descension_world() {

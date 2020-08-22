@@ -14,7 +14,7 @@ import java.util.Random;
 public class Surface extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
-    private final Random random = new Random();
+    private final Random random;
     private final int surfaceLayer;
     private final ZombieBossBehavior finder;
     private final EntityType[] banditTypes = {
@@ -28,11 +28,12 @@ public class Surface extends BukkitRunnable {
     };
     private static final int CHECK_RANGE = 20;
 
-    public Surface(BadlandsCaves plugin) {
+    public Surface(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getMainWorldName());
         surfaceLayer = plugin.getOptionsConfig().getInt("surface_layer");
-        finder = new ZombieBossBehavior(plugin);
+        finder = new ZombieBossBehavior(plugin, random);
+        this.random = random;
     }
 
     @Override

@@ -18,11 +18,13 @@ public class TaintedPowderRunnable extends BukkitRunnable {
     private final Item item;
     private final Player thrower;
     private final int vel_check_ID;
-    public TaintedPowderRunnable(BadlandsCaves bcav, Item itm, Player ply, int id) {
+    private final Random random;
+    public TaintedPowderRunnable(BadlandsCaves bcav, Item itm, Player ply, int id, Random random) {
         plugin = bcav;
         item = itm;
         thrower = ply;
         vel_check_ID = id;
+        this.random = random;
     }
 
     @Override
@@ -85,7 +87,6 @@ public class TaintedPowderRunnable extends BukkitRunnable {
                         if (!player.equals(thrower)) {
                             player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                             double tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
-                            final Random random = new Random();
                             if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
                                 final double tox_incr = random.nextDouble() / 5;
                                 final int part_num = random.nextInt(3) + 5;

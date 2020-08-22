@@ -22,8 +22,10 @@ import java.util.Random;
 public class PigZombieBuff implements Listener {
     private final BadlandsCaves plugin;
     private final World chambers;
-    public PigZombieBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public PigZombieBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
@@ -40,8 +42,6 @@ public class PigZombieBuff implements Listener {
 
         Location location = pigZombie.getLocation();
         World world = location.getWorld();
-
-        Random random = new Random();
 
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, random.nextInt(2), false, true));
         pigZombie.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999, random.nextInt(3), false, true));
@@ -106,7 +106,6 @@ public class PigZombieBuff implements Listener {
         if (event.getEntity().getWorld().equals(chambers)) return;
 
         if (event.getEntity() instanceof PigZombie) {
-            final Random random = new Random();
             final int chaos = plugin.getSystemConfig().getInt("chaos_level");
             final double chance = Math.pow(1.045, chaos) - 1;
             if (random.nextInt(100) < chance) {

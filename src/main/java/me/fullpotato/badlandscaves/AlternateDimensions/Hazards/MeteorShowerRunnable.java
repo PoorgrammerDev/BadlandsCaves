@@ -16,12 +16,13 @@ public class MeteorShowerRunnable extends BukkitRunnable{
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards dims;
     private final ZombieBossBehavior locationFinder;
-    private final Random random = new Random();
+    private final Random random;
 
-    public MeteorShowerRunnable(BadlandsCaves plugin) {
+    public MeteorShowerRunnable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        this.dims = new EnvironmentalHazards(plugin);
-        this.locationFinder = new ZombieBossBehavior(plugin);
+        this.dims = new EnvironmentalHazards(plugin, random);
+        this.locationFinder = new ZombieBossBehavior(plugin, random);
+        this.random = random;
     }
 
 

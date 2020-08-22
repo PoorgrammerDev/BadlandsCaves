@@ -1,10 +1,10 @@
 package me.fullpotato.badlandscaves.Loot.MobDeathLoot;
 
-import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -14,13 +14,17 @@ import java.util.List;
 import java.util.Random;
 
 public class ZombieDeathLoot implements Listener {
+    private final Random random;
+
+    public ZombieDeathLoot(Random random) {
+        this.random = random;
+    }
 
     @EventHandler
     public void zombieDeath (EntityDeathEvent event) {
         if (event.getEntity() instanceof Zombie) {
             final Zombie zombie = (Zombie) event.getEntity();
             final Player player = zombie.getKiller();
-            final Random random = new Random();
 
             List<ItemStack> drops = event.getDrops();
             final int rotten_flesh_count = getRottenFleshAmount(drops);

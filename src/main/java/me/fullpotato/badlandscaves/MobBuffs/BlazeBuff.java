@@ -21,8 +21,10 @@ import java.util.Random;
 public class BlazeBuff implements Listener {
     private final BadlandsCaves plugin;
     private final World chambers;
-    public BlazeBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public BlazeBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
@@ -48,7 +50,6 @@ public class BlazeBuff implements Listener {
             if (fireball.getShooter() instanceof Blaze) {
                 Blaze blaze = (Blaze) fireball.getShooter();
                 if (blaze.getTarget() instanceof Player) {
-                    final Random random = new Random();
                     final int chaos = plugin.getSystemConfig().getInt("chaos_level");
                     final double chance = Math.pow(1.045, chaos) - 1;
                     if (random.nextInt(100) >= chance) return;

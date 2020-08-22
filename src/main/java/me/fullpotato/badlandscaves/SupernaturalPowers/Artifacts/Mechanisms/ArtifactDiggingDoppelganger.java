@@ -28,7 +28,7 @@ import org.bukkit.util.RayTraceResult;
 import java.util.*;
 
 public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements Listener {
-    private final Random random = new Random();
+    private final Random random;
     private final StarlightPaxelMechanism paxelMechanism;
     private final FakePlayerNMS fakePlayerNMS;
     private final EnhancedEyesNMS enhancedEyesNMS;
@@ -48,10 +48,11 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
             Material.BLACKSTONE
     };
 
-    public ArtifactDiggingDoppelganger(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, StarlightPaxelMechanism paxelMechanism) {
+    public ArtifactDiggingDoppelganger(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, Random random, StarlightPaxelMechanism paxelMechanism) {
         super(plugin, voidmatter, artifactManager);
         fakePlayerNMS = plugin.getFakePlayerNMS();
         enhancedEyesNMS = plugin.getEnhancedEyesNMS();
+        this.random = random;
         this.paxelMechanism = paxelMechanism;
 
         this.faceYawMap = new HashMap<>();

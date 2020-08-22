@@ -23,15 +23,16 @@ import java.util.Random;
 
 public class IncreaseToxInRain implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
     private final StarlightArmor starlightArmor;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
     private final PlayerEffects playerEffects;
     private final EnvironmentalHazards environmentalHazards;
 
-    public IncreaseToxInRain(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, PlayerEffects playerEffects, EnvironmentalHazards environmentalHazards) {
+    public IncreaseToxInRain(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, PlayerEffects playerEffects, EnvironmentalHazards environmentalHazards) {
         this.plugin = plugin;
+        this.random = random;
         this.starlightArmor = starlightArmor;
         this.starlightCharge = starlightCharge;
         this.nebuliteManager = nebuliteManager;
@@ -81,7 +82,6 @@ public class IncreaseToxInRain implements Listener {
         boolean waterBreathing = (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER));
 
         final int toxic_sys_var = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
-        final Random random = new Random();
 
         int base = 50;
         if (hardmode) base += 50;

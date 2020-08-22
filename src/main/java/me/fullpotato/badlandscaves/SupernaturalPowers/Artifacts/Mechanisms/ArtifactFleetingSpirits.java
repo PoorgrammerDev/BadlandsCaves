@@ -35,7 +35,7 @@ public class ArtifactFleetingSpirits extends ArtifactMechanisms implements Liste
     private final ZombieBossBehavior zombieBossBehavior;
     private final LineOfSightNMS lineOfSightNMS;
     private final EnhancedEyesNMS enhancedEyesNMS;
-    private final Random random = new Random();
+    private final Random random;
     final int cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost") * 4;
     private final EntityDamageEvent.DamageCause[] blacklistedCauses = {
             EntityDamageEvent.DamageCause.FIRE_TICK,
@@ -46,9 +46,10 @@ public class ArtifactFleetingSpirits extends ArtifactMechanisms implements Liste
             EntityDamageEvent.DamageCause.VOID,
     };
 
-    public ArtifactFleetingSpirits(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager) {
+    public ArtifactFleetingSpirits(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, Random random) {
         super(plugin, voidmatter, artifactManager);
-        zombieBossBehavior = new ZombieBossBehavior(plugin);
+        this.random = random;
+        zombieBossBehavior = new ZombieBossBehavior(plugin, random);
         lineOfSightNMS = plugin.getLineOfSightNMS();
         enhancedEyesNMS = plugin.getEnhancedEyesNMS();
     }

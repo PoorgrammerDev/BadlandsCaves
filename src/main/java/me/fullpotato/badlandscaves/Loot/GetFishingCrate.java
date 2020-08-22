@@ -16,8 +16,10 @@ import java.util.Random;
 
 public class GetFishingCrate implements Listener {
     private final BadlandsCaves plugin;
-    public GetFishingCrate(BadlandsCaves bcav) {
+    private final Random random;
+    public GetFishingCrate(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
 
@@ -27,7 +29,6 @@ public class GetFishingCrate implements Listener {
             if (event.getCaught() != null && event.getCaught() instanceof Item) {
                 final Player player = event.getPlayer();
                 Item item = (Item) event.getCaught();
-                final Random random = new Random();
                 final int default_bound = plugin.getOptionsConfig().getInt("fishing_crate_chance");
                 final double player_luck = player.getAttribute(Attribute.GENERIC_LUCK).getValue();
 

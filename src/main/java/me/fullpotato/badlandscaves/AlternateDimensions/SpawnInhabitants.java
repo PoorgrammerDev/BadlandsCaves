@@ -15,6 +15,7 @@ import java.util.Random;
 
 public class SpawnInhabitants implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
     private final EntityType[] banditTypes = {
             EntityType.VINDICATOR,
             EntityType.PILLAGER,
@@ -25,8 +26,9 @@ public class SpawnInhabitants implements Listener {
             EntityType.EVOKER,
     };
 
-    public SpawnInhabitants(BadlandsCaves plugin) {
+    public SpawnInhabitants(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -57,7 +59,6 @@ public class SpawnInhabitants implements Listener {
                     }
 
                     if (habitationType != null) {
-                        final Random random = new Random();
                         final Location location = event.getLocation();
                         if (habitationType.equals(DimensionsWorlds.Habitation.ILLAGERS)) {
                             event.setCancelled(true);

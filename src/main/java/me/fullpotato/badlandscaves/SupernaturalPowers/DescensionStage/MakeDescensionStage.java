@@ -14,10 +14,11 @@ import java.util.Random;
 public class MakeDescensionStage extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
-    private final Random random = new Random();
-    public MakeDescensionStage(BadlandsCaves plugin) {
+    private final Random random;
+    public MakeDescensionStage(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        this.random = random;
     }
 
     @Override

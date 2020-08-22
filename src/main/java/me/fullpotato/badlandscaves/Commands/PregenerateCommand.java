@@ -8,11 +8,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 public class PregenerateCommand extends Commands implements CommandExecutor {
     private final PregenerateDimensions pregenerateDimensions;
 
-    public PregenerateCommand(BadlandsCaves plugin) {
-        pregenerateDimensions = new PregenerateDimensions(plugin);
+    public PregenerateCommand(BadlandsCaves plugin, Random random) {
+        pregenerateDimensions = new PregenerateDimensions(plugin, random);
     }
 
     @Override

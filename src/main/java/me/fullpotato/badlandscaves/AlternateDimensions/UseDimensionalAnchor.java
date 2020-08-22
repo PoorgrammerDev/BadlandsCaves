@@ -48,7 +48,7 @@ public class UseDimensionalAnchor implements Listener {
     private final EnvironmentalHazards environmentalHazards;
     private final DestroySpawner destroySpawner;
     private final DeathHandler deathHandler;
-    private final Random random = new Random();
+    private final Random random;
     private final String title = "§9Dimensional Doorway";
     private final NamespacedKey dimPortalKey;
     private final NamespacedKey usableKey;
@@ -56,15 +56,16 @@ public class UseDimensionalAnchor implements Listener {
     private final DimensionStructures structures;
     private final double tpsThreshold;
 
-    public UseDimensionalAnchor(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards, DestroySpawner destroySpawner, DeathHandler deathHandler) {
+    public UseDimensionalAnchor(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards, DestroySpawner destroySpawner, DeathHandler deathHandler, Random random) {
         this.plugin = plugin;
-        dimensions = new DimensionsWorlds(plugin);
+        dimensions = new DimensionsWorlds(plugin, random);
         tpsGetter = plugin.getTpsGetterNMS();
         tpsThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
-        structures = new DimensionStructures(plugin);
+        structures = new DimensionStructures(plugin, random);
         this.environmentalHazards = environmentalHazards;
         this.destroySpawner = destroySpawner;
         this.deathHandler = deathHandler;
+        this.random = random;
 
         nameFromCode.put(EnvironmentalHazards.Hazard.ACID_RAIN.name(), "Acid Rain");
         nameFromCode.put(EnvironmentalHazards.Hazard.TOXIC_WATER.name(), "Toxic Water");
@@ -265,7 +266,7 @@ public class UseDimensionalAnchor implements Listener {
         else if (type.equals(MenuType.WARP)) {
             World world = plugin.getServer().getWorld(plugin.getDimensionPrefixName() + worldName);
             if (world == null) {
-                DimensionsWorlds dimensions = new DimensionsWorlds(plugin);
+                DimensionsWorlds dimensions = new DimensionsWorlds(plugin, random);
                 world = dimensions.generate(worldName, false);
             }
 
@@ -416,8 +417,8 @@ public class UseDimensionalAnchor implements Listener {
                         Byte result = state.getPersistentDataContainer().get(dimPortalKey, PersistentDataType.BYTE);
                         if (result != null && result == (byte) 1) {
                             Player player = event.getPlayer();
-                            ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin);
-                            Location nearby = locationFinder.getNearbyLocation(player.getLocation(), new Random(), 5);
+                            ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin, random);
+                            Location nearby = locationFinder.getNearbyLocation(player.getLocation(), random, 5);
                             if (nearby != null) {
                                 event.setTo(nearby);
                             }

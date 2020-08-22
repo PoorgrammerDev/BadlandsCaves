@@ -17,11 +17,12 @@ import java.util.Random;
 public class RestlessNight /*extends BukkitRunnable*/ implements Listener {
     private final BadlandsCaves plugin;
     private final World mainWorld;
-    private final Random random = new Random();
+    private final Random random;
 
-    public RestlessNight(BadlandsCaves plugin) {
+    public RestlessNight(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.mainWorld = plugin.getServer().getWorld(plugin.getMainWorldName());
+        this.random = random;
     }
 
     //@Override

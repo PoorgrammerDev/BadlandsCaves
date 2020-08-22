@@ -13,10 +13,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Random;
+
 public class UseTaintPowder implements Listener {
     private final BadlandsCaves plugin;
-    public UseTaintPowder(BadlandsCaves bcav) {
+    private final Random random;
+    public UseTaintPowder(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
     @EventHandler
@@ -54,7 +58,7 @@ public class UseTaintPowder implements Listener {
                             double init_x_vel = drop.getVelocity().getX();
                             double init_y_vel = drop.getVelocity().getY();
                             double init_z_vel = drop.getVelocity().getZ();
-                            new TaintedPowderVelCheck(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel).runTaskTimerAsynchronously(plugin, 0, 2);
+                            new TaintedPowderVelCheck(plugin, player, drop, init_x_vel, init_y_vel, init_z_vel, random).runTaskTimerAsynchronously(plugin, 0, 2);
                         }
                     }.runTaskLater(plugin, 3);
                 }

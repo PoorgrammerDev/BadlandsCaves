@@ -13,9 +13,11 @@ import java.util.Random;
 
 public class AugmentedSpider extends BukkitRunnable {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public AugmentedSpider(BadlandsCaves plugin) {
+    public AugmentedSpider(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @Override
@@ -29,7 +31,6 @@ public class AugmentedSpider extends BukkitRunnable {
                     final Spider spider = (Spider) entity;
                     if (spider.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && spider.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                         if (spider.getTarget() != null && spider.getTarget().equals(player)) {
-                            final Random random = new Random();
 
                             final Location spider_loc = spider.getLocation();
                             final Location player_loc = player.getLocation();

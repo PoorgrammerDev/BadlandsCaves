@@ -18,11 +18,13 @@ import java.util.Random;
 public class PossessionIndicatorRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final TargetEntity targetEntity = new TargetEntity();
-    final Possession possession;
+    private final Possession possession;
+    private final Random random;
 
-    public PossessionIndicatorRunnable(BadlandsCaves plugin) {
+    public PossessionIndicatorRunnable(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         possession = new Possession(plugin);
+        this.random = random;
     }
 
     @Override
@@ -73,7 +75,6 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
     }
 
     public void spawnParticle(Player player, Location location) {
-        Random random = new Random();
         int rand_r = random.nextInt(76) + 6;
         int rand_g = random.nextInt(11) + 104;
         int rand_b = random.nextInt(115);

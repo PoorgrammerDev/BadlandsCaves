@@ -1,6 +1,5 @@
 package me.fullpotato.badlandscaves.CustomItems.Crafting;
 
-import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,13 +13,17 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Random;
 
 public class MushroomStew implements Listener {
+    private final Random random;
+
+    public MushroomStew(Random random) {
+        this.random = random;
+    }
 
     @EventHandler
     public void randomStewCraft (PrepareItemCraftEvent event) {
         CraftingInventory inventory = event.getInventory();
         if (inventory.getResult() != null && inventory.getResult().getType().equals(Material.MUSHROOM_STEW)) {
             ItemStack stew = new ItemStack(Material.SUSPICIOUS_STEW);
-            Random random = new Random();
 
             SuspiciousStewMeta meta = (SuspiciousStewMeta) stew.getItemMeta();
             PotionEffectType[] effectTypes = PotionEffectType.values();

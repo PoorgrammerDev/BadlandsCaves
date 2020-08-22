@@ -22,10 +22,12 @@ public class DescensionReset extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
     private final MakeDescensionStage mkDscStg;
-    public DescensionReset(BadlandsCaves bcav) {
+    private final Random random;
+    public DescensionReset(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
-        mkDscStg = new MakeDescensionStage(plugin);
+        mkDscStg = new MakeDescensionStage(plugin, random);
     }
 
     @Override
@@ -89,7 +91,6 @@ public class DescensionReset extends BukkitRunnable {
 
     //spawnmobs w/ custom mobcap
     public void spawnMobs (Team team, int mob_cap) {
-        Random random = new Random();
         Location origin = new Location(world, 0, 64, 0);
         int upper_lim = 80;
         int lower_lim = 50;

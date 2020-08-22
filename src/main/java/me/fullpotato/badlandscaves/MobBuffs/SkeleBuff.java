@@ -24,8 +24,10 @@ import java.util.Random;
 public class SkeleBuff implements Listener {
     private final BadlandsCaves plugin;
     private final World chambers;
-    public SkeleBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public SkeleBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
     }
 
@@ -42,9 +44,7 @@ public class SkeleBuff implements Listener {
         Location location = skeleton.getLocation();
         World world = location.getWorld();
 
-        Random random = new Random();
         if (!hardmode && random.nextInt(100) >= chance) return;
-
         if (skeleton.getType().equals(EntityType.SKELETON)) {
             if (hardmode) {
                 final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
@@ -179,7 +179,6 @@ public class SkeleBuff implements Listener {
                 if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
                     player.setNoDamageTicks(0);
 
-                    final Random random = new Random();
                     final int chaos = plugin.getSystemConfig().getInt("chaos_level");
 
                     if (random.nextInt(100) < Math.max(chaos, 10)) {
@@ -190,8 +189,8 @@ public class SkeleBuff implements Listener {
                             }
                         }
                         if (nearbySkeles.size() < Math.max(chaos / 5, 5)) {
-                            ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin);
-                            Location spawnLoc = locationFinder.getNearbyLocation(arrow.getLocation(), new Random(), 5);
+                            ZombieBossBehavior locationFinder = new ZombieBossBehavior(plugin, random);
+                            Location spawnLoc = locationFinder.getNearbyLocation(arrow.getLocation(), random, 5);
 
                             if (spawnLoc != null && spawnLoc.distanceSquared(player.getLocation()) > 2) {
                                 new BukkitRunnable() {

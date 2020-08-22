@@ -22,8 +22,10 @@ public class ZombieBuff implements Listener {
     private final BadlandsCaves plugin;
     private final World descension_world;
     private final World reflection_world;
-    public ZombieBuff(BadlandsCaves bcav) {
+    private final Random random;
+    public ZombieBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
         descension_world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
     }
@@ -42,7 +44,6 @@ public class ZombieBuff implements Listener {
 
         //giving armor
         Zombie zombie = (Zombie) event.getEntity();
-        Random random = new Random();
 
 
         final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");

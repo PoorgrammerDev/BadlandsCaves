@@ -10,14 +10,15 @@ import java.util.Random;
 
 public abstract class NebuliteMechanisms {
     protected final BadlandsCaves plugin;
-    protected final Random random = new Random();
+    protected final Random random;
     protected final StarlightArmor starlightArmor;
     protected final StarlightTools starlightTools;
     protected final StarlightCharge starlightCharge;
     protected final NebuliteManager nebuliteManager;
 
-    public NebuliteMechanisms(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+    public NebuliteMechanisms(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         this.plugin = plugin;
+        this.random = random;
         this.starlightArmor = starlightArmor;
         this.starlightTools = starlightTools;
         this.starlightCharge = starlightCharge;

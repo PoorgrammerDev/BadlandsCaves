@@ -14,9 +14,10 @@ import java.util.Random;
 
 public class ArtifactMomentousMomentum extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
-    public ArtifactMomentousMomentum(BadlandsCaves plugin) {
+    private final Random random;
+    public ArtifactMomentousMomentum(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler

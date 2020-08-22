@@ -1,4 +1,4 @@
-Versions Supported: Minecraft 1.16.1
+Versions Supported: Minecraft 1.16.2
 Author: FullPotato
 
 Get the map and structure files here: {link}

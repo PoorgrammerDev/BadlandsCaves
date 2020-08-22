@@ -23,14 +23,15 @@ import java.util.Random;
 
 public class NebuliteCounterattack extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
     private final StarlightArmor starlightArmor;
     private final StarlightTools starlightTools;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
 
-    public NebuliteCounterattack(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+    public NebuliteCounterattack(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         this.plugin = plugin;
+        this.random = random;
         this.starlightArmor = starlightArmor;
         this.starlightTools = starlightTools;
         this.starlightCharge = starlightCharge;

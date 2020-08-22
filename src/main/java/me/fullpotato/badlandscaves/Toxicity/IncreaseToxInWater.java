@@ -7,6 +7,7 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharg
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
+import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactFleetingSpirits;
@@ -28,7 +29,7 @@ import java.util.Random;
 
 public class IncreaseToxInWater implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random = new Random();
+    private final Random random;
     private final StarlightArmor starlightArmor;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
@@ -36,9 +37,11 @@ public class IncreaseToxInWater implements Listener {
     private final ArtifactManager artifactManager;
     private final ArtifactFleetingSpirits artifactFleetingSpirits;
     private final EnvironmentalHazards environmentalHazards;
+    private final PlayerEffects playerEffects;
 
-    public IncreaseToxInWater(BadlandsCaves plugin, StarlightArmor starlightArmor, StarlightCharge starlightCharge, ArtifactManager artifactManager, Voidmatter voidmatter, ArtifactFleetingSpirits artifactFleetingSpirits, NebuliteManager nebuliteManager, EnvironmentalHazards environmentalHazards) {
+    public IncreaseToxInWater(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightCharge starlightCharge, ArtifactManager artifactManager, Voidmatter voidmatter, ArtifactFleetingSpirits artifactFleetingSpirits, NebuliteManager nebuliteManager, EnvironmentalHazards environmentalHazards, PlayerEffects playerEffects) {
         this.plugin = plugin;
+        this.random = random;
         this.starlightArmor = starlightArmor;
         this.starlightCharge = starlightCharge;
         this.voidmatter = voidmatter;
@@ -46,6 +49,7 @@ public class IncreaseToxInWater implements Listener {
         this.artifactFleetingSpirits = artifactFleetingSpirits;
         this.nebuliteManager = nebuliteManager;
         this.environmentalHazards = environmentalHazards;
+        this.playerEffects = playerEffects;
     }
 
 
@@ -54,6 +58,7 @@ public class IncreaseToxInWater implements Listener {
     public void incr_tox_in_water (PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Block block = player.getLocation().getBlock();
+        if (event.getTo() != null && event.getTo().distanceSquared(event.getFrom()) <= 0) return;
 
         World world = player.getWorld();
         if (environmentalHazards.isDimension(world) && !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
@@ -72,7 +77,7 @@ public class IncreaseToxInWater implements Listener {
                  *  Wbreath
                  *  Nothing
                  * */
-                if (!player.isDead() && (double) PlayerScore.TOXICITY.getScore(plugin, player) <= 100) {
+                if (!player.isDead()) {
                     if (plugin.getSystemConfig().getBoolean("hardmode")) {
                         final EntityEquipment equipment = player.getEquipment();
                         if (equipment != null) {
@@ -105,9 +110,6 @@ public class IncreaseToxInWater implements Listener {
                     }
 
 
-
-
-
                     if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING) || player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
                         if ((player.getVehicle() instanceof Boat)) {
                             //Boat with wbreath
@@ -127,7 +129,7 @@ public class IncreaseToxInWater implements Listener {
                     }
                     else {
                         //Nothing
-                        int random_incr = (int) (Math.random() * 100);
+                        int random_incr = (int) (Math.random() * 25);
                         PlayerScore.TOXICITY.setScore(plugin, player, current_tox + random_incr);
                     }
 
@@ -138,6 +140,7 @@ public class IncreaseToxInWater implements Listener {
                         PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0);
                         PlayerScore.TOXICITY.setScore(plugin, player, current_tox + 0.1);
                     }
+                    playerEffects.applyEffects(player, true);
                 }
             }
         }

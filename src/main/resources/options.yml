@@ -53,7 +53,7 @@ spell_costs:
 soul_drop_chance: 25
 
 # Maximum bottles of liquid a canteen can hold
-canteen_limit: 5
+canteen_limit: 10
 
 # XP -> Energy Core Charge Reduction
 energy_core_charge_reduce: 0.25
@@ -81,7 +81,7 @@ pre_hardmode_values:
   tox_drink_thirst_incr: 10
 
   # How much Toxicity Toxic Water increases in Pre-hardmode
-  tox_drink_tox_incr: 5
+  tox_drink_tox_incr: 10
 
   # How Much Thirst Purified Water replenishes in Pre-hardmode
   purified_drink_thirst_incr: 60
@@ -97,7 +97,7 @@ hardmode_values:
   death_reverse_gapple: 0
 
   # How many Deaths a Enchanted Blessed Apple will reverse in Hardmode
-  death_reverse_ench_gapple: 2
+  death_reverse_ench_gapple: 5
 
   # Inversely controls how quickly Thirst depletes in Hardmode
   # Decreasing this value will cause Thirst to fall faster
@@ -108,10 +108,10 @@ hardmode_values:
   tox_drink_thirst_incr: 5
 
   # How much Toxicity Toxic Water increases in Hardmode
-  tox_drink_tox_incr: 10
+  tox_drink_tox_incr: 20
 
   # How Much Thirst Purified Water replenishes in Hardmode
-  purified_drink_thirst_incr: 40
+  purified_drink_thirst_incr: 50
 
   # How Much Toxicity Antidote decreases in Hardmode
   antidote_drink_tox_decr: 50

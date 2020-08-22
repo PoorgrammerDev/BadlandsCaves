@@ -10,14 +10,16 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Random;
+
 public class SlowBreak implements Listener {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards dims;
     private final PlayerEffects playerEffects;
 
-    public SlowBreak(BadlandsCaves plugin) {
+    public SlowBreak(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        this.dims = new EnvironmentalHazards(plugin);
+        this.dims = new EnvironmentalHazards(plugin, random);
         playerEffects = new PlayerEffects(plugin);
     }
 

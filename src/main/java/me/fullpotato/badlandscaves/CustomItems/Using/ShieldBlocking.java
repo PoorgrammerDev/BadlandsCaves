@@ -28,13 +28,15 @@ public class ShieldBlocking implements Listener {
     private final StarlightTools starlightTools;
     private final StarlightCharge starlightCharge;
     private final NebuliteManager nebuliteManager;
+    private final Random random;
 
-    public ShieldBlocking(BadlandsCaves plugin, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+    public ShieldBlocking(BadlandsCaves plugin, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager, Random random) {
         this.plugin = plugin;
         customItemManager = plugin.getCustomItemManager();
         this.starlightTools = starlightTools;
         this.starlightCharge = starlightCharge;
         this.nebuliteManager = nebuliteManager;
+        this.random = random;
     }
 
     @EventHandler
@@ -49,7 +51,6 @@ public class ShieldBlocking implements Listener {
                 final ItemStack ironShield = customItemManager.getItem(CustomItem.IRON_SHIELD);
                 final ItemStack diamondShield = customItemManager.getItem(CustomItem.DIAMOND_SHIELD);
                 final ItemStack netheriteShield = customItemManager.getItem(CustomItem.NETHERITE_SHIELD);
-                final Random random = new Random();
 
                 double modifier = 2;
                 boolean damageIgnored = false;

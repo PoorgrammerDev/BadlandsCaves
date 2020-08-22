@@ -18,9 +18,9 @@ public class AugmentedZombie extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final Random random;
 
-    public AugmentedZombie(BadlandsCaves plugin) {
+    public AugmentedZombie(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        this.random = new Random();
+        this.random = random;
     }
 
 
@@ -50,7 +50,7 @@ public class AugmentedZombie extends BukkitRunnable {
                             if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                                 Location zombieLocation = zombie.getEyeLocation();
                                 Location playerLocation = player.getEyeLocation();
-                                if (zombieLocation.getWorld() != null && zombieLocation.getWorld().equals(playerLocation.getWorld()) && zombieLocation.distanceSquared(playerLocation) < 100) {
+                                if (zombieLocation.getWorld() != null && zombieLocation.getWorld().equals(playerLocation.getWorld()) && zombieLocation.distanceSquared(playerLocation) < 25) {
                                     int attackType = getAttackType(zombieLocation.distanceSquared(playerLocation));
                                     if (attackType == 1) {
                                         //DONUT----------------------------------------------
@@ -70,7 +70,10 @@ public class AugmentedZombie extends BukkitRunnable {
                                         Location knifeSpawn = zombie.getEyeLocation();
                                         double phi = 0;
                                         int knives = 0;
-                                        while (phi <= Math.PI) {
+
+                                        final int maxTries = 100;
+                                        int tries = 0;
+                                        while (phi <= Math.PI && tries < maxTries) {
                                             phi += Math.PI / (5);
 
                                             for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / (10)) {
@@ -125,6 +128,7 @@ public class AugmentedZombie extends BukkitRunnable {
                                                     knives++;
                                                 } else break;
                                             }
+                                            tries++;
                                         }
                                     }
                                     zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE, (byte) ((-1 * (chaos / 5)) + 30));
@@ -145,13 +149,13 @@ public class AugmentedZombie extends BukkitRunnable {
         int attackType;
         //Type 1 = DONUT
         //Type 2 = KNIVES
-        if (distance < 9) {
+        if (distance < 4) {
             attackType = 1;
         }
-        else if (distance < 16) {
+        else if (distance < 9) {
             attackType = random.nextInt(100) < 75 ? 1 : 2;
         }
-        else if (distance < 25) {
+        else if (distance < 16) {
             return random.nextInt(2) + 1;
         }
         else {

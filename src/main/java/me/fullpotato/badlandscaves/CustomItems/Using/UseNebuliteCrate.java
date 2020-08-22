@@ -16,10 +16,11 @@ import java.util.Random;
 public class UseNebuliteCrate implements Listener {
     private final BadlandsCaves plugin;
     private final Nebulite[] nebulites = Nebulite.values();
-    private final Random random = new Random();
+    private final Random random;
 
-    public UseNebuliteCrate(BadlandsCaves plugin) {
+    public UseNebuliteCrate(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler

@@ -18,17 +18,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Random;
+
 public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener {
     private final BadlandsCaves plugin;
     private final InventorySerialize inventorySerialize;
     private final DeathHandler deathHandler;
     private final DescensionPlayerMove descensionPlayerMove;
+    private final Random random;
 
-    public UseCompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize, DeathHandler deathHandler, DescensionPlayerMove descensionPlayerMove) {
+    public UseCompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize, DeathHandler deathHandler, DescensionPlayerMove descensionPlayerMove, Random random) {
         this.plugin = plugin;
         this.inventorySerialize = inventorySerialize;
         this.deathHandler = deathHandler;
         this.descensionPlayerMove = descensionPlayerMove;
+        this.random = random;
     }
 
     @EventHandler
@@ -68,7 +72,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
 
         //readying descension stage
         new StageEnter(plugin, player).runTask(plugin);
-        new ShrineCapture(plugin).runTaskTimer(plugin, 0 ,5);
+        new ShrineCapture(plugin, random).runTaskTimer(plugin, 0 ,5);
         new DescensionTimeLimit(plugin, descensionPlayerMove).runTaskTimer(plugin, 0, 20);
         new DetectedBar(plugin).runTaskTimer(plugin, 0, 3);
         new LostSoulParticle(plugin).runTaskTimer(plugin, 0, 3);

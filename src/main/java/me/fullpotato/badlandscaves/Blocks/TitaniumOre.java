@@ -19,9 +19,11 @@ import java.util.Random;
 
 public class TitaniumOre implements Listener {
     private final BadlandsCaves plugin;
+    private final Random random;
 
-    public TitaniumOre(BadlandsCaves plugin) {
+    public TitaniumOre(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
+        this.random = random;
     }
 
     @EventHandler
@@ -38,7 +40,6 @@ public class TitaniumOre implements Listener {
                         final int fortune = tool.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
                         int count = 1;
 
-                        final Random random = new Random();
                         if (fortune > 0) {
                             for (int i = 0; i < fortune; i++) {
                                 if (random.nextBoolean()) count++;

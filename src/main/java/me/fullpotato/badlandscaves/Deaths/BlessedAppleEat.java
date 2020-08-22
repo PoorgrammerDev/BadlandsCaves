@@ -12,6 +12,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class BlessedAppleEat implements Listener {
     private final BadlandsCaves plugin;
@@ -31,6 +34,31 @@ public class BlessedAppleEat implements Listener {
         final ItemStack enchanted_blessed_apple = plugin.getCustomItemManager().getItem(CustomItem.ENCHANTED_BLESSED_APPLE);
 
         if (item.isSimilar(blessed_apple) || item.isSimilar(enchanted_blessed_apple)) {
+            //added buffs
+
+            final int saturationLevel, regenerationLevel, absorptionLevel;
+            if (item.isSimilar(blessed_apple)) {
+                saturationLevel = 0;
+                regenerationLevel = 4;
+                absorptionLevel = 4;
+            }
+            else {
+                saturationLevel = 1;
+                regenerationLevel = 9;
+                absorptionLevel = 9;
+            }
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.removePotionEffect(PotionEffectType.ABSORPTION);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 5, saturationLevel, true, true));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10, regenerationLevel, true, true));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 300, absorptionLevel, true, true));
+                }
+            }.runTaskLater(plugin, 1);
+
+
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getReflectionWorldName()))) {
                 int cooldown = 100;
                 player.setCooldown(Material.GOLDEN_APPLE, cooldown);

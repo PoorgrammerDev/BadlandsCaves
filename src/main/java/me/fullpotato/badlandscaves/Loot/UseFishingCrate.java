@@ -19,8 +19,10 @@ import java.util.Random;
 
 public class UseFishingCrate implements Listener {
     private final BadlandsCaves plugin;
-    public UseFishingCrate(BadlandsCaves bcav) {
+    private final Random random;
+    public UseFishingCrate(BadlandsCaves bcav, Random random) {
         plugin = bcav;
+        this.random = random;
     }
 
     @EventHandler
@@ -39,7 +41,6 @@ public class UseFishingCrate implements Listener {
                     final World world = player.getWorld();
                     final Location location = player.getLocation();
                     final Inventory inventory = player.getInventory();
-                    final Random random = new Random();
                     final boolean hardmode = item.isSimilar(fishing_crate_hm);
 
                     item.setAmount(item.getAmount() - 1);
