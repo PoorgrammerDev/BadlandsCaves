@@ -55,7 +55,6 @@ public enum CustomItem {
     RECALL_POTION(false),
     TITANIUM_FRAGMENT(true),
     TITANIUM_INGOT(true),
-    TITANIUM_PLATING(true),
     REINFORCED_TITANIUM(true),
     TITANIUM_ROD(true),
     BINDING(true),

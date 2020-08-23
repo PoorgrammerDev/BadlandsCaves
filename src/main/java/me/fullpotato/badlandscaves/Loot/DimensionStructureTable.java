@@ -87,14 +87,18 @@ public class DimensionStructureTable implements LootTable, Listener {
             final ItemStack item;
             if (random.nextInt(100) < 60) {
                 item = priorityList.get(random.nextInt(priorityList.size()));
+                if (priorityMap.containsKey(item)) {
+                    final int amount = priorityMap.get(item);
+                    item.setAmount(amount > 1 ? randomCount(random, 1, amount) : 1);
+                }
             }
             else {
                 item = list.get(random.nextInt(list.size()));
+                if (itemMap.containsKey(item)) {
+                    final int amount = itemMap.get(item);
+                    item.setAmount(amount > 1 ? randomCount(random, 1, amount) : 1);
+                }
             }
-
-            if (itemMap.containsKey(item)) {
-                final int amount = itemMap.get(item);
-                item.setAmount(amount > 1 ? randomCount(random, 1, amount) : 1);
 
                 if (item.isSimilar(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER))) {
                     output.add(treasureGear.getTreasureGear(true, random));
@@ -117,12 +121,6 @@ public class DimensionStructureTable implements LootTable, Listener {
                     }
                 }
             }
-            else {
-                i--;
-                failed++;
-            }
-        }
-
         return output;
     }
 
