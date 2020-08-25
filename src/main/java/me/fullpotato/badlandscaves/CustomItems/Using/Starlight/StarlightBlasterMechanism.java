@@ -33,6 +33,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
     private final StarlightTools toolManager;
     private final NebuliteManager nebuliteManager;
     private final EnhancedEyesNMS nms;
+    private final ParticleShapes particleShapes;
     private final int damage = 20;
     private final Particle.DustOptions[] dustOptions = {
             new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), // default yellow
@@ -40,12 +41,13 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
             new Particle.DustOptions(Color.fromRGB(0, 180, 255), 1), // hunters blue
     };
 
-    public StarlightBlasterMechanism(BadlandsCaves plugin, StarlightCharge chargeManager, StarlightTools toolManager, NebuliteManager nebuliteManager) {
+    public StarlightBlasterMechanism(BadlandsCaves plugin, StarlightCharge chargeManager, StarlightTools toolManager, NebuliteManager nebuliteManager, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.nms = plugin.getEnhancedEyesNMS();
         this.chargeManager = chargeManager;
         this.toolManager = toolManager;
         this.nebuliteManager = nebuliteManager;
+        this.particleShapes = particleShapes;
     }
 
     @EventHandler
@@ -194,7 +196,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
 
 
                     player.getWorld().playSound(location, "custom.starlight_blaster", 1, 1);
-                    ParticleShapes.particleLine(null, Particle.REDSTONE, player.getEyeLocation(), targetLocation, 0, dustOptions, 0.5);
+                    particleShapes.line(null, Particle.REDSTONE, player.getEyeLocation(), targetLocation, 0, dustOptions, 0.5);
 
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                         int cost = 25;

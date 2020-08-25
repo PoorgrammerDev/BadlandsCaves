@@ -15,10 +15,12 @@ public class ExitPortal extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final World world;
     private final Location location;
+    private final ParticleShapes particleShapes;
 
-    public ExitPortal(BadlandsCaves plugin) {
+    public ExitPortal(BadlandsCaves plugin, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
+        this.particleShapes = particleShapes;
         location = new Location(world, 0.5, 82, 0.5);
     }
 
@@ -36,7 +38,7 @@ public class ExitPortal extends BukkitRunnable {
             if (in_descension == 2) {
                 int capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));
                 if (capped == 4) {
-                    ParticleShapes.particleSphere(null, Particle.SPELL_WITCH, location, 5, -1, null);
+                    particleShapes.sphere(null, Particle.SPELL_WITCH, location, 5, -1, null);
                     return;
                 }
             }

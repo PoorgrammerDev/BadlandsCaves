@@ -11,27 +11,73 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Voidmatter extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
+    private final ItemStack voidmatter;
+    private final List<Material> types;
+    private final ItemStack stick;
+    private final ItemStack string;
+    private final ItemStack helmet;
+    private final ItemStack chestplate;
+    private final ItemStack leggings;
+    private final ItemStack boots;
+    private final ItemStack blade;
+    private final ItemStack bow;
+    private final ItemStack pick;
+    private final ItemStack shovel;
+    private final ItemStack axe;
+    private final ItemStack repairPlaceholder;
+    private final ItemStack magicEssence;
+    private final ItemStack mergedSouls;
 
     public Voidmatter(BadlandsCaves plugin) {
         this.plugin = plugin;
         customItemManager = plugin.getCustomItemManager();
+        voidmatter = customItemManager.getItem(CustomItem.VOIDMATTER);
+
+        stick = customItemManager.getItem(CustomItem.VOIDMATTER_STICK);
+        string = customItemManager.getItem(CustomItem.VOIDMATTER_STRING);
+        helmet = customItemManager.getItem(CustomItem.VOIDMATTER_HELMET);
+        chestplate = customItemManager.getItem(CustomItem.VOIDMATTER_CHESTPLATE);
+        leggings = customItemManager.getItem(CustomItem.VOIDMATTER_LEGGINGS);
+        boots = customItemManager.getItem(CustomItem.VOIDMATTER_BOOTS);
+        blade = customItemManager.getItem(CustomItem.VOIDMATTER_BLADE);
+        bow = customItemManager.getItem(CustomItem.VOIDMATTER_BOW);
+        pick = customItemManager.getItem(CustomItem.VOIDMATTER_PICKAXE);
+        shovel = customItemManager.getItem(CustomItem.VOIDMATTER_SHOVEL);
+        axe = customItemManager.getItem(CustomItem.VOIDMATTER_AXE);
+        repairPlaceholder = customItemManager.getItem(CustomItem.VOIDMATTER_REPAIR_PLACEHOLDER);
+        magicEssence = customItemManager.getItem(CustomItem.MAGIC_ESSENCE);
+        mergedSouls = customItemManager.getItem(CustomItem.MERGED_SOULS);
+
+        stick.setAmount(4);
+        string.setAmount(2);
+
+        types = new ArrayList<>();
+        types.add(helmet.getType());
+        types.add(chestplate.getType());
+        types.add(leggings.getType());
+        types.add(boots.getType());
+        types.add(blade.getType());
+        types.add(bow.getType());
+        types.add(pick.getType());
+        types.add(shovel.getType());
+        types.add(axe.getType());
     }
 
     public void stickRecipe () {
-        final ItemStack stick = customItemManager.getItem(CustomItem.VOIDMATTER_STICK);
-        stick.setAmount(4);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_stick"), stick);
         recipe.shape("#", "#");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -39,17 +85,12 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void stringRecipe () {
-        final ItemStack string = customItemManager.getItem(CustomItem.VOIDMATTER_STRING);
-        string.setAmount(2);
-
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "voidmatter_string"), string);
         recipe.addIngredient(Material.STRUCTURE_BLOCK);
         plugin.getServer().addRecipe(recipe);
     }
 
     public void helmetRecipe () {
-        final ItemStack helmet = customItemManager.getItem(CustomItem.VOIDMATTER_HELMET);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_helmet"), helmet);
         recipe.shape("###", "# #");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -58,8 +99,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void chestplateRecipe () {
-        final ItemStack chestplate = customItemManager.getItem(CustomItem.VOIDMATTER_CHESTPLATE);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_chestplate"), chestplate);
         recipe.shape("# #", "###", "###");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -68,8 +107,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void leggingsRecipe () {
-        final ItemStack leggings = customItemManager.getItem(CustomItem.VOIDMATTER_LEGGINGS);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_leggings"), leggings);
         recipe.shape("###", "# #", "# #");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -78,8 +115,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void bootsRecipe () {
-        final ItemStack boots = customItemManager.getItem(CustomItem.VOIDMATTER_BOOTS);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_boots"), boots);
         recipe.shape("# #", "# #");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -88,8 +123,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void bladeRecipe () {
-        final ItemStack blade = customItemManager.getItem(CustomItem.VOIDMATTER_BLADE);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_blade"), blade);
         recipe.shape("#", "#", "|");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -99,8 +132,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void bowRecipe () {
-        final ItemStack bow = customItemManager.getItem(CustomItem.VOIDMATTER_BOW);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_bow"), bow);
         recipe.shape("@| ", "@ |", "@| ");
         recipe.setIngredient('@', Material.STRUCTURE_BLOCK);
@@ -110,8 +141,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void pickaxeRecipe () {
-        final ItemStack pick = customItemManager.getItem(CustomItem.VOIDMATTER_PICKAXE);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_pickaxe"), pick);
         recipe.shape("###", " | ", " | ");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -121,8 +150,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void shovelRecipe () {
-        final ItemStack shovel = customItemManager.getItem(CustomItem.VOIDMATTER_SHOVEL);
-
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_shovel"), shovel);
         recipe.shape("#", "|", "|");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -132,7 +159,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
     }
 
     public void axeRecipe () {
-        final ItemStack axe = customItemManager.getItem(CustomItem.VOIDMATTER_AXE);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voidmatter_axe"), axe);
         recipe.shape("##", "#|", " |");
         recipe.setIngredient('#', Material.STRUCTURE_BLOCK);
@@ -141,7 +167,14 @@ public class Voidmatter extends MatchCrafting implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
+    public void repairRecipe () {
+        final ItemStack repairPlaceholder = customItemManager.getItem(CustomItem.VOIDMATTER_REPAIR_PLACEHOLDER);
+        final ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "voidmatter_repair"), repairPlaceholder);
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(types));
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.STRUCTURE_BLOCK, Material.COMMAND_BLOCK));
 
+        plugin.getServer().addRecipe(recipe);
+    }
 
     @EventHandler
     public void checkRecipes(PrepareItemCraftEvent event) {
@@ -176,7 +209,6 @@ public class Voidmatter extends MatchCrafting implements Listener {
         }
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
-        final ItemStack voidmatter = customItemManager.getItem(CustomItem.VOIDMATTER);
         if (result.isSimilar(helmet) || result.isSimilar(chestplate) || result.isSimilar(leggings) || result.isSimilar(boots) || result.isSimilar(string) || result.isSimilar(stick)) {
             if (isMatching(matrix, voidmatter)) return;
         }
@@ -197,6 +229,48 @@ public class Voidmatter extends MatchCrafting implements Listener {
         }
 
         event.getInventory().setResult(null);
+    }
+
+    @EventHandler
+    public void checkRepairRecipe (PrepareItemCraftEvent event) {
+        if (event.getRecipe() != null && event.getRecipe().getResult() != null) {
+            final ItemStack result = event.getRecipe().getResult();
+            if (!result.isSimilar(repairPlaceholder)) return;
+
+            final ItemStack[] matrix = event.getInventory().getMatrix();
+            ItemStack voidmatterTool = null;
+            ItemStack repairElement = null;
+            double repairAmt = -1;
+
+            for (ItemStack item : matrix) {
+                if (item != null) {
+                    if (isVoidmatter(item)) {
+                        voidmatterTool = item;
+                    }
+                    else if (item.isSimilar(this.voidmatter)) {
+                        repairElement = item;
+                        repairAmt = 0.5;
+                    }
+                    else if (item.isSimilar(mergedSouls)) {
+                        repairElement = item;
+                        repairAmt = 0.25;
+                    }
+                    else if (item.isSimilar(magicEssence)) {
+                        repairElement = item;
+                        repairAmt = 0.125;
+                    }
+                }
+            }
+
+            if (repairElement == null || voidmatterTool == null) return;
+            final ItemStack newResult = voidmatterTool.clone();
+            if (newResult.getItemMeta() instanceof Damageable) {
+                final Damageable meta = (Damageable) newResult.getItemMeta();
+                meta.setDamage((int) Math.max(meta.getDamage() - (newResult.getType().getMaxDurability() * repairAmt), 0));
+                newResult.setItemMeta((ItemMeta) meta);
+            }
+            event.getInventory().setResult(newResult);
+        }
     }
 
     public boolean isVoidmatter (ItemStack item) {
@@ -314,6 +388,4 @@ public class Voidmatter extends MatchCrafting implements Listener {
         }
         return false;
     }
-
-
 }

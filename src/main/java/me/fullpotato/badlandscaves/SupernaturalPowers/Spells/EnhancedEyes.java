@@ -37,19 +37,21 @@ public class EnhancedEyes extends UsePowers implements Listener {
     private final ArtifactManager artifactManager;
     private final ArtifactDirectionalVision artifactDirectionalVision;
     private final World backrooms;
+    private final ParticleShapes particleShapes;
 
-    public EnhancedEyes(BadlandsCaves plugin, ArtifactManager artifactManager) {
-        super(plugin);
+    public EnhancedEyes(BadlandsCaves plugin, ArtifactManager artifactManager, ParticleShapes particleShapes) {
+        super(plugin, particleShapes);
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         nms = plugin.getEnhancedEyesNMS();
         this.artifactManager = artifactManager;
+        this.particleShapes = particleShapes;
 
         levelRangeMap = new HashMap<>();
         levelRangeMap.put(1, 5);
         levelRangeMap.put(2, 10);
         initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost");
         constant_mana_drain = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_drain");
-        artifactDirectionalVision = new ArtifactDirectionalVision(plugin, this);
+        artifactDirectionalVision = new ArtifactDirectionalVision(plugin, this, particleShapes);
     }
 
     @EventHandler
@@ -139,7 +141,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
 
         if (particle) {
             //Particle effects
-            ParticleShapes.particleSphere(player, Particle.REDSTONE, player.getLocation(), levelRangeMap.get(eyes_level) - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
+            particleShapes.sphere(player, Particle.REDSTONE, player.getLocation(), levelRangeMap.get(eyes_level) - 1, 0, new Particle.DustOptions(Color.BLUE, 1));
             //Effects for nearby magic players
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {

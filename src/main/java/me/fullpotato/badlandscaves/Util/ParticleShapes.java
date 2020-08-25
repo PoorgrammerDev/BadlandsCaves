@@ -15,7 +15,7 @@ public class ParticleShapes {
         this.plugin = plugin;
     }
 
-    public static void particleLine(Player player, Particle particle, Location origin, Location target, double extra, Object options, double line_scale) {
+    public void line(Player player, Particle particle, Location origin, Location target, double extra, Object options, double line_scale) {
         if (origin != null && target != null) {
             final Location originClone = origin.clone();
             final Location targetClone = target.clone();
@@ -39,7 +39,7 @@ public class ParticleShapes {
         }
     }
 
-    public void particleLineDelayed(Player player, Particle particle, Location origin, Location target, double extra, Object options, double line_scale, long delay) {
+    public void lineDelayed(Player player, Particle particle, Location origin, Location target, double extra, Object options, double line_scale, long delay) {
         if (origin != null && target != null) {
             final Location originClone = origin.clone();
             final Location targetClone = target.clone();
@@ -73,7 +73,7 @@ public class ParticleShapes {
         }
     }
 
-    public static void particleSphere (Player player, Particle particle, Location location, double radius, double extra, Object options) {
+    public void sphere(Player player, Particle particle, Location location, double radius, double extra, Object options) {
         final Location clone = location.clone();
         if (clone.getWorld() != null) {
             final World world = clone.getWorld();
@@ -95,7 +95,7 @@ public class ParticleShapes {
         }
     }
 
-    public void particleSphereDelayed (Player player, Particle particle, Location location, double radius, double extra, Object options, long delay, boolean reverse) {
+    public void sphereDelayed(Player player, Particle particle, Location location, double radius, double extra, Object options, long delay, boolean reverse) {
         final Location clone = location.clone();
         if (clone.getWorld() != null) {
             final World world = clone.getWorld();
@@ -131,7 +131,7 @@ public class ParticleShapes {
         }
     }
 
-    public static void particleCircle(Player player, Particle particle, Location location, double radius, double extra, Object options) {
+    public void circle(Player player, Particle particle, Location location, double radius, double extra, Object options) {
         final Location clone = location.clone();
         for (double theta = 0; theta <= 2*Math.PI; theta += Math.PI / 5) {
             double x = (radius / 2) * Math.cos(theta);
@@ -143,7 +143,7 @@ public class ParticleShapes {
         }
     }
 
-    private static void findCorrectParticleMethod (Player player, World world, Particle particle, Location scout, double extra, Object options) {
+    private void findCorrectParticleMethod (Player player, World world, Particle particle, Location scout, double extra, Object options) {
         if (options != null) {
             if (extra != -1) {
                 if (player == null) {

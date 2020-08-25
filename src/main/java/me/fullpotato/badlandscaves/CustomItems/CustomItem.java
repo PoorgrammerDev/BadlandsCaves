@@ -90,6 +90,7 @@ public enum CustomItem {
     VOIDMATTER_PICKAXE(false),
     VOIDMATTER_SHOVEL(false),
     VOIDMATTER_AXE(false),
+    VOIDMATTER_REPAIR_PLACEHOLDER(true),
     DIMENSIONAL_ANCHOR(true),
     TOTEM_OF_PRESERVATION(true),
     TREASURE_GEAR_VOUCHER(true),

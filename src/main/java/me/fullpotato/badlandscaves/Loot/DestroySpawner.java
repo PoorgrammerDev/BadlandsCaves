@@ -37,6 +37,7 @@ public class DestroySpawner implements Listener {
     private final Map<Integer[], BlockFace> chestInfo = new HashMap<>();
     private final String chestName = ChatColor.RESET.toString() + ChatColor.of("#8f8f8f") + "Dungeon Chest";
     private final NamespacedKey key;
+    private ParticleShapes particleShapes;
     private final EntityType[] mobTypes = {
             EntityType.ZOMBIE,
             EntityType.SKELETON,
@@ -46,10 +47,11 @@ public class DestroySpawner implements Listener {
     };
 
 
-    public DestroySpawner(BadlandsCaves plugin, Random random) {
+    public DestroySpawner(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "spawner_id");
         this.random = random;
+        this.particleShapes = particleShapes;
         mossMap.put(Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS);
         mossMap.put(Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB);
         mossMap.put(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS);
@@ -88,7 +90,8 @@ public class DestroySpawner implements Listener {
 
 
                 if (!spawner.getSpawnedType().equals(EntityType.BLAZE)) {
-                    ParticleShapes.particleLine(null, Particle.FLASH, location.clone().add(0, 1, 0), location.clone().add(0, 255, 0), 0, null, 1);
+                    if (particleShapes == null) particleShapes = new ParticleShapes(plugin);
+                    particleShapes.line(null, Particle.FLASH, location.clone().add(0, 1, 0), location.clone().add(0, 255, 0), 0, null, 1);
                     for (Player online : plugin.getServer().getOnlinePlayers()) {
                         online.playSound(online.getLocation(), "custom.darkrooms_whispers", SoundCategory.BLOCKS, 0.4F, 0.7F);
                         online.playSound(online.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 0.6F, 0.5F);

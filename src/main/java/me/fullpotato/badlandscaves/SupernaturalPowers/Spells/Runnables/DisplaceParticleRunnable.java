@@ -19,10 +19,12 @@ import java.util.Random;
 public class DisplaceParticleRunnable extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final Random random;
+    private final ParticleShapes particleShapes;
 
-    public DisplaceParticleRunnable(BadlandsCaves plugin, Random random) {
+    public DisplaceParticleRunnable(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.random = random;
+        this.particleShapes = particleShapes;
     }
 
     @Override
@@ -104,7 +106,7 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
         final double radius = 1;
 
         if (active) {
-            ParticleShapes.particleCircle(player, Particle.SPELL_WITCH, location, radius, 0, null);
+            particleShapes.circle(player, Particle.SPELL_WITCH, location, radius, 0, null);
         }
 
         player.spawnParticle(Particle.BLOCK_DUST, location, 10, 0.05, 0.5, 0.05, 0, Material.PURPLE_GLAZED_TERRACOTTA.createBlockData());
@@ -115,6 +117,6 @@ public class DisplaceParticleRunnable extends BukkitRunnable {
         player_loc.add(0,  1, 0);
         PositionManager position = new PositionManager();
         final Location origin = player.getMainHand().equals(MainHand.RIGHT) ? position.getLeftSide(player_loc, 1) : position.getRightSide(player_loc, 1);
-        ParticleShapes.particleLine(player, Particle.REDSTONE, origin, target, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 255), 0.5F), 1);
+        particleShapes.line(player, Particle.REDSTONE, origin, target, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 255), 0.5F), 1);
     }
 }

@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.PossessionMobsRunnable;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TargetEntity;
 import org.bukkit.*;
@@ -28,9 +29,10 @@ public class Possession extends UsePowers implements Listener {
     private final World backrooms;
     private final int cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost");
     private final int drain = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_drain");
-
-    public Possession(BadlandsCaves bcav) {
-        super(bcav);
+    private final ParticleShapes particleShapes;
+    public Possession(BadlandsCaves bcav, ParticleShapes particleShapes) {
+        super(bcav, particleShapes);
+        this.particleShapes = particleShapes;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
     }
 

@@ -39,6 +39,8 @@ public class WitherBossFight implements Listener {
     private final CustomItemManager customItemManager;
     private final World world;
     private final Random random;
+    private final TitleEffects titleEffects;
+    private final ParticleShapes particleShapes;
     private final BlockFace[] adjacent = {
             BlockFace.NORTH,
             BlockFace.EAST,
@@ -48,11 +50,13 @@ public class WitherBossFight implements Listener {
     private static final ArrayList<Player> players = new ArrayList<>();
     private static final ArrayList<Item> droppedKeys = new ArrayList<>();
 
-    public WitherBossFight(BadlandsCaves plugin, Random random) {
+    public WitherBossFight(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getChambersWorldName());
         customItemManager = plugin.getCustomItemManager();
         this.random = random;
+        titleEffects = new TitleEffects(plugin);
+        this.particleShapes = particleShapes;
     }
 
     //--------------------------------------------------
@@ -926,7 +930,6 @@ public class WitherBossFight implements Listener {
                 plugin.getServer().broadcastMessage("§dThe Wither has been slain!");
 
                 if (!hardmode) {
-                    TitleEffects titleEffects = new TitleEffects(plugin);
                     plugin.getServer().getOnlinePlayers().forEach(player -> {
                         titleEffects.sendDecodingTitle(player, "ENTERING HARDMODE", ChatColor.of("#ff6600") + ChatColor.BOLD.toString(), "Prepare yourself.", ChatColor.of("#ff4000").toString(), 0, 80, 20, 2, false);
                         player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.MASTER, 1, 0.5F);
@@ -987,18 +990,18 @@ public class WitherBossFight implements Listener {
     }
 
     public void exitPortalParticles () {
-        Location centerStage = new Location(world, 300.5, 206, 0.5);
+        final Location centerStage = new Location(world, 300.5, 206, 0.5);
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (plugin.getSystemConfig().getInt("wither_fight.fight_stage") == 5) {
-                    ParticleShapes.particleSphere(null, Particle.REDSTONE, centerStage, 9, 0, new Particle.DustOptions(Color.ORANGE, 1));
+                    particleShapes.sphereDelayed(null, Particle.REDSTONE, centerStage, 9, 0, new Particle.DustOptions(Color.ORANGE, 1), 2, false);
                 }
                 else {
                     this.cancel();
                 }
             }
-        }.runTaskTimerAsynchronously(plugin, 0, 0);
+        }.runTaskTimerAsynchronously(plugin, 20, 40);
     }
 
     @EventHandler

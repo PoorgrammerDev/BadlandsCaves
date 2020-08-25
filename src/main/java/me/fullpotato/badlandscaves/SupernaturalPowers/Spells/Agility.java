@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -14,8 +15,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Agility extends UsePowers implements Listener {
-    public Agility (BadlandsCaves bcav) {
-        super(bcav);
+    private final ParticleShapes particleShapes;
+    public Agility(BadlandsCaves bcav, ParticleShapes particleShapes) {
+        super(bcav, particleShapes);
+        this.particleShapes = particleShapes;
     }
 
     //detecting if the player is jumping

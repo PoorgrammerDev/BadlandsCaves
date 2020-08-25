@@ -72,7 +72,8 @@ public enum PlayerScore {
     ARTIFACTS(PersistentDataType.STRING, ""),
     ECLIPSED_SHADOWS_ACTIVE(PersistentDataType.BYTE),
     DIGGING_DOPPELGANGER_ACTIVE(PersistentDataType.BYTE),
-    MOMENTOUS_MOMENTUM_TIMER(PersistentDataType.INTEGER);
+    MOMENTOUS_MOMENTUM_TIMER(PersistentDataType.INTEGER),
+    SPAWN_IMMUNE(PersistentDataType.BYTE);
 
 
     private final PersistentDataType<?, ?> type;

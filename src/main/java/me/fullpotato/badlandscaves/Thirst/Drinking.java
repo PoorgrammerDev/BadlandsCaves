@@ -28,11 +28,13 @@ public class Drinking implements Listener {
     private final PlayerEffects playerEffects;
     private final BackroomsManager backroomsManager;
     private final Random random;
-    public Drinking(BadlandsCaves bcav, PlayerEffects playerEffects, BackroomsManager backroomsManager, Random random) {
+    private final ParticleShapes particleShapes;
+    public Drinking(BadlandsCaves bcav, PlayerEffects playerEffects, BackroomsManager backroomsManager, Random random, ParticleShapes particleShapes) {
         plugin = bcav;
         this.playerEffects = playerEffects;
         this.backroomsManager = backroomsManager;
         this.random = random;
+        this.particleShapes = particleShapes;
     }
     @EventHandler
     public void drink (PlayerItemConsumeEvent event) {
@@ -167,7 +169,7 @@ public class Drinking implements Listener {
                     //}
                 }
                 else {
-                    ParticleShapes.particleCircle(null, Particle.REDSTONE, location.clone().add(0, tracker[0], 0), 1, 0, new Particle.DustOptions(Color.YELLOW, 0.5F));
+                    particleShapes.circle(null, Particle.REDSTONE, location.clone().add(0, tracker[0], 0), 1, 0, new Particle.DustOptions(Color.YELLOW, 0.5F));
                     tracker[0] += 0.1;
                 }
             }

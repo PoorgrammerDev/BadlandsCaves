@@ -13,9 +13,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class UsePowers {
     protected final BadlandsCaves plugin;
-
-    protected UsePowers(BadlandsCaves plugin) {
+    private final ParticleShapes particleShapes;
+    protected UsePowers(BadlandsCaves plugin, ParticleShapes particleShapes) {
         this.plugin = plugin;
+        this.particleShapes = particleShapes;
     }
 
     public void notEnoughMana(Player player) {
@@ -35,7 +36,7 @@ public abstract class UsePowers {
 
     public boolean attemptSilence(Player player) {
         final ManaBarManager manaBar = new ManaBarManager(plugin);
-        SilencerBlock silencerBlock = new SilencerBlock(plugin);
+        SilencerBlock silencerBlock = new SilencerBlock(plugin, particleShapes);
         Location silencer = silencerBlock.getNearbyActiveSilencer(player.getLocation());
         if (silencer != null) {
             silencerBlock.useSilencer(silencer);
@@ -45,9 +46,9 @@ public abstract class UsePowers {
 
 
             //PARTICLES
-            ParticleShapes.particleLine(null, Particle.REDSTONE, player.getLocation().add(0, 0.5, 0), silencer.clone().add(0.5, 0.5, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 0.25);
+            particleShapes.line(null, Particle.REDSTONE, player.getLocation().add(0, 0.5, 0), silencer.clone().add(0.5, 0.5, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 0.25);
             for (double i = 0; i < player.getHeight(); i+= 0.1) {
-                ParticleShapes.particleCircle(null, Particle.REDSTONE, player.getLocation().add(0, i, 0), 1, 0, new Particle.DustOptions(Color.PURPLE, 1));
+                particleShapes.circle(null, Particle.REDSTONE, player.getLocation().add(0, i, 0), 1, 0, new Particle.DustOptions(Color.PURPLE, 1));
             }
 
             //SOUND

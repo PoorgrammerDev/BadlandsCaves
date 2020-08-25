@@ -35,9 +35,11 @@ import java.util.UUID;
 public class SilencerBlock implements Listener {
     private final BadlandsCaves plugin;
     private final String destroyMenuTitle = ChatColor.DARK_RED + "Destroy Silencer";
+    private final ParticleShapes particleShapes;
 
-    public SilencerBlock(BadlandsCaves plugin) {
+    public SilencerBlock(BadlandsCaves plugin, ParticleShapes particleShapes) {
         this.plugin = plugin;
+        this.particleShapes = particleShapes;
     }
 
     @EventHandler
@@ -60,7 +62,7 @@ public class SilencerBlock implements Listener {
                             }
                             else {
                                 block.getWorld().playSound(block.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.BLOCKS, 1, 0.5F);
-                                ParticleShapes.particleLine(null, Particle.REDSTONE, block.getLocation().add(0.5, 0.5, 0.5), nearbySilencer.clone().add(0.5, 0.5, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 0.7F), 1);
+                                particleShapes.line(null, Particle.REDSTONE, block.getLocation().add(0.5, 0.5, 0.5), nearbySilencer.clone().add(0.5, 0.5, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 0.7F), 1);
                             }
                         }
                     }
@@ -141,19 +143,18 @@ public class SilencerBlock implements Listener {
                                         final int range = plugin.getOptionsConfig().getInt("hardmode_values.silencer_range");
 
                                         world.playSound(location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1, 1);
-                                        ParticleShapes particleShapes = new ParticleShapes(plugin);
-                                        particleShapes.particleLineDelayed(player, Particle.REDSTONE, location.clone().add(0.5, 0, 0.5), location.clone().add(0.5, range, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 1, 1);
+                                        particleShapes.lineDelayed(player, Particle.REDSTONE, location.clone().add(0.5, 0, 0.5), location.clone().add(0.5, range, 0.5), 0, new Particle.DustOptions(Color.PURPLE, 1), 1, 1);
 
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
-                                                particleShapes.particleSphereDelayed(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1), 1, false);
+                                                particleShapes.sphereDelayed(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1), 1, false);
 
                                                 new BukkitRunnable() {
                                                     @Override
                                                     public void run() {
                                                         world.playSound(location, Sound.BLOCK_BEACON_POWER_SELECT, SoundCategory.BLOCKS, 10, 1);
-                                                        ParticleShapes.particleSphere(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1));
+                                                        particleShapes.sphere(player, Particle.REDSTONE, location, 25, 0, new Particle.DustOptions(Color.PURPLE, 1));
                                                     }
                                                 }.runTaskLaterAsynchronously(plugin, range);
 

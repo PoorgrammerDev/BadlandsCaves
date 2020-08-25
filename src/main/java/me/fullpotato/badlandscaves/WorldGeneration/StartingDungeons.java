@@ -11,10 +11,14 @@ import java.util.Random;
 public class StartingDungeons {
     private final BadlandsCaves plugin;
     private final Random random;
+    private final DestroySpawner dungeonGenerator;
+    private final World world;
 
     public StartingDungeons(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.random = random;
+        dungeonGenerator = new DestroySpawner(plugin, random, null);
+        world = plugin.getServer().getWorld(plugin.getMainWorldName());
     }
 
     public void genSpawnDungeons () {
@@ -22,9 +26,6 @@ public class StartingDungeons {
         final int starting_dungeons = plugin.getOptionsConfig().getInt("starting_dungeons");
 
         if (starting_dungeons > 0) {
-            DestroySpawner dungeonGenerator = new DestroySpawner(plugin, random);
-            World world = plugin.getServer().getWorld(plugin.getMainWorldName());
-
             int[] ran = {0};
             new BukkitRunnable() {
                 @Override

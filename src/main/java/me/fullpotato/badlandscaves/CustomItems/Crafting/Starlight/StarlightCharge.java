@@ -9,14 +9,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
@@ -83,6 +86,51 @@ public class StarlightCharge implements Listener {
             return;
         }
         event.getInventory().setResult(null);
+    }
+
+    @EventHandler
+    public void preserveSpareCharge (CraftItemEvent event) {
+        if (event.getRecipe().getResult().isSimilar(plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER))) {
+            final CraftingInventory inventory = event.getInventory();
+            final ItemStack[] matrix = inventory.getMatrix();
+
+            final ItemStack result = event.getInventory().getResult();
+            int coreSlot = -1;
+            ItemStack energyCore = null;
+            ItemStack starlightArmorIngredient = null;
+
+            for (int i = 0; i < matrix.length; i++) {
+                if (matrix[i] != null) {
+                    if (coreChecker.isEnergyCore(matrix[i])) {
+                        energyCore = matrix[i];
+                        coreSlot = i + 1;
+                    }
+                    else if (isStarlight(matrix[i])) {
+                        starlightArmorIngredient = matrix[i];
+                    }
+                }
+            }
+
+            if (coreSlot == -1 || energyCore == null || starlightArmorIngredient == null) return;
+
+            final int finalCharge = getCharge(result);
+            final int ingredientCharge = getCharge(starlightArmorIngredient);
+            final int coreCharge = coreChecker.getCharge(energyCore);
+            final int difference = Math.abs(finalCharge - (ingredientCharge + coreCharge));
+
+            if (difference > 0) {
+                final ItemStack newCore = plugin.getCustomItemManager().getItem(CustomItem.ENERGY_CORE);
+                coreChecker.setCharge(newCore, difference);
+
+                int finalCoreSlot = coreSlot;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        inventory.setItem(finalCoreSlot, newCore);
+                    }
+                }.runTaskLater(plugin, 1);
+            }
+        }
     }
 
     @EventHandler

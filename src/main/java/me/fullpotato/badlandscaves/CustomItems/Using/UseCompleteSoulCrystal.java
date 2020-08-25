@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.Deaths.DeathHandler;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.*;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
@@ -26,13 +27,15 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
     private final DeathHandler deathHandler;
     private final DescensionPlayerMove descensionPlayerMove;
     private final Random random;
+    private final ParticleShapes particleShapes;
 
-    public UseCompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize, DeathHandler deathHandler, DescensionPlayerMove descensionPlayerMove, Random random) {
+    public UseCompleteSoulCrystal(BadlandsCaves plugin, InventorySerialize inventorySerialize, DeathHandler deathHandler, DescensionPlayerMove descensionPlayerMove, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.inventorySerialize = inventorySerialize;
         this.deathHandler = deathHandler;
         this.descensionPlayerMove = descensionPlayerMove;
         this.random = random;
+        this.particleShapes = particleShapes;
     }
 
     @EventHandler
@@ -77,7 +80,7 @@ public class UseCompleteSoulCrystal extends LimitedUseItems implements Listener 
         new DetectedBar(plugin).runTaskTimer(plugin, 0, 3);
         new LostSoulParticle(plugin).runTaskTimer(plugin, 0, 3);
         new DetectionDecrease(plugin).runTaskTimer(plugin, 0, 20);
-        new ExitPortal(plugin).runTaskTimer(plugin, 0, 5);
+        new ExitPortal(plugin, particleShapes).runTaskTimer(plugin, 0, 5);
 
         //tutorial text
         player.sendTitle(ChatColor.DARK_PURPLE + "Capture the Four Shrines.", ChatColor.of("#6c2b9e") + "Stand under each one for a while to capture them.", 20, 60, 20);

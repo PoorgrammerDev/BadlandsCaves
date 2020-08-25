@@ -14,10 +14,12 @@ import java.util.Random;
 public class AugmentedSpider extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final Random random;
+    private final ParticleShapes particleShapes;
 
-    public AugmentedSpider(BadlandsCaves plugin, Random random) {
+    public AugmentedSpider(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.random = random;
+        this.particleShapes = particleShapes;
     }
 
     @Override
@@ -39,8 +41,8 @@ public class AugmentedSpider extends BukkitRunnable {
                             if (random.nextInt(100) < 25) {
                                 if (spider_loc.distanceSquared(player_loc) < 25 && player_loc.getBlock().isPassable() && !player_loc.getBlock().getType().equals(Material.COBWEB)) {
                                     spider_loc.add(0, 0.5, 0);
-                                    ParticleShapes.particleLine(null, Particle.REDSTONE, spider_loc, player.getEyeLocation(), 0, new Particle.DustOptions(Color.fromRGB(200, 200, 200), 0.5F), 0.05);
-                                    ParticleShapes.particleSphere(null, Particle.BLOCK_DUST, player_loc, 1, 0, Material.COBWEB.createBlockData());
+                                    particleShapes.line(null, Particle.REDSTONE, spider_loc, player.getEyeLocation(), 0, new Particle.DustOptions(Color.fromRGB(200, 200, 200), 0.5F), 0.05);
+                                    particleShapes.sphere(null, Particle.BLOCK_DUST, player_loc, 1, 0, Material.COBWEB.createBlockData());
                                     player_loc.getBlock().setType(Material.COBWEB);
                                 }
                             }

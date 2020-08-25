@@ -7,6 +7,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactDistractingDoppelganger;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -32,15 +33,17 @@ public class Displace extends UsePowers implements Listener {
     private final ArtifactDistractingDoppelganger artifactDistractingDoppelganger;
     private final int cost;
     private final World backrooms;
+    private final ParticleShapes particleShapes;
 
-    public Displace(BadlandsCaves plugin, ArtifactManager artifactManager, ManaBarManager manaBar, ArtifactDistractingDoppelganger artifactDistractingDoppelganger) {
-        super(plugin);
+    public Displace(BadlandsCaves plugin, ArtifactManager artifactManager, ManaBarManager manaBar, ArtifactDistractingDoppelganger artifactDistractingDoppelganger, ParticleShapes particleShapes) {
+        super(plugin, particleShapes);
         this.artifactManager = artifactManager;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         nms = plugin.getLineOfSightNMS();
         cost = plugin.getOptionsConfig().getInt("spell_costs.displace_mana_cost");
         this.manaBar = manaBar;
         this.artifactDistractingDoppelganger = artifactDistractingDoppelganger;
+        this.particleShapes = particleShapes;
     }
 
     @EventHandler

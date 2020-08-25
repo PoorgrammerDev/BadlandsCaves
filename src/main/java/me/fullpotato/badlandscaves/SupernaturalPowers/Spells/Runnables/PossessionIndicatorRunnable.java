@@ -21,9 +21,9 @@ public class PossessionIndicatorRunnable extends BukkitRunnable {
     private final Possession possession;
     private final Random random;
 
-    public PossessionIndicatorRunnable(BadlandsCaves plugin, Random random) {
+    public PossessionIndicatorRunnable(BadlandsCaves plugin, Possession possession, Random random) {
         this.plugin = plugin;
-        possession = new Possession(plugin);
+        this.possession = possession;
         this.random = random;
     }
 

@@ -15,20 +15,29 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class StopCustomItemsInteract implements Listener {
+    private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final TreasureGear treasureGear = new TreasureGear();
     private final StarlightCharge starlightCharge;
     private final Voidmatter voidmatter;
+    private final List<Material> repairTypes = Arrays.asList(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, Material.DIAMOND_SWORD, Material.DIAMOND_PICKAXE, Material.DIAMOND_SHOVEL, Material.DIAMOND_AXE, Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS, Material.NETHERITE_SWORD, Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_AXE, Material.BOW, Material.CROSSBOW, Material.FISHING_ROD);
 
     public StopCustomItemsInteract(BadlandsCaves plugin, StarlightCharge starlightCharge, Voidmatter voidmatter) {
+        this.plugin = plugin;
         this.customItemManager = plugin.getCustomItemManager();
         this.starlightCharge = starlightCharge;
         this.voidmatter = voidmatter;
@@ -95,10 +104,11 @@ public class StopCustomItemsInteract implements Listener {
 
     @EventHandler
     public void preventAnvil (PrepareAnvilEvent event) {
-        for (ItemStack item : event.getInventory()) {
+        final AnvilInventory inventory = event.getInventory();
+
+        for (ItemStack item : inventory) {
             if (isCustomItem(item)) {
                 event.setResult(null);
-
                 event.getViewers().forEach(humanEntity -> {
                     if (humanEntity instanceof Player) {
                         final Player player = (Player) humanEntity;
@@ -128,6 +138,32 @@ public class StopCustomItemsInteract implements Listener {
                         final ItemMeta meta = item.getItemMeta();
                         if (meta != null && meta.hasEnchants() && isCustomItem(item)) {
                             event.setCancelled(true);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void preventRepairing (PrepareItemCraftEvent event) {
+        if (event.getRecipe() != null && event.getInventory().getResult() != null) {
+            final ItemStack result = event.getInventory().getResult();
+            final Material type = result.getType();
+            if (repairTypes.contains(type)) {
+                final ItemStack[] matrix = event.getInventory().getMatrix();
+                final List<ItemStack> armors = new ArrayList<>();
+                for (ItemStack item : matrix) {
+                    if (item != null && item.getType().equals(type)) {
+                        armors.add(item);
+                    }
+                }
+
+                if (armors.size() >= 2) {
+                    for (ItemStack armor : armors) {
+                        if (treasureGear.isTreasureGear(armor) || starlightCharge.isStarlight(armor) || voidmatter.isVoidmatter(armor)) {
+                            event.getInventory().setResult(null);
                             return;
                         }
                     }

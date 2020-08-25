@@ -17,10 +17,12 @@ import java.util.Set;
 public class ArtifactDirectionalVision {
     private final BadlandsCaves plugin;
     private final EnhancedEyes enhancedEyes;
+    private final ParticleShapes particleShapes;
 
-    public ArtifactDirectionalVision(BadlandsCaves plugin, EnhancedEyes enhancedEyes) {
+    public ArtifactDirectionalVision(BadlandsCaves plugin, EnhancedEyes enhancedEyes, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.enhancedEyes = enhancedEyes;
+        this.particleShapes = particleShapes;
     }
 
     public Set<Block> getDirectionalBlocks (Player player, int range, int radius) {
@@ -28,7 +30,7 @@ public class ArtifactDirectionalVision {
         final Location scout = player.getLocation();
         for (int i = 0; i < range; i++) {
             scout.add(scout.getDirection().normalize().multiply(1.5));
-            if (i % 2 == 0) ParticleShapes.particleSphere(player, Particle.REDSTONE, scout, radius, 0, new Particle.DustOptions(Color.BLUE, 1));
+            if (i % 2 == 0) particleShapes.sphere(player, Particle.REDSTONE, scout, radius, 0, new Particle.DustOptions(Color.BLUE, 1));
             output.addAll(enhancedEyes.getNearbyBlocks(scout, radius));
         }
         return output;

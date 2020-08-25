@@ -19,9 +19,11 @@ import java.util.Random;
 public class CreeperBuff implements Listener {
     private final BadlandsCaves plugin;
     private final Random random;
-    public CreeperBuff(BadlandsCaves bcav, Random random) {
+    private final ParticleShapes particleShapes;
+    public CreeperBuff(BadlandsCaves bcav, Random random, ParticleShapes particleShapes) {
         plugin = bcav;
         this.random = random;
+        this.particleShapes = particleShapes;
     }
 
     @EventHandler
@@ -104,8 +106,8 @@ public class CreeperBuff implements Listener {
                         if (random.nextBoolean()) {
                             Location top = source.getLocation().clone();
                             top.add(0, 5, 0);
-                            ParticleShapes.particleLine(null, Particle.REDSTONE, source.getLocation(), top, 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
-                            ParticleShapes.particleLine(null, Particle.REDSTONE, top, surrounding.getLocation(), 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
+                            particleShapes.line(null, Particle.REDSTONE, source.getLocation(), top, 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
+                            particleShapes.line(null, Particle.REDSTONE, top, surrounding.getLocation(), 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {

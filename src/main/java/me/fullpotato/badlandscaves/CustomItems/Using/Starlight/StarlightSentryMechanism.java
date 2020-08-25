@@ -41,13 +41,15 @@ public class StarlightSentryMechanism implements Listener {
     private final StarlightCharge chargeManager;
     private final EnhancedEyesNMS nms;
     private final StarlightBlasterMechanism starlightBlasterMechanism;
+    private final ParticleShapes particleShapes;
 
-    public StarlightSentryMechanism(BadlandsCaves plugin, StarlightTools toolManager, StarlightCharge chargeManager, StarlightBlasterMechanism starlightBlasterMechanism) {
+    public StarlightSentryMechanism(BadlandsCaves plugin, StarlightTools toolManager, StarlightCharge chargeManager, StarlightBlasterMechanism starlightBlasterMechanism, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.nms = plugin.getEnhancedEyesNMS();
         this.toolManager = toolManager;
         this.chargeManager = chargeManager;
         this.starlightBlasterMechanism = starlightBlasterMechanism;
+        this.particleShapes = particleShapes;
     }
 
     @EventHandler
@@ -361,7 +363,7 @@ public class StarlightSentryMechanism implements Listener {
 
                     target.damage(damage, armorStand);
                     armorStand.getWorld().playSound(location, "custom.starlight_blaster", 1, 1);
-                    ParticleShapes.particleLine(null, Particle.REDSTONE, armorStand.getLocation().add(0, 4.5, 0), target.getEyeLocation(), 0, new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), 0.25);
+                    particleShapes.line(null, Particle.REDSTONE, armorStand.getLocation().add(0, 4.5, 0), target.getEyeLocation(), 0, new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), 0.25);
 
                     int charge = getCharge(armorStand) - 25;
                     setCharge(armorStand, charge);

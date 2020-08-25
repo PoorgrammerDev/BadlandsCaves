@@ -8,6 +8,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactSoulHeist;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
@@ -35,11 +36,14 @@ public class Withdraw extends UsePowers implements Listener {
     private final ArtifactManager artifactManager;
     private final ArtifactSoulHeist artifactSoulHeist;
     private final World backrooms;
-    public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter) {
-        super(plugin);
+    private final ParticleShapes particleShapes;
+
+    public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter, ParticleShapes particleShapes) {
+        super(plugin, particleShapes);
         this.random = random;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         void_world = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
+        this.particleShapes = particleShapes;
         artifactSoulHeist = new ArtifactSoulHeist(plugin, this, possession, voidmatter, artifactManager);
         this.artifactManager = artifactManager;
     }

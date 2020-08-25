@@ -65,6 +65,7 @@ import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInWater;
 import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
@@ -221,6 +222,8 @@ public final class BadlandsCaves extends JavaPlugin {
     private PreventTechUse preventTechUse;
     private ManaBarManager manaBarManager;
     private PreventMagicUse preventMagicUse;
+    private ParticleShapes particleShapes;
+    private SpawnImmunity spawnImmunity;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -269,6 +272,7 @@ public final class BadlandsCaves extends JavaPlugin {
     }
 
     public void initializeFields() {
+        particleShapes = new ParticleShapes(this);
         EnchantmentStorage enchantmentStorage = new EnchantmentStorage(this);
         pregenerateDimensions = new PregenerateDimensions(this, random);
         customItemManager = new CustomItemManager(this, enchantmentStorage, pregenerateDimensions);
@@ -298,7 +302,7 @@ public final class BadlandsCaves extends JavaPlugin {
         useFishingCrate = new UseFishingCrate(this, random);
         skeleBuff = new SkeleBuff(this, random);
         zombieBuff = new ZombieBuff(this, random);
-        creeperBuff = new CreeperBuff(this, random);
+        creeperBuff = new CreeperBuff(this, random, particleShapes);
         spiderBuff = new SpiderBuff(this, random);
         pigZombieBuff = new PigZombieBuff(this, random);
         silverfishBuff = new SilverfishBuff(this, random);
@@ -309,15 +313,15 @@ public final class BadlandsCaves extends JavaPlugin {
         swapPowers = new SwapPowers(this);
         manaBarManager = new ManaBarManager(this);
         ArtifactDistractingDoppelganger artifactDistractingDoppelganger = new ArtifactDistractingDoppelganger(this, voidmatter, artifactManager);
-        displace = new Displace(this, artifactManager, manaBarManager, artifactDistractingDoppelganger);
+        displace = new Displace(this, artifactManager, manaBarManager, artifactDistractingDoppelganger, particleShapes);
         stopPowersInvInteract = new StopPowersInvInteract(this);
-        enhancedEyes = new EnhancedEyes(this, artifactManager);
-        possession = new Possession(this);
-        withdraw = new Withdraw(random, this, artifactManager, possession, voidmatter);
+        enhancedEyes = new EnhancedEyes(this, artifactManager, particleShapes);
+        possession = new Possession(this, particleShapes);
+        withdraw = new Withdraw(random, this, artifactManager, possession, voidmatter, particleShapes);
         playerJoinLeave = new PlayerJoinLeave(this, guideBook, withdraw, playerEffects);
         increaseToxInRain = new IncreaseToxInRain(this, random, starlightArmor, starlightCharge, nebuliteManager, playerEffects, environmentalHazards);
         enduranceCancelHunger = new EnduranceCancelHunger(this, random);
-        agility = new Agility(this);
+        agility = new Agility(this, particleShapes);
         InventorySerialize inventorySerialize = new InventorySerialize(this);
         useIncompleteSoulCrystal = new UseIncompleteSoulCrystal(this, inventorySerialize, random);
         descensionPlayerMove = new DescensionPlayerMove(this, deathHandler, useIncompleteSoulCrystal, inventorySerialize);
@@ -331,13 +335,13 @@ public final class BadlandsCaves extends JavaPlugin {
         playerUnderSht = new PlayerUnderSht(this);
         endGame = new EndGame(this, deathHandler, useIncompleteSoulCrystal);
         limitActions = new LimitActions(this, useIncompleteSoulCrystal);
-        useCompleteSoulCrystal = new UseCompleteSoulCrystal(this, inventorySerialize, deathHandler, descensionPlayerMove, random);
+        useCompleteSoulCrystal = new UseCompleteSoulCrystal(this, inventorySerialize, deathHandler, descensionPlayerMove, random, particleShapes);
         mushroomStew = new MushroomStew(random);
-        destroySpawner = new DestroySpawner(this, random);
+        destroySpawner = new DestroySpawner(this, random, particleShapes);
         useRune = new UseRune(this);
         useChargedRune = new UseChargedRune(this);
         backroomsManager = new BackroomsManager(this, inventorySerialize, random);
-        drinking = new Drinking(this, playerEffects, backroomsManager, random);
+        drinking = new Drinking(this, playerEffects, backroomsManager, random, particleShapes);
         treasureGear = new TreasureGear();
         eXPBottle = new EXPBottle();
         serratedSwords = new SerratedSwords(this, energyCore, starlightTools);
@@ -347,7 +351,7 @@ public final class BadlandsCaves extends JavaPlugin {
         corrosive = new Corrosive(this, starlightTools, energyCore);
         useCorrosive = new UseCorrosive(this, starlightArmor, starlightCharge, nebuliteManager, corrosive, random);
         customBows = new CustomBows(this);
-        witherBossFight = new WitherBossFight(this, random);
+        witherBossFight = new WitherBossFight(this, random, particleShapes);
         apples = new Apples(this);
         noMending = new NoMending(this);
         shieldBlocking = new ShieldBlocking(this, starlightTools, starlightCharge, nebuliteManager, random);
@@ -357,7 +361,7 @@ public final class BadlandsCaves extends JavaPlugin {
         titaniumBar = new TitaniumBar(this);
         starlightComponents = new StarlightComponents(this);
         useForeverFish = new UseForeverFish(this);
-        starlightBlasterMechanism = new StarlightBlasterMechanism(this, starlightCharge, starlightTools, nebuliteManager);
+        starlightBlasterMechanism = new StarlightBlasterMechanism(this, starlightCharge, starlightTools, nebuliteManager, particleShapes);
         spawnInhabitants = new SpawnInhabitants(this, random);
         noOxygen = new NoOxygen(this, environmentalHazards, random);
         noFood = new NoFood(environmentalHazards);
@@ -366,13 +370,13 @@ public final class BadlandsCaves extends JavaPlugin {
         piglinBuff = new PiglinBuff(this, random);
         hoglinBuff = new HoglinBuff(this, random);
         silencer = new Silencer(this);
-        silencerBlock = new SilencerBlock(this);
+        silencerBlock = new SilencerBlock(this, particleShapes);
         canteen = new Canteen(this);
         useCanteen = new UseCanteen(this, drinking);
         soulLantern = new SoulLantern(this);
         useSoulLantern = new UseSoulLantern(this);
         preservationTotem = new PreservationTotem(this);
-        starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism);
+        starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism, particleShapes);
         useChambersBag = new UseChambersBag(this, random);
         augmentedDrops = new AugmentedDrops(this);
         NebuliteStatChanges nebuliteStatChanges = new NebuliteStatChanges(this, nebuliteManager, starlightCharge, starlightArmor, starlightTools, enchantmentStorage);
@@ -417,6 +421,7 @@ public final class BadlandsCaves extends JavaPlugin {
         slowBreak = new SlowBreak(this, random);
         preventTechUse = new PreventTechUse(this, voidmatter, enchantmentStorage);
         preventMagicUse = new PreventMagicUse(this, starlightCharge, enchantmentStorage);
+        spawnImmunity = new SpawnImmunity(this, playerEffects);
     }
 
     //CONFIG
@@ -632,6 +637,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 slowBreak,
                 preventTechUse,
                 preventMagicUse,
+                spawnImmunity,
         };
 
         for (Listener event : events) {
@@ -682,14 +688,14 @@ public final class BadlandsCaves extends JavaPlugin {
     public void loadRunnables() {
         new ActionbarRunnable(this).runTaskTimer(this, 0, 5);
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
-        new DisplaceParticleRunnable(this, random).runTaskTimerAsynchronously(this, 0, 2);
+        new DisplaceParticleRunnable(this, random, particleShapes).runTaskTimerAsynchronously(this, 0, 2);
         new WithdrawIndicatorRunnable(this).runTaskTimerAsynchronously(this, 0, 5);
-        new PossessionIndicatorRunnable(this, random).runTaskTimer(this, 0, 1);
+        new PossessionIndicatorRunnable(this, possession, random).runTaskTimer(this, 0, 1);
         manaBarManager.runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 5);
         new DescensionReset(this, random).runTaskTimer(this, 0, 120);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
-        new AugmentedSpider(this, random).runTaskTimer(this, 0, 5);
+        new AugmentedSpider(this, random, particleShapes).runTaskTimer(this, 0, 5);
         new AugmentedZombie(this, random).runTaskTimer(this, 0, 10);
         new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
@@ -800,6 +806,7 @@ public final class BadlandsCaves extends JavaPlugin {
         voidmatter.pickaxeRecipe();
         voidmatter.shovelRecipe();
         voidmatter.axeRecipe();
+        voidmatter.repairRecipe();
 
         canteen.canteenRecipe();
         canteen.fillCanteen();
