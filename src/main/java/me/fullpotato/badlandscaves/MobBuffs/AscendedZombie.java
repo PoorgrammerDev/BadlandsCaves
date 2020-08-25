@@ -14,11 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
-public class AugmentedZombie extends BukkitRunnable {
+public class AscendedZombie extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final Random random;
 
-    public AugmentedZombie(BadlandsCaves plugin, Random random) {
+    public AscendedZombie(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.random = random;
     }
@@ -29,7 +29,7 @@ public class AugmentedZombie extends BukkitRunnable {
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         for (World world : plugin.getServer().getWorlds()) {
             for (Zombie zombie : world.getEntitiesByClass(Zombie.class)) {
-                if (zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1 && !zombie.isDead()) {
+                if (zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1 && !zombie.isDead()) {
                     //WRYY----------------------
                     byte wryyCooldown = zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE);
                     if (wryyCooldown <= 0) {

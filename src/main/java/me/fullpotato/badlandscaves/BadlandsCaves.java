@@ -28,7 +28,7 @@ import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Info.CraftingGuide;
 import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.Loot.*;
-import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AugmentedDrops;
+import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AscendedDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
@@ -176,7 +176,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private PreservationTotem preservationTotem;
     private StarlightSentryMechanism starlightSentryMechanism;
     private UseChambersBag useChambersBag;
-    private AugmentedDrops augmentedDrops;
+    private AscendedDrops ascendedDrops;
     private NebuliteInstaller nebuliteInstaller;
     private StarlightSaberMechanism starlightSaberMechanism;
     private NebuliteThruster nebuliteThruster;
@@ -378,7 +378,7 @@ public final class BadlandsCaves extends JavaPlugin {
         preservationTotem = new PreservationTotem(this);
         starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism, particleShapes);
         useChambersBag = new UseChambersBag(this, random);
-        augmentedDrops = new AugmentedDrops(this);
+        ascendedDrops = new AscendedDrops(this);
         NebuliteStatChanges nebuliteStatChanges = new NebuliteStatChanges(this, nebuliteManager, starlightCharge, starlightArmor, starlightTools, enchantmentStorage);
         nebuliteInstaller = new NebuliteInstaller(this, starlightCharge, nebuliteManager, nebuliteStatChanges);
         starlightSaberMechanism = new StarlightSaberMechanism(this, starlightTools, starlightCharge, nebuliteManager, useVoltshock, useCorrosive, useSerrated, random);
@@ -592,7 +592,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 preservationTotem,
                 starlightSentryMechanism,
                 useChambersBag,
-                augmentedDrops,
+                ascendedDrops,
                 nebuliteInstaller,
                 starlightSaberMechanism,
                 nebuliteThruster,
@@ -695,8 +695,8 @@ public final class BadlandsCaves extends JavaPlugin {
         new ManaRegen(this).runTaskTimer(this, 0, 5);
         new DescensionReset(this, random).runTaskTimer(this, 0, 120);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
-        new AugmentedSpider(this, random, particleShapes).runTaskTimer(this, 0, 5);
-        new AugmentedZombie(this, random).runTaskTimer(this, 0, 10);
+        new AscendedSpider(this, random, particleShapes).runTaskTimer(this, 0, 5);
+        new AscendedZombie(this, random).runTaskTimer(this, 0, 10);
         new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this, random).runTaskTimer(this, 0, 20);

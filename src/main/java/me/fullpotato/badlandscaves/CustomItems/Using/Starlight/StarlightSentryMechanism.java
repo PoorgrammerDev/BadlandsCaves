@@ -18,10 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -222,7 +219,10 @@ public class StarlightSentryMechanism implements Listener {
                     if (entity instanceof ArmorStand) {
                         ArmorStand armorStand = (ArmorStand) entity;
                         if (isSentry(armorStand)) {
-                            destroySentry(armorStand, slime, true);
+                            final Player owner = getOwner(armorStand);
+                            if (owner != null && owner.equals(event.getPlayer())) {
+                                destroySentry(armorStand, true);
+                            }
                         }
                     }
                 }
@@ -232,6 +232,24 @@ public class StarlightSentryMechanism implements Listener {
 
     @EventHandler
     public void ownerLogOff (PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 1) {
+            String result = (String) PlayerScore.STARLIGHT_SENTRY_UUID.getScore(plugin, player);
+            if (result != null && !result.isEmpty()) {
+                final UUID uuid = UUID.fromString(result);
+                Entity entity = plugin.getServer().getEntity(uuid);
+                if (entity instanceof ArmorStand) {
+                    ArmorStand armorStand = (ArmorStand) entity;
+                    if (isSentry(armorStand)) {
+                        destroySentry(armorStand, true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void ownerChangeDimension (PlayerChangedWorldEvent event) {
         final Player player = event.getPlayer();
         if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 1) {
             String result = (String) PlayerScore.STARLIGHT_SENTRY_UUID.getScore(plugin, player);

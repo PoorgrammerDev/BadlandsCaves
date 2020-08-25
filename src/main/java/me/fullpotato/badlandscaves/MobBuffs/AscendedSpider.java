@@ -11,12 +11,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
-public class AugmentedSpider extends BukkitRunnable {
+public class AscendedSpider extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final Random random;
     private final ParticleShapes particleShapes;
 
-    public AugmentedSpider(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
+    public AscendedSpider(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         this.random = random;
         this.particleShapes = particleShapes;
@@ -31,7 +31,7 @@ public class AugmentedSpider extends BukkitRunnable {
             for (Entity entity : player.getNearbyEntities(7, 7, 7)) {
                 if (entity instanceof Spider) {
                     final Spider spider = (Spider) entity;
-                    if (spider.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && spider.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                    if (spider.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && spider.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1) {
                         if (spider.getTarget() != null && spider.getTarget().equals(player)) {
 
                             final Location spider_loc = spider.getLocation();

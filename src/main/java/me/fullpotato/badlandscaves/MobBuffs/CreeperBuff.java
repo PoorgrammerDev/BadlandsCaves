@@ -38,12 +38,12 @@ public class CreeperBuff implements Listener {
         if (!isHardmode) return;
 
         final int radius = plugin.getOptionsConfig().getInt("hardmode_values.creeper_radius");
-        final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
+        final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
-        if (random.nextInt(100) < augment) {
-            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
+        if (random.nextInt(100) < ascend) {
+            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
             creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);
             creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
@@ -54,13 +54,13 @@ public class CreeperBuff implements Listener {
     }
 
     @EventHandler
-    public void augmentedExplode (EntityExplodeEvent event) {
+    public void ascendedExplode (EntityExplodeEvent event) {
         if (event.getEntity() instanceof Creeper) {
             final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
             if (hardmode) {
                 final Creeper creeper = (Creeper) event.getEntity();
                 if (!creeper.isDead()) {
-                    if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                    if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1) {
                         final Location location = creeper.getLocation();
                         final World world = creeper.getWorld();
                         final int size = creeper.getExplosionRadius();
@@ -99,10 +99,10 @@ public class CreeperBuff implements Listener {
                     //immune to each other's explosions
                     event.setCancelled(true);
 
-                    //augmented chain explode
+                    //ascended chain explode
                     final Creeper source = (Creeper) event.getDamager();
                     final Creeper surrounding = (Creeper) event.getEntity();
-                    if (source.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && source.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                    if (source.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && source.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1) {
                         if (random.nextBoolean()) {
                             Location top = source.getLocation().clone();
                             top.add(0, 5, 0);
@@ -117,11 +117,11 @@ public class CreeperBuff implements Listener {
                         }
                     }
                 }
-                //augmented deflect arrow
+                //ascended deflect arrow
                 else if (event.getDamager() instanceof Arrow) {
                     final Arrow arrow = (Arrow) event.getDamager();
                     final Creeper creeper = (Creeper) event.getEntity();
-                    if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                    if (creeper.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && creeper.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1) {
                         event.setCancelled(true);
                         creeper.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, arrow.getLocation(), 1, 0, 0, 0, 0);
                         arrow.setVelocity(arrow.getVelocity().multiply(2));

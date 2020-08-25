@@ -38,6 +38,7 @@ public class WitherBossFight implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final World world;
+    private final World withdraw;
     private final Random random;
     private final TitleEffects titleEffects;
     private final ParticleShapes particleShapes;
@@ -53,6 +54,7 @@ public class WitherBossFight implements Listener {
     public WitherBossFight(BadlandsCaves plugin, Random random, ParticleShapes particleShapes) {
         this.plugin = plugin;
         world = plugin.getServer().getWorld(plugin.getChambersWorldName());
+        withdraw = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
         customItemManager = plugin.getCustomItemManager();
         this.random = random;
         titleEffects = new TitleEffects(plugin);
@@ -258,6 +260,7 @@ public class WitherBossFight implements Listener {
                             plugin.saveSystemConfig();
                         }
                         else if (fight_stage == 1) {
+                            clearEntities(true);
                             prepareStage();
                         }
                     }
@@ -310,7 +313,7 @@ public class WitherBossFight implements Listener {
 
                 int active = 0;
                 for (Player player : players) {
-                    if (player.isOnline() && !player.isDead() && player.getWorld().equals(world)) {
+                    if (player.isOnline() && !player.isDead() && (player.getWorld().equals(world) || isInWithdraw(player))) {
                         active++;
                     }
                 }
@@ -337,6 +340,14 @@ public class WitherBossFight implements Listener {
     }
 
     //---------------------------------------------------
+
+    public boolean isInWithdraw (Player player) {
+        if (player.getWorld().equals(withdraw)) {
+            String worldname = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
+            return (worldname != null && worldname.equalsIgnoreCase(plugin.getChambersWorldName()));
+        }
+        return false;
+    }
 
     public void genMazes (Random random, boolean spawnMobs) {
         //magma maze
@@ -904,6 +915,7 @@ public class WitherBossFight implements Listener {
     public void clearEntities(boolean removeWither) {
         for (Entity entity : world.getEntities()) {
             if (entity instanceof Blaze || entity instanceof WitherSkeleton || entity instanceof PigZombie || (removeWither && entity instanceof Wither)) {
+                entity.teleport(entity.getLocation().subtract(0, 100, 0));
                 entity.remove();
             }
         }

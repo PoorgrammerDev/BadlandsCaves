@@ -80,7 +80,7 @@ public class GuideBook {
         meta.spigot().addPage(getTOCEntries(entries_page_1, pages_page_1, false));
 
 
-        final String[] entries_page_2 = {"§4Hardmode§0", "§9Augmented Mobs"};
+        final String[] entries_page_2 = {"§4Hardmode§0", "§9Ascended Mobs"};
         final String[] pages_page_2 = {"27", "29"};
         meta.spigot().addPage(getTOCEntries(entries_page_2, pages_page_2, true));
 
@@ -108,7 +108,7 @@ public class GuideBook {
         meta.addPage("§c§lHallowed Chambers (cont.)§0\n" + "§0After everyone has entered, right click the red barrier twice to start. After going down the hallway, kill mobs in each of the 3 dungeons. One mob in each dungeon holds a key. Put these keys in the center platform.");
         meta.addPage("§4§lHardmode§0\n" + "§0After defeating The Wither for the first time, the world is irreversibly put into Hardmode. All mobs are significantly buffed. Thirst drains quicker, water doesn't quench as much, more materials are needed to purify, among other things.");
         meta.addPage("§4§lHardmode (cont.)§0\n" + "§0However, you now get access to crazier items, like Power Suits, Sabers, and Modules for the Puresouls, and Voidmatter Armor, Tools, and Artifacts for the Heretics.");
-        meta.addPage("§9§lAugmented Mobs§0\n" + "§0In Hardmode, there is a small chance of an Augmented Mob to spawn in the place of a regular mob. This chance is increased with Chaos. These mobs are VERY powerful and could be considered mini-bosses.");
+        meta.addPage("§9§lAscended Mobs§0\n" + "§0In Hardmode, there is a small chance of an Ascended Mob to spawn in the place of a regular mob. This chance is increased with Chaos. These mobs are VERY powerful and could be considered mini-bosses.");
 
 
         book.setItemMeta(meta);

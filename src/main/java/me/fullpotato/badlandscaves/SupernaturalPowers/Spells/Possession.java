@@ -195,9 +195,9 @@ public class Possession extends UsePowers implements Listener {
         if (entity instanceof Player || entity instanceof EnderDragon || entity instanceof Wither) return false;
 
         final PersistentDataContainer container = entity.getPersistentDataContainer();
-        final NamespacedKey augmented = new NamespacedKey(plugin, "augmented");
-        if (container.has(augmented, PersistentDataType.BYTE)) {
-            final Byte result = container.get(augmented, PersistentDataType.BYTE);
+        final NamespacedKey ascended = new NamespacedKey(plugin, "ascended");
+        if (container.has(ascended, PersistentDataType.BYTE)) {
+            final Byte result = container.get(ascended, PersistentDataType.BYTE);
             if (result != null) {
                 return result == 0;
             }

@@ -47,9 +47,9 @@ public class SkeleBuff implements Listener {
         if (!hardmode && random.nextInt(100) >= chance) return;
         if (skeleton.getType().equals(EntityType.SKELETON)) {
             if (hardmode) {
-                final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
-                if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < augment) {
-                    skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
+                final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
+                if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < ascend) {
+                    skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
                     skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Summoner");
 
                     ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
@@ -101,7 +101,7 @@ public class SkeleBuff implements Listener {
             skeleton.getEquipment().setItemInMainHand(bow);
 
             if (!hardmode) return;
-            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
+            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
 
             final Location headSpace = location.clone();
@@ -109,7 +109,7 @@ public class SkeleBuff implements Listener {
             if (!headSpace.getBlock().isPassable()) return;
 
             //witherskeleton
-            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) {
+            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) {
                 world.spawnEntity(location, EntityType.WITHER_SKELETON);
             }
         }
@@ -137,7 +137,7 @@ public class SkeleBuff implements Listener {
             Arrow arrow = (Arrow) event.getEntity();
             if (arrow.getShooter() instanceof Skeleton) {
                 Skeleton skeleton = (Skeleton) arrow.getShooter();
-                if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1) {
                     Vector velocity = arrow.getVelocity();
                     Location location = arrow.getLocation();
 
@@ -173,7 +173,7 @@ public class SkeleBuff implements Listener {
             Arrow arrow = (Arrow) event.getEntity();
             if (arrow.getShooter() instanceof Skeleton) {
                 Skeleton skeleton = (Skeleton) arrow.getShooter();
-                if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) == (byte) 1) {
+                if (skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) && skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) == (byte) 1) {
                     player.setNoDamageTicks(0);
 
                     final int chaos = plugin.getSystemConfig().getInt("chaos_level");

@@ -51,10 +51,10 @@ public class ZombieBuff implements Listener {
         final double chance = Math.pow(1.045, chaos) - 1;
         if (hardmode) {
 
-            final int augment = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.augmented_spawn_chance");
-            if (random.nextInt(100) < augment) {
+            final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
+            if (random.nextInt(100) < ascend) {
                 zombie.setBaby(false);
-                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE, (byte) 1);
+                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE, (byte) 0);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "wryy_cooldown"), PersistentDataType.BYTE, (byte) 0);
                 zombie.setCustomName(ChatColor.GOLD.toString() + ChatColor.BOLD + "Vampire");
@@ -89,7 +89,7 @@ public class ZombieBuff implements Listener {
             }
 
 
-            if (!zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) || zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "augmented"), PersistentDataType.BYTE) != (byte) 1) {
+            if (!zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) || zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) {
                 boolean overpowered = random.nextInt(100) < chance;
 
                 //SWORD-------------------------------------------------------------------

@@ -105,6 +105,7 @@ public class Canteen extends MatchCrafting implements Listener {
     public void returnGlassBottle (CraftItemEvent event) {
         final ItemStack result = event.getRecipe().getResult();
         if (!result.isSimilar(placeholder)) return;
+        if (event.getInventory().getResult() == null) return;
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
         int slot = -1;

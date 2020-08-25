@@ -123,12 +123,12 @@ hardmode_values:
   # For scale, a vanilla creeper explosion size is 3. (as of 1.16.1)
   creeper_radius: 7
 
-  # In Hardmode, mini-boss versions of enemies, called Augmented Mobs, can spawn in place of regular mobs.
+  # In Hardmode, mini-boss versions of enemies, called Ascended Mobs, can spawn in place of regular mobs.
   # This is the base percent chance that happens. [Not factoring in Chaos]
-  augmented_spawn_chance: 5
+  ascended_spawn_chance: 5
 
-  # The EXP dropped from Augmented Mobs are multiplied by this amount as a reward for killing them.
-  augmented_exp_multiplier: 10
+  # The EXP dropped from Ascended Mobs are multiplied by this amount as a reward for killing them.
+  ascended_exp_multiplier: 10
 
   # In Hardmode, Silencers are blocks that prevent Heretics from using their powers. This is their radius of effect.
   silencer_range: 25
