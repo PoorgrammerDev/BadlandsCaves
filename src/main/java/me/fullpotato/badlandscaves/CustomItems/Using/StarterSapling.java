@@ -2,9 +2,9 @@ package me.fullpotato.badlandscaves.CustomItems.Using;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
-import org.bukkit.Location;
-import org.bukkit.TreeType;
-import org.bukkit.World;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -23,19 +23,18 @@ public class StarterSapling implements Listener {
     public void useSapling (BlockPlaceEvent event) {
         final ItemStack item = event.getItemInHand();
         if (item.isSimilar(plugin.getCustomItemManager().getItem(sapling))) {
-            event.setCancelled(true);
-            final Location location = event.getBlockPlaced().getLocation();
-            final World world = location.getWorld();
-            if (world != null) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (world.generateTree(location, TreeType.TREE)) {
-                            item.setAmount(item.getAmount() - 1);
-                        }
+            final Block block = event.getBlockPlaced();
+            final Material saplingMat = plugin.getCustomItemManager().getItem(sapling).getType();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    int counter = 0;
+                    while (block.getType() == saplingMat && counter < 64) {
+                        block.applyBoneMeal(BlockFace.UP);
+                        ++counter;
                     }
-                }.runTaskLater(plugin, 1L);
-            }
+                }
+            }.runTaskLater(plugin, 5);
         }
     }
 }
