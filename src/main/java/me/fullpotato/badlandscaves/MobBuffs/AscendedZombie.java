@@ -47,7 +47,7 @@ public class AscendedZombie extends BukkitRunnable {
                     if (timeStopCooldown <= 0) {
                         if (zombie.getTarget() != null && zombie.getTarget() instanceof Player) {
                             Player player = (Player) zombie.getTarget();
-                            if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
+                            if (!player.isDead() && (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE))) {
                                 Location zombieLocation = zombie.getEyeLocation();
                                 Location playerLocation = player.getEyeLocation();
                                 if (zombieLocation.getWorld() != null && zombieLocation.getWorld().equals(playerLocation.getWorld()) && zombieLocation.distanceSquared(playerLocation) < 25) {
@@ -61,7 +61,7 @@ public class AscendedZombie extends BukkitRunnable {
                                         world.playSound(player.getLocation(), "custom.vampire.ability", SoundCategory.HOSTILE, 10, 1);
 
                                         double damage = zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() * 4;
-                                        player.setVelocity(zombie.getVelocity().subtract(player.getVelocity()).multiply(damage));
+                                        player.setVelocity(zombie.getVelocity().subtract(player.getVelocity()).normalize().multiply(damage));
                                         player.damage(damage, zombie);
                                         healZombie(zombie, damage / ((chaos / -50.0) + 5));
                                     }

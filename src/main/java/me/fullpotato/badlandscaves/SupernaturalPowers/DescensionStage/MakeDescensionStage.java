@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class MakeDescensionStage extends BukkitRunnable {
     private final BadlandsCaves plugin;
-    private final World world;
+    private World world;
     private final Random random;
     public MakeDescensionStage(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
@@ -23,6 +23,7 @@ public class MakeDescensionStage extends BukkitRunnable {
 
     @Override
     public void run() {
+        world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         int clear_lim = 100;
         //clears the area first
         for (int x = -clear_lim; x <= clear_lim; x++) {
