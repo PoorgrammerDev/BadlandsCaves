@@ -187,7 +187,7 @@ public class EnhancedEyes extends UsePowers implements Listener {
         }
 
         PlayerScore.MANA.setScore(plugin, player, mana - ((waive ? 0 : initial_mana_cost) - (constant_mana_drain / 20.0)));
-        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         PlayerScore.USING_EYES.setScore(plugin, player, 1);
 

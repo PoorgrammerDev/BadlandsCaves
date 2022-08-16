@@ -50,7 +50,7 @@ public class PossessionMobsRunnable extends BukkitRunnable {
 
 
             //cancel mana regen and keep mana bar active
-            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
             //make target invis to player

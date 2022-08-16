@@ -92,7 +92,7 @@ public class Possession extends UsePowers implements Listener {
 
         //cancel mana regen and keep mana bar active
         PlayerScore.MANA.setScore(plugin, player, mana - cost);
-        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
         //readying the player and the target

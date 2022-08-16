@@ -33,7 +33,10 @@ public class ArtifactManaWarding extends ArtifactMechanisms implements Listener 
                                         final double cost = event.getFinalDamage() * 7.5;
                                         if (mana >= cost) {
                                             PlayerScore.MANA.setScore(plugin, player, mana - (cost));
-                                            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 50));
+                                            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(
+                                                    ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)),
+                                                    plugin.getOptionsConfig().getInt("mana_regen_cooldown") / 3
+                                            ));
                                             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                                             event.setDamage(event.getDamage() * 0.25);
                                         }

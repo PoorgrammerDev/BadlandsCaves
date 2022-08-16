@@ -169,7 +169,7 @@ public class Displace extends UsePowers implements Listener {
                                 double new_mana = mana - (double) (cost);
                                 PlayerScore.MANA.setScore(plugin, player, new_mana);
                                 PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
 
                                 if (plugin.getSystemConfig().getBoolean("hardmode")) {
                                     //Undisplace Artifact

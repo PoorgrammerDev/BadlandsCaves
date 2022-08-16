@@ -159,7 +159,7 @@ public class Withdraw extends UsePowers implements Listener {
                     player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidLoc, 10, 0, 1, 0);
                     PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, timer - 1);
 
-                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
                 }
             }
         }.runTaskTimer(plugin, 0, 0);

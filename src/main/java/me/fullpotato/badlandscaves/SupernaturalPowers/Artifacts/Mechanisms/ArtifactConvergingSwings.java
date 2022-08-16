@@ -56,7 +56,10 @@ public class ArtifactConvergingSwings extends ArtifactMechanisms implements List
         final double mana = (double) PlayerScore.MANA.getScore(plugin, player);
         PlayerScore.MANA.setScore(plugin, player, mana - cost);
         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 30));
+        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(
+                ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)),
+                plugin.getOptionsConfig().getInt("mana_regen_cooldown") / 3
+        ));
 
         final int times = 25;
         final int[] ran = {0};

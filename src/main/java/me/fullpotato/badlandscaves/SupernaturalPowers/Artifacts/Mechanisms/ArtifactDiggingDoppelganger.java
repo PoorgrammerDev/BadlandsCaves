@@ -94,7 +94,7 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
                                             if (faceYawMap.containsKey(opposite)) {
                                                 //Mana costs, setting score to active
                                                 PlayerScore.MANA.setScore(plugin, player, mana - (cost + drain / 20.0));
-                                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+                                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
                                                 PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                                                 PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.setScore(plugin, player, 1);
 
@@ -231,7 +231,7 @@ public class ArtifactDiggingDoppelganger extends ArtifactMechanisms implements L
 
                 //MANA DRAIN
                 PlayerScore.MANA.setScore(plugin, original, mana - (drain / 20.0));
-                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, original, 300);
+                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, original, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
                 PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, original, 60);
             }
 

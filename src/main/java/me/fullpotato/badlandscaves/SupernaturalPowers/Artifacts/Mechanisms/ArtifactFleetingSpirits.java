@@ -133,7 +133,7 @@ public class ArtifactFleetingSpirits extends ArtifactMechanisms implements Liste
 
                 if (warp != null && lineOfSightNMS.hasLineOfSight(player, warp) && isViable(warp)) {
                     PlayerScore.MANA.setScore(plugin, player, mana - cost);
-                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
                     PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
                     warp.setYaw(location.getYaw());

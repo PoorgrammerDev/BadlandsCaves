@@ -100,7 +100,7 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
                     if (mana >= cost) {
                         PlayerScore.MANA.setScore(plugin, player, mana - cost);
                         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-                        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+                        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
                         PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 1);
 
                         player.getInventory().setItemInOffHand(null);
