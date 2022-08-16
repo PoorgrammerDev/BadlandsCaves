@@ -54,10 +54,9 @@ public class PlayerEffects implements Listener {
 
         final int total_walk_speed = deathValues.get("walk_speed") + thirstValues.get("walk_speed") + toxValues.get("walk_speed") + agility_speed;
         final int total_mine_speed = deathValues.get("mine_speed") + thirstValues.get("mine_speed") + toxValues.get("mine_speed");
-        final int total_hunger = deathValues.get("hunger_lvl") + thirstValues.get("hunger_lvl") + toxValues.get("hunger_lvl");
+        final int total_hunger = thirstValues.get("hunger_lvl") + toxValues.get("hunger_lvl");
         final int total_poison = thirstValues.get("poison_lvl") + toxValues.get("poison_lvl");
         final boolean blindness = deathValues.get("blindness") > 0 || thirstValues.get("blindness") > 0 || toxValues.get("blindness") > 0;
-
 
         if (total_walk_speed > 0) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, total_walk_speed - 1, true, false));
