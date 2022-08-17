@@ -8,6 +8,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Withdraw;
 import me.fullpotato.badlandscaves.Util.InitializePlayer;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -43,6 +45,7 @@ public class PlayerJoinLeave implements Listener {
 
             if (!player.hasPlayedBefore()) {
                 player.getInventory().addItem(plugin.getCustomItemManager().getItem(CustomItem.STARTER_SAPLING));
+                player.getInventory().addItem(new ItemStack(Material.TORCH, 4));
                 player.getInventory().addItem(guideBook.getGuideBook());
 
                 new BukkitRunnable() {

@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.Effects.PlayerEffects;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -14,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -53,8 +56,12 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void give_starter_on_spawn (PlayerRespawnEvent event) {
-        if (plugin.getOptionsConfig().getBoolean("give_new_starter_on_spawn"))
-            event.getPlayer().getInventory().addItem(plugin.getCustomItemManager().getItem(CustomItem.STARTER_SAPLING));
+        if (plugin.getOptionsConfig().getBoolean("give_new_starter_on_spawn")) {
+            Inventory inv = event.getPlayer().getInventory();
+
+            inv.addItem(plugin.getCustomItemManager().getItem(CustomItem.STARTER_SAPLING));
+            inv.addItem(new ItemStack(Material.TORCH, 4));
+        }
     }
 
     @EventHandler
