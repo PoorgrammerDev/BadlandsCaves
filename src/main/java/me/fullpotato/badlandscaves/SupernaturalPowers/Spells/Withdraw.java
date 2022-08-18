@@ -99,27 +99,29 @@ public class Withdraw extends UsePowers implements Listener {
     public void enterWithdraw(Player player, boolean subtractCost) {
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
+        final int duration = random.nextInt(200) + 500;
         generateVoidChunk(player);
 
+        //Gets entrance position in block and chunk form
         final Location location = player.getLocation();
-        plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", player.getWorld().getName());
-
         final Location voidLoc = location.clone();
         voidLoc.setWorld(void_world);
-
         final Chunk voidChunk = voidLoc.getChunk();
-        final int duration = random.nextInt(200) + 500;
 
+        //Set original world to return player to
+        plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", player.getWorld().getName());
+
+        //Sets entrance pos and timer
         PlayerScore.WITHDRAW_X.setScore(plugin, player, voidLoc.getX());
         PlayerScore.WITHDRAW_Y.setScore(plugin, player, voidLoc.getY());
         PlayerScore.WITHDRAW_Z.setScore(plugin, player, voidLoc.getZ());
         PlayerScore.WITHDRAW_CHUNK_X.setScore(plugin, player, voidChunk.getX());
         PlayerScore.WITHDRAW_CHUNK_Z.setScore(plugin, player, voidChunk.getZ());
-
         PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, duration);
 
         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
 
+        //Play sound to other nearby sorcerers
         for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
             if (entity instanceof Player) {
                 Player powered = (Player) entity;
@@ -130,9 +132,11 @@ public class Withdraw extends UsePowers implements Listener {
             }
         }
 
+        //Enter world + sound
         player.teleport(voidLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
         player.playSound(player.getLocation(), "custom.supernatural.withdraw.enter", SoundCategory.PLAYERS, 0.5F, 1);
 
+        //Apply potion effects
         if (supernatural) {
             AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.NIGHT_VISION, duration, 0));
         }
@@ -141,29 +145,37 @@ public class Withdraw extends UsePowers implements Listener {
             AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, duration, 2));
         }
 
-
         new BukkitRunnable() {
             @Override
             public void run() {
                 final int timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
+                //Exit - out of time
                 if (timer <= 0) {
                     this.cancel();
                     exitWithdraw(player, location, voidLoc);
                 }
+
+                // Withdraw continuous behaviour
                 else {
+                    //Healing if Level 2
                     if (withdraw_level > 1 && timer % (70) == 0) {
                         if (player.getHealth() < 20 && player.getHealth() > 0)
                             player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
                         PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0));
                     }
-                    player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidLoc, 10, 0, 1, 0);
-                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, timer - 1);
 
+                    //Particle at entrance position
+                    player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidLoc, 10, 0, 1, 0);
+
+                    //Prevent mana regen
                     PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
+
+                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, timer - 1);
                 }
             }
         }.runTaskTimer(plugin, 0, 0);
 
+        //Only subtracts Mana cost if the player is the initiator
         if (subtractCost) {
             final double mana = ((double) PlayerScore.MANA.getScore(plugin, player));
             PlayerScore.MANA.setScore(plugin, player, mana - cost);
@@ -214,7 +226,6 @@ public class Withdraw extends UsePowers implements Listener {
         if (withdraw_level == 1) {
             PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
         }
-
 
         player.setFallDistance(0);
         if (withdraw_timer != -255) {
