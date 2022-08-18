@@ -47,41 +47,43 @@ public class DescensionPlayerMove implements Listener {
         if (!player.getWorld().equals(world)) return;
 
         Location player_location = player.getLocation();
-        //leaving descension stage (quitting)
-        if (player_location.getY() < 0) {
-            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-            player.setFallDistance(0);
-            resetPlayer(player);
-            PlayerScore.IN_DESCENSION.setScore(plugin, player, 3);
-            return;
-        }
-
-        if (!player.getGameMode().equals(GameMode.ADVENTURE) && !player.getGameMode().equals(GameMode.SURVIVAL)) return;
-
-        int in_descension = ((int) PlayerScore.IN_DESCENSION.getScore(plugin, player));
-        if (in_descension != 2) return;
-
-        //leaving descension stage (winning)
         Location center_loc = new Location(world, 0, 85, 0);
-        if (player_location.distanceSquared(center_loc) < 25) {
-            int towers_capped = ((int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player));
-            if (towers_capped == 4) {
+
+        boolean fallOff = (player_location.getY() < 0);
+        boolean usePortal = (player_location.distanceSquared(center_loc) < 25);
+        boolean gamemodeMatches = (player.getGameMode().equals(GameMode.ADVENTURE) || player.getGameMode().equals(GameMode.SURVIVAL));
+
+        int in_descension = (int) PlayerScore.IN_DESCENSION.getScore(plugin, player);
+
+        if (fallOff || (usePortal && gamemodeMatches && in_descension == 2)) {
+            int captures = (int) PlayerScore.DESCENSION_SHRINES_CAPPED.getScore(plugin, player);
+
+            //Reset player
+            if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
+            resetPlayer(player, (captures == 4));
+            player.setFallDistance(0);
+
+            if (captures == 4) {
+                //Send player messages
                 player.sendTitle(ChatColor.of("#4c158f") + "You are now a Heretic.", ChatColor.of("#25005c") + "The strange sensation follows you back to reality.", 20, 60, 20);
                 player.sendMessage(ChatColor.of("#4c158f") + "You are now a Heretic.");
                 player.sendMessage(ChatColor.of("#25005c") + "The strange sensation follows you back to reality.");
-                if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-                player.setFallDistance(0);
-                resetPlayer(player, true);
+
+                //Play exit portal sound
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.5F, 1);
                     }
                 }.runTaskLaterAsynchronously(plugin, 1);
-                return;
             }
+            else {
+                PlayerScore.IN_DESCENSION.setScore(plugin, player, 3);
+            }
+            return;
         }
 
+        if (!gamemodeMatches || in_descension != 2) return;
 
         boolean moved_x = (Math.abs(event.getTo().getX() - event.getFrom().getX()) > 0);
         boolean moved_y = (Math.abs(event.getTo().getY() - event.getFrom().getY()) > 0);
@@ -110,9 +112,10 @@ public class DescensionPlayerMove implements Listener {
                     detection = ((double) PlayerScore.DESCENSION_DETECT.getScore(plugin, player));
 
                     int multiplier = 1;
-                    if (player_location.distance(entity_location) < 0.5) multiplier = 8;
-                    else if (player_location.distance(entity_location) < 1) multiplier = 4;
-                    else if (player_location.distance(entity_location) < 3) multiplier = 2;
+                    if (player_location.distance(entity_location) < 0.5) multiplier = 16;
+                    else if (player_location.distance(entity_location) < 1) multiplier = 8;
+                    else if (player_location.distance(entity_location) < 3) multiplier = 4;
+                    else if (player_location.distance(entity_location) < 5) multiplier = 2;
 
                     if (sprinting) {
                         detection += multiplier;
@@ -125,7 +128,7 @@ public class DescensionPlayerMove implements Listener {
                     }
 
                     PlayerScore.DESCENSION_DETECT.setScore(plugin, player, detection);
-                    PlayerScore.DESCENSION_DETECT_COOLDOWN.setScore(plugin, player, 30);
+                    PlayerScore.DESCENSION_DETECT_COOLDOWN.setScore(plugin, player, 15);
                 }
             }
         }

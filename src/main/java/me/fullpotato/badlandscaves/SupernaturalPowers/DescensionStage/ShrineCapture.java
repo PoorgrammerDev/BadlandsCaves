@@ -50,12 +50,12 @@ public class ShrineCapture extends BukkitRunnable {
                     final short charge = (short) (crystal.getPersistentDataContainer().getOrDefault(chargeKey, PersistentDataType.SHORT, (short) 0) + 1);
                     crystal.getPersistentDataContainer().set(chargeKey, PersistentDataType.SHORT, charge);
 
-                    if (charge % 25 == 1) {
+                    if (charge == 0) {
                         player.playSound(playerLocation, Sound.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 1, 0.3f);
                     }
 
                     //done charging
-                    if (charge >= 100) {
+                    if (charge >= 25) {
                         //crystal
                         crystal.getPersistentDataContainer().set(chargedKey, PersistentDataType.BYTE, (byte) 1);
 
@@ -96,9 +96,13 @@ public class ShrineCapture extends BukkitRunnable {
                                 PlayerScore.POSSESS_LEVEL.setScore(plugin, player, 2);
                                 break;
                             case 4:
+                                //Final capture message
                                 player.sendTitle(net.md_5.bungee.api.ChatColor.of("#3b26de") + "You can now walk along the beam.", net.md_5.bungee.api.ChatColor.of("#5600bf") + "Go towards the center to leave.", 20, 60, 20);
                                 player.sendMessage(net.md_5.bungee.api.ChatColor.of("#3b26de") + "You can now walk along the beam.");
                                 player.sendMessage(net.md_5.bungee.api.ChatColor.of("#5600bf") + "Go towards the center to leave.");
+
+                                //Fully recover mana and build bridges
+                                PlayerScore.MANA.setScore(plugin, player, PlayerScore.MAX_MANA.getScore(plugin, player));
                                 new DescensionFinish(plugin).runTask(plugin);
                                 break;
                         }

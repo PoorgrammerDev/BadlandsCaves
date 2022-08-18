@@ -30,7 +30,7 @@ starting_dungeons: 10
 
 # Time Limit for Descension World
 # (Does not take into account extra time each Shrine gives)
-descension_time_limit: 300
+descension_time_limit: 200
 
 # Maximum Lost Souls in Descension at one time
 descension_mob_limit: 100
