@@ -6,6 +6,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactSoulHeist;
+import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.DescensionReset;
 import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescensionStage;
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
@@ -30,6 +31,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 public class Withdraw extends UsePowers implements Listener {
@@ -50,14 +53,7 @@ public class Withdraw extends UsePowers implements Listener {
             BlockFace.DOWN,
     };
 
-    private Vector[] adjacent = {
-            new Vector(1, 0, 0),
-            new Vector(-1, 0, 0),
-            new Vector(0, 1, 0),
-            new Vector(0, -1, 0),
-            new Vector(0, 0, 1),
-            new Vector(0, 0, -1),
-    };
+    private HashSet<String> visited;
 
     public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter, ParticleShapes particleShapes) {
         super(plugin, particleShapes);
@@ -67,6 +63,8 @@ public class Withdraw extends UsePowers implements Listener {
         this.particleShapes = particleShapes;
         artifactSoulHeist = new ArtifactSoulHeist(plugin, this, possession, voidmatter, artifactManager);
         this.artifactManager = artifactManager;
+
+        visited = new HashSet<>();
     }
 
     @EventHandler
@@ -85,10 +83,10 @@ public class Withdraw extends UsePowers implements Listener {
                     if (player.getWorld().equals(void_world) || (byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1
                      || ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0) || attemptSilence(player)) return;
                     if (player.getWorld().equals(backrooms)) return;
-                        final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
-                        if (withdraw_level > 0) {
-                            attemptEnterWithdraw(player);
-                        }
+                    final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
+                    if (withdraw_level > 0) {
+                        attemptEnterWithdraw(player);
+                    }
                     PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                 }
             }
@@ -121,7 +119,8 @@ public class Withdraw extends UsePowers implements Listener {
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         final int duration = random.nextInt(200) + 500;
-        generateVoidChunk(player);
+
+        generateWithdrawClone(player.getLocation(), 15);
 
         //Gets entrance position in block and chunk form
         final Location location = player.getLocation();
@@ -204,49 +203,123 @@ public class Withdraw extends UsePowers implements Listener {
     }
 
     public void generateWithdrawClone(Location center, int radius) {
-        //This method will use iterative floodfill to clone all the visible blocks within a radius
-        //Iteration is being used in this case instead of recursion for performance reasons (stack frame allocation)
+        //This method will use iterative BFS floodfill to clone all the visible blocks within a radius
 
+        /* Steps:
+        * 1. Start at center. Add all of its neighbours to a queue
+        * 2. Save the current queue size -> intraLayer
+        * 3. Begin loop; repeat until travelled > radius OR queue is empty:
+        * 3a. Dequeue location. If solid, set Withdraw solid.
+        * 3b. If air, set Withdraw air and enqueue all its neighbours.
+        * 3c. Add location to visited
+        * 3d. Subtract one from intraLayer.
+        * 3e. If intraLayer == 0:
+        * 3ea. Add 1 to travelled
+        * 3eb. Save the current queue size -> intraLayer
+        * */
 
+        Queue<Location> queue = new LinkedList<>();
+        HashSet<String> visited = new HashSet<>();
+        String encoded;
+        int intraLayer;
+        int travelled = 0;
 
-
-
-    }
-
-    public void test(final Location loc, final int radius, int travelled, HashSet<Location> visited) {
-        if (travelled > radius) {
-            Bukkit.broadcastMessage("Travelled " + travelled + "  blocks, can not reach position " + loc.toString());
-            return;
-        }
-        if (visited.contains(loc)) {
-            Bukkit.broadcastMessage(loc.toString() + " has already been visited");
-            return;
-        }
-
-        final Block sourceBlock = loc.getBlock();
-        final Location voidLoc = loc.clone();
+        Block block = center.getBlock();
+        Location sourceLoc = center;
+        Location voidLoc = sourceLoc.clone();
         voidLoc.setWorld(void_world);
-        final Block voidBlock = voidLoc.getBlock();
 
-        if (sourceBlock.getType().isSolid()) {
-            voidBlock.setType(MakeDescensionStage.getVoidMat(random));
-            return;
+        //Add neighbors of center to queue
+        for (BlockFace adj : this.adjacentFaces) {
+            queue.add(block.getRelative(adj).getLocation());
         }
+        intraLayer = queue.size();
 
-        voidBlock.setType(Material.GLASS);
-        visited.add(loc);
+        while (travelled <= radius && !queue.isEmpty()) {
+            sourceLoc = queue.poll();
+            encoded = encodeLocation(sourceLoc);
+            if (visited.contains(encoded)) continue;
 
-        for (Vector adj : adjacent) {
-            Location relative = loc.clone().add(adj);
-            test(relative, radius, travelled + 1, visited);
+            block = sourceLoc.getBlock();
+
+            voidLoc.setX(sourceLoc.getX());
+            voidLoc.setY(sourceLoc.getY());
+            voidLoc.setZ(sourceLoc.getZ());
+
+            //Add location to visited
+            visited.add(encoded);
+
+            //If solid: set Withdraw block to solid
+            if (!block.getType().isAir()) {
+                System.out.println("Block " + block.toString() + " is of type " + block.getType().toString());
+                voidLoc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
+            }
+
+            //If air: set Withdraw block to air and enqueue all neighbours
+            else {
+                System.out.println("Enqueueing neighbours of block " + block.toString() + ", which is of type " + block.getType().toString());
+                voidLoc.getBlock().setType(Material.AIR);
+
+                //Add all neighbours
+                for (BlockFace adj : this.adjacentFaces) {
+                    Location adjLoc = block.getRelative(adj).getLocation();
+                    if (!visited.contains(encodeLocation(adjLoc))) queue.add(adjLoc);
+                }
+            }
+
+
+            intraLayer--;
+
+            //Determine if layer is completed
+            if (intraLayer <= 0) {
+                travelled++;
+                intraLayer = queue.size();
+            }
         }
-
     }
+
+    private String encodeLocation(final Location location) {
+        return (location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
+    }
+
+//    public void test(final Location loc, final int radius, String parent) {
+//        String pos = loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+//
+//        if (loc.getBlockX() == 0 && loc.getBlockZ() == 0)
+//        System.out.println("[WITHDRAW] Block at " + pos + " with travelled value " + travelled + " and parent block " + parent);
+//
+//
+//        if (travelled > radius) {
+////            System.out.println("Travelled " + travelled + " blocks, can not reach position " + pos);
+//            return;
+//        }
+//        if (visited.contains(pos)) {
+////            System.out.println(pos + " has already been visited");
+//            return;
+//        }
+//
+//        final Block sourceBlock = loc.getBlock();
+//        final Location voidLoc = loc.clone();
+//        voidLoc.setWorld(void_world);
+//        final Block voidBlock = voidLoc.getBlock();
+//
+//        visited.add(pos);
+//        if (sourceBlock.getType().isSolid()) {
+//            voidBlock.setType(MakeDescensionStage.getVoidMat(random));
+//            return;
+//        }
+//
+//        voidBlock.setType(Material.GLASS);
+//
+//        for (Vector adj : adjacent) {
+//            Location relative = loc.clone().add(adj);
+//            test(relative, radius, travelled + 1, pos);
+//        }
+//
+//    }
 
 
     public void generateVoidChunk (Player player) {
-        HashSet<Location> visited = new HashSet<>();
-        test(player.getLocation(), 50, 0, visited);
 
 
 //        //generating the void chunk
