@@ -13,6 +13,7 @@ import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class Withdraw extends UsePowers implements Listener {
@@ -37,6 +40,24 @@ public class Withdraw extends UsePowers implements Listener {
     private final ArtifactSoulHeist artifactSoulHeist;
     private final World backrooms;
     private final ParticleShapes particleShapes;
+
+    private final BlockFace[] adjacentFaces = {
+            BlockFace.NORTH,
+            BlockFace.EAST,
+            BlockFace.WEST,
+            BlockFace.SOUTH,
+            BlockFace.UP,
+            BlockFace.DOWN,
+    };
+
+    private Vector[] adjacent = {
+            new Vector(1, 0, 0),
+            new Vector(-1, 0, 0),
+            new Vector(0, 1, 0),
+            new Vector(0, -1, 0),
+            new Vector(0, 0, 1),
+            new Vector(0, 0, -1),
+    };
 
     public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter, ParticleShapes particleShapes) {
         super(plugin, particleShapes);
@@ -182,43 +203,88 @@ public class Withdraw extends UsePowers implements Listener {
         }
     }
 
+    public void generateWithdrawClone(Location center, int radius) {
+        //This method will use iterative floodfill to clone all the visible blocks within a radius
+        //Iteration is being used in this case instead of recursion for performance reasons (stack frame allocation)
+
+
+
+
+
+    }
+
+    public void test(final Location loc, final int radius, int travelled, HashSet<Location> visited) {
+        if (travelled > radius) {
+            Bukkit.broadcastMessage("Travelled " + travelled + "  blocks, can not reach position " + loc.toString());
+            return;
+        }
+        if (visited.contains(loc)) {
+            Bukkit.broadcastMessage(loc.toString() + " has already been visited");
+            return;
+        }
+
+        final Block sourceBlock = loc.getBlock();
+        final Location voidLoc = loc.clone();
+        voidLoc.setWorld(void_world);
+        final Block voidBlock = voidLoc.getBlock();
+
+        if (sourceBlock.getType().isSolid()) {
+            voidBlock.setType(MakeDescensionStage.getVoidMat(random));
+            return;
+        }
+
+        voidBlock.setType(Material.GLASS);
+        visited.add(loc);
+
+        for (Vector adj : adjacent) {
+            Location relative = loc.clone().add(adj);
+            test(relative, radius, travelled + 1, visited);
+        }
+
+    }
+
+
     public void generateVoidChunk (Player player) {
-        //generating the void chunk
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 256; y++) {
-                for (int z = 0; z < 16; z++) {
-                    Block block = player.getLocation().getChunk().getBlock(x, y, z);
-                    Location block_loc = block.getLocation();
-                    block_loc.setWorld(void_world);
-                    if (block.getType().isSolid()) {
-                        block_loc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
-                    } else if (!block.getType().isAir()) {
-                        block_loc.getBlock().setType(Material.AIR);
-                    }
-                }
-            }
-        }
-        PreventDragon.preventDragonSpawn(void_world);
+        HashSet<Location> visited = new HashSet<>();
+        test(player.getLocation(), 50, 0, visited);
+
+
+//        //generating the void chunk
+//        for (int x = 0; x < 16; x++) {
+//            for (int y = 0; y < 256; y++) {
+//                for (int z = 0; z < 16; z++) {
+//                    Block block = player.getLocation().getChunk().getBlock(x, y, z);
+//                    Location block_loc = block.getLocation();
+//                    block_loc.setWorld(void_world);
+//                    if (block.getType().isSolid()) {
+//                        block_loc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
+//                    } else if (!block.getType().isAir()) {
+//                        block_loc.getBlock().setType(Material.AIR);
+//                    }
+//                }
+//            }
+//        }
+//        PreventDragon.preventDragonSpawn(void_world);
     }
 
-    @EventHandler
-    public void keepInChunk(PlayerMoveEvent event) {
-        final Player player = event.getPlayer();
-        if (!player.getWorld().equals(void_world)) return;
-
-        final Location location = player.getLocation();
-        final Chunk chunk = location.getChunk();
-        double void_x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
-        double void_y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
-        double void_z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
-        int chunk_x = (int) PlayerScore.WITHDRAW_CHUNK_X.getScore(plugin, player);
-        int chunk_z = (int) PlayerScore.WITHDRAW_CHUNK_Z.getScore(plugin, player);
-
-        if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
-            final Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
-            player.teleport(origin, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        }
-    }
+//    @EventHandler
+//    public void keepInChunk(PlayerMoveEvent event) {
+//        final Player player = event.getPlayer();
+//        if (!player.getWorld().equals(void_world)) return;
+//
+//        final Location location = player.getLocation();
+//        final Chunk chunk = location.getChunk();
+//        double void_x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+//        double void_y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+//        double void_z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+//        int chunk_x = (int) PlayerScore.WITHDRAW_CHUNK_X.getScore(plugin, player);
+//        int chunk_z = (int) PlayerScore.WITHDRAW_CHUNK_Z.getScore(plugin, player);
+//
+//        if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
+//            final Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
+//            player.teleport(origin, PlayerTeleportEvent.TeleportCause.PLUGIN);
+//        }
+//    }
 
     public void exitWithdraw(Player player, Location returnLocation, Location voidLocation) {
         final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
