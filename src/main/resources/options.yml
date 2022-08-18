@@ -58,6 +58,9 @@ canteen_limit: 10
 # XP -> Energy Core Charge Reduction
 energy_core_charge_reduce: 0.25
 
+# Mana regen cooldown after using a spell, measured in (ticks * 5)
+mana_regen_cooldown: 60
+
 # Energy Core Booster Items Multipliers
 energy_core_mult:
   redstone: 1.5
