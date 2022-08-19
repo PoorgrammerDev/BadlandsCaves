@@ -120,7 +120,7 @@ public class Withdraw extends UsePowers implements Listener {
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         final int duration = random.nextInt(200) + 500;
 
-        generateWithdrawClone(player.getLocation(), 25);
+        generateWithdrawClone(player.getLocation(), 50, 10, 3);
 
         //Gets entrance position in block and chunk form
         final Location location = player.getLocation();
@@ -202,7 +202,18 @@ public class Withdraw extends UsePowers implements Listener {
         }
     }
 
-    public void generateWithdrawClone(Location center, int radius) {
+    /**
+     * This function generates the clone pocket dimension in the Withdraw skill.
+     * Due to its heavy performance impact, the task can be split among muliple game ticks,
+     * with a limit of how much work can be done per tick.
+     * @author Thomas Tran
+     *
+     * @param center Location where Withdraw generation is centered around;
+     * @param radius Max radius of the generation
+     * @param minInitialLayers Minimum layers that must be generated before the player enters. Must be larger than 0.
+     * @param maxLayersPerTick Maximum amount of layers (in the radius) that can be generated per tick. Must be larger than 0.
+     * */
+    public void generateWithdrawClone(final Location center, final int radius, final int minInitialLayers, final int maxLayersPerTick) {
         //This method will use iterative BFS floodfill to clone all the visible blocks within a radius
 
         /* Steps:
@@ -220,59 +231,74 @@ public class Withdraw extends UsePowers implements Listener {
 
         Queue<Location> queue = new LinkedList<>();
         HashSet<String> visited = new HashSet<>();
-        String encoded;
-        int intraLayer;
-        int travelled = 0;
+        final String[] encoded = new String[1];
+        final int[] intraLayer = new int[1];
+        final int[] travelled = {0};
 
-        Block block = center.getBlock();
-        Location sourceLoc = center;
-        Location voidLoc = sourceLoc.clone();
+        final Block[] block = {center.getBlock()};
+        final Location[] sourceLoc = {center};
+        Location voidLoc = sourceLoc[0].clone();
         voidLoc.setWorld(void_world);
 
         //Add neighbors of center to queue
         for (BlockFace adj : this.adjacentFaces) {
-            queue.add(block.getRelative(adj).getLocation());
+            queue.add(block[0].getRelative(adj).getLocation());
         }
-        intraLayer = queue.size();
+        intraLayer[0] = queue.size();
 
-        while (travelled <= radius && !queue.isEmpty()) {
-            sourceLoc = queue.poll();
-            encoded = encodeLocation(sourceLoc);
-            if (visited.contains(encoded)) continue;
-
-            block = sourceLoc.getBlock();
-
-            voidLoc.setX(sourceLoc.getX());
-            voidLoc.setY(sourceLoc.getY());
-            voidLoc.setZ(sourceLoc.getZ());
-
-            //Add location to visited
-            visited.add(encoded);
-
-            //If solid: set Withdraw block to solid
-            if (!block.getType().isAir()) {
-                voidLoc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
-            }
-
-            //If air: set Withdraw block to air and enqueue all neighbours
-            else {
-                voidLoc.getBlock().setType(Material.AIR);
-
-                //Add all neighbours
-                for (BlockFace adj : this.adjacentFaces) {
-                    Location adjLoc = block.getRelative(adj).getLocation();
-                    if (!visited.contains(encodeLocation(adjLoc))) queue.add(adjLoc);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (travelled[0] > radius || queue.isEmpty()) {
+                    this.cancel();
+                    return;
                 }
-            }
 
-            intraLayer--;
+                int layers = (travelled[0] == 0 ? minInitialLayers : maxLayersPerTick);
 
-            //Determine if layer is completed
-            if (intraLayer <= 0) {
-                travelled++;
-                intraLayer = queue.size();
+                while (layers > 0) {
+                    sourceLoc[0] = queue.poll();
+                    encoded[0] = encodeLocation(sourceLoc[0]);
+                    if (visited.contains(encoded[0])) continue;
+
+                    block[0] = sourceLoc[0].getBlock();
+
+                    voidLoc.setX(sourceLoc[0].getX());
+                    voidLoc.setY(sourceLoc[0].getY());
+                    voidLoc.setZ(sourceLoc[0].getZ());
+
+                    //Add location to visited
+                    visited.add(encoded[0]);
+
+                    //If solid: set Withdraw block to solid
+                    if (!block[0].getType().isAir()) {
+                        voidLoc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
+                    }
+
+                    //If air: set Withdraw block to air and enqueue all neighbours
+                    else {
+                        voidLoc.getBlock().setType(Material.AIR);
+
+                        //Add all neighbours
+                        for (BlockFace adj : adjacentFaces) {
+                            Location adjLoc = block[0].getRelative(adj).getLocation();
+                            if (!visited.contains(encodeLocation(adjLoc))) queue.add(adjLoc);
+                        }
+                    }
+
+                    intraLayer[0]--;
+
+                    //Determine if layer is completed
+                    if (intraLayer[0] <= 0) {
+                        travelled[0]++;
+                        layers--;
+                        intraLayer[0] = queue.size();
+                    }
+                }
+
             }
-        }
+        }.runTaskTimer(plugin, 0, 1);
+
     }
 
     private String encodeLocation(final Location location) {
