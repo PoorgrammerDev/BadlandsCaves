@@ -23,17 +23,24 @@ import java.util.Random;
 public class SpiderBuff implements Listener {
     private final BadlandsCaves plugin;
     private final Random random;
+    private final World voidWorld;
     public SpiderBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
         this.random = random;
+        this.voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
     public void HMspider (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Spider)) return;
+        final Spider spider = (Spider) event.getEntity();
+
+        //Exception for entering Withdraw
+        if (spider.getWorld().equals(voidWorld)) return;
+
         boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
 
-        final Spider spider = (Spider) event.getEntity();
+
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 

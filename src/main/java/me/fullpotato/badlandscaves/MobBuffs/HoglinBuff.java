@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import org.bukkit.World;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
@@ -15,21 +16,26 @@ import java.util.Random;
 
 public class HoglinBuff implements Listener {
     private final BadlandsCaves plugin;
-    private final Random random ;
+    private final Random random;
+    private final World voidWorld;
 
     public HoglinBuff(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.random = random;
+        this.voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
     private void hoglinBuff (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Hoglin)) return;
-
         final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
 
         final Hoglin hoglin = (Hoglin) event.getEntity();
+
+        //Exception for entering Withdraw
+        if (hoglin.getWorld().equals(voidWorld)) return;
+
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 
