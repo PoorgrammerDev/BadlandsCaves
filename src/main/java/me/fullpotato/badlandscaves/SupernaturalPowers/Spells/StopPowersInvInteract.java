@@ -84,6 +84,7 @@ public class StopPowersInvInteract implements Listener {
             for (ItemStack activePower : activePowers) {
                 if (items.get(a).isSimilar(activePower)) {
                     event.getDrops().remove(a);
+                    break;
                 }
             }
         }
