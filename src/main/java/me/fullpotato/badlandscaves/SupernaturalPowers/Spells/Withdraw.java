@@ -226,7 +226,12 @@ public class Withdraw extends UsePowers implements Listener {
                         player.setHealth(Math.max(Math.min(player.getHealth() + healing, maxHealth), 0));
                     }
 
-                    PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - healing, 0));
+                    double thirst = (double) PlayerScore.THIRST.getScore(plugin, player);
+                    if (thirst >= 50) {
+                        healing /= (thirst >= 80 ? 2.0 : 4.0);
+
+                        PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - healing, 0));
+                    }
                 }
 
                 //Entrance particle
