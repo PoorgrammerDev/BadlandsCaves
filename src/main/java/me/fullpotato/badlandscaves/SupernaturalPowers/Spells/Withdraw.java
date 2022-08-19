@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Mechanisms.ArtifactSoulHeist;
@@ -13,6 +14,8 @@ import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -28,6 +31,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
@@ -43,6 +47,7 @@ public class Withdraw extends UsePowers implements Listener {
     private final ArtifactSoulHeist artifactSoulHeist;
     private final World backrooms;
     private final ParticleShapes particleShapes;
+    private final LineOfSightNMS lineOfSightNMS;
 
     private final BlockFace[] adjacentFaces = {
             BlockFace.NORTH,
@@ -53,9 +58,7 @@ public class Withdraw extends UsePowers implements Listener {
             BlockFace.DOWN,
     };
 
-    private HashSet<String> visited;
-
-    public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter, ParticleShapes particleShapes) {
+    public Withdraw(Random random, BadlandsCaves plugin, ArtifactManager artifactManager, Possession possession, Voidmatter voidmatter, ParticleShapes particleShapes, LineOfSightNMS lineOfSightNMS) {
         super(plugin, particleShapes);
         this.random = random;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
@@ -63,8 +66,7 @@ public class Withdraw extends UsePowers implements Listener {
         this.particleShapes = particleShapes;
         artifactSoulHeist = new ArtifactSoulHeist(plugin, this, possession, voidmatter, artifactManager);
         this.artifactManager = artifactManager;
-
-        visited = new HashSet<>();
+        this.lineOfSightNMS = lineOfSightNMS;
     }
 
     @EventHandler
@@ -80,9 +82,29 @@ public class Withdraw extends UsePowers implements Listener {
                 assert e != null;
                 if (e.equals(EquipmentSlot.OFF_HAND)) {
                     event.setCancelled(true);
-                    if (player.getWorld().equals(void_world) || (byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1
-                     || ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0) || attemptSilence(player)) return;
+
+                    if ((byte) PlayerScore.SPELL_COOLDOWN.getScore(plugin, player) == 1 ||
+                            ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0) ||
+                            attemptSilence(player)) return;
                     if (player.getWorld().equals(backrooms)) return;
+
+                    //Exit Withdraw world manually
+                    if (player.getWorld().equals(void_world)) {
+                        String worldName = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
+                        if (worldName == null) return;
+
+                        final double originX = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+                        final double originY = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+                        final double originZ = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+                        final Location originVoid = new Location(void_world, originX, originY, originZ);
+                        final Location voidLoc = player.getLocation();
+                        final Location origin = new Location(plugin.getServer().getWorld(worldName), originX, originY, originZ, voidLoc.getYaw(), voidLoc.getPitch());
+                        final Location location = new Location(plugin.getServer().getWorld(worldName), voidLoc.getX(), voidLoc.getY(), voidLoc.getZ(), voidLoc.getYaw(), voidLoc.getPitch());
+
+                        exitWithdraw(player, lineOfSightNMS.hasLineOfSight(player, originVoid) ? location : origin);
+                        return;
+                    }
+
                     final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
                     if (withdraw_level > 0) {
                         attemptEnterWithdraw(player);
@@ -120,13 +142,13 @@ public class Withdraw extends UsePowers implements Listener {
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         final int duration = random.nextInt(200) + 500;
 
-        generateWithdrawClone(player.getLocation(), 50, 10, 3);
+        //Generates the Withdraw world terrain
+        generateWithdrawClone(player.getLocation(), (withdraw_level > 1 ? 50 : 25), 10, 3);
 
-        //Gets entrance position in block and chunk form
+        //Gets entrance position
         final Location location = player.getLocation();
         final Location voidLoc = location.clone();
         voidLoc.setWorld(void_world);
-        final Chunk voidChunk = voidLoc.getChunk();
 
         //Set original world to return player to
         plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".withdraw_orig_world", player.getWorld().getName());
@@ -135,8 +157,6 @@ public class Withdraw extends UsePowers implements Listener {
         PlayerScore.WITHDRAW_X.setScore(plugin, player, voidLoc.getX());
         PlayerScore.WITHDRAW_Y.setScore(plugin, player, voidLoc.getY());
         PlayerScore.WITHDRAW_Z.setScore(plugin, player, voidLoc.getZ());
-        PlayerScore.WITHDRAW_CHUNK_X.setScore(plugin, player, voidChunk.getX());
-        PlayerScore.WITHDRAW_CHUNK_Z.setScore(plugin, player, voidChunk.getZ());
         PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, duration);
 
         if (player.getGameMode().equals(GameMode.SURVIVAL)) player.setGameMode(GameMode.ADVENTURE);
@@ -165,35 +185,78 @@ public class Withdraw extends UsePowers implements Listener {
             AddPotionEffect.addPotionEffect(player, new PotionEffect(PotionEffectType.SLOW, duration, 2));
         }
 
+        final Location raisedVoidLoc = voidLoc.clone().add(0, 0.75f, 0);
         new BukkitRunnable() {
             @Override
             public void run() {
                 final int timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
+                //Player has manually left
+                if (!player.getWorld().equals(void_world)) {
+                    this.cancel();
+                    return;
+                }
+
                 //Exit - out of time
                 if (timer <= 0) {
                     this.cancel();
-                    exitWithdraw(player, location, voidLoc);
-                }
 
-                // Withdraw continuous behaviour
-                else {
-                    //Healing if Level 2
-                    if (withdraw_level > 1 && timer % (70) == 0) {
-                        if (player.getHealth() < 20 && player.getHealth() > 0)
-                            player.setHealth(Math.max(Math.min(player.getHealth() + 1, 20), 0));
-                        PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - 0.5, 0));
+                    Location exitLoc;
+                    if (lineOfSightNMS.hasLineOfSight(player, voidLoc)) {
+                        exitLoc = player.getLocation();
+                        exitLoc.setWorld(location.getWorld());
+                    }
+                    else {
+                        exitLoc = location.clone();
+                        exitLoc.setYaw(player.getLocation().getYaw());
+                        exitLoc.setPitch(player.getLocation().getPitch());
                     }
 
-                    //Particle at entrance position
-                    player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidLoc, 10, 0, 1, 0);
-
-                    //Prevent mana regen
-                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
-
-                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, timer - 1);
+                    exitWithdraw(player, exitLoc);
+                    return;
                 }
+
+                // Withdraw continuous behaviour ----------
+                //Healing
+                if (timer % 70 == 0) {
+                    AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                    double maxHealth = (attribute != null ? attribute.getValue() : 20);
+                    double healing = (withdraw_level > 1 ? 1.5 : 1);
+
+                    if (player.getHealth() < maxHealth && player.getHealth() > 0) {
+                        player.setHealth(Math.max(Math.min(player.getHealth() + healing, maxHealth), 0));
+                    }
+
+                    PlayerScore.TOXICITY.setScore(plugin, player, Math.max((double) PlayerScore.TOXICITY.getScore(plugin, player) - healing, 0));
+                }
+
+                //Entrance particle
+                player.spawnParticle(Particle.ENCHANTMENT_TABLE, voidLoc, 10, 0, 1, 0);
+
+                //Tether particle
+                Color tetherColor = lineOfSightNMS.hasLineOfSight(player, voidLoc) ? Color.fromRGB(255, 0, 255) : Color.GRAY;
+                Particle.DustOptions tetherOptions = new Particle.DustOptions(tetherColor, 0.5F);
+                particleShapes.line(player, Particle.REDSTONE, raisedVoidLoc, player.getLocation().add(0, 1, 0), 0, tetherOptions, 0.5f);
+
+                //Prevent mana regen and tick timer
+                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
+                PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, timer - 1);
             }
         }.runTaskTimer(plugin, 0, 0);
+
+        //Boundary particle
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                //Ended
+                if (!player.getWorld().equals(void_world)) {
+                    this.cancel();
+                    return;
+                }
+
+                particleShapes.sphereDelayed(player, Particle.REDSTONE, voidLoc, (withdraw_level == 2 ? 50 : 25), 0, new Particle.DustOptions(Color.GRAY, 1), 2, false);
+            }
+        }.runTaskTimer(plugin, 0, 40);
 
         //Only subtracts Mana cost if the player is the initiator
         if (subtractCost) {
@@ -271,7 +334,7 @@ public class Withdraw extends UsePowers implements Listener {
                     visited.add(encoded[0]);
 
                     //If solid: set Withdraw block to solid
-                    if (!block[0].getType().isAir()) {
+                    if (block[0].getType().isSolid()) {
                         voidLoc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
                     }
 
@@ -301,135 +364,63 @@ public class Withdraw extends UsePowers implements Listener {
 
     }
 
+    /**
+     * Forces player to stay within the generated radius.
+     * Also prevents them from falling out of the world
+     * @author Thomas Tran
+     * */
+    @EventHandler
+    public void confinePlayer (PlayerMoveEvent event) {
+        if (event.isCancelled()) return;
+
+        final Player player = event.getPlayer();
+        if (!player.getWorld().equals(void_world)) return;
+
+        // Get player's entrance location and current location
+        final double originX = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+        final double originY = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+        final double originZ = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+        final Location origin = new Location(void_world, originX, originY, originZ);
+        final Location location = player.getLocation();
+
+        //Determine max distance based on Withdraw level
+        final int withdrawLevel = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
+        final double distSq = Math.pow((withdrawLevel == 2 ? 50 : 25), 2);
+
+        //Fell out of world or exited bounds -> return to entrance
+        if (location.getY() <= 0 || (location.distanceSquared(origin) > distSq)) {
+            player.teleport(origin, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        }
+    }
+
     private String encodeLocation(final Location location) {
         return (location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
     }
 
-//    public void test(final Location loc, final int radius, String parent) {
-//        String pos = loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
-//
-//        if (loc.getBlockX() == 0 && loc.getBlockZ() == 0)
-//        System.out.println("[WITHDRAW] Block at " + pos + " with travelled value " + travelled + " and parent block " + parent);
-//
-//
-//        if (travelled > radius) {
-////            System.out.println("Travelled " + travelled + " blocks, can not reach position " + pos);
-//            return;
-//        }
-//        if (visited.contains(pos)) {
-////            System.out.println(pos + " has already been visited");
-//            return;
-//        }
-//
-//        final Block sourceBlock = loc.getBlock();
-//        final Location voidLoc = loc.clone();
-//        voidLoc.setWorld(void_world);
-//        final Block voidBlock = voidLoc.getBlock();
-//
-//        visited.add(pos);
-//        if (sourceBlock.getType().isSolid()) {
-//            voidBlock.setType(MakeDescensionStage.getVoidMat(random));
-//            return;
-//        }
-//
-//        voidBlock.setType(Material.GLASS);
-//
-//        for (Vector adj : adjacent) {
-//            Location relative = loc.clone().add(adj);
-//            test(relative, radius, travelled + 1, pos);
-//        }
-//
-//    }
-
-
-    public void generateVoidChunk (Player player) {
-
-
-//        //generating the void chunk
-//        for (int x = 0; x < 16; x++) {
-//            for (int y = 0; y < 256; y++) {
-//                for (int z = 0; z < 16; z++) {
-//                    Block block = player.getLocation().getChunk().getBlock(x, y, z);
-//                    Location block_loc = block.getLocation();
-//                    block_loc.setWorld(void_world);
-//                    if (block.getType().isSolid()) {
-//                        block_loc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
-//                    } else if (!block.getType().isAir()) {
-//                        block_loc.getBlock().setType(Material.AIR);
-//                    }
-//                }
-//            }
-//        }
-//        PreventDragon.preventDragonSpawn(void_world);
-    }
-
-//    @EventHandler
-//    public void keepInChunk(PlayerMoveEvent event) {
-//        final Player player = event.getPlayer();
-//        if (!player.getWorld().equals(void_world)) return;
-//
-//        final Location location = player.getLocation();
-//        final Chunk chunk = location.getChunk();
-//        double void_x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
-//        double void_y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
-//        double void_z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
-//        int chunk_x = (int) PlayerScore.WITHDRAW_CHUNK_X.getScore(plugin, player);
-//        int chunk_z = (int) PlayerScore.WITHDRAW_CHUNK_Z.getScore(plugin, player);
-//
-//        if (location.getY() < 0 || chunk.getX() != chunk_x || chunk.getZ() != chunk_z) {
-//            final Location origin = new Location(void_world, void_x, void_y, void_z, location.getYaw(), location.getPitch());
-//            player.teleport(origin, PlayerTeleportEvent.TeleportCause.PLUGIN);
-//        }
-//    }
-
-    public void exitWithdraw(Player player, Location returnLocation, Location voidLocation) {
+    public void exitWithdraw(Player player, Location returnLocation) {
         final int withdraw_timer = (int) PlayerScore.WITHDRAW_TIMER.getScore(plugin, player);
-        final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
-        if (withdraw_level == 1) {
-            PlayerScore.HAS_DISPLACE_MARKER.setScore(plugin, player, 0);
-        }
 
         player.setFallDistance(0);
         if (withdraw_timer != -255) {
+            //Teleport and sound to player
             player.teleport(returnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
-            player.playSound(player.getLocation(), "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.5F, 1);
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            player.playSound(returnLocation, "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.5F, 1);
 
+            //Play sfx/vfx to nearby sorcerers
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
                 if (entity instanceof Player) {
                     Player powered = (Player) entity;
-                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(player.getWorld()) && powered.getLocation().distanceSquared(player.getLocation()) < 100) {
-                        powered.playSound(player.getLocation(), "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.3F, 1);
-                        powered.spawnParticle(Particle.REDSTONE, player.getLocation(), 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
+                    if (!(powered.equals(player)) && ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, powered) == 1) && powered.getWorld().equals(returnLocation.getWorld()) && powered.getLocation().distanceSquared(returnLocation) < 100) {
+                        powered.playSound(returnLocation, "custom.supernatural.withdraw.leave", SoundCategory.PLAYERS, 0.3F, 1);
+                        powered.spawnParticle(Particle.REDSTONE, returnLocation, 10, 0.5, 0.5, 0.5, 0, new Particle.DustOptions(Color.GRAY, 1));
                     }
                 }
             }
         }
         if (player.getGameMode().equals(GameMode.ADVENTURE)) player.setGameMode(GameMode.SURVIVAL);
-        boolean ready_to_clear = true;
 
-        for (Player scout : plugin.getServer().getOnlinePlayers()) {
-            if (!scout.equals(player) && scout.getLocation().getWorld().equals(voidLocation.getWorld()) && scout.getLocation().getChunk().equals(voidLocation.getChunk())) {
-                ready_to_clear = false;
-                break;
-            }
-        }
-
-        if (ready_to_clear) {
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 256; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        Block block = player.getLocation().getChunk().getBlock(x, y, z);
-                        if (!block.getType().isAir()) {
-                            Location block_loc = block.getLocation();
-                            block_loc.setWorld(void_world);
-                            block_loc.getBlock().setType(Material.AIR);
-                        }
-                    }
-                }
-            }
-            PreventDragon.preventDragonSpawn(void_world);
-        }
-
+        PreventDragon.preventDragonSpawn(void_world);
         PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, 0);
     }
 
