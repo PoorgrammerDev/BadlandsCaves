@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.event.EventHandler;
@@ -14,9 +15,11 @@ import java.util.Random;
 public class SilverfishBuff implements Listener {
     private final BadlandsCaves plugin;
     private final Random random;
+    private final World voidWorld;
     public SilverfishBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
         this.random = random;
+        voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
@@ -25,7 +28,10 @@ public class SilverfishBuff implements Listener {
         boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!isHardmode) return;
 
-        Silverfish silverfish = (Silverfish) event.getEntity();
+        final Silverfish silverfish = (Silverfish) event.getEntity();
+
+        //Exception for entering Withdraw
+        if (silverfish.getWorld().equals(voidWorld)) return;
 
         silverfish.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, random.nextInt(3) + 1, true, true));
         silverfish.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 9999, random.nextInt(3) + 1, true, true));

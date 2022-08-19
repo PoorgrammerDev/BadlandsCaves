@@ -22,30 +22,31 @@ public class ZombieBuff implements Listener {
     private final BadlandsCaves plugin;
     private final World descension_world;
     private final World reflection_world;
+    private final World voidWorld;
     private final Random random;
+
     public ZombieBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
         this.random = random;
         descension_world = plugin.getServer().getWorld(plugin.getDescensionWorldName());
         reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
+        voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
     public void HM_zombie (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Zombie)) return;
         if (event.getEntityType().equals(EntityType.ZOMBIFIED_PIGLIN)) return;
+        final Zombie zombie = (Zombie) event.getEntity();
 
         //make sure zombie is not a descension "Lost Soul"
         World world = event.getLocation().getWorld();
         if (world == null) return;
         if (world.equals(descension_world)) return;
         if (world.equals(reflection_world)) return;
-
+        if (world.equals(voidWorld)) return;
 
         //giving armor
-        Zombie zombie = (Zombie) event.getEntity();
-
-
         final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;

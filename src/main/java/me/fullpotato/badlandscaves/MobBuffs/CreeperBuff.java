@@ -20,16 +20,22 @@ public class CreeperBuff implements Listener {
     private final BadlandsCaves plugin;
     private final Random random;
     private final ParticleShapes particleShapes;
+    private final World voidWorld;
+
     public CreeperBuff(BadlandsCaves bcav, Random random, ParticleShapes particleShapes) {
         plugin = bcav;
         this.random = random;
         this.particleShapes = particleShapes;
+        this.voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
     public void HMcreeper (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Creeper)) return;
         final Creeper creeper = (Creeper) event.getEntity();
+
+        //Exception for entering Withdraw
+        if (creeper.getWorld().equals(voidWorld)) return;
 
         boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");

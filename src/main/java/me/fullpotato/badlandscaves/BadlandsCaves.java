@@ -194,6 +194,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private ArtifactTenaciousTrickery artifactTenaciousTrickery;
     private ArtifactEclipsedShadows artifactEclipsedShadows;
     private ArtifactManaWarding artifactManaWarding;
+    private ArtifactManager artifactManager;
     private ArtifactFleetingSpirits artifactFleetingSpirits;
     private ArtifactConvergingSwings artifactConvergingSwings;
     private ArtifactTravellingBlades artifactTravellingBlades;
@@ -284,7 +285,7 @@ public final class BadlandsCaves extends JavaPlugin {
         energyCore = new EnergyCore(this);
         starlightCharge = new StarlightCharge(this, starlightArmor, starlightTools, enchantmentStorage, energyCore);
         voidmatter = new Voidmatter(this);
-        ArtifactManager artifactManager = new ArtifactManager(this);
+        artifactManager = new ArtifactManager(this);
         artifactFleetingSpirits = new ArtifactFleetingSpirits(this, voidmatter, artifactManager, random);
         NebuliteManager nebuliteManager = new NebuliteManager(this, starlightCharge, starlightArmor, starlightTools);
         EnvironmentalHazards environmentalHazards = new EnvironmentalHazards(this, random);
@@ -690,6 +691,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
         new DisplaceParticleRunnable(this, random, particleShapes).runTaskTimerAsynchronously(this, 0, 2);
         new PossessionIndicatorRunnable(this, possession, random).runTaskTimer(this, 0, 1);
+        new WithdrawIndicatorRunnable(this, artifactManager, particleShapes).runTaskTimer(this, 0, 1);
         manaBarManager.runTaskTimer(this, 0, 5);
         new ManaRegen(this).runTaskTimer(this, 0, 5);
         new DescensionReset(this, random).runTaskTimer(this, 0, 120);

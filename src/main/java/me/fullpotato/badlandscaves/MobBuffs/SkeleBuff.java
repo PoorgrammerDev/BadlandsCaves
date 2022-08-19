@@ -24,23 +24,29 @@ import java.util.Random;
 public class SkeleBuff implements Listener {
     private final BadlandsCaves plugin;
     private final World chambers;
+    private final World voidWorld;
+
     private final Random random;
     public SkeleBuff(BadlandsCaves bcav, Random random) {
         plugin = bcav;
         this.random = random;
         chambers = plugin.getServer().getWorld(plugin.getChambersWorldName());
+        voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
     public void HMskele (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Skeleton)) return;
         if (event.getEntity().getWorld().equals(chambers)) return;
+        final Skeleton skeleton = (Skeleton) event.getEntity();
+
+        //Exception for entering Withdraw
+        if (skeleton.getWorld().equals(voidWorld)) return;
 
         boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
 
-        Skeleton skeleton = (Skeleton) event.getEntity();
         Location location = skeleton.getLocation();
         World world = location.getWorld();
 

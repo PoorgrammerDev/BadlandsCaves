@@ -12,6 +12,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.DescensionStage.MakeDescen
 import me.fullpotato.badlandscaves.Util.AddPotionEffect;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.Util.TargetEntity;
 import me.fullpotato.badlandscaves.WorldGeneration.PreventDragon;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -125,8 +126,7 @@ public class Withdraw extends UsePowers implements Listener {
                     if (artifactManager.hasArtifact(player, Artifact.SOUL_HEIST)) {
                         PlayerScore.MANA.setScore(plugin, player, mana - cost);
 
-                        artifactSoulHeist.launchProjectile(player);
-                        return;
+                        artifactSoulHeist.run(player);
                     }
                     enterWithdraw(player, true);
                 }
