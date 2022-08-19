@@ -120,7 +120,7 @@ public class Withdraw extends UsePowers implements Listener {
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
         final int duration = random.nextInt(200) + 500;
 
-        generateWithdrawClone(player.getLocation(), 15);
+        generateWithdrawClone(player.getLocation(), 25);
 
         //Gets entrance position in block and chunk form
         final Location location = player.getLocation();
@@ -251,13 +251,11 @@ public class Withdraw extends UsePowers implements Listener {
 
             //If solid: set Withdraw block to solid
             if (!block.getType().isAir()) {
-                System.out.println("Block " + block.toString() + " is of type " + block.getType().toString());
                 voidLoc.getBlock().setType(MakeDescensionStage.getVoidMat(random));
             }
 
             //If air: set Withdraw block to air and enqueue all neighbours
             else {
-                System.out.println("Enqueueing neighbours of block " + block.toString() + ", which is of type " + block.getType().toString());
                 voidLoc.getBlock().setType(Material.AIR);
 
                 //Add all neighbours
@@ -266,7 +264,6 @@ public class Withdraw extends UsePowers implements Listener {
                     if (!visited.contains(encodeLocation(adjLoc))) queue.add(adjLoc);
                 }
             }
-
 
             intraLayer--;
 
