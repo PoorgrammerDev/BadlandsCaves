@@ -44,7 +44,7 @@ spell_costs:
   displace_mana_cost: 25
   eyes_mana_cost: 50
   eyes_mana_drain: 10
-  withdraw_mana_cost: 70
+  withdraw_mana_cost: 80
   possess_mana_cost: 25
   possess_mana_drain: 3
   agility_mana_cost: 5
@@ -60,6 +60,12 @@ energy_core_charge_reduce: 0.25
 
 # Mana regen cooldown after using a spell, measured in (ticks * 5)
 mana_regen_cooldown: 60
+
+#Withdraw copies the source world in layers from the origin point. This value is the minimum amount of layers formed in the first tick.
+withdraw_minimum_initial_layers: 5
+
+#Max amount of blocks Withdraw cloning can process per tick after the first tick
+withdraw_max_blocks_per_tick: 1000
 
 # Energy Core Booster Items Multipliers
 energy_core_mult:

@@ -140,10 +140,10 @@ public class Withdraw extends UsePowers implements Listener {
     public void enterWithdraw(Player player, boolean subtractCost) {
         final boolean supernatural = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         final int withdraw_level = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
-        final int duration = random.nextInt(200) + 500;
+        final int duration = random.nextInt(250) + 750;
 
         //Generates the Withdraw world terrain
-        generateWithdrawClone(player.getLocation(), (withdraw_level > 1 ? 50 : 25), 10, 3);
+        generateWithdrawClone(player, player.getLocation(), (withdraw_level > 1 ? 30 : 15), plugin.getOptionsConfig().getInt("withdraw_minimum_initial_layers"), plugin.getOptionsConfig().getInt("withdraw_max_blocks_per_tick"));
 
         //Gets entrance position
         final Location location = player.getLocation();
@@ -254,7 +254,7 @@ public class Withdraw extends UsePowers implements Listener {
                     return;
                 }
 
-                particleShapes.sphereDelayed(player, Particle.REDSTONE, voidLoc, (withdraw_level == 2 ? 50 : 25), 0, new Particle.DustOptions(Color.GRAY, 1), 2, false);
+                particleShapes.sphereDelayed(player, Particle.REDSTONE, voidLoc, (withdraw_level == 2 ? 30 : 15), 0, new Particle.DustOptions(Color.GRAY, 1), 2, false);
             }
         }.runTaskTimer(plugin, 0, 40);
 
@@ -271,12 +271,13 @@ public class Withdraw extends UsePowers implements Listener {
      * with a limit of how much work can be done per tick.
      * @author Thomas Tran
      *
-     * @param center Location where Withdraw generation is centered around;
+     * @param player Player who initiated this generation
+     * @param center Location where Withdraw generation is centered around
      * @param radius Max radius of the generation
      * @param minInitialLayers Minimum layers that must be generated before the player enters. Must be larger than 0.
-     * @param maxLayersPerTick Maximum amount of layers (in the radius) that can be generated per tick. Must be larger than 0.
+     * @param maxBlocksPerTick Maximum amount of blocks that can be generated per tick after the first tick. Must be larger than 0.
      * */
-    public void generateWithdrawClone(final Location center, final int radius, final int minInitialLayers, final int maxLayersPerTick) {
+    public void generateWithdrawClone(final Player player, final Location center, final int radius, final int minInitialLayers, final int maxBlocksPerTick) {
         //This method will use iterative BFS floodfill to clone all the visible blocks within a radius
 
         /* Steps:
@@ -312,14 +313,14 @@ public class Withdraw extends UsePowers implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (travelled[0] > radius || queue.isEmpty()) {
+                if (travelled[0] > radius || queue.isEmpty() || player == null || !player.getWorld().equals(void_world) || player.isDead() || !player.isOnline()) {
                     this.cancel();
                     return;
                 }
 
-                int layers = (travelled[0] == 0 ? minInitialLayers : maxLayersPerTick);
+                int count = 0;
 
-                while (layers > 0) {
+                while ((travelled[0] == 0 && travelled[0] < minInitialLayers) || (travelled[0] != 0 && count < maxBlocksPerTick)) {
                     sourceLoc[0] = queue.poll();
                     encoded[0] = encodeLocation(sourceLoc[0]);
                     if (visited.contains(encoded[0])) continue;
@@ -354,9 +355,10 @@ public class Withdraw extends UsePowers implements Listener {
                     //Determine if layer is completed
                     if (intraLayer[0] <= 0) {
                         travelled[0]++;
-                        layers--;
                         intraLayer[0] = queue.size();
                     }
+
+                    ++count;
                 }
 
             }
@@ -385,7 +387,7 @@ public class Withdraw extends UsePowers implements Listener {
 
         //Determine max distance based on Withdraw level
         final int withdrawLevel = (int) PlayerScore.WITHDRAW_LEVEL.getScore(plugin, player);
-        final double distSq = Math.pow((withdrawLevel == 2 ? 50 : 25), 2);
+        final double distSq = Math.pow((withdrawLevel == 2 ? 30 : 15), 2);
 
         //Fell out of world or exited bounds -> return to entrance
         if (location.getY() <= 0 || (location.distanceSquared(origin) > distSq)) {
