@@ -775,7 +775,7 @@ public final class BadlandsCaves extends JavaPlugin {
         starlightComponents.craftStarlightCircuit();
         starlightComponents.craftStarlightBattery();
         starlightComponents.craftStarlightModule();
-        starlightComponents.craftEnergium();
+        starlightComponents.craftChargedQuartz();
         starlightComponents.craftPhotonEmitter();
 
         starlightCharge.chargeRecipe();

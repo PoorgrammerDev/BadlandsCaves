@@ -177,7 +177,8 @@ public enum CustomItem {
     BLUEPRINTS_DUNGEON_COMPASS(true),
     BLUEPRINTS_STIM_PACK(true),
 
-    ASCENDED_ORB(true);
+    ASCENDED_ORB(true),
+    CHARGED_QUARTZ(true),
 
     ;
 

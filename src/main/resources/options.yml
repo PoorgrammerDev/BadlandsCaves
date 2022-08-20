@@ -55,9 +55,6 @@ soul_drop_chance: 25
 # Maximum bottles of liquid a canteen can hold
 canteen_limit: 10
 
-# XP -> Energy Core Charge Reduction
-energy_core_charge_reduce: 0.25
-
 # Mana regen cooldown after using a spell, measured in (ticks * 5)
 mana_regen_cooldown: 60
 
@@ -67,12 +64,14 @@ withdraw_minimum_initial_layers: 5
 #Max amount of blocks Withdraw cloning can process per tick after the first tick
 withdraw_max_blocks_per_tick: 1000
 
-# Energy Core Booster Items Multipliers
+# Energy Core Catalyst Charge Ratios (1 XP to _ Charge)
 energy_core_mult:
-  redstone: 1.5
-  glowstone: 3.0
-  energium: 7.5
-  nether_star_fragment: 15.0
+  empty: 0.375
+  redstone: 0.75
+  glowstone: 1.5
+  charged_quartz: 3.0
+  energium: 6.0
+
 
 pre_hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Pre-hardmode

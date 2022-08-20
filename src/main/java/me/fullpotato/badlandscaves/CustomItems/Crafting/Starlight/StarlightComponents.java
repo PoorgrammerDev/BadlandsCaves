@@ -98,15 +98,15 @@ public class StarlightComponents extends MatchCrafting implements Listener {
         plugin.getServer().addRecipe(recipe);
     }
 
-    public void craftEnergium() {
-        ItemStack energium = customItemManager.getItem(CustomItem.ENERGIUM);
-        energium.setAmount(4);
+    public void craftChargedQuartz() {
+        ItemStack chargedQuartz = customItemManager.getItem(CustomItem.CHARGED_QUARTZ);
+        chargedQuartz.setAmount(4);
 
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "energium"), energium);
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "chargedQuartz"), chargedQuartz);
         recipe.shape("#@", "@#");
 
         recipe.setIngredient('#', Material.REDSTONE);
-        recipe.setIngredient('@', Material.DIAMOND);
+        recipe.setIngredient('@', Material.QUARTZ);
 
         plugin.getServer().addRecipe(recipe);
     }
