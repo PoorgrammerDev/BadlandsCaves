@@ -150,7 +150,7 @@ public class UseChargedRune implements Listener {
                                     PlayerScore power = icons.get(clicked_inv.getItem(4));
 
                                     if (power.equals(PlayerScore.MAX_MANA)) {
-                                        power.setScore(plugin, player, (double) power.getScore(plugin, player) + 10);
+                                        power.setScore(plugin, player, (double) power.getScore(plugin, player) + 25);
                                     }
                                     else {
                                         power.setScore(plugin, player, (int) power.getScore(plugin, player) + 1);
@@ -277,17 +277,19 @@ public class UseChargedRune implements Listener {
                 //withdraw_lore.add("§7Withdraw §8| §7Level §a1");
                 withdraw_lore.add("§7--------------------");
                 withdraw_lore.add("§7Retreat to an alternate copy of your surroundings.");
+                withdraw_lore.add("§7You regenerate passively in the §8Withdraw§7 world.");
+                withdraw_lore.add("§7Return to your §9new§7 location if §dline of sight §7is kept.");
+                withdraw_lore.add("§7Range: §a15 §7blocks.");
+                withdraw_lore.add("§7--------------------");
+                withdraw_lore.add("§9Use§7 the skill again to manually exit the world.");
                 withdraw_lore.add("§7--------------------");
                 withdraw_lore.add("§3Mana §7Cost: §a" + cost + " §3Mana§7.");
             }
             else if (withdraw_level == 1) {
                 //withdraw_lore.add("§7Withdraw §8| §7Level §a2");
                 withdraw_lore.add("§7--------------------");
-                withdraw_lore.add("§7Any §dDisplace §7markers placed within the §8Withdraw§7 world");
-                withdraw_lore.add("§7are transferred back to the real world upon returning.");
-                withdraw_lore.add("§7--------------------");
-                withdraw_lore.add("§7You regenerate health, hunger, thirst, and toxicity");
-                withdraw_lore.add("§7passively in the §8Withdraw§7 world.");
+                withdraw_lore.add("§7Range increased to §a30 §7blocks.");
+                withdraw_lore.add("§7Regeneration is slightly increased.");
             }
 
             withdraw_meta.setLore(withdraw_lore);
@@ -492,11 +494,11 @@ public class UseChargedRune implements Listener {
         else {
             ItemStack icon = customItemManager.getItem(CustomItem.MAGIC_ESSENCE);
             ItemMeta meta = icon.getItemMeta();
-            meta.setDisplayName("§3Max Mana §8| §7Increase to §a" + (max_mana + 10));
+            meta.setDisplayName("§3Max Mana §8| §7Increase to §a" + (max_mana + 25));
 
             ArrayList<String> lore = new ArrayList<>();
             lore.add("§7--------------------");
-            lore.add("§7Increase your §3Max Mana §7by §a10 §7points.");
+            lore.add("§7Increase your §3Max Mana §7by §a25 §7points.");
 
             meta.setLore(lore);
             icon.setItemMeta(meta);

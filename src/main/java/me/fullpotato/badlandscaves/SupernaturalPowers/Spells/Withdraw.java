@@ -124,8 +124,6 @@ public class Withdraw extends UsePowers implements Listener {
             if (!in_possession) {
                 if (checkOtherPlayers(player)) {
                     if (artifactManager.hasArtifact(player, Artifact.SOUL_HEIST)) {
-                        PlayerScore.MANA.setScore(plugin, player, mana - cost);
-
                         artifactSoulHeist.run(player);
                     }
                     enterWithdraw(player, true);
