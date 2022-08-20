@@ -1,8 +1,12 @@
 package me.fullpotato.badlandscaves.Loot.MobDeathLoot;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.SoulLantern;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
+import me.fullpotato.badlandscaves.CustomItems.Using.UseSoulLantern;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,13 +22,19 @@ import java.util.Random;
 public class SoulDrop implements Listener {
     private final BadlandsCaves plugin;
     private final Random random;
+    private final int soulChance;
+    private final SoulLantern soulLanternManager;
+    private final UseSoulLantern soulLanternAdder;
     private final HashMap<EntityType, ItemStack> souls = new HashMap<>();
 
-    public SoulDrop(BadlandsCaves bcav, Random random) {
-        plugin = bcav;
+    public SoulDrop(BadlandsCaves bcav, Random random, SoulLantern soulLanternManager, UseSoulLantern soulLanternAdder) {
+        this.plugin = bcav;
         this.random = random;
-        final CustomItemManager customItemManager = plugin.getCustomItemManager();
+        this.soulLanternManager = soulLanternManager;
+        this.soulLanternAdder = soulLanternAdder;
+        this.soulChance = plugin.getOptionsConfig().getInt("soul_drop_chance");
 
+        final CustomItemManager customItemManager = plugin.getCustomItemManager();
         souls.put(EntityType.ZOMBIE, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
         souls.put(EntityType.ZOMBIE_VILLAGER, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
         souls.put(EntityType.DROWNED, customItemManager.getItem(CustomItem.ZOMBIE_SOUL));
@@ -53,10 +63,22 @@ public class SoulDrop implements Listener {
 
             //can drop soul if player killed
             if (player != null) {
-                List<ItemStack> drops = event.getDrops();
-                final int soul_chance = plugin.getOptionsConfig().getInt("soul_drop_chance");
                 final ItemStack soul = souls.get(entity.getType());
-                if (random.nextInt(100) <= soul_chance) {
+
+                //Soul Lantern override - 3x drop rate + directly add into lantern
+                final ItemStack offHand = player.getInventory().getItemInOffHand();
+                final List<ItemStack> drops = event.getDrops();
+                final boolean hasLantern = soulLanternManager.isSoulLantern(offHand);
+
+                final int chance = hasLantern ? soulChance * 3 : soulChance;
+                if (random.nextInt(100) <= chance) {
+                    //Add directly to soul lantern
+                    if (hasLantern && soulLanternAdder.addSoul(offHand, soul)) {
+                        player.playSound(player.getLocation(), Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.HOSTILE, 1, 1);
+                        return;
+                    }
+
+                    //Add to drops
                     drops.add(soul);
                 }
             }

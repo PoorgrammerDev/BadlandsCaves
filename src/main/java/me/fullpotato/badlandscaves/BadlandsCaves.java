@@ -326,7 +326,6 @@ public final class BadlandsCaves extends JavaPlugin {
         InventorySerialize inventorySerialize = new InventorySerialize(this);
         useIncompleteSoulCrystal = new UseIncompleteSoulCrystal(this, inventorySerialize, random);
         descensionPlayerMove = new DescensionPlayerMove(this, deathHandler, useIncompleteSoulCrystal, inventorySerialize);
-        soulDrop = new SoulDrop(this, random);
         hellEssence = new HellEssence(this);
         magicEssence = new MagicEssence(this);
         mergedSouls = new MergedSouls(this);
@@ -375,7 +374,8 @@ public final class BadlandsCaves extends JavaPlugin {
         canteen = new Canteen(this);
         useCanteen = new UseCanteen(this, drinking);
         soulLantern = new SoulLantern(this);
-        useSoulLantern = new UseSoulLantern(this);
+        useSoulLantern = new UseSoulLantern(this, soulLantern);
+        soulDrop = new SoulDrop(this, random, soulLantern, useSoulLantern);
         preservationTotem = new PreservationTotem(this);
         starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism, particleShapes);
         useChambersBag = new UseChambersBag(this, random);
