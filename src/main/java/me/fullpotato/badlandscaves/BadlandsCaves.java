@@ -7,6 +7,7 @@ import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
 import me.fullpotato.badlandscaves.AlternateDimensions.UnloadDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.UseDimensionalAnchor;
 import me.fullpotato.badlandscaves.Blocks.SilencerBlock;
+import me.fullpotato.badlandscaves.Blocks.EnergiumOre;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
@@ -151,6 +152,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private Shield shield;
     private CraftingGuide craftingGuide;
     private TitaniumOre titaniumOre;
+    private EnergiumOre energiumOre;
     private TitaniumBar titaniumBar;
     private StarlightComponents starlightComponents;
     private UseForeverFish useForeverFish;
@@ -358,6 +360,7 @@ public final class BadlandsCaves extends JavaPlugin {
         shield = new Shield(this);
         craftingGuide = new CraftingGuide(this);
         titaniumOre = new TitaniumOre(this, random);
+        energiumOre = new EnergiumOre(this, random);
         titaniumBar = new TitaniumBar(this);
         starlightComponents = new StarlightComponents(this);
         useForeverFish = new UseForeverFish(this);
@@ -568,6 +571,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 shield,
                 craftingGuide,
                 titaniumOre,
+                energiumOre,
                 titaniumBar,
                 starlightComponents,
                 useForeverFish,
