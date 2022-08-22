@@ -42,38 +42,60 @@ public class DimensionsGen extends ChunkGenerator {
         //Values for generation
         final int octaves = 8;                                      // Simplex Noise param: octaves to generate (more octaves produces better detail)
         final double lacunarity = 2.0;                              // Simplex Noise param: how much detail later octaves add to the surface (<1 smoother; 1 same impact; >1 more detail)
-        final double persistence = 0.25;                             // Simplex Noise param: how much each octave affects overall shape
+        final double persistence = 0.25;                            // Simplex Noise param: how much each octave affects overall shape
         final int variance = random.nextInt(15) + 15;               // "Y-scale" of the noise; how much the terrain's height changes based on noise
-        final int center = random.nextInt(90) + 90;                 // Center y-level
+        final int center = random.nextInt(60) + 90;                 // Center y-level
         final int layerNoiseOffset = (random.nextInt(5000) + 1000); // Offset x and z values on where to sample noise for y-levels of stone layer beginning and void layer beginning
-        final double voidThreshold = (0.2D * random.nextDouble()) + 0.4D; // Threshold value for 3D noise between [0.4, 0.6]
-        final int voidTopLayerOffset = Math.min(random.nextInt(chaos / 5), center - variance - 5);
+        final double threshold = (0.2D * random.nextDouble()) + 0.1D; // Threshold value for 3D noise between [0.1, 0.3]
+        final int inverseSquash = random.nextInt(75) + 75;           //Higher values, less squashing of surface layer; [75,150]
 
+        //Void layer variables
+        final double voidThreshold = (0.2D * random.nextDouble()) + 0.4D; // Threshold value for 3D noise between [0.4, 0.6]
+        //Y offset for void top layer (based on world's Chaos value)
+        final int voidTopLayerOffset = (chaos / 5 > 0) ? Math.min(random.nextInt(chaos / 5), center - variance - 5) : 0;
+    
         final SimplexOctaveGenerator generator = new SimplexOctaveGenerator(world.getSeed(), octaves);
         generator.setScale(0.0375D + (random.nextDouble() * 0.0125D));
 
         //Generating the actual chunk shape
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
+                // GENERATING 2D HEIGHT ==============================================
                 //generate noise value between [-1,1]
-                final double noise = generator.noise((chunkX * 16) + x, (chunkZ * 16) + z, lacunarity, persistence, true);
+                final double heightNoise = generator.noise((chunkX * 16) + x, (chunkZ * 16) + z, lacunarity, persistence, true);
                 final double layerNoiseStone = generator.noise((chunkX * 16) + x + layerNoiseOffset, (chunkZ * 16) + z + layerNoiseOffset, lacunarity, persistence, true);
                 final double layerNoiseVoid = generator.noise((chunkX * 16) + x - layerNoiseOffset, (chunkZ * 16) + z - layerNoiseOffset, lacunarity, persistence, true);
            
                 //middle layer is 120; can go 60 down and 60 up
-                final int height = (int) (noise * variance) + center;           // [center - variance, center + variance]
-                final int stoneDepth = (int) layerNoiseStone + 5;               // [4, 6]
+                final int height = (int) (heightNoise * variance) + center;     // [center - variance, center + variance]
+                final int stoneDepth = (int) (layerNoiseStone + 5);             // [4,6]
                 final int voidLayerBegins = (int) (layerNoiseVoid * (10 + voidTopLayerOffset)) + (30 + voidTopLayerOffset);   // default [20,40] ; max [40,60]
+                // ===================================================================
 
-                //Fill in the blocks
-                chunk.setBlock(x, height, z, blocks[0]);                                                //Set top block
-                chunk.setRegion(x, height - stoneDepth, z, x + 1, height, z + 1, blocks[1]);            //Set blocks between top and {stone}
-                chunk.setRegion(x, voidLayerBegins, z, x + 1, height - stoneDepth, z + 1, blocks[2]);   //Fill in stone blocks
-                
                 //Set the biome
                 for (int y = voidLayerBegins; y < world.getMaxHeight(); ++y) {
+                    //Set the biome
                     biome.setBiome(x, y, z, this.biome);
                 }
+
+                //Generating the top landscape using 3D noise
+                for (int y = (height + (stoneDepth * 3)); y >= (height - stoneDepth); --y) {
+
+                    //Noise adjusted by density value to squash blocks down
+                    //Density value decreases as Y increases, vice versa. Center point is the 'height' value.
+                    double noise = generator.noise((chunkX * 16) + x, y, (chunkZ * 16) + z, lacunarity, persistence, true);
+                    noise = (noise + 1.0) / 2.0;    //Transform noise from [-1, 1] -> [0, 1]
+                    
+                    //Apply density value to it
+                    noise -= ((double) y - height) / inverseSquash;
+
+                    if (noise > threshold) {
+                        chunk.setBlock(x, y, z, (chunk.getType(x, y + 1, z).isAir()) ? Material.GRASS_BLOCK : Material.DIRT);
+                    }
+                }
+
+                //Fill in stone layer
+                chunk.setRegion(x, voidLayerBegins, z, x + 1, height - stoneDepth, z + 1, blocks[2]);
 
                 //Void layer --------
 
