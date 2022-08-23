@@ -1,11 +1,13 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
 import java.util.Random;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.jetbrains.annotations.NotNull;
 
@@ -121,6 +123,19 @@ public class DimensionsGen extends ChunkGenerator {
 
         saveStats(world);
         return chunk;
+    }
+
+    @Override
+    public List<BlockPopulator> getDefaultPopulators(World world) {
+        final List<BlockPopulator> populators = super.getDefaultPopulators(world);
+
+        //Add Titanium Ore populator 
+        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 5, 2, 8, false));
+
+        //Add Energium Ore populator
+        // populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 30, 0, 5, 1, 3, true));
+
+        return populators;
     }
 
     public void populateBlockArray () {
