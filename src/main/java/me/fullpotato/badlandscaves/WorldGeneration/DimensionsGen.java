@@ -81,7 +81,7 @@ public class DimensionsGen extends ChunkGenerator {
                 }
 
                 //Generating the top landscape using 3D noise
-                for (int y = (height + (stoneDepth * 3)); y >= (height - stoneDepth); --y) {
+                for (int y = (height + (stoneDepth * 5)); y >= (height - stoneDepth); --y) {
 
                     //Noise adjusted by density value to squash blocks down
                     //Density value decreases as Y increases, vice versa. Center point is the 'height' value.
@@ -89,7 +89,7 @@ public class DimensionsGen extends ChunkGenerator {
                     noise = (noise + 1.0) / 2.0;    //Transform noise from [-1, 1] -> [0, 1]
                     
                     //Apply density value to it
-                    noise -= ((double) y - height) / inverseSquash;
+                    noise -= ((double) y - center) / inverseSquash;
 
                     if (noise > threshold) {
                         chunk.setBlock(x, y, z, (chunk.getType(x, y + 1, z).isAir()) ? Material.GRASS_BLOCK : Material.DIRT);
