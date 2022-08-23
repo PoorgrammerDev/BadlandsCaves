@@ -46,7 +46,7 @@ public class DimensionsGen extends ChunkGenerator {
         final double lacunarity = 2.0;                              // Simplex Noise param: how much detail later octaves add to the surface (<1 smoother; 1 same impact; >1 more detail)
         final double persistence = 0.25;                            // Simplex Noise param: how much each octave affects overall shape
         final int variance = random.nextInt(15) + 15;               // "Y-scale" of the noise; how much the terrain's height changes based on noise
-        final int center = random.nextInt(60) + 90;                 // Center y-level
+        final int center = random.nextInt(20) + 60;                 // Center y-level
         final int layerNoiseOffset = (random.nextInt(5000) + 1000); // Offset x and z values on where to sample noise for y-levels of stone layer beginning and void layer beginning
         final double threshold = (0.2D * random.nextDouble()) + 0.1D; // Threshold value for 3D noise between [0.1, 0.3]
         final int inverseSquash = random.nextInt(75) + 75;           //Higher values, less squashing of surface layer; [75,150]
@@ -54,7 +54,7 @@ public class DimensionsGen extends ChunkGenerator {
         //Void layer variables
         final double voidThreshold = (0.2D * random.nextDouble()) + 0.4D; // Threshold value for 3D noise between [0.4, 0.6]
         //Y offset for void top layer (based on world's Chaos value)
-        final int voidTopLayerOffset = (chaos / 5 > 0) ? Math.min(random.nextInt(chaos / 5), center - variance - 5) : 0;
+        final int voidTopLayerOffset = (chaos / 5 > 0) ? Math.min(random.nextInt(chaos / 5), center - variance - 10) : 0;
     
         final SimplexOctaveGenerator generator = new SimplexOctaveGenerator(world.getSeed(), octaves);
         generator.setScale(0.0375D + (random.nextDouble() * 0.0125D));
@@ -130,10 +130,10 @@ public class DimensionsGen extends ChunkGenerator {
         final List<BlockPopulator> populators = super.getDefaultPopulators(world);
 
         //Add Titanium Ore populator 
-        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 5, 2, 8, false));
+        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 10, 2, 8));
 
         //Add Energium Ore populator
-        // populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 30, 0, 5, 1, 3, true));
+        populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 29, 1, 5, 1, 4));
 
         return populators;
     }
