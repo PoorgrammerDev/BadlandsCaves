@@ -228,6 +228,9 @@ public final class BadlandsCaves extends JavaPlugin {
     private PreventMagicUse preventMagicUse;
     private ParticleShapes particleShapes;
     private SpawnImmunity spawnImmunity;
+    private VoidSkeleton voidSkeleton;
+    private VoidCreeper voidCreeper;
+    private VoidZombie voidZombie;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -429,6 +432,9 @@ public final class BadlandsCaves extends JavaPlugin {
         preventTechUse = new PreventTechUse(this, voidmatter, enchantmentStorage);
         preventMagicUse = new PreventMagicUse(this, starlightCharge, enchantmentStorage);
         spawnImmunity = new SpawnImmunity(this, playerEffects);
+        voidSkeleton = new VoidSkeleton(this, random);
+        voidCreeper = new VoidCreeper(this);
+        voidZombie = new VoidZombie(this);
     }
 
     //CONFIG
@@ -646,6 +652,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 preventTechUse,
                 preventMagicUse,
                 spawnImmunity,
+                voidSkeleton,
+                voidCreeper,
+                voidZombie,
         };
 
         for (Listener event : events) {

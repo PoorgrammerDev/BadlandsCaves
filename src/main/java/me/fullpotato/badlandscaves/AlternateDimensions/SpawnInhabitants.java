@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,6 +48,8 @@ public class SpawnInhabitants implements Listener {
                 }
 
                 if (entity instanceof Monster) {
+                    if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) return;
+
                     DimensionsWorlds.Habitation habitationType = null;
 
                     String savedHabitatType = plugin.getSystemConfig().getString("alternate_dimensions." + world.getName() + ".habitation");

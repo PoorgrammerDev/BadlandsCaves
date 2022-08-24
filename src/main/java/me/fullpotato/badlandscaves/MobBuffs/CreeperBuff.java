@@ -55,6 +55,7 @@ public class CreeperBuff implements Listener {
             creeper.setCustomName("Void Creeper");
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 
+            creeper.setExplosionRadius(radius * 4);
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(8.0);
             NameTagHide.getInstance().Hide(creeper);
             return;

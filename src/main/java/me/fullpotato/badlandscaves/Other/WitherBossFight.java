@@ -782,35 +782,9 @@ public class WitherBossFight implements Listener {
                     if (random.nextBoolean()) {
                         Location location = skull.getLocation();
                         final int lifespan = 100;
-                        int[] ticks = {0};
 
                         if (location.getWorld().equals(world)) {
-                            world.playSound(location, Sound.BLOCK_PORTAL_TRIGGER, SoundCategory.HOSTILE, 1, 1);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (ticks[0] > lifespan) {
-                                        this.cancel();
-                                    }
-                                    else {
-                                        world.spawnParticle(Particle.REDSTONE, location, 2, 0.1, 0.1, 0.1,0, new Particle.DustOptions(Color.BLACK, 2));
-
-                                        world.spawnParticle(Particle.REDSTONE, location, 10, 2, 1, 1,0, new Particle.DustOptions(Color.RED, 1));
-                                        world.spawnParticle(Particle.REDSTONE, location, 10, 1, 2, 1,0, new Particle.DustOptions(Color.RED, 1));
-                                        world.spawnParticle(Particle.REDSTONE, location, 10, 1, 1, 2,0, new Particle.DustOptions(Color.RED, 1));
-
-                                        for (Entity entity : world.getNearbyEntities(location, 10, 10, 10)) {
-                                            if (entity instanceof Player) {
-                                                Player player = (Player) entity;
-                                                if (player.getWorld().equals(world) && player.getLocation().distanceSquared(location) > 1 && player.getLocation().distanceSquared(location) < 25) {
-                                                    player.setVelocity(location.clone().subtract(player.getLocation()).toVector().multiply(0.3));
-                                                }
-                                            }
-                                        }
-                                        ticks[0]++;
-                                    }
-                                }
-                            }.runTaskTimer(plugin, 0, 0);
+                            new GravityAttack(location, world, lifespan, 5, 0).runTaskTimer(plugin, 0, 0);
                         }
                     }
                 }
