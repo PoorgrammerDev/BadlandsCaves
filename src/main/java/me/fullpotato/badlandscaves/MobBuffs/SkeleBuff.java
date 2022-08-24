@@ -2,8 +2,11 @@ package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
+
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -53,6 +56,16 @@ public class SkeleBuff implements Listener {
         if (!hardmode && random.nextInt(100) >= chance) return;
         if (skeleton.getType().equals(EntityType.SKELETON)) {
             if (hardmode) {
+                //Change behaviour if the monster is spawned in The Void
+                if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+                    skeleton.setCustomName("Void Skeleton");
+                    skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+                    skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(22.5);
+                    NameTagHide.getInstance().Hide(skeleton);
+                    return;
+                }
+
                 final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
                 if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < ascend) {
                     skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);

@@ -66,6 +66,7 @@ import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInWater;
 import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
@@ -275,6 +276,8 @@ public final class BadlandsCaves extends JavaPlugin {
     }
 
     public void initializeFields() {
+        new NameTagHide(this);
+
         particleShapes = new ParticleShapes(this);
         EnchantmentStorage enchantmentStorage = new EnchantmentStorage(this);
         pregenerateDimensions = new PregenerateDimensions(this, random);

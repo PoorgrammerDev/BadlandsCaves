@@ -165,3 +165,5 @@ hardmode_values:
 
   # Alternate Dimensions will only generate when recent TPS is above this number. Set to 20.0 to always allow.
   alternate_dimensions_tps_threshold: 18.0
+
+nametag_hide_team_name: __HIDE_NAMETAG__

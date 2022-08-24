@@ -1,9 +1,11 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
@@ -47,6 +49,16 @@ public class CreeperBuff implements Listener {
         final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
+
+        //Change behaviour if the monster is spawned in The Void
+        if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+            creeper.setCustomName("Void Creeper");
+            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+            creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(8.0);
+            NameTagHide.getInstance().Hide(creeper);
+            return;
+        }
 
         if (random.nextInt(100) < ascend) {
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);

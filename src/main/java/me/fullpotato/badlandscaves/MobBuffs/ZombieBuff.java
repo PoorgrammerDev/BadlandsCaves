@@ -1,8 +1,11 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
+
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
@@ -51,8 +54,21 @@ public class ZombieBuff implements Listener {
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
         if (hardmode) {
+            //Change behaviour if the monster is spawned in The Void
+            if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+                zombie.setCustomName("Void Zombie");
+                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 
+                zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(22.5);
+                zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(15);
+                NameTagHide.getInstance().Hide(zombie);
+                return;
+            }
+            
+
+            //Ascended mob / mini-boss
             final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
+
             if (random.nextInt(100) < ascend) {
                 zombie.setBaby(false);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
@@ -89,7 +105,7 @@ public class ZombieBuff implements Listener {
                 zombie.setHealth(40.0);
             }
 
-
+            //Regular mob buff
             if (!zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) || zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) {
                 boolean overpowered = random.nextInt(100) < chance;
 
