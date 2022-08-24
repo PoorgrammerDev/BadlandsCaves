@@ -50,25 +50,25 @@ public class CreeperBuff implements Listener {
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
-        //Change behaviour if the monster is spawned in The Void
-        if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
-            creeper.setCustomName("Void Creeper");
-            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
-
-            creeper.setExplosionRadius(radius * 4);
-            creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(8.0);
-            NameTagHide.getInstance().Hide(creeper);
-            return;
-        }
-
+        //Ascended Monster
         if (random.nextInt(100) < ascend) {
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
             creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);
             creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
             creeper.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
+            return;
         }
 
+        //Change behaviour if the monster is spawned in The Void
+        if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+            creeper.setCustomName("Void Creeper");
+            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+            creeper.setExplosionRadius((int) (radius * 2 * Math.max(chaos / 32.0, 1)));
+            creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(8.0);
+            NameTagHide.getInstance().Hide(creeper);
+        }
 
     }
 

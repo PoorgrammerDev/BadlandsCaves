@@ -55,59 +55,52 @@ public class SkeleBuff implements Listener {
 
         if (!hardmode && random.nextInt(100) >= chance) return;
         if (skeleton.getType().equals(EntityType.SKELETON)) {
-            if (hardmode) {
-                //Change behaviour if the monster is spawned in The Void
-                if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
-                    skeleton.setCustomName("Void Skeleton");
-                    skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+            final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
+            boolean ascended = random.nextInt(100) < ascend;
+            if (hardmode && !event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && ascended) {
+                skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
+                skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Summoner");
 
-                    skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(22.5);
-                    NameTagHide.getInstance().Hide(skeleton);
-                    return;
-                }
-
-                final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
-                if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM) && random.nextInt(100) < ascend) {
-                    skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
-                    skeleton.setCustomName(ChatColor.DARK_GRAY.toString() + ChatColor.BOLD + "Summoner");
-
-                    ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
-                    LeatherArmorMeta boots_meta = (LeatherArmorMeta) boots.getItemMeta();
-                    boots_meta.setColor(Color.BLACK);
-                    boots.setItemMeta(boots_meta);
+                ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+                LeatherArmorMeta boots_meta = (LeatherArmorMeta) boots.getItemMeta();
+                boots_meta.setColor(Color.BLACK);
+                boots.setItemMeta(boots_meta);
 
 
-                    ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
-                    LeatherArmorMeta leggings_meta = (LeatherArmorMeta) leggings.getItemMeta();
-                    leggings_meta.setColor(Color.BLACK);
-                    leggings.setItemMeta(leggings_meta);
+                ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+                LeatherArmorMeta leggings_meta = (LeatherArmorMeta) leggings.getItemMeta();
+                leggings_meta.setColor(Color.BLACK);
+                leggings.setItemMeta(leggings_meta);
 
-                    ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
-                    LeatherArmorMeta chestplate_meta = (LeatherArmorMeta) chestplate.getItemMeta();
-                    chestplate_meta.setColor(Color.BLACK);
-                    chestplate.setItemMeta(chestplate_meta);
+                ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+                LeatherArmorMeta chestplate_meta = (LeatherArmorMeta) chestplate.getItemMeta();
+                chestplate_meta.setColor(Color.BLACK);
+                chestplate.setItemMeta(chestplate_meta);
 
-                    ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
-                    LeatherArmorMeta helmet_meta = (LeatherArmorMeta) helmet.getItemMeta();
-                    helmet_meta.setColor(Color.BLACK);
-                    helmet.setItemMeta(helmet_meta);
+                ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+                LeatherArmorMeta helmet_meta = (LeatherArmorMeta) helmet.getItemMeta();
+                helmet_meta.setColor(Color.BLACK);
+                helmet.setItemMeta(helmet_meta);
 
-                    ItemStack[] armor = {boots, leggings, chestplate, helmet};
+                ItemStack[] armor = {boots, leggings, chestplate, helmet};
 
-                    skeleton.getEquipment().setArmorContents(armor);
-                    skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0);
-                    skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
-                    skeleton.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
-                }
+                skeleton.getEquipment().setArmorContents(armor);
+                skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0);
+                skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
+                skeleton.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
             }
 
             ItemStack bow = new ItemStack(Material.BOW, 1);
             ItemMeta bow_meta = bow.getItemMeta();
+
+            //BOW ENCHANT: POWER
             if (hardmode) bow_meta.addEnchant(Enchantment.ARROW_DAMAGE, random.nextInt(random.nextInt(100) < chance ? 8 : 5) + 3, false);
             else {
                 int power = random.nextInt(3) + 1;
                 bow_meta.addEnchant(Enchantment.ARROW_DAMAGE, power, false);
             }
+            
+            //BOW ENCHANT: PUNCH
             if (hardmode) {
                 final int knockback = random.nextInt(random.nextInt(100) < chance ? 8 : 2);
                 if (knockback > 0) {
@@ -116,12 +109,27 @@ public class SkeleBuff implements Listener {
                 bow_meta.addEnchant(Enchantment.ARROW_FIRE, 1, false);
                 bow_meta.setDisplayName(ChatColor.GRAY + "Skeleton's Bow");
             }
+
+            //Upgrade the bow
             bow.setItemMeta(bow_meta);
             skeleton.getEquipment().setItemInMainHand(bow);
 
             if (!hardmode) return;
-            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) || skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
+
+            //Void Monster override
+            if (!ascended && event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+                skeleton.setCustomName("Void Skeleton");
+                skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+                skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(22.5);
+                NameTagHide.getInstance().Hide(skeleton);
+                return;
+            }
+
+            if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) ||
+                skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1)
+                    skeleton.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(random.nextInt(random.nextInt(100) < chance ? 17 : 12));
 
             final Location headSpace = location.clone();
             headSpace.setY(headSpace.getBlockY() + 2);

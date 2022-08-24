@@ -74,7 +74,7 @@ public class VoidSkeleton implements Listener {
         if (arrow.getPersistentDataContainer().has(attackKey, PersistentDataType.BYTE)) {
             final Byte result = arrow.getPersistentDataContainer().get(attackKey, PersistentDataType.BYTE);
             if (result != null && result == (byte) 1) {
-               new GravityAttack(arrow.getLocation(), arrow.getWorld(), 20, 3, 0.25).runTaskTimer(plugin, 0, 0); 
+               new GravityAttack(arrow.getLocation(), arrow.getWorld(), 20, 3, 0.5).runTaskTimer(plugin, 0, 0); 
             }
         }
     }
