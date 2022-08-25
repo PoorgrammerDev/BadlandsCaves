@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
@@ -28,6 +30,7 @@ public class VoidCreeper implements Listener {
     public void spreadVoid(EntityExplodeEvent event) {
         if (event.isCancelled()) return;
         if (!(event.getEntity() instanceof Creeper)) return;
+        if (event.getLocation().getWorld().getEnvironment() != Environment.NORMAL) return;
 
         final Creeper creeper = (Creeper) event.getEntity();
 
@@ -37,11 +40,16 @@ public class VoidCreeper implements Listener {
        
         final List<Block> blocks = event.blockList();
 
+        //Spreads the void via explosions
         for (Block block : blocks) {
             if (block.getType().isSolid() && !(block.getState() instanceof Container)) {
                 block.setType(Material.BLACKSTONE);
             }
-            block.setBiome(Biome.THE_VOID);
+            block.setBiome(Biome.GRAVELLY_MOUNTAINS);
+
+            if (block.getRelative(BlockFace.UP).getType().isAir()) {
+                block.getRelative(BlockFace.UP).setBiome(Biome.GRAVELLY_MOUNTAINS);
+            }
         }
 
         event.blockList().clear();

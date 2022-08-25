@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.NameTagHide;
 
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
@@ -98,12 +99,13 @@ public class ZombieBuff implements Listener {
             }
 
             //Void mob override
-            if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+            if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
                 zombie.setCustomName("Void Zombie");
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 
                 zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(12.5 + (chaos / 4.0)); //base 12.5; up to 25 additional
-                zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(20 + (chaos / 8.0)); //base 20; up to 12.5 additional
+                zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(12.5 + (chaos / 4.0)); //base 12.5; up to 25 additional
+                zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(50 + (chaos / 4.0)); //base 50; up to 25 additional
                 NameTagHide.getInstance().Hide(zombie);
                 return;
             }

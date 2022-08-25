@@ -48,7 +48,7 @@ public class SpawnInhabitants implements Listener {
                 }
 
                 if (entity instanceof Monster) {
-                    if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) return;
+                    if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS) return;
 
                     DimensionsWorlds.Habitation habitationType = null;
 

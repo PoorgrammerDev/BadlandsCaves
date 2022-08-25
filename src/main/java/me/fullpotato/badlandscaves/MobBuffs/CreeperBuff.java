@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Arrow;
@@ -61,7 +62,7 @@ public class CreeperBuff implements Listener {
         }
 
         //Change behaviour if the monster is spawned in The Void
-        if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+        if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
             creeper.setCustomName("Void Creeper");
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 

@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBoss
 import me.fullpotato.badlandscaves.Util.NameTagHide;
 
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
@@ -118,7 +119,7 @@ public class SkeleBuff implements Listener {
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
 
             //Void Monster override
-            if (!ascended && event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+            if (!ascended && event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
                 skeleton.setCustomName("Void Skeleton");
                 skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 

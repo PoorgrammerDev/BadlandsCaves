@@ -40,8 +40,8 @@ public class NameTagHide {
         //TODO: For some reason this isn't working; therefore the workaround is being used instead
         // this.team.addEntry(entity.getUniqueId().toString());
 
-        String command = "team join " + this.teamName + " " + entity.getUniqueId().toString();
-        this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), command);
+        // String command = "team join " + this.teamName + " " + entity.getUniqueId().toString();
+        // this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), command);
 
     }
     

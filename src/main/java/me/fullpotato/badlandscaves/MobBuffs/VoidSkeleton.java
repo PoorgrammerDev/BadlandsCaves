@@ -25,7 +25,6 @@ public class VoidSkeleton implements Listener {
     private Random random;
     private NamespacedKey voidKey;
     private NamespacedKey attackKey;
-    private int SPAWN_CHANCE = 25;
     
     public VoidSkeleton(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
@@ -46,7 +45,9 @@ public class VoidSkeleton implements Listener {
         skeleton.getPersistentDataContainer().get(voidKey, PersistentDataType.BYTE) != 1) return;
 
         //Spawn chance
-        if (random.nextInt(100) >= SPAWN_CHANCE) return;
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+        final int spawnChance = 25 + (chaos / 2);
+        if (random.nextInt(100) >= spawnChance) return;
 
         arrow.getPersistentDataContainer().set(attackKey, PersistentDataType.BYTE, (byte) 1);
         final World world = arrow.getWorld();
@@ -74,7 +75,10 @@ public class VoidSkeleton implements Listener {
         if (arrow.getPersistentDataContainer().has(attackKey, PersistentDataType.BYTE)) {
             final Byte result = arrow.getPersistentDataContainer().get(attackKey, PersistentDataType.BYTE);
             if (result != null && result == (byte) 1) {
-               new GravityAttack(arrow.getLocation(), arrow.getWorld(), 20, 3, 0.5).runTaskTimer(plugin, 0, 0); 
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+                final double damage = 0.75 + (chaos / 400.0);
+
+                new GravityAttack(arrow.getLocation(), arrow.getWorld(), 20, 3, damage).runTaskTimer(plugin, 0, 0); 
             }
         }
     }

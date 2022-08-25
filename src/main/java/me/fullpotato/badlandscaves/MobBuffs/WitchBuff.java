@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.*;
@@ -43,7 +44,7 @@ public class WitchBuff implements Listener {
         final Witch witch = (Witch) event.getEntity();
 
         //Change behaviour if the monster is spawned in The Void
-        if (event.getLocation().getBlock().getBiome() == Biome.THE_VOID) {
+        if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
             witch.setCustomName("Void Witch");
             witch.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 

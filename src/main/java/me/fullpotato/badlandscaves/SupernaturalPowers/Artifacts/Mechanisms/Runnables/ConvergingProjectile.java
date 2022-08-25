@@ -50,7 +50,7 @@ public class ConvergingProjectile extends BukkitRunnable {
         }
 
         scout = scout.add(front.getDirection().normalize());
-        world.spawnParticle(Particle.REDSTONE, scout, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(75, 0, 145), 1));
+        world.spawnParticle(Particle.REDSTONE, scout, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 255), 1));
 
         for (Entity target : world.getNearbyEntities(scout, range, range, range)) {
             if (target instanceof LivingEntity) {
@@ -73,6 +73,7 @@ public class ConvergingProjectile extends BukkitRunnable {
                     front.setYaw(livingTarget.getLocation().getYaw());
                     front.setPitch(livingTarget.getLocation().getPitch());
                     livingTarget.teleport(front, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    livingTarget.setNoDamageTicks(0);
 
                     //Effects
                     world.spawnParticle(Particle.SPELL_WITCH, scout, 25, 0.5, 1, 0.5);

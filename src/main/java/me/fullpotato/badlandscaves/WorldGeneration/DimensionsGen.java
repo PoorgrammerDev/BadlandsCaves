@@ -116,7 +116,9 @@ public class DimensionsGen extends ChunkGenerator {
                     }
 
                     //Set the biome
-                    biome.setBiome(x, y, z, Biome.THE_VOID);
+                    //Unfortuantely this biome cannot be set to THE_VOID (which was the original intention)
+                    //because that biome prohibits monster spawns, so this is used as a stand-in
+                    biome.setBiome(x, y, z, Biome.GRAVELLY_MOUNTAINS);
                 }
             }
         }
