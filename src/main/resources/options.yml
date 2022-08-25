@@ -52,6 +52,9 @@ spell_costs:
 # Default Soul Drop Chance (%)
 soul_drop_chance: 25
 
+# Default Voidmatter Drop Chance (from Void Monsters) (%)
+void_monster_drop_chance: 25
+
 # Maximum bottles of liquid a canteen can hold
 canteen_limit: 10
 

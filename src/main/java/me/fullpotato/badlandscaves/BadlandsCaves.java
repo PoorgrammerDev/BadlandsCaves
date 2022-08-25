@@ -31,6 +31,7 @@ import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.Loot.*;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AscendedDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
+import me.fullpotato.badlandscaves.Loot.MobDeathLoot.VoidMobDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
 import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadowsNMS;
@@ -231,6 +232,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private VoidSkeleton voidSkeleton;
     private VoidCreeper voidCreeper;
     private VoidZombie voidZombie;
+    private VoidMobDrops voidMobDrops;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -435,6 +437,7 @@ public final class BadlandsCaves extends JavaPlugin {
         voidSkeleton = new VoidSkeleton(this, random);
         voidCreeper = new VoidCreeper(this);
         voidZombie = new VoidZombie(this);
+        voidMobDrops = new VoidMobDrops(this, random);
     }
 
     //CONFIG
@@ -655,6 +658,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 voidSkeleton,
                 voidCreeper,
                 voidZombie,
+                voidMobDrops,
         };
 
         for (Listener event : events) {
