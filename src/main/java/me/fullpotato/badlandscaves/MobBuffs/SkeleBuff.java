@@ -13,6 +13,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -119,7 +120,11 @@ public class SkeleBuff implements Listener {
             skeleton.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999, 0, true, true));
 
             //Void Monster override
-            if (!ascended && event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
+            if (!ascended &&
+                event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS &&
+                event.getLocation().getWorld().getEnvironment() == Environment.NORMAL &&
+                event.getSpawnReason() != SpawnReason.CUSTOM) {
+
                 skeleton.setCustomName("Void Skeleton");
                 skeleton.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 
