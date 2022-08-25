@@ -89,7 +89,8 @@ public class OrePopulator extends BlockPopulator {
     }
 
     private boolean isLocationValid(Location location, Chunk chunk) {
-        return (location.getBlock().getType() == this.baseMaterial && location.getChunk().equals(chunk));
+        return (location.getBlock().getType() == this.baseMaterial &&
+        location.getChunk().equals(chunk));
     }
 
     private void generateVein(final Location origin, final Random random, final Chunk chunk, final int blockSize) {

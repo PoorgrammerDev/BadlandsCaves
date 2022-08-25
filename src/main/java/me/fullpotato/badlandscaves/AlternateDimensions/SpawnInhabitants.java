@@ -39,14 +39,6 @@ public class SpawnInhabitants implements Listener {
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
 
             if (plugin.getSystemConfig().getBoolean("hardmode")) {
-                if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
-                    if (entity instanceof CaveSpider || entity instanceof WitherSkeleton) {
-                        event.setCancelled(true);
-                        entity.remove();
-                    }
-                    return;
-                }
-
                 if (entity instanceof Monster) {
                     if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS) return;
 

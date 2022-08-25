@@ -17,7 +17,7 @@ public class DimensionsGen extends ChunkGenerator {
     private final BadlandsCaves plugin;
     private final Biome biome;
     private final int chaos;
-    private final Material[] blocks = new Material[3];
+    private final Material[] blocks = new Material[2];
 
     public DimensionsGen(BadlandsCaves plugin, Biome biome, int chaos) {
         this.plugin = plugin;
@@ -28,7 +28,7 @@ public class DimensionsGen extends ChunkGenerator {
 
     @Override
     public boolean shouldGenerateCaves() {
-        return true;
+        return false;
     }
 
     @Override
@@ -46,9 +46,10 @@ public class DimensionsGen extends ChunkGenerator {
         final double lacunarity = 2.0;                              // Simplex Noise param: how much detail later octaves add to the surface (<1 smoother; 1 same impact; >1 more detail)
         final double persistence = 0.25;                            // Simplex Noise param: how much each octave affects overall shape
         final int variance = random.nextInt(15) + 15;               // "Y-scale" of the noise; how much the terrain's height changes based on noise
-        final int center = random.nextInt(20) + 60;                 // Center y-level
+        final int center = random.nextInt(60) + 90;                 // Center y-level
         final int layerNoiseOffset = (random.nextInt(5000) + 1000); // Offset x and z values on where to sample noise for y-levels of stone layer beginning and void layer beginning
         final double threshold = (0.2D * random.nextDouble()) + 0.1D; // Threshold value for 3D noise between [0.1, 0.3]
+        final double caveThreshold = (0.2D * random.nextDouble()) + 0.5D; // Threshold value for 3D noise between [0.5, 0.7]
         final int inverseSquash = random.nextInt(75) + 75;           //Higher values, less squashing of surface layer; [75,150]
 
         //Void layer variables
@@ -92,12 +93,25 @@ public class DimensionsGen extends ChunkGenerator {
                     noise -= ((double) y - center) / inverseSquash;
 
                     if (noise > threshold) {
-                        chunk.setBlock(x, y, z, (chunk.getType(x, y + 1, z).isAir()) ? Material.GRASS_BLOCK : Material.DIRT);
+                        chunk.setBlock(x, y, z, (chunk.getType(x, y + 1, z).isAir()) ? blocks[0] : blocks[1]);
                     }
                 }
 
+                //Stone layer ----------
+
                 //Fill in stone layer
-                chunk.setRegion(x, voidLayerBegins, z, x + 1, height - stoneDepth, z + 1, blocks[2]);
+                chunk.setRegion(x, voidLayerBegins, z, x + 1, height - stoneDepth, z + 1, Material.STONE);
+
+                //Carve out caves in the stone layer
+                for (int y = voidLayerBegins + 3; y < (height - stoneDepth - 3); ++y) {
+                    double noise = generator.noise((chunkX * 16) + x, y, (chunkZ * 16) + z, lacunarity, persistence, true);
+                    noise = (noise + 1.0) / 2.0;    //Transform noise from [-1, 1] -> [0, 1]
+
+                    if (noise > caveThreshold) {
+                        chunk.setBlock(x, y, z, Material.CAVE_AIR);
+                    }
+                }
+
 
                 //Void layer --------
 
@@ -132,7 +146,7 @@ public class DimensionsGen extends ChunkGenerator {
         final List<BlockPopulator> populators = super.getDefaultPopulators(world);
 
         //Add Titanium Ore populator 
-        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 10, 2, 8));
+        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 5, 2, 8));
 
         //Add Energium Ore populator
         populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 29, 1, 5, 1, 4));
@@ -145,17 +159,14 @@ public class DimensionsGen extends ChunkGenerator {
             case DESERT:
                 blocks[0] = Material.SAND;
                 blocks[1] = Material.SANDSTONE;
-                blocks[2] = Material.STONE;
                 break;
             case MUSHROOM_FIELD_SHORE:
                 blocks[0] = Material.MYCELIUM;
                 blocks[1] = Material.DIRT;
-                blocks[2] = Material.STONE;
                 break;
             default:
                 blocks[0] = Material.GRASS_BLOCK;
                 blocks[1] = Material.DIRT;
-                blocks[2] = Material.STONE;
                 break;
         }
     }
