@@ -34,11 +34,17 @@ public class SpawnInhabitants implements Listener {
 
     @EventHandler
     public void mobSpawn(CreatureSpawnEvent event) {
-        if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) return;
-
         LivingEntity entity = event.getEntity();
         World world = entity.getWorld();
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
+
+            if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+                if (entity instanceof CaveSpider || entity instanceof WitherSkeleton) {
+                    event.setCancelled(true);
+                    entity.remove();
+                }
+                return;
+            }
 
             if (plugin.getSystemConfig().getBoolean("hardmode")) {
                 if (entity instanceof Monster) {
