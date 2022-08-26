@@ -98,9 +98,10 @@ public class UseDimensionalAnchor implements Listener {
 
                         // TODO: 8/17/2020 fix the crashing and remove this
                         final String worldName = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
+                        final boolean allowOnDemand = plugin.getOptionsConfig().getBoolean("allow_dim_gen_on_demand");
                         final UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.getDimensionPrefixName() + worldName);
 
-                        if (unloadedWorld.exists()) {
+                        if (allowOnDemand || unloadedWorld.exists()) {
                             initiate(item, block);
                         }
                         else {

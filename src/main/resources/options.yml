@@ -61,10 +61,10 @@ canteen_limit: 10
 # Mana regen cooldown after using a spell, measured in (ticks * 5)
 mana_regen_cooldown: 60
 
-#Withdraw copies the source world in layers from the origin point. This value is the minimum amount of layers formed in the first tick.
+# Withdraw copies the source world in layers from the origin point. This value is the minimum amount of layers formed in the first tick.
 withdraw_minimum_initial_layers: 5
 
-#Max amount of blocks Withdraw cloning can process per tick after the first tick
+# Max amount of blocks Withdraw cloning can process per tick after the first tick
 withdraw_max_blocks_per_tick: 1000
 
 # Energy Core Catalyst Charge Ratios (1 XP to _ Charge)
@@ -75,6 +75,8 @@ energy_core_mult:
   charged_quartz: 3.0
   energium: 6.0
 
+# Allow loading alternate dimensions that are not pre-generated
+allow_dim_gen_on_demand: false
 
 pre_hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Pre-hardmode
