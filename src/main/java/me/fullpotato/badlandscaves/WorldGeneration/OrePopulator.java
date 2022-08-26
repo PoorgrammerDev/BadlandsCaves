@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.BlockPopulator;
+import org.bukkit.util.Vector;
 
 public class OrePopulator extends BlockPopulator {
 
@@ -21,13 +22,13 @@ public class OrePopulator extends BlockPopulator {
     private final int minVeinSize;
     private final int maxVeinSize;
 
-    private final BlockFace[] adjacentFaces = {
-        BlockFace.NORTH,
-        BlockFace.EAST,
-        BlockFace.WEST,
-        BlockFace.SOUTH,
-        BlockFace.UP,
-        BlockFace.DOWN,
+    private final Vector[] adjacentVectors = {
+        new Vector(1, 0, 0),
+        new Vector(-1, 0, 0),
+        new Vector(0, 1, 0),
+        new Vector(0, -1, 0),
+        new Vector(0, 0, 1),
+        new Vector(0, 0, -1),
     };
 
     /**
@@ -72,40 +73,50 @@ public class OrePopulator extends BlockPopulator {
     }
 
     private Location getValidLocation(Chunk source, Random random) {
-        Location location = new Location(source.getWorld(), 0, 0, 0);
+        Vector vec = new Vector(0, 0, 0);
         final int CHUNK_SIZE = 16;
       
         int tries = 0;
         //Generate a random location within bounds
         do {
-            location.setX(random.nextInt(CHUNK_SIZE) + (source.getX() * CHUNK_SIZE));
-            location.setY(random.nextInt(this.topBound - this.bottomBound) + this.bottomBound);
-            location.setZ(random.nextInt(CHUNK_SIZE) + (source.getZ() * CHUNK_SIZE));
+            vec.setX(random.nextInt(CHUNK_SIZE) + (source.getX() * CHUNK_SIZE));
+            vec.setY(random.nextInt(this.topBound - this.bottomBound) + this.bottomBound);
+            vec.setZ(random.nextInt(CHUNK_SIZE) + (source.getZ() * CHUNK_SIZE));
             
             ++tries;
-        } while (tries < 1000 && !isLocationValid(location, source));
+        } while (tries < 1000 && !isLocationValid(vec, source));
 
-        return (tries < 1000) ? location : null;
+        return (tries < 1000) ? vec.toLocation(source.getWorld()) : null;
     }
 
-    private boolean isLocationValid(Location location, Chunk chunk) {
-        return (location.getBlock().getType() == this.baseMaterial &&
-        location.getChunk().equals(chunk));
+    private boolean isLocationValid(Vector vec, Chunk chunk) {
+        final int CHUNK_SIZE = 16;
+
+        //Ensure that it's within chunk bounds
+        final int minX = chunk.getX() * CHUNK_SIZE;
+        final int minZ = chunk.getZ() * CHUNK_SIZE;
+
+        if (vec.getX() < minX || vec.getX() >= (minX + CHUNK_SIZE)) return false;
+        if (vec.getZ() < minZ || vec.getZ() >= (minZ + CHUNK_SIZE)) return false;
+
+        //Ensure that the block type matches
+        final Location location = vec.toLocation(chunk.getWorld());
+        return location.getBlock().getType() == this.baseMaterial;
     }
 
     private void generateVein(final Location origin, final Random random, final Chunk chunk, final int blockSize) {
         final HashSet<String> visited = new HashSet<>();
-        final Location[] ores = new Location[blockSize];
+        final Vector[] ores = new Vector[blockSize];
         
         //Set the origin as the first
         origin.getBlock().setType(this.oreBlock, false);
-        ores[0] = origin.getBlock().getLocation();
-        visited.add(encodeLocation(ores[0]));
+        ores[0] = origin.getBlock().getLocation().toVector();
+        visited.add(encodeVector(ores[0]));
 
         //Loop starts from 1 because 0 is already populated
         for (int i = 1; i < blockSize; ++i) {
-            Location selectedLoc;
-            Block neighbour;
+            Vector selectedLoc;
+            Vector neighbour;
 
             int tries = 0;
             do {
@@ -113,24 +124,25 @@ public class OrePopulator extends BlockPopulator {
                 selectedLoc = ores[random.nextInt(i)];
 
                 //Select a random neighbour from this location
-                neighbour = selectedLoc.getBlock().getRelative(adjacentFaces[random.nextInt(adjacentFaces.length)]);
+                // neighbour = selectedLoc.getRelative(adjacentFaces[random.nextInt(adjacentFaces.length)]);
+                neighbour = selectedLoc.add(adjacentVectors[random.nextInt(adjacentVectors.length)]);
 
                 ++tries;
 
-            } while (tries < 1000 && (visited.contains(encodeLocation(neighbour.getLocation())) || !isLocationValid(neighbour.getLocation(), chunk)));
+            } while (tries < 1000 && (visited.contains(encodeVector(neighbour)) || !isLocationValid(neighbour, chunk)));
 
             if (tries >= 1000) {
                 return;
             }
 
-            neighbour.setType(this.oreBlock, false);
-            ores[i] = neighbour.getLocation();
-            visited.add(encodeLocation(ores[i])); 
+            neighbour.toLocation(origin.getWorld()).getBlock().setType(this.oreBlock, false);
+            ores[i] = neighbour;
+            visited.add(encodeVector(ores[i])); 
         }
     }
 
-    private String encodeLocation(Location location) {
-        return "(" + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + ")";
+    private String encodeVector(Vector vec) {
+        return "(" + vec.getBlockX() + "," + vec.getBlockY() + "," + vec.getBlockZ() + ")";
     }
 
     

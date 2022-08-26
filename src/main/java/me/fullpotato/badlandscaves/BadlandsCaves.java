@@ -165,7 +165,6 @@ public final class BadlandsCaves extends JavaPlugin {
     private StarlightCharge starlightCharge;
     private StarlightBlasterMechanism starlightBlasterMechanism;
     private SpawnInhabitants spawnInhabitants;
-    private NoOxygen noOxygen;
     private NoFood noFood;
     private Freezing freezing;
     private UseDimensionalAnchor useDimensionalAnchor;
@@ -223,7 +222,6 @@ public final class BadlandsCaves extends JavaPlugin {
     private PlayerEffects playerEffects;
     private HungerLimit hungerLimit;
     private StarlightPaxelMechanism starlightPaxelMechanism;
-    private SlowBreak slowBreak;
     private PreventTechUse preventTechUse;
     private ManaBarManager manaBarManager;
     private PreventMagicUse preventMagicUse;
@@ -374,7 +372,6 @@ public final class BadlandsCaves extends JavaPlugin {
         useForeverFish = new UseForeverFish(this);
         starlightBlasterMechanism = new StarlightBlasterMechanism(this, starlightCharge, starlightTools, nebuliteManager, particleShapes);
         spawnInhabitants = new SpawnInhabitants(this, random);
-        noOxygen = new NoOxygen(this, environmentalHazards, random);
         noFood = new NoFood(environmentalHazards);
         freezing = new Freezing(this, environmentalHazards);
         useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler, random);
@@ -430,7 +427,6 @@ public final class BadlandsCaves extends JavaPlugin {
         dimensionStructureTable = new DimensionStructureTable(this, random);
         unloadDimensions = new UnloadDimensions(this);
         hungerLimit = new HungerLimit();
-        slowBreak = new SlowBreak(this, random);
         preventTechUse = new PreventTechUse(this, voidmatter, enchantmentStorage);
         preventMagicUse = new PreventMagicUse(this, starlightCharge, enchantmentStorage);
         spawnImmunity = new SpawnImmunity(this, playerEffects);
@@ -594,9 +590,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 starlightCharge,
                 starlightBlasterMechanism,
                 spawnInhabitants,
-                noOxygen,
                 noFood,
-                freezing,
                 useDimensionalAnchor,
                 piglinBuff,
                 hoglinBuff,
@@ -651,7 +645,6 @@ public final class BadlandsCaves extends JavaPlugin {
                 playerEffects,
                 hungerLimit,
                 starlightPaxelMechanism,
-                slowBreak,
                 preventTechUse,
                 preventMagicUse,
                 spawnImmunity,
@@ -721,10 +714,6 @@ public final class BadlandsCaves extends JavaPlugin {
         new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this, random).runTaskTimer(this, 0, 20);
-        new BewildermentRunnable(this, random).runTaskTimer(this, 0, 100);
-        noOxygen.runTaskTimer(this, 0, 10);
-        new LavaFloorRunnable(this, random).runTaskTimer(this, 0, 20);
-        new NoFloorRunnable(this, random).runTaskTimer(this, 0, 10);
         new ParanoiaRunnable(this, random).runTaskTimer(this, 0, 80);
         freezing.runTaskTimer(this, 0, 5);
         preventTechUse.runTaskTimer(this, 0, 200);

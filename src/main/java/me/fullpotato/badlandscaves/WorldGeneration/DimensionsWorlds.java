@@ -97,7 +97,7 @@ public class DimensionsWorlds {
         final WorldBorder border = world.getWorldBorder();
         border.setCenter(0, 0);
         border.setWarningDistance(25);
-        border.setSize(random.nextInt(4000) + 1000);
+        border.setSize(random.nextInt(1000) + 1000);
 
         //This next part is delayed by 5 and 10 ticks
         new BukkitRunnable() {
@@ -114,7 +114,7 @@ public class DimensionsWorlds {
 
                         if (!pregenerate) {
                             final int hazardCount = (chaos / 20 > 0) ? (1 + random.nextInt((chaos / 20))) : 1;
-                            addHazards(world, habitation, biome, hazardCount);
+                            addHazards(world, biome, hazardCount);
                         }
                     }
                 }.runTaskLater(plugin, 5);
@@ -143,17 +143,15 @@ public class DimensionsWorlds {
 
     public void addHazards (World world) {
         final String name = world.getName();
-        final String habitationStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".habitation");
         final String biomeStr = plugin.getSystemConfig().getString("alternate_dimensions." + name + ".generator.biome");
 
-        if (habitationStr != null && !habitationStr.isEmpty() && biomeStr != null && !biomeStr.isEmpty()) {
+        if (biomeStr != null && !biomeStr.isEmpty()) {
             try {
-                final Habitation habitation = Habitation.valueOf(habitationStr.toUpperCase());
                 final Biome biome = Biome.valueOf(biomeStr.toUpperCase());
                 final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-                final int amount = chaos / 20 > 0 ? 1 + random.nextInt((chaos / 20)) : 1;
+                final int amount = chaos / 50 > 0 ? 1 + random.nextInt((chaos / 50)) : 1;
 
-                addHazards(world, habitation, biome, amount);
+                addHazards(world, biome, amount);
             }
             catch (IllegalArgumentException e){
                 e.printStackTrace();
@@ -161,32 +159,14 @@ public class DimensionsWorlds {
         }
     }
 
-    public void addHazards (World world, Habitation habitation, Biome biome, int amount) {
+    public void addHazards (World world, Biome biome, int amount) {
         final ArrayList<EnvironmentalHazards.Hazard> list = new ArrayList<>();
 
-        //EXCLUSIVE-----------------------------------------------
-        if (biome.equals(Biome.SNOWY_BEACH) || biome.equals(Biome.SNOWY_TAIGA) || biome.equals(Biome.ICE_SPIKES)) {
-            list.add(EnvironmentalHazards.Hazard.FREEZING);
-        }
-        else if (biome.equals(Biome.SWAMP)) {
-            list.add(EnvironmentalHazards.Hazard.ACID_RAIN);
-            list.add(EnvironmentalHazards.Hazard.TOXIC_WATER);
-        }
-
-        //UNINHABITABLE-------------------------------------------
-        if (!habitation.equals(Habitation.ILLAGERS)) {
-            list.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
-            list.add(EnvironmentalHazards.Hazard.LAVA_FLOOR);
-            list.add(EnvironmentalHazards.Hazard.NO_OXYGEN);
-            list.add(EnvironmentalHazards.Hazard.NO_FLOOR);
-            list.add(EnvironmentalHazards.Hazard.NO_FOOD);
-        }
-
-        //NONSPECIFIC-----------------------------------------------
-        list.add(EnvironmentalHazards.Hazard.SLOW_BREAK);
+        list.add(EnvironmentalHazards.Hazard.FREEZING);
+        list.add(EnvironmentalHazards.Hazard.TOXIC_WATER);
+        list.add(EnvironmentalHazards.Hazard.METEOR_SHOWERS);
+        list.add(EnvironmentalHazards.Hazard.NO_FOOD);
         list.add(EnvironmentalHazards.Hazard.PARANOIA);
-        list.add(EnvironmentalHazards.Hazard.BEWILDERMENT);
-
 
         //RETURNING----------------------------------------------------------------------------
         for (int i = 0; i < amount; i++) {

@@ -9,7 +9,10 @@ import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.ItemBuilder;
+import me.fullpotato.badlandscaves.Util.UnloadedWorld;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.type.Slab;
@@ -67,14 +70,8 @@ public class UseDimensionalAnchor implements Listener {
         this.deathHandler = deathHandler;
         this.random = random;
 
-        nameFromCode.put(EnvironmentalHazards.Hazard.ACID_RAIN.name(), "Acid Rain");
-        nameFromCode.put(EnvironmentalHazards.Hazard.TOXIC_WATER.name(), "Toxic Water");
-        nameFromCode.put(EnvironmentalHazards.Hazard.SLOW_BREAK.name(), "Slow Breaking");
+        nameFromCode.put(EnvironmentalHazards.Hazard.TOXIC_WATER.name(), "Toxic Water & Acid Rain");
         nameFromCode.put(EnvironmentalHazards.Hazard.METEOR_SHOWERS.name(), "Meteor Showers");
-        nameFromCode.put(EnvironmentalHazards.Hazard.BEWILDERMENT.name(), "Bewilderment");
-        nameFromCode.put(EnvironmentalHazards.Hazard.NO_OXYGEN.name(), "No Oxygen");
-        nameFromCode.put(EnvironmentalHazards.Hazard.LAVA_FLOOR.name(), "The Floor is Lava");
-        nameFromCode.put(EnvironmentalHazards.Hazard.NO_FLOOR.name(), "The Floor is Nothing");
         nameFromCode.put(EnvironmentalHazards.Hazard.NO_FOOD.name(), "Famine");
         nameFromCode.put(EnvironmentalHazards.Hazard.PARANOIA.name(), "Paranoia");
         nameFromCode.put(EnvironmentalHazards.Hazard.FREEZING.name(), "Cryogenic");
@@ -100,20 +97,15 @@ public class UseDimensionalAnchor implements Listener {
                         }
 
                         // TODO: 8/17/2020 fix the crashing and remove this
-                        final ItemMeta meta = item.getItemMeta();
-                        if (meta != null) {
-                            final List<String> lore = meta.getLore();
-                            if (lore != null && lore.size() >= 2) {
-                                final String tag = lore.get(1);
-                                if (!tag.toUpperCase().contains("NOT")) {
-                                    initiate(item, block);
-                                }
-                                else {
-                                    player.sendMessage(ChatColor.RED + "Unfortunately this isn't supported right now. You can only load pre-generated worlds at this time.");
-                                }
-                            }
-                        }
+                        final String worldName = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
+                        final UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.getDimensionPrefixName() + worldName);
 
+                        if (unloadedWorld.exists()) {
+                            initiate(item, block);
+                        }
+                        else {
+                            player.sendMessage(ChatColor.RED + "Unfortunately this isn't supported right now. You can only load pre-generated worlds at this time.");
+                        }
                     }
                 }
             }
@@ -481,10 +473,14 @@ public class UseDimensionalAnchor implements Listener {
 
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7" + str);
+        lore.add(ChatColor.BLUE + "Visited");
         meta.setLore(lore);
 
         NamespacedKey key = new NamespacedKey(plugin, "world_name");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, str);
+
+        key = new NamespacedKey(plugin, "is_dim_anchor");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
 
         item.setItemMeta(meta);
         return item;
