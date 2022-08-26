@@ -35,17 +35,17 @@ import me.fullpotato.badlandscaves.Loot.MobDeathLoot.VoidMobDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
 import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadowsNMS;
-import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadows_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadows_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
-import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
-import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
-import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
-import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
-import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter_1_16_R3;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.Research.UseResearchTable;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
@@ -852,13 +852,13 @@ public final class BadlandsCaves extends JavaPlugin {
         String version = this.getServer().getClass().getPackage().getName();
         version = version.substring(version.lastIndexOf('.') + 2);
 
-        if ("1_16_R2".equals(version)) {
-            enhancedEyesNMS = new EnhancedEyes_1_16_R2();
-            fakePlayerNMS = new FakePlayer_1_16_R2(this);
-            lineOfSightNMS = new LineOfSight_1_16_R2();
-            possessionNMS = new Possession_1_16_R2();
-            eclipsedShadowsNMS = new EclipsedShadows_1_16_R2(this);
-            tpsGetterNMS = new TPSGetter_1_16_R2(this);
+        if ("1_16_R3".equals(version)) {
+            enhancedEyesNMS = new EnhancedEyes_1_16_R3();
+            fakePlayerNMS = new FakePlayer_1_16_R3(this);
+            lineOfSightNMS = new LineOfSight_1_16_R3();
+            possessionNMS = new Possession_1_16_R3();
+            eclipsedShadowsNMS = new EclipsedShadows_1_16_R3(this);
+            tpsGetterNMS = new TPSGetter_1_16_R3(this);
 
         } else {
             this.getServer().getLogger().severe("Invalid server version " + version + ". Disabling plugin.");
