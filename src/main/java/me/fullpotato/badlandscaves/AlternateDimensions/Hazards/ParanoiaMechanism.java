@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,6 +26,7 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards hazards;
     private final Random random;
+    private final boolean blindnessFallback;
 
     private HashMap<UUID, HashSet<Vector>> map;
     private HashMap<UUID, Vector> centerMap;
@@ -37,10 +37,12 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
         this.random = random;
         this.map = new HashMap<>();
         this.centerMap = new HashMap<>();
+        this.blindnessFallback = plugin.getOptionsConfig().getBoolean("alternate_dimensions.hazards.paranoia_force_blind");
     }
 
     @EventHandler
     public void unloadWorld(PlayerChangedWorldEvent event) {
+        if (this.blindnessFallback) return;
         final UUID uuid = event.getPlayer().getUniqueId();
 
         if (map.containsKey(uuid)) map.remove(uuid);
@@ -49,6 +51,7 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
 
     @EventHandler
     public void changeGamemode(PlayerGameModeChangeEvent event) {
+        if (this.blindnessFallback) return;
         if (event.getNewGameMode() != GameMode.CREATIVE && event.getNewGameMode() != GameMode.SPECTATOR) return;
 
         removeBounds(event.getPlayer());
@@ -56,7 +59,7 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
 
     @EventHandler
     public void resetAll(PluginDisableEvent event) {
-        Bukkit.broadcastMessage("message");
+        if (this.blindnessFallback) return;
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             removeBounds(player);
         }
@@ -65,6 +68,7 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
     @Override
     public void run() {
         ArrayList<Player> players = new ArrayList<>(plugin.getServer().getOnlinePlayers());
+        int soundChance = (this.blindnessFallback ? 25 : 5);
         
         for (Player player : players) {
             final World world = player.getWorld();
@@ -73,11 +77,16 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
             if (!hazards.isDimension(world) || !hazards.hasHazard(world, EnvironmentalHazards.Hazard.PARANOIA)) continue;
             if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.getGameMode().equals(GameMode.ADVENTURE)) continue;
 
+            //VISION LIMITING ==========================
+            //Force fallback to blindness via config
+            Vector velocity = player.getVelocity();
+            if (this.blindnessFallback) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 0));
+            }
             //Bounding box effect does not work well when the player is in free fall
             //Player can collide with it and take fall damage even if the block isn't actually there server-side
             //Therefore, if the player is falling too fast, fallback to blindness effect
-            Vector velocity = player.getVelocity();
-            if (velocity.getY() <= -1.0f) {
+            else if (velocity.getY() <= -1.0f) {
                 removeBounds(player);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0));
             }
@@ -85,10 +94,10 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
             else {
                 limitVision(player, 15);
             }
+            //==========================================
             
-
             //Play random sounds around the player
-            if (random.nextInt(100) < 5) {
+            if (random.nextInt(100) < soundChance) {
                 soundEffects(player);
             }
 
@@ -203,6 +212,9 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
         final String name = sound.name();
         final Location location = player.getLocation().add(getRandomOffset(3, 7));
 
+        //No music
+        if (name.startsWith("MUSIC")) return;
+        
         // SPECIAL BEHAVIOUR (50% chance) =======
         if (random.nextBoolean()) {
             //ENTITY DAMAGE OVERRIDE - Play continuously, and then end in a death sound
@@ -319,7 +331,10 @@ public class ParanoiaMechanism extends BukkitRunnable implements Listener {
                 count[0]++;
             }
         }.runTaskTimer(plugin, 0, delay);
+    }
 
+    public boolean getBlindnessFallback() {
+        return this.blindnessFallback;
     }
 
 }

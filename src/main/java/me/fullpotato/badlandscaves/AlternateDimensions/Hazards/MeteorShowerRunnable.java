@@ -2,12 +2,16 @@ package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -17,11 +21,17 @@ public class MeteorShowerRunnable extends BukkitRunnable{
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards dims;
     private final Random random;
+    private final Freezing freezingManager;
+    private final boolean destroyBlocks;
+    private final BlockData iceBlockData;
 
-    public MeteorShowerRunnable(BadlandsCaves plugin, Random random) {
+    public MeteorShowerRunnable(BadlandsCaves plugin, Random random, Freezing freezingManager) {
         this.plugin = plugin;
         this.dims = new EnvironmentalHazards(plugin, random);
         this.random = random;
+        this.freezingManager = freezingManager;
+        this.destroyBlocks = plugin.getOptionsConfig().getBoolean("alternate_dimensions.hazards.meteors_destroy_blocks");
+        this.iceBlockData = Material.ICE.createBlockData();
     }
 
 
@@ -70,12 +80,37 @@ public class MeteorShowerRunnable extends BukkitRunnable{
                 @Override
                 public void run() {
                     if (!clone.getBlock().isPassable() || times[0] > limit) {
-                        world.createExplosion(clone, 5, !ice, true);
+                        world.createExplosion(clone, 5, !ice, destroyBlocks);
+
+                        //ICE METEOR BEHAVIOUR
+                        if (ice) {
+                            for (int x = -5; x <= 5; x++) {
+                                for (int y = -5; y <= 5; y++) {
+                                    for (int z = -5; z <= 5; z++) {
+                                        final Block block = clone.clone().add(x, y, z).getBlock();
+                                        if (block.getLocation().distanceSquared(clone) < 25) {
+                                            final Material type = block.getType();
+                                            if (type == Material.LAVA) {
+                                                block.setType(Material.COBBLESTONE);
+                                            }
+                                            else if (freezingManager.isWarmingMaterial(type)) {
+                                                block.breakNaturally();
+                                            }
+                                            else if (type.isSolid() && type.getBlastResistance() < 100) {
+                                                block.setType(random.nextBoolean() ? Material.ICE : Material.PACKED_ICE);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         this.cancel();
                     }
                     else {
                         if (ice) {
-                            world.spawnParticle(Particle.ITEM_CRACK, clone, 2, 0, 0, 0, 0, Material.ICE);
+                            world.spawnParticle(Particle.REDSTONE, clone, 10, 0.25, 0.25, 0.25, 0, new Particle.DustOptions(Color.fromRGB(5, 221, 245), 1));
+                            world.spawnParticle(Particle.BLOCK_DUST, clone, 2, 0, 0, 0, 0, iceBlockData);
                         }
                         else {
                             world.spawnParticle(Particle.LAVA, clone, 2, 0, 0, 0, 0);

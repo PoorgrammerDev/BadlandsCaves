@@ -75,7 +75,7 @@ energy_core_mult:
   charged_quartz: 3.0
   energium: 6.0
 
-# Allow loading alternate dimensions that are not pre-generated
+ #TODO: MARKED FOR DELETION
 allow_dim_gen_on_demand: false
 
 pre_hardmode_values:
@@ -163,12 +163,37 @@ hardmode_values:
     # Cost Per arrow fired (arrow count based on Chaos)
     summoners_rift: 5
 
-  # In Hardmode, Alternate Dimensions are accessible. Since generating on-the-fly is
-  # quite resource demanding, the plugin pre-generates some when players aren't online and keeps them in a "buffer".
-  # This is the limit of how many can be in the "buffer" before it stops.
+ #TODO: MARKED FOR DELETION
   alternate_dimensions_pregenerate_limit: 5
 
-  # Alternate Dimensions will only generate when recent TPS is above this number. Set to 20.0 to always allow.
+ #TODO: MARKED FOR DELETION
   alternate_dimensions_tps_threshold: 18.0
 
+#Options for Alternate Dimensions, different worlds the player can access in Hardmode
+alternate_dimensions:
+  # Since generating on-the-fly is quite resource demanding, the plugin pre-generates 
+  # some worlds when players aren't online and keeps them in a "buffer".
+  # This is the limit of how many can be in the "buffer" before it stops.
+  pregenerate_limit: 5
+
+  # Alternate Dimensions will only pre-generate when recent TPS is above this number. Set to 20.0 to always allow.
+  pregenerate_tps_threshold: 18.0
+
+  # Allow loading alternate dimensions that are not pre-generated
+  allow_generate_on_demand: false
+  
+  # Options for the Environmental Hazards present in these worlds
+  hazards:
+    # Paranoia uses a box of faux blocks around the player to achieve distance-customizable vision limiting.
+    # However, this can be performance intensive for both the server and the clients.
+    # This option forces the system to fallback to applying blindness instead.
+    paranoia_force_blind: false
+
+    # Allows Meteor Shower explosions to destroy blocks
+    meteors_destroy_blocks: true
+
+    # Cryogenic range around player to search for warm blocks 
+    freezing_warm_block_range: 5
+
+# Designated team name used for hiding nametags of monsters
 nametag_hide_team_name: __HIDE_NAMETAG__

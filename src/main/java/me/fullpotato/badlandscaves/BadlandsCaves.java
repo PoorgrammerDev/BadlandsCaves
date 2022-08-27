@@ -716,9 +716,9 @@ public final class BadlandsCaves extends JavaPlugin {
         new AscendedZombie(this, random).runTaskTimer(this, 0, 10);
         new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
-        new MeteorShowerRunnable(this, random).runTaskTimer(this, 0, 20);
-        paranoiaMechanism.runTaskTimer(this, 0, 5);
+        paranoiaMechanism.runTaskTimer(this, 0, (paranoiaMechanism.getBlindnessFallback() ? 80 : 5));
         freezing.runTaskTimer(this, 0, 5);
+        new MeteorShowerRunnable(this, random, freezing).runTaskTimer(this, 0, 20);
         preventTechUse.runTaskTimer(this, 0, 200);
         preventMagicUse.runTaskTimer(this, 0, 200);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
