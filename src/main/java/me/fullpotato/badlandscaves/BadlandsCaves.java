@@ -231,6 +231,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private VoidCreeper voidCreeper;
     private VoidZombie voidZombie;
     private VoidMobDrops voidMobDrops;
+    private ParanoiaMechanism paranoiaMechanism;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -434,6 +435,7 @@ public final class BadlandsCaves extends JavaPlugin {
         voidCreeper = new VoidCreeper(this);
         voidZombie = new VoidZombie(this);
         voidMobDrops = new VoidMobDrops(this, random);
+        paranoiaMechanism = new ParanoiaMechanism(this, random);
     }
 
     //CONFIG
@@ -652,6 +654,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 voidCreeper,
                 voidZombie,
                 voidMobDrops,
+                paranoiaMechanism,
         };
 
         for (Listener event : events) {
@@ -714,7 +717,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
         new MeteorShowerRunnable(this, random).runTaskTimer(this, 0, 20);
-        new ParanoiaRunnable(this, random).runTaskTimer(this, 0, 80);
+        paranoiaMechanism.runTaskTimer(this, 0, 5);
         freezing.runTaskTimer(this, 0, 5);
         preventTechUse.runTaskTimer(this, 0, 200);
         preventMagicUse.runTaskTimer(this, 0, 200);
