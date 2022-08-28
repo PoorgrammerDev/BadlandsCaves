@@ -55,33 +55,24 @@ public class Freezing extends BukkitRunnable {
                     KeyedBossBar tempBar = getTemperatureBar(player, true);
                     tempBar.setVisible(true);
 
-                    //TODO: Continue working on this, clamp values [0, 100]
-                    //calc score
-                    if (isWarm(player, this.range)) {
-                        if (temp < 100) {
-                            temp++;
-                        }
+                    //Calculating temperature difference ===================
+                    final boolean warm = isWarm(player, this.range);
+                    final Block standingIn = player.getLocation().getBlock();
+                    final Block standingOn = standingIn.getRelative(BlockFace.DOWN);
+                    double difference = warm ? 1.0 : -1.0;
+
+                    //Standing on ice: -0.5
+                    if (standingOn.getType() == Material.ICE || standingOn.getType() == Material.PACKED_ICE) {
+                        difference -= 0.5;
                     }
-                    else if (temp > 0) {
-                        Bukkit.broadcastMessage("a");
-                        final Block standingIn = player.getLocation().getBlock();
-                        final Block standingOn = standingIn.getRelative(BlockFace.DOWN);
-                        double decrease = 1.0;
 
-                        //Standing on ice - 1.5x
-                        if (standingOn.getType() == Material.ICE || standingOn.getType() == Material.PACKED_ICE) {
-                            decrease *= 1.5;
-                        }
-
-                        //Standing in water - 1.25x
-                        if (standingIn.getType() == Material.WATER) {
-                            decrease *= 1.25;
-                        }
-
-                        Bukkit.broadcastMessage("decrease: " + decrease);
-                        temp -= decrease;
-                        Bukkit.broadcastMessage("new temp: " + temp);
+                    //Standing in water: -0.75
+                    if (standingIn.getType() == Material.WATER) {
+                        difference -= 0.75;
                     }
+
+                    temp += difference;
+                    // ====================================================
 
                     //update bar and change color, also slowness
                     tempBar.setProgress(Math.max(Math.min(temp / 100.0, 1.0), 0.0));
@@ -110,7 +101,7 @@ public class Freezing extends BukkitRunnable {
                         player.setHealth(Math.floor(player.getHealth() / 2));
                     }
 
-                    PlayerScore.TEMPERATURE.setScore(plugin, player, temp);
+                    PlayerScore.TEMPERATURE.setScore(plugin, player, Math.min(Math.max(temp, 0.0), 100.0));
                 }
             }
             else {
