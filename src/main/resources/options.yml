@@ -75,9 +75,6 @@ energy_core_mult:
   charged_quartz: 3.0
   energium: 6.0
 
- #TODO: MARKED FOR DELETION
-allow_dim_gen_on_demand: false
-
 pre_hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Pre-hardmode
   death_reverse_gapple: 1
@@ -162,12 +159,6 @@ hardmode_values:
 
     # Cost Per arrow fired (arrow count based on Chaos)
     summoners_rift: 5
-
- #TODO: MARKED FOR DELETION
-  alternate_dimensions_pregenerate_limit: 5
-
- #TODO: MARKED FOR DELETION
-  alternate_dimensions_tps_threshold: 18.0
 
 #Options for Alternate Dimensions, different worlds the player can access in Hardmode
 alternate_dimensions:

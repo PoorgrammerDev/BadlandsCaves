@@ -27,8 +27,8 @@ public class PregenerateDimensions extends BukkitRunnable implements Listener {
 
     public PregenerateDimensions(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
-        worldsLimit = plugin.getOptionsConfig().getInt("hardmode_values.alternate_dimensions_pregenerate_limit");
-        TPSThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
+        worldsLimit = plugin.getOptionsConfig().getInt("alternate_dimensions.pregenerate_limit");
+        TPSThreshold = plugin.getOptionsConfig().getDouble("alternate_dimensions.pregenerate_tps_threshold");
         tpsGetter = plugin.getTpsGetterNMS();
         dimensionsWorlds = new DimensionsWorlds(plugin, random);
     }

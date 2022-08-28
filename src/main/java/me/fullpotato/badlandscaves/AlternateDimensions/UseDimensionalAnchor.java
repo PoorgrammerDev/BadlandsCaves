@@ -63,7 +63,7 @@ public class UseDimensionalAnchor implements Listener {
         this.plugin = plugin;
         dimensions = new DimensionsWorlds(plugin, random);
         tpsGetter = plugin.getTpsGetterNMS();
-        tpsThreshold = plugin.getOptionsConfig().getDouble("hardmode_values.alternate_dimensions_tps_threshold");
+        tpsThreshold = plugin.getOptionsConfig().getDouble("alternate_dimensions.pregenerate_tps_threshold");
         structures = new DimensionStructures(plugin, random);
         this.environmentalHazards = environmentalHazards;
         this.destroySpawner = destroySpawner;
@@ -98,7 +98,7 @@ public class UseDimensionalAnchor implements Listener {
 
                         // TODO: 8/17/2020 fix the crashing and remove this
                         final String worldName = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "world_name"), PersistentDataType.STRING);
-                        final boolean allowOnDemand = plugin.getOptionsConfig().getBoolean("allow_dim_gen_on_demand");
+                        final boolean allowOnDemand = plugin.getOptionsConfig().getBoolean("alternate_dimensions.allow_generate_on_demand");
                         final UnloadedWorld unloadedWorld = new UnloadedWorld(plugin.getDimensionPrefixName() + worldName);
 
                         if (allowOnDemand || unloadedWorld.exists()) {
