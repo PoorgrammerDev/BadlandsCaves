@@ -59,12 +59,12 @@ public class UseDimensionalAnchor implements Listener {
     private final DimensionStructures structures;
     private final double tpsThreshold;
 
-    public UseDimensionalAnchor(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards, DestroySpawner destroySpawner, DeathHandler deathHandler, Random random) {
+    public UseDimensionalAnchor(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards, DestroySpawner destroySpawner, DeathHandler deathHandler, DimensionStructures structures, Random random) {
         this.plugin = plugin;
         dimensions = new DimensionsWorlds(plugin, random);
         tpsGetter = plugin.getTpsGetterNMS();
         tpsThreshold = plugin.getOptionsConfig().getDouble("alternate_dimensions.pregenerate_tps_threshold");
-        structures = new DimensionStructures(plugin, random);
+        this.structures = structures;
         this.environmentalHazards = environmentalHazards;
         this.destroySpawner = destroySpawner;
         this.deathHandler = deathHandler;

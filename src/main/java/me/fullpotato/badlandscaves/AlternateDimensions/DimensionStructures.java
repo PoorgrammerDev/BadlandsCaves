@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.AlternateDimensions;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -56,42 +57,40 @@ public class DimensionStructures {
                     this.cancel();
                     return;
                 }
-                final Location location = new Location(world, x + (random.nextInt(radius * 2) - radius), 256, z + (random.nextInt(radius * 2) - radius));
-                generateStructure(world, location, null);
+
+                //Find randomized location and then find the surface
+                final Location location = new Location(world, x + (random.nextInt(radius * 2) - radius), world.getMaxHeight(), z + (random.nextInt(radius * 2) - radius));
+                Material type = null;
+                do {
+                    location.setY(location.getY() - 1);
+                    type = location.getBlock().getType();
+                } while (!type.isSolid() || blacklistedMats.contains(type));
+
+                generateStructure(location, null, false, false);
                 ticker[0]++;
             }
         }.runTaskTimer(plugin, 0, 20);
     }
 
-    public void generateStructure (World world, Location origin, @Nullable Structure structure) {
-        if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
-            for (int y = world.getMaxHeight(); y > 0; y--) {
-                Location iterate = origin.clone();
-                iterate.setY(y);
+    public void generateStructure (Location origin, @Nullable Structure structure, boolean leaveStructureBlocks, boolean force) {
+        final World world = origin.getWorld();
+        if (!force && !world.getName().startsWith(plugin.getDimensionPrefixName())) return;
 
-                final Material type = iterate.getBlock().getType();
-                if (type.isSolid() && !(blacklistedMats.contains(type))) {
-                    origin.setY(y);
-                    break;
-                }
-            }
-
-            if (structure == null) {
-                structure = Structure.values()[random.nextInt(Structure.values().length)];
-            }
-
-            world.loadChunk(origin.getChunk());
-            final Structure finalStructure = structure;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    loadStructure(finalStructure, origin);
-                }
-            }.runTaskLater(plugin, 20);
+        if (structure == null) {
+            structure = Structure.values()[random.nextInt(Structure.values().length)];
         }
+
+        world.loadChunk(origin.getChunk());
+        final Structure finalStructure = structure;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                loadStructure(finalStructure, origin, leaveStructureBlocks);
+            }
+        }.runTaskLater(plugin, 20);
     }
 
-    public void loadStructure(Structure queried, Location origin) {
+    public void loadStructure(Structure queried, Location origin, boolean leaveStructureBlocks) {
         //center ground level world origin ~(0, 60, 0)
 
         //multistructures
@@ -106,7 +105,7 @@ public class DimensionStructures {
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker);
-            loader.loadAll(origin, false);
+            loader.loadAll(origin, leaveStructureBlocks);
         }
         else if (queried.equals(Structure.BUNKER_AB)) {
             final StructureTrack[] bunker_ab = {
@@ -119,7 +118,7 @@ public class DimensionStructures {
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker_ab);
-            loader.loadAll(origin, false);
+            loader.loadAll(origin, leaveStructureBlocks);
         }
         //single structures
         else {
@@ -142,7 +141,7 @@ public class DimensionStructures {
 
             for (StructureTrack structure : structures) {
                 if (queried.name().equalsIgnoreCase(structure.getStructureName().split(":")[1])) {
-                    structure.load(origin, false);
+                    structure.load(origin, leaveStructureBlocks);
                     return;
                 }
             }

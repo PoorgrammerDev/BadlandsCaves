@@ -68,3 +68,6 @@ commands:
       - generate
       - worldgenerate
       - worldgen
+  structure:
+    usage: /structure spawn <structureName> <x> <y> <z> [leaveStructureBlocks]
+    description: Spawn a structure at the desired location

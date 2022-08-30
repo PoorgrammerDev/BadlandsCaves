@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves;
 
 import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
+import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
 import me.fullpotato.badlandscaves.AlternateDimensions.UnloadDimensions;
@@ -232,6 +233,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private VoidZombie voidZombie;
     private VoidMobDrops voidMobDrops;
     private ParanoiaMechanism paranoiaMechanism;
+    private DimensionStructures dimensionStructures;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -375,7 +377,8 @@ public final class BadlandsCaves extends JavaPlugin {
         spawnInhabitants = new SpawnInhabitants(this, random);
         noFood = new NoFood(environmentalHazards);
         freezing = new Freezing(this, environmentalHazards);
-        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler, random);
+        dimensionStructures = new DimensionStructures(this, random);
+        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler, dimensionStructures, random);
         piglinBuff = new PiglinBuff(this, random);
         hoglinBuff = new HoglinBuff(this, random);
         silencer = new Silencer(this);
@@ -699,6 +702,9 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("world").setExecutor(new WorldCommand(this));
 
         this.getCommand("pregenerate").setExecutor(new PregenerateCommand(this, random));
+
+        this.getCommand("structure").setExecutor(new StructureCommand(this, dimensionStructures));
+        this.getCommand("structure").setTabCompleter(new StructureCommandTabCompleter());
     }
 
     //RUNNABLES

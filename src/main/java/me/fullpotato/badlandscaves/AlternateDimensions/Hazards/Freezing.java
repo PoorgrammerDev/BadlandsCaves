@@ -47,7 +47,6 @@ public class Freezing extends BukkitRunnable {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             World world = player.getWorld();
             double temp = (double) PlayerScore.TEMPERATURE.getScore(plugin, player);
-            Bukkit.broadcastMessage("" + temp);
             if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     world.spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 0.5, 0), 50, 5, 5, 5, 0, new Particle.DustOptions(Color.fromRGB(203, 239, 245), 1));
