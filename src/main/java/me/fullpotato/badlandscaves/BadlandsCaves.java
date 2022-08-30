@@ -700,6 +700,7 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
 
         this.getCommand("world").setExecutor(new WorldCommand(this));
+        this.getCommand("world").setTabCompleter(new WorldCommandTabCompleter(this));
 
         this.getCommand("pregenerate").setExecutor(new PregenerateCommand(this, random));
 
