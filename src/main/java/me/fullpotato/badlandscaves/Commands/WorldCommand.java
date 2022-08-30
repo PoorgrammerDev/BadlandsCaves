@@ -1,7 +1,6 @@
 package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.Util.UnloadedWorld;
 
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -45,21 +44,6 @@ public class WorldCommand extends Commands implements CommandExecutor {
             player.teleport(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             return true;
         }
-
-        //Search for an unloaded world
-        UnloadedWorld unloadedWorld = new UnloadedWorld(args[0]);
-        if (unloadedWorld.exists()) {
-            //FIXME: This does not load the world generator properly
-            unloadedWorld.load(plugin);
-
-            world = plugin.getServer().getWorld(args[0]);
-            if (world != null) {
-                commandSender.sendMessage("§6Teleporting you to §c" + world.getName() + "§6.");
-                player.teleport(world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                return true;
-            }
-        }
-
 
         commandSender.sendMessage("§cInvalid world!");
         return true;

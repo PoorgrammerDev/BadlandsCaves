@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -26,29 +27,16 @@ public class WorldCommandTabCompleter implements TabCompleter {
         if (!command.getName().equalsIgnoreCase("world")) return null;
         if (!(sender instanceof Player) || !sender.isOp()) return null;
 
-        final Player player = (Player) sender;
         final List<String> list = new ArrayList<>();
 
-        switch (args.length) {
-            //World names
-            case 1:
-                File[] worlds = plugin.getServer().getWorldContainer().listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file) {
-                        return file.isDirectory() && Arrays.asList(file.list()).contains("level.dat");
-                    }
-                });
-
-                for (File world : worlds) {
-                    list.add(world.getName());
-                }
-                return list;
-
-            default:
-                return null;
+        if (args.length == 1) {
+            for (World world : plugin.getServer().getWorlds()) {
+                list.add(world.getName());
+            }
+            return list;
         }
 
-
+        return null;
     }
 
 }

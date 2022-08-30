@@ -16,7 +16,7 @@ public class Backrooms {
 
     public void gen_backrooms() {
         WorldCreator backrooms = new WorldCreator(plugin.getBackroomsWorldName());
-        backrooms.environment(World.Environment.NORMAL)
+        backrooms.environment(World.Environment.THE_END)
                 .type(WorldType.FLAT)
                 .generator(new BackroomsGen(random));
         World world_backrooms = plugin.getServer().createWorld(backrooms);
@@ -34,5 +34,7 @@ public class Backrooms {
         world_backrooms.setGameRule(GameRule.DO_FIRE_TICK, false);
         world_backrooms.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
         world_backrooms.setDifficulty(Difficulty.HARD);
+
+        PreventDragon.preventDragonSpawn(world_backrooms);
     }
 }
