@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -32,6 +33,7 @@ public class DimensionStructures {
         HOUSE_ABANDONED,
         HOUSE_DESTROYED,
         BUNKER,
+        BUNKER2,
         BUNKER_AB,
     }
     
@@ -65,6 +67,8 @@ public class DimensionStructures {
                     location.setY(location.getY() - 1);
                     type = location.getBlock().getType();
                 } while (!type.isSolid() || blacklistedMats.contains(type));
+
+                Bukkit.broadcastMessage("structure spawning at " + location.toString());
 
                 generateStructure(location, null, false, false);
                 ticker[0]++;
@@ -102,6 +106,19 @@ public class DimensionStructures {
                     new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker_bedroom", BlockFace.DOWN),
                     new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker_dine", BlockFace.DOWN),
                     new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker_farm", BlockFace.UP),
+            };
+
+            MultiStructureLoader loader = new MultiStructureLoader(bunker);
+            loader.loadAll(origin, leaveStructureBlocks);
+        }
+        else if (queried.equals(Structure.BUNKER2)) {
+            final StructureTrack[] bunker = {
+                    new StructureTrack(plugin, -6, -9, -14, -1, 1, 0, "badlandscaves:bunker2_tophouse", BlockFace.DOWN),
+                    new StructureTrack(plugin, -9, -33, -10, -2, 1, -6, "badlandscaves:bunker2_intertube", BlockFace.DOWN),
+                    new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker2_foyer", BlockFace.DOWN),
+                    new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker2_bedroom", BlockFace.DOWN),
+                    new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker2_dine", BlockFace.DOWN),
+                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker2_farm", BlockFace.UP),
             };
 
             MultiStructureLoader loader = new MultiStructureLoader(bunker);

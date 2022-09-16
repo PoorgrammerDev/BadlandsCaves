@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves;
 
 import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
+import me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics.CastleBossEntry;
 import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
@@ -35,6 +36,7 @@ import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.VoidMobDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
+import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.CastleBoss;
 import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadowsNMS;
 import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadows_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
@@ -73,6 +75,8 @@ import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -234,6 +238,8 @@ public final class BadlandsCaves extends JavaPlugin {
     private VoidMobDrops voidMobDrops;
     private ParanoiaMechanism paranoiaMechanism;
     private DimensionStructures dimensionStructures;
+    private CastleBossEntry castleBossEntry;
+    private CastleBoss castleBoss;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -439,6 +445,8 @@ public final class BadlandsCaves extends JavaPlugin {
         voidZombie = new VoidZombie(this);
         voidMobDrops = new VoidMobDrops(this, random);
         paranoiaMechanism = new ParanoiaMechanism(this, random);
+        castleBossEntry = new CastleBossEntry(this);
+        castleBoss = new CastleBoss(this, random);
     }
 
     //CONFIG
@@ -511,6 +519,11 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StartingDungeons dungeons = new StartingDungeons(this, random);
         dungeons.genSpawnDungeons();
+
+        //TODO: REMOVE THIS
+        WorldCreator wc = new WorldCreator("world_test");
+        wc.type(WorldType.FLAT);
+        wc.createWorld();
     }
 
     //EVENTS
@@ -658,6 +671,8 @@ public final class BadlandsCaves extends JavaPlugin {
                 voidZombie,
                 voidMobDrops,
                 paranoiaMechanism,
+                castleBossEntry,
+                castleBoss,
         };
 
         for (Listener event : events) {
