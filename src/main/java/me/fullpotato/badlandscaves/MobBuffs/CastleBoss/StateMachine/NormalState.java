@@ -13,6 +13,7 @@ public class NormalState extends CastleBossState {
     private CastleBossState[] hitTransition = {
         new ChainAttackState(plugin, manager, boss, random),
         new ExplosiveState(plugin, manager, boss, random),
+        new TravellingBladesState(plugin, manager, boss, random),
     };
 
     public NormalState(BadlandsCaves plugin, CastleBoss manager, Vindicator boss, Random random) {
@@ -29,7 +30,9 @@ public class NormalState extends CastleBossState {
 
     @Override
     public void Attack(Player player, double damage) {
-        if (random.nextInt(100) < 25) {
+        final int chance = isBuffed() ? 33 : 25;
+
+        if (random.nextInt(100) < chance) {
             manager.setState(boss, hitTransition[random.nextInt(hitTransition.length)]);
         } 
     }

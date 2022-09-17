@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootTables;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -33,6 +32,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import net.md_5.bungee.api.ChatColor;
 
 public class CastleBossEntry implements Listener {
@@ -81,11 +81,20 @@ public class CastleBossEntry implements Listener {
 
                         //Summon the boss
                         final Location spawnLoc = block.getLocation().add(0, 3, 38); //This is the offset from the lectern to the throne
-                        spawnBoss(world, spawnLoc);
+                        final Location[] treeLocations = {  // Offsets from lectern to the trees
+                            block.getLocation().add(15, 1, 33), 
+                            block.getLocation().add(-15, 1, 33),
+                            block.getLocation().add(15, 1, 13),
+                            block.getLocation().add(-15, 1, 13),
+                        };
+
+                        Vindicator boss = spawnBoss(world, spawnLoc, block.getLocation(), treeLocations);
+                        boss.setTarget(player);
 
                         //Mark fight as active
-                        final PersistentDataContainer lecternPDC = ((Lectern) block.getState()).getPersistentDataContainer();
-                        lecternPDC.set(this.activeKey, PersistentDataType.BYTE, (byte) 1);
+                        final Lectern blockState = (Lectern) block.getState();
+                        blockState.getPersistentDataContainer().set(this.activeKey, PersistentDataType.BYTE, (byte) 1);
+                        blockState.update();
                     }
 
 
@@ -98,7 +107,7 @@ public class CastleBossEntry implements Listener {
         }
     }
 
-    private void spawnBoss(World world, Location location) {
+    private Vindicator spawnBoss(World world, Location location, Location lecternLocation, Location[] treeLocations) {
         final Vindicator boss = (Vindicator) world.spawnEntity(location, EntityType.VINDICATOR);
 
         //Attributes, tags, loot
@@ -106,9 +115,9 @@ public class CastleBossEntry implements Listener {
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0f);
         boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(25.0f);
         boss.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).setBaseValue(12.5f);
-        boss.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5f);
+        boss.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.4f);
+        boss.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.75f);
         boss.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(999f);
-        boss.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999f);
         boss.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_castle_boss"), PersistentDataType.BYTE, (byte) 1);
         boss.setLootTable(Bukkit.getLootTable(LootTables.EMPTY.getKey()));
         boss.setRemoveWhenFarAway(false);
@@ -116,19 +125,23 @@ public class CastleBossEntry implements Listener {
         boss.setGlowing(true);
         boss.setHealth(boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         boss.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 32767, 0, true, false));
+        boss.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 32767, 2, true, false));
+
+        plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId() + ".saved_lectern_location", lecternLocation);
+
+        plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId() + ".saved_tree_location_0", treeLocations[0]);
+        plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId() + ".saved_tree_location_1", treeLocations[1]);
+        plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId() + ".saved_tree_location_2", treeLocations[2]);
+        plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId() + ".saved_tree_location_3", treeLocations[3]);
+        plugin.saveSystemConfig();
 
         //Weapon ---------------
-        final ItemStack weapon = new ItemStack(Material.NETHERITE_AXE);
-        final ItemMeta meta = weapon.getItemMeta();
-        if (meta != null) {
-            meta.setCustomModelData(172); // Model of Void Axe
-            meta.addEnchant(Enchantment.DURABILITY, 1, false);
-            weapon.setItemMeta(meta);
-        }
-                        
+        final ItemStack weapon = plugin.getCustomItemManager().getItem(CustomItem.VOIDMATTER_AXE);
+        
         boss.getEquipment().setItemInMainHand(weapon);
         boss.getEquipment().setItemInMainHandDropChance(-999);
         boss.getEquipment().setItemInOffHandDropChance(-999);
+        return boss;
     }
 
 

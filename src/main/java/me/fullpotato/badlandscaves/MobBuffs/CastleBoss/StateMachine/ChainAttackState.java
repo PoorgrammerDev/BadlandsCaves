@@ -2,7 +2,6 @@ package me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
@@ -39,18 +38,24 @@ public class ChainAttackState extends CastleBossState {
     @Override
     public void Attack(Player player, double damage) {
         if (this.beganAttack) return;
-
         this.beganAttack = true;
-        Bukkit.broadcastMessage("Performing Chain Attack");
+
+        final Location origin = boss.getLocation();
+        final int hits = isBuffed() ? 8 : 4;
+        final int delay = isBuffed() ? 3 : 5;
 
         int[] count = {0};
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (count[0] > 5) {
-                    manager.setState(boss, new NormalState(plugin, manager, boss, random));
-                    boss.getEquipment().setItemInOffHand(null);
+                if (count[0] > hits || boss.getLocation().distanceSquared(player.getLocation()) > 9) {
+                    //Teleport back to original location
+                    boss.teleport(origin);
+                    boss.getWorld().playSound(origin, "custom.supernatural.displace.warp", SoundCategory.HOSTILE, 0.3F, 1);
+                    boss.getWorld().spawnParticle(Particle.SPELL_WITCH, origin, 5, 0.1, 0.1, 0.1, 1);
 
+                    //Change to normal state
+                    manager.setState(boss, new NormalState(plugin, manager, boss, random));
                     this.cancel();
                     return;
                 }
@@ -69,7 +74,7 @@ public class ChainAttackState extends CastleBossState {
                 count[0]++;
             }
 
-        }.runTaskTimer(plugin, 0, 5);
+        }.runTaskTimer(plugin, 0, delay);
     }
     
 }

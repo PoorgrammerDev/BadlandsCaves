@@ -4,35 +4,41 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.SoundCategory;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine.CastleBossState;
 import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine.NormalState;
+import me.fullpotato.badlandscaves.Util.ParticleShapes;
 
 public class CastleBoss implements Listener {
     private final BadlandsCaves plugin;
+    private final ParticleShapes particleShapes;
     private final Random random;
 
-    private HashMap<UUID, CastleBossState> stateMap;
+    private final HashMap<UUID, CastleBossState> stateMap;
 
-    public CastleBoss(BadlandsCaves plugin, Random random) {
+    public CastleBoss(BadlandsCaves plugin, ParticleShapes particleShapes, Random random) {
         this.plugin = plugin;
+        this.particleShapes = particleShapes;
         this.random = random;
         this.stateMap = new HashMap<>();
     }
@@ -77,6 +83,125 @@ public class CastleBoss implements Listener {
         event.setCancelled(true);
     }
 
+    @EventHandler
+    public void HalfHealthBuff(EntityDamageEvent event) {
+        if (event.isCancelled()) return;
+
+        if (!(event.getEntity() instanceof Vindicator)) return;
+        final Vindicator boss = (Vindicator) event.getEntity();
+
+        //Check if vindicator is the boss
+        final NamespacedKey bossKey = new NamespacedKey(plugin, "is_castle_boss");
+        if (!boss.getPersistentDataContainer().has(bossKey, PersistentDataType.BYTE) ||
+            boss.getPersistentDataContainer().get(bossKey, PersistentDataType.BYTE) != (byte) 1) return;
+
+        //Trigger buff if HP is half
+        final double hpRatio = boss.getHealth() / boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+        if (hpRatio > 0.5) return;
+
+        //If already buffed, return
+        final NamespacedKey secondPhaseBuff = new NamespacedKey(plugin, "castle_boss_buffed");
+        if (boss.getPersistentDataContainer().has(secondPhaseBuff, PersistentDataType.BYTE) &&
+            boss.getPersistentDataContainer().get(secondPhaseBuff, PersistentDataType.BYTE) == (byte) 1) return;
+
+        //Stat buffs
+        boss.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.6f);
+        boss.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999f);
+        boss.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).setBaseValue(25.0f);
+
+        //Absorb trees and heal
+        final Location[] treeLocations = {
+            plugin.getSystemConfig().getLocation("castle_boss." + boss.getUniqueId() + ".saved_tree_location_0"),
+            plugin.getSystemConfig().getLocation("castle_boss." + boss.getUniqueId() + ".saved_tree_location_1"),
+            plugin.getSystemConfig().getLocation("castle_boss." + boss.getUniqueId() + ".saved_tree_location_2"),
+            plugin.getSystemConfig().getLocation("castle_boss." + boss.getUniqueId() + ".saved_tree_location_3"),
+        };
+
+        //Sound effects
+        boss.getWorld().playSound(boss.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 5, 0.75f);
+
+        for (Location treeLocation : treeLocations) {
+            AbsorbTree(treeLocation, boss);
+        }
+
+        //New particle effect when moving
+        final World world = boss.getWorld();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (boss == null || boss.isDead() || !boss.isValid()) {
+                    this.cancel();
+                    return;
+                }
+            
+                world.spawnParticle(Particle.REDSTONE, boss.getLocation().add(0, 1, 0), 10, 0.25f, 0.5f, 0.25f, 0, new Particle.DustOptions(Color.ORANGE, 1));
+                world.spawnParticle(Particle.FLAME, boss.getLocation().add(0, 1, 0), 10, 0.25f, 0.5f, 0.25f, 0);
+            }            
+        }.runTaskTimer(plugin, 0, 1);
+        
+        // Set buffed tag
+        boss.getPersistentDataContainer().set(secondPhaseBuff, PersistentDataType.BYTE, (byte) 1);
+    }
+
+    @EventHandler
+    public void Death(EntityDeathEvent event) {
+        if (!(event.getEntity() instanceof Vindicator)) return;
+
+        final Vindicator boss = (Vindicator) event.getEntity();
+
+        //Check if vindicator is the boss
+        final NamespacedKey bossKey = new NamespacedKey(plugin, "is_castle_boss");
+        if (!boss.getPersistentDataContainer().has(bossKey, PersistentDataType.BYTE) ||
+            boss.getPersistentDataContainer().get(bossKey, PersistentDataType.BYTE) != (byte) 1) return;
+
+        //Remove the lectern 
+        final Location lecternLoc = plugin.getSystemConfig().getLocation("castle_boss." + boss.getUniqueId() + ".saved_lectern_location");
+        lecternLoc.getBlock().setType(Material.AIR);
+
+        //Remove concrete wall
+        final Location corner = lecternLoc.add(-4, 0, 2); //offset from lectern to bottom corner of black concrete wall
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 8; y++) {
+                final Block block = corner.clone().add(x, y, 0).getBlock();
+                if (block.getType() == Material.BLACK_CONCRETE) {
+                    block.setType(Material.AIR); 
+                }
+            }
+        }
+
+        //Remove config entries
+        plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId(), null);
+
+    }
+
+    private void AbsorbTree(Location treeLocation, Vindicator boss) {
+        int[] y = {0};
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (y[0] > 12) {
+                    this.cancel();
+                    return;
+                }
+
+                for (int x = -5; x <= 5; x++) {
+                    for (int z = -5; z <= 5; z++) {
+                        final Block block = treeLocation.clone().add(x, y[0], z).getBlock();
+                        if (block.getType() == Material.NETHER_WART_BLOCK || block.getType() == Material.CRIMSON_STEM || block.getType() == Material.SHROOMLIGHT) {
+            //TODO: REENABLE THIS
+                            block.setType(Material.BASALT);
+                            boss.setHealth(Math.min(boss.getHealth() + 0.5f, boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+                            particleShapes.lineDelayed(null, Particle.FLAME, block.getLocation(), boss.getLocation(), 0, null, 2, 1);
+                        }
+                    }
+                }
+
+                y[0]++;
+            }
+        }.runTaskTimer(plugin, 0, 5);
+    }
+
     public CastleBossState getState(Vindicator boss) {
         if (this.stateMap.containsKey(boss.getUniqueId())) {
             return this.stateMap.get(boss.getUniqueId());
@@ -98,12 +223,3 @@ public class CastleBoss implements Listener {
     }
 
 }
-
-// enum CastleBossState {
-//     NORMAL,
-//     CHAIN_ATTACK_READY,
-//     CHAIN_ATTACK,
-//     EXPLOSIVE_ATTACK,
-//     TRAVELLING_BLADES,
-//     HEALING,
-// }
