@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.Lectern;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.event.EventHandler;
@@ -154,8 +155,14 @@ public class CastleBoss implements Listener {
         if (!boss.getPersistentDataContainer().has(bossKey, PersistentDataType.BYTE) ||
             boss.getPersistentDataContainer().get(bossKey, PersistentDataType.BYTE) != (byte) 1) return;
 
-        //Remove the lectern 
+        //Remove lectern config entry and then the lectern
         final Location lecternLoc = plugin.getSystemConfig().getLocation("castle_boss." + boss.getUniqueId() + ".saved_lectern_location");
+        if (lecternLoc.getBlock().getType() == Material.LECTERN) {
+            final Lectern lectern = (Lectern) lecternLoc.getBlock().getState();
+            final String uuid = lectern.getPersistentDataContainer().get(new NamespacedKey(plugin, "location_uuid"), PersistentDataType.STRING);
+            plugin.getSystemConfig().set("castle_lectern_locations." + uuid, null);
+            plugin.saveSystemConfig();
+        }
         lecternLoc.getBlock().setType(Material.AIR);
 
         //Remove concrete wall

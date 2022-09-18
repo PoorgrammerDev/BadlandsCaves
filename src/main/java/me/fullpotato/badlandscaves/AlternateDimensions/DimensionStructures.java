@@ -14,6 +14,8 @@ import org.bukkit.World;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Lectern;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
@@ -32,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 
 public class DimensionStructures {
@@ -327,6 +330,7 @@ public class DimensionStructures {
                     new Vector(20, 7, -18),
                 };
 
+                //Spawn melee enemies ==============
                 final World world = origin.getWorld();
                 for (Vector meleeOffset : meleeEnemies) {
                     final Location spawn = origin.clone().add(meleeOffset);
@@ -349,6 +353,7 @@ public class DimensionStructures {
                     guard.setCustomNameVisible(false);
                 }
 
+                //Spawn ranged enemies =================
                 for (Vector rangedOffset : rangedEnemies) {
                     final Location spawn = origin.clone().add(rangedOffset);
 
@@ -387,6 +392,29 @@ public class DimensionStructures {
                     guard.setRemoveWhenFarAway(false);
                     guard.setCustomName("Castle Guard");
                     guard.setCustomNameVisible(false);
+                }
+
+                //Log location of lectern
+                ConfigurationSection section = plugin.getSystemConfig().getConfigurationSection("castle_lectern_locations");
+                if (section == null) {
+                    plugin.getSystemConfig().createSection("castle_lectern_locations");
+                    plugin.saveSystemConfig();
+
+                    section = plugin.getSystemConfig().getConfigurationSection("castle_lectern_locations");
+                }
+
+                final UUID uuid = UUID.randomUUID();
+                final Location lecternLoc = origin.clone().add(0, 0, 17);
+                section.set(uuid.toString(), lecternLoc);
+                plugin.getSystemConfig().set("castle_lectern_locations", section);
+                plugin.saveSystemConfig();
+
+                //Update lectern with UUID
+                Bukkit.broadcastMessage(lecternLoc.toString());
+                if (lecternLoc.getBlock().getType() == Material.LECTERN) {
+                    final Lectern lectern = (Lectern) lecternLoc.getBlock().getState(); 
+                    lectern.getPersistentDataContainer().set(new NamespacedKey(plugin, "location_uuid"), PersistentDataType.STRING, uuid.toString());
+                    lectern.update();
                 }
 
                 break;

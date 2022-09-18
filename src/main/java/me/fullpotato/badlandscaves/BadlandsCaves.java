@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves;
 import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
 import me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics.CastleBossEntry;
+import me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics.CastlePreventModify;
 import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
@@ -240,6 +241,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private DimensionStructures dimensionStructures;
     private CastleBossEntry castleBossEntry;
     private CastleBoss castleBoss;
+    private CastlePreventModify castlePreventModify;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -447,6 +449,7 @@ public final class BadlandsCaves extends JavaPlugin {
         paranoiaMechanism = new ParanoiaMechanism(this, random);
         castleBossEntry = new CastleBossEntry(this);
         castleBoss = new CastleBoss(this, particleShapes, random);
+        castlePreventModify = new CastlePreventModify(this);
     }
 
     //CONFIG
@@ -673,6 +676,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 paranoiaMechanism,
                 castleBossEntry,
                 castleBoss,
+                castlePreventModify,
         };
 
         for (Listener event : events) {
