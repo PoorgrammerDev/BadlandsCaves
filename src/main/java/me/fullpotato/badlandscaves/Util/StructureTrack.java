@@ -105,6 +105,7 @@ public class StructureTrack {
             state.setRelativePosition(new BlockVector(settingXOffset, settingYOffset, settingZOffset));
             state.setStructureName(structureName);
             state.setIntegrity((float) integrity);
+            state.setIgnoreEntities(false);
             state.update();
 
             Block relative = block.getRelative(redstoneBlockRelative);

@@ -2,6 +2,8 @@ package me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics;
 
 import java.util.Collection;
 
+import javax.print.DocFlavor.BYTE_ARRAY;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,7 +15,9 @@ import org.bukkit.block.Lectern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Evoker;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.entity.Witch;
@@ -60,19 +64,22 @@ public class CastleBossEntry implements Listener {
                     //If fight is not active yet =================
                     if (!checkBlock(block, this.activeKey)) {
                         //Check if all mobs on the outside have been destroyed =============
-                        final Collection<Entity> guards = world.getNearbyEntities(block.getLocation(), 20, 20, 20, (Entity entity) -> {
-                            return (entity instanceof Vindicator || entity instanceof Witch);
+                        final NamespacedKey castleGuardKey = new NamespacedKey(plugin, "castle_guard");
+                        final Collection<Entity> guards = world.getNearbyEntities(block.getLocation(), 50, 50, 50, (Entity entity) -> {
+                            if (entity instanceof Vindicator || entity instanceof Witch || entity instanceof Pillager || entity instanceof Evoker) {
+                                return (entity.getPersistentDataContainer().has(castleGuardKey, PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(castleGuardKey, PersistentDataType.BYTE) == (byte) 1);
+                            }
+                            return false;
                         });
                     
                         if (guards.size() > 0) {
                             player.sendMessage(ChatColor.RED + "Defeat the remaining guards.");
 
-                            if (guards.size() < 5) {
-                                for (Entity guard : guards) {
-                                    if (guard instanceof LivingEntity) {
-                                        final LivingEntity livingGuard = (LivingEntity) guard;
-                                        livingGuard.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 30, 0));
-                                    }
+                            //Mark remaining guards glowing
+                            for (Entity guard : guards) {
+                                if (guard instanceof LivingEntity) {
+                                    final LivingEntity livingGuard = (LivingEntity) guard;
+                                    livingGuard.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 30, 0));
                                 }
                             }
 
@@ -113,6 +120,7 @@ public class CastleBossEntry implements Listener {
         //Attributes, tags, loot
         boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(80.0f);
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0f);
+        boss.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(20.0f);
         boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(25.0f);
         boss.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).setBaseValue(12.5f);
         boss.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.4f);

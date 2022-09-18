@@ -159,12 +159,26 @@ public class CastleBoss implements Listener {
         lecternLoc.getBlock().setType(Material.AIR);
 
         //Remove concrete wall
-        final Location corner = lecternLoc.add(-4, 0, 2); //offset from lectern to bottom corner of black concrete wall
-        for (int x = 0; x < 9; x++) {
-            for (int y = 0; y < 8; y++) {
-                final Block block = corner.clone().add(x, y, 0).getBlock();
-                if (block.getType() == Material.BLACK_CONCRETE) {
-                    block.setType(Material.AIR); 
+        Location corner = lecternLoc.clone().add(-4, 0, 2); //offset from lectern to bottom corner of black concrete wall
+        RemoveWall(corner, 9, 8);
+
+        //Remove side concrete walls
+        corner = lecternLoc.clone().add(27, 0, 13);
+        RemoveWall(corner, 3, 10);
+
+        corner = lecternLoc.clone().add(-29, 0, 13);
+        RemoveWall(corner, 3, 10);
+
+        //Remove all barriers from stage area
+        //25,13,41 : -25,0,5
+        corner = lecternLoc.clone().add(-25, 0, 5);
+        for (int x = 0; x < 51; x++) {
+            for (int y = 0; y < 14; y++) {
+                for (int z = 0; z < 37; z++) {
+                    final Block block = corner.clone().add(x, y, z).getBlock();
+                    if (block.getType() == Material.BARRIER) {
+                        block.setType(Material.AIR);
+                    }
                 }
             }
         }
@@ -200,6 +214,17 @@ public class CastleBoss implements Listener {
                 y[0]++;
             }
         }.runTaskTimer(plugin, 0, 5);
+    }
+
+    private void RemoveWall(Location negativeCorner, int xLength, int yLength) {
+        for (int x = 0; x < xLength; x++) {
+            for (int y = 0; y < yLength; y++) {
+                final Block block = negativeCorner.clone().add(x, y, 0).getBlock();
+                if (block.getType() == Material.BLACK_CONCRETE) {
+                    block.setType(Material.AIR); 
+                }
+            }
+        }
     }
 
     public CastleBossState getState(Vindicator boss) {

@@ -5,11 +5,28 @@ import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Evoker;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Pillager;
+import org.bukkit.entity.Vindicator;
+import org.bukkit.entity.Witch;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -35,6 +52,7 @@ public class DimensionStructures {
         BUNKER,
         BUNKER2,
         BUNKER_AB,
+        CASTLE,
     }
     
     private final BadlandsCaves plugin;
@@ -96,72 +114,286 @@ public class DimensionStructures {
 
     public void loadStructure(Structure queried, Location origin, boolean leaveStructureBlocks) {
         //center ground level world origin ~(0, 60, 0)
+        StructureTrack[] multiStructure = null;
+        StructureTrack structure = null;
 
-        //multistructures
-        if (queried.equals(Structure.BUNKER)) {
-            final StructureTrack[] bunker = {
-                    new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "badlandscaves:bunker_tophouse", BlockFace.DOWN),
-                    new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "badlandscaves:bunker_intertube", BlockFace.DOWN),
-                    new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker_foyer", BlockFace.DOWN),
-                    new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker_bedroom", BlockFace.DOWN),
-                    new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker_dine", BlockFace.DOWN),
-                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker_farm", BlockFace.UP),
-            };
+        switch (queried) {
+            case BUNKER:
+                multiStructure = new StructureTrack[]{
+                        new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "badlandscaves:bunker_tophouse", BlockFace.DOWN),
+                        new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "badlandscaves:bunker_intertube", BlockFace.DOWN),
+                        new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker_foyer", BlockFace.DOWN),
+                        new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker_bedroom", BlockFace.DOWN),
+                        new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker_dine", BlockFace.DOWN),
+                        new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker_farm", BlockFace.UP),
+                };
+                break;
 
-            MultiStructureLoader loader = new MultiStructureLoader(bunker);
+            case BUNKER2:
+                multiStructure = new StructureTrack[]{
+                        new StructureTrack(plugin, -6, -9, -14, -1, 1, 0, "badlandscaves:bunker2_tophouse", BlockFace.DOWN),
+                        new StructureTrack(plugin, -9, -33, -10, -2, 1, -6, "badlandscaves:bunker2_intertube", BlockFace.DOWN),
+                        new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker2_foyer", BlockFace.DOWN),
+                        new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker2_bedroom", BlockFace.DOWN),
+                        new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker2_dine", BlockFace.DOWN),
+                        new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker2_farm", BlockFace.UP),
+                };
+                break;
+
+            case BUNKER_AB:
+                multiStructure = new StructureTrack[]{
+                        new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "badlandscaves:bunker_tophouse_ab", BlockFace.DOWN),
+                        new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "badlandscaves:bunker_intertube_ab", BlockFace.DOWN),
+                        new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker_foyer_ab", BlockFace.DOWN),
+                        new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker_bedroom_ab", BlockFace.DOWN),
+                        new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker_dine_ab", BlockFace.DOWN),
+                        new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker_farm_ab", BlockFace.UP),
+                };
+                break;
+
+            case CASTLE:
+                multiStructure = new StructureTrack[]{
+                    new StructureTrack(plugin, -39, -3, -24, 0, 1, 0, "badlandscaves:castle_nw_bottom", BlockFace.DOWN),
+                    new StructureTrack(plugin, 9, -3, -24, 0, 1, 0, "badlandscaves:castle_ne_bottom", BlockFace.DOWN),
+                    new StructureTrack(plugin, -39, -3, 24, 0, 1, 0, "badlandscaves:castle_w_bottom", BlockFace.DOWN),
+                    new StructureTrack(plugin, 9, -3, 24, 0, 1, 0, "badlandscaves:castle_e_bottom", BlockFace.DOWN),
+
+                    new StructureTrack(plugin, -39, -3, 72, 0, 1, 0, "badlandscaves:castle_sw", BlockFace.DOWN),
+                    new StructureTrack(plugin, 9, -3, 72, 0, 1, 0, "badlandscaves:castle_se", BlockFace.DOWN),
+
+                    new StructureTrack(plugin, -39, 56, -24, 0, -10, 0, "badlandscaves:castle_nw_top", BlockFace.UP),
+                    new StructureTrack(plugin, 9, 56, -24, 0, -10, 0, "badlandscaves:castle_ne_top", BlockFace.UP),
+                    new StructureTrack(plugin, -39, 56, 24, 0, -10, 0, "badlandscaves:castle_w_top", BlockFace.UP),
+                    new StructureTrack(plugin, 9, 56, 24, 0, -10, 0, "badlandscaves:castle_e_top", BlockFace.UP),
+                };
+                break;
+
+            case CURSED_HOUSE:
+                structure = new StructureTrack(plugin, 10, -1, -11, -19, 0, 1, "badlandscaves:" + Structure.CURSED_HOUSE.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case HOUSE:
+                structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case HOUSE_ABANDONED:
+                structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_ABANDONED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case HOUSE_DESTROYED:
+                structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_DESTROYED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case JAIL:
+                structure = new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case JAIL_ABANDONED:
+                structure = new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL_ABANDONED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case LAB:
+                structure = new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case LAB_ABANDONED:
+                structure = new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_ABANDONED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case LAB_DESTROYED:
+                structure = new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_DESTROYED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case MANABAR:
+                structure = new StructureTrack(plugin, 11, 0, 10, -21, 0, -19, "badlandscaves:" + Structure.MANABAR.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case SHRINE:
+                structure = new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.SHRINE.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case SHRINE_DESTROYED:
+                structure = new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.SHRINE_DESTROYED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case TENT:
+                structure = new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.TENT.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            default:
+                return;
+        }
+
+        if (multiStructure != null) {
+            MultiStructureLoader loader = new MultiStructureLoader(multiStructure);
             loader.loadAll(origin, leaveStructureBlocks);
         }
-        else if (queried.equals(Structure.BUNKER2)) {
-            final StructureTrack[] bunker = {
-                    new StructureTrack(plugin, -6, -9, -14, -1, 1, 0, "badlandscaves:bunker2_tophouse", BlockFace.DOWN),
-                    new StructureTrack(plugin, -9, -33, -10, -2, 1, -6, "badlandscaves:bunker2_intertube", BlockFace.DOWN),
-                    new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker2_foyer", BlockFace.DOWN),
-                    new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker2_bedroom", BlockFace.DOWN),
-                    new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker2_dine", BlockFace.DOWN),
-                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker2_farm", BlockFace.UP),
-            };
+        else if (structure != null) {
+            structure.load(origin, leaveStructureBlocks);
+        }         
 
-            MultiStructureLoader loader = new MultiStructureLoader(bunker);
-            loader.loadAll(origin, leaveStructureBlocks);
-        }
-        else if (queried.equals(Structure.BUNKER_AB)) {
-            final StructureTrack[] bunker_ab = {
-                    new StructureTrack(plugin, -6, -9, -14, 0, 1, 0, "badlandscaves:bunker_tophouse_ab", BlockFace.DOWN),
-                    new StructureTrack(plugin, -9, -33, -10, 0, 1, 0, "badlandscaves:bunker_intertube_ab", BlockFace.DOWN),
-                    new StructureTrack(plugin, -13, -33, 5, 0, 1, 0, "badlandscaves:bunker_foyer_ab", BlockFace.DOWN),
-                    new StructureTrack(plugin, -42, -30, 9, 0, 1, 0, "badlandscaves:bunker_bedroom_ab", BlockFace.DOWN),
-                    new StructureTrack(plugin, 8, -29, 10, 0, 1, 0, "badlandscaves:bunker_dine_ab", BlockFace.DOWN),
-                    new StructureTrack(plugin, 5, -28, 27, -15, 1, 0, "badlandscaves:bunker_farm_ab", BlockFace.UP),
-            };
+        //Special extra instructions
+        ExtraInstructions(queried, origin);
+    }
 
-            MultiStructureLoader loader = new MultiStructureLoader(bunker_ab);
-            loader.loadAll(origin, leaveStructureBlocks);
-        }
-        //single structures
-        else {
-            final StructureTrack[] structures = {
-                    new StructureTrack(plugin, 11, 0, 10, -21, 0, -19, "badlandscaves:" + Structure.MANABAR.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_ABANDONED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_DESTROYED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL_ABANDONED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.SHRINE.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.SHRINE_DESTROYED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 10, -1, -11, -19, 0, 1, "badlandscaves:" + Structure.CURSED_HOUSE.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.TENT.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_ABANDONED.name().toLowerCase(), BlockFace.UP),
-                    new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_DESTROYED.name().toLowerCase(), BlockFace.UP),
+    private void ExtraInstructions(Structure structure, Location origin) {
+        switch (structure) {
+            case CASTLE: {
+                //Enemy spawn offsets
+                final Vector[] meleeEnemies = {
+                    // Southeast tent
+                    new Vector(8, 0, 8),
+                    new Vector(13, 0, 10),
+                    new Vector(8, 0, 12),
+                    
+                    // East tent
+                    new Vector(8, 0, 2),
+                    new Vector(13, 0, 0),
+                    new Vector(8, 0, -2),
 
-            };
+                    // Northeast tent
+                    new Vector(8, 0, -8),
+                    new Vector(13, 0, -10),
+                    new Vector(8, 0, -12),
 
-            for (StructureTrack structure : structures) {
-                if (queried.name().equalsIgnoreCase(structure.getStructureName().split(":")[1])) {
-                    structure.load(origin, leaveStructureBlocks);
-                    return;
+                    // Southwest tower
+                    new Vector(28, 0, -19),
+                    new Vector(27, 5, -19),
+                    new Vector(27, 9, -19),
+
+                    //East tunnel
+                    new Vector(28, 0, 0),
+                    new Vector(28, 0, 5),
+                    new Vector(28, 0, -5),
+                    new Vector(28, 0, -10),
+
+                    //East tower
+                    new Vector(28, 7, 19),
+                    new Vector(28, 0, 18),
+
+                    // Southwest tent
+                    new Vector(-8, 0, 8),
+                    new Vector(-13, 0, 10),
+                    new Vector(-8, 0, 12),
+                    
+                    // West tent
+                    new Vector(-8, 0, 2),
+                    new Vector(-13, 0, 0),
+                    new Vector(-8, 0, -2),
+
+                    // Northwest tent
+                    new Vector(-8, 0, -8),
+                    new Vector(-13, 0, -10),
+                    new Vector(-8, 0, -12),
+
+                    // Northwest tower
+                    new Vector(-28, 0, -19),
+                    new Vector(-27, 5, -19),
+                    new Vector(-27, 9, -19),
+
+                    //West tunnel
+                    new Vector(-28, 0, 0),
+                    new Vector(-28, 0, 5),
+                    new Vector(-28, 0, -5),
+                    new Vector(-28, 0, -10),
+
+                    //West tower
+                    new Vector(-28, 7, 19),
+                    new Vector(-28, 0, 18),
+                };
+                
+                final Vector[] rangedEnemies = {
+                    //East walkway
+                    new Vector(28, 7, 0),
+                    new Vector(28, 7, 5),
+                    new Vector(28, 7, -5),
+                    new Vector(28, 7, -10),
+
+                    //West walkway
+                    new Vector(-28, 7, 0),
+                    new Vector(-28, 7, 5),
+                    new Vector(-28, 7, -5),
+                    new Vector(-28, 7, -10),
+
+                    //North walkway
+                    new Vector(-20, 7, -18),
+                    new Vector(-15, 7, -18),
+                    new Vector(-10, 7, -18),
+                    new Vector(-5, 7, -18),
+                    new Vector(0, 7, -18),
+                    new Vector(5, 7, -18),
+                    new Vector(10, 7, -18),
+                    new Vector(15, 7, -18),
+                    new Vector(20, 7, -18),
+                };
+
+                final World world = origin.getWorld();
+                for (Vector meleeOffset : meleeEnemies) {
+                    final Location spawn = origin.clone().add(meleeOffset);
+
+                    LivingEntity guard;
+                    if (random.nextInt(100) < 25) {
+                        guard = (Evoker) world.spawnEntity(spawn, EntityType.EVOKER);
+                    }
+                    else {
+                        guard = (Vindicator) world.spawnEntity(spawn, EntityType.VINDICATOR);
+                        guard.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_AXE));
+                    }
+
+                    guard.getPersistentDataContainer().set(new NamespacedKey(plugin, "castle_guard"), PersistentDataType.BYTE, (byte) 1);
+                    guard.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20.0f);
+                    guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(8.0f);
+                    guard.setPersistent(true);
+                    guard.setRemoveWhenFarAway(false);
+                    guard.setCustomName("Castle Guard");
+                    guard.setCustomNameVisible(false);
                 }
+
+                for (Vector rangedOffset : rangedEnemies) {
+                    final Location spawn = origin.clone().add(rangedOffset);
+
+                    LivingEntity guard;
+                    if (random.nextInt(100) < 25) {
+                        guard = (Witch) world.spawnEntity(spawn, EntityType.WITCH);
+                    }
+                    else {
+                        guard = (Pillager) world.spawnEntity(spawn, EntityType.PILLAGER);
+
+                        final ItemStack crossbow = new ItemStack(Material.CROSSBOW);
+                        final ItemMeta meta = crossbow.getItemMeta();
+                        if (meta != null) {
+                            meta.addEnchant(Enchantment.QUICK_CHARGE, 3, false);
+                            meta.addEnchant(Enchantment.MULTISHOT, 1, false);
+                        }
+
+                        guard.getEquipment().setItemInMainHand(crossbow);
+
+                        final ItemStack rocket = new ItemStack(Material.FIREWORK_ROCKET, 64);
+                        final FireworkMeta rocketMeta = (FireworkMeta) rocket.getItemMeta();
+
+                        rocketMeta.addEffect(FireworkEffect.builder().with(Type.BALL).withColor(Color.YELLOW).build());
+                        rocketMeta.addEffect(FireworkEffect.builder().with(Type.BALL_LARGE).withColor(Color.ORANGE).build());
+                        rocketMeta.addEffect(FireworkEffect.builder().with(Type.STAR).withColor(Color.RED).build());
+                        rocket.setItemMeta(rocketMeta);
+
+                        guard.getEquipment().setItemInOffHand(rocket);
+                        guard.getEquipment().setItemInOffHandDropChance(-999);
+                    }
+
+                    guard.getPersistentDataContainer().set(new NamespacedKey(plugin, "castle_guard"), PersistentDataType.BYTE, (byte) 1);
+                    guard.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20.0f);
+                    guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(8.0f);
+                    guard.setPersistent(true);
+                    guard.setRemoveWhenFarAway(false);
+                    guard.setCustomName("Castle Guard");
+                    guard.setCustomNameVisible(false);
+                }
+
+                break;
             }
+
+            default:
+                return;
         }
     }
 }
