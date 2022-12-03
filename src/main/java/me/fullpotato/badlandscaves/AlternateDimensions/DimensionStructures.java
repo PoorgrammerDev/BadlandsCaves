@@ -330,6 +330,10 @@ public class DimensionStructures {
                     new Vector(20, 7, -18),
                 };
 
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+                final ItemStack netheriteAxe = new ItemStack(Material.NETHERITE_AXE);
+                final ItemStack diamondAxe = new ItemStack(Material.DIAMOND_AXE);
+
                 //Spawn melee enemies ==============
                 final World world = origin.getWorld();
                 for (Vector meleeOffset : meleeEnemies) {
@@ -341,12 +345,12 @@ public class DimensionStructures {
                     }
                     else {
                         guard = (Vindicator) world.spawnEntity(spawn, EntityType.VINDICATOR);
-                        guard.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_AXE));
+                        guard.getEquipment().setItemInMainHand((random.nextInt(100) < (0.25 * chaos) + 50) ? netheriteAxe : diamondAxe);
                     }
 
                     guard.getPersistentDataContainer().set(new NamespacedKey(plugin, "castle_guard"), PersistentDataType.BYTE, (byte) 1);
-                    guard.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20.0f);
-                    guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(8.0f);
+                    guard.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(10.0f + (chaos / 20.0f));
+                    guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(4.0f + (chaos / 45.0f));
                     guard.setPersistent(true);
                     guard.setRemoveWhenFarAway(false);
                     guard.setCustomName("Castle Guard");
@@ -366,14 +370,14 @@ public class DimensionStructures {
 
                         final ItemStack crossbow = new ItemStack(Material.CROSSBOW);
                         final ItemMeta meta = crossbow.getItemMeta();
-                        if (meta != null) {
+                        if ((random.nextInt(100) < (0.25 * chaos) + 50) && meta != null) {
                             meta.addEnchant(Enchantment.QUICK_CHARGE, 3, false);
-                            meta.addEnchant(Enchantment.MULTISHOT, 1, false);
+                            if (random.nextInt(100) < (0.25 * chaos) + 50) meta.addEnchant(Enchantment.MULTISHOT, 1, false);
                         }
 
                         guard.getEquipment().setItemInMainHand(crossbow);
 
-                        final ItemStack rocket = new ItemStack(Material.FIREWORK_ROCKET, 64);
+                        final ItemStack rocket = new ItemStack(Material.FIREWORK_ROCKET, (int) ((0.48 * chaos) + 16));
                         final FireworkMeta rocketMeta = (FireworkMeta) rocket.getItemMeta();
 
                         rocketMeta.addEffect(FireworkEffect.builder().with(Type.BALL).withColor(Color.YELLOW).build());
@@ -386,8 +390,8 @@ public class DimensionStructures {
                     }
 
                     guard.getPersistentDataContainer().set(new NamespacedKey(plugin, "castle_guard"), PersistentDataType.BYTE, (byte) 1);
-                    guard.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20.0f);
-                    guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(8.0f);
+                    guard.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(10.0f + (chaos / 20.0f));
+                    guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(4.0f + (chaos / 45.0f));
                     guard.setPersistent(true);
                     guard.setRemoveWhenFarAway(false);
                     guard.setCustomName("Castle Guard");

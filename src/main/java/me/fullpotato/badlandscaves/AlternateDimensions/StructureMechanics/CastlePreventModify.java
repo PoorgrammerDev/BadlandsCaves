@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
@@ -55,6 +56,14 @@ public class CastlePreventModify implements Listener{
         if (event.isCancelled()) return;
 
         if (!isInsideCastle(event.getBlock().getLocation())) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void PreventMobSpawn(CreatureSpawnEvent event) {
+        if (event.isCancelled()) return;
+
+        if (!isInsideCastle(event.getLocation())) return;
         event.setCancelled(true);
     }
 
