@@ -242,6 +242,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private CastleBossEntry castleBossEntry;
     private CastleBoss castleBoss;
     private CastlePreventModify castlePreventModify;
+    private AscendedOrb ascendedOrb;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -450,6 +451,7 @@ public final class BadlandsCaves extends JavaPlugin {
         castleBossEntry = new CastleBossEntry(this);
         castleBoss = new CastleBoss(this, particleShapes, random);
         castlePreventModify = new CastlePreventModify(this);
+        ascendedOrb = new AscendedOrb(this, artifactManager);
     }
 
     //CONFIG
@@ -677,6 +679,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 castleBossEntry,
                 castleBoss,
                 castlePreventModify,
+                ascendedOrb,
         };
 
         for (Listener event : events) {
@@ -858,6 +861,8 @@ public final class BadlandsCaves extends JavaPlugin {
 
         NebuliteInstallerSmelt nebuliteInstallerSmelt = new NebuliteInstallerSmelt(this);
         nebuliteInstallerSmelt.deconstructRecipe();
+
+        ascendedOrb.ascendedOrbCrafting();
     }
 
     public void loadWorldNames() {

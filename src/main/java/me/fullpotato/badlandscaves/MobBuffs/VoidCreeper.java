@@ -9,6 +9,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
+import org.bukkit.block.Lectern;
 import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,9 +43,10 @@ public class VoidCreeper implements Listener {
 
         //Spreads the void via explosions
         for (Block block : blocks) {
-            if (block.getType().isSolid() && !(block.getState() instanceof Container)) {
+            if (block.getType().isSolid() && !(block.getState() instanceof Container) && !(block.getState() instanceof Lectern)) {
                 block.setType(Material.BLACKSTONE);
             }
+
             block.setBiome(Biome.GRAVELLY_MOUNTAINS);
 
             if (block.getRelative(BlockFace.UP).getType().isAir()) {

@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.MobBuffs.CastleBoss;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -22,13 +24,18 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine.CastleBossState;
 import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine.NormalState;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
+import net.md_5.bungee.api.ChatColor;
 
 public class CastleBoss implements Listener {
     private final BadlandsCaves plugin;
@@ -189,6 +196,23 @@ public class CastleBoss implements Listener {
                 }
             }
         }
+
+        //Drop an Orb of Ascension
+        final ItemStack orb = plugin.getCustomItemManager().getItem(CustomItem.ASCENDED_ORB);
+        final ItemMeta meta = orb.getItemMeta();
+        if (meta != null) {
+            List<String> lore = meta.getLore();        
+            if (lore == null) lore = new ArrayList<String>();
+
+            lore.add(ChatColor.GRAY + "Traveling Blades");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "orb_artifact"), PersistentDataType.STRING, Artifact.TRAVELING_BLADES.name());
+            orb.setItemMeta(meta);
+        }
+        event.getDrops().clear();
+        event.getDrops().add(orb);
+
 
         //Remove config entries
         plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId(), null);

@@ -2,8 +2,6 @@ package me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics;
 
 import java.util.Collection;
 
-import javax.print.DocFlavor.BYTE_ARRAY;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,7 +10,6 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Lectern;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
@@ -86,6 +83,11 @@ public class CastleBossEntry implements Listener {
                             return;
                         }
 
+                        //Mark fight as active
+                        final Lectern blockState = (Lectern) block.getState();
+                        blockState.getPersistentDataContainer().set(this.activeKey, PersistentDataType.BYTE, (byte) 1);
+                        blockState.update();
+
                         //Summon the boss
                         final Location spawnLoc = block.getLocation().add(0, 3, 38); //This is the offset from the lectern to the throne
                         final Location[] treeLocations = {  // Offsets from lectern to the trees
@@ -97,13 +99,7 @@ public class CastleBossEntry implements Listener {
 
                         Vindicator boss = spawnBoss(world, spawnLoc, block.getLocation(), treeLocations);
                         boss.setTarget(player);
-
-                        //Mark fight as active
-                        final Lectern blockState = (Lectern) block.getState();
-                        blockState.getPersistentDataContainer().set(this.activeKey, PersistentDataType.BYTE, (byte) 1);
-                        blockState.update();
                     }
-
 
                     //Teleport the player into the arena
                     final Location arenaEntrance = block.getLocation().add(0, 0, 4);
@@ -117,11 +113,13 @@ public class CastleBossEntry implements Listener {
     private Vindicator spawnBoss(World world, Location location, Location lecternLocation, Location[] treeLocations) {
         final Vindicator boss = (Vindicator) world.spawnEntity(location, EntityType.VINDICATOR);
 
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+
         //Attributes, tags, loot
-        boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(80.0f);
+        boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0f + (0.4 * chaos));
         boss.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(25.0f);
         boss.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(20.0f);
-        boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(25.0f);
+        boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(12.5f + (0.25 * chaos));
         boss.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).setBaseValue(12.5f);
         boss.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.4f);
         boss.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.75f);

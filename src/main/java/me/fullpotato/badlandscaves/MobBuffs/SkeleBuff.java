@@ -1,9 +1,12 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
 import me.fullpotato.badlandscaves.Util.NameTagHide;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
@@ -24,6 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class SkeleBuff implements Listener {
@@ -291,5 +295,33 @@ public class SkeleBuff implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void skeletonDrop(EntityDeathEvent event) {
+        if (!(event.getEntity() instanceof Skeleton)) return;
+        final Skeleton skeleton = (Skeleton) event.getEntity();
+
+        //Check if ascended skeleton (Summoner)
+        if (!skeleton.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) ||
+            skeleton.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) return;
+
+        
+        //Drop an Orb of Ascension
+        final ItemStack orb = plugin.getCustomItemManager().getItem(CustomItem.ASCENDED_ORB);
+        final ItemMeta meta = orb.getItemMeta();
+        if (meta != null) {
+            List<String> lore = meta.getLore();        
+            if (lore == null) lore = new ArrayList<String>();
+
+            lore.add(ChatColor.of("#1f2e28") + "Summoner’s Rift");
+            meta.setLore(lore);
+
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "orb_artifact"), PersistentDataType.STRING, Artifact.SUMMONERS_RIFT.name());
+            orb.setItemMeta(meta);
+        }
+        event.getDrops().add(orb);
+        
+
     }
 }
