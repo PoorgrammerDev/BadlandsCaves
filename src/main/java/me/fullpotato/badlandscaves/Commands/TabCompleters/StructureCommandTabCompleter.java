@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures.Structure;
+import me.fullpotato.badlandscaves.AlternateDimensions.Structure;
 
 public class StructureCommandTabCompleter implements TabCompleter {
 

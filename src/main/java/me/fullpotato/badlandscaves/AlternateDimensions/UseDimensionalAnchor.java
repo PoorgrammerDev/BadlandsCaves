@@ -491,7 +491,7 @@ public class UseDimensionalAnchor implements Listener {
         final boolean generated = plugin.getSystemConfig().getBoolean("alternate_dimensions." + world.getName() + ".structures_generated");
         if (!generated) {
             final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-            structures.generateStructures(world, null, (int) (world.getWorldBorder().getSize() / 2), random.nextInt((chaos / 5) + 20) + 5);
+            structures.generateStructures(world, (int) (world.getWorldBorder().getSize() / 2), random.nextInt((chaos / 5) + 20) + 5);
 
             new BukkitRunnable() {
                 @Override

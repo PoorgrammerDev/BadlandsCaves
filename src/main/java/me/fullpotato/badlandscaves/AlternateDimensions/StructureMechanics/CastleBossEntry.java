@@ -97,7 +97,10 @@ public class CastleBossEntry implements Listener {
                             block.getLocation().add(-15, 1, 13),
                         };
 
-                        Vindicator boss = spawnBoss(world, spawnLoc, block.getLocation(), treeLocations);
+                        boolean voidVariant = blockState.getPersistentDataContainer().has(new NamespacedKey(plugin, "is_void"), PersistentDataType.BYTE)
+                            && blockState.getPersistentDataContainer().get(new NamespacedKey(plugin, "is_void"), PersistentDataType.BYTE) == (byte) 1;
+
+                        Vindicator boss = spawnBoss(world, spawnLoc, block.getLocation(), treeLocations, voidVariant);
                         boss.setTarget(player);
                     }
 
@@ -110,7 +113,7 @@ public class CastleBossEntry implements Listener {
         }
     }
 
-    private Vindicator spawnBoss(World world, Location location, Location lecternLocation, Location[] treeLocations) {
+    private Vindicator spawnBoss(World world, Location location, Location lecternLocation, Location[] treeLocations, boolean voidVariant) {
         final Vindicator boss = (Vindicator) world.spawnEntity(location, EntityType.VINDICATOR);
 
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
@@ -125,6 +128,7 @@ public class CastleBossEntry implements Listener {
         boss.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.75f);
         boss.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(999f);
         boss.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_castle_boss"), PersistentDataType.BYTE, (byte) 1);
+        boss.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_void"), PersistentDataType.BYTE, (byte) 1);
         boss.setLootTable(Bukkit.getLootTable(LootTables.EMPTY.getKey()));
         boss.setRemoveWhenFarAway(false);
         boss.setPersistent(true);

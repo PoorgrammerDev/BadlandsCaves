@@ -100,8 +100,12 @@ public class CastleBoss implements Listener {
 
         //Check if vindicator is the boss
         final NamespacedKey bossKey = new NamespacedKey(plugin, "is_castle_boss");
+        final NamespacedKey voidKey = new NamespacedKey(plugin, "is_void");
         if (!boss.getPersistentDataContainer().has(bossKey, PersistentDataType.BYTE) ||
             boss.getPersistentDataContainer().get(bossKey, PersistentDataType.BYTE) != (byte) 1) return;
+
+        final boolean isVoid = boss.getPersistentDataContainer().has(voidKey, PersistentDataType.BYTE) &&
+            boss.getPersistentDataContainer().get(voidKey, PersistentDataType.BYTE) == (byte) 1;
 
         //Trigger buff if HP is half
         final double hpRatio = boss.getHealth() / boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
@@ -132,6 +136,9 @@ public class CastleBoss implements Listener {
             AbsorbTree(treeLocation, boss);
         }
 
+        Particle flame = isVoid ? Particle.SOUL_FIRE_FLAME : Particle.FLAME;
+        Color color = isVoid ? Color.AQUA : Color.ORANGE;
+
         //New particle effect when moving
         final World world = boss.getWorld();
         new BukkitRunnable() {
@@ -141,9 +148,9 @@ public class CastleBoss implements Listener {
                     this.cancel();
                     return;
                 }
-            
-                world.spawnParticle(Particle.REDSTONE, boss.getLocation().add(0, 1, 0), 10, 0.25f, 0.5f, 0.25f, 0, new Particle.DustOptions(Color.ORANGE, 1));
-                world.spawnParticle(Particle.FLAME, boss.getLocation().add(0, 1, 0), 10, 0.25f, 0.5f, 0.25f, 0);
+
+                world.spawnParticle(Particle.REDSTONE, boss.getLocation().add(0, 1, 0), 10, 0.25f, 0.5f, 0.25f, 0, new Particle.DustOptions(color, 1));
+                world.spawnParticle(flame, boss.getLocation().add(0, 1, 0), 10, 0.25f, 0.5f, 0.25f, 0);
             }            
         }.runTaskTimer(plugin, 0, 1);
         
@@ -233,11 +240,14 @@ public class CastleBoss implements Listener {
                 for (int x = -5; x <= 5; x++) {
                     for (int z = -5; z <= 5; z++) {
                         final Block block = treeLocation.clone().add(x, y[0], z).getBlock();
-                        if (block.getType() == Material.NETHER_WART_BLOCK || block.getType() == Material.CRIMSON_STEM || block.getType() == Material.SHROOMLIGHT) {
-            //TODO: REENABLE THIS
+
+                        final boolean nonVoidType = block.getType() == Material.NETHER_WART_BLOCK || block.getType() == Material.CRIMSON_STEM || block.getType() == Material.SHROOMLIGHT;
+                        final boolean voidType = block.getType() == Material.WARPED_WART_BLOCK || block.getType() == Material.WARPED_STEM;
+
+                        if (nonVoidType || voidType) {
                             block.setType(Material.BASALT);
                             boss.setHealth(Math.min(boss.getHealth() + 0.5f, boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
-                            particleShapes.lineDelayed(null, Particle.FLAME, block.getLocation(), boss.getLocation(), 0, null, 2, 1);
+                            particleShapes.lineDelayed(null, nonVoidType ? Particle.FLAME : Particle.SOUL_FIRE_FLAME, block.getLocation(), boss.getLocation(), 0, null, 2, 1);
                         }
                     }
                 }

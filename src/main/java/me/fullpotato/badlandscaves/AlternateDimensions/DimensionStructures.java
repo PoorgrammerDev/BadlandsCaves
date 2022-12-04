@@ -3,6 +3,7 @@ package me.fullpotato.badlandscaves.AlternateDimensions;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.MultiStructureLoader;
 import me.fullpotato.badlandscaves.Util.StructureTrack;
+import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -13,6 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Lectern;
 import org.bukkit.configuration.ConfigurationSection;
@@ -30,7 +32,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -38,26 +39,6 @@ import java.util.UUID;
 
 
 public class DimensionStructures {
-    public enum Structure {
-        MANABAR,
-        LAB,
-        LAB_ABANDONED,
-        LAB_DESTROYED,
-        JAIL,
-        JAIL_ABANDONED,
-        SHRINE,
-        SHRINE_DESTROYED,
-        CURSED_HOUSE,
-        TENT,
-        HOUSE,
-        HOUSE_ABANDONED,
-        HOUSE_DESTROYED,
-        BUNKER,
-        BUNKER2,
-        BUNKER_AB,
-        CASTLE,
-    }
-    
     private final BadlandsCaves plugin;
     private final Random random;
     private final List<Material> blacklistedMats = Arrays.asList(Material.OAK_LOG, Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG, Material.JUNGLE_LOG, Material.SPRUCE_LOG, Material.OAK_LEAVES, Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.DARK_OAK_LEAVES, Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM, Material.NETHER_WART_BLOCK, Material.WARPED_WART_BLOCK, Material.RED_MUSHROOM_BLOCK, Material.BROWN_MUSHROOM_BLOCK);
@@ -67,50 +48,100 @@ public class DimensionStructures {
         this.random = random;
     }
 
-    public void generateStructures (World world, @Nullable Location origin, int radius, int count) {
-        if (origin == null) origin = new Location(world, 0, 256, 0);
-
+    /**
+     * GenerateStructures
+     * @param world World to spawn structures in
+     * @param radius Radius around the world's origin (0, 256, 0) to generate structures
+     * @param count Count of structures spawned per layer. A count of 1 will spawn 1 structure in every layer.
+     */
+    public void generateStructures (World world, int radius, int count) {
+        final Location origin = new Location(world, 0, 256, 0);
         final int x = origin.getBlockX();
         final int z = origin.getBlockZ();
         final int[] ticker = {0};
+
+        final List<Structure> surfaceStructures = Structure.GetStructuresByType(StructureType.SURFACE_STRUCTURE);
+        final List<Structure> voidStructures = Structure.GetStructuresByType(StructureType.VOID_STRUCTURE);
+        
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (ticker[0] > count) {
+                if (ticker[0] >= (count * 2)) {
                     this.cancel();
                     return;
                 }
 
-                //Find randomized location and then find the surface
+                //Find randomized (X,Z) location
                 final Location location = new Location(world, x + (random.nextInt(radius * 2) - radius), world.getMaxHeight(), z + (random.nextInt(radius * 2) - radius));
-                Material type = null;
-                do {
-                    location.setY(location.getY() - 1);
-                    type = location.getBlock().getType();
-                } while (!type.isSolid() || blacklistedMats.contains(type));
+                Structure structure;
 
-                generateStructure(location, null, false, false);
+                world.loadChunk(location.getChunk());
+
+                //Surface structure ----------
+                if (ticker[0] % 2 == 0) {
+                    //select a random structure
+                    structure = surfaceStructures.get(random.nextInt(surfaceStructures.size()));
+
+                    //find surface height
+                    Material type = null;
+                    do {
+                        location.setY(location.getY() - 1);
+                        type = location.getBlock().getType();
+                    } while (!type.isSolid() || blacklistedMats.contains(type));
+                }
+                //Void structure ------------
+                else {
+                    //select a random structure
+                    structure = voidStructures.get(random.nextInt(voidStructures.size()));
+
+                    //first, get the height of the void layer by searching from the bottom of the world
+                    location.setY(5);
+                    Biome biome = null;
+                    Material type = null;
+                    do {
+                        location.setY(location.getY() + 1); //iterate upwards
+                        biome = location.getBlock().getBiome();
+                    } while (biome == Biome.GRAVELLY_MOUNTAINS && location.getY() < 128); //reserved biome value for VOID
+
+                    //get a random height in [5, maxHeight] to place the structure
+                    //with maxHeight being the value we just calculated via searching
+                    location.setY(random.nextInt(location.getBlockY() - 5) + 5);
+
+                    //then search downwards for a pocket of air
+                    do {
+                        location.setY(location.getY() - 1); //iterate downwards
+                        type = location.getBlock().getType();
+                    } while (type.isSolid() && location.getY() > 5); //keep iterating as long as its still going through solid blocks
+                    //has reached an air block
+
+                    //then search downwards for ground
+                    do {
+                        location.setY(location.getY() - 1); //iterate downwards
+                        type = location.getBlock().getType();
+                    } while (type.isSolid() && location.getY() > 5); //keep iterating as long as its still going through air blocks
+                    //has reached solid ground
+                    
+                    //Y MUST be at least 5
+                    location.setY(Math.max(location.getY(), 5));
+                }
+
+                generateStructure(location, structure, false, false);
                 ticker[0]++;
             }
-        }.runTaskTimer(plugin, 0, 20);
+        }.runTaskTimer(plugin, 100, 100);
     }
 
-    public void generateStructure (Location origin, @Nullable Structure structure, boolean leaveStructureBlocks, boolean force) {
+    public void generateStructure (Location origin, Structure structure, boolean leaveStructureBlocks, boolean force) {
         final World world = origin.getWorld();
         if (!force && !world.getName().startsWith(plugin.getDimensionPrefixName())) return;
-
-        if (structure == null) {
-            structure = Structure.values()[random.nextInt(Structure.values().length)];
-        }
 
         Bukkit.broadcastMessage("Structure " + structure.name() + " spawning at " + origin.getBlockX() + " " + origin.getBlockY() + " " + origin.getBlockZ());
 
         world.loadChunk(origin.getChunk());
-        final Structure finalStructure = structure;
         new BukkitRunnable() {
             @Override
             public void run() {
-                loadStructure(finalStructure, origin, leaveStructureBlocks);
+                loadStructure(structure, origin, leaveStructureBlocks);
             }
         }.runTaskLater(plugin, 20);
     }
@@ -168,6 +199,23 @@ public class DimensionStructures {
                     new StructureTrack(plugin, 9, 56, -24, 0, -10, 0, "badlandscaves:castle_ne_top", BlockFace.UP),
                     new StructureTrack(plugin, -39, 56, 24, 0, -10, 0, "badlandscaves:castle_w_top", BlockFace.UP),
                     new StructureTrack(plugin, 9, 56, 24, 0, -10, 0, "badlandscaves:castle_e_top", BlockFace.UP),
+                };
+                break;
+
+            case CASTLE_VOID:
+                multiStructure = new StructureTrack[]{
+                    new StructureTrack(plugin, -39, -3, -24, 0, 1, 0, "badlandscaves:void_castle_nw_bottom", BlockFace.DOWN),
+                    new StructureTrack(plugin, 9, -3, -24, 0, 1, 0, "badlandscaves:void_castle_ne_bottom", BlockFace.DOWN),
+                    new StructureTrack(plugin, -39, -3, 24, 0, 1, 0, "badlandscaves:void_castle_w_bottom", BlockFace.DOWN),
+                    new StructureTrack(plugin, 9, -3, 24, 0, 1, 0, "badlandscaves:void_castle_e_bottom", BlockFace.DOWN),
+
+                    new StructureTrack(plugin, -39, -3, 72, 0, 1, 0, "badlandscaves:void_castle_sw", BlockFace.DOWN),
+                    new StructureTrack(plugin, 9, -3, 72, 0, 1, 0, "badlandscaves:void_castle_se", BlockFace.DOWN),
+
+                    new StructureTrack(plugin, -39, 56, -24, 0, -10, 0, "badlandscaves:void_castle_nw_top", BlockFace.UP),
+                    new StructureTrack(plugin, 9, 56, -24, 0, -10, 0, "badlandscaves:void_castle_ne_top", BlockFace.UP),
+                    new StructureTrack(plugin, -39, 56, 24, 0, -10, 0, "badlandscaves:void_castle_w_top", BlockFace.UP),
+                    new StructureTrack(plugin, 9, 56, 24, 0, -10, 0, "badlandscaves:void_castle_e_top", BlockFace.UP),
                 };
                 break;
 
@@ -241,6 +289,7 @@ public class DimensionStructures {
 
     private void ExtraInstructions(Structure structure, Location origin) {
         switch (structure) {
+            case CASTLE_VOID:
             case CASTLE: {
                 //Enemy spawn offsets
                 final Vector[] meleeEnemies = {
@@ -353,7 +402,8 @@ public class DimensionStructures {
                     guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(4.0f + (chaos / 45.0f));
                     guard.setPersistent(true);
                     guard.setRemoveWhenFarAway(false);
-                    guard.setCustomName("Castle Guard");
+                    guard.setCustomName(structure == Structure.CASTLE ? "Castle Guard" : ChatColor.MAGIC + "Void Castle Guard");
+                    guard.setSilent(structure == Structure.CASTLE_VOID);
                     guard.setCustomNameVisible(false);
                 }
 
@@ -394,7 +444,8 @@ public class DimensionStructures {
                     guard.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(4.0f + (chaos / 45.0f));
                     guard.setPersistent(true);
                     guard.setRemoveWhenFarAway(false);
-                    guard.setCustomName("Castle Guard");
+                    guard.setCustomName(structure == Structure.CASTLE ? "Castle Guard" : ChatColor.MAGIC + "Void Castle Guard");
+                    guard.setSilent(structure == Structure.CASTLE_VOID);
                     guard.setCustomNameVisible(false);
                 }
 
@@ -417,6 +468,7 @@ public class DimensionStructures {
                 if (lecternLoc.getBlock().getType() == Material.LECTERN) {
                     final Lectern lectern = (Lectern) lecternLoc.getBlock().getState(); 
                     lectern.getPersistentDataContainer().set(new NamespacedKey(plugin, "location_uuid"), PersistentDataType.STRING, uuid.toString());
+                    if (structure == Structure.CASTLE_VOID) lectern.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_void"), PersistentDataType.BYTE, (byte) 1);
                     lectern.update();
                 }
 

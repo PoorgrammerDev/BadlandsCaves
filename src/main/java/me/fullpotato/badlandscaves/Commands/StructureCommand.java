@@ -2,7 +2,7 @@ package me.fullpotato.badlandscaves.Commands;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
-import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures.Structure;
+import me.fullpotato.badlandscaves.AlternateDimensions.Structure;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Location;
