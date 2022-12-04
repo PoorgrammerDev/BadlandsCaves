@@ -56,17 +56,6 @@ public class ConvergingProjectile extends BukkitRunnable {
             if (target instanceof LivingEntity) {
                 final LivingEntity livingTarget = (LivingEntity) target;
                 if (!livingTarget.equals(sourceEntity)) {
-                    //Exception - if livingTarget is a player and a sorcerer
-                    if (livingTarget instanceof Player) {
-                        final Player playerTarget = (Player) livingTarget;
-
-                        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, playerTarget) == 1) {
-                            continue;
-                        }
-
-                    }
-
-                    
                     this.cancel();
 
                     //Teleport the target to the position

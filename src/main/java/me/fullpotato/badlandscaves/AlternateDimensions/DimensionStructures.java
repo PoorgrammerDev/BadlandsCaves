@@ -89,8 +89,6 @@ public class DimensionStructures {
                     type = location.getBlock().getType();
                 } while (!type.isSolid() || blacklistedMats.contains(type));
 
-                Bukkit.broadcastMessage("structure spawning at " + location.toString());
-
                 generateStructure(location, null, false, false);
                 ticker[0]++;
             }
@@ -104,6 +102,8 @@ public class DimensionStructures {
         if (structure == null) {
             structure = Structure.values()[random.nextInt(Structure.values().length)];
         }
+
+        Bukkit.broadcastMessage("Structure " + structure.name() + " spawning at " + origin.getBlockX() + " " + origin.getBlockY() + " " + origin.getBlockZ());
 
         world.loadChunk(origin.getChunk());
         final Structure finalStructure = structure;
@@ -414,7 +414,6 @@ public class DimensionStructures {
                 plugin.saveSystemConfig();
 
                 //Update lectern with UUID
-                Bukkit.broadcastMessage(lecternLoc.toString());
                 if (lecternLoc.getBlock().getType() == Material.LECTERN) {
                     final Lectern lectern = (Lectern) lecternLoc.getBlock().getState(); 
                     lectern.getPersistentDataContainer().set(new NamespacedKey(plugin, "location_uuid"), PersistentDataType.STRING, uuid.toString());
