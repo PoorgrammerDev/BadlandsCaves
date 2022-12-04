@@ -26,7 +26,7 @@ public class DimensionStructureTable implements LootTable, Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final NamespacedKey key;
-    private final Artifact[] artifacts = Artifact.values();
+    private final Artifact[] artifacts = Artifact.GetLootItems();
     private final PregenerateDimensions pregenerateDimensions;
     private final Map<ItemStack, Integer> priorityMap = new HashMap<>();
     private final Map<ItemStack, Integer> itemMap = new HashMap<>();

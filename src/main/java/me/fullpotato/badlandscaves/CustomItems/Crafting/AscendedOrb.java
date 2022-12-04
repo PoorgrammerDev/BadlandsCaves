@@ -65,7 +65,7 @@ public class AscendedOrb implements Listener {
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
 
-            //Find the exp bottle and the orb used
+            //Find the artifact and the orb used
             ItemStack artifact = null;
             ItemStack orb = null;
             for (ItemStack ingredient : matrix) {
