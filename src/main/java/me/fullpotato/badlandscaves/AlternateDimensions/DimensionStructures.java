@@ -17,6 +17,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Lectern;
+import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -42,7 +43,8 @@ public class DimensionStructures {
     private final BadlandsCaves plugin;
     private final Random random;
     private final List<Material> blacklistedMats = Arrays.asList(Material.OAK_LOG, Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG, Material.JUNGLE_LOG, Material.SPRUCE_LOG, Material.OAK_LEAVES, Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.DARK_OAK_LEAVES, Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM, Material.NETHER_WART_BLOCK, Material.WARPED_WART_BLOCK, Material.RED_MUSHROOM_BLOCK, Material.BROWN_MUSHROOM_BLOCK);
-
+    private final int MINIMUM_HEIGHT = 5;
+    
     public DimensionStructures(BadlandsCaves plugin, Random random) {
         this.plugin = plugin;
         this.random = random;
@@ -62,23 +64,26 @@ public class DimensionStructures {
 
         final List<Structure> surfaceStructures = Structure.GetStructuresByType(StructureType.SURFACE_STRUCTURE);
         final List<Structure> voidStructures = Structure.GetStructuresByType(StructureType.VOID_STRUCTURE);
-        
+        final List<Structure> voidDecorations = Structure.GetStructuresByType(StructureType.VOID_DECORATION);
+
+       
+        final int layerMultiplier = 10;
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (ticker[0] >= (count * 2)) {
+                if (ticker[0] >= (count * layerMultiplier)) {
                     this.cancel();
                     return;
                 }
 
                 //Find randomized (X,Z) location
-                final Location location = new Location(world, x + (random.nextInt(radius * 2) - radius), world.getMaxHeight(), z + (random.nextInt(radius * 2) - radius));
-                Structure structure;
+                Location location = new Location(world, x + (random.nextInt(radius * 2) - radius), world.getMaxHeight(), z + (random.nextInt(radius * 2) - radius));
+                Structure structure = null;
 
                 world.loadChunk(location.getChunk());
 
                 //Surface structure ----------
-                if (ticker[0] % 2 == 0) {
+                if (ticker[0] % layerMultiplier == 0) {
                     //select a random structure
                     structure = surfaceStructures.get(random.nextInt(surfaceStructures.size()));
 
@@ -90,45 +95,33 @@ public class DimensionStructures {
                     } while (!type.isSolid() || blacklistedMats.contains(type));
                 }
                 //Void structure ------------
-                else {
+                else if (ticker[0] % layerMultiplier == 1) {
                     //select a random structure
                     structure = voidStructures.get(random.nextInt(voidStructures.size()));
 
-                    //first, get the height of the void layer by searching from the bottom of the world
-                    location.setY(5);
-                    Biome biome = null;
-                    Material type = null;
-                    do {
-                        location.setY(location.getY() + 1); //iterate upwards
-                        biome = location.getBlock().getBiome();
-                    } while (biome == Biome.GRAVELLY_MOUNTAINS && location.getY() < 128); //reserved biome value for VOID
-
-                    //get a random height in [5, maxHeight] to place the structure
-                    //with maxHeight being the value we just calculated via searching
-                    location.setY(random.nextInt(location.getBlockY() - 5) + 5);
-
-                    //then search downwards for a pocket of air
-                    do {
-                        location.setY(location.getY() - 1); //iterate downwards
-                        type = location.getBlock().getType();
-                    } while (type.isSolid() && location.getY() > 5); //keep iterating as long as its still going through solid blocks
-                    //has reached an air block
-
-                    //then search downwards for ground
-                    do {
-                        location.setY(location.getY() - 1); //iterate downwards
-                        type = location.getBlock().getType();
-                    } while (type.isSolid() && location.getY() > 5); //keep iterating as long as its still going through air blocks
-                    //has reached solid ground
+                    //Calculate an appropriate height in the void layer from this location
+                    location = TryCalcVoidHeight(location, 10);
                     
-                    //Y MUST be at least 5
-                    location.setY(Math.max(location.getY(), 5));
+                    //Enforce that Y MUST be at least minimum, even if it fails after how many ever tries
+                    location.setY(Math.max(location.getY(), MINIMUM_HEIGHT));
+                }
+                else {
+                    //Calculate an appropriate height in the void layer from this location
+                    location = TryCalcVoidHeight(location, 10);
+
+                    //Do not force place -- if the height is less than minimum then ignore
+                    if (location.getY() < MINIMUM_HEIGHT) structure = null;
+
+                    //otherwise select random structure
+                    else structure = voidDecorations.get(random.nextInt(voidDecorations.size()));
                 }
 
-                generateStructure(location, structure, false, false);
-                ticker[0]++;
+                if (structure != null) {
+                    generateStructure(location, structure, false, false);
+                    ticker[0]++;
+                }
             }
-        }.runTaskTimer(plugin, 100, 100);
+        }.runTaskTimer(plugin, 100, 20);
     }
 
     public void generateStructure (Location origin, Structure structure, boolean leaveStructureBlocks, boolean force) {
@@ -146,7 +139,7 @@ public class DimensionStructures {
         }.runTaskLater(plugin, 20);
     }
 
-    public void loadStructure(Structure queried, Location origin, boolean leaveStructureBlocks) {
+    private void loadStructure(Structure queried, Location origin, boolean leaveStructureBlocks) {
         //center ground level world origin ~(0, 60, 0)
         StructureTrack[] multiStructure = null;
         StructureTrack structure = null;
@@ -223,6 +216,10 @@ public class DimensionStructures {
                 structure = new StructureTrack(plugin, 10, -1, -11, -19, 0, 1, "badlandscaves:" + Structure.CURSED_HOUSE.name().toLowerCase(), BlockFace.UP);
                 break;
 
+            case HOUSE_VOID:
+                structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:void_house", BlockFace.UP);
+                break;
+
             case HOUSE:
                 structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE.name().toLowerCase(), BlockFace.UP);
                 break;
@@ -241,6 +238,10 @@ public class DimensionStructures {
 
             case JAIL_ABANDONED:
                 structure = new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL_ABANDONED.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case LAB_VOID:
+                structure = new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:void_lab", BlockFace.UP);
                 break;
 
             case LAB:
@@ -269,6 +270,31 @@ public class DimensionStructures {
 
             case TENT:
                 structure = new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.TENT.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            //Void layer decorations
+            case LANTERN_STATUE_GHOUL_1:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_lantern_ghoul_1", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
+                break;
+            case LANTERN_STATUE_GHOUL_2:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_lantern_ghoul_2", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
+                break;
+            case LANTERN_STATUE_GHOUL_3:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_lantern_ghoul_3", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
+                break;
+            case LANTERN_STATUE_GHOUL_4:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_lantern_ghoul_4", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
+                break;
+
+            case LANTERN_STATUE_LARGE_1:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_lantern_statue_large_1", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
+                break;
+            case LANTERN_STATUE_LARGE_2:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_lantern_statue_large_2", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
+                break;
+
+            case STATUE_HOUND_1:
+                structure = new StructureTrack(plugin, null, 0, -1, 0, 0, 1, 0, "badlandscaves:void_hound_statue_1", BlockFace.WEST, StructureRotation.values()[random.nextInt(StructureRotation.values().length)]);
                 break;
 
             default:
@@ -479,4 +505,50 @@ public class DimensionStructures {
                 return;
         }
     }
+
+    private Location TryCalcVoidHeight(Location location, int tries) {
+        //first, get the height of the void layer by searching from the bottom of the world
+        location.setY(MINIMUM_HEIGHT);
+        Biome biome = null;
+        Material type = null;
+        do {
+            location.setY(location.getY() + 1); //iterate upwards
+            biome = location.getBlock().getBiome();
+        } while (biome == Biome.GRAVELLY_MOUNTAINS && location.getY() < 128); //reserved biome value for VOID
+
+        int maxHeight = location.getBlockY();
+
+        for (int i = 0; i < tries; i++) {
+            //get a random height in [minHeight, maxHeight] to place the structure
+            //with maxHeight being the value we just calculated via searching
+            location.setY(random.nextInt(maxHeight - MINIMUM_HEIGHT) + MINIMUM_HEIGHT);
+
+            //then search downwards for a pocket of air
+            int savedY = location.getBlockY();
+            for (int j = 0; j < savedY - MINIMUM_HEIGHT; j++) {
+                type = location.getBlock().getType();
+                if (type.isAir() || location.getY() < MINIMUM_HEIGHT) break; //if hit air or reach min height then break
+
+                location.setY(location.getY() - 1); //iterate downwards
+            }
+
+            //then search downwards for ground
+            savedY = location.getBlockY();
+            for (int j = 0; j < savedY - MINIMUM_HEIGHT; j++) {
+                type = location.getBlock().getType();
+                if (type.isSolid() || location.getY() < MINIMUM_HEIGHT) break; //if hit ground or reach min height then break
+
+                location.setY(location.getY() - 1); //iterate downwards
+            }
+
+            //logic to check if desired Y has been reached
+            if (location.getY() >= MINIMUM_HEIGHT) break;
+
+        }
+                    
+        //NOTE: is this necessary? or is it already returned via reference?
+        return location;
+    }
+
+
 }

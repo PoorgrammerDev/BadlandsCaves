@@ -1,12 +1,16 @@
 package me.fullpotato.badlandscaves.Util;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+
+import javax.annotation.Nullable;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Structure;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.block.structure.UsageMode;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockVector;
@@ -23,9 +27,21 @@ public class StructureTrack {
     private final double integrity;
     private final String structureName;
     private final BlockFace redstoneBlockRelative;
+    private final StructureRotation rotation;
 
     //CONSTRUCTORS
-    public StructureTrack(BadlandsCaves plugin, Location origin, int blockXOffset, int blockYOffset, int blockZOffset, int settingXOffset, int settingYOffset, int settingZOffset, String structureName, BlockFace redstoneBlockRelative) {
+
+    /**
+     * @param blockXOffset X Offset from the origin for where the structure block will be placed (from origin to stucture block)
+     * @param blockYOffset Y Offset from the origin for where the structure block will be placed (from origin to stucture block)
+     * @param blockZOffset Z Offset from the origin for where the structure block will be placed (from origin to stucture block)
+     * @param settingXOffset X Offset inside structure block (from structure block to structure)
+     * @param settingYOffset Y Offset inside structure block (from structure block to structure)
+     * @param settingZOffset Z Offset inside structure block (from structure block to structure)
+     * @param redstoneBlockRelative Relative BlockFace to place the redstone block to activate the structure block
+     * @param rotation structure block rotation setting
+     */
+    public StructureTrack(BadlandsCaves plugin, @Nullable Location origin, int blockXOffset, int blockYOffset, int blockZOffset, int settingXOffset, int settingYOffset, int settingZOffset, String structureName, BlockFace redstoneBlockRelative, StructureRotation rotation) {
         this.plugin = plugin;
         this.origin = origin;
         this.blockXOffset = blockXOffset;
@@ -37,48 +53,24 @@ public class StructureTrack {
         this.integrity = 1;
         this.structureName = structureName;
         this.redstoneBlockRelative = redstoneBlockRelative;
+        this.rotation = rotation;
     }
 
-    public StructureTrack(BadlandsCaves plugin, Location origin, int blockXOffset, int blockYOffset, int blockZOffset, int settingXOffset, int settingYOffset, int settingZOffset, double integrity, String structureName, BlockFace redstoneBlockRelative) {
-        this.plugin = plugin;
-        this.origin = origin;
-        this.blockXOffset = blockXOffset;
-        this.blockYOffset = blockYOffset;
-        this.blockZOffset = blockZOffset;
-        this.settingXOffset = settingXOffset;
-        this.settingYOffset = settingYOffset;
-        this.settingZOffset = settingZOffset;
-        this.integrity = integrity;
-        this.structureName = structureName;
-        this.redstoneBlockRelative = redstoneBlockRelative;
+    //Constructor without rotation
+    public StructureTrack(BadlandsCaves plugin, @Nullable Location origin, int blockXOffset, int blockYOffset, int blockZOffset, int settingXOffset, int settingYOffset, int settingZOffset, String structureName, BlockFace redstoneBlockRelative) {
+        this(plugin, origin, blockXOffset, blockYOffset, blockZOffset, settingXOffset, settingYOffset, settingZOffset, structureName, redstoneBlockRelative, StructureRotation.NONE);        
     }
 
+    //Constructor without origin location and rotation
     public StructureTrack(BadlandsCaves plugin, int blockXOffset, int blockYOffset, int blockZOffset, int settingXOffset, int settingYOffset, int settingZOffset, String structureName, BlockFace redstoneBlockRelative) {
-        this.plugin = plugin;
-        this.origin = null;
-        this.blockXOffset = blockXOffset;
-        this.blockYOffset = blockYOffset;
-        this.blockZOffset = blockZOffset;
-        this.settingXOffset = settingXOffset;
-        this.settingYOffset = settingYOffset;
-        this.settingZOffset = settingZOffset;
-        this.integrity = 1;
-        this.structureName = structureName;
-        this.redstoneBlockRelative = redstoneBlockRelative;
-    }
-
-    public StructureTrack(BadlandsCaves plugin, int blockXOffset, int blockYOffset, int blockZOffset, int settingXOffset, int settingYOffset, int settingZOffset, double integrity, String structureName, BlockFace redstoneBlockRelative) {
-        this.plugin = plugin;
-        this.origin = null;
-        this.blockXOffset = blockXOffset;
-        this.blockYOffset = blockYOffset;
-        this.blockZOffset = blockZOffset;
-        this.settingXOffset = settingXOffset;
-        this.settingYOffset = settingYOffset;
-        this.settingZOffset = settingZOffset;
-        this.integrity = integrity;
-        this.structureName = structureName;
-        this.redstoneBlockRelative = redstoneBlockRelative;
+        this(
+            plugin,
+            null,
+            blockXOffset, blockYOffset, blockZOffset,
+            settingXOffset, settingYOffset, settingZOffset,
+            structureName,
+            redstoneBlockRelative
+        );
     }
 
     public Structure load () {

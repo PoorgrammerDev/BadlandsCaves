@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Structure {
+    //surface layer structures ------
     MANABAR(StructureType.SURFACE_STRUCTURE),
     LAB(StructureType.SURFACE_STRUCTURE),
     LAB_ABANDONED(StructureType.SURFACE_STRUCTURE),
@@ -21,8 +22,23 @@ public enum Structure {
     BUNKER2(StructureType.SURFACE_STRUCTURE),
     BUNKER_AB(StructureType.SURFACE_STRUCTURE),
     CASTLE(StructureType.SURFACE_STRUCTURE),
+
+    //void layer structures -----
     CASTLE_VOID(StructureType.VOID_STRUCTURE),
-    
+    HOUSE_VOID(StructureType.VOID_STRUCTURE),
+    LAB_VOID(StructureType.VOID_STRUCTURE),
+
+    //void layer decorations -----
+    LANTERN_STATUE_GHOUL_1(StructureType.VOID_DECORATION),
+    LANTERN_STATUE_GHOUL_2(StructureType.VOID_DECORATION),
+    LANTERN_STATUE_GHOUL_3(StructureType.VOID_DECORATION),
+    LANTERN_STATUE_GHOUL_4(StructureType.VOID_DECORATION),
+    LANTERN_STATUE_LARGE_1(StructureType.VOID_DECORATION),
+    LANTERN_STATUE_LARGE_2(StructureType.VOID_DECORATION),
+    STATUE_HOUND_1(StructureType.VOID_DECORATION),
+
+
+
     
     ;
    
