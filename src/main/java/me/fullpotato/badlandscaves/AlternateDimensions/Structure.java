@@ -27,6 +27,9 @@ public enum Structure {
     CASTLE_VOID(StructureType.VOID_STRUCTURE),
     HOUSE_VOID(StructureType.VOID_STRUCTURE),
     LAB_VOID(StructureType.VOID_STRUCTURE),
+    HOUSE_DESTROYED_VOID(StructureType.VOID_STRUCTURE),
+    LAB_DESTROYED_VOID(StructureType.VOID_STRUCTURE),
+    SHRINE_VOID(StructureType.VOID_STRUCTURE),
 
     //void layer decorations -----
     LANTERN_STATUE_GHOUL_1(StructureType.VOID_DECORATION),

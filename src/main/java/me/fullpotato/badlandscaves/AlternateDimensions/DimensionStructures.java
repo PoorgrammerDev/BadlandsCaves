@@ -232,6 +232,10 @@ public class DimensionStructures {
                 structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:" + Structure.HOUSE_DESTROYED.name().toLowerCase(), BlockFace.UP);
                 break;
 
+            case HOUSE_DESTROYED_VOID:
+                structure = new StructureTrack(plugin, -9, 0, -8, 1, 0, 1, "badlandscaves:void_house_destroyed", BlockFace.UP);
+                break;
+
             case JAIL:
                 structure = new StructureTrack(plugin, -8, -6, 6, 1, 0, -29, "badlandscaves:" + Structure.JAIL.name().toLowerCase(), BlockFace.UP);
                 break;
@@ -256,6 +260,10 @@ public class DimensionStructures {
                 structure = new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:" + Structure.LAB_DESTROYED.name().toLowerCase(), BlockFace.UP);
                 break;
 
+            case LAB_DESTROYED_VOID:
+                structure = new StructureTrack(plugin, 11, 0, -15, -22, 0, 1, "badlandscaves:void_lab_destroyed", BlockFace.UP);
+                break;
+
             case MANABAR:
                 structure = new StructureTrack(plugin, 11, 0, 10, -21, 0, -19, "badlandscaves:" + Structure.MANABAR.name().toLowerCase(), BlockFace.UP);
                 break;
@@ -270,6 +278,10 @@ public class DimensionStructures {
 
             case TENT:
                 structure = new StructureTrack(plugin, 6, 0, -6, -11, 0, 1, "badlandscaves:" + Structure.TENT.name().toLowerCase(), BlockFace.UP);
+                break;
+
+            case SHRINE_VOID:
+                structure = new StructureTrack(plugin, -16, 0, -16, 1, 0, 1, "badlandscaves:void_shrine", BlockFace.UP);
                 break;
 
             //Void layer decorations
