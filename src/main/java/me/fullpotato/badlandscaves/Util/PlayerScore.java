@@ -62,7 +62,7 @@ public enum PlayerScore {
     AGILITY_BUFF_SPEED_LVL(PersistentDataType.INTEGER),
     HAS_SEEN_BACKROOMS(PersistentDataType.BYTE),
     BACKROOMS_TIMER(PersistentDataType.INTEGER),
-    TEMPERATURE(PersistentDataType.INTEGER, 100),
+    TEMPERATURE(PersistentDataType.DOUBLE, 100.0f),
     USED_PRESERVE_TOTEM(PersistentDataType.BYTE),
     HAS_STARLIGHT_SENTRY(PersistentDataType.BYTE),
     STARLIGHT_SENTRY_UUID(PersistentDataType.STRING),

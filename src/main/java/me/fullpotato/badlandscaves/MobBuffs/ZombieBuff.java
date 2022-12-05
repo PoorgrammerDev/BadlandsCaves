@@ -1,8 +1,12 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
+
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
@@ -51,9 +55,13 @@ public class ZombieBuff implements Listener {
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
         if (hardmode) {
+            //Common trait
+            zombie.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
 
+            //Ascended mob / mini-boss
             final int ascend = (chaos / 5) + plugin.getOptionsConfig().getInt("hardmode_values.ascended_spawn_chance");
-            if (random.nextInt(100) < ascend) {
+            final boolean ascended = random.nextInt(100) < ascend;
+            if (ascended) {
                 zombie.setBaby(false);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
                 zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "time_stop_cooldown"), PersistentDataType.BYTE, (byte) 0);
@@ -87,85 +95,94 @@ public class ZombieBuff implements Listener {
 
                 zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
                 zombie.setHealth(40.0);
+                return;
             }
 
+            //Void mob override
+            if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
+                zombie.setCustomName("Void Zombie");
+                zombie.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
 
-            if (!zombie.getPersistentDataContainer().has(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) || zombie.getPersistentDataContainer().get(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE) != (byte) 1) {
-                boolean overpowered = random.nextInt(100) < chance;
-
-                //SWORD-------------------------------------------------------------------
-                boolean dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
-                boolean netherite_upg = (dia_upg && overpowered && random.nextBoolean());
-                ItemStack sword = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_SWORD) : new ItemStack(Material.DIAMOND_SWORD)) : new ItemStack(Material.IRON_SWORD);
-                ItemMeta sword_meta = sword.getItemMeta();
-                sword_meta.addEnchant(Enchantment.DAMAGE_ALL, random.nextInt(overpowered ? 8 : 5) + 3, true);
-                final int fire = random.nextInt(2);
-                if (fire > 0) {
-                    sword_meta.addEnchant(Enchantment.FIRE_ASPECT, fire, false);
-                }
-                sword_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Sword");
-                sword.setItemMeta(sword_meta);
-
-                //ARMOR----------------------------------------------------------------
-                int[] armor_protections = random.ints(4, 0, overpowered ? 10 : 5).toArray();
-
-                //BOOTS-----------------------------
-                dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
-                netherite_upg = (dia_upg && overpowered && random.nextBoolean());
-                ItemStack boots = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_BOOTS) : new ItemStack(Material.DIAMOND_BOOTS)) : new ItemStack(Material.IRON_BOOTS);
-                if (armor_protections[0] > 0) {
-                    ItemMeta boots_meta = boots.getItemMeta();
-                    boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[0], true);
-                    boots_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Boots");
-                    boots.setItemMeta(boots_meta);
-                }
-
-                //LEGGINGS--------------------------
-                dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
-                netherite_upg = (dia_upg && overpowered && random.nextBoolean());
-                ItemStack leggings = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_LEGGINGS) : new ItemStack(Material.DIAMOND_LEGGINGS)) : new ItemStack(Material.IRON_LEGGINGS);
-                if (armor_protections[1] > 0){
-                    ItemMeta leggings_meta = leggings.getItemMeta();
-                    leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[1], true);
-                    leggings_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Leggings");
-                    leggings.setItemMeta(leggings_meta);
-                }
-
-                //CHESTPLATE------------------------
-                dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
-                netherite_upg = (dia_upg && overpowered && random.nextBoolean());
-                ItemStack chestplate = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_CHESTPLATE) : new ItemStack(Material.DIAMOND_CHESTPLATE)) : new ItemStack(Material.IRON_CHESTPLATE);
-                if (armor_protections[2] > 0){
-                    ItemMeta chestplate_meta = chestplate.getItemMeta();
-                    chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[2], true);
-                    chestplate_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Chestplate");
-                    chestplate.setItemMeta(chestplate_meta);
-                }
-
-                //HELMET-----------------------------
-                dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
-                netherite_upg = (dia_upg && overpowered && random.nextBoolean());
-                ItemStack helmet = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_HELMET) : new ItemStack(Material.DIAMOND_HELMET)) : new ItemStack(Material.IRON_HELMET);
-                if (armor_protections[3] > 0){
-                    ItemMeta helmet_meta = helmet.getItemMeta();
-                    helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[3], true);
-                    helmet_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Helmet");
-                    helmet.setItemMeta(helmet_meta);
-                }
-                //------------------------------------------------------------------------
-
-                ItemStack[] armor = {
-                        boots,
-                        leggings,
-                        chestplate,
-                        helmet,
-                };
-
-                zombie.getEquipment().setArmorContents(armor);
-                zombie.getEquipment().setItemInMainHand(sword);
+                zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(12.5 + (chaos / 4.0)); //base 12.5; up to 25 additional
+                zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(12.5 + (chaos / 4.0)); //base 12.5; up to 25 additional
+                zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(50 + (chaos / 4.0)); //base 50; up to 25 additional
+                NameTagHide.getInstance().Hide(zombie);
+                return;
             }
 
-            zombie.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
+            //Regular mob buff
+            boolean overpowered = random.nextInt(100) < chance;
+
+            //SWORD-------------------------------------------------------------------
+            boolean dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
+            boolean netherite_upg = (dia_upg && overpowered && random.nextBoolean());
+            ItemStack sword = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_SWORD) : new ItemStack(Material.DIAMOND_SWORD)) : new ItemStack(Material.IRON_SWORD);
+            ItemMeta sword_meta = sword.getItemMeta();
+            sword_meta.addEnchant(Enchantment.DAMAGE_ALL, random.nextInt(overpowered ? 8 : 5) + 3, true);
+            final int fire = random.nextInt(2);
+            if (fire > 0) {
+                sword_meta.addEnchant(Enchantment.FIRE_ASPECT, fire, false);
+            }
+            sword_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Sword");
+            sword.setItemMeta(sword_meta);
+
+            //ARMOR----------------------------------------------------------------
+            int[] armor_protections = random.ints(4, 0, overpowered ? 10 : 5).toArray();
+
+            //BOOTS-----------------------------
+            dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
+            netherite_upg = (dia_upg && overpowered && random.nextBoolean());
+            ItemStack boots = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_BOOTS) : new ItemStack(Material.DIAMOND_BOOTS)) : new ItemStack(Material.IRON_BOOTS);
+            if (armor_protections[0] > 0) {
+                ItemMeta boots_meta = boots.getItemMeta();
+                boots_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[0], true);
+                boots_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Boots");
+                boots.setItemMeta(boots_meta);
+            }
+
+            //LEGGINGS--------------------------
+            dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
+            netherite_upg = (dia_upg && overpowered && random.nextBoolean());
+            ItemStack leggings = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_LEGGINGS) : new ItemStack(Material.DIAMOND_LEGGINGS)) : new ItemStack(Material.IRON_LEGGINGS);
+            if (armor_protections[1] > 0){
+                ItemMeta leggings_meta = leggings.getItemMeta();
+                leggings_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[1], true);
+                leggings_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Leggings");
+                leggings.setItemMeta(leggings_meta);
+            }
+
+            //CHESTPLATE------------------------
+            dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
+            netherite_upg = (dia_upg && overpowered && random.nextBoolean());
+            ItemStack chestplate = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_CHESTPLATE) : new ItemStack(Material.DIAMOND_CHESTPLATE)) : new ItemStack(Material.IRON_CHESTPLATE);
+            if (armor_protections[2] > 0){
+                ItemMeta chestplate_meta = chestplate.getItemMeta();
+                chestplate_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[2], true);
+                chestplate_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Chestplate");
+                chestplate.setItemMeta(chestplate_meta);
+            }
+
+            //HELMET-----------------------------
+            dia_upg = (overpowered && random.nextInt(100) < 75) || (!overpowered && random.nextBoolean());
+            netherite_upg = (dia_upg && overpowered && random.nextBoolean());
+            ItemStack helmet = dia_upg ? (netherite_upg ? new ItemStack(Material.NETHERITE_HELMET) : new ItemStack(Material.DIAMOND_HELMET)) : new ItemStack(Material.IRON_HELMET);
+            if (armor_protections[3] > 0){
+                ItemMeta helmet_meta = helmet.getItemMeta();
+                helmet_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, armor_protections[3], true);
+                helmet_meta.setDisplayName(ChatColor.DARK_GREEN + "Zombie's Helmet");
+                helmet.setItemMeta(helmet_meta);
+            }
+            //------------------------------------------------------------------------
+
+            ItemStack[] armor = {
+                    boots,
+                    leggings,
+                    chestplate,
+                    helmet,
+            };
+
+            zombie.getEquipment().setArmorContents(armor);
+            zombie.getEquipment().setItemInMainHand(sword);
         }
         else {
             if (chaos > 0) {

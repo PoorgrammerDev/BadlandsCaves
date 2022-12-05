@@ -1,51 +1,34 @@
 package me.fullpotato.badlandscaves.WorldGeneration;
 
-import me.fullpotato.badlandscaves.BadlandsCaves;
+import java.util.Random;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.util.noise.PerlinOctaveGenerator;
+import org.bukkit.generator.BlockPopulator;
+import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import me.fullpotato.badlandscaves.BadlandsCaves;
 
 public class DimensionsGen extends ChunkGenerator {
     private final BadlandsCaves plugin;
     private final Biome biome;
-    private final double scale;
-    private final double frequency;
-    private final double amplitude;
-    private final Material[] blocks = new Material[3];
-    private final boolean firstGen;
     private final int chaos;
-    private final int middle = 60;
+    private final Material[] blocks = new Material[2];
 
-    public DimensionsGen(BadlandsCaves plugin, Biome biome, Random random) {
+    public DimensionsGen(BadlandsCaves plugin, Biome biome, int chaos) {
         this.plugin = plugin;
         this.biome = biome;
-        this.scale = (random.nextInt(32) + 32);
-        this.frequency = (random.nextDouble()) + 0.25;
-        this.amplitude = (random.nextDouble()) + 0.25;
-        this.firstGen = true;
-        this.chaos = plugin.getSystemConfig().getInt("chaos_level");
-        this.setBlocks();
-    }
-
-    public DimensionsGen(BadlandsCaves plugin, Biome biome, double scale, double frequency, double amplitude, int chaos, Random random) {
-        this.plugin = plugin;
-        this.biome = biome;
-        this.scale = scale;
-        this.frequency = frequency;
-        this.amplitude = amplitude;
-        this.firstGen = false;
         this.chaos = chaos;
-        this.setBlocks();
+        this.populateBlockArray();
     }
 
     @Override
     public boolean shouldGenerateCaves() {
-        return true;
+        return false;
     }
 
     @Override
@@ -54,76 +37,146 @@ public class DimensionsGen extends ChunkGenerator {
     }
 
     @Override
-    public @NotNull ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunk_x, int chunk_z, @NotNull BiomeGrid biome) {
+    public @NotNull ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull BiomeGrid biome) {
         final ChunkData chunk = createChunkData(world);
-        final PerlinOctaveGenerator generator = new PerlinOctaveGenerator(world.getSeed(), 8);
-        generator.setScale(1 / scale);
-        int chunkVerticalShift = 0;
-        if (chaos / 10 > 0 && random.nextInt(100) < chaos) {
-            chunkVerticalShift = random.nextInt(chaos / 10) - (chaos / 20);
-        }
+        random.setSeed(world.getSeed());
 
+        //Values for generation
+        final int octaves = 8;                                      // Simplex Noise param: octaves to generate (more octaves produces better detail)
+        final double lacunarity = 2.0;                              // Simplex Noise param: how much detail later octaves add to the surface (<1 smoother; 1 same impact; >1 more detail)
+        final double persistence = 0.25;                            // Simplex Noise param: how much each octave affects overall shape
+        final int variance = random.nextInt(15) + 15;               // "Y-scale" of the noise; how much the terrain's height changes based on noise
+        final int center = random.nextInt(60) + 90;                 // Center y-level
+        final int layerNoiseOffset = (random.nextInt(5000) + 1000); // Offset x and z values on where to sample noise for y-levels of stone layer beginning and void layer beginning
+        final double threshold = (0.2D * random.nextDouble()) + 0.1D; // Threshold value for 3D noise between [0.1, 0.3]
+        final double caveThreshold = (0.2D * random.nextDouble()) + 0.5D; // Threshold value for 3D noise between [0.5, 0.7]
+        final int inverseSquash = random.nextInt(75) + 75;           //Higher values, less squashing of surface layer; [75,150]
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                //biome setting
-                for (int y = 0; y < world.getMaxHeight(); y++) {
+        //Void layer variables
+        final double voidThreshold = (0.2D * random.nextDouble()) + 0.4D; // Threshold value for 3D noise between [0.4, 0.6]
+        //Y offset for void top layer (based on world's Chaos value)
+        final int voidTopLayerOffset = (chaos / 5 > 0) ? Math.min(random.nextInt(chaos / 5), center - variance - 10) : 0;
+    
+        final SimplexOctaveGenerator generator = new SimplexOctaveGenerator(world.getSeed(), octaves);
+        generator.setScale(0.0375D + (random.nextDouble() * 0.0125D));
+
+        //Generating the actual chunk shape
+        for (int x = 0; x < 16; ++x) {
+            for (int z = 0; z < 16; ++z) {
+                // GENERATING 2D HEIGHT ==============================================
+                //generate noise value between [-1,1]
+                final double heightNoise = generator.noise((chunkX * 16) + x, (chunkZ * 16) + z, lacunarity, persistence, true);
+                final double layerNoiseStone = generator.noise((chunkX * 16) + x + layerNoiseOffset, (chunkZ * 16) + z + layerNoiseOffset, lacunarity, persistence, true);
+                final double layerNoiseVoid = generator.noise((chunkX * 16) + x - layerNoiseOffset, (chunkZ * 16) + z - layerNoiseOffset, lacunarity, persistence, true);
+           
+                //middle layer is 120; can go 60 down and 60 up
+                final int height = (int) (heightNoise * variance) + center;     // [center - variance, center + variance]
+                final int stoneDepth = (int) (layerNoiseStone + 5);             // [4,6]
+                final int voidLayerBegins = (int) (layerNoiseVoid * (10 + voidTopLayerOffset)) + (30 + voidTopLayerOffset);   // default [20,40] ; max [40,60]
+                // ===================================================================
+
+                //Set the biome
+                for (int y = voidLayerBegins; y < world.getMaxHeight(); ++y) {
+                    //Set the biome
                     biome.setBiome(x, y, z, this.biome);
                 }
 
-                final double noise = generator.noise((chunk_x * 16) + x, (chunk_z * 16) + z, frequency, amplitude);
-                final int currentHeight = (int) ((middle + (noise) * middle / 3) + chunkVerticalShift);
-                if (currentHeight > 0) {
-                    //base world generation
-                    chunk.setBlock(x, currentHeight, z, blocks[0]);
-                    chunk.setRegion(x, currentHeight - 4, z, x + 1, currentHeight, z + 1, blocks[1]);
-                    chunk.setRegion(x, 1, z, x + 1, currentHeight - 4, z + 1, blocks[2]);
+                //Generating the top landscape using 3D noise
+                for (int y = (height + (stoneDepth * 5)); y >= (height - stoneDepth); --y) {
 
-                    final int blackstoneHeight = (int) ((Math.max((noise * chaos) + (random.nextInt(4) - 2) + (chaos / 3.0), 0)));
-                    chunk.setRegion(x, 0, z, x + 1, blackstoneHeight, z + 1, Material.BLACKSTONE);
+                    //Noise adjusted by density value to squash blocks down
+                    //Density value decreases as Y increases, vice versa. Center point is the 'height' value.
+                    double noise = generator.noise((chunkX * 16) + x, y, (chunkZ * 16) + z, lacunarity, persistence, true);
+                    noise = (noise + 1.0) / 2.0;    //Transform noise from [-1, 1] -> [0, 1]
+                    
+                    //Apply density value to it
+                    noise -= ((double) y - center) / inverseSquash;
+
+                    if (noise > threshold) {
+                        chunk.setBlock(x, y, z, (chunk.getType(x, y + 1, z).isAir()) ? blocks[0] : blocks[1]);
+                    }
+                }
+
+                //Stone layer ----------
+
+                //Fill in stone layer
+                chunk.setRegion(x, voidLayerBegins, z, x + 1, height - stoneDepth, z + 1, Material.STONE);
+
+                //Carve out caves in the stone layer
+                for (int y = voidLayerBegins + 3; y < (height - stoneDepth - 3); ++y) {
+                    double noise = generator.noise((chunkX * 16) + x, y, (chunkZ * 16) + z, lacunarity, persistence, true);
+                    noise = (noise + 1.0) / 2.0;    //Transform noise from [-1, 1] -> [0, 1]
+
+                    if (noise > caveThreshold) {
+                        chunk.setBlock(x, y, z, Material.CAVE_AIR);
+                    }
+                }
+
+
+                //Void layer --------
+
+                //Fill the top of the layer
+                chunk.setRegion(x, voidLayerBegins - stoneDepth, z, x + 1, voidLayerBegins + 1, z + 1, Material.BLACKSTONE);
+
+                for (int y = 0; y < voidLayerBegins; ++y) {
+                    //Using 3D noise
+                    double voidNoise = generator.noise((chunkX * 16) + x, y, (chunkZ * 16) + z, lacunarity, persistence, true);
+                    
+                    //Translate voidNoise from [-1, 1] to [0, 1]
+                    voidNoise = (voidNoise + 1.0) / 2.0;
+                    
+                    if (voidNoise > voidThreshold) {
+                        chunk.setBlock(x, y, z, Material.BLACKSTONE);
+                    }
+
+                    //Set the biome
+                    //Unfortuantely this biome cannot be set to THE_VOID (which was the original intention)
+                    //because that biome prohibits monster spawns, so this is used as a stand-in
+                    biome.setBiome(x, y, z, Biome.GRAVELLY_MOUNTAINS);
                 }
             }
         }
-        if (firstGen) saveStats(world);
+
+        saveStats(world);
         return chunk;
     }
 
-    public void setBlocks () {
+    @Override
+    public List<BlockPopulator> getDefaultPopulators(World world) {
+        final List<BlockPopulator> populators = super.getDefaultPopulators(world);
+
+        //Add Titanium Ore populator 
+        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 5, 2, 8));
+
+        //Add Energium Ore populator
+        populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 29, 1, 5, 1, 4));
+
+        return populators;
+    }
+
+    public void populateBlockArray () {
         switch (biome) {
             case DESERT:
                 blocks[0] = Material.SAND;
                 blocks[1] = Material.SANDSTONE;
-                blocks[2] = Material.STONE;
-                break;
-            case ICE_SPIKES:
-                blocks[0] = Material.WATER;
-                blocks[1] = Material.PACKED_ICE;
-                blocks[2] = Material.BLUE_ICE;
                 break;
             case MUSHROOM_FIELD_SHORE:
                 blocks[0] = Material.MYCELIUM;
                 blocks[1] = Material.DIRT;
-                blocks[2] = Material.STONE;
-                break;
-            case SNOWY_BEACH:
-                blocks[0] = Material.SAND;
-                blocks[1] = blocks[0];
-                blocks[2] = Material.STONE;
                 break;
             default:
                 blocks[0] = Material.GRASS_BLOCK;
                 blocks[1] = Material.DIRT;
-                blocks[2] = Material.STONE;
                 break;
         }
     }
 
     public void saveStats(World world) {
-        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.scale", scale);
-        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.frequency", frequency);
-        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.amplitude", amplitude);
-        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.biome", biome.name());
-        plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".generator.chaos", chaos);
+        final String prefix = "alternate_dimensions." + world.getName() + ".generator";
+        if (plugin.getSystemConfig().contains(prefix + ".biome")) return;
+
+        plugin.getSystemConfig().set(prefix + ".biome", biome.name());
+        plugin.getSystemConfig().set(prefix + ".chaos", chaos);
         plugin.saveSystemConfig();
     }
 }

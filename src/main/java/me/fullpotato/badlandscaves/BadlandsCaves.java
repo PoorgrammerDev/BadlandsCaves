@@ -2,11 +2,15 @@ package me.fullpotato.badlandscaves;
 
 import com.google.common.base.Charsets;
 import me.fullpotato.badlandscaves.AlternateDimensions.Hazards.*;
+import me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics.CastleBossEntry;
+import me.fullpotato.badlandscaves.AlternateDimensions.StructureMechanics.CastlePreventModify;
+import me.fullpotato.badlandscaves.AlternateDimensions.DimensionStructures;
 import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.SpawnInhabitants;
 import me.fullpotato.badlandscaves.AlternateDimensions.UnloadDimensions;
 import me.fullpotato.badlandscaves.AlternateDimensions.UseDimensionalAnchor;
 import me.fullpotato.badlandscaves.Blocks.SilencerBlock;
+import me.fullpotato.badlandscaves.Blocks.EnergiumOre;
 import me.fullpotato.badlandscaves.Blocks.TitaniumOre;
 import me.fullpotato.badlandscaves.Commands.*;
 import me.fullpotato.badlandscaves.Commands.TabCompleters.*;
@@ -30,20 +34,22 @@ import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.Loot.*;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.AscendedDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.SoulDrop;
+import me.fullpotato.badlandscaves.Loot.MobDeathLoot.VoidMobDrops;
 import me.fullpotato.badlandscaves.Loot.MobDeathLoot.ZombieDeathLoot;
 import me.fullpotato.badlandscaves.MobBuffs.*;
+import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.CastleBoss;
 import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadowsNMS;
-import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadows_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.EclipsedShadows.EclipsedShadows_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
-import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyes_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayerNMS;
-import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.FakePlayer.FakePlayer_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSightNMS;
-import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.LineOfSight.LineOfSight_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
-import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.Possession.Possession_1_16_R3;
 import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter;
-import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter_1_16_R2;
+import me.fullpotato.badlandscaves.NMS.TPSGetter.TPSGetter_1_16_R3;
 import me.fullpotato.badlandscaves.Other.*;
 import me.fullpotato.badlandscaves.Research.UseResearchTable;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
@@ -65,10 +71,13 @@ import me.fullpotato.badlandscaves.Toxicity.IncreaseToxInWater;
 import me.fullpotato.badlandscaves.Toxicity.ToxSlowDecreaseRunnable;
 import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
 import me.fullpotato.badlandscaves.Util.InventorySerialize;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.ServerProperties;
 import me.fullpotato.badlandscaves.WorldGeneration.*;
 import org.bukkit.GameRule;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -151,6 +160,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private Shield shield;
     private CraftingGuide craftingGuide;
     private TitaniumOre titaniumOre;
+    private EnergiumOre energiumOre;
     private TitaniumBar titaniumBar;
     private StarlightComponents starlightComponents;
     private UseForeverFish useForeverFish;
@@ -161,7 +171,6 @@ public final class BadlandsCaves extends JavaPlugin {
     private StarlightCharge starlightCharge;
     private StarlightBlasterMechanism starlightBlasterMechanism;
     private SpawnInhabitants spawnInhabitants;
-    private NoOxygen noOxygen;
     private NoFood noFood;
     private Freezing freezing;
     private UseDimensionalAnchor useDimensionalAnchor;
@@ -219,12 +228,21 @@ public final class BadlandsCaves extends JavaPlugin {
     private PlayerEffects playerEffects;
     private HungerLimit hungerLimit;
     private StarlightPaxelMechanism starlightPaxelMechanism;
-    private SlowBreak slowBreak;
     private PreventTechUse preventTechUse;
     private ManaBarManager manaBarManager;
     private PreventMagicUse preventMagicUse;
     private ParticleShapes particleShapes;
     private SpawnImmunity spawnImmunity;
+    private VoidSkeleton voidSkeleton;
+    private VoidCreeper voidCreeper;
+    private VoidZombie voidZombie;
+    private VoidMobDrops voidMobDrops;
+    private ParanoiaMechanism paranoiaMechanism;
+    private DimensionStructures dimensionStructures;
+    private CastleBossEntry castleBossEntry;
+    private CastleBoss castleBoss;
+    private CastlePreventModify castlePreventModify;
+    private AscendedOrb ascendedOrb;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -273,6 +291,8 @@ public final class BadlandsCaves extends JavaPlugin {
     }
 
     public void initializeFields() {
+        new NameTagHide(this);
+
         particleShapes = new ParticleShapes(this);
         EnchantmentStorage enchantmentStorage = new EnchantmentStorage(this);
         pregenerateDimensions = new PregenerateDimensions(this, random);
@@ -358,15 +378,16 @@ public final class BadlandsCaves extends JavaPlugin {
         shield = new Shield(this);
         craftingGuide = new CraftingGuide(this);
         titaniumOre = new TitaniumOre(this, random);
+        energiumOre = new EnergiumOre(this, random);
         titaniumBar = new TitaniumBar(this);
         starlightComponents = new StarlightComponents(this);
         useForeverFish = new UseForeverFish(this);
         starlightBlasterMechanism = new StarlightBlasterMechanism(this, starlightCharge, starlightTools, nebuliteManager, particleShapes);
         spawnInhabitants = new SpawnInhabitants(this, random);
-        noOxygen = new NoOxygen(this, environmentalHazards, random);
         noFood = new NoFood(environmentalHazards);
         freezing = new Freezing(this, environmentalHazards);
-        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler, random);
+        dimensionStructures = new DimensionStructures(this, random);
+        useDimensionalAnchor = new UseDimensionalAnchor(this, environmentalHazards, destroySpawner, deathHandler, dimensionStructures, random);
         piglinBuff = new PiglinBuff(this, random);
         hoglinBuff = new HoglinBuff(this, random);
         silencer = new Silencer(this);
@@ -419,10 +440,18 @@ public final class BadlandsCaves extends JavaPlugin {
         dimensionStructureTable = new DimensionStructureTable(this, random);
         unloadDimensions = new UnloadDimensions(this);
         hungerLimit = new HungerLimit();
-        slowBreak = new SlowBreak(this, random);
         preventTechUse = new PreventTechUse(this, voidmatter, enchantmentStorage);
         preventMagicUse = new PreventMagicUse(this, starlightCharge, enchantmentStorage);
         spawnImmunity = new SpawnImmunity(this, playerEffects);
+        voidSkeleton = new VoidSkeleton(this, random);
+        voidCreeper = new VoidCreeper(this);
+        voidZombie = new VoidZombie(this);
+        voidMobDrops = new VoidMobDrops(this, random);
+        paranoiaMechanism = new ParanoiaMechanism(this, random);
+        castleBossEntry = new CastleBossEntry(this);
+        castleBoss = new CastleBoss(this, particleShapes, random, dimensionStructureTable);
+        castlePreventModify = new CastlePreventModify(this);
+        ascendedOrb = new AscendedOrb(this, artifactManager);
     }
 
     //CONFIG
@@ -495,6 +524,11 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StartingDungeons dungeons = new StartingDungeons(this, random);
         dungeons.genSpawnDungeons();
+
+        //TODO: REMOVE THIS
+        WorldCreator wc = new WorldCreator("world_test");
+        wc.type(WorldType.FLAT);
+        wc.createWorld();
     }
 
     //EVENTS
@@ -568,6 +602,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 shield,
                 craftingGuide,
                 titaniumOre,
+                energiumOre,
                 titaniumBar,
                 starlightComponents,
                 useForeverFish,
@@ -578,9 +613,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 starlightCharge,
                 starlightBlasterMechanism,
                 spawnInhabitants,
-                noOxygen,
                 noFood,
-                freezing,
                 useDimensionalAnchor,
                 piglinBuff,
                 hoglinBuff,
@@ -635,10 +668,18 @@ public final class BadlandsCaves extends JavaPlugin {
                 playerEffects,
                 hungerLimit,
                 starlightPaxelMechanism,
-                slowBreak,
                 preventTechUse,
                 preventMagicUse,
                 spawnImmunity,
+                voidSkeleton,
+                voidCreeper,
+                voidZombie,
+                voidMobDrops,
+                paranoiaMechanism,
+                castleBossEntry,
+                castleBoss,
+                castlePreventModify,
+                ascendedOrb,
         };
 
         for (Listener event : events) {
@@ -681,8 +722,12 @@ public final class BadlandsCaves extends JavaPlugin {
         this.getCommand("backrooms").setTabCompleter(new BackroomsCommandTabComplete(this));
 
         this.getCommand("world").setExecutor(new WorldCommand(this));
+        this.getCommand("world").setTabCompleter(new WorldCommandTabCompleter(this));
 
         this.getCommand("pregenerate").setExecutor(new PregenerateCommand(this, random));
+
+        this.getCommand("structure").setExecutor(new StructureCommand(this, dimensionStructures));
+        this.getCommand("structure").setTabCompleter(new StructureCommandTabCompleter());
     }
 
     //RUNNABLES
@@ -700,13 +745,9 @@ public final class BadlandsCaves extends JavaPlugin {
         new AscendedZombie(this, random).runTaskTimer(this, 0, 10);
         new Surface(this, random).runTaskTimer(this, 0, 100);
         starlightBlasterMechanism.runTaskTimer(this, 0, 20);
-        new MeteorShowerRunnable(this, random).runTaskTimer(this, 0, 20);
-        new BewildermentRunnable(this, random).runTaskTimer(this, 0, 100);
-        noOxygen.runTaskTimer(this, 0, 10);
-        new LavaFloorRunnable(this, random).runTaskTimer(this, 0, 20);
-        new NoFloorRunnable(this, random).runTaskTimer(this, 0, 10);
-        new ParanoiaRunnable(this, random).runTaskTimer(this, 0, 80);
+        paranoiaMechanism.runTaskTimer(this, 0, (paranoiaMechanism.getBlindnessFallback() ? 80 : 5));
         freezing.runTaskTimer(this, 0, 5);
+        new MeteorShowerRunnable(this, random, freezing).runTaskTimer(this, 0, 20);
         preventTechUse.runTaskTimer(this, 0, 200);
         preventMagicUse.runTaskTimer(this, 0, 200);
         new SilencerTimerRunnable(this).runTaskTimerAsynchronously(this, 0, 0);
@@ -820,6 +861,8 @@ public final class BadlandsCaves extends JavaPlugin {
 
         NebuliteInstallerSmelt nebuliteInstallerSmelt = new NebuliteInstallerSmelt(this);
         nebuliteInstallerSmelt.deconstructRecipe();
+
+        ascendedOrb.ascendedOrbCrafting();
     }
 
     public void loadWorldNames() {
@@ -843,13 +886,13 @@ public final class BadlandsCaves extends JavaPlugin {
         String version = this.getServer().getClass().getPackage().getName();
         version = version.substring(version.lastIndexOf('.') + 2);
 
-        if ("1_16_R2".equals(version)) {
-            enhancedEyesNMS = new EnhancedEyes_1_16_R2();
-            fakePlayerNMS = new FakePlayer_1_16_R2(this);
-            lineOfSightNMS = new LineOfSight_1_16_R2();
-            possessionNMS = new Possession_1_16_R2();
-            eclipsedShadowsNMS = new EclipsedShadows_1_16_R2(this);
-            tpsGetterNMS = new TPSGetter_1_16_R2(this);
+        if ("1_16_R3".equals(version)) {
+            enhancedEyesNMS = new EnhancedEyes_1_16_R3();
+            fakePlayerNMS = new FakePlayer_1_16_R3(this);
+            lineOfSightNMS = new LineOfSight_1_16_R3();
+            possessionNMS = new Possession_1_16_R3();
+            eclipsedShadowsNMS = new EclipsedShadows_1_16_R3(this);
+            tpsGetterNMS = new TPSGetter_1_16_R3(this);
 
         } else {
             this.getServer().getLogger().severe("Invalid server version " + version + ". Disabling plugin.");

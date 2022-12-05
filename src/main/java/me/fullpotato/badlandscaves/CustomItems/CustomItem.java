@@ -178,6 +178,7 @@ public enum CustomItem {
     BLUEPRINTS_STIM_PACK(true),
 
     ASCENDED_ORB(true),
+    ASCENDED_ORB_PLACEHOLDER(true),
     CHARGED_QUARTZ(true),
 
     ;

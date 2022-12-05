@@ -1,16 +1,16 @@
 package me.fullpotato.badlandscaves.NMS.EnhancedEyes;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class EnhancedEyes_1_16_R2 implements EnhancedEyesNMS {
+public class EnhancedEyes_1_16_R3 implements EnhancedEyesNMS {
 
     public int spawnIndicator (Player player, Location location) {
         return spawnIndicator(player, location, null);

@@ -1,9 +1,12 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
@@ -48,14 +51,25 @@ public class CreeperBuff implements Listener {
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
+        //Ascended Monster
         if (random.nextInt(100) < ascend) {
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
             creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);
             creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
             creeper.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
+            return;
         }
 
+        //Change behaviour if the monster is spawned in The Void
+        if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
+            creeper.setCustomName("Void Creeper");
+            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+            creeper.setExplosionRadius((int) (radius * 2 * Math.max(chaos / 32.0, 1)));
+            creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(8.0);
+            NameTagHide.getInstance().Hide(creeper);
+        }
 
     }
 

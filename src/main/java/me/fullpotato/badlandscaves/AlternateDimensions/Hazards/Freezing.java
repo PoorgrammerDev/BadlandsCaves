@@ -3,117 +3,78 @@ package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.UUID;
 
-public class Freezing extends BukkitRunnable implements Listener {
+public class Freezing extends BukkitRunnable {
     private final BadlandsCaves plugin;
     private final EnvironmentalHazards environmentalHazards;
     private final static String title = "Temperature";
-
-    private final Material[] warmBlocks = {
-            Material.FIRE,
-            Material.CAMPFIRE,
-            Material.LAVA,
-            Material.MAGMA_BLOCK,
-            Material.TORCH,
-    };
+    private final HashSet<Material> warmBlocks;
+    private final HashMap<UUID, Block> cachedBlocks;
+    private final int range;
 
     public Freezing(BadlandsCaves plugin, EnvironmentalHazards environmentalHazards) {
         this.plugin = plugin;
         this.environmentalHazards = environmentalHazards;
-    }
+        this.cachedBlocks = new HashMap<>();
+        this.range = plugin.getOptionsConfig().getInt("alternate_dimensions.hazards.freezing_warm_block_range");
 
-    @EventHandler
-    public void stopFrozenMove (PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
-            if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                if ((int) PlayerScore.TEMPERATURE.getScore(plugin, player) <= 0) {
-                    if (event.getTo() != null && event.getTo().distanceSquared(event.getFrom()) > 0) {
-                        event.setCancelled(true);
-                    }
-                }
-            }
-        }
+        this.warmBlocks = new HashSet<>();
+        this.warmBlocks.add(Material.FIRE);
+        this.warmBlocks.add(Material.CAMPFIRE);
+        this.warmBlocks.add(Material.LAVA);
+        this.warmBlocks.add(Material.MAGMA_BLOCK);
+        this.warmBlocks.add(Material.TORCH);
+        this.warmBlocks.add(Material.WALL_TORCH);
+        this.warmBlocks.add(Material.LANTERN);
+        this.warmBlocks.add(Material.JACK_O_LANTERN);
     }
-
-    @EventHandler
-    public void stopFrozenBreak (BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
-            if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                if ((int) PlayerScore.TEMPERATURE.getScore(plugin, player) <= 0) {
-                    event.setCancelled(true);
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    public void stopFrozenPlace (BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
-            if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
-                if ((int) PlayerScore.TEMPERATURE.getScore(plugin, player) <= 0) {
-                    event.setCancelled(true);
-                }
-            }
-        }
-    }
-
 
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             World world = player.getWorld();
-            int temp = (int) PlayerScore.TEMPERATURE.getScore(plugin, player);
+            double temp = (double) PlayerScore.TEMPERATURE.getScore(plugin, player);
             if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.FREEZING)) {
                 if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                     world.spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 0.5, 0), 50, 5, 5, 5, 0, new Particle.DustOptions(Color.fromRGB(203, 239, 245), 1));
 
-
                     KeyedBossBar tempBar = getTemperatureBar(player, true);
                     tempBar.setVisible(true);
 
-                    //calc score
-                    if (isWarm(player, 3)) {
-                        if (temp < 100) {
-                            temp++;
-                        }
-                    }
-                    else {
-                        temp--;
+                    //Calculating temperature difference ===================
+                    final boolean warm = isWarm(player, this.range);
+                    final Block standingIn = player.getLocation().getBlock();
+                    final Block standingOn = standingIn.getRelative(BlockFace.DOWN);
+                    double difference = warm ? 1.0 : -1.0;
+
+                    //Standing on ice: -0.5
+                    if (standingOn.getType() == Material.ICE || standingOn.getType() == Material.PACKED_ICE) {
+                        difference -= 0.5;
                     }
 
-                    //damage
-                    if (temp <= 0) {
-                        world.spawnParticle(Particle.REDSTONE, player.getLocation().add(0, 0.5, 0), 15, 0.25, 1, 0.25, 0, new Particle.DustOptions(Color.fromRGB(95, 201, 217), 0.5F));
-
-                        if (temp < -20) {
-                            player.damage(player.getHealth() / 8.0);
-                            temp = 0;
-                        }
+                    //Standing in water: -0.75
+                    if (standingIn.getType() == Material.WATER) {
+                        difference -= 0.75;
                     }
+
+                    temp += difference;
+                    // ====================================================
 
                     //update bar and change color, also slowness
-                    tempBar.setProgress(Math.max(Math.min(temp / 100.0, 1), 0));
+                    tempBar.setProgress(Math.max(Math.min(temp / 100.0, 1.0), 0.0));
                     if (temp > 80) {
                         tempBar.setColor(BarColor.RED);
                         tempBar.setTitle(ChatColor.RED + title);
@@ -136,11 +97,10 @@ public class Freezing extends BukkitRunnable implements Listener {
                         tempBar.setColor(BarColor.BLUE);
                         tempBar.setTitle(ChatColor.BLUE.toString() + ChatColor.BOLD + "Frozen");
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15, 99, false, false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 15, 99, false, false));
+                        player.setHealth(Math.floor(player.getHealth() / 2));
                     }
 
-
-                    PlayerScore.TEMPERATURE.setScore(plugin, player, temp);
+                    PlayerScore.TEMPERATURE.setScore(plugin, player, Math.min(Math.max(temp, 0.0), 100.0));
                 }
             }
             else {
@@ -149,7 +109,7 @@ public class Freezing extends BukkitRunnable implements Listener {
                     tempBar.setVisible(false);
                 }
 
-                if (temp < 100) PlayerScore.TEMPERATURE.setScore(plugin, player, 100);
+                if (temp < 100) PlayerScore.TEMPERATURE.setScore(plugin, player, 100.0);
             }
         }
     }
@@ -157,13 +117,40 @@ public class Freezing extends BukkitRunnable implements Listener {
     public boolean isWarm (Player player, int radius) {
         if (player.getFireTicks() > 0) return true;
 
-        final Location location = player.getLocation();
-        final List<Material> warmBlocks = Arrays.asList(this.warmBlocks);
+        //Cached block override
+        final UUID uuid = player.getUniqueId();
+        if (this.cachedBlocks.containsKey(uuid)) {
+            final Block block = this.cachedBlocks.get(uuid);
+            final Location cachedLocation = block.getLocation();
+            final Location playerLocation = player.getLocation();
+
+            //Check if block is still a valid type
+            if (this.warmBlocks.contains(block.getType())) {
+                //Check if world is still the same
+                if (playerLocation.getWorld().equals(cachedLocation.getWorld())) {
+                    //Check if in range
+                    if (
+                        Math.abs(playerLocation.getBlockX() - cachedLocation.getBlockX()) <= radius &&
+                        Math.abs(playerLocation.getBlockY() - cachedLocation.getBlockY()) <= radius &&
+                        Math.abs(playerLocation.getBlockZ() - cachedLocation.getBlockZ()) <= radius
+                    ) {
+                        return true;
+                    }
+                }
+            }
+            
+            //Did exist, but is no longer valid (for any of the above reasons) -> delete
+            this.cachedBlocks.remove(uuid);
+        }
+   
+        //Manually search for the blocks
+        final Location origin = player.getLocation();
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
-                    final Location iter = location.clone().add(x, y, z);
-                    if (warmBlocks.contains(iter.getBlock().getType())) {
+                    final Block block = origin.clone().add(x, y, z).getBlock();
+                    if (this.warmBlocks.contains(block.getType())) {
+                        this.cachedBlocks.put(player.getUniqueId(), block);
                         return true;
                     }
                 }
@@ -180,5 +167,9 @@ public class Freezing extends BukkitRunnable implements Listener {
             bar.addPlayer(player);
         }
         return bar;
+    }
+
+    public boolean isWarmingMaterial(Material material) {
+        return this.warmBlocks.contains(material);
     }
 }

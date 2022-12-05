@@ -1,31 +1,41 @@
 package me.fullpotato.badlandscaves.AlternateDimensions.Hazards;
 
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 public class NoFood implements Listener {
     private final EnvironmentalHazards environmentalHazards;
+    private final int FOOD_LEVEL = 6;
 
     public NoFood(EnvironmentalHazards environmentalHazards) {
         this.environmentalHazards = environmentalHazards;
     }
 
     @EventHandler
-    public void eat(PlayerItemConsumeEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        if (environmentalHazards.isDimension(world) && environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.NO_FOOD)) {
-            ItemStack item = event.getItem();
-            if (!item.getType().equals(Material.POTION)) {
-                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.5F, 1);
-                event.setCancelled(true);
-            }
-        }
+    public void enterDimension(PlayerChangedWorldEvent event) {
+        final Player player = event.getPlayer();
+        final World world = player.getWorld();
+
+        //Ensure that this is relevant
+        if (!environmentalHazards.isDimension(world) || !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.NO_FOOD)) return;
+
+        player.setFoodLevel(Math.min(player.getFoodLevel(), FOOD_LEVEL));
+    }
+
+
+    @EventHandler
+    public void hungerChange(FoodLevelChangeEvent event) {
+        final HumanEntity human = event.getEntity();
+        final World world = human.getWorld();
+
+        //Ensure that this is relevant
+        if (!environmentalHazards.isDimension(world) || !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.NO_FOOD)) return;
+
+        event.setFoodLevel(Math.min(event.getFoodLevel(), FOOD_LEVEL));
     }
 }

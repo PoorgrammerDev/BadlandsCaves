@@ -4,6 +4,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.WorldGeneration.DimensionsWorlds;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,16 +38,18 @@ public class SpawnInhabitants implements Listener {
         World world = entity.getWorld();
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
 
-            if (plugin.getSystemConfig().getBoolean("hardmode")) {
-                if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
-                    if (entity instanceof CaveSpider || entity instanceof WitherSkeleton) {
-                        event.setCancelled(true);
-                        entity.remove();
-                    }
-                    return;
+            if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+                if (entity instanceof CaveSpider || entity instanceof WitherSkeleton) {
+                    event.setCancelled(true);
+                    entity.remove();
                 }
+                return;
+            }
 
+            if (plugin.getSystemConfig().getBoolean("hardmode")) {
                 if (entity instanceof Monster) {
+                    if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS) return;
+
                     DimensionsWorlds.Habitation habitationType = null;
 
                     String savedHabitatType = plugin.getSystemConfig().getString("alternate_dimensions." + world.getName() + ".habitation");

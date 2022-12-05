@@ -237,7 +237,8 @@ public class CustomItemManager {
         itemMap.put(CustomItem.BLUEPRINTS_STIM_PACK, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.RESET.toString() + ChatColor.of("#03a1fc") + "Blueprints").setLore(ChatColor.GRAY + "Stim Pack").setCustomModelData(232).build());
         itemMap.put(CustomItem.ARTIFACT_VOUCHER, new ItemBuilder(Material.PAPER).setName(ChatColor.WHITE + "Artifact Voucher").build());
         itemMap.put(CustomItem.DIMENSIONAL_ANCHOR, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Dimensional Anchor").setCustomModelData(175).setPersistentData(new NamespacedKey(plugin, "is_dim_anchor"), PersistentDataType.BYTE, (byte) 1).build());
-        itemMap.put(CustomItem.ASCENDED_ORB, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.AQUA + "Orb of Ascension").setCustomModelData(239).build());
+        itemMap.put(CustomItem.ASCENDED_ORB, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.AQUA + "Orb of Ascension").setCustomModelData(239).setPersistentData(new NamespacedKey(plugin, "is_ascension_orb"), PersistentDataType.BYTE, (byte) 1).build());
+        itemMap.put(CustomItem.ASCENDED_ORB_PLACEHOLDER, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.WHITE + "Artifact Conversion Placeholder").build());
         itemMap.put(CustomItem.CHARGED_QUARTZ, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.WHITE + "Charged Quartz").setCustomModelData(240).build());
 
         //starlight armor/tools

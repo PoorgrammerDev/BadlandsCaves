@@ -20,14 +20,8 @@ public class EnvironmentalHazards {
     }
 
     public enum Hazard {
-        ACID_RAIN,
         TOXIC_WATER,
-        SLOW_BREAK,
         METEOR_SHOWERS,
-        BEWILDERMENT,
-        NO_OXYGEN,
-        LAVA_FLOOR,
-        NO_FLOOR,
         NO_FOOD,
         PARANOIA,
         FREEZING,
@@ -42,7 +36,7 @@ public class EnvironmentalHazards {
         plugin.getSystemConfig().set("alternate_dimensions." + world.getName() + ".hazards", hazards);
         plugin.saveSystemConfig();
 
-        if (hazard.equals(Hazard.ACID_RAIN)) {
+        if (hazard.equals(Hazard.TOXIC_WATER)) {
             world.setStorm(true);
             world.setWeatherDuration(999);
             world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);

@@ -58,4 +58,39 @@ public enum Artifact {
     public ArtifactBaseItem[] getArtifactBaseItems() {
         return artifactBaseItems;
     }
+
+    public static Artifact[] GetLootItems() {
+        return new Artifact[] {
+            TENACIOUS_TRICKERY,
+            ECLIPSED_SHADOWS,
+            MANA_WARDING,
+            FLEETING_SPIRITS,
+            CONVERGING_SWINGS,
+            //TRAVELING_BLADES, // REMOVED: Orb of Ascension
+            HASTE_WIND,
+            BLOODSAPPING_BAYONET,
+            SIGHT_STEALING,
+            BLOODSAPPING_BOW,
+            //SUMMONERS_RIFT, // REMOVED: Orb of Ascension
+            EMANCIPATED_EYES,
+            DIGGING_DOPPELGANGER,
+            UNDISPLACE,
+            MOMENTOUS_MOMENTUM,
+            DISTRACTING_DOPPELGANGER,
+            SOUL_HEIST,
+            TEMPORAL_SUSPENSION,
+            DIRECTIONAL_VISION,
+            FORESIGHT,
+            CHEAP_SIGHT,
+            ADAPTIVE_EXPLOITATION,
+            SAFEGUARD,
+            INSPIRE,
+            DOMINO,
+            TRIPLE_JUMP,
+            RECOVERY_ROLL,
+            SHADOWSTEP,
+            METAPHYSICAL_NOURISHMENT
+        };
+    }
+
 }

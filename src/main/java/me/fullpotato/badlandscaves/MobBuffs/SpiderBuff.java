@@ -5,7 +5,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -38,8 +40,15 @@ public class SpiderBuff implements Listener {
         //Exception for entering Withdraw
         if (spider.getWorld().equals(voidWorld)) return;
 
-        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
+        //No spiders in the void layer
+        if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS &&
+            event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
+                event.setCancelled(true);
+                event.getEntity().remove();
+                return;
+        }
 
+        boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
 
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
         final double chance = Math.pow(1.045, chaos) - 1;
