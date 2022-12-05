@@ -449,7 +449,7 @@ public final class BadlandsCaves extends JavaPlugin {
         voidMobDrops = new VoidMobDrops(this, random);
         paranoiaMechanism = new ParanoiaMechanism(this, random);
         castleBossEntry = new CastleBossEntry(this);
-        castleBoss = new CastleBoss(this, particleShapes, random);
+        castleBoss = new CastleBoss(this, particleShapes, random, dimensionStructureTable);
         castlePreventModify = new CastlePreventModify(this);
         ascendedOrb = new AscendedOrb(this, artifactManager);
     }

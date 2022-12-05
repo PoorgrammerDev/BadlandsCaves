@@ -26,11 +26,13 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.loot.LootContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.Loot.DimensionStructureTable;
 import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine.CastleBossState;
 import me.fullpotato.badlandscaves.MobBuffs.CastleBoss.StateMachine.NormalState;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
@@ -41,14 +43,16 @@ public class CastleBoss implements Listener {
     private final BadlandsCaves plugin;
     private final ParticleShapes particleShapes;
     private final Random random;
+    private final DimensionStructureTable lootManager;
 
     private final HashMap<UUID, CastleBossState> stateMap;
 
-    public CastleBoss(BadlandsCaves plugin, ParticleShapes particleShapes, Random random) {
+    public CastleBoss(BadlandsCaves plugin, ParticleShapes particleShapes, Random random, DimensionStructureTable lootManager) {
         this.plugin = plugin;
         this.particleShapes = particleShapes;
         this.random = random;
         this.stateMap = new HashMap<>();
+        this.lootManager = lootManager;
     }
 
     @EventHandler
@@ -219,6 +223,46 @@ public class CastleBoss implements Listener {
         }
         event.getDrops().clear();
         event.getDrops().add(orb);
+
+        //50x exp rate for killing boss
+        event.setDroppedExp(event.getDroppedExp() * 50);
+
+        //Extinguish all flames near place of death to prevent loot from burning
+        for (int x = -5; x <= 5; x++) {
+            for (int y = -5; y <= 5; y++) {
+                for (int z = -5; z <= 5; z++) {
+                    Location loc = boss.getLocation().add(x, y, z);
+                    if (loc != null) {
+                        Material type = loc.getBlock().getType();
+                        if (type == Material.FIRE || type == Material.LAVA || type == Material.SOUL_FIRE) {
+                            loc.getBlock().setType(Material.AIR);
+                        }
+                    }
+                }
+            }
+        }
+
+        //Drop loot repeatedly
+        final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+        final int count = (chaos / 20 > 0) ? random.nextInt(chaos / 20) + 1 : 1;
+        int[] ticker = {0};
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (ticker[0] >= count) {
+                    this.cancel();
+                    return;
+                }
+                
+                lootManager.populateLoot(random, new LootContext.Builder(boss.getLocation()).build()).forEach((ItemStack item) -> {
+                    boss.getWorld().dropItemNaturally(boss.getLocation(), item);
+                });
+
+                ticker[0]++;
+            }
+            
+        }.runTaskTimer(plugin, 0, 10);
+
 
 
         //Remove config entries
