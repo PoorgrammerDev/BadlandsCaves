@@ -111,11 +111,6 @@ public class DimensionsWorlds {
                         plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".structures_generated", false);
                         plugin.saveSystemConfig();
                         addHabitation(world, habitation);
-
-                        if (!pregenerate) {
-                            final int hazardCount = (chaos / 20 > 0) ? (1 + random.nextInt((chaos / 20))) : 1;
-                            addHazards(world, biome, hazardCount);
-                        }
                     }
                 }.runTaskLater(plugin, 5);
             }
@@ -149,7 +144,7 @@ public class DimensionsWorlds {
             try {
                 final Biome biome = Biome.valueOf(biomeStr.toUpperCase());
                 final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-                final int amount = chaos / 50 > 0 ? 1 + random.nextInt((chaos / 50)) : 1;
+                final int amount = chaos / 25 > 0 ? 1 + random.nextInt((chaos / 25)) : 1;
 
                 addHazards(world, biome, amount);
             }

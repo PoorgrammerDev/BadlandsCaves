@@ -65,7 +65,6 @@ public class DimensionStructures {
         final List<Structure> surfaceStructures = Structure.GetStructuresByType(StructureType.SURFACE_STRUCTURE);
         final List<Structure> voidStructures = Structure.GetStructuresByType(StructureType.VOID_STRUCTURE);
         final List<Structure> voidDecorations = Structure.GetStructuresByType(StructureType.VOID_DECORATION);
-
        
         final int layerMultiplier = 10;
         new BukkitRunnable() {
@@ -100,14 +99,14 @@ public class DimensionStructures {
                     structure = voidStructures.get(random.nextInt(voidStructures.size()));
 
                     //Calculate an appropriate height in the void layer from this location
-                    location = TryCalcVoidHeight(location, 10);
+                    location = TryCalcVoidHeight(location, 1);
                     
-                    //Enforce that Y MUST be at least minimum, even if it fails after how many ever tries
-                    location.setY(Math.max(location.getY(), MINIMUM_HEIGHT));
+                    //Do not force place -- if the height is less than minimum then ignore
+                    if (location.getY() < MINIMUM_HEIGHT) structure = null;
                 }
                 else {
                     //Calculate an appropriate height in the void layer from this location
-                    location = TryCalcVoidHeight(location, 10);
+                    location = TryCalcVoidHeight(location, 1);
 
                     //Do not force place -- if the height is less than minimum then ignore
                     if (location.getY() < MINIMUM_HEIGHT) structure = null;
@@ -121,14 +120,12 @@ public class DimensionStructures {
                     ticker[0]++;
                 }
             }
-        }.runTaskTimer(plugin, 100, 20);
+        }.runTaskTimer(plugin, 100, 40);
     }
 
     public void generateStructure (Location origin, Structure structure, boolean leaveStructureBlocks, boolean force) {
         final World world = origin.getWorld();
         if (!force && !world.getName().startsWith(plugin.getDimensionPrefixName())) return;
-
-        Bukkit.broadcastMessage("Structure " + structure.name() + " spawning at " + origin.getBlockX() + " " + origin.getBlockY() + " " + origin.getBlockZ());
 
         world.loadChunk(origin.getChunk());
         new BukkitRunnable() {
