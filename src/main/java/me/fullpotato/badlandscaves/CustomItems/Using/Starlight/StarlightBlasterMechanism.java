@@ -8,6 +8,7 @@ import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulit
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import me.fullpotato.badlandscaves.Util.PositionManager;
 import me.fullpotato.badlandscaves.Util.TargetEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,7 +38,7 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
     private final ParticleShapes particleShapes;
     private final int damage = 20;
     private final Particle.DustOptions[] dustOptions = {
-            new Particle.DustOptions(Color.fromRGB(255, 200, 1), 1), // default yellow
+            new Particle.DustOptions(Color.fromRGB(0, 242, 255), 1), // default blue
             new Particle.DustOptions(Color.fromRGB(255, 125, 1), 1), // superheating orange
             new Particle.DustOptions(Color.fromRGB(0, 180, 255), 1), // hunters blue
     };
@@ -80,8 +82,8 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                 short cooldown = getCooldown(item);
                 event.setCancelled(true);
                 boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
-                List<Nebulite> nebuliteList = Arrays.asList(nebuliteManager.getNebulites(item));
-                if (hardmode && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0 && (cooldown <= 0 || nebuliteList.contains(Nebulite.RAPID_FIRE))) {
+                HashSet<Nebulite> nebuliteList = new HashSet<>(Arrays.asList(nebuliteManager.getNebulites(item)));
+                if (hardmode && (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0 && charge > 0 && cooldown <= 0) {
                     Location location = player.getEyeLocation();
                     TargetEntity targetEntity = new TargetEntity();
                     Particle.DustOptions dustOptions = this.dustOptions[0];
@@ -196,7 +198,11 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
 
 
                     player.getWorld().playSound(location, "custom.starlight_blaster", 1, 1);
-                    particleShapes.line(null, Particle.REDSTONE, player.getEyeLocation(), targetLocation, 0, dustOptions, 0.5);
+                    PositionManager positionManager = new PositionManager();
+                    Location origin = event.getHand() == EquipmentSlot.HAND ? positionManager.getMainSide(player) : positionManager.getOffSide(player);
+                    particleShapes.line(null, Particle.REDSTONE,
+                        origin.add(origin.getDirection().normalize().multiply(1.5)),
+                        targetLocation, 0, dustOptions, 0.5);
 
                     if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                         int cost = 25;
@@ -219,12 +225,17 @@ public class StarlightBlasterMechanism extends BukkitRunnable implements Listene
                         if (nebuliteList.contains(Nebulite.SUPERHEATING_LASER)) cost *= 5;
 
                         //RAPID FIRE COST FACTOR
-                        if (nebuliteList.contains(Nebulite.RAPID_FIRE) && cooldown > 0) cost *= (cooldown / 5.0);
+                        if (nebuliteList.contains(Nebulite.RAPID_FIRE)) cost *= 2;
 
                         chargeManager.setCharge(item, charge - cost);
                     }
 
-                    setCooldown(item, (short) 2);
+                    if (nebuliteList.contains(Nebulite.RAPID_FIRE)){
+                        setCooldown(item, (short) 2);
+                    }
+                    else {
+                        setCooldown(item, (short) 8);
+                    }
                 }
             }
         }
