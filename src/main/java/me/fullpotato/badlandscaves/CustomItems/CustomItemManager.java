@@ -146,9 +146,9 @@ public class CustomItemManager {
         itemMap.put(CustomItem.WAVELENGTH_DISRUPTOR, new ItemBuilder(Material.STRUCTURE_BLOCK).setName("§eWavelength Disruptor").setCustomModelData(179).build());
         itemMap.put(CustomItem.SILENCER, new ItemBuilder(Material.STRUCTURE_BLOCK).setName(ChatColor.DARK_PURPLE + "Silencer").build());
         itemMap.put(CustomItem.FOREVER_FISH, new ItemBuilder(Material.COOKED_COD).setName("§6Forever Fish").setLore("§7Give a man a fish, feed him for a day.", "§7Give him a Forever Fish, feed him for a lifetime.").addItemFlags(ItemFlag.HIDE_ENCHANTS).addEnchant(Enchantment.DURABILITY, 1, true).build());
-        itemMap.put(CustomItem.ENERGIUM, new ItemBuilder(Material.COMMAND_BLOCK).setName("§cEnergium").setCustomModelData(155).build());
+        itemMap.put(CustomItem.ENERGIUM, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.of("#ffd60a") + "Energium").setCustomModelData(155).build());
         itemMap.put(CustomItem.ENERGY_CORE, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§bEnergy Core").setLore("§7Charge: 0").setCustomModelData(156).setPersistentData(new NamespacedKey(this.plugin, "energy_core_charge"), PersistentDataType.INTEGER, 0).setPersistentData(new NamespacedKey(this.plugin, "is_energy_core"), PersistentDataType.BYTE, (byte) 1).build());
-        itemMap.put(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.WHITE + "Charge Starlight Armor").setCustomModelData(157).build());
+        itemMap.put(CustomItem.STARLIGHT_CHARGE_PLACEHOLDER, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.WHITE + "Charge Starlight Armor and Tools").setCustomModelData(157).build());
         itemMap.put(CustomItem.VOIDMATTER, new ItemBuilder(Material.STRUCTURE_BLOCK).setName("§5Voidmatter").setCustomModelData(158).build());
         itemMap.put(CustomItem.VOIDMATTER_STICK, new ItemBuilder(Material.COMMAND_BLOCK).setName("§5Void Stick").setCustomModelData(173).build());
         itemMap.put(CustomItem.VOIDMATTER_STRING, new ItemBuilder(Material.STRUCTURE_BLOCK).setName("§5Void String").setCustomModelData(174).build());

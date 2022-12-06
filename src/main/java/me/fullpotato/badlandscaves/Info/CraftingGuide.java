@@ -5,7 +5,6 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.ItemBuilder;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,6 +20,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
+
+import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1491,7 +1492,7 @@ public class CraftingGuide implements Listener {
 
         descs.put(customItemManager.getItem(CustomItem.ENERGIUM), 
             new ItemBuilder(Material.DEAD_BRAIN_CORAL_BLOCK)
-            .setName("§eMine Energium Ore")
+            .setName(ChatColor.of("#ffd60a") + "Mine Energium Ore")
             .setLore(
                 "§7This item is obtained by mining Energium Ore,",
                 "§7which generates in the Void Layer of Alternate Dimensions."
