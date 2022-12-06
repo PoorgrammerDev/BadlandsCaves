@@ -142,6 +142,7 @@ public class CraftingGuide implements Listener {
             CustomItem.VOIDMATTER_AXE.toString(),
 
             CustomItem.NEBULITE_CRATE.toString(),
+            CustomItem.NEBULITE_INSTALLER.toString(),
             CustomItem.ARTIFACT_VOUCHER.toString(),
 
             CustomItem.ARTIFACT_SUMMONERS_RIFT.toString(),
@@ -1500,8 +1501,8 @@ public class CraftingGuide implements Listener {
         );
 
         descs.put(customItemManager.getItem(CustomItem.NEBULITE_CRATE), voidmatter_desc);
+        descs.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), voidmatter_desc);
         descs.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), voidmatter_desc);
-
 
 
     }
