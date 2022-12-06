@@ -148,8 +148,11 @@ public class DimensionsGen extends ChunkGenerator {
         //Add Titanium Ore populator 
         populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 5, 2, 8));
 
-        //Add Energium Ore populator
+        //Add Energium Ore populator (Void layer)
         populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 29, 1, 5, 1, 4));
+
+        //Add Ancient Debris populator (Void layer)
+        populators.add(new OrePopulator(Material.BLACKSTONE, Material.ANCIENT_DEBRIS, 29, 1, 5, 1, 2));
 
         return populators;
     }

@@ -56,6 +56,7 @@ public class DimensionStructureTable implements LootTable, Listener {
         surfaceItemMap.put(new ItemStack(Material.SHULKER_SHELL), 2);
         surfaceItemMap.put(new ItemStack(Material.LEAD), 2);
         surfaceItemMap.put(new ItemStack(Material.TOTEM_OF_UNDYING), 1);
+        surfaceItemMap.put(new ItemStack(Material.WITHER_SKELETON_SKULL), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.RECALL_POTION), 1);
@@ -84,6 +85,7 @@ public class DimensionStructureTable implements LootTable, Listener {
         voidItemMap.put(new ItemStack(Material.BLAZE_POWDER), 16);
         voidItemMap.put(new ItemStack(Material.SHULKER_SHELL), 8);
         voidItemMap.put(new ItemStack(Material.TOTEM_OF_UNDYING), 1);
+        voidItemMap.put(new ItemStack(Material.WITHER_SKELETON_SKULL), 3);
         voidItemMap.put(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION), 1);
         voidItemMap.put(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE), 4);
         voidItemMap.put(customItemManager.getItem(CustomItem.RECALL_POTION), 1);
