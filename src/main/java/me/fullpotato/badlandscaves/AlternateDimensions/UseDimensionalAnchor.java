@@ -31,6 +31,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -352,7 +353,10 @@ public class UseDimensionalAnchor implements Listener {
                     }
                 }
                 else if (item.getType().equals(Material.ORANGE_TERRACOTTA)) {
-                    deathHandler.resetPlayer(player, false, true, false);
+                    Location returnLoc = player.getBedSpawnLocation();
+                    if (returnLoc == null) returnLoc = plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation();
+
+                    player.teleport(returnLoc, TeleportCause.PLUGIN);
                 }
             }
 

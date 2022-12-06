@@ -129,8 +129,12 @@ public class NebuliteManager {
                 final String str = getStringFromNebulites(nebulites);
                 final ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
+                    //set the inner PDC
                     meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, str);
 
+                    //manage item description ------
+
+                    //???
                     List<String> lore = meta.getLore();
                     if (lore == null) lore = new ArrayList<>();
                     for (int i = 5; i > 0; i--) {
@@ -139,23 +143,30 @@ public class NebuliteManager {
                         }
                     }
 
-                    for (int i = 0; i < nebulites.length; i++) {
-                        if (nebulites[i] != null) {
+                    ArrayList<String> nebList = new ArrayList<>();
+                    if (nebulites != null && nebulites.length > 0) {
+                        //display all nebulite strings into nebList
+                        for (int i = 0; i < nebulites.length; i++) {
+                            if (nebulites[i] != null) {
+                                final String name = customItemManager.getItem(nebulites[i].getNebuliteItem()).getItemMeta().getDisplayName();
+                                final int index = name.indexOf(ChatColor.stripColor(name));
+                                final String desc = ChatColor.RESET + name.substring(0, index) + name.substring(index);
+
+                                nebList.add(desc);
+                            }
+                        }
+
+                        //add header and "commit" nebList into description
+                        if (nebList.size() > 0) {
+                            //add header
                             lore.add("");
                             lore.add(ChatColor.RESET.toString() + ChatColor.BOLD + ChatColor.of("#0081fa") + "--- Nebulites ---");
-                            for (int k = 0; k < 3; k++) {
-                                if (nebulites[k] != null) {
-                                    // TODO: 7/17/2020 clean this up? idk how or why this works tbh but it works
-                                    final String name = customItemManager.getItem(nebulites[k].getNebuliteItem()).getItemMeta().getDisplayName();
-                                    final int index = name.indexOf(ChatColor.stripColor(name));
-                                    final String desc = ChatColor.RESET + name.substring(0, index) + name.substring(index);
 
-                                    lore.add(desc);
-                                }
-                            }
-                            break;
+                            lore.addAll(nebList);
                         }
+
                     }
+
                     meta.setLore(lore);
                     item.setItemMeta(meta);
                 }

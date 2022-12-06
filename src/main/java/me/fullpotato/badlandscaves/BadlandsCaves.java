@@ -398,10 +398,10 @@ public final class BadlandsCaves extends JavaPlugin {
         useSoulLantern = new UseSoulLantern(this, soulLantern);
         soulDrop = new SoulDrop(this, random, soulLantern, useSoulLantern);
         preservationTotem = new PreservationTotem(this);
-        starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism, particleShapes);
         useChambersBag = new UseChambersBag(this, random);
         ascendedDrops = new AscendedDrops(this);
         NebuliteStatChanges nebuliteStatChanges = new NebuliteStatChanges(this, nebuliteManager, starlightCharge, starlightArmor, starlightTools, enchantmentStorage);
+        starlightSentryMechanism = new StarlightSentryMechanism(this, starlightTools, starlightCharge, starlightBlasterMechanism, particleShapes, nebuliteManager, nebuliteStatChanges);
         nebuliteInstaller = new NebuliteInstaller(this, starlightCharge, nebuliteManager, nebuliteStatChanges);
         starlightSaberMechanism = new StarlightSaberMechanism(this, starlightTools, starlightCharge, nebuliteManager, useVoltshock, useCorrosive, useSerrated, random);
         nebuliteThruster = new NebuliteThruster(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);

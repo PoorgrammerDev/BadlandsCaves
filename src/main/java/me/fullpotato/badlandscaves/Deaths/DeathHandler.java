@@ -94,6 +94,9 @@ public class DeathHandler implements Listener {
         PlayerScore.TOX_SLOW_INCR_VAR.setScore(plugin, player, 0.0);
         PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, -255);
 
+        //patch fix for starlight sentry bugs
+        PlayerScore.HAS_STARLIGHT_SENTRY.setScore(plugin, player, 0);
+
         boolean has_powers = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         if (has_powers) {
             PlayerScore.MANA.setScore(plugin, player, PlayerScore.MAX_MANA.getScore(plugin, player));
