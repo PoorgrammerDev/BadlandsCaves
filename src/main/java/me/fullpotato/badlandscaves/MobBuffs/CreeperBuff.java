@@ -54,7 +54,7 @@ public class CreeperBuff implements Listener {
         //Ascended Monster
         if (random.nextInt(100) < ascend) {
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
-            creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
+            creeper.setCustomName(ChatColor.RED.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);
             creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
             creeper.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
@@ -126,8 +126,8 @@ public class CreeperBuff implements Listener {
                         if (random.nextBoolean()) {
                             Location top = source.getLocation().clone();
                             top.add(0, 5, 0);
-                            particleShapes.line(null, Particle.REDSTONE, source.getLocation(), top, 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
-                            particleShapes.line(null, Particle.REDSTONE, top, surrounding.getLocation(), 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
+                            particleShapes.line(null, Particle.REDSTONE, source.getLocation(), top, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1), 1);
+                            particleShapes.line(null, Particle.REDSTONE, top, surrounding.getLocation(), 0, new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1), 1);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
