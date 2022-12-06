@@ -65,8 +65,8 @@ public class DescensionPlayerMove implements Listener {
 
             if (captures == 4) {
                 //Send player messages
-                player.sendTitle(ChatColor.of("#4c158f") + "You are now a Heretic.", ChatColor.of("#25005c") + "The strange sensation follows you back to reality.", 20, 60, 20);
-                player.sendMessage(ChatColor.of("#4c158f") + "You are now a Heretic.");
+                player.sendTitle(ChatColor.of("#4c158f") + "You are now a Sorcerer.", ChatColor.of("#25005c") + "The strange sensation follows you back to reality.", 20, 60, 20);
+                player.sendMessage(ChatColor.of("#4c158f") + "You are now a Sorcerer.");
                 player.sendMessage(ChatColor.of("#25005c") + "The strange sensation follows you back to reality.");
 
                 //Play exit portal sound

@@ -38,7 +38,7 @@ descension_mob_limit: 100
 # How many Detection Points Lost Souls have to detect before player loses.
 descension_max_detect: 100
 
-# Heretic Spell Mana Costs
+# Sorcerer Spell Mana Costs
 # "Drain" indicates cost per second, instead of single-cost.
 spell_costs:
   displace_mana_cost: 25
@@ -140,10 +140,10 @@ hardmode_values:
   # The EXP dropped from Ascended Mobs are multiplied by this amount as a reward for killing them.
   ascended_exp_multiplier: 10
 
-  # In Hardmode, Silencers are blocks that prevent Heretics from using their powers. This is their radius of effect.
+  # In Hardmode, Silencers are blocks that prevent Sorcerers from using their powers. This is their radius of effect.
   silencer_range: 25
 
-  # Everytime a Silencer cancels a Heretic's powers from being used, it uses up this much energy.
+  # Everytime a Silencer cancels a Sorcerer's powers from being used, it uses up this much energy.
   silencer_cost: 10
 
   # The Nebulite "Decisive Disintegration" for the Starlight Paxel gives it Vein Miner and Tree Feller capabilities.

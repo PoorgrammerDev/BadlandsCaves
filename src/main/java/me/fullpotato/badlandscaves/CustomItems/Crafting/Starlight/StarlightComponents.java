@@ -289,7 +289,7 @@ public class StarlightComponents extends MatchCrafting implements Listener {
     }
 
     @EventHandler
-    public void preventHereticCraft (PrepareItemCraftEvent event) {
+    public void preventSorcererCrafting (PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
         final ItemStack result = event.getRecipe().getResult();

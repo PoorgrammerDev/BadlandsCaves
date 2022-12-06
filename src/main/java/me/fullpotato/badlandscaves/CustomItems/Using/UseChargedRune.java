@@ -60,7 +60,7 @@ public class UseChargedRune implements Listener {
 
         if (event.getHand() == null || event.getHand().equals(EquipmentSlot.OFF_HAND)) return;
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) != 1) {
-            player.sendMessage(ChatColor.RED + "This item can only be used by Heretics.");
+            player.sendMessage(ChatColor.RED + "This item can only be used by Sorcerers.");
             return;
         }
 
