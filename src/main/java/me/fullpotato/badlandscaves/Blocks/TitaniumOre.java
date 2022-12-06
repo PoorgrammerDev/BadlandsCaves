@@ -43,11 +43,12 @@ public class TitaniumOre implements Listener {
                         if (fortune > 0) {
                             for (int i = 0; i < fortune; i++) {
                                 if (random.nextBoolean()) count++;
+                                else break;
                             }
                         }
                         event.setDropItems(false);
 
-                        ItemStack titanium = plugin.getCustomItemManager().getItem(CustomItem.TITANIUM_FRAGMENT);
+                        ItemStack titanium = plugin.getCustomItemManager().getItem(CustomItem.TITANIUM_INGOT);
                         titanium.setAmount(count);
                         event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), titanium);
                         event.setExpToDrop(count * 16);
