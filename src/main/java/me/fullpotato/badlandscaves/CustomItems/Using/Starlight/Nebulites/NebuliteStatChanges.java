@@ -100,8 +100,8 @@ public class NebuliteStatChanges {
                 speed -= 5;
             }
             else if (nebulite.equals(Nebulite.STRONG_STANCE)) {
-                knockback_resist += 100;
-                speed -= 10;
+                knockback_resist += 10000;
+                speed -= 15;
             }
             else if (nebulite.equals(Nebulite.THRUSTER)) {
                 if (nebulites.contains(Nebulite.REINFORCED_PLATING)) speed += 5;
@@ -133,7 +133,7 @@ public class NebuliteStatChanges {
 
         meta.removeAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
         if (knockback_resist > 0) {
-            meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, new AttributeModifier(UUID.randomUUID(), "Nebulite Knockback Resistance Modifier", (double) knockback_resist / 100, AttributeModifier.Operation.ADD_SCALAR, slotMap.get(item.getType())));
+            meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, new AttributeModifier(UUID.randomUUID(), "Nebulite Knockback Resistance Modifier", (double) knockback_resist, AttributeModifier.Operation.ADD_NUMBER, slotMap.get(item.getType())));
         }
 
         meta.removeAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED);

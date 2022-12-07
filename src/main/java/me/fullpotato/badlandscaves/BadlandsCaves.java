@@ -212,7 +212,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private ArtifactSightStealing artifactSightStealing;
     private ArtifactBloodsappingBow artifactBloodsappingBow;
     private ArtifactSummonersRift artifactSummonersRift;
-    private ArtifactEmancipatedEyes artifactEmancipatedEyes;
+    private ArtifactPrescientSight artifactPrescientSight;
     private ArtifactDiggingDoppelganger artifactDiggingDoppelganger;
     private ArtifactMomentousMomentum artifactMomentousMomentum;
     private PreventWaterBucketPVP preventWaterBucketPVP;
@@ -426,7 +426,7 @@ public final class BadlandsCaves extends JavaPlugin {
         artifactSightStealing = new ArtifactSightStealing(this, voidmatter, artifactManager);
         artifactBloodsappingBow = new ArtifactBloodsappingBow(this, voidmatter, artifactManager);
         artifactSummonersRift = new ArtifactSummonersRift(this, voidmatter, artifactManager, artifactFleetingSpirits, random);
-        artifactEmancipatedEyes = new ArtifactEmancipatedEyes(this, voidmatter, artifactManager, enhancedEyes);
+        artifactPrescientSight = new ArtifactPrescientSight(this, voidmatter, artifactManager, enhancedEyes);
         starlightPaxelMechanism = new StarlightPaxelMechanism(this, starlightTools, starlightCharge);
         artifactDiggingDoppelganger = new ArtifactDiggingDoppelganger(this, voidmatter, artifactManager, random, starlightPaxelMechanism);
         artifactMomentousMomentum = new ArtifactMomentousMomentum(this, random);
@@ -652,7 +652,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 artifactSightStealing,
                 artifactBloodsappingBow,
                 artifactSummonersRift,
-                artifactEmancipatedEyes,
+                artifactPrescientSight,
                 artifactDiggingDoppelganger,
                 artifactMomentousMomentum,
                 preventWaterBucketPVP,
