@@ -343,7 +343,7 @@ public final class BadlandsCaves extends JavaPlugin {
         playerJoinLeave = new PlayerJoinLeave(this, guideBook, withdraw, playerEffects);
         increaseToxInRain = new IncreaseToxInRain(this, random, starlightArmor, starlightCharge, nebuliteManager, playerEffects, environmentalHazards);
         enduranceCancelHunger = new EnduranceCancelHunger(this, random);
-        agility = new Agility(this, particleShapes);
+        agility = new Agility(this, particleShapes, artifactManager);
         InventorySerialize inventorySerialize = new InventorySerialize(this);
         useIncompleteSoulCrystal = new UseIncompleteSoulCrystal(this, inventorySerialize, random);
         descensionPlayerMove = new DescensionPlayerMove(this, deathHandler, useIncompleteSoulCrystal, inventorySerialize);

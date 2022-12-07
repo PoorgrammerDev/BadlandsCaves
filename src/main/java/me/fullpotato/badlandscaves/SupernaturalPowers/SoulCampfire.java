@@ -70,6 +70,8 @@ public class SoulCampfire implements Listener {
         artifactSlots.put(ArtifactBaseItem.WITHDRAW, 24);
         artifactSlots.put(ArtifactBaseItem.ENHANCED_EYES, 33);
         artifactSlots.put(ArtifactBaseItem.POSSESSION, 42);
+        artifactSlots.put(ArtifactBaseItem.AGILITY, 25);
+        artifactSlots.put(ArtifactBaseItem.ENDURANCE, 34);
 
     }
 

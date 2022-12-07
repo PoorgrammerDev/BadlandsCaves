@@ -1,6 +1,8 @@
 package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.*;
@@ -11,14 +13,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Agility extends UsePowers implements Listener {
     private final ParticleShapes particleShapes;
-    public Agility(BadlandsCaves bcav, ParticleShapes particleShapes) {
+    private final ArtifactManager artifactManager;
+    private final String JUMP_TIMES = "jump_times";
+
+
+    public Agility(BadlandsCaves bcav, ParticleShapes particleShapes, ArtifactManager artifactManager) {
         super(bcav, particleShapes);
         this.particleShapes = particleShapes;
+        this.artifactManager = artifactManager;
     }
 
     //detecting if the player is jumping
@@ -34,6 +42,12 @@ public class Agility extends UsePowers implements Listener {
         }
         else if (((LivingEntity) player).isOnGround()) {
             player.setAllowFlight(false);
+
+            //reset triple jump value
+            if (player.hasMetadata(JUMP_TIMES)) {
+                player.removeMetadata(JUMP_TIMES, plugin);
+            }
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -108,6 +122,22 @@ public class Agility extends UsePowers implements Listener {
                     }
                 }
             }.runTaskTimerAsynchronously(plugin, 0, 0);
+
+
+            //Triple jump -- if they have it and they haven't jumped three times yet, allow them to fly again
+            if (this.artifactManager.hasArtifact(player, Artifact.TRIPLE_JUMP)) {
+                //If has metadata, increment. Otherwise initialize to 2
+                //(as this is the double jump, so they've already jumped once before and one now)
+                int newJumpValue = (player.hasMetadata(JUMP_TIMES)) ?
+                    player.getMetadata(JUMP_TIMES).get(0).asInt() + 1 :
+                    2;
+
+                player.setMetadata(JUMP_TIMES, new FixedMetadataValue(plugin, newJumpValue));
+
+                if (newJumpValue < 3) {
+                    player.setAllowFlight(true);
+                }
+            }
         }
         else {
             player.setFlying(false);
