@@ -106,7 +106,7 @@ public class UseDimensionalAnchor implements Listener {
                             initiate(item, block);
                         }
                         else {
-                            player.sendMessage(ChatColor.RED + "Unfortunately this isn't supported right now. You can only load pre-generated worlds at this time.");
+                            player.sendMessage(ChatColor.RED + "Generating Alternate Dimensions on demand is disabled in the config.");
                         }
                     }
                 }

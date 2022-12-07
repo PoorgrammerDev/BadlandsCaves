@@ -77,6 +77,7 @@ public class CraftingGuide implements Listener {
             CustomItem.VOLTSHOCK_SHOCKER.toString(),
             CustomItem.VOLTSHOCK_PLACEHOLDER.toString(),
             CustomItem.CHARGED_QUARTZ.toString(),
+            Material.EXPERIENCE_BOTTLE.toString(),
             CustomItem.ENERGY_CORE.toString(),
             CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.toString(),
             CustomItem.VOLTSHOCK_ARROW.toString(),
@@ -1504,6 +1505,17 @@ public class CraftingGuide implements Listener {
         descs.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), voidmatter_desc);
         descs.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), voidmatter_desc);
 
+        descs.put(new ItemStack(Material.EXPERIENCE_BOTTLE),
+            new ItemBuilder(Material.ENCHANTING_TABLE)
+            .setName(ChatColor.WHITE + "Glass Bottle + Enchanting Table")
+            .setLore(
+                ChatColor.BLUE.toString() + ChatColor.BOLD + "Right Click" + ChatColor.RESET + ChatColor.GRAY + " an Enchanting Table with a Glass Bottle",
+                ChatColor.GRAY + "in your hand to turn it into an EXP Bottle.",
+                ChatColor.GRAY + "This consumes one level from your player and stores it in there.",
+                ChatColor.GRAY + "Continue right clicking the EXP Bottle to add more levels."
+            )
+            .build()
+        );
 
     }
 }
