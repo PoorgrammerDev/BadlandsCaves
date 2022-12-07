@@ -243,6 +243,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private CastleBoss castleBoss;
     private CastlePreventModify castlePreventModify;
     private AscendedOrb ascendedOrb;
+    private ArtifactSafeguard artifactSafeguard;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -452,6 +453,7 @@ public final class BadlandsCaves extends JavaPlugin {
         castleBoss = new CastleBoss(this, particleShapes, random, dimensionStructureTable);
         castlePreventModify = new CastlePreventModify(this);
         ascendedOrb = new AscendedOrb(this, artifactManager);
+        artifactSafeguard = new ArtifactSafeguard(this, voidmatter, artifactManager);
     }
 
     //CONFIG
@@ -680,6 +682,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 castleBoss,
                 castlePreventModify,
                 ascendedOrb,
+                artifactSafeguard,
         };
 
         for (Listener event : events) {
