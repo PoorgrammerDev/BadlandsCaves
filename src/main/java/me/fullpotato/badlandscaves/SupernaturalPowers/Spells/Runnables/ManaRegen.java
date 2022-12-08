@@ -2,6 +2,7 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Voidmatter;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Domino;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.EntityEquipment;
@@ -10,8 +11,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ManaRegen extends BukkitRunnable {
     private final BadlandsCaves plugin;
-    public ManaRegen(BadlandsCaves bcav) {
+    private final Domino domino;
+    public ManaRegen(BadlandsCaves bcav, Domino domino) {
         plugin = bcav;
+        this.domino = domino;
     }
 
     @Override
@@ -28,6 +31,9 @@ public class ManaRegen extends BukkitRunnable {
             if (thirst < 30) return;
 
             if (((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) > 0)) return;
+
+            //Domino mana regen halting
+            if (domino.IsUsingDomino(player.getUniqueId())) return;
 
             int mana_regen_delay_timer = ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player));
             if (mana_regen_delay_timer > 0) {

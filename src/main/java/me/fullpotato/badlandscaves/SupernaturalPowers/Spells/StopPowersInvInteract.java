@@ -26,6 +26,7 @@ public class StopPowersInvInteract implements Listener {
             activePowers.add(plugin.getCustomItemManager().getItem(value.getItem()));
         }
         activePowers.add(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS));
+        // activePowers.add(plugin.getCustomItemManager().getItem(CustomItem.DOMINO));
     }
 
     @EventHandler

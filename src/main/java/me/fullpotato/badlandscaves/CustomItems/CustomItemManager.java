@@ -97,6 +97,7 @@ public class CustomItemManager {
         itemMap.put(CustomItem.WITHDRAW, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§7Withdraw").setCustomModelData(104).build());
         itemMap.put(CustomItem.ENHANCED_EYES, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Enhanced Eyes").setCustomModelData(106).build());
         itemMap.put(CustomItem.POSSESS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§2Possession").setCustomModelData(107).build());
+        itemMap.put(CustomItem.DOMINO, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.of("#ffc300") + "Domino").setCustomModelData(107).build());
         itemMap.put(CustomItem.TINY_BLAZE_POWDER, new ItemBuilder(Material.STRUCTURE_BLOCK, 9).setName(ChatColor.WHITE + "Tiny Pile of Blaze Powder").setCustomModelData(100).build());
         itemMap.put(CustomItem.TAINTED_POWDER, new ItemBuilder(Material.COMMAND_BLOCK, 2).setName("§2Tainted Powder").setLore("§7Right click to throw.").setCustomModelData(102).build());
         itemMap.put(CustomItem.ZOMBIE_SOUL, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.WHITE + "Soul of Decay").setCustomModelData(109).build());

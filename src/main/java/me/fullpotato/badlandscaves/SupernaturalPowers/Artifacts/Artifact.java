@@ -66,12 +66,12 @@ public enum Artifact {
             MANA_WARDING,
             FLEETING_SPIRITS,
             CONVERGING_SWINGS,
-            //TRAVELING_BLADES, // REMOVED: Orb of Ascension
+            //TRAVELING_BLADES,         // REMOVED: Orb of Ascension
             HASTE_WIND,
             BLOODSAPPING_BAYONET,
             SIGHT_STEALING,
             BLOODSAPPING_BOW,
-            //SUMMONERS_RIFT, // REMOVED: Orb of Ascension
+            //SUMMONERS_RIFT,           // REMOVED: Orb of Ascension
             PRESCIENT_SIGHT,
             DIGGING_DOPPELGANGER,
             UNDISPLACE,
@@ -89,7 +89,7 @@ public enum Artifact {
             TRIPLE_JUMP,
             RECOVERY_ROLL,
             // SHADOWSTEP,              // not implemented
-            METAPHYSICAL_NOURISHMENT
+            // METAPHYSICAL_NOURISHMENT // not implemented
         };
     }
 

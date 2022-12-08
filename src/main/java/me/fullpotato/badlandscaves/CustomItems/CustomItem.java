@@ -181,6 +181,7 @@ public enum CustomItem {
     ASCENDED_ORB_PLACEHOLDER(true),
     CHARGED_QUARTZ(true),
 
+    DOMINO(true),
     ;
 
     private final boolean preventUse;

@@ -245,6 +245,7 @@ public final class BadlandsCaves extends JavaPlugin {
     private AscendedOrb ascendedOrb;
     private ArtifactSafeguard artifactSafeguard;
     private ArtifactRecoveryRoll artifactRecoveryRoll;
+    private Domino domino;
 
     //CONFIG FILES
     private FileConfiguration optionsConfig;
@@ -333,7 +334,7 @@ public final class BadlandsCaves extends JavaPlugin {
         ghastBuff = new GhastBuff(this, random);
         phantomBuff = new PhantomBuff(this, random);
         witchBuff = new WitchBuff(this, random);
-        swapPowers = new SwapPowers(this);
+        swapPowers = new SwapPowers(this, artifactManager);
         manaBarManager = new ManaBarManager(this);
         ArtifactDistractingDoppelganger artifactDistractingDoppelganger = new ArtifactDistractingDoppelganger(this, voidmatter, artifactManager);
         displace = new Displace(this, artifactManager, manaBarManager, artifactDistractingDoppelganger, particleShapes);
@@ -456,6 +457,7 @@ public final class BadlandsCaves extends JavaPlugin {
         ascendedOrb = new AscendedOrb(this, artifactManager);
         artifactSafeguard = new ArtifactSafeguard(this, voidmatter, artifactManager);
         artifactRecoveryRoll = new ArtifactRecoveryRoll(this, voidmatter, artifactManager);
+        domino = new Domino(this, particleShapes);
     }
 
     //CONFIG
@@ -686,6 +688,7 @@ public final class BadlandsCaves extends JavaPlugin {
                 ascendedOrb,
                 artifactSafeguard,
                 artifactRecoveryRoll,
+                domino,
         };
 
         for (Listener event : events) {
@@ -742,9 +745,10 @@ public final class BadlandsCaves extends JavaPlugin {
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
         new DisplaceParticleRunnable(this, random, particleShapes).runTaskTimerAsynchronously(this, 0, 2);
         new PossessionIndicatorRunnable(this, possession, random).runTaskTimer(this, 0, 1);
+        new DominoParticleRunnable(this, domino).runTaskTimer(this, 0, 1);
         new WithdrawIndicatorRunnable(this, artifactManager, particleShapes).runTaskTimer(this, 0, 1);
         manaBarManager.runTaskTimer(this, 0, 5);
-        new ManaRegen(this).runTaskTimer(this, 0, 5);
+        new ManaRegen(this, domino).runTaskTimer(this, 0, 5);
         new DescensionReset(this, random).runTaskTimer(this, 0, 120);
         new ForceFixDescensionValues(this).runTaskTimer(this, 0, 100);
         new AscendedSpider(this, random, particleShapes).runTaskTimer(this, 0, 5);

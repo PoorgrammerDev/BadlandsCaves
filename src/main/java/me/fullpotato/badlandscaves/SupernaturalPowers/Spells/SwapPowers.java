@@ -3,8 +3,12 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -23,15 +27,18 @@ public class SwapPowers implements Listener {
     private final ManaBarManager manaBarManager;
     private final ItemStack[] blacklisted;
     private final World backrooms;
+    private final ArtifactManager artifactManager;
 
-    public SwapPowers(BadlandsCaves plugin) {
+    public SwapPowers(BadlandsCaves plugin, ArtifactManager artifactManager) {
         this.plugin = plugin;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         this.manaBarManager = new ManaBarManager(plugin);
+        this.artifactManager = artifactManager;
         customItemManager = plugin.getCustomItemManager();
 
         blacklisted = new ItemStack[]{
                 customItemManager.getItem(CustomItem.ECLIPSED_SHADOWS),
+                customItemManager.getItem(CustomItem.DOMINO),
         };
     }
 
@@ -129,6 +136,12 @@ public class SwapPowers implements Listener {
             else {
                 //If the next spell in the list is unlocked
                 if ((int) order[swapSlot].getLevelScore().getScore(plugin, player) > 0) {
+                    ActivePowers newPower = order[swapSlot];
+                    
+                    //ARTIFACT Domino override
+                    if (order[swapSlot] == ActivePowers.POSSESSION && artifactManager.hasArtifact(player, Artifact.DOMINO)) {
+                        newPower = ActivePowers.DOMINO;
+                    }
 
                     if (!offhandItem.getType().equals(Material.AIR)) {
                         //Checks if current offhand item is spell
@@ -157,10 +170,10 @@ public class SwapPowers implements Listener {
                         }
                     }
 
-                    player.getInventory().setItemInOffHand(customItemManager.getItem(order[swapSlot].getItem()));
+                    player.getInventory().setItemInOffHand(customItemManager.getItem(newPower.getItem()));
 
                     if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                        manaBarManager.displayMessage(player, order[swapSlot].getDisplayName(), 2, true);
+                        manaBarManager.displayMessage(player, newPower.getDisplayName(), 2, true);
                     }
                     successfulSwap(player, swapSlot);
                     return;
