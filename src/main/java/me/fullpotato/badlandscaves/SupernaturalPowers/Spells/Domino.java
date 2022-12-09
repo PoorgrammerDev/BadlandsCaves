@@ -12,6 +12,7 @@ import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -199,21 +201,10 @@ public class Domino extends UsePowers implements Listener {
         if (event.getCause() == DamageCause.CUSTOM) return; //this makes sure that the propagation damage doesn't cause infinite recursion
         if (!(event.getEntity() instanceof LivingEntity)) return;
 
-        //entity is being domino'ed
+        //entity is being domino'ed and get caster if so
         final LivingEntity entity = (LivingEntity) event.getEntity();
-        if (!entity.hasMetadata(DOMINO_CASTER_TAG)) return;
-
-        final List<MetadataValue> metadataValues = entity.getMetadata(DOMINO_CASTER_TAG);
-        if (metadataValues.size() < 1) return;
-
-        //get the caster's id and caster from the entity
-        UUID casterID = null;
-        try {
-            casterID = UUID.fromString(metadataValues.get(0).asString());
-        }
-        catch (Exception e) {
-            return;
-        }
+        final UUID casterID = GetDominoCaster(entity);
+        if (casterID == null) return;
 
         final Player player = plugin.getServer().getPlayer(casterID);
         if (player == null) return;
@@ -233,20 +224,33 @@ public class Domino extends UsePowers implements Listener {
     public void RemoveEntityOnDeath (EntityDeathEvent event) {
         final LivingEntity entity = event.getEntity();
 
-        //TODO: Cleanup; code repetition
-        if (!entity.hasMetadata(DOMINO_CASTER_TAG)) return;
+        //get caster (function does checks internally)
+        final UUID casterID = GetDominoCaster(entity);
+        if (casterID == null) return;
 
-        final List<MetadataValue> metadataValues = entity.getMetadata(DOMINO_CASTER_TAG);
-        if (metadataValues.size() < 1) return;
+        final Player player = plugin.getServer().getPlayer(casterID);
+        if (player == null) return;
+        if (!IsUsingDomino(casterID)) return;
 
-        //get the caster's id and caster from the entity
-        UUID casterID = null;
-        try {
-            casterID = UUID.fromString(metadataValues.get(0).asString());
-        }
-        catch (Exception e) {
-            return;
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                RemoveEntity(casterID, entity);
+            }   
+        }.runTaskLater(plugin, 5);
+
+    }
+
+    //for some reason, creepers exploding are not counted as a death
+    @EventHandler
+    public void CreeperExplode(EntityExplodeEvent event) {
+        if (!(event.getEntity() instanceof Creeper)) return;
+
+        final Creeper entity = (Creeper) event.getEntity();
+
+        //get caster (function does checks internally)
+        final UUID casterID = GetDominoCaster(entity);
+        if (casterID == null) return;
 
         final Player player = plugin.getServer().getPlayer(casterID);
         if (player == null) return;
@@ -259,7 +263,6 @@ public class Domino extends UsePowers implements Listener {
                 RemoveEntity(finalCasterID, entity);
             }   
         }.runTaskLater(plugin, 5);
-
     }
 
     @EventHandler
@@ -462,6 +465,23 @@ public class Domino extends UsePowers implements Listener {
 
     public boolean HasCapacity(UUID playerID) {
         return !IsUsingDomino(playerID) || this.linkData.get(playerID).size() < MAX_LINKS;
+    }
+
+    private UUID GetDominoCaster(LivingEntity entity) {
+        //check if the entity is even domino'ed
+        if (!entity.hasMetadata(DOMINO_CASTER_TAG)) return null;
+
+        //actually has a caster
+        final List<MetadataValue> metadataValues = entity.getMetadata(DOMINO_CASTER_TAG);
+        if (metadataValues.size() < 1) return null;
+
+        //get the caster's id and caster from the entity
+        try {
+            return UUID.fromString(metadataValues.get(0).asString());
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
 }
