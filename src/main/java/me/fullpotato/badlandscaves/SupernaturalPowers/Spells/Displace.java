@@ -98,6 +98,9 @@ public class Displace extends UsePowers implements Listener {
     public void destroyMarker (PlayerSwapHandItemsEvent event) {
         final Player player = event.getPlayer();
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            //must not be in swap mode
+            if (!PlayerScore.SWAP_WINDOW.hasScore(plugin, player) || (byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 1) return;
+        
             final ItemStack item = event.getMainHandItem();
             if (item != null && item.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.DISPLACE))) {
                 event.setCancelled(true);

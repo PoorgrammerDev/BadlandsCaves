@@ -177,6 +177,9 @@ public class Domino extends UsePowers implements Listener {
         //Ensure they are magic class
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) return;
 
+        //must not be in swap mode
+        if (!PlayerScore.SWAP_WINDOW.hasScore(plugin, player) || (byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 1) return;
+
         //Ensure they are using Domino
         if (!IsUsingDomino(player.getUniqueId())) return;
 

@@ -35,6 +35,7 @@ public enum PlayerScore {
     SWAP_COOLDOWN_OPTION(PersistentDataType.BYTE, 1),
     SWAP_COOLDOWN(PersistentDataType.INTEGER),
     SWAP_ORDER(PersistentDataType.STRING, "DISPLACE,ENHANCED_EYES,WITHDRAW,POSSESSION"),
+    SWAP_MODE(PersistentDataType.STRING, "DYNAMIC"),
     SPELL_COOLDOWN(PersistentDataType.BYTE),
     SPELLS_SILENCED_TIMER(PersistentDataType.INTEGER),
     DISPLACE_LEVEL(PersistentDataType.INTEGER),

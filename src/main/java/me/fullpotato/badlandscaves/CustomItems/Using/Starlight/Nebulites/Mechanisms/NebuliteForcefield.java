@@ -52,7 +52,7 @@ public class NebuliteForcefield extends NebuliteMechanisms implements Listener {
                                 }
 
                                 if (hasForcefield) {
-                                    if (random.nextInt(100) < 25) {
+                                    if (random.nextInt(100) < 12.5f) {
                                         event.setCancelled(true);
                                         starlightCharge.setCharge(item,  (int) (starlightCharge.getCharge(item) - (event.getFinalDamage() * 2)));
                                         
