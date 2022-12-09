@@ -1,10 +1,9 @@
 package me.fullpotato.badlandscaves.CustomItems;
 
-import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
-import me.fullpotato.badlandscaves.BadlandsCaves;
-import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
-import me.fullpotato.badlandscaves.Util.ItemBuilder;
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,9 +17,11 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.AlternateDimensions.PregenerateDimensions;
+import me.fullpotato.badlandscaves.Util.EnchantmentStorage;
+import me.fullpotato.badlandscaves.Util.ItemBuilder;
+import net.md_5.bungee.api.ChatColor;
 
 public class CustomItemManager {
     private final BadlandsCaves plugin;
@@ -93,11 +94,13 @@ public class CustomItemManager {
         itemMap.put(CustomItem.PURGE_ESSENCE, new ItemBuilder(Material.COMMAND_BLOCK).setName("§dEssence of Purging").setCustomModelData(101).build());
         itemMap.put(CustomItem.HELL_ESSENCE, new ItemBuilder(Material.COMMAND_BLOCK).setName("§cEssence of Hell").setCustomModelData(105).build());
         itemMap.put(CustomItem.MAGIC_ESSENCE, new ItemBuilder(Material.COMMAND_BLOCK).setName("§9Essence of Magic").setCustomModelData(108).build());
-        itemMap.put(CustomItem.DISPLACE, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§dDisplace").setCustomModelData(103).build());
-        itemMap.put(CustomItem.WITHDRAW, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§7Withdraw").setCustomModelData(104).build());
-        itemMap.put(CustomItem.ENHANCED_EYES, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Enhanced Eyes").setCustomModelData(106).build());
-        itemMap.put(CustomItem.POSSESS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§2Possession").setCustomModelData(107).build());
-        itemMap.put(CustomItem.DOMINO, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.of("#ffc300") + "Domino").setCustomModelData(107).build());
+
+        itemMap.put(CustomItem.DISPLACE, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§dDisplace").setLore("§9§lRight Click §r§7to place down a marker.","§9§lRight Click §r§7again to teleport to it.","§7§lClick §9§lF §r§7to remove the marker.").setCustomModelData(103).build());
+        itemMap.put(CustomItem.WITHDRAW, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§7Withdraw").setLore("§9§lRight Click §r§7to activate.","§9§lRight Click §r§7again to manually deactivate.").setCustomModelData(104).build());
+        itemMap.put(CustomItem.ENHANCED_EYES, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§9Enhanced Eyes").setLore("§9§lRight Click §r§7to activate.","§9§lRight Click §r§7again to deactivate.","§7§lClick §9§lF §r§7from any spell to quickly deactivate.").setCustomModelData(106).build());
+        itemMap.put(CustomItem.POSSESS, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName("§2Possession").setLore("§9§lRight Click §r§7to activate.","§9§lRight Click §r§7again to deactivate.","§7§lClick §9§lF §r§7from any spell to quickly deactivate.").setCustomModelData(107).build());
+        itemMap.put(CustomItem.DOMINO, new ItemBuilder(Material.KNOWLEDGE_BOOK).setName(ChatColor.of("#ffc300") + "Domino").setLore("§9§lRight Click §r§7to create new links.","§7§lClick §9§lF §r§7from any spell to deactivate.").setCustomModelData(241).build());
+
         itemMap.put(CustomItem.TINY_BLAZE_POWDER, new ItemBuilder(Material.STRUCTURE_BLOCK, 9).setName(ChatColor.WHITE + "Tiny Pile of Blaze Powder").setCustomModelData(100).build());
         itemMap.put(CustomItem.TAINTED_POWDER, new ItemBuilder(Material.COMMAND_BLOCK, 2).setName("§2Tainted Powder").setLore("§7Right click to throw.").setCustomModelData(102).build());
         itemMap.put(CustomItem.ZOMBIE_SOUL, new ItemBuilder(Material.COMMAND_BLOCK).setName(ChatColor.WHITE + "Soul of Decay").setCustomModelData(109).build());

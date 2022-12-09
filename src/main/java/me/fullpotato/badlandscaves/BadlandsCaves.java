@@ -457,7 +457,7 @@ public final class BadlandsCaves extends JavaPlugin {
         ascendedOrb = new AscendedOrb(this, artifactManager);
         artifactSafeguard = new ArtifactSafeguard(this, voidmatter, artifactManager);
         artifactRecoveryRoll = new ArtifactRecoveryRoll(this, voidmatter, artifactManager);
-        domino = new Domino(this, particleShapes);
+        domino = new Domino(this, particleShapes, artifactManager);
     }
 
     //CONFIG
@@ -745,7 +745,7 @@ public final class BadlandsCaves extends JavaPlugin {
         new ToxSlowDecreaseRunnable(this).runTaskTimer(this, 0, 600);
         new DisplaceParticleRunnable(this, random, particleShapes).runTaskTimerAsynchronously(this, 0, 2);
         new PossessionIndicatorRunnable(this, possession, random).runTaskTimer(this, 0, 1);
-        new DominoParticleRunnable(this, domino).runTaskTimer(this, 0, 1);
+        new DominoParticleRunnable(this, domino, artifactManager).runTaskTimer(this, 0, 1);
         new WithdrawIndicatorRunnable(this, artifactManager, particleShapes).runTaskTimer(this, 0, 1);
         manaBarManager.runTaskTimer(this, 0, 5);
         new ManaRegen(this, domino).runTaskTimer(this, 0, 5);

@@ -6,8 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +32,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
+import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.NMS.Possession.PossessionNMS;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.Util.TargetEntity;
@@ -54,9 +61,9 @@ Each adjacency list will be stored under the caster's UUID in a HashMap
 
 public class Domino extends UsePowers implements Listener {
     //Constants    
+    public static final String DOMINO_CASTER_TAG = "domino_caster";
     private static final int MAXIMUM_DISTANCE_SQUARED = 400; //20 blocks between each node
     private static final int MAX_LINKS = 5;
-    private static final String DOMINO_CASTER_TAG = "domino_caster";
     private static final double DAMAGE_REDUCTION_FACTOR = 0.75;
     private static final int DELAY = 10;
 
@@ -65,18 +72,20 @@ public class Domino extends UsePowers implements Listener {
     //External classes being used
     private final TargetEntity targetManager;
     private final ParticleShapes particleShapes;
-    private final PossessionNMS outlineManager;
+    private final EnhancedEyesNMS outlineManager;
+    private final ArtifactManager artifactManager;
 
     //Numeric values
     private final int cost;
 
-    public Domino(BadlandsCaves plugin, ParticleShapes particleShapes) {
+    public Domino(BadlandsCaves plugin, ParticleShapes particleShapes, ArtifactManager artifactManager) {
         super(plugin, particleShapes);
+        this.artifactManager = artifactManager;
         this.linkData = new HashMap<>();
         this.targetManager = new TargetEntity();
         this.particleShapes = particleShapes;
         this.cost = plugin.getOptionsConfig().getInt("spell_costs.possess_mana_cost");
-        this.outlineManager = plugin.getPossessionNMS();
+        this.outlineManager = plugin.getEnhancedEyesNMS();
     }
 
     /**
@@ -93,6 +102,9 @@ public class Domino extends UsePowers implements Listener {
 
         //Ensure they are magic class
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) return;
+
+        //Has artifact equipped
+        if (!this.artifactManager.hasArtifact(player, Artifact.DOMINO)) return;
 
         //is holding spell in offhand
         final ItemStack spellItem = plugin.getCustomItemManager().getItem(CustomItem.DOMINO);
@@ -111,9 +123,13 @@ public class Domino extends UsePowers implements Listener {
             this.linkData.put(playerID, new HashMap<>());
         }
         
+        boolean success = false;
         for (LivingEntity target : targets) {
             //domino cannot affect players
             if (target instanceof Player) continue;
+
+            //player can see the entity
+            if (!player.hasLineOfSight(target)) continue;
 
             //enforce size limit
             if (this.linkData.get(playerID).keySet().size() >= MAX_LINKS) return;
@@ -127,6 +143,8 @@ public class Domino extends UsePowers implements Listener {
 
             //add the entity to graph
             if (LinkEntity(playerID, target)) {
+                success = true;
+
                 //edit their metadata to hold a reference to the owner/caster
                 //we're using metadata here instead of PDC because
                 //since we're using a hashmap, the graph is already reset on reload/restart anyway
@@ -138,6 +156,11 @@ public class Domino extends UsePowers implements Listener {
                 PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
                 PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
             }
+        }
+
+        //sfx
+        if (success) {
+            player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 1.0f, 1.0f);
         }
 
     }
@@ -201,14 +224,9 @@ public class Domino extends UsePowers implements Listener {
         PropagateDamage(player, entity, event.getDamage(), entity.getNoDamageTicks(), 5, visited);
 
         //actually visited
-        if (visited.size() > 1) {
-            //the function above already damages the original entity too, so disable this
-            event.setCancelled(true);
-        }
-        else {
+        if (visited.size() <= 1) {
             RemoveEntity(casterID, entity);
         }
-        
     }
 
     @EventHandler
@@ -361,13 +379,19 @@ public class Domino extends UsePowers implements Listener {
      */
     private void PropagateDamage(Player player, LivingEntity entity, double damage, int iFrames, int delay, HashSet<LivingEntity> visited) {
         //damage entity and mark as visited
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                entity.damage(damage);
-                entity.setNoDamageTicks(iFrames);
-            }
-        }.runTaskLater(plugin, delay);
+
+        final int size = visited.size();
+        //do not damage the first mob, because they should already be damaged by the hit
+        if (size > 0) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    //damage
+                    entity.damage(damage);
+                    entity.setNoDamageTicks(iFrames);
+                }
+            }.runTaskLater(plugin, delay);
+        }
         visited.add(entity);
 
         if (!this.linkData.get(player.getUniqueId()).containsKey(entity)) return;
@@ -402,7 +426,7 @@ public class Domino extends UsePowers implements Listener {
         if (visited.contains(entity)) return;
 
         //make entity glow and mark as visited
-        this.outlineManager.setIndicator(player, entity);
+        this.outlineManager.highlightEntity(player, entity, ChatColor.GOLD);
         visited.add(entity);
 
         //loop through this entity's neighbors

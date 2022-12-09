@@ -51,7 +51,7 @@ public class EnhancedEyes_1_16_R3 implements EnhancedEyesNMS {
     }
 
     public void highlightEntity (Player player, org.bukkit.entity.Entity entity) {
-        highlightEntity(player, entity, null);
+        highlightEntity(player, entity, ChatColor.WHITE);
     }
 
     public void highlightEntity(Player player, org.bukkit.entity.Entity ent, ChatColor color) {
