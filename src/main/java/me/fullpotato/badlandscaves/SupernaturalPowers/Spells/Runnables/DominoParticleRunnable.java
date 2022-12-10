@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
@@ -57,6 +58,9 @@ public class DominoParticleRunnable extends BukkitRunnable {
             if (item != null && item.isSimilar(this.dominoItem)) {
                 //show indicator for new target entities
                 for (LivingEntity target : this.targetManager.findTargetLivingEntities(player.getEyeLocation(), 15, 0.2, 3, false, player)) {
+                    //cannot be player
+                    if (target instanceof Player) continue;
+
                     //entity is not already domino'ed
                     if (target.hasMetadata(Domino.DOMINO_CASTER_TAG)) continue;
                     

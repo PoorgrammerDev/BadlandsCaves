@@ -133,6 +133,9 @@ public class Domino extends UsePowers implements Listener {
             //player can see the entity
             if (!player.hasLineOfSight(target)) continue;
 
+            //entity is not already domino'ed
+            if (target.hasMetadata(Domino.DOMINO_CASTER_TAG)) continue;
+
             //enforce size limit
             if (this.linkData.get(playerID).keySet().size() >= MAX_LINKS) return;
             

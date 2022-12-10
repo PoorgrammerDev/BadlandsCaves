@@ -123,7 +123,7 @@ public class SwapPowers implements Listener {
             }
 
             case "FIXED": {
-                if (newSlot < 0 || newSlot > 4) return;
+                if (newSlot < 0 || newSlot > 3) return;
 
                 final ActivePowers[] order = getSwapOrder(player);
                 SwapToSpell(player, player.getInventory().getItemInOffHand(), order, newSlot);
@@ -189,9 +189,6 @@ public class SwapPowers implements Listener {
         //If the next spell in the list is unlocked
         if ((int) order[swapSlot].getLevelScore().getScore(plugin, player) > 0) {
             ActivePowers newPower = order[swapSlot];
-            
-            Bukkit.broadcastMessage("swapslot: " + swapSlot);
-            Bukkit.broadcastMessage(order[swapSlot].getDisplayName());
 
             //ARTIFACT Domino override
             if (order[swapSlot] == ActivePowers.POSSESSION && artifactManager.hasArtifact(player, Artifact.DOMINO)) {
