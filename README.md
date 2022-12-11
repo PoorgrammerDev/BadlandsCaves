@@ -1,5 +1,5 @@
 
-![BadlandsCaves](https://github.com/PoorgrammerDev/BadlandsCaves/raw/media/badlandscaves-banner.png)
+![BadlandsCaves](https://github.com/PoorgrammerDev/BadlandsCaves/raw/media/badlandscaves-banner-transparent.png)
 
 ![Game Status](https://img.shields.io/badge/Game%20Status-Playable-brightgreen)
 ![Available for](https://img.shields.io/badge/Available%20for-Minecraft%201.16.5-blue)
@@ -10,25 +10,6 @@ BadlandsCaves is a Spigot plugin offering a challenging custom survival experien
 The player is thrown into a hostile underground cave world with limited resources.<br>
 The oceans are riddled with lethal toxin, but water is required to live.<br>
 Explore dungeons, fight bosses, open portals to raid other worlds, and dabble in magic or tinker with technology to overcome the perils ahead!
-
-## Gallery
-
-
-<details>
-<summary>Expand to view gallery</summary>
-<img src="https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-1.png" ></img>
-Exploring a dungeon in pre-hardmode. The player on the right is wielding a Serrated Diamond Sword and the other is a Sorcerer using Displace.
-
-<img src="https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-2.png"></img>
-One of the trials undergone by those looking to become Sorcerers. 
-
-<img src="https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-3.png"></img>
-Fighting The Wither in its stage: The Hallowed Chambers. The player in the air is a Sorcerer using Withdraw and Agility, and the other is a Puresoul wielding a Corrosive Diamond Sword and Netherite Shield. **
-
-<img src="https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-4.png"></img>
-Raiding a Castle found in the Void Layer of an Alternate Dimension. The player on the right is a Puresoul wearing the Starlight Set and shooting the Starlight Blaster. The other player is a Sorcerer wearing the Voidmatter Set and utilizing the Traveling Blades and Domino Artifacts. 
-</details>
-
 
 ## Features
 - Challenging subterranean environment
@@ -47,8 +28,23 @@ Raiding a Castle found in the Void Layer of an Alternate Dimension. The player o
 	- Pilfer and raid structures and enemies
 	- Endure the unforgiving Void Layer
 
+## Gallery
+
+![](https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-1.png)
+Exploring a dungeon in pre-hardmode. The player on the right is wielding a Serrated Diamond Sword and the other is a Sorcerer using Displace.
+
+![](https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-2.png)
+One of the trials undergone by those looking to become Sorcerers. 
+
+![](https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-3.png)
+Fighting The Wither in its stage: The Hallowed Chambers. The player in the air is a Sorcerer using Withdraw and Agility, and the other is a Puresoul wielding a Corrosive Diamond Sword and Netherite Shield. **
+
+![](https://raw.githubusercontent.com/PoorgrammerDev/BadlandsCaves/media/gallery/gallery-4.png)
+Raiding a Castle found in the Void Layer of an Alternate Dimension. The player on the right is a Puresoul wearing the Starlight Set and shooting the Starlight Blaster. The other player is a Sorcerer wearing the Voidmatter Set and utilizing the Traveling Blades and Domino Artifacts. 
+
 ## Installing
 <ins>**IMPORTANT: OptiFine is highly recommended for the full experience! Get it [here](https://www.optifine.net/).**</ins>
+
 It's required to properly render custom armor, shields, and mobs from the resource pack.
 
 ### <ins>Using Precompiled Jar (Recommended)</ins>
