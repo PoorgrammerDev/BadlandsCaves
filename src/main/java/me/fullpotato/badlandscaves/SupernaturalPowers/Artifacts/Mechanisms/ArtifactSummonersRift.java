@@ -54,8 +54,10 @@ public class ArtifactSummonersRift extends ArtifactMechanisms implements Listene
                                 if (mana >= cost) {
                                     PlayerScore.MANA.setScore(plugin, player, mana - cost);
                                     PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 30));
-
+                                    PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(
+                                            ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)),
+                                            plugin.getOptionsConfig().getInt("mana_regen_cooldown") / 3
+                                    ));
 
                                     arrow.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
 
@@ -73,7 +75,10 @@ public class ArtifactSummonersRift extends ArtifactMechanisms implements Listene
                                             else {
                                                 PlayerScore.MANA.setScore(plugin, player, mana - cost);
                                                 PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-                                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)), 30));
+                                                PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, Math.max(
+                                                        ((int) PlayerScore.MANA_REGEN_DELAY_TIMER.getScore(plugin, player)),
+                                                        plugin.getOptionsConfig().getInt("mana_regen_cooldown") / 3
+                                                ));
 
                                                 final Arrow trail = (Arrow) arrow.getWorld().spawnEntity(location, EntityType.ARROW);
                                                 trail.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);

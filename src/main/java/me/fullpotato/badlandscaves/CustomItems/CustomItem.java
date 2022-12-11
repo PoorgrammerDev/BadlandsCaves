@@ -115,7 +115,7 @@ public enum CustomItem {
     NEBULITE_TOXIN_EXPELLER(true),
     NEBULITE_SHOCK_ABSORBER(true),
     NEBULITE_FORCEFIELD(true),
-    NEBULITE_GUARDIAN_ANGEL(true),
+    NEBULITE_STARLIGHT_GUARDIAN(true),
     NEBULITE_RAPID_FIRE(true),
     NEBULITE_HUNTERS_EYES(true),
     NEBULITE_SCATTERING_LIGHTS(true),
@@ -145,7 +145,7 @@ public enum CustomItem {
     ARTIFACT_SIGHT_STEALING(true),
     ARTIFACT_BLOODSAPPING_BOW(true),
     ARTIFACT_SUMMONERS_RIFT(true),
-    ARTIFACT_EMANCIPATED_EYES(true),
+    ARTIFACT_PRESCIENT_SIGHT(true),
     ARTIFACT_DIGGING_DOPPELGANGER(true),
     ARTIFACT_UNDISPLACE(true),
     ARTIFACT_MOMENTOUS_MOMENTUM(true),
@@ -177,8 +177,11 @@ public enum CustomItem {
     BLUEPRINTS_DUNGEON_COMPASS(true),
     BLUEPRINTS_STIM_PACK(true),
 
-    ASCENDED_ORB(true);
+    ASCENDED_ORB(true),
+    ASCENDED_ORB_PLACEHOLDER(true),
+    CHARGED_QUARTZ(true),
 
+    DOMINO(true),
     ;
 
     private final boolean preventUse;

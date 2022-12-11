@@ -46,7 +46,7 @@ public class IncreaseToxInRain implements Listener {
         World world = player.getWorld();
         if (!world.hasStorm()) return;
 
-        if (environmentalHazards.isDimension(world) && !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.ACID_RAIN)) return;
+        if (environmentalHazards.isDimension(world) && !environmentalHazards.hasHazard(world, EnvironmentalHazards.Hazard.TOXIC_WATER)) return;
 
         Location location = player.getLocation();
         double temp = world.getTemperature(location.getBlockX(), location.getBlockY(), location.getBlockZ());

@@ -7,6 +7,8 @@ import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,28 +39,38 @@ public class NebuliteForcefield extends NebuliteMechanisms implements Listener {
                                 final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
 
                                 boolean hasForcefield = false;
-                                boolean hasGuardianAngel = false;
+                                boolean hasGuardian = false;
                                 for (Nebulite nebulite : nebulites) {
                                     if (nebulite != null) {
                                         if (nebulite.equals(Nebulite.FORCEFIELD)) {
                                             hasForcefield = true;
                                         }
-                                        else if (nebulite.equals(Nebulite.GUARDIAN_ANGEL)) {
-                                            hasGuardianAngel = true;
+                                        else if (nebulite.equals(Nebulite.STARLIGHT_GUARDIAN)) {
+                                            hasGuardian = true;
                                         }
                                     }
                                 }
 
                                 if (hasForcefield) {
-                                    if (random.nextInt(100) < 25) {
+                                    if (random.nextInt(100) < 12.5f) {
                                         event.setCancelled(true);
                                         starlightCharge.setCharge(item,  (int) (starlightCharge.getCharge(item) - (event.getFinalDamage() * 2)));
+                                        
+                                        //sfx
+                                        player.getWorld().playSound(player.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1f, 1);
+
+                                        return;
                                     }
-                                    else if (event.getFinalDamage() >= player.getHealth() && hasGuardianAngel) {
+                                    else if (event.getFinalDamage() >= player.getHealth() && hasGuardian) {
                                         event.setCancelled(true);
-                                        starlightCharge.setCharge(item,  (int) (starlightCharge.getCharge(item) - (event.getFinalDamage() * 20)));
+                                        starlightCharge.setCharge(item,  (int) (starlightCharge.getCharge(item) - (event.getFinalDamage() * 40)));
+                                        
+                                        //sfx
+                                        player.getWorld().playSound(player.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1f, 1);
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 1);
+                                        
+                                        return;
                                     }
-                                    return;
                                 }
                             }
                         }

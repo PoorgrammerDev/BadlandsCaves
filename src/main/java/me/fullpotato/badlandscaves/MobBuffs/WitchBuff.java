@@ -2,11 +2,15 @@ package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.SupernaturalPowers.ReflectionStage.ZombieBossBehavior;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +19,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.loot.LootTables;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -34,11 +39,21 @@ public class WitchBuff implements Listener {
     public void witchStatBuff (CreatureSpawnEvent event) {
         boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
         if (!hardmode) return;
+        if (!(event.getEntity() instanceof Witch)) return;
 
-        if (event.getEntity() instanceof Witch) {
-            Witch witch = (Witch) event.getEntity();
-            witch.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(9.5);
+        final Witch witch = (Witch) event.getEntity();
+
+        //Change behaviour if the monster is spawned in The Void
+        if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
+            witch.setCustomName("Void Witch");
+            witch.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+            witch.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(15.0);
+            NameTagHide.getInstance().Hide(witch);
+            return;
         }
+
+        witch.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(9.5);
     }
 
     @EventHandler
@@ -74,7 +89,7 @@ public class WitchBuff implements Listener {
                         else {
                             double square_distance = target.getLocation().distanceSquared(witch.getLocation());
                             if (square_distance < 9) {
-                                if (random.nextInt(100) < chance) spawnUnderworldFighter(target, witch.getLocation(), 10);
+                                if (random.nextInt(100) < chance) spawnUnderworldFighter(target, witch.getLocation(), 10, witch);
                                 witch.teleport(findLocation(target.getLocation(), random, 9, 100, 8), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
                                 for (Player powered : plugin.getServer().getOnlinePlayers()) {
@@ -106,7 +121,7 @@ public class WitchBuff implements Listener {
         return targetLocation;
     }
 
-    public void spawnUnderworldFighter (LivingEntity target, Location location, int lifespan) {
+    public void spawnUnderworldFighter (LivingEntity target, Location location, int lifespan, Witch source) {
         location.getWorld().spawnParticle(Particle.FLASH, location, 1);
         Vindicator vindicator = (Vindicator) location.getWorld().spawnEntity(location, EntityType.VINDICATOR);
         vindicator.getEquipment().setItemInMainHandDropChance(0);
@@ -116,6 +131,12 @@ public class WitchBuff implements Listener {
         vindicator.setCanJoinRaid(false);
         vindicator.setPatrolLeader(false);
         vindicator.setTarget(target);
+
+        final NamespacedKey voidKey = new NamespacedKey(plugin, "voidMonster");
+        if (source.getPersistentDataContainer().has(voidKey, PersistentDataType.BYTE) && source.getPersistentDataContainer().get(voidKey, PersistentDataType.BYTE) == 1) {
+            vindicator.setCustomName("Void Vindicator");
+            NameTagHide.getInstance().Hide(vindicator);
+        }
 
         int[] timeElapsed = {0};
         new BukkitRunnable() {

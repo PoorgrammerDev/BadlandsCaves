@@ -25,23 +25,26 @@ public class EnergyCore extends MatchCrafting implements Listener {
     private final BadlandsCaves plugin;
     private final CustomItemManager customItemManager;
     private final ItemStack energyCore;
+    private final ItemStack chargedQuartz;
     private final ItemStack energium;
-    private final ItemStack starFragment;
-    private final Map<ItemStack, Double> chargeMultiplierMap;
+    private final double defaultRatio; // XP:Charge Ratio when no catalyst is applied
 
+    private final Map<ItemStack, Double> chargeMultiplierMap;
 
     public EnergyCore(BadlandsCaves plugin) {
         this.plugin = plugin;
         customItemManager = plugin.getCustomItemManager();
         energyCore = customItemManager.getItem(CustomItem.ENERGY_CORE);
+        chargedQuartz = customItemManager.getItem(CustomItem.CHARGED_QUARTZ);
         energium = customItemManager.getItem(CustomItem.ENERGIUM);
-        starFragment = customItemManager.getItem(CustomItem.NETHER_STAR_FRAGMENT);
 
         chargeMultiplierMap = new HashMap<>();
         chargeMultiplierMap.put(new ItemStack(Material.REDSTONE), plugin.getOptionsConfig().getDouble("energy_core_mult.redstone"));
         chargeMultiplierMap.put(new ItemStack(Material.GLOWSTONE_DUST), plugin.getOptionsConfig().getDouble("energy_core_mult.glowstone"));
+        chargeMultiplierMap.put(chargedQuartz, plugin.getOptionsConfig().getDouble("energy_core_mult.charged_quartz"));
         chargeMultiplierMap.put(energium, plugin.getOptionsConfig().getDouble("energy_core_mult.energium"));
-        chargeMultiplierMap.put(starFragment, plugin.getOptionsConfig().getDouble("energy_core_mult.nether_star_fragment"));
+
+        this.defaultRatio = plugin.getOptionsConfig().getDouble("energy_core_mult.empty");
     }
 
     public void energyCoreRecipes() {
@@ -100,6 +103,7 @@ public class EnergyCore extends MatchCrafting implements Listener {
     public void craftEnergyCore(PrepareItemCraftEvent event) {
         if (event.getRecipe() == null || event.getRecipe().getResult() == null) return;
 
+        //Make sure recipe is for energy core
         final ItemStack result = event.getRecipe().getResult();
         if (!result.isSimilar(energyCore)) return;
 
@@ -108,6 +112,7 @@ public class EnergyCore extends MatchCrafting implements Listener {
             return;
         }
 
+        //Tech class only
         if (event.getViewers().get(0) instanceof Player) {
             Player player = (Player) event.getViewers().get(0);
             if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 1) {
@@ -118,47 +123,56 @@ public class EnergyCore extends MatchCrafting implements Listener {
 
         final ItemStack[] matrix = event.getInventory().getMatrix();
 
+            //Find the exp bottle and the catalyst used
             ItemStack exp_bottle = null;
-            ItemStack multiplier = null;
+            ItemStack catalyst = null;
             for (ItemStack ingredient : matrix) {
                 if (ingredient != null) {
                     if (ingredient.getType().equals(Material.EXPERIENCE_BOTTLE)) {
                         exp_bottle = ingredient;
                     }
                     else {
-                        multiplier = ingredient;
+                        catalyst = ingredient;
                     }
                 }
             }
 
             if (exp_bottle != null) {
                 int charge = 0;
-                final ItemMeta xp_meta = exp_bottle.getItemMeta();
-                if (xp_meta.hasLore()) {
-                    List<String> lore = xp_meta.getLore();
-                    try {
-                        charge = Integer.parseInt(lore.get(0).split(" ")[0].substring(2));
-                    }
-                    catch (NumberFormatException ignored) {
-                    }
+                final ItemMeta bottleMeta = exp_bottle.getItemMeta();
+                if (bottleMeta != null && bottleMeta.hasLore()) {
+                   final List<String> lore = bottleMeta.getLore();
 
-                    final double chargeReduction = plugin.getOptionsConfig().getDouble("energy_core_charge_reduce");
-                    charge *= chargeReduction;
+                   if (lore != null) {
+                       try {
+                           charge = Integer.parseInt(lore.get(0).split(" ")[0].substring(2));
+                       }
+                       catch (NumberFormatException ignored) {
+                       }
 
-                    if (multiplier != null) {
-                        final ItemStack multiplierClone = multiplier.clone();
-                        multiplierClone.setAmount(1);
+                       //Apply catalyst charge multiplier
+                       if (catalyst != null) {
+                           final ItemStack multiplierClone = catalyst.clone();
+                           multiplierClone.setAmount(1);
 
-                        if (chargeMultiplierMap.containsKey(multiplierClone)) {
-                            charge *= chargeMultiplierMap.get(multiplierClone);
-                        }
-                    }
+                           if (chargeMultiplierMap.containsKey(multiplierClone)) {
+                               charge *= chargeMultiplierMap.get(multiplierClone);
+                           }
+                       }
+                       //Apply default
+                       else {
+                           charge *= defaultRatio;
+                       }
 
-                    if (charge > 0) {
-                        setCharge(result, charge);
-                        event.getInventory().setResult(result);
-                        return;
-                    }
+                       //Set final result's charge and set result
+                       if (charge > 0) {
+                           setCharge(result, charge);
+                           event.getInventory().setResult(result);
+                           return;
+                       }
+                   }
+
+
                 }
             }
         event.getInventory().setResult(null);

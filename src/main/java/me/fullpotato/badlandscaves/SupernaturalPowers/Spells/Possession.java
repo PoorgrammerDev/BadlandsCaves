@@ -92,7 +92,7 @@ public class Possession extends UsePowers implements Listener {
 
         //cancel mana regen and keep mana bar active
         PlayerScore.MANA.setScore(plugin, player, mana - cost);
-        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
 
         //readying the player and the target
@@ -175,6 +175,9 @@ public class Possession extends UsePowers implements Listener {
     public void forceExit (PlayerSwapHandItemsEvent event) {
         final Player player = event.getPlayer();
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
+            //must not be in swap mode
+            if (!PlayerScore.SWAP_WINDOW.hasScore(plugin, player) || (byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 1) return;
+            
             if ((byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == 1 || (byte) PlayerScore.DIGGING_DOPPELGANGER_ACTIVE.getScore(plugin, player) == 1) {
                 final ItemStack item = event.getMainHandItem();
                 if (item != null) {

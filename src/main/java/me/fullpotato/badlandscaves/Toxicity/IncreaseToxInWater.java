@@ -97,11 +97,21 @@ public class IncreaseToxInWater implements Listener {
                             }
                             else {
                                 if (!player.hasPotionEffect(PotionEffectType.WATER_BREATHING) && !player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
+                                    //ARTIFACT Fleeting Spirits Override
                                     for (ItemStack armor : equipment.getArmorContents()) {
                                         if (armor != null && voidmatter.isVoidmatterArmor(armor)) {
                                             if (artifactManager.hasArtifact(player, Artifact.FLEETING_SPIRITS)) {
                                                 if (artifactFleetingSpirits.attemptWarp(player, block.getLocation())) return;
                                             }
+                                        }
+                                    }
+
+                                    //ARTIFACT Safeguard Override
+                                    //In possession, has the safeguard artifact, is not immune (no water breathing) -> cancel pos.
+                                    if (PlayerScore.IN_POSSESSION.hasScore(plugin, player) && (byte) PlayerScore.IN_POSSESSION.getScore(plugin, player) == (byte) 1) {
+                                        if (this.artifactManager.hasArtifact(player, Artifact.SAFEGUARD)) {
+                                            PlayerScore.IN_POSSESSION.setScore(plugin, player, 0);
+                                            return;
                                         }
                                     }
                                 }

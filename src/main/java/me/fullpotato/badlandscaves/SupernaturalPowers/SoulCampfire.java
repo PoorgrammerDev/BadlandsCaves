@@ -8,6 +8,7 @@ import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.ActivePowers;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.SwapPowers;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
+import me.fullpotato.badlandscaves.Util.ItemBuilder;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -46,6 +47,8 @@ public class SoulCampfire implements Listener {
     private final ItemStack doubleShiftIconOff = getDoubleShiftIcon(false);
     private final ItemStack swapCooldownIconOn = getSwapCooldownIcon(true);
     private final ItemStack swapCooldownIconOff = getSwapCooldownIcon(false);
+    private final ItemStack swapModeDynamic = getSwapModeIcon(false);
+    private final ItemStack swapModeFixed = getSwapModeIcon(true);
     private final String title = ChatColor.of("#03969a") + "Soul Campfire";
 
     enum Menu {
@@ -70,6 +73,8 @@ public class SoulCampfire implements Listener {
         artifactSlots.put(ArtifactBaseItem.WITHDRAW, 24);
         artifactSlots.put(ArtifactBaseItem.ENHANCED_EYES, 33);
         artifactSlots.put(ArtifactBaseItem.POSSESSION, 42);
+        artifactSlots.put(ArtifactBaseItem.AGILITY, 25);
+        artifactSlots.put(ArtifactBaseItem.ENDURANCE, 34);
 
     }
 
@@ -135,6 +140,7 @@ public class SoulCampfire implements Listener {
             inventory.setItem(13, optionsExplanation);
             inventory.setItem(28, (byte) PlayerScore.SWAP_DOUBLESHIFT_OPTION.getScore(plugin, player) == 1 ? doubleShiftIconOn : doubleShiftIconOff);
             inventory.setItem(30, (byte) PlayerScore.SWAP_COOLDOWN_OPTION.getScore(plugin, player) == 1 ? swapCooldownIconOn : swapCooldownIconOff);
+            inventory.setItem(32, ((String) PlayerScore.SWAP_MODE.getScore(plugin, player)).equals("DYNAMIC") ? swapModeDynamic : swapModeFixed);
         }
         else if (menu.equals(Menu.ARTIFACTS)) {
             inventory.setItem(4, getArtifactsIcon(true));
@@ -233,6 +239,14 @@ public class SoulCampfire implements Listener {
                             }
                             else if (currentItem.isSimilar(swapCooldownIconOff)) {
                                 inventory.setItem(slot, swapCooldownIconOn);
+                            }
+
+                            //Swap Mode
+                            else if (currentItem.isSimilar(swapModeDynamic)) {
+                                inventory.setItem(slot, swapModeFixed);
+                            }
+                            else if (currentItem.isSimilar(swapModeFixed)) {
+                                inventory.setItem(slot, swapModeDynamic);
                             }
                         }
                     }
@@ -372,6 +386,16 @@ public class SoulCampfire implements Listener {
                 }
                 else if (swapCooldown.isSimilar(swapCooldownIconOff)) {
                     PlayerScore.SWAP_COOLDOWN_OPTION.setScore(plugin, player, 0);
+                }
+            }
+
+            final ItemStack swapMode = inventory.getItem(32);
+            if (swapMode != null) {
+                if (swapMode.isSimilar(swapModeDynamic)) {
+                    PlayerScore.SWAP_MODE.setScore(plugin, player, "DYNAMIC");
+                }
+                else if (swapMode.isSimilar(swapModeFixed)) {
+                    PlayerScore.SWAP_MODE.setScore(plugin, player, "FIXED");
                 }
             }
         }
@@ -525,6 +549,25 @@ public class SoulCampfire implements Listener {
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    public ItemStack getSwapModeIcon(boolean fixed) {
+        return new ItemBuilder(Material.END_CRYSTAL)
+        .setName(ChatColor.BLUE.toString() + ChatColor.BOLD + "Spell Swap Mode")
+        .setLore(
+            "§7This is set to §3§lDynamic §r§7by default.",
+            "§7With §3§lDynamic§r§7, scrolling up swaps spells forwards",
+            "§7and down swaps backwards, regardless of what slot",
+            "§7you swap to or how many slots you swap.",
+            "\n",
+            "§7With §6§lFixed§r§7, spells are arranged into specific slots.",
+            "§7Each slot 1-4 is mapped to the spells 1-4 in the Spell Order tab.",
+            "§7To return to the original item you were holding,",
+            "§7press F while in spell switch mode (double shift by default)",
+            "\n",
+            (fixed) ? "§6§lFixed" : "§3§lDynamic"
+        )
+        .build();
     }
 
     public ItemStack getHomeButton () {

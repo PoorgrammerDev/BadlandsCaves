@@ -3,18 +3,25 @@ package me.fullpotato.badlandscaves.SupernaturalPowers.Spells;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.ArtifactManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Runnables.ManaBarManager;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import net.md_5.bungee.api.ChatColor;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.IllegalFormatException;
 
 public class SwapPowers implements Listener {
@@ -23,15 +30,18 @@ public class SwapPowers implements Listener {
     private final ManaBarManager manaBarManager;
     private final ItemStack[] blacklisted;
     private final World backrooms;
+    private final ArtifactManager artifactManager;
 
-    public SwapPowers(BadlandsCaves plugin) {
+    public SwapPowers(BadlandsCaves plugin, ArtifactManager artifactManager) {
         this.plugin = plugin;
         this.backrooms = plugin.getServer().getWorld(plugin.getBackroomsWorldName());
         this.manaBarManager = new ManaBarManager(plugin);
+        this.artifactManager = artifactManager;
         customItemManager = plugin.getCustomItemManager();
 
         blacklisted = new ItemStack[]{
                 customItemManager.getItem(CustomItem.ECLIPSED_SHADOWS),
+                customItemManager.getItem(CustomItem.DOMINO),
         };
     }
 
@@ -96,11 +106,50 @@ public class SwapPowers implements Listener {
 
         final int newSlot = event.getNewSlot();
         final int oldSlot = event.getPreviousSlot();
-        boolean reverse = ((newSlot < oldSlot) || (newSlot == 8 && oldSlot == 0)) && (newSlot != 0 && oldSlot != 8);
-        attemptSwap(player, reverse);
+        
+        final String swapMode = (String) PlayerScore.SWAP_MODE.getScore(plugin, player);
+        switch (swapMode) {
+            case "DYNAMIC": {
+                // swapping is going backwards when:
+                // (
+                //  the new slot comes before the old slot
+                //  or the special case where we're swapping backwards from slot 0 where the resulting slot is now 8 which > 0
+                // )
+                // and we exclude the other special case where we swap forwards from 8 to 0 which would otherwise be counted as reverse
+                boolean reverse = ((newSlot < oldSlot) || (newSlot == 8 && oldSlot == 0)) && (newSlot != 0 || oldSlot != 8);
+
+                AttemptDynamicSwap(player, reverse);
+                break;
+            }
+
+            case "FIXED": {
+                if (newSlot < 0 || newSlot > 3) return;
+
+                final ActivePowers[] order = getSwapOrder(player);
+                SwapToSpell(player, player.getInventory().getItemInOffHand(), order, newSlot);
+                break;
+            }
+        }
     }
 
-    public void attemptSwap (Player player, boolean reverse) {
+    @EventHandler
+    public void FastResetSpell(PlayerSwapHandItemsEvent event) {
+        //must be magic class
+        final Player player = event.getPlayer();
+        if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 0) return;
+
+        //must be in swap mode
+        if (!PlayerScore.SWAP_WINDOW.hasScore(plugin, player) || (byte) PlayerScore.SWAP_WINDOW.getScore(plugin, player) == 0) return;
+
+        //must be in non-item swap slot
+        final int swapSlot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
+        if (swapSlot == -1) return;
+
+        event.setCancelled(true);
+        SwapToOriginalItem(player);
+    }
+
+    public void AttemptDynamicSwap (Player player, boolean reverse) {
         final ItemStack offhandItem = player.getInventory().getItemInOffHand();
         final ActivePowers[] order = getSwapOrder(player);
         int swapSlot = ((int) PlayerScore.SWAP_SLOT.getScore(plugin, player));
@@ -114,61 +163,75 @@ public class SwapPowers implements Listener {
 
             //Switching back to default offhand
             if (swapSlot == -1) {
-                final ItemStack orig_item = plugin.getSystemConfig().getItemStack("player_info." + player.getUniqueId() + ".saved_offhand_item");
-                player.getInventory().setItemInOffHand(orig_item);
-
-                plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", null);
-                plugin.saveSystemConfig();
-
-                if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                    manaBarManager.clearMessage(player);
-                }
-                successfulSwap(player, swapSlot);
+                SwapToOriginalItem(player);
                 return;
             }
             else {
-                //If the next spell in the list is unlocked
-                if ((int) order[swapSlot].getLevelScore().getScore(plugin, player) > 0) {
-
-                    if (!offhandItem.getType().equals(Material.AIR)) {
-                        //Checks if current offhand item is spell
-                        boolean offHandIsSpell = false;
-
-                        //check if special blacklisted item
-                        for (ItemStack itemStack : blacklisted) {
-                            if (offhandItem.isSimilar(itemStack)) {
-                                offHandIsSpell = true;
-                                break;
-                            }
-                        }
-
-                        //check if another spell
-                        for (ActivePowers check : ActivePowers.values()) {
-                            if (offhandItem.isSimilar(customItemManager.getItem(check.getItem()))) {
-                                offHandIsSpell = true;
-                                break;
-                            }
-                        }
-
-                        //Saves item if not spell
-                        if (!offHandIsSpell) {
-                            plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", offhandItem);
-                            plugin.saveSystemConfig();
-                        }
-                    }
-
-                    player.getInventory().setItemInOffHand(customItemManager.getItem(order[swapSlot].getItem()));
-
-                    if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                        manaBarManager.displayMessage(player, order[swapSlot].getDisplayName(), 2, true);
-                    }
-                    successfulSwap(player, swapSlot);
-                    return;
-                }
+                if (SwapToSpell(player, offhandItem, order, swapSlot)) return;
             }
         }
     }
 
+    private void SwapToOriginalItem(Player player) {
+        final ItemStack orig_item = plugin.getSystemConfig().getItemStack("player_info." + player.getUniqueId() + ".saved_offhand_item");
+        player.getInventory().setItemInOffHand(orig_item);
+
+        plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", null);
+        plugin.saveSystemConfig();
+
+        if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
+            manaBarManager.clearMessage(player);
+        }
+        successfulSwap(player, -1);
+    }
+
+    private boolean SwapToSpell(Player player, ItemStack offhandItem, ActivePowers[] order, int swapSlot) {
+        //If the next spell in the list is unlocked
+        if ((int) order[swapSlot].getLevelScore().getScore(plugin, player) > 0) {
+            ActivePowers newPower = order[swapSlot];
+
+            //ARTIFACT Domino override
+            if (order[swapSlot] == ActivePowers.POSSESSION && artifactManager.hasArtifact(player, Artifact.DOMINO)) {
+                newPower = ActivePowers.DOMINO;
+            }
+
+            if (!offhandItem.getType().equals(Material.AIR)) {
+                //Checks if current offhand item is spell
+                boolean offHandIsSpell = false;
+
+                //check if special blacklisted item
+                for (ItemStack itemStack : blacklisted) {
+                    if (offhandItem.isSimilar(itemStack)) {
+                        offHandIsSpell = true;
+                        break;
+                    }
+                }
+
+                //check if another spell
+                for (ActivePowers check : ActivePowers.values()) {
+                    if (offhandItem.isSimilar(customItemManager.getItem(check.getItem()))) {
+                        offHandIsSpell = true;
+                        break;
+                    }
+                }
+
+                //Saves item if not spell
+                if (!offHandIsSpell) {
+                    plugin.getSystemConfig().set("player_info." + player.getUniqueId() + ".saved_offhand_item", offhandItem);
+                    plugin.saveSystemConfig();
+                }
+            }
+
+            player.getInventory().setItemInOffHand(customItemManager.getItem(newPower.getItem()));
+
+            if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
+                manaBarManager.displayMessage(player, newPower.getDisplayName(), 2, true);
+            }
+            successfulSwap(player, swapSlot);
+            return true;
+        }
+        return false;
+    }
 
     public void successfulSwap (Player player, int swap_slot) {
         PlayerScore.SWAP_SLOT.setScore(plugin, player, swap_slot);

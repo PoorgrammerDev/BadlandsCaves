@@ -7,7 +7,9 @@ import me.fullpotato.badlandscaves.Info.GuideBook;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Spells.Withdraw;
 import me.fullpotato.badlandscaves.Util.InitializePlayer;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -43,6 +46,7 @@ public class PlayerJoinLeave implements Listener {
 
             if (!player.hasPlayedBefore()) {
                 player.getInventory().addItem(plugin.getCustomItemManager().getItem(CustomItem.STARTER_SAPLING));
+                player.getInventory().addItem(new ItemStack(Material.TORCH, 4));
                 player.getInventory().addItem(guideBook.getGuideBook());
 
                 new BukkitRunnable() {
@@ -78,18 +82,18 @@ public class PlayerJoinLeave implements Listener {
             //if they log off in the withdraw pocket dimension, it sends them back to the real world when they log back in
             if (player.getWorld().equals(plugin.getServer().getWorld(plugin.getWithdrawWorldName()))) {
                 String origworldname = plugin.getSystemConfig().getString("player_info." + player.getUniqueId() + ".withdraw_orig_world");
-                if (origworldname == null) {
-                    player.setHealth(0);
-                } else {
-                    PlayerScore.WITHDRAW_TIMER.setScore(plugin, player, 0);
-                    final World origworld = plugin.getServer().getWorld(origworldname);
-                    final double x = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
-                    final double y = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
-                    final double z = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+                Location location = player.getBedSpawnLocation();
 
-                    final Location location = new Location(origworld, x, y, z);
-                    withdraw.exitWithdraw(player, location, player.getLocation());
+                if (origworldname != null) {
+                    final World origWorld = plugin.getServer().getWorld(origworldname);
+                    final double originX = (double) PlayerScore.WITHDRAW_X.getScore(plugin, player);
+                    final double originY = (double) PlayerScore.WITHDRAW_Y.getScore(plugin, player);
+                    final double originZ = (double) PlayerScore.WITHDRAW_Z.getScore(plugin, player);
+                    location = new Location(origWorld, originX, originY, originZ);
+
                 }
+
+                withdraw.exitWithdraw(player, location);
             }
 
             //reset agility jump timer

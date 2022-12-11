@@ -47,7 +47,7 @@ public class ReflectionGen extends ChunkGenerator {
                 }
 
                 for (int Y = 0; Y < 255; Y++) {
-                    biome.setBiome(X, Y, Z, Biome.THE_VOID);
+                    biome.setBiome(X, Y, Z, Biome.FROZEN_OCEAN);
                 }
             }
         }

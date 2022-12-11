@@ -55,8 +55,8 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
                 final ItemStack offhand = player.getInventory().getItemInOffHand();
                 if (offhand.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS))) {
                     player.getInventory().setItemInOffHand(null);
-                    swapPowers.attemptSwap(player, false);
-                    swapPowers.attemptSwap(player, true);
+                    swapPowers.AttemptDynamicSwap(player, false);
+                    swapPowers.AttemptDynamicSwap(player, true);
                 }
 
                 if ((byte) PlayerScore.ECLIPSED_SHADOWS_ACTIVE.getScore(plugin, player) == 1) {
@@ -100,12 +100,12 @@ public class ArtifactEclipsedShadows extends ArtifactMechanisms implements Liste
                     if (mana >= cost) {
                         PlayerScore.MANA.setScore(plugin, player, mana - cost);
                         PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
-                        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+                        PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
                         PlayerScore.SPELL_COOLDOWN.setScore(plugin, player, 1);
 
                         player.getInventory().setItemInOffHand(null);
-                        swapPowers.attemptSwap(player, false);
-                        swapPowers.attemptSwap(player, true);
+                        swapPowers.AttemptDynamicSwap(player, false);
+                        swapPowers.AttemptDynamicSwap(player, true);
 
                         new BukkitRunnable() {
                             @Override

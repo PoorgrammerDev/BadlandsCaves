@@ -1,9 +1,12 @@
 package me.fullpotato.badlandscaves.MobBuffs;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.Util.NameTagHide;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
@@ -20,16 +23,22 @@ public class CreeperBuff implements Listener {
     private final BadlandsCaves plugin;
     private final Random random;
     private final ParticleShapes particleShapes;
+    private final World voidWorld;
+
     public CreeperBuff(BadlandsCaves bcav, Random random, ParticleShapes particleShapes) {
         plugin = bcav;
         this.random = random;
         this.particleShapes = particleShapes;
+        this.voidWorld = plugin.getServer().getWorld(plugin.getWithdrawWorldName());
     }
 
     @EventHandler
     public void HMcreeper (CreatureSpawnEvent event) {
         if (!(event.getEntity() instanceof Creeper)) return;
         final Creeper creeper = (Creeper) event.getEntity();
+
+        //Exception for entering Withdraw
+        if (creeper.getWorld().equals(voidWorld)) return;
 
         boolean isHardmode = plugin.getSystemConfig().getBoolean("hardmode");
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
@@ -42,14 +51,25 @@ public class CreeperBuff implements Listener {
         creeper.setExplosionRadius(radius);
         creeper.setSilent(true);
 
+        //Ascended Monster
         if (random.nextInt(100) < ascend) {
             creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "ascended"), PersistentDataType.BYTE, (byte) 1);
-            creeper.setCustomName(ChatColor.GREEN.toString() + ChatColor.BOLD + "The Fustercluck");
+            creeper.setCustomName(ChatColor.RED.toString() + ChatColor.BOLD + "The Fustercluck");
             creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(11.0);
             creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
             creeper.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(999);
+            return;
         }
 
+        //Change behaviour if the monster is spawned in The Void
+        if (event.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS && event.getLocation().getWorld().getEnvironment() == Environment.NORMAL) {
+            creeper.setCustomName("Void Creeper");
+            creeper.getPersistentDataContainer().set(new NamespacedKey(plugin, "voidMonster"), PersistentDataType.BYTE, (byte) 1);
+
+            creeper.setExplosionRadius((int) (radius * 2 * Math.max(chaos / 32.0, 1)));
+            creeper.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(8.0);
+            NameTagHide.getInstance().Hide(creeper);
+        }
 
     }
 
@@ -106,8 +126,8 @@ public class CreeperBuff implements Listener {
                         if (random.nextBoolean()) {
                             Location top = source.getLocation().clone();
                             top.add(0, 5, 0);
-                            particleShapes.line(null, Particle.REDSTONE, source.getLocation(), top, 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
-                            particleShapes.line(null, Particle.REDSTONE, top, surrounding.getLocation(), 0, new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1), 1);
+                            particleShapes.line(null, Particle.REDSTONE, source.getLocation(), top, 0, new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1), 1);
+                            particleShapes.line(null, Particle.REDSTONE, top, surrounding.getLocation(), 0, new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1), 1);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {

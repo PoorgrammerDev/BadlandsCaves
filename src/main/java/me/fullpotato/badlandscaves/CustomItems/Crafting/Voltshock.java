@@ -7,6 +7,8 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Loot.TreasureGear;
 import me.fullpotato.badlandscaves.Util.PlayerScore;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -38,8 +40,8 @@ public class Voltshock extends MatchCrafting implements Listener {
             Material.IRON_SWORD,
             Material.GOLDEN_SWORD,
             Material.DIAMOND_SWORD,
-            Material.NETHERITE_SWORD,
     };
+    private final int VOLTSHOCK_MAX_CHARGE = 100;
 
     public Voltshock(BadlandsCaves plugin, EnergyCore energyCore, StarlightTools starlightsword) {
         this.plugin = plugin;
@@ -178,7 +180,7 @@ public class Voltshock extends MatchCrafting implements Listener {
 
                                             ArrayList<String> lore = new ArrayList<>();
                                             lore.add(shock_lore);
-                                            lore.add("§70 / 50 Charge");
+                                            lore.add("§70 / " + VOLTSHOCK_MAX_CHARGE + " Charge");
                                             meta.setLore(lore);
                                             modified_sword.setItemMeta(meta);
 
@@ -219,11 +221,11 @@ public class Voltshock extends MatchCrafting implements Listener {
 
                 if (sword != null && energyCore != null) {
                     final int current_charge = getCharge(sword);
-                    if (current_charge < 50) {
+                    if (current_charge < VOLTSHOCK_MAX_CHARGE) {
                         final int addedCharge = this.energyCore.getCharge(energyCore);
 
                         if (addedCharge > 0) {
-                            final int new_charge = Math.min(50, current_charge + addedCharge);
+                            final int new_charge = Math.min(VOLTSHOCK_MAX_CHARGE, current_charge + addedCharge);
                             ItemStack new_result = sword.clone();
                             setCharge(new_result, new_charge);
                             event.getInventory().setResult(new_result);
@@ -277,7 +279,7 @@ public class Voltshock extends MatchCrafting implements Listener {
             ItemMeta meta = item.getItemMeta();
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "charge"), PersistentDataType.INTEGER, charge);
             List<String> lore = meta.getLore();
-            lore.set(1, "§7" + charge + " / 50 Charge");
+            lore.set(1, "§7" + charge + " / " + VOLTSHOCK_MAX_CHARGE + " Charge");
             meta.setLore(lore);
             item.setItemMeta(meta);
         }

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Listener {
+public class ArtifactPrescientSight extends ArtifactMechanisms implements Listener {
     private final EnhancedEyes enhancedEyes;
     private final int initial_mana_cost;
     private final int constant_mana_drain;
@@ -31,7 +31,7 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
             BlockFace.WEST,
     };
 
-    public ArtifactEmancipatedEyes(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, EnhancedEyes enhancedEyes) {
+    public ArtifactPrescientSight(BadlandsCaves plugin, Voidmatter voidmatter, ArtifactManager artifactManager, EnhancedEyes enhancedEyes) {
         super(plugin, voidmatter, artifactManager);
         this.enhancedEyes = enhancedEyes;
         initial_mana_cost = plugin.getOptionsConfig().getInt("spell_costs.eyes_mana_cost") / 3;
@@ -45,7 +45,7 @@ public class ArtifactEmancipatedEyes extends ArtifactMechanisms implements Liste
             if (player.isSneaking()) {
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
                     final ItemStack mainhand = player.getInventory().getItemInMainHand();
-                    if (voidmatter.isVoidmatterTool(mainhand) && artifactManager.hasArtifact(player, Artifact.EMANCIPATED_EYES)) {
+                    if (voidmatter.isVoidmatterTool(mainhand) && artifactManager.hasArtifact(player, Artifact.PRESCIENT_SIGHT)) {
                         final ItemStack offhand = player.getInventory().getItemInOffHand();
                         if (offhand.isSimilar(plugin.getCustomItemManager().getItem(CustomItem.ENHANCED_EYES))) {
                             final double mana = (double) PlayerScore.MANA.getScore(plugin, player);

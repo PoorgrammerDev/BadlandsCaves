@@ -3,6 +3,9 @@ package me.fullpotato.badlandscaves.CustomItems.Using.Starlight;
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightCharge;
 import me.fullpotato.badlandscaves.CustomItems.Crafting.Starlight.StarlightTools;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteStatChanges;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.NMS.EnhancedEyes.EnhancedEyesNMS;
 import me.fullpotato.badlandscaves.Util.ParticleShapes;
@@ -39,14 +42,20 @@ public class StarlightSentryMechanism implements Listener {
     private final EnhancedEyesNMS nms;
     private final StarlightBlasterMechanism starlightBlasterMechanism;
     private final ParticleShapes particleShapes;
+    private final NebuliteManager nebuliteManager;
+    private final NebuliteStatChanges nebuliteStatChanges;
 
-    public StarlightSentryMechanism(BadlandsCaves plugin, StarlightTools toolManager, StarlightCharge chargeManager, StarlightBlasterMechanism starlightBlasterMechanism, ParticleShapes particleShapes) {
+    public StarlightSentryMechanism(BadlandsCaves plugin, StarlightTools toolManager, StarlightCharge chargeManager,
+            StarlightBlasterMechanism starlightBlasterMechanism, ParticleShapes particleShapes, NebuliteManager nebuliteManager,
+            NebuliteStatChanges nebuliteStatChanges) {
         this.plugin = plugin;
         this.nms = plugin.getEnhancedEyesNMS();
         this.toolManager = toolManager;
         this.chargeManager = chargeManager;
         this.starlightBlasterMechanism = starlightBlasterMechanism;
         this.particleShapes = particleShapes;
+        this.nebuliteManager = nebuliteManager;
+        this.nebuliteStatChanges = nebuliteStatChanges;
     }
 
     @EventHandler
@@ -75,6 +84,10 @@ public class StarlightSentryMechanism implements Listener {
 
                                         Slime slime = (Slime) world.spawnEntity(bottom, EntityType.SLIME);
                                         slime.setAI(false);
+                                        slime.setRemoveWhenFarAway(false);
+                                        slime.setPersistent(true);
+                                        slime.setCustomName("Starlight Sentry Hitbox");
+                                        slime.setCustomNameVisible(false);
                                         slime.setGravity(false);
                                         slime.setSize(6);
                                         slime.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false));
@@ -83,10 +96,23 @@ public class StarlightSentryMechanism implements Listener {
 
                                         ArmorStand armorStand = (ArmorStand) world.spawnEntity(bottom, EntityType.ARMOR_STAND);
                                         armorStand.setCustomName(player.getDisplayName() + "'s Starlight Sentry");
+                                        armorStand.setCustomNameVisible(false);
                                         armorStand.setMarker(true);
                                         armorStand.setVisible(false);
                                         armorStand.setInvulnerable(true);
                                         armorStand.setGravity(false);
+                                        armorStand.setRemoveWhenFarAway(false);
+                                        armorStand.setPersistent(true);
+
+                                        //keep track of nebulites
+                                        final NamespacedKey nebuliteKey = new NamespacedKey(plugin, "nebulites");
+                                        final ItemMeta sentryItemMeta = item.getItemMeta();
+
+                                        if (sentryItemMeta != null && sentryItemMeta.getPersistentDataContainer().has(nebuliteKey, PersistentDataType.STRING)) {
+                                            armorStand.getPersistentDataContainer().set(nebuliteKey, PersistentDataType.STRING, 
+                                                sentryItemMeta.getPersistentDataContainer().get(nebuliteKey, PersistentDataType.STRING)
+                                            );
+                                        }
 
                                         armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_starlight_sentry"), PersistentDataType.BYTE, (byte) 1);
                                         armorStand.getPersistentDataContainer().set(new NamespacedKey(plugin, "charge"), PersistentDataType.INTEGER, charge);
@@ -232,25 +258,15 @@ public class StarlightSentryMechanism implements Listener {
 
     @EventHandler
     public void ownerLogOff (PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
-        if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 1) {
-            String result = (String) PlayerScore.STARLIGHT_SENTRY_UUID.getScore(plugin, player);
-            if (result != null && !result.isEmpty()) {
-                final UUID uuid = UUID.fromString(result);
-                Entity entity = plugin.getServer().getEntity(uuid);
-                if (entity instanceof ArmorStand) {
-                    ArmorStand armorStand = (ArmorStand) entity;
-                    if (isSentry(armorStand)) {
-                        destroySentry(armorStand, true);
-                    }
-                }
-            }
-        }
+        ExitDespawn(event.getPlayer());
     }
 
     @EventHandler
     public void ownerChangeDimension (PlayerChangedWorldEvent event) {
-        final Player player = event.getPlayer();
+        ExitDespawn(event.getPlayer());
+    }
+
+    public void ExitDespawn(Player player) {
         if ((byte) PlayerScore.HAS_STARLIGHT_SENTRY.getScore(plugin, player) == (byte) 1) {
             String result = (String) PlayerScore.STARLIGHT_SENTRY_UUID.getScore(plugin, player);
             if (result != null && !result.isEmpty()) {
@@ -287,6 +303,21 @@ public class StarlightSentryMechanism implements Listener {
             if (player != null) {
                 final ItemStack item = plugin.getCustomItemManager().getItem(CustomItem.STARLIGHT_SENTRY);
                 chargeManager.setCharge(item, charge);
+
+                //re-add nebulites
+                final NamespacedKey nebuliteKey = new NamespacedKey(plugin, "nebulites");
+                if (armorStand.getPersistentDataContainer().has(nebuliteKey, PersistentDataType.STRING)) {
+                    //then, saves info to item
+                    this.nebuliteManager.setNebulites(item, 
+                        //first, interprets saved string data into array of enums
+                        this.nebuliteManager.getNebulitesFromString(
+                            armorStand.getPersistentDataContainer().get(nebuliteKey, PersistentDataType.STRING)
+                        )
+                    );
+
+                    //then, updates stats
+                    this.nebuliteStatChanges.updateStats(item);
+                }
 
                 for (Entity entity : slime.getNearbyEntities(10, 10, 10)) {
                     if (entity instanceof Mob) {

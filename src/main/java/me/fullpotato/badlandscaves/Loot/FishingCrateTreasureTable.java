@@ -49,7 +49,7 @@ public class FishingCrateTreasureTable implements LootTable {
         ArrayList<ItemStack> tier3 = new ArrayList<>();
         ArrayList<ItemStack> tier4 = new ArrayList<>();
         if (hardmode) {
-            final boolean heretic = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
+            final boolean isSorcerer = (byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1;
         //HARDMODE-------------------------------------
 
             tier1.add(new ItemStack(Material.IRON_BLOCK, randomCount(random, 1, 8)));
@@ -73,7 +73,7 @@ public class FishingCrateTreasureTable implements LootTable {
             tier2.add(new ItemStack(Material.PIG_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.SHEEP_SPAWN_EGG, randomCount(random, 1, 4)));
             tier2.add(new ItemStack(Material.GRASS_BLOCK, randomCount(random, 1, 4)));
-            if (heretic) {
+            if (isSorcerer) {
                 tier2.add(customItemManager.getItem(CustomItem.MANA_POTION));
                 tier2.add(new ItemStack(Material.WITCH_SPAWN_EGG, randomCount(random, 1, 4)));
                 tier2.add(new ItemStack(Material.LAPIS_BLOCK, randomCount(random, 8, 32)));
@@ -84,7 +84,7 @@ public class FishingCrateTreasureTable implements LootTable {
             }
 
             tier3.add(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER));
-            if (!heretic) {
+            if (!isSorcerer) {
                 tier3.add(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT));
             }
 

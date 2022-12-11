@@ -3,12 +3,12 @@ package me.fullpotato.badlandscaves.NMS.FakePlayer;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import me.fullpotato.badlandscaves.BadlandsCaves;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -17,10 +17,10 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FakePlayer_1_16_R2 implements FakePlayerNMS{
+public class FakePlayer_1_16_R3 implements FakePlayerNMS{
     private final BadlandsCaves plugin;
 
-    public FakePlayer_1_16_R2(BadlandsCaves plugin) {
+    public FakePlayer_1_16_R3(BadlandsCaves plugin) {
         this.plugin = plugin;
     }
 
@@ -39,7 +39,7 @@ public class FakePlayer_1_16_R2 implements FakePlayerNMS{
         if (copyArmor) {
             EntityEquipment equipment = player.getEquipment();
 
-            List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R2.ItemStack>> list = new ArrayList<>();
+            List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> list = new ArrayList<>();
             list.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(equipment.getHelmet())));
             list.add(new Pair<>(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(equipment.getChestplate())));
             list.add(new Pair<>(EnumItemSlot.LEGS, CraftItemStack.asNMSCopy(equipment.getLeggings())));
@@ -90,7 +90,7 @@ public class FakePlayer_1_16_R2 implements FakePlayerNMS{
     public void giveHandItem (Player player, Player sendTo, ItemStack item, boolean offHand) {
         EntityPlayer clone = ((CraftPlayer) player).getHandle();
 
-        List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R2.ItemStack>> list = new ArrayList<>();
+        List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> list = new ArrayList<>();
         list.add(new Pair<>(offHand ? EnumItemSlot.OFFHAND : EnumItemSlot.MAINHAND, CraftItemStack.asNMSCopy(item)));
 
         PacketPlayOutEntityEquipment handItemPacket = new PacketPlayOutEntityEquipment(clone.getId(), list);

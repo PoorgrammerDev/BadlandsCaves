@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -20,10 +21,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import javax.annotation.Nullable;
+
 public class UseSoulLantern implements Listener {
     private final BadlandsCaves plugin;
     private final String title = ChatColor.of("#03969a") + "Soul Lantern";
     private final NamespacedKey key;
+    private final SoulLantern soulLanternManager;
     private final CustomItem[] souls = {
             CustomItem.ZOMBIE_SOUL,
             CustomItem.CREEPER_SOUL,
@@ -38,8 +42,9 @@ public class UseSoulLantern implements Listener {
     };
 
 
-    public UseSoulLantern(BadlandsCaves plugin) {
+    public UseSoulLantern(BadlandsCaves plugin, SoulLantern soulLanternManager) {
         this.plugin = plugin;
+        this.soulLanternManager = soulLanternManager;
         key = new NamespacedKey(plugin, "soul_lantern_items");
     }
 
@@ -49,8 +54,7 @@ public class UseSoulLantern implements Listener {
             if (event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
                 ItemStack item = event.getItem();
                 if (item != null) {
-                    SoulLantern lantern = new SoulLantern(plugin);
-                    if (lantern.isSoulLantern(item)) {
+                    if (soulLanternManager.isSoulLantern(item)) {
                         final Player player = event.getPlayer();
                         event.setCancelled(true);
                         openInventory(player, item);
@@ -63,7 +67,6 @@ public class UseSoulLantern implements Listener {
     @EventHandler
     public void preventInputNonSoulItem (InventoryClickEvent event) {
         if (event.getView().getTitle().equals(title)) {
-            SoulLantern soulLanternManager = new SoulLantern(plugin);
             ItemStack lantern = event.getCurrentItem();
             if (soulLanternManager.isSoulLantern(lantern)) {
                 event.setCancelled(true);
@@ -123,13 +126,12 @@ public class UseSoulLantern implements Listener {
         if (event.getView().getTitle().equals(title)) {
             final Player player = (Player) event.getPlayer();
             final Inventory inventory = event.getInventory();
-            final SoulLantern soulLantern = new SoulLantern(plugin);
             ItemStack lantern = player.getInventory().getItemInMainHand();
-            if (!soulLantern.isSoulLantern(lantern)) {
+            if (!soulLanternManager.isSoulLantern(lantern)) {
                 lantern = player.getInventory().getItemInOffHand();
             }
 
-            if (soulLantern.isSoulLantern(lantern)) {
+            if (soulLanternManager.isSoulLantern(lantern)) {
                 String string = convertSoulsToString(inventory.getContents());
                 ItemMeta meta = lantern.getItemMeta();
                 meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, string);
@@ -166,9 +168,9 @@ public class UseSoulLantern implements Listener {
         return builder.toString();
     }
 
-    public ItemStack[] convertStringToSouls(String string) {
+    public ItemStack[] convertStringToSouls(@Nullable String string) {
         final ItemStack[] output = new ItemStack[27];
-        if (string.isEmpty()) return output;
+        if (string == null || string.isEmpty()) return output;
 
         //0:ZOMBIE_SOUL#5;1:CREEPER_SOUL#2;
         final String[] eachEntry = string.split(";");
@@ -195,6 +197,50 @@ public class UseSoulLantern implements Listener {
         }
 
         return output;
+    }
+
+    public boolean addSoul(ItemStack lantern, ItemStack soul) {
+        //Ensure item is soul lantern
+        if (!soulLanternManager.isSoulLantern(lantern)) return false;
+
+        final ItemMeta meta = lantern.getItemMeta();
+        if (meta == null) return false;
+
+        //Deserialize the item data
+        String serialized = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        ItemStack[] deserialized = convertStringToSouls(serialized);
+        soul.setAmount(1);
+
+        //Increment the first similar soul
+        boolean success = false;
+        for (ItemStack item : deserialized) {
+            if (item != null && item.isSimilar(soul) && item.getAmount() < 64) {
+                item.setAmount(item.getAmount() + 1);
+                success = true;
+                break;
+            }
+        }
+
+        //Find an open slot and insert items
+        if (!success) {
+            for (int i = 0; i < deserialized.length; ++i) {
+                if (deserialized[i] == null || deserialized[i].getType().isAir()) {
+                    deserialized[i] = soul;
+                    success = true;
+                    break;
+                }
+            }
+        }
+
+        //Reserialize the items and apply update to the lantern
+        if (success) {
+            serialized = convertSoulsToString(deserialized);
+            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, serialized);
+            lantern.setItemMeta(meta);
+            return true;
+        }
+
+        return false;
     }
 
     public CustomItem getCustomItemFromSoulItemStack(ItemStack item) {

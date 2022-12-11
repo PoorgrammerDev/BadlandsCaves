@@ -81,7 +81,7 @@ public class EyesRunnable extends BukkitRunnable {
             //mana stuffs
             mana -= (drain / 20.0);
             PlayerScore.MANA.setScore(plugin, player, mana);
-            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, 300);
+            PlayerScore.MANA_REGEN_DELAY_TIMER.setScore(plugin, player, plugin.getOptionsConfig().getInt("mana_regen_cooldown"));
             PlayerScore.MANA_BAR_ACTIVE_TIMER.setScore(plugin, player, 60);
         }
         else {

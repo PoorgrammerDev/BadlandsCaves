@@ -30,7 +30,7 @@ starting_dungeons: 10
 
 # Time Limit for Descension World
 # (Does not take into account extra time each Shrine gives)
-descension_time_limit: 300
+descension_time_limit: 200
 
 # Maximum Lost Souls in Descension at one time
 descension_mob_limit: 100
@@ -38,13 +38,13 @@ descension_mob_limit: 100
 # How many Detection Points Lost Souls have to detect before player loses.
 descension_max_detect: 100
 
-# Heretic Spell Mana Costs
+# Sorcerer Spell Mana Costs
 # "Drain" indicates cost per second, instead of single-cost.
 spell_costs:
   displace_mana_cost: 25
   eyes_mana_cost: 50
   eyes_mana_drain: 10
-  withdraw_mana_cost: 70
+  withdraw_mana_cost: 80
   possess_mana_cost: 25
   possess_mana_drain: 3
   agility_mana_cost: 5
@@ -52,21 +52,28 @@ spell_costs:
 # Default Soul Drop Chance (%)
 soul_drop_chance: 25
 
+# Default Voidmatter Drop Chance (from Void Monsters) (%)
+void_monster_drop_chance: 25
+
 # Maximum bottles of liquid a canteen can hold
 canteen_limit: 10
-
-# XP -> Energy Core Charge Reduction
-energy_core_charge_reduce: 0.25
 
 # Mana regen cooldown after using a spell, measured in (ticks * 5)
 mana_regen_cooldown: 60
 
-# Energy Core Booster Items Multipliers
+# Withdraw copies the source world in layers from the origin point. This value is the minimum amount of layers formed in the first tick.
+withdraw_minimum_initial_layers: 5
+
+# Max amount of blocks Withdraw cloning can process per tick after the first tick
+withdraw_max_blocks_per_tick: 1000
+
+# Energy Core Catalyst Charge Ratios (1 XP to _ Charge)
 energy_core_mult:
-  redstone: 1.5
-  glowstone: 3.0
-  energium: 7.5
-  nether_star_fragment: 15.0
+  empty: 0.375
+  redstone: 0.75
+  glowstone: 1.5
+  charged_quartz: 3.0
+  energium: 6.0
 
 pre_hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Pre-hardmode
@@ -133,10 +140,10 @@ hardmode_values:
   # The EXP dropped from Ascended Mobs are multiplied by this amount as a reward for killing them.
   ascended_exp_multiplier: 10
 
-  # In Hardmode, Silencers are blocks that prevent Heretics from using their powers. This is their radius of effect.
+  # In Hardmode, Silencers are blocks that prevent Sorcerers from using their powers. This is their radius of effect.
   silencer_range: 25
 
-  # Everytime a Silencer cancels a Heretic's powers from being used, it uses up this much energy.
+  # Everytime a Silencer cancels a Sorcerer's powers from being used, it uses up this much energy.
   silencer_cost: 10
 
   # The Nebulite "Decisive Disintegration" for the Starlight Paxel gives it Vein Miner and Tree Feller capabilities.
@@ -153,10 +160,31 @@ hardmode_values:
     # Cost Per arrow fired (arrow count based on Chaos)
     summoners_rift: 5
 
-  # In Hardmode, Alternate Dimensions are accessible. Since generating on-the-fly is
-  # quite resource demanding, the plugin pre-generates some when players aren't online and keeps them in a "buffer".
+#Options for Alternate Dimensions, different worlds the player can access in Hardmode
+alternate_dimensions:
+  # Since generating on-the-fly is quite resource demanding, the plugin pre-generates 
+  # some worlds when players aren't online and keeps them in a "buffer".
   # This is the limit of how many can be in the "buffer" before it stops.
-  alternate_dimensions_pregenerate_limit: 5
+  pregenerate_limit: 5
 
-  # Alternate Dimensions will only generate when recent TPS is above this number. Set to 20.0 to always allow.
-  alternate_dimensions_tps_threshold: 18.0
+  # Alternate Dimensions will only pre-generate when recent TPS is above this number. Set to 20.0 to always allow.
+  pregenerate_tps_threshold: 18.0
+
+  # Allow loading alternate dimensions that are not pre-generated
+  allow_generate_on_demand: false
+  
+  # Options for the Environmental Hazards present in these worlds
+  hazards:
+    # Paranoia uses a box of faux blocks around the player to achieve distance-customizable vision limiting.
+    # However, this can be performance intensive for both the server and the clients.
+    # This option forces the system to fallback to applying blindness instead.
+    paranoia_force_blind: false
+
+    # Allows Meteor Shower explosions to destroy blocks
+    meteors_destroy_blocks: true
+
+    # Cryogenic range around player to search for warm blocks 
+    freezing_warm_block_range: 5
+
+# Designated team name used for hiding nametags of monsters
+nametag_hide_team_name: __HIDE_NAMETAG__

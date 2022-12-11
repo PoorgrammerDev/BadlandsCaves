@@ -18,7 +18,7 @@ public enum Artifact {
     BLOODSAPPING_BOW(CustomItem.ARTIFACT_BLOODSAPPING_BOW, ArtifactBaseItem.VOIDMATTER_BOW),
     SUMMONERS_RIFT(CustomItem.ARTIFACT_SUMMONERS_RIFT, ArtifactBaseItem.VOIDMATTER_BOW),
 
-    EMANCIPATED_EYES(CustomItem.ARTIFACT_EMANCIPATED_EYES, ArtifactBaseItem.VOIDMATTER_TOOLS),
+    PRESCIENT_SIGHT(CustomItem.ARTIFACT_PRESCIENT_SIGHT, ArtifactBaseItem.VOIDMATTER_TOOLS),
     DIGGING_DOPPELGANGER(CustomItem.ARTIFACT_DIGGING_DOPPELGANGER, ArtifactBaseItem.VOIDMATTER_TOOLS),
 
     UNDISPLACE(CustomItem.ARTIFACT_UNDISPLACE, ArtifactBaseItem.DISPLACE),
@@ -58,4 +58,39 @@ public enum Artifact {
     public ArtifactBaseItem[] getArtifactBaseItems() {
         return artifactBaseItems;
     }
+
+    public static Artifact[] GetLootItems() {
+        return new Artifact[] {
+            TENACIOUS_TRICKERY,
+            ECLIPSED_SHADOWS,
+            MANA_WARDING,
+            FLEETING_SPIRITS,
+            CONVERGING_SWINGS,
+            //TRAVELING_BLADES,         // REMOVED: Orb of Ascension
+            HASTE_WIND,
+            BLOODSAPPING_BAYONET,
+            SIGHT_STEALING,
+            BLOODSAPPING_BOW,
+            //SUMMONERS_RIFT,           // REMOVED: Orb of Ascension
+            PRESCIENT_SIGHT,
+            DIGGING_DOPPELGANGER,
+            UNDISPLACE,
+            MOMENTOUS_MOMENTUM,
+            DISTRACTING_DOPPELGANGER,
+            SOUL_HEIST,
+            // TEMPORAL_SUSPENSION,     // not implemented
+            DIRECTIONAL_VISION,
+            // FORESIGHT,
+            CHEAP_SIGHT,
+            // ADAPTIVE_EXPLOITATION,   // not implemented
+            SAFEGUARD,
+            INSPIRE,
+            DOMINO,
+            TRIPLE_JUMP,
+            RECOVERY_ROLL,
+            // SHADOWSTEP,              // not implemented
+            // METAPHYSICAL_NOURISHMENT // not implemented
+        };
+    }
+
 }

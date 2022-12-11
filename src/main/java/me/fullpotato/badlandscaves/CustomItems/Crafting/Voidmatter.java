@@ -262,7 +262,12 @@ public class Voidmatter extends MatchCrafting implements Listener {
                 }
             }
 
-            if (repairElement == null || voidmatterTool == null) return;
+            //not a valid recipe -- clear the output and return
+            if (repairElement == null || voidmatterTool == null)  {
+                event.getInventory().setResult(null);
+                return;
+            }
+
             final ItemStack newResult = voidmatterTool.clone();
             if (newResult.getItemMeta() instanceof Damageable) {
                 final Damageable meta = (Damageable) newResult.getItemMeta();

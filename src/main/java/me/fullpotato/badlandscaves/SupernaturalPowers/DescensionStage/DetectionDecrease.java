@@ -31,7 +31,7 @@ public class DetectionDecrease extends BukkitRunnable {
                 if (detection > 0) {
                     double detect_cooldown = (double) PlayerScore.DESCENSION_DETECT_COOLDOWN.getScore(plugin, player);
                     if (detect_cooldown <= 0) {
-                        detection -= 0.5;
+                        detection *= 0.9;
                         PlayerScore.DESCENSION_DETECT.setScore(plugin, player, detection);
                     }
                     else {

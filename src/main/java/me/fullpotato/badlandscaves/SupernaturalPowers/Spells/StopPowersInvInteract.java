@@ -26,6 +26,7 @@ public class StopPowersInvInteract implements Listener {
             activePowers.add(plugin.getCustomItemManager().getItem(value.getItem()));
         }
         activePowers.add(plugin.getCustomItemManager().getItem(CustomItem.ECLIPSED_SHADOWS));
+        // activePowers.add(plugin.getCustomItemManager().getItem(CustomItem.DOMINO));
     }
 
     @EventHandler
@@ -84,6 +85,7 @@ public class StopPowersInvInteract implements Listener {
             for (ItemStack activePower : activePowers) {
                 if (items.get(a).isSimilar(activePower)) {
                     event.getDrops().remove(a);
+                    break;
                 }
             }
         }

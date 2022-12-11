@@ -5,7 +5,6 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.ItemBuilder;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,6 +20,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
+
+import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +76,9 @@ public class CraftingGuide implements Listener {
             CustomItem.VOLTSHOCK_BATTERY.toString(),
             CustomItem.VOLTSHOCK_SHOCKER.toString(),
             CustomItem.VOLTSHOCK_PLACEHOLDER.toString(),
+            CustomItem.CHARGED_QUARTZ.toString(),
+            Material.EXPERIENCE_BOTTLE.toString(),
+            CustomItem.ENERGY_CORE.toString(),
             CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.toString(),
             CustomItem.VOLTSHOCK_ARROW.toString(),
 
@@ -95,7 +99,6 @@ public class CraftingGuide implements Listener {
 
             CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG.toString(),
 
-            CustomItem.TITANIUM_FRAGMENT.toString(),
             CustomItem.TITANIUM_INGOT.toString(),
             CustomItem.REINFORCED_TITANIUM.toString(),
             CustomItem.TITANIUM_ROD.toString(),
@@ -122,7 +125,6 @@ public class CraftingGuide implements Listener {
             CustomItem.SILENCER.toString(),
 
             CustomItem.ENERGIUM.toString(),
-            CustomItem.ENERGY_CORE.toString(),
             CustomItem.STARLIGHT_CHARGE_PLACEHOLDER.toString(),
 
             CustomItem.DIMENSIONAL_ANCHOR.toString(),
@@ -139,6 +141,13 @@ public class CraftingGuide implements Listener {
             CustomItem.VOIDMATTER_PICKAXE.toString(),
             CustomItem.VOIDMATTER_SHOVEL.toString(),
             CustomItem.VOIDMATTER_AXE.toString(),
+
+            CustomItem.NEBULITE_CRATE.toString(),
+            CustomItem.NEBULITE_INSTALLER.toString(),
+            CustomItem.ARTIFACT_VOUCHER.toString(),
+
+            CustomItem.ARTIFACT_SUMMONERS_RIFT.toString(),
+            CustomItem.ARTIFACT_TRAVELING_BLADES.toString(),
     };
 
     private final HashMap<ItemStack, ItemStack[]> craftingRecipes = new HashMap<>();
@@ -674,7 +683,7 @@ public class CraftingGuide implements Listener {
 
         ItemStack shock_sword = customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER);
         ItemMeta shock_sword_meta = shock_sword.getItemMeta();
-        shock_sword_meta.setDisplayName(ChatColor.WHITE + "Iron, Gold, or Netherite Sword");
+        shock_sword_meta.setDisplayName(ChatColor.WHITE + "Wooden, Stone, Iron, Gold, or Diamond Sword");
         shock_sword.setItemMeta(shock_sword_meta);
 
         ItemStack[] voltshock_placeholder_recipe = {
@@ -691,8 +700,8 @@ public class CraftingGuide implements Listener {
 
 
         ItemStack[] voltshock_sword_charge_placeholder_recipe = {
-                new ItemStack(Material.EXPERIENCE_BOTTLE),
                 customItemManager.getItem(CustomItem.VOLTSHOCK_PLACEHOLDER),
+                customItemManager.getItem(CustomItem.ENERGY_CORE),
         };
         recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER), voltshock_sword_charge_placeholder_recipe);
 
@@ -855,15 +864,6 @@ public class CraftingGuide implements Listener {
         };
         recipes.put(new ItemStack(Material.QUARTZ), quartz_recipe);
 
-        ItemStack[] titanium_ingot_recipe = {
-                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
-                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
-                null,
-                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
-                customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT),
-        };
-        recipes.put(customItemManager.getItem(CustomItem.TITANIUM_INGOT), titanium_ingot_recipe);
-
         final ItemStack goldNugget = new ItemStack(Material.GOLD_NUGGET);
         final ItemStack netheriteScrap = new ItemStack(Material.NETHERITE_SCRAP);
         ItemStack[] reinforced_titanium_recipe = {
@@ -967,22 +967,31 @@ public class CraftingGuide implements Listener {
         };
         recipes.put(customItemManager.getItem(CustomItem.PHOTON_EMITTER), photon_emitter_recipe);
 
+        recipes.put(customItemManager.getItem(CustomItem.CHARGED_QUARTZ), new ItemStack[]{
+            new ItemStack(Material.REDSTONE),
+            new ItemStack(Material.QUARTZ),
+            null,
+            new ItemStack(Material.QUARTZ),
+            new ItemStack(Material.REDSTONE)
+        });
 
-        ItemStack[] energium_recipe = {
-                new ItemStack(Material.REDSTONE),
-                new ItemStack(Material.DIAMOND),
-                null,
-                new ItemStack(Material.DIAMOND),
-                new ItemStack(Material.REDSTONE),
-        };
-        recipes.put(customItemManager.getItem(CustomItem.ENERGIUM), energium_recipe);
 
         ItemStack[] energy_core_recipe = {
-               customItemManager.getItem(CustomItem.ENERGIUM),
+                //Catalyst Item
+                new ItemBuilder(customItemManager.getItem(CustomItem.ENERGIUM))
+                    .setName(ChatColor.YELLOW + "Catalyst Item")
+                    .setLore(
+                        "§7Valid Items include:",
+                        "§7- Redstone",
+                        "§7- Glowstone",
+                        "§7- Charged Quartz",
+                        "§7- Energium"
+                    )
+                    .build(),
+
                 new ItemStack(Material.EXPERIENCE_BOTTLE),
         };
         recipes.put(customItemManager.getItem(CustomItem.ENERGY_CORE), energy_core_recipe);
-
 
         ItemStack[] starlight_helmet_recipe = {
                 customItemManager.getItem(CustomItem.REINFORCED_TITANIUM),
@@ -1257,6 +1266,20 @@ public class CraftingGuide implements Listener {
                 customItemManager.getItem(CustomItem.VOIDMATTER_STICK),
         };
         recipes.put(customItemManager.getItem(CustomItem.VOIDMATTER_AXE), voidmatter_axe_recipe);
+
+        recipes.put(customItemManager.getItem(CustomItem.ARTIFACT_TRAVELING_BLADES), 
+            new ItemStack[]{
+                customItemManager.getItem(CustomItem.ASCENDED_ORB),
+                customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER),
+            }
+        );
+
+        recipes.put(customItemManager.getItem(CustomItem.ARTIFACT_SUMMONERS_RIFT),
+            new ItemStack[]{
+                customItemManager.getItem(CustomItem.ASCENDED_ORB),
+                customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER),
+            }
+        );
     }
 
     public void fillCauldronRecipes(HashMap<ItemStack, ItemStack[]> recipes) {
@@ -1441,15 +1464,16 @@ public class CraftingGuide implements Listener {
         hallowed_chambers_treasure_bag_desc.setItemMeta(hallowed_chambers_treasure_bag_meta);
         descs.put(customItemManager.getItem(CustomItem.HALLOWED_CHAMBERS_TREASURE_BAG), hallowed_chambers_treasure_bag_desc);
 
-        ItemStack titanium_fragment_desc = new ItemStack(Material.DEAD_TUBE_CORAL_BLOCK);
-        ItemMeta titanium_fragment_meta = titanium_fragment_desc.getItemMeta();
-        titanium_fragment_meta.setDisplayName("§bMine Titanium Ore");
-        ArrayList<String> titanium_fragment_lore = new ArrayList<>();
-        titanium_fragment_lore.add("§7This item is obtained by mining Titanium Ore,");
-        titanium_fragment_lore.add("§7which generates right above The Void.");
-        titanium_fragment_meta.setLore(titanium_fragment_lore);
-        titanium_fragment_desc.setItemMeta(titanium_fragment_meta);
-        descs.put(customItemManager.getItem(CustomItem.TITANIUM_FRAGMENT), titanium_fragment_desc);
+        ItemStack titanium_ingot_desc = new ItemStack(Material.DEAD_TUBE_CORAL_BLOCK);
+        ItemMeta titanium_ingot_meta = titanium_ingot_desc.getItemMeta();
+        titanium_ingot_meta.setDisplayName("§bMine Titanium Ore");
+        ArrayList<String> titanium_ingot_lore = new ArrayList<>();
+        titanium_ingot_lore.add("§7This item is obtained by mining Titanium Ore,");
+        titanium_ingot_lore.add("§7which generates at the bottom of the main world");
+        titanium_ingot_lore.add("§7and underground in Alternate Dimensions.");
+        titanium_ingot_meta.setLore(titanium_ingot_lore);
+        titanium_ingot_desc.setItemMeta(titanium_ingot_meta);
+        descs.put(customItemManager.getItem(CustomItem.TITANIUM_INGOT), titanium_ingot_desc);
 
         ItemStack forever_fish_desc = customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE);
         ItemMeta forever_fish_meta = forever_fish_desc.getItemMeta();
@@ -1459,14 +1483,39 @@ public class CraftingGuide implements Listener {
         forever_fish_desc.setItemMeta(forever_fish_meta);
         descs.put(customItemManager.getItem(CustomItem.FOREVER_FISH), forever_fish_desc);
 
-        ItemStack voidmatter_desc = new ItemStack(Material.ENDER_PEARL);
+        ItemStack voidmatter_desc = customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR);
         ItemMeta voidmatter_meta = voidmatter_desc.getItemMeta();
         voidmatter_meta.setDisplayName("§eExtradimensional Loot");
         ArrayList<String> voidmatter_lore = new ArrayList<>();
-        voidmatter_lore.add("§7This item is obtained by raiding other dimensions.");
+        voidmatter_lore.add("§7This item is obtained in the Void Layer of Alternate Dimensions.");
         voidmatter_meta.setLore(voidmatter_lore);
         voidmatter_desc.setItemMeta(voidmatter_meta);
         descs.put(customItemManager.getItem(CustomItem.VOIDMATTER), voidmatter_desc);
+
+        descs.put(customItemManager.getItem(CustomItem.ENERGIUM), 
+            new ItemBuilder(Material.DEAD_BRAIN_CORAL_BLOCK)
+            .setName(ChatColor.of("#ffd60a") + "Mine Energium Ore")
+            .setLore(
+                "§7This item is obtained by mining Energium Ore,",
+                "§7which generates in the Void Layer of Alternate Dimensions."
+            ).build()
+        );
+
+        descs.put(customItemManager.getItem(CustomItem.NEBULITE_CRATE), voidmatter_desc);
+        descs.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), voidmatter_desc);
+        descs.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), voidmatter_desc);
+
+        descs.put(new ItemStack(Material.EXPERIENCE_BOTTLE),
+            new ItemBuilder(Material.ENCHANTING_TABLE)
+            .setName(ChatColor.WHITE + "Glass Bottle + Enchanting Table")
+            .setLore(
+                ChatColor.BLUE.toString() + ChatColor.BOLD + "Right Click" + ChatColor.RESET + ChatColor.GRAY + " an Enchanting Table with a Glass Bottle",
+                ChatColor.GRAY + "in your hand to turn it into an EXP Bottle.",
+                ChatColor.GRAY + "This consumes one level from your player and stores it in there.",
+                ChatColor.GRAY + "Continue right clicking the EXP Bottle to add more levels."
+            )
+            .build()
+        );
 
     }
 }
