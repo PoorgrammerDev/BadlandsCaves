@@ -530,11 +530,6 @@ public final class BadlandsCaves extends JavaPlugin {
 
         StartingDungeons dungeons = new StartingDungeons(this, random);
         dungeons.genSpawnDungeons();
-
-        //TODO: REMOVE THIS
-        WorldCreator wc = new WorldCreator("world_test");
-        wc.type(WorldType.FLAT);
-        wc.createWorld();
     }
 
     //EVENTS

@@ -52,7 +52,7 @@ public class StructureCommand extends Commands implements CommandExecutor {
                 spawnSubcommand(player, args);
                 break;
             case "LIST":
-                //TODO: Implement functionality
+                commandSender.sendMessage(ChatColor.RED + "This sub-command is unimplemented.");
                 break;
             default:
                 commandSender.sendMessage(ChatColor.RED + "Invalid subcommand!");
