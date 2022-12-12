@@ -23,7 +23,7 @@ Explore dungeons, fight bosses, open portals to raid other worlds, and dabble in
     - Extremely agile; quickly traverse varying types of terrain
     - Build Voidmatter gear as an extension of your abilities late-game
 - Fight a stronger version of the Wither in a custom stage
-- Fight custom mini-bosses in late-game
+- Battle custom mini-bosses in late-game
 - Invade hazardous alternate dimensions
 	- Pilfer and raid structures and enemies
 	- Endure the unforgiving Void Layer
@@ -88,9 +88,9 @@ This section doesn't pertain to the plugin's features or lore. This section is a
 
 I started this project in my senior year of high school as I was getting into programming. It wasn't for a class or for a club, just something I wanted to work on in my free time.
 
-At the time, I was learning Java in my first real coding class. At the time, I knew Minecraft was coded in Java and knew how some of the technical things worked in the game, so I decided to take a shot at making some kind of gameplay experience. While this is technically a Spigot plugin, I tried to design the experience to be more akin to a Forge modpack. The main reason I didn't go with Forge is because I had wanted the game to be playable with as little client modding as possible.
+At the time, I was learning Java in my first real coding class. I knew Minecraft was coded in Java and knew how some of the technical things worked in the game, so I decided to take a shot at making some kind of gameplay experience. While this is technically a Spigot plugin, I tried to design the experience to be more akin to a Forge modpack. The main reason I didn't go with Forge is because I had wanted the game to be playable with as little client modding as possible.
 
-Through the process of creating this plugin, I discovered my passion for developing and designing video games, the former of which I've chosen to focus on for my career. Working on this project also served as a great incentive to learn more programming during my beginning stages of Computer Science, and it acted as my creative outlet and coding testing ground. I would randomly come up with new ideas to add, learn what I needed to understand to add them, and do so. This led to the plugin being quite a smorgasbord of features, some completely unrelated to others. Did you know the Backrooms is in here somewhere?
+Through the process of creating this plugin, I discovered my passion for developing and designing video games, the former of which I've chosen to focus on for my career. Working on this project also served as a great incentive to learn more programming during my beginning stages of Computer Science, and it acted as my creative outlet and coding testing ground. I would spontaneously come up with new ideas to add, learn what I needed to understand to add them, and then do so. This led to the plugin being quite a smorgasbord of features, some completely unrelated to others. (Did you know the Backrooms is in here somewhere?)
 
 I had stopped development in August 2020 and moved onto other things for a while, but it always bothered me that I simply left the project to die. So, this year (2022), I returned and tied up some loose ends, fixed some bugs, and wrote this readme. It's not completely finished, but it's at a point where I can be happy about leaving it.
 
