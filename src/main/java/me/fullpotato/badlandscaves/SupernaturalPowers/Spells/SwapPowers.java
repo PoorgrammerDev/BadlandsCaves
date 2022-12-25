@@ -52,6 +52,9 @@ public class SwapPowers implements Listener {
         if (!has_powers) return;
 
         boolean doubleShiftOption = (byte) PlayerScore.SWAP_DOUBLESHIFT_OPTION.getScore(plugin, player) == 1;
+        final String swapMode = (String) PlayerScore.SWAP_MODE.getScore(plugin, player);
+        final String swapMessage = (swapMode.equals("DYNAMIC")) ? "§3Scroll to Access Abilities" : "§3Select Desired Ability";
+
         if (doubleShiftOption) {
             if (player.isSneaking()) {
                 PlayerScore.SWAP_WINDOW.setScore(plugin, player, 0);
@@ -65,7 +68,7 @@ public class SwapPowers implements Listener {
                     PlayerScore.SWAP_WINDOW.setScore(plugin, player, 1);
 
                     if ((int) PlayerScore.SPELLS_SILENCED_TIMER.getScore(plugin, player) <= 0) {
-                        manaBarManager.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
+                        manaBarManager.displayMessage(player, swapMessage, 2, false);
                     }
                 }
                 else {
@@ -88,7 +91,7 @@ public class SwapPowers implements Listener {
             }
             else {
                 PlayerScore.SWAP_WINDOW.setScore(plugin, player, 1);
-                manaBarManager.displayMessage(player, "§3Scroll to Access Abilities", 2, false);
+                manaBarManager.displayMessage(player, swapMessage, 2, false);
             }
         }
     }

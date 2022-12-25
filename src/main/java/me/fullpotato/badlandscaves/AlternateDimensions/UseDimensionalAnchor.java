@@ -163,9 +163,9 @@ public class UseDimensionalAnchor implements Listener {
                                 plugin.saveSystemConfig();
                             }
 
-                            destroySpawner.incrementChaos(true);
+                            destroySpawner.incrementChaos(false);
                             destroySpawner.getNewLocation(middle.getLocation(), random, 500);
-                            destroySpawner.makeDungeon(finalEntityType, random, true, false);
+                            destroySpawner.makeDungeon(finalEntityType, random, false, false);
 
                             plugin.getServer().broadcastMessage("§9A Dimensional Doorway has opened!");
                             gatewayData.getPersistentDataContainer().set(usableKey, PersistentDataType.BYTE, (byte) 1);

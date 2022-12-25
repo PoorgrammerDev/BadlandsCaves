@@ -77,7 +77,7 @@ public class UseIncompleteSoulCrystal extends LimitedUseItems implements Listene
         if (player.getWorld().equals(reflection) || player.getWorld().equals(descension)) return;
         if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) return;
 
-        if (!descension.getEntitiesByClass(Player.class).isEmpty()) return;
+        if (!reflection.getPlayers().isEmpty()) return;
 
         //removes a use
         depleteUse(current, 2);

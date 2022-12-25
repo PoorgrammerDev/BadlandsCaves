@@ -2,7 +2,6 @@ package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -19,11 +18,13 @@ public class UnloadDimensions implements Listener {
     public void exitDimension(PlayerChangedWorldEvent event) {
         final World world = event.getFrom();
         if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
-            if (world.getEntitiesByClass(Player.class).isEmpty()) {
+            if (!plugin.getOptionsConfig().getBoolean("alternate_dimensions.allow_unload_unused")) return;
+
+            if (world.getPlayers().isEmpty()) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (world.getEntitiesByClass(Player.class).isEmpty()) {
+                        if (world.getPlayers().isEmpty()) {
                             plugin.getLogger().info("Unloading Alternate Dimension " + world.getName() + ".");
                             plugin.getServer().unloadWorld(world, true);
                         }

@@ -18,7 +18,7 @@ fishing_crate_treasure_base: 10
 fishing_crate_tier_upgrade: 25
 
 # Hallowed Chambers in Hardmode doesn't require searching for keys.
-waive_hardmode_chambers_keys: false
+waive_hardmode_chambers_keys: true
 
 # Give new Starter Kit (Sapling, Bone Meal) on every Player Respawn
 give_new_starter_on_spawn: false
@@ -70,10 +70,10 @@ withdraw_max_blocks_per_tick: 1000
 # Energy Core Catalyst Charge Ratios (1 XP to _ Charge)
 energy_core_mult:
   empty: 0.375
-  redstone: 0.75
-  glowstone: 1.5
-  charged_quartz: 3.0
-  energium: 6.0
+  redstone: 0.5
+  glowstone: 0.75
+  charged_quartz: 1.5
+  energium: 7.5
 
 pre_hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Pre-hardmode
@@ -104,7 +104,7 @@ pre_hardmode_values:
 
 hardmode_values:
   # How many Deaths a Blessed Apple will reverse in Hardmode
-  death_reverse_gapple: 0
+  death_reverse_gapple: 1
 
   # How many Deaths a Enchanted Blessed Apple will reverse in Hardmode
   death_reverse_ench_gapple: 5
@@ -171,7 +171,15 @@ alternate_dimensions:
   pregenerate_tps_threshold: 18.0
 
   # Allow loading alternate dimensions that are not pre-generated
-  allow_generate_on_demand: false
+  allow_generate_on_demand: true
+
+  # Allow automatic unloading of unused worlds (this does not destroy the world, just saves and unloads it to free memory)
+  allow_unload_unused: true
+
+  # When players log off in an Alternate Dimension and the Dimension is unloaded,
+  # this setting will load the world back into memory for them to spawn into.
+  # If this is false, they will be defaulted back to their bed spawn or the world spawn.
+  allow_load_on_join: true
   
   # Options for the Environmental Hazards present in these worlds
   hazards:

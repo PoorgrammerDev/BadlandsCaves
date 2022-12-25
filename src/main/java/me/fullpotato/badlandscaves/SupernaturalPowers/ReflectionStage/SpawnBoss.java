@@ -32,11 +32,13 @@ public class SpawnBoss extends BukkitRunnable {
         dmg.put(Material.STONE_SWORD, 5);
         dmg.put(Material.IRON_SWORD, 6);
         dmg.put(Material.DIAMOND_SWORD, 7);
+        dmg.put(Material.NETHERITE_SWORD, 8);
         dmg.put(Material.WOODEN_AXE, 7);
         dmg.put(Material.GOLDEN_AXE, 7);
         dmg.put(Material.STONE_AXE, 9);
         dmg.put(Material.IRON_AXE, 9);
         dmg.put(Material.DIAMOND_AXE, 9);
+        dmg.put(Material.NETHERITE_AXE, 10);
         dmg.put(Material.TRIDENT, 9);
     }
 

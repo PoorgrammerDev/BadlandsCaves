@@ -84,7 +84,7 @@ public enum Artifact {
             CHEAP_SIGHT,
             // ADAPTIVE_EXPLOITATION,   // not implemented
             SAFEGUARD,
-            INSPIRE,
+            // INSPIRE,                 // not implemented
             DOMINO,
             TRIPLE_JUMP,
             RECOVERY_ROLL,

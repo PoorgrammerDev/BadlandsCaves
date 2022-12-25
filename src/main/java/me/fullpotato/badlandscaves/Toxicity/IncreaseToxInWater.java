@@ -16,6 +16,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -67,7 +68,7 @@ public class IncreaseToxInWater implements Listener {
         if (in_reflection) return;
 
         if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
-            if (block.getType() == Material.WATER) {
+            if (IsWater(block)) {
                 double current_tox = (double) PlayerScore.TOXICITY.getScore(plugin, player);
                 int current_tox_slow = ((int) PlayerScore.TOX_SLOW_INCR_VAR.getScore(plugin, player));
 
@@ -155,4 +156,21 @@ public class IncreaseToxInWater implements Listener {
             }
         }
     }
+
+    private boolean IsWater(Block block) {
+        //base case -- is water block
+        if (block.getType() == Material.WATER) return true;
+
+        //if it's a bubble column
+        if (block.getType() == Material.BUBBLE_COLUMN) return true;
+
+        //check if block is waterlogged
+        if (block.getBlockData() instanceof Waterlogged) {
+            Waterlogged data = (Waterlogged) block.getBlockData();
+            if (data.isWaterlogged()) return true;
+        }
+
+        return false;
+    }
+
 }

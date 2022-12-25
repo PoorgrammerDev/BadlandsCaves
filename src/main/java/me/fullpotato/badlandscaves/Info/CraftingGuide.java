@@ -77,7 +77,7 @@ public class CraftingGuide implements Listener {
             CustomItem.VOLTSHOCK_SHOCKER.toString(),
             CustomItem.VOLTSHOCK_PLACEHOLDER.toString(),
             CustomItem.CHARGED_QUARTZ.toString(),
-            Material.EXPERIENCE_BOTTLE.toString(),
+            CustomItem.EXP_BOTTLE_CRAFTGUIDE_ICON.toString(),
             CustomItem.ENERGY_CORE.toString(),
             CustomItem.VOLTSHOCK_SWORD_CHARGE_PLACEHOLDER.toString(),
             CustomItem.VOLTSHOCK_ARROW.toString(),
@@ -609,6 +609,7 @@ public class CraftingGuide implements Listener {
                 null,
                 new ItemStack(Material.BLAZE_POWDER),
                 new ItemStack(Material.MAGMA_CREAM),
+                customItemManager.getItem(CustomItem.PIGZOMBIE_SOUL),
         };
         recipes.put(customItemManager.getItem(CustomItem.HELL_ESSENCE), hell_essence_recipe);
 
@@ -987,9 +988,9 @@ public class CraftingGuide implements Listener {
                         "§7- Charged Quartz",
                         "§7- Energium"
                     )
-                    .build(),
+                .build(),
 
-                new ItemStack(Material.EXPERIENCE_BOTTLE),
+                customItemManager.getItem(CustomItem.EXP_BOTTLE_CRAFTGUIDE_ICON)
         };
         recipes.put(customItemManager.getItem(CustomItem.ENERGY_CORE), energy_core_recipe);
 
@@ -1505,7 +1506,7 @@ public class CraftingGuide implements Listener {
         descs.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), voidmatter_desc);
         descs.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), voidmatter_desc);
 
-        descs.put(new ItemStack(Material.EXPERIENCE_BOTTLE),
+        descs.put(customItemManager.getItem(CustomItem.EXP_BOTTLE_CRAFTGUIDE_ICON),
             new ItemBuilder(Material.ENCHANTING_TABLE)
             .setName(ChatColor.WHITE + "Glass Bottle + Enchanting Table")
             .setLore(

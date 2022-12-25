@@ -182,6 +182,8 @@ public enum CustomItem {
     CHARGED_QUARTZ(true),
 
     DOMINO(true),
+
+    EXP_BOTTLE_CRAFTGUIDE_ICON(true),
     ;
 
     private final boolean preventUse;
