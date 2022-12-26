@@ -39,6 +39,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -156,16 +157,24 @@ public class UseDimensionalAnchor implements Listener {
                         @Override
                         public void run() {
                             final String fullName = plugin.getDimensionPrefixName() + worldName;
+
+                            //if it hasn't been accessed before, add hazards to it
                             if (!plugin.getSystemConfig().getBoolean("alternate_dimensions." + fullName + ".accessed") && !environmentalHazards.hasHazards(world)) {
                                 dimensions.addHazards(world);
 
                                 plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".accessed", true);
-                                plugin.saveSystemConfig();
                             }
 
-                            destroySpawner.incrementChaos(false);
+                            //set (new) portal location
+                            //splitting into world name and location vector because alternate dimensions can be opened in other alternate dimensions
+                            //if we were to serialize a regular Location object, exceptions may be thrown on load if the source dimension is not loaded
+                            plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".doorway.world_name", middle.getWorld().getName());
+                            plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".doorway.location_vector", middle.getLocation().toVector());
+                            plugin.saveSystemConfig();
+
+                            destroySpawner.incrementChaos(true, 3);
                             destroySpawner.getNewLocation(middle.getLocation(), random, 500);
-                            destroySpawner.makeDungeon(finalEntityType, random, false, false);
+                            destroySpawner.makeDungeon(finalEntityType, random, true, false);
 
                             plugin.getServer().broadcastMessage("§9A Dimensional Doorway has opened!");
                             gatewayData.getPersistentDataContainer().set(usableKey, PersistentDataType.BYTE, (byte) 1);
@@ -353,6 +362,49 @@ public class UseDimensionalAnchor implements Listener {
                     }
                 }
                 else if (item.getType().equals(Material.ORANGE_TERRACOTTA)) {
+                    //this is the name of the world they are CURRENTLY IN
+                    String sourceWorldName = player.getWorld().getName();
+
+                    //attempt to find the matching gateway to teleport to
+                    if (plugin.getSystemConfig().contains("alternate_dimensions." + sourceWorldName + ".doorway.world_name")) {
+                        //world name of where they want to TRAVEL TO
+                        final String destWorldName = plugin.getSystemConfig().getString("alternate_dimensions." + sourceWorldName + ".doorway.world_name");
+                        final Vector destVec = plugin.getSystemConfig().getVector("alternate_dimensions." + sourceWorldName + ".doorway.location_vector");
+
+                        if (destWorldName != null && destVec != null) {
+                            //check if the world is loaded
+
+                            World destinationWorld = null;
+
+                            //if its loaded, just get the world from the server
+                            if (plugin.getServer().getWorld(destWorldName) != null) {
+                                destinationWorld = plugin.getServer().getWorld(destWorldName);
+                            }
+
+                            //manually load the world in if allowed
+                            //TODO: add config reading
+                            else {
+                                //here, destinationWorldName is the entire name: "world_dim_UUID"
+                                //however, dimensions.generate() expects just the UUID, and it manually appends "world_dim_" onto the beginning
+                                //so, this splits by delimiter of _ into {"world", "dim", "UUID"} and selects the 3rd element "UUID" to feed into the function
+                                final DimensionsWorlds dimensions = new DimensionsWorlds(plugin, random);
+                                destinationWorld = dimensions.generate(destWorldName.split("_")[2], false);
+                            }
+                            
+                            //if everything went right, build location and teleport the player
+                            if (destinationWorld != null) {
+                                final Location playerLoc = player.getLocation();
+                                final Location destination = new Location(destinationWorld, destVec.getX(), destVec.getY(), destVec.getZ(), playerLoc.getYaw(), playerLoc.getPitch());
+
+                                if (destination != null) {
+                                    player.teleport(destination, TeleportCause.PLUGIN);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    //default back to the base world's spawn if anything goes wrong
                     Location returnLoc = player.getBedSpawnLocation();
                     if (returnLoc == null) returnLoc = plugin.getServer().getWorld(plugin.getMainWorldName()).getSpawnLocation();
 

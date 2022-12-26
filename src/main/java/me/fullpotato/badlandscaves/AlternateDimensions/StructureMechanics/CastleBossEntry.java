@@ -128,7 +128,6 @@ public class CastleBossEntry implements Listener {
         boss.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.75f);
         boss.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(999f);
         boss.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_castle_boss"), PersistentDataType.BYTE, (byte) 1);
-        boss.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_void"), PersistentDataType.BYTE, (byte) 1);
         boss.setLootTable(Bukkit.getLootTable(LootTables.EMPTY.getKey()));
         boss.setRemoveWhenFarAway(false);
         boss.setPersistent(true);
@@ -136,6 +135,9 @@ public class CastleBossEntry implements Listener {
         boss.setHealth(boss.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         boss.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 32767, 0, true, false));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 32767, 2, true, false));
+
+        //set void tag
+        if (voidVariant) boss.getPersistentDataContainer().set(new NamespacedKey(plugin, "is_void"), PersistentDataType.BYTE, (byte) 1);
 
         plugin.getSystemConfig().set("castle_boss." + boss.getUniqueId() + ".saved_lectern_location", lecternLocation);
 

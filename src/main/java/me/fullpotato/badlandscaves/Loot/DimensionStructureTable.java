@@ -194,6 +194,16 @@ public class DimensionStructureTable implements LootTable, Listener {
                 barrel.getPersistentDataContainer().remove(key);
                 barrel.update(true);
                 fillInventory(barrel.getInventory(), random, lootContext);
+
+                //Chaos Increase Mechanism
+                final int chaos = plugin.getSystemConfig().getInt("chaos_level");
+                
+                // base rate 25%, eventually reaches 75%
+                if (chaos < 100 && random.nextInt(100) < (12.5 + (0.625f * chaos))) {
+                    plugin.getSystemConfig().set("chaos_level", chaos + 1);
+                    plugin.saveSystemConfig();
+                }
+
                 return true;
             }
         }

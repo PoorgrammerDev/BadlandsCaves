@@ -79,7 +79,7 @@ public class DestroySpawner implements Listener {
         if (block.getType().equals(Material.SPAWNER)) {
             final Player player = event.getPlayer();
             if (pickaxes.contains(player.getInventory().getItemInMainHand().getType())) {
-                incrementChaos(false);
+                incrementChaos(false, 1);
                 final CreatureSpawner spawner = (CreatureSpawner) event.getBlock().getState();
                 final Location location = block.getLocation().add(0.5, 0.5, 0.5);
                 final World world = location.getWorld();
@@ -123,10 +123,10 @@ public class DestroySpawner implements Listener {
         }
     }
 
-    public void incrementChaos(boolean silent) {
+    public void incrementChaos(boolean silent, int amount) {
         int current_chaos = plugin.getSystemConfig().getInt("chaos_level");
         if (current_chaos < 100) {
-            plugin.getSystemConfig().set("chaos_level", current_chaos + 1);
+            plugin.getSystemConfig().set("chaos_level", current_chaos + amount);
             plugin.saveSystemConfig();
             if (!silent) plugin.getServer().broadcastMessage("§cChaos seeps into this realm...");
         }

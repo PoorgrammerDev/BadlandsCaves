@@ -151,7 +151,8 @@ public class PlayerJoinLeave implements Listener {
             }
 
             if (logoutWorld != null) {
-                final Location logoutLocation = new Location(logoutWorld, vector.getX(), vector.getY(), vector.getZ());
+                final Location playerLoc = player.getLocation();
+                final Location logoutLocation = new Location(logoutWorld, vector.getX(), vector.getY(), vector.getZ(), playerLoc.getYaw(), playerLoc.getPitch());
 
                 if (logoutLocation != null) {
                     if (plugin.getServer().getWorlds().contains(logoutWorld)) {
