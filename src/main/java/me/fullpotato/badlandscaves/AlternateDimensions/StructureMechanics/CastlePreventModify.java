@@ -93,7 +93,7 @@ public class CastlePreventModify implements Listener{
                     final Location lowerBound = castleLecternLoc.clone().subtract(39, 2, 41);
                     final Location upperBound = castleLecternLoc.clone().add(39, 55, 55);
 
-                    //TODO: THIS IS MESSY
+                    //is inside bounds
                     if (
                         location.getBlockX() >= lowerBound.getBlockX() && location.getBlockX() <= upperBound.getBlockX() &&
                         location.getBlockY() >= lowerBound.getBlockY() && location.getBlockY() <= upperBound.getBlockY() &&

@@ -72,11 +72,28 @@ public class CastleBossEntry implements Listener {
                         if (guards.size() > 0) {
                             player.sendMessage(ChatColor.RED + "Defeat the remaining guards.");
 
+                            //the constants below are the relative distances from lectern to bounds of castle
+                            final Location entrance = block.getLocation().clone().subtract(0, 0, 35);
+                            final Location lowerBound = block.getLocation().clone().subtract(39, 2, 41);
+                            final Location upperBound = block.getLocation().clone().add(39, 55, 55);
+
                             //Mark remaining guards glowing
                             for (Entity guard : guards) {
                                 if (guard instanceof LivingEntity) {
                                     final LivingEntity livingGuard = (LivingEntity) guard;
                                     livingGuard.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 30, 0));
+
+                                    final Location location = livingGuard.getLocation();
+
+                                    //if outside of bounds -> teleport to castle entrance
+                                    if (
+                                        location.getBlockX() < lowerBound.getBlockX() || location.getBlockX() > upperBound.getBlockX() ||
+                                        location.getBlockY() < lowerBound.getBlockY() || location.getBlockY() > upperBound.getBlockY() ||
+                                        location.getBlockZ() < lowerBound.getBlockZ() || location.getBlockZ() > upperBound.getBlockZ()) {
+                                        
+                                        livingGuard.teleport(entrance, TeleportCause.PLUGIN);
+                                    }
+
                                 }
                             }
 
