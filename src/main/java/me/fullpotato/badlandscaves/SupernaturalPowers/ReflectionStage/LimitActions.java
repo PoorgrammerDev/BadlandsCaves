@@ -5,16 +5,19 @@ import me.fullpotato.badlandscaves.CustomItems.Using.UseIncompleteSoulCrystal;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -56,6 +59,16 @@ public class LimitActions extends BukkitRunnable implements Listener {
         reflection_world = plugin.getServer().getWorld(plugin.getReflectionWorldName());
         this.useIncompleteSoulCrystal = useIncompleteSoulCrystal;
     }
+
+    /**
+     * Prevents players from placing down minecarts/boats to trap the boss 
+     */
+     @EventHandler
+     public void PreventVehicleTrapping(VehicleCreateEvent event) {
+        if (event.getVehicle().getWorld().equals(reflection_world)) {
+            event.setCancelled(true);
+        }
+     }
 
     /**
      * Disallows placing of fluids (water, lava)

@@ -108,6 +108,10 @@ public class ArtifactSummonersRift extends ArtifactMechanisms implements Listene
             final LivingEntity entity = (LivingEntity) event.getEntity();
             if (arrow.getShooter() instanceof Player) {
                 final Player player = (Player) arrow.getShooter();
+                
+                // summons should not spawn if they shoot themselves
+                if (entity.equals(player)) return;
+
                 if (plugin.getSystemConfig().getBoolean("hardmode")) {
                     if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == 1) {
                         if (arrow.getPersistentDataContainer().has(key, PersistentDataType.BYTE)) {

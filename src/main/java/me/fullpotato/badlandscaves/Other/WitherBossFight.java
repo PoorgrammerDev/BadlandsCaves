@@ -71,6 +71,9 @@ public class WitherBossFight implements Listener {
                 if (plugin.getSystemConfig().getBoolean("wither_fight.portal_active")) return;
                 if (plugin.getSystemConfig().getInt("wither_fight.fight_stage") != -1) return;
 
+                //don't allow in alternate dimensions
+                if (event.getEntity().getWorld().getName().startsWith(plugin.getDimensionPrefixName())) return;
+
                 Location spawnLocation = event.getLocation();
                 if (spawnLocation.getWorld() == null || !spawnLocation.getWorld().getEnvironment().equals(World.Environment.NORMAL)) return;
 
