@@ -665,7 +665,6 @@ public final class BadlandsCaves extends JavaPlugin {
                 pregenerateDimensions,
                 useNebuliteCrate,
                 dimensionStructureTable,
-                unloadDimensions,
                 playerEffects,
                 hungerLimit,
                 starlightPaxelMechanism,
@@ -760,6 +759,7 @@ public final class BadlandsCaves extends JavaPlugin {
         artifactHasteWind.runTaskTimer(this, 0, 0);
         new ArtifactMomentousMomentum(this, random).runTaskTimer(this, 0, 0);
         new PregenerateDimensions(this, random).runTaskTimer(this, 600, 2000);
+        new UnloadDimensions(this).runTaskTimer(this, 1200, 1200);
 
         witherBossFight.checkIfEnded();
         witherBossFight.portalDestroyTimer();

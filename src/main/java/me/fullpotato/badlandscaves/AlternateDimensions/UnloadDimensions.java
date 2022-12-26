@@ -1,36 +1,59 @@
 package me.fullpotato.badlandscaves.AlternateDimensions;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class UnloadDimensions implements Listener {
+public class UnloadDimensions extends BukkitRunnable {
     private final BadlandsCaves plugin;
+    private boolean detectedOnce;
 
     public UnloadDimensions(BadlandsCaves plugin) {
         this.plugin = plugin;
+        this.detectedOnce = false;
     }
 
-    @EventHandler
-    public void exitDimension(PlayerChangedWorldEvent event) {
-        final World world = event.getFrom();
-        if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
-            if (!plugin.getOptionsConfig().getBoolean("alternate_dimensions.allow_unload_unused")) return;
+    @Override
+    public void run() {
+        //check if the mechanism has been disabled
+        if (!plugin.getOptionsConfig().getBoolean("alternate_dimensions.allow_unload_unused")) {
+            this.cancel();
+            return;
+        }
 
-            if (world.getPlayers().isEmpty()) {
+        //only run this when no players are online twice consecutively
+        if (!plugin.getServer().getOnlinePlayers().isEmpty()) {
+            this.detectedOnce = false;
+            return;
+        }
+
+        //first run of no players detected -> set flag to true and return
+        if (!detectedOnce) {
+            this.detectedOnce = true;
+            return;
+        }
+
+        //second run -> unload all dimensions
+        this.detectedOnce = false;   //reset the flag
+
+        int delay = 0;
+        for (World world : plugin.getServer().getWorlds()) {
+            if (world.getName().startsWith(plugin.getDimensionPrefixName())) {
+                //don't unload every world at once - might overload server
+                //instead split between different ticks
+                
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (world.getPlayers().isEmpty()) {
-                            plugin.getLogger().info("Unloading Alternate Dimension " + world.getName() + ".");
-                            plugin.getServer().unloadWorld(world, true);
-                        }
+                        plugin.getLogger().info("Unloading Alternate Dimension " + world.getName() + ".");
+                        plugin.getServer().unloadWorld(world, true);
                     }
-                }.runTaskLater(plugin, 1200L);
+                }.runTaskLater(plugin, delay);
+
+                delay += 10;
             }
         }
+
     }
 }
