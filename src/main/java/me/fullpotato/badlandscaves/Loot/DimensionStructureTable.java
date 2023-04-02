@@ -5,6 +5,7 @@ import me.fullpotato.badlandscaves.BadlandsCaves;
 import me.fullpotato.badlandscaves.CustomItems.CustomItem;
 import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.SupernaturalPowers.Artifacts.Artifact;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Canteen;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,57 +44,57 @@ public class DimensionStructureTable implements LootTable, Listener {
         customItemManager = plugin.getCustomItemManager();
         this.random = random;
 
-        surfaceItemMap.put(new ItemStack(Material.NETHERITE_SCRAP), 4);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.VOIDMATTER), 1);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.TITANIUM_INGOT), 1);
-        surfaceItemMap.put(new ItemStack(Material.IRON_BLOCK), 2);
-        surfaceItemMap.put(new ItemStack(Material.DIAMOND_BLOCK), 2);
-        surfaceItemMap.put(new ItemStack(Material.EMERALD_BLOCK), 2);
-        surfaceItemMap.put(new ItemStack(Material.QUARTZ_BLOCK), 2);
-        surfaceItemMap.put(new ItemStack(Material.GOLD_BLOCK), 2);
-        surfaceItemMap.put(new ItemStack(Material.REDSTONE_BLOCK), 2);
-        surfaceItemMap.put(new ItemStack(Material.BLAZE_POWDER), 4);
-        surfaceItemMap.put(new ItemStack(Material.SHULKER_SHELL), 2);
-        surfaceItemMap.put(new ItemStack(Material.LEAD), 2);
+        //SURFACE LAYER LOOT -----
+
+        //Minerals
+        surfaceItemMap.put(new ItemStack(Material.IRON_BLOCK), 8);
+        surfaceItemMap.put(new ItemStack(Material.DIAMOND_BLOCK), 8);
+        surfaceItemMap.put(new ItemStack(Material.EMERALD_BLOCK), 8);
+        surfaceItemMap.put(new ItemStack(Material.QUARTZ_BLOCK), 8);
+        surfaceItemMap.put(new ItemStack(Material.GOLD_BLOCK), 8);
+        surfaceItemMap.put(new ItemStack(Material.REDSTONE_BLOCK), 8);
+
+        //Utilities
+        surfaceItemMap.put(customItemManager.getItem(CustomItem.BLESSED_APPLE), 4);
+        surfaceItemMap.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), 2);
         surfaceItemMap.put(new ItemStack(Material.TOTEM_OF_UNDYING), 1);
-        surfaceItemMap.put(new ItemStack(Material.WITHER_SKELETON_SKULL), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION), 1);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.RECALL_POTION), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.MANA_POTION), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.ANTIDOTE), 1);
         surfaceItemMap.put(customItemManager.getItem(CustomItem.PURIFIED_WATER), 1);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR), 1);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.MERGED_SOULS), 1);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER), 1);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.TAINTED_POWDER), 8);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.BLESSED_APPLE), 4);
-        surfaceItemMap.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), 2);
+        surfaceItemMap.put(new ItemStack(Material.SHULKER_SHELL), 2);
 
-        voidItemMap.put(new ItemStack(Material.NETHERITE_INGOT), 4);
-        voidItemMap.put(customItemManager.getItem(CustomItem.VOIDMATTER), 8);
-        voidItemMap.put(customItemManager.getItem(CustomItem.TITANIUM_INGOT), 8);
+        //Other Items
+        surfaceItemMap.put(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE), 16);
+        surfaceItemMap.put(new ItemStack(Material.MAGMA_CREAM), 4);
+        surfaceItemMap.put(new ItemStack(Material.LEAD), 2);
+        surfaceItemMap.put(new ItemStack(Material.WITHER_SKELETON_SKULL), 2);
+        surfaceItemMap.put(new ItemStack(Material.TURTLE_EGG), 2);
+        surfaceItemMap.put(new ItemStack(Material.WITHER_ROSE), 4);
+        surfaceItemMap.put(customItemManager.getItem(CustomItem.MERGED_SOULS), 2);
+
+        //-----
+       
+        //VOID LAYER LOOT -----
+
+        //Item Modifiers
         voidItemMap.put(customItemManager.getItem(CustomItem.ARTIFACT_VOUCHER), 1);
         voidItemMap.put(customItemManager.getItem(CustomItem.NEBULITE_CRATE), 1);
-        voidItemMap.put(customItemManager.getItem(CustomItem.ENERGIUM), 8);
-        voidItemMap.put(new ItemStack(Material.IRON_BLOCK), 8);
-        voidItemMap.put(new ItemStack(Material.DIAMOND_BLOCK), 8);
-        voidItemMap.put(new ItemStack(Material.EMERALD_BLOCK), 8);
-        voidItemMap.put(new ItemStack(Material.QUARTZ_BLOCK), 8);
-        voidItemMap.put(new ItemStack(Material.GOLD_BLOCK), 8);
-        voidItemMap.put(new ItemStack(Material.REDSTONE_BLOCK), 8);
-        voidItemMap.put(new ItemStack(Material.BLAZE_POWDER), 16);
-        voidItemMap.put(new ItemStack(Material.SHULKER_SHELL), 8);
-        voidItemMap.put(new ItemStack(Material.TOTEM_OF_UNDYING), 1);
-        voidItemMap.put(new ItemStack(Material.WITHER_SKELETON_SKULL), 3);
-        voidItemMap.put(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION), 1);
-        voidItemMap.put(customItemManager.getItem(CustomItem.FISHING_CRATE_HARDMODE), 4);
-        voidItemMap.put(customItemManager.getItem(CustomItem.RECALL_POTION), 1);
-        voidItemMap.put(customItemManager.getItem(CustomItem.MANA_POTION), 1);
-        voidItemMap.put(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR), 1);
         voidItemMap.put(customItemManager.getItem(CustomItem.NEBULITE_INSTALLER), 1);
-        voidItemMap.put(customItemManager.getItem(CustomItem.TREASURE_GEAR_VOUCHER), 1);
-        voidItemMap.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), 4);
+
+        //Utilities
+        voidItemMap.put(new ItemStack(Material.TOTEM_OF_UNDYING), 1);
+        voidItemMap.put(customItemManager.getItem(CustomItem.TOTEM_OF_PRESERVATION), 1);
+        voidItemMap.put(customItemManager.getItem(CustomItem.RECALL_POTION), 1);
+        voidItemMap.put(customItemManager.getItem(CustomItem.BLESSED_APPLE), 2);
+        voidItemMap.put(customItemManager.getItem(CustomItem.ENCHANTED_BLESSED_APPLE), 1);
+        voidItemMap.put(customItemManager.getItem(CustomItem.DIMENSIONAL_ANCHOR), 1);
+
+        //Other Items
+        voidItemMap.put(new ItemStack(Material.WITHER_SKELETON_SKULL), 2);
+        voidItemMap.put(customItemManager.getItem(CustomItem.VOIDMATTER), 2);
+        voidItemMap.put(new ItemStack(Material.SHULKER_SHELL), 2);
     }
 
     @Override
@@ -103,10 +104,18 @@ public class DimensionStructureTable implements LootTable, Listener {
 
         final Collection<ItemStack> output = new ArrayList<>();
         final int chaos = plugin.getSystemConfig().getInt("chaos_level");
-        int count = ((chaos / 7) > 0 ? random.nextInt(chaos / 7) : 0) + random.nextInt(5) + 5;
-
         final boolean isVoid = lootContext.getLocation() != null && lootContext.getLocation().getBlock().getBiome() == Biome.GRAVELLY_MOUNTAINS;
-        if (isVoid) count *= 2;
+
+        //Count is randomly calculated using two different random scales.
+        //First off, there is a flat minimum of five items.
+        //Then, up to five more items can be randomly added regardless of chaos.
+        //Then, up to (chaos divided by 8) more items can be randomly added. At max (100) chaos, this number is 12.
+        int count = ((chaos / 8) > 0 ? random.nextInt(chaos / 8) : 0) + random.nextInt(5) + 5;
+
+        //Then after that raw value is calculated, loot in surface structures are given extra 50% rolls.
+        if (!isVoid) count = (int) (count * 1.5); 
+
+        //Make sure it does not exceed chest size
         count = Math.min(count, 27);
 
         for (int i = 0; i < count; i++) {
