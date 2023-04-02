@@ -92,6 +92,7 @@ public class DimensionsWorlds {
         world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
         world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
         world.setKeepSpawnInMemory(false);
+        world.setMonsterSpawnLimit(plugin.getServer().getMonsterSpawnLimit() * (2 + (chaos / 50))); //from 2x to 4x monster spawns (might be cursed)
 
         //Set worldborder
         final WorldBorder border = world.getWorldBorder();
@@ -119,7 +120,7 @@ public class DimensionsWorlds {
     }
 
     public void genSpawnCage (World world) {
-        final Location location = new Location(world, random.nextInt(200) - 100, random.nextInt(100) + 20, random.nextInt(200) - 100);
+        final Location location = new Location(world, random.nextInt(200) - 100, random.nextInt(30) + 70, random.nextInt(200) - 100);
         world.setSpawnLocation(location);
 
         final StructureTrack track = new StructureTrack(plugin, location, -7, -1, -7, 0, 0, 0, "badlandscaves:dungeon", BlockFace.DOWN);

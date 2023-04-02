@@ -45,9 +45,7 @@ public class DimensionsGen extends ChunkGenerator {
         final int octaves = 8;                                      // Simplex Noise param: octaves to generate (more octaves produces better detail)
         final double lacunarity = 2.0;                              // Simplex Noise param: how much detail later octaves add to the surface (<1 smoother; 1 same impact; >1 more detail)
         final double persistence = 0.25;                            // Simplex Noise param: how much each octave affects overall shape
-        final int variance = random.nextInt(15) + 15;               // "Y-scale" of the noise; how much the terrain's height changes based on noise
-        final int center = random.nextInt(60) + 90;                 // Center y-level
-        final int layerNoiseOffset = (random.nextInt(5000) + 1000); // Offset x and z values on where to sample noise for y-levels of stone layer beginning and void layer beginning
+        final int sampleOffset = (random.nextInt(5000) + 1000); // Offset x and z values on where to sample noise for y-levels of stone layer beginning, void layer beginning, and variance
         final double threshold = (0.2D * random.nextDouble()) + 0.1D; // Threshold value for 3D noise between [0.1, 0.3]
         final double caveThreshold = (0.2D * random.nextDouble()) + 0.5D; // Threshold value for 3D noise between [0.5, 0.7]
         final int inverseSquash = random.nextInt(75) + 75;           //Higher values, less squashing of surface layer; [75,150]
@@ -55,10 +53,12 @@ public class DimensionsGen extends ChunkGenerator {
         //Void layer variables
         final double voidThreshold = (0.2D * random.nextDouble()) + 0.4D; // Threshold value for 3D noise between [0.4, 0.6]
         //Y offset for void top layer (based on world's Chaos value)
-        final int voidTopLayerOffset = (chaos / 5 > 0) ? Math.min(random.nextInt(chaos / 5), center - variance - 10) : 0;
-    
+
+        final int voidTopLayerOffsetRaw = (chaos / 5 > 0) ? random.nextInt(chaos / 5) : 0;
         final SimplexOctaveGenerator generator = new SimplexOctaveGenerator(world.getSeed(), octaves);
+        final SimplexOctaveGenerator centerGenerator = new SimplexOctaveGenerator(world.getSeed(), 4);
         generator.setScale(0.0375D + (random.nextDouble() * 0.0125D));
+        centerGenerator.setScale(0.0025D);
 
         //Generating the actual chunk shape
         for (int x = 0; x < 16; ++x) {
@@ -66,13 +66,19 @@ public class DimensionsGen extends ChunkGenerator {
                 // GENERATING 2D HEIGHT ==============================================
                 //generate noise value between [-1,1]
                 final double heightNoise = generator.noise((chunkX * 16) + x, (chunkZ * 16) + z, lacunarity, persistence, true);
-                final double layerNoiseStone = generator.noise((chunkX * 16) + x + layerNoiseOffset, (chunkZ * 16) + z + layerNoiseOffset, lacunarity, persistence, true);
-                final double layerNoiseVoid = generator.noise((chunkX * 16) + x - layerNoiseOffset, (chunkZ * 16) + z - layerNoiseOffset, lacunarity, persistence, true);
+                final double layerNoiseStone = generator.noise((chunkX * 16) + x + sampleOffset, (chunkZ * 16) + z + sampleOffset, lacunarity, persistence, true);
+                final double layerNoiseVoid = generator.noise((chunkX * 16) + x - sampleOffset, (chunkZ * 16) + z - sampleOffset, lacunarity, persistence, true);
+                final double varianceNoise = generator.noise((chunkX * 16) + x + (2 * sampleOffset), (chunkZ * 16) + z + (2 * sampleOffset), lacunarity, persistence, true);
+                final double centerNoise = centerGenerator.noise((chunkX * 16) + x - (2 * sampleOffset), (chunkZ * 16) + z - (2 * sampleOffset), lacunarity, persistence, true);
+               
+                final int center = (int) ((centerNoise * 20) + 70);                 // Center y-level
+                final int variance = (int) ((varianceNoise * 10) + 15);               // "Y-scale" of the noise; how much the terrain's height changes based on noise
            
                 //middle layer is 120; can go 60 down and 60 up
                 final int height = (int) (heightNoise * variance) + center;     // [center - variance, center + variance]
                 final int stoneDepth = (int) (layerNoiseStone + 5);             // [4,6]
-                final int voidLayerBegins = (int) (layerNoiseVoid * (10 + voidTopLayerOffset)) + (30 + voidTopLayerOffset);   // default [20,40] ; max [40,60]
+                final int voidTopLayerOffset = Math.min(voidTopLayerOffsetRaw, center - variance - 10);
+                final int voidLayerBegins = (int) (layerNoiseVoid * (10 + voidTopLayerOffset)) + (30 + voidTopLayerOffset);   // default [20,40] ; max [40,60] (are these values still accurate?)
                 // ===================================================================
 
                 //Set the biome
@@ -146,13 +152,13 @@ public class DimensionsGen extends ChunkGenerator {
         final List<BlockPopulator> populators = super.getDefaultPopulators(world);
 
         //Add Titanium Ore populator 
-        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 5, 2, 8));
+        populators.add(new OrePopulator(Material.STONE, Material.DEAD_TUBE_CORAL_BLOCK, 60, 30, 10, 2, 4));
 
         //Add Energium Ore populator (Void layer)
         populators.add(new OrePopulator(Material.BLACKSTONE, Material.DEAD_BRAIN_CORAL_BLOCK, 29, 1, 5, 1, 4));
 
         //Add Ancient Debris populator (Void layer)
-        populators.add(new OrePopulator(Material.BLACKSTONE, Material.ANCIENT_DEBRIS, 29, 1, 5, 1, 2));
+        populators.add(new OrePopulator(Material.BLACKSTONE, Material.ANCIENT_DEBRIS, 29, 1, 4, 1, 2));
 
         return populators;
     }
