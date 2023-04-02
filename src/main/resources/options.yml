@@ -121,7 +121,7 @@ hardmode_values:
   tox_drink_tox_incr: 20
 
   # How Much Thirst Purified Water replenishes in Hardmode
-  purified_drink_thirst_incr: 50
+  purified_drink_thirst_incr: 60
 
   # How Much Toxicity Antidote decreases in Hardmode
   antidote_drink_tox_decr: 50

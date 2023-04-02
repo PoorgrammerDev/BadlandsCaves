@@ -172,7 +172,7 @@ public class UseDimensionalAnchor implements Listener {
                             plugin.getSystemConfig().set("alternate_dimensions." + fullName + ".doorway.location_vector", middle.getLocation().toVector());
                             plugin.saveSystemConfig();
 
-                            destroySpawner.incrementChaos(true, 3);
+                            destroySpawner.incrementChaos(true, 1);
                             destroySpawner.getNewLocation(middle.getLocation(), random, 500);
                             destroySpawner.makeDungeon(finalEntityType, random, true, false);
 
