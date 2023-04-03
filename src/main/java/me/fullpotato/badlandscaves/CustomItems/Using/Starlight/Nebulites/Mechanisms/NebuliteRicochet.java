@@ -24,7 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class NebuliteDecisiveDisintegration extends NebuliteMechanisms implements Listener {
+public class NebuliteRicochet extends NebuliteMechanisms implements Listener {
     private final Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(98, 0, 255), 1);
     private final PositionManager positionManager = new PositionManager();
     private final List<Material> ores = Arrays.asList(Material.COAL_ORE, Material.IRON_ORE, Material.LAPIS_ORE, Material.GOLD_ORE, Material.REDSTONE_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.NETHER_QUARTZ_ORE, Material.NETHER_GOLD_ORE, Material.ANCIENT_DEBRIS, Material.GILDED_BLACKSTONE);
@@ -40,7 +40,7 @@ public class NebuliteDecisiveDisintegration extends NebuliteMechanisms implement
     };
 
 
-    public NebuliteDecisiveDisintegration(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+    public NebuliteRicochet(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
     }
 
@@ -60,8 +60,8 @@ public class NebuliteDecisiveDisintegration extends NebuliteMechanisms implement
                     if (starlightTools.isStarlightPaxel(item) && starlightCharge.getCharge(item) > 0) {
                         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
                         for (Nebulite nebulite : nebulites) {
-                            if (nebulite != null && nebulite.equals(Nebulite.DECISIVE_DISINTEGRATION)) {
-                                final int limit = plugin.getOptionsConfig().getInt("hardmode_values.decisive_disintegration_limit");
+                            if (nebulite != null && nebulite.equals(Nebulite.RICOCHET)) {
+                                final int limit = plugin.getOptionsConfig().getInt("hardmode_values.paxel_ricochet_limit");
                                 if (ores.contains(block.getType())) {
                                     int[] count = {0};
                                     recursiveVeinMiner(player, block.getType(), block, item, item.clone(), count, limit);

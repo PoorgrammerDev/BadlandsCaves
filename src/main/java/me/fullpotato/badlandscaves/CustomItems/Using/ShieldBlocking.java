@@ -75,11 +75,11 @@ public class ShieldBlocking implements Listener {
                             }
                             else {
                                 if (starlightTools.isStarlightShield(playersShield)) {
+                                    damageIgnored = true; //Starlight Shield blocks all dmg
                                     final Nebulite[] nebulites = nebuliteManager.getNebulites(playersShield);
 
                                     for (Nebulite nebulite : nebulites) {
-                                        if (nebulite.equals(Nebulite.HARDENED_DEFENSE)) damageIgnored = true;
-                                        else if (nebulite.equals(Nebulite.ENERGY_CONVERTER)) {
+                                        if (nebulite.equals(Nebulite.ENERGY_CONVERTER)) {
                                             if (event.getDamager() instanceof Projectile) {
                                                 Projectile projectile = (Projectile) event.getDamager();
                                                 absorbProjectile(playersShield, projectile);
@@ -94,7 +94,6 @@ public class ShieldBlocking implements Listener {
                                     }
 
                                     modifier = 15;
-                                    if (!damageIgnored) damageIgnored = (damage / modifier < 1 || random.nextInt(100) < 75);
                                 }
                             }
                         }

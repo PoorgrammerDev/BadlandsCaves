@@ -20,6 +20,7 @@ import me.fullpotato.badlandscaves.CustomItems.CustomItemManager;
 import me.fullpotato.badlandscaves.CustomItems.StopCustomItemsInteract;
 import me.fullpotato.badlandscaves.CustomItems.Using.*;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Mechanisms.*;
+import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.Nebulite;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteInstaller;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteManager;
 import me.fullpotato.badlandscaves.CustomItems.Using.Starlight.Nebulites.NebuliteStatChanges;
@@ -81,6 +82,7 @@ import org.bukkit.WorldType;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -193,9 +195,9 @@ public final class BadlandsCaves extends JavaPlugin {
     private NebuliteSmolderingFlames nebuliteSmolderingFlames;
     private NebuliteShockAbsorber nebuliteShockAbsorber;
     private NebuliteForcefield nebuliteForcefield;
-    private NebuliteLightSpeed nebuliteLightSpeed;
-    private NebuliteBigSmash nebuliteBigSmash;
-    private NebuliteDecisiveDisintegration nebuliteDecisiveDisintegration;
+    private NebuliteSuperSonic nebuliteSuperSonic;
+    private NebuliteHammer nebuliteHammer;
+    private NebuliteRicochet nebuliteRicochet;
     private NebulitePropulsionBash nebulitePropulsionBash;
     private NebuliteShieldThruster nebuliteShieldThruster;
     private NebuliteCounterattack nebuliteCounterattack;
@@ -412,9 +414,9 @@ public final class BadlandsCaves extends JavaPlugin {
         nebuliteSmolderingFlames = new NebuliteSmolderingFlames(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteShockAbsorber = new NebuliteShockAbsorber(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteForcefield = new NebuliteForcefield(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteLightSpeed = new NebuliteLightSpeed(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteBigSmash = new NebuliteBigSmash(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteDecisiveDisintegration = new NebuliteDecisiveDisintegration(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteSuperSonic = new NebuliteSuperSonic(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteHammer = new NebuliteHammer(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
+        nebuliteRicochet = new NebuliteRicochet(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebulitePropulsionBash = new NebulitePropulsionBash(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteShieldThruster = new NebuliteShieldThruster(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteCounterattack = new NebuliteCounterattack(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
@@ -635,9 +637,9 @@ public final class BadlandsCaves extends JavaPlugin {
                 nebuliteSmolderingFlames,
                 nebuliteShockAbsorber,
                 nebuliteForcefield,
-                nebuliteLightSpeed,
-                nebuliteBigSmash,
-                nebuliteDecisiveDisintegration,
+                nebuliteSuperSonic,
+                nebuliteHammer,
+                nebuliteRicochet,
                 nebulitePropulsionBash,
                 nebuliteShieldThruster,
                 nebuliteCounterattack,

@@ -31,7 +31,10 @@ public class NebuliteSmolderingFlames extends NebuliteMechanisms implements List
                 final Player player = (Player) event.getEntity();
                 if ((byte) PlayerScore.HAS_SUPERNATURAL_POWERS.getScore(plugin, player) == (byte) 0) {
                     EntityDamageEvent.DamageCause cause = event.getCause();
-                    if (cause.equals(EntityDamageEvent.DamageCause.LAVA) || ((cause.equals(EntityDamageEvent.DamageCause.FIRE) || cause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) && player.getHealth() < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 4.0)) {
+                    if (cause.equals(EntityDamageEvent.DamageCause.LAVA) ||
+                        cause.equals(EntityDamageEvent.DamageCause.FIRE) ||
+                        cause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
+
                         final EntityEquipment equipment = player.getEquipment();
                         if (equipment != null) {
                             for (ItemStack item : equipment.getArmorContents()) {
@@ -39,7 +42,7 @@ public class NebuliteSmolderingFlames extends NebuliteMechanisms implements List
                                     final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
                                     for (Nebulite nebulite : nebulites) {
                                         if (nebulite != null && nebulite.equals(Nebulite.SMOLDERING_FLAMES)) {
-                                            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0, true, true));
+                                            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600, 0, true, true));
                                             player.setFireTicks(0);
                                             event.setCancelled(true);
                                             starlightCharge.setCharge(item, starlightCharge.getCharge(item) - 10);

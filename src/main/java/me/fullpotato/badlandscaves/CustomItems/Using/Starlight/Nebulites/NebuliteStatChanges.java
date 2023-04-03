@@ -88,7 +88,6 @@ public class NebuliteStatChanges {
         final List<Nebulite> nebulites = Arrays.asList(nebuliteManager.getNebulites(item));
 
         int protection = defaultEnchantments.getOrDefault(Enchantment.PROTECTION_ENVIRONMENTAL, 7);
-        int fire_protection = defaultEnchantments.getOrDefault(Enchantment.PROTECTION_FIRE, 0);
         int respiration = defaultEnchantments.getOrDefault(Enchantment.OXYGEN, 0);
         int aqua_affinity = defaultEnchantments.getOrDefault(Enchantment.WATER_WORKER, 0);
         int knockback_resist = 0;
@@ -99,26 +98,22 @@ public class NebuliteStatChanges {
                 protection += 3;
                 speed -= 5;
             }
-            else if (nebulite.equals(Nebulite.STRONG_STANCE)) {
+            else if (nebulite.equals(Nebulite.POWER_STANCE)) {
                 knockback_resist += 10000;
-                speed -= 15;
+                speed -= 10;
             }
             else if (nebulite.equals(Nebulite.THRUSTER)) {
                 if (nebulites.contains(Nebulite.REINFORCED_PLATING)) speed += 5;
-                if (nebulites.contains(Nebulite.STRONG_STANCE)) speed += 10;
+                if (nebulites.contains(Nebulite.POWER_STANCE)) speed += 10;
             }
             else if (nebulite.equals(Nebulite.OXYGENATOR)) {
                 respiration += 3;
                 aqua_affinity++;
             }
-            else if (nebulite.equals(Nebulite.SMOLDERING_FLAMES)) {
-                fire_protection += 5;
-            }
         }
 
         Map<Enchantment, Integer> newEnchants = new HashMap<>();
         if (protection > 0) newEnchants.put(Enchantment.PROTECTION_ENVIRONMENTAL, protection);
-        if (fire_protection > 0) newEnchants.put(Enchantment.PROTECTION_FIRE, fire_protection);
         if (respiration > 0) newEnchants.put(Enchantment.OXYGEN, respiration);
         if (aqua_affinity > 0) newEnchants.put(Enchantment.WATER_WORKER, aqua_affinity);
 
@@ -154,12 +149,10 @@ public class NebuliteStatChanges {
 
         for (Nebulite nebulite : nebulites) {
             if (nebulite.equals(Nebulite.FLURRYING_SWINGS)) {
-                sharpness -= 3;
-                speed += 0.5;
+                speed += 1.25;
             }
-            else if (nebulite.equals(Nebulite.DECISIVE_SLICE)) {
-                sharpness += 3;
-                speed -= 0.5;
+            else if (nebulite.equals(Nebulite.ARDENT_SLASH)) {
+                sharpness += 5;
             }
             else if (nebulite.equals(Nebulite.WIDE_SWING)) {
                 sweeping += 10;
@@ -201,14 +194,14 @@ public class NebuliteStatChanges {
         int silkTouch = defaultEnchantments.getOrDefault(Enchantment.SILK_TOUCH, 0);
 
         for (Nebulite nebulite : nebulites) {
-            if (nebulite.equals(Nebulite.LIGHTSPEED_PROPULSORS)) {
+            if (nebulite.equals(Nebulite.SUPERSONIC_PROPULSORS)) {
                 efficiency += 5;
             }
-            else if (nebulite.equals(Nebulite.MOLECULAR_PRESERVATION)) {
+            else if (nebulite.equals(Nebulite.DISASSEMBLER)) {
                 fortune = 0;
                 silkTouch++;
             }
-            else if (nebulite.equals(Nebulite.BIG_SMASH)) {
+            else if (nebulite.equals(Nebulite.STARLIGHT_HAMMER)) {
                 efficiency -= 2;
             }
         }
@@ -236,9 +229,9 @@ public class NebuliteStatChanges {
         if (nebulites.contains(Nebulite.SHIELD_THRUSTER)) {
             speedMod = 0;
         }
-        else if (nebulites.contains(Nebulite.HARDENED_DEFENSE)) {
-            speedMod -= 0.1;
-        }
+        // else if (nebulites.contains(Nebulite.HARDENED_DEFENSE)) {
+        //     speedMod -= 0.1;
+        // }
 
         final ItemMeta meta = item.getItemMeta();
         meta.removeAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED);

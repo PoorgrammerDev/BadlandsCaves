@@ -23,17 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class NebuliteBigSmash extends NebuliteMechanisms implements Listener {
+public class NebuliteHammer extends NebuliteMechanisms implements Listener {
     public Map<BlockFace, int[][]> blockFaceHashMap = new HashMap<>();
 
 
-    public NebuliteBigSmash(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
+    public NebuliteHammer(BadlandsCaves plugin, Random random, StarlightArmor starlightArmor, StarlightTools starlightTools, StarlightCharge starlightCharge, NebuliteManager nebuliteManager) {
         super(plugin, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         initializeHashMap();
     }
 
     @EventHandler
-    public void bigSmashDestroy(BlockBreakEvent event) {
+    public void hammerDestroy(BlockBreakEvent event) {
         if (plugin.getSystemConfig().getBoolean("hardmode")) {
             final Player player = event.getPlayer();
             if (player.isSneaking()) return;
@@ -47,7 +47,7 @@ public class NebuliteBigSmash extends NebuliteMechanisms implements Listener {
                     if (starlightTools.isStarlightPaxel(item) && starlightCharge.getCharge(item) > 0) {
                         final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
                         for (Nebulite nebulite : nebulites) {
-                            if (nebulite != null && nebulite.equals(Nebulite.BIG_SMASH)) {
+                            if (nebulite != null && nebulite.equals(Nebulite.STARLIGHT_HAMMER)) {
                                 final RayTraceResult rayTraceResult = player.rayTraceBlocks(5);
                                 if (rayTraceResult != null && rayTraceResult.getHitBlock() != null && rayTraceResult.getHitBlock().equals(block)) {
                                     final BlockFace blockFace = rayTraceResult.getHitBlockFace();
