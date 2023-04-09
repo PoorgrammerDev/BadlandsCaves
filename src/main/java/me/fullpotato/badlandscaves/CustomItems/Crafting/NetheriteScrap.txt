@@ -1,0 +1,39 @@
+package me.fullpotato.badlandscaves.CustomItems.Crafting;
+
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
+
+import me.fullpotato.badlandscaves.BadlandsCaves;
+
+/**
+ * This class holds a crafting recipe to revert netherite ingots to scrap.
+ */
+public class NetheriteScrap {
+    private final BadlandsCaves plugin;
+
+    /**
+     * @param plugin An instance of the main class
+     */
+    public NetheriteScrap(BadlandsCaves plugin) {
+        this.plugin = plugin;
+    }
+    
+    /**
+     * Registers the crafting recipe
+     */
+    public void RegisterScrapRecipe() {
+        ItemStack result = new ItemStack(Material.NETHERITE_SCRAP);
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "netherite_ingot_revert"), result);
+
+        //Four netherite ingot to one netherite scrap
+        recipe.addIngredient(Material.NETHERITE_INGOT);
+        recipe.addIngredient(Material.NETHERITE_INGOT);
+        recipe.addIngredient(Material.NETHERITE_INGOT);
+        recipe.addIngredient(Material.NETHERITE_INGOT);
+
+        plugin.getServer().addRecipe(recipe);        
+    }
+
+}

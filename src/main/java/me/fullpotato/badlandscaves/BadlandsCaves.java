@@ -415,8 +415,6 @@ public final class BadlandsCaves extends JavaPlugin {
         nebuliteShockAbsorber = new NebuliteShockAbsorber(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteForcefield = new NebuliteForcefield(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteSuperSonic = new NebuliteSuperSonic(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteHammer = new NebuliteHammer(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
-        nebuliteRicochet = new NebuliteRicochet(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebulitePropulsionBash = new NebulitePropulsionBash(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteShieldThruster = new NebuliteShieldThruster(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
         nebuliteCounterattack = new NebuliteCounterattack(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager);
@@ -432,7 +430,9 @@ public final class BadlandsCaves extends JavaPlugin {
         artifactBloodsappingBow = new ArtifactBloodsappingBow(this, voidmatter, artifactManager);
         artifactSummonersRift = new ArtifactSummonersRift(this, voidmatter, artifactManager, artifactFleetingSpirits, random);
         artifactPrescientSight = new ArtifactPrescientSight(this, voidmatter, artifactManager, enhancedEyes);
-        starlightPaxelMechanism = new StarlightPaxelMechanism(this, starlightTools, starlightCharge);
+        starlightPaxelMechanism = new StarlightPaxelMechanism(this, starlightTools, starlightCharge, nebuliteManager, random);
+        nebuliteRicochet = new NebuliteRicochet(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager, starlightPaxelMechanism);
+        nebuliteHammer = new NebuliteHammer(this, random, starlightArmor, starlightTools, starlightCharge, nebuliteManager, starlightPaxelMechanism);
         artifactDiggingDoppelganger = new ArtifactDiggingDoppelganger(this, voidmatter, artifactManager, random, starlightPaxelMechanism);
         artifactMomentousMomentum = new ArtifactMomentousMomentum(this, random);
         preventWaterBucketPVP = new PreventWaterBucketPVP();
