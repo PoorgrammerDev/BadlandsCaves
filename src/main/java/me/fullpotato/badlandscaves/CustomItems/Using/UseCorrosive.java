@@ -59,7 +59,7 @@ public class UseCorrosive implements Listener {
                             if (event.getDamage() >= player_dmg) {
                                 boolean critical = event.getDamage() > player_dmg;
                                 if ((critical) || (random.nextBoolean())) {
-                                    if (applyCorrosion(entity, random, random.nextInt(5) + 10,false)) {
+                                    if (applyCorrosion(entity, random, random.nextInt(5) + 10, 0.75, false)) {
                                         if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
                                             corrosive.setHitsLeft(item, corrosive.getHitsLeft(item) - 1);
 
@@ -87,7 +87,7 @@ public class UseCorrosive implements Listener {
                 if (arrow.isCritical()) {
                     if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event.getHitEntity();
-                        applyCorrosion(entity, random, random.nextInt(3) + 2, false);
+                        applyCorrosion(entity, random, random.nextInt(5) + 10, 0.5, false);
                     }
                     else {
                         arrow.getWorld().spawnParticle(Particle.REDSTONE, arrow.getLocation(), 5, 0.1, 0.1, 0.1, 0, new Particle.DustOptions(Color.GREEN, 1.5F));
@@ -98,7 +98,7 @@ public class UseCorrosive implements Listener {
         }
     }
 
-    public boolean applyCorrosion (LivingEntity entity, Random random, int max_times, boolean force) {
+    public boolean applyCorrosion (LivingEntity entity, Random random, int max_times, double potency, boolean force) {
         boolean already_corroding = entity.getPersistentDataContainer().has(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) && entity.getPersistentDataContainer().get(new NamespacedKey(plugin, "corrosive_debuff"), PersistentDataType.BYTE) == (byte) 1;
 
         if (force || !already_corroding) {
@@ -141,7 +141,16 @@ public class UseCorrosive implements Listener {
                         this.cancel();
                     }
                     else {
-                        entity.setHealth(Math.max(Math.min(entity.getHealth() - random.nextDouble() / 2.0, 20.0), 0.0));
+                        entity.setHealth(
+                            Math.max(
+                                //deal anywhere from 0 to {potency} dmg directly to player per proc
+                                entity.getHealth() - (random.nextDouble() * potency), 
+
+                                //Health cannot be negative
+                                0.0 
+                            )
+                        );
+
                         entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.PLAYERS, 2, 2);
                         entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.PLAYERS, 2, 2);
                         entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_CORAL_BLOCK_BREAK, SoundCategory.PLAYERS, 0.5F, 1);

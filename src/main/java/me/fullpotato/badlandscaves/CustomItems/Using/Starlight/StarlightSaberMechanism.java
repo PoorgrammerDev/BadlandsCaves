@@ -71,8 +71,8 @@ public class StarlightSaberMechanism implements Listener {
                             final Nebulite[] nebulites = nebuliteManager.getNebulites(item);
                             for (Nebulite nebulite : nebulites) {
                                 if (nebulite.equals(Nebulite.CORRODING_LIGHTS)) {
-                                    int count = random.nextInt(10) + 5;
-                                    if (useCorrosive.applyCorrosion(entity, random, count, false)) chargeManager.setCharge(item, chargeManager.getCharge(item) - count);
+                                    int count = random.nextInt(5) + 10;
+                                    if (useCorrosive.applyCorrosion(entity, random, count, 1.0, false)) chargeManager.setCharge(item, chargeManager.getCharge(item) - count);
                                 }
                                 else if (nebulite.equals(Nebulite.JAGGED_LIGHTS)) {
                                     int count = random.nextInt(3) + 3;
