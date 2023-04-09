@@ -98,12 +98,21 @@ public class DestroySpawner implements Listener {
                     }
 
                     getNewLocation(block.getLocation(), random, 500);
-                    makeDungeon(spawner.getSpawnedType(), random, false, false);
+
+                    //Possiblity for spawner to change mobs / mutate on break if the setting in config is enabled.
+                    //Passing in a null EntityType to this function will make it roll for a random mob.
+                    EntityType type = spawner.getSpawnedType();
+                    if (plugin.getOptionsConfig().getBoolean("spawner_reroll") && random.nextBoolean()) {
+                        type = null;
+                    }
+
+                    makeDungeon(type, random, false, false);
                 }
 
                 loot(player, block.getLocation(), random, spawner.getSpawnedType());
             }
             else if (!player.getGameMode().equals(GameMode.CREATIVE)) {
+                player.sendMessage(ChatColor.RED + "You need a stronger tool.");
                 event.setCancelled(true);
                 return;
             }

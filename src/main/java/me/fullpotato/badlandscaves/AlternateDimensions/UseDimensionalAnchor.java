@@ -174,7 +174,15 @@ public class UseDimensionalAnchor implements Listener {
 
                             destroySpawner.incrementChaos(true, 1);
                             destroySpawner.getNewLocation(middle.getLocation(), random, 500);
-                            destroySpawner.makeDungeon(finalEntityType, random, true, false);
+
+                            //Possiblity for spawner to change mobs / mutate on break if the setting in config is enabled.
+                            //Passing in a null EntityType to this function will make it roll for a random mob.
+                            EntityType type = finalEntityType;
+                            if (plugin.getOptionsConfig().getBoolean("spawner_reroll") && random.nextBoolean()) {
+                                type = null;
+                            }
+
+                            destroySpawner.makeDungeon(type, random, true, false);
 
                             plugin.getServer().broadcastMessage("§9A Dimensional Doorway has opened!");
                             gatewayData.getPersistentDataContainer().set(usableKey, PersistentDataType.BYTE, (byte) 1);

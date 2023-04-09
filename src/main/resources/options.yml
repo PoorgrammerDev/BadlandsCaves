@@ -28,6 +28,9 @@ give_new_starter_on_spawn: false
 # Set to 0 to disable Starting Dungeons.
 starting_dungeons: 10
 
+# When breaking spawners, the spawner in the new dungeon has a 50% chance of being a different entity.
+spawner_reroll: true
+
 # Time Limit for Descension World
 # (Does not take into account extra time each Shrine gives)
 descension_time_limit: 200
