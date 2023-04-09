@@ -55,19 +55,13 @@ public class Corrosive extends MatchCrafting implements Listener {
 
     public void craftCorrosiveSubstance() {
         final ItemStack corrosive_substance = customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE);
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "corrosive_substance"), corrosive_substance);
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "corrosive_substance"), corrosive_substance);
 
         /*
-         * X**
-         * *&*
-         * **X
-         *
-         * where X is spider eye, * is tainted powder, and & is poison 2 potion
+         * unshaped recipe: one water bottle with one corrosive substance
          * */
-        recipe.shape("X**", "*&*", "**X");
-        recipe.setIngredient('X', Material.SPIDER_EYE);
-        recipe.setIngredient('*', Material.COMMAND_BLOCK);
-        recipe.setIngredient('&', Material.POTION);
+        recipe.addIngredient(Material.COMMAND_BLOCK);
+        recipe.addIngredient(Material.POTION);
 
         plugin.getServer().addRecipe(recipe);
     }
@@ -83,9 +77,20 @@ public class Corrosive extends MatchCrafting implements Listener {
 
     public void craftCorrosiveArrow() {
         final ItemStack corrosive_arrow = customItemManager.getItem(CustomItem.CORROSIVE_ARROW);
-        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "corrosive_arrow"), corrosive_arrow);
-        recipe.addIngredient(Material.ARROW);
-        recipe.addIngredient(Material.COMMAND_BLOCK);
+        corrosive_arrow.setAmount(8);
+
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "corrosive_arrow"), corrosive_arrow);
+
+        /*
+         * ###
+         * #X#
+         * ###
+         * 
+         * where # is arrow ; X is corrosive substance
+         */
+        recipe.shape("###","#X#","###");
+        recipe.setIngredient('#', Material.ARROW);
+        recipe.setIngredient('X', Material.COMMAND_BLOCK);
 
         plugin.getServer().addRecipe(recipe);
 

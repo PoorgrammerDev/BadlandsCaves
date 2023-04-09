@@ -116,18 +116,19 @@ public class Voltshock extends MatchCrafting implements Listener {
 
     public void craft_arrow() {
         final ItemStack voltshock_arrow = customItemManager.getItem(CustomItem.VOLTSHOCK_ARROW);
+        voltshock_arrow.setAmount(7);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "voltshock_arrow"), voltshock_arrow);
 
-        /*
-         *   #
-         *  *
-         * &%
-         * where & is battery, % is arrow, * is redstone, and # is shocker
-         * */
+         /*
+            %#%
+            %%%
+            %&%
 
-        recipe.shape("  #", " * ", "&% ");
+            where & is battery, % is arrow, and # is shocker
+          */
+
+        recipe.shape("%#%", "%%%", "%&%");
         recipe.setIngredient('#', Material.COMMAND_BLOCK);
-        recipe.setIngredient('*', Material.REDSTONE);
         recipe.setIngredient('&', Material.COMMAND_BLOCK);
         recipe.setIngredient('%', Material.ARROW);
 
@@ -248,7 +249,7 @@ public class Voltshock extends MatchCrafting implements Listener {
                 final ItemStack battery = customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY);
                 final ItemStack shocker = customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER);
 
-                if (!isMatching(matrix, shocker, 2) || !isMatching(matrix, battery, 6)) {
+                if (!isMatching(matrix, shocker, 1) || !isMatching(matrix, battery, 7)) {
                     event.getInventory().setResult(null);
                 }
             }

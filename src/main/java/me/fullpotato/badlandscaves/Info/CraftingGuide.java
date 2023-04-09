@@ -708,15 +708,15 @@ public class CraftingGuide implements Listener {
 
 
         ItemStack[] voltshock_arrow_recipe = {
-                null,
-                null,
+                new ItemStack(Material.ARROW),
                 customItemManager.getItem(CustomItem.VOLTSHOCK_SHOCKER),
-                null,
-                new ItemStack(Material.REDSTONE),
-                null,
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
                 customItemManager.getItem(CustomItem.VOLTSHOCK_BATTERY),
                 new ItemStack(Material.ARROW),
-                null,
         };
         recipes.put(customItemManager.getItem(CustomItem.VOLTSHOCK_ARROW), voltshock_arrow_recipe);
 
@@ -728,15 +728,8 @@ public class CraftingGuide implements Listener {
         poison_potion.setItemMeta(poison_potion_meta);
 
         ItemStack[] corrosive_substance_recipe = {
-                new ItemStack(Material.SPIDER_EYE),
                 tainted_powder,
-                tainted_powder,
-                tainted_powder,
-                poison_potion,
-                tainted_powder,
-                tainted_powder,
-                tainted_powder,
-                new ItemStack(Material.SPIDER_EYE),
+                poison_potion
         };
         recipes.put(customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE), corrosive_substance_recipe);
 
@@ -753,7 +746,14 @@ public class CraftingGuide implements Listener {
 
 
         ItemStack[] corrosive_arrow_recipe = {
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
                 customItemManager.getItem(CustomItem.CORROSIVE_SUBSTANCE),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
+                new ItemStack(Material.ARROW),
                 new ItemStack(Material.ARROW)
         };
         recipes.put(customItemManager.getItem(CustomItem.CORROSIVE_ARROW), corrosive_arrow_recipe);
