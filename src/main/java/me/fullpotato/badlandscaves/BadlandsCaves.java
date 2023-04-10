@@ -317,7 +317,6 @@ public final class BadlandsCaves extends JavaPlugin {
         increaseToxInWater = new IncreaseToxInWater(this, random, starlightArmor, starlightCharge, artifactManager, voidmatter, artifactFleetingSpirits, nebuliteManager, environmentalHazards, playerEffects);
         deathHandler = new DeathHandler(this, playerEffects);
         blessedAppleEat = new BlessedAppleEat(this, playerEffects);
-        cauldronMenu = new CauldronMenu(this);
         toxicWaterBottling = new ToxicWaterBottling(this);
         blazePowder = new BlazePowder(this);
         purgeEssence = new PurgeEssence(this);
@@ -398,6 +397,7 @@ public final class BadlandsCaves extends JavaPlugin {
         silencer = new Silencer(this);
         silencerBlock = new SilencerBlock(this, particleShapes);
         canteen = new Canteen(this);
+        cauldronMenu = new CauldronMenu(this, canteen);
         useCanteen = new UseCanteen(this, drinking);
         soulLantern = new SoulLantern(this);
         useSoulLantern = new UseSoulLantern(this, soulLantern);

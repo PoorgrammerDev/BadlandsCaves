@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 public enum CauldronRecipe {
     PURIFIED_WATER_PREHARDMODE(RecipeAvailability.PREHARDMODE_ONLY, "Purified Water", CustomItem.PURIFIED_WATER, new ItemStack(Material.GLASS_BOTTLE), new ItemStack(Material.BLAZE_POWDER)),
@@ -20,7 +19,7 @@ public enum CauldronRecipe {
     private final RecipeAvailability recipeAvailability;
     private final String displayName;
     private final CustomItem result;
-    private final Set<ItemStack> ingredients = new HashSet<>();
+    private final HashSet<ItemStack> ingredients = new HashSet<>();
 
     CauldronRecipe(RecipeAvailability recipeAvailability, String displayName, CustomItem result, ItemStack... ingredients) {
         this.recipeAvailability = recipeAvailability;
@@ -29,7 +28,7 @@ public enum CauldronRecipe {
         this.ingredients.addAll(Arrays.asList(ingredients));
     }
 
-    public Set<ItemStack> getIngredients() {
+    public HashSet<ItemStack> getIngredients() {
         return this.ingredients;
     }
 

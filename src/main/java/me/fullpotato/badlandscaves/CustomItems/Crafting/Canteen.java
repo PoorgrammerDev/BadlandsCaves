@@ -241,4 +241,13 @@ public class Canteen extends MatchCrafting implements Listener {
             }
         }
     }
+
+    /**
+     * Can the Canteen hold this liquid type?
+     * @param liquid The custom item for the liquid potion (e.g. PURIFIED_WATER)
+     * @return If canteen can hold the liquid or not
+     */
+    public boolean isValidLiquid(CustomItem liquid) {
+        return this.liquidTypes.containsKey(liquid);
+    }
 }

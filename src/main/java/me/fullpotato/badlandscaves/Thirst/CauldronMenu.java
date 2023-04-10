@@ -1,6 +1,7 @@
 package me.fullpotato.badlandscaves.Thirst;
 
 import me.fullpotato.badlandscaves.BadlandsCaves;
+import me.fullpotato.badlandscaves.CustomItems.Crafting.Canteen;
 import me.fullpotato.badlandscaves.Util.EmptyItem;
 import me.fullpotato.badlandscaves.Util.LocationSave;
 import net.md_5.bungee.api.ChatColor;
@@ -24,6 +25,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class CauldronMenu implements Listener {
@@ -39,9 +41,12 @@ public class CauldronMenu implements Listener {
     private final NamespacedKey recipeKey;
     private final NamespacedKey locationKey;
     private final LocationSave locationSave;
+    private final Canteen canteenManager;
 
-    public CauldronMenu(BadlandsCaves plugin) {
+    public CauldronMenu(BadlandsCaves plugin, Canteen canteenManager) {
         this.plugin = plugin;
+        this.canteenManager = canteenManager;
+
         waterLevelKey = new NamespacedKey(plugin, "level");
         recipeKey = new NamespacedKey(plugin, "recipe");
         locationKey = new NamespacedKey(plugin, "location");
@@ -185,24 +190,54 @@ public class CauldronMenu implements Listener {
     }
 
     public void updateCauldronStatus (Inventory inventory) {
+        final int[] slotNumbers = {11, 15}; 
         final ArrayList<ItemStack> slots = new ArrayList<>();
-        slots.add(inventory.getItem(11));
-        slots.add(inventory.getItem(15));
+        ItemStack canteen = null;
+
+        //Check if any of the items is a Canteen
+        for (int slot : slotNumbers) {
+            if (this.canteenManager.isCanteen(inventory.getItem(slot))) {
+                slots.add(new ItemStack(Material.GLASS_BOTTLE));
+                canteen = inventory.getItem(slot);
+            }
+            else {
+                slots.add(inventory.getItem(slot));
+            }
+        }
 
         if (slots.get(0) != null && slots.get(1) != null) {
             final int waterLevel = getWaterLevel(inventory);
             if (waterLevel >= MAX_LEVEL) {
                 final boolean hardmode = plugin.getSystemConfig().getBoolean("hardmode");
-                final ArrayList<ItemStack> slotsClone = cloneItemList(slots);
                 for (CauldronRecipe recipe : CauldronRecipe.values()) {
+                    //Check recipe availability against current mode
                     final RecipeAvailability availability = recipe.getRecipeAvailability();
                     if (availability.equals(RecipeAvailability.ALWAYS) ||
                             (availability.equals(RecipeAvailability.PREHARDMODE_ONLY) && !hardmode) ||
                             (availability.equals(RecipeAvailability.HARDMODE_ONLY) && hardmode)) {
-                        final Set<ItemStack> ingredients = recipe.getIngredients();
-                        if (ingredients.containsAll(slotsClone)) {
-                            inventory.setItem(13, getReadyButton(recipe));
-                            return;
+
+                        final HashSet<ItemStack> recipeIngredients = recipe.getIngredients();
+                        final HashSet<ItemStack> slotsClone = cloneItemList(slots);
+
+                        //Checks if the items matches the recipe
+                        //NOTE: Originally used containsAll but this was producing unintended behaviour
+                        if (recipeIngredients.equals(slotsClone)) {
+                            //If there is a canteen, make sure it's either empty or has a compatible liquid type
+                            if (canteen != null) {
+                                if (canteenManager.isValidLiquid(recipe.getResult())) {
+                                    if (canteenManager.getAmount(canteen) == 0 || (canteenManager.getType(canteen) != null && canteenManager.getType(canteen).equals(recipe.getResult().name()))) {
+                                        final int limit = plugin.getOptionsConfig().getInt("canteen_limit");
+                                        if (canteenManager.getAmount(canteen) < limit) {
+                                            inventory.setItem(13, getReadyButton(recipe));
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                inventory.setItem(13, getReadyButton(recipe));
+                                return;
+                            }
                         }
                     }
                 }
@@ -256,16 +291,15 @@ public class CauldronMenu implements Listener {
         return item;
     }
 
-    public ArrayList<ItemStack> cloneItemList (ArrayList<ItemStack> slots) {
-        final ArrayList<ItemStack> slotsClone = new ArrayList<>();
-        final ItemStack slotOneClone = slots.get(0).clone();
-        final ItemStack slotTwoClone = slots.get(1).clone();
-        slotOneClone.setAmount(1);
-        slotTwoClone.setAmount(1);
-        slotsClone.add(slotOneClone);
-        slotsClone.add(slotTwoClone);
+    public HashSet<ItemStack> cloneItemList (ArrayList<ItemStack> slots) {
+        final HashSet<ItemStack> ret = new HashSet<>();
+        for (ItemStack item : slots) {
+            ItemStack clone = item.clone();
+            clone.setAmount(1);
+            ret.add(clone);
+        }
 
-        return slotsClone;
+        return ret;
     }
 
     public void attemptCraft (Inventory inventory, Player player) {
@@ -293,6 +327,34 @@ public class CauldronMenu implements Listener {
                                     inventory.getItem(11),
                                     inventory.getItem(15),
                             };
+
+                            //CANTEEN OVERRIDE -----
+                            for (int i = 0; i < slots.length; ++i) {
+                                if (canteenManager.isCanteen(slots[i])) {
+                                    if (canteenManager.getAmount(slots[i]) == 0 || (canteenManager.getType(slots[i]) != null && canteenManager.getType(slots[i]).equals(recipe.getResult().name()))) {
+                                        final int limit = plugin.getOptionsConfig().getInt("canteen_limit");
+                                        if (canteenManager.getAmount(slots[i]) < limit) {
+                                            canteenManager.setAmount(slots[i], canteenManager.getAmount(slots[i]) + 1);
+                                            canteenManager.setType(slots[i], recipe.getResult());
+
+                                            //decrement ingredient amount
+                                            for (int j = 0; j < slots.length; ++j) {
+                                                if (j != i && slots[j] != null) {
+                                                    slots[j].setAmount(slots[j].getAmount() - 1);
+                                                }
+                                            }
+
+                                            //sfx
+                                            World world = cauldronLocation.getWorld();
+                                            if (world == null) world = player.getWorld();
+                                            world.playSound(cauldronLocation, Sound.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1, 1);
+                                        }
+                                    }
+
+                                    return;
+                                }
+                            }
+                            //-----
 
                             for (ItemStack slot : slots) {
                                 if (slot != null) {
